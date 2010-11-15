@@ -1,0 +1,67 @@
+Core changes:
+- Replace most of XMPP exchanges with CouchDB replication
+  -> Note: needs either CouchDB to support automatic replication startup, or do our own
+- Replace API server with direct access to a CouchDB instance
+  -> This means the manager will drop.
+- Replace AnyEvent with Node.js
+- Upgrade to recent OpenSIPS
+  -> issues with drouting (dr_reload, semi-colon in routes)
+
+Portal:
+- View layout handled by CouchDB
+- Portal needs to do authorization (intermediate admin level -- FDN federation; Sotel "sales" profile)
+
+
+
+
+SIP features:
+  T.38 supported, tested (including turning off T.38)
+  More options for codec choices
+  Get rid of FS for regular call scenarios (OpenSIPS B2BUA: http://www.opensips.org/Resources/B2buaTutorial)
+  REFER support (see OpenSIPS B2BUA)
+  Support mix of TCP and UDP (esp. on both sides of the same proxy)
+    what does it mean performance-wise (for OpenSIPS? for FreeSwitch?)
+
+Call Handling features:
+  Prepaid
+    simplify the options: cost per duration unit is computed at start, etc.
+    use sharding for updating (one operation: incr) -- add record in CouchDB, update view, propagate
+
+Core:
+  OpenSIPS 1.6.3+
+    Use memcache? http://www.opensips.org/Resources/DocsTutMemcache
+    Use 302 (instead of new INVITE) for CFA, CFB, etc ?
+
+  FreeSwitch latest
+  CouchDB 1.0.1+ with sharding and replication for multi-master
+    automate the allocation of shards
+    need sharding client
+
+  Client access CouchDB remotely with SSL and username/password, subscribe to _changes streams
+    There could be more than one of such clients
+    They wouldn't have to be async
+    How well does CouchDB handle, say, 100's of _changes clients?
+  Node.js for async event handling
+
+  System configuration (currently in DNS) must be explicited
+    can change it from within (with proper reconfig & restarts)
+
+  System monitoring
+
+  Get rid of the "request" system -- each module gets _changes and implements accordingly
+  New routing system -- use JS code snippets where RequestManager db was used ? Or can these be abstracted and put in a UI ?
+
+Portal:
+  Portal = CouchDB + Node.js for authorization
+
+
+
+Rating:
+
+  Postpaid:
+    raw-CDR-files --(upload)--> CDR-CouchDB --(rate)--> RatedCDR-CouchDB
+
+
+
+Marketing:
+  "Shared-Nothing" is how voice-system.ro calls it. :)
