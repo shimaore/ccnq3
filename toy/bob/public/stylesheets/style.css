@@ -2,3 +2,15 @@ body {
   padding: 50px;
   font: 14px "Lucida Grande", "Helvetica Nueue", Arial, sans-serif;
 }
+
+form {
+  padding: 11px;
+}
+label, input, button, select {
+  margin: 11px;
+}
+label {
+  width: 100px;
+  display: inline-block;
+
+}
