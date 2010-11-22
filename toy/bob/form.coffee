@@ -21,7 +21,7 @@ db_info =
     port: 5432,
     hostname: '4.53.161.142',
 
-pg = require './lib/postgres-pure.js'
+pg = require process.cwd()+'lib/postgres-pure.js'
 
 def db: pg.Connection(db_info)
 
