@@ -78,10 +78,10 @@ sub run {
         $conf->{location},
         $conf->{username},
         $conf->{password},
-        {AutoCommit => 1},
-        on_error => sub { $req->respond([500,$@]) },
-        timeout  => 12,
       );
+
+      $dbh->on_error( sub { $req->respond([500,$@]) } );
+      $dbh->timeout(12);
 
       $dbh->exec($sql,@$params,sub {
         my ($dbh,$rows,$rv) = @_;
