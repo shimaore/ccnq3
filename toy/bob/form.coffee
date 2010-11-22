@@ -1,11 +1,19 @@
 #!/usr/bin/env zappa
 
-fs = require 'fs'
+using 'http'
 
-PASS_FILE = '/etc/ccn/pg-avistar.pass'
-
-fs = require('fs')
-data = fs.readFileSync(PASS_FILE,'utf8').split("\n")
+helper query: (db,sql,p...,cb) ->
+  data =
+    sql: sql
+    params: [p...]
+  db = http.createClient(6789,'localhost')
+  request = db.request('POST','/'+db)
+  request.write JSON.stringify(data)
+  request.end
+  request.on 'response', (response) ->
+    _data = ''
+    response.on 'data', (chunk) -> _data += chunk
+    response.on 'end', -> cb(JSON.parse(_data))
 
 crypto = require 'crypto'
 
@@ -13,18 +21,6 @@ def md5_hex: (t) ->
   hash = crypto.createHash('md5')
   hash.update(t)
   return hash.digest('hex')
-
-db_info =
-    database: 'realtunnel',
-    username: data.username,
-    password: data.password,
-    port: 5432,
-    hostname: '4.53.161.142',
-
-pg = require process.cwd()+'/lib/postgres-pure.js'
-pg.DEBUG = 4
-
-def db: new pg.Connection(db_info)
 
 # ALTER TABLE realuser ADD agent TEXT;
 # ALTER TABLE realuser ADD user_type TEXT;
@@ -66,14 +62,14 @@ put '/': ->
 
   if(@user_id)
     # Update
-    db.execute 'UPDATE realuser SET '+(f+' = ?' for f in fields).join(',')+' WHERE user_id = ?', values..., @user_id, ->
+    query 'UPDATE realuser SET '+(f+' = ?' for f in fields).join(',')+' WHERE user_id = ?', values..., @user_id, ->
       render 'default', apply: 'restrict'
   else
     # Create
     new_user_id = Math.floor(Math.random()*2000000000)
-    db.execute 'INSERT INTO realuser (user_id,'+fields.join(',')+') VALUES (?,'('?' for f in fields).join(',')+')', new_user_id, values..., ->
+    query 'INSERT INTO realuser (user_id,'+fields.join(',')+') VALUES (?,'('?' for f in fields).join(',')+')', new_user_id, values..., ->
       sip_name = uri_escape(@email)
-      db.execute 'INSERT INTO sip_user (sipuser_id,user_id,sipid,sipname,password) VALUES (?,?,?,?,?)',
+      query 'INSERT INTO sip_user (sipuser_id,user_id,sipid,sipname,password) VALUES (?,?,?,?,?)',
         new_user_id,
         new_user_id,
         [sip_name,fw_name].join('@'),
@@ -109,7 +105,7 @@ client search: ->
 
 get '/user': ->
   # Return a JSON record for the specified username (must exist)
-  db.query 'SELECT * FROM realuser WHERE username = %', @username, (row) ->
+  query 'SELECT * FROM realuser WHERE username = %', @username, (row) ->
     send row
 
 # send { user_id: '5678', username: @username}
@@ -117,9 +113,8 @@ get '/user': ->
 get '/search': ->
   rows = []
   # Return a list of usernames matching the @term parameter
-  db.query 'SELECT username FROM realuser WHERE username LIKE %', @term+'%', (row) ->
-    if(row) rows.push row
-    else    send rows   # null indicates no more rows
+  query 'SELECT username FROM realuser WHERE username LIKE %', @term+'%', (data) ->
+    send data
 
 # send ['bob','henry','max']
 
@@ -149,9 +144,8 @@ client account: ->
 get '/account/:account': ->
   check_agent(@account)
   rows = []
-  db.query 'SELECT username FROM realuser WHERE account = %', @account, (row) ->
-    if(row) rows.push [row.username]
-    else    send { aaData: rows }
+  query 'SELECT username FROM realuser WHERE account = %', @account, (rows) ->
+    send { aaData: rows }
 
 #  send {
 #    aaData: [
