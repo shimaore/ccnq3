@@ -59,16 +59,16 @@ put '/': ->
 
   # Need special handling for password
   @password = md5_hex([@email,'realtunnel.com',@password].join(':'))
+  values = (params[f] for f in fields)
 
-  if(@user_id) {
+  if(@user_id)
     # Update
-    params_values = (params[f] for f in fields)
-    db.execute 'UPDATE realuser SET '+(f+' = ?' for f in fields).join(',')+' WHERE user_id = ?', params_values..., @user_id, ->
+    db.execute 'UPDATE realuser SET '+(f+' = ?' for f in fields).join(',')+' WHERE user_id = ?', values..., @user_id, ->
       render 'default', apply: 'restrict'
-  } else {
+  else
     # Create
     new_user_id = Math.floor(Math.random()*2000000000)
-    db.execute 'INSERT INTO realuser (user_id,'+fields.join(',')+') VALUES (?,'('?' for f in fields).join(',')+')', new_user_id, params_values..., ->
+    db.execute 'INSERT INTO realuser (user_id,'+fields.join(',')+') VALUES (?,'('?' for f in fields).join(',')+')', new_user_id, values..., ->
       sip_name = uri_escape(@email)
       db.execute 'INSERT INTO sip_user (sipuser_id,user_id,sipid,sipname,password) VALUES (?,?,?,?,?)',
         new_user_id,
@@ -77,7 +77,7 @@ put '/': ->
         sip_name,
         md5_hex([sip_name,fw_name,@password].join(':'))
       render 'default', apply: 'restrict'
-  }
+
 
 postrender restrict: ->
   # $('.staff').remove() unless @user.role is 'staff'
