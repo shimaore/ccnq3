@@ -176,9 +176,9 @@ client ->
 
     $('#license').change ->
       if($(this).val())
-        $('#on_license').find('input').attr('disabled',false)
+        $('#on_license').find('input').addClass('required')
       else
-        $('#on_license').find('input').attr('disabled',true)
+        $('#on_license').find('input').removeClass('required')
 
 
 view ->
