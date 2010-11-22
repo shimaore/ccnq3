@@ -58,7 +58,7 @@ sub run {
       my ($db_name) = ($path =~ m{^/(\w+)$}) or return $error->(404);
 
       my $json = eval { decode_json($req->content) };
-      !$@ && ref($json) eq 'HASH' or return $error->([418,$@]);
+      !$@ && ref($json) eq 'HASH' or return $error->(418,$@);
 
       my $sql = $json->{sql} or return $error->(501);
       my $params = $json->{params} || [];
