@@ -119,7 +119,10 @@ get '/search': ->
   rows = []
   # Return a list of usernames matching the @term parameter
   sql 'SELECT username FROM realuser WHERE username LIKE ?', [@term+'%'], (data) ->
-    send data.rows?.map (a) -> a.username
+    try
+      send data.rows.map (a) -> a.username
+    catch error
+      send []
 
 # send ['bob','henry','max']
 
