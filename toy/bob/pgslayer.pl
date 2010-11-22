@@ -93,6 +93,7 @@ sub run {
 
         my $response = {};
         $response->{status} = $rv   if $rv;
+        $response->{error}  = $dbh->errstr;
         $response->{rows}   = $rows if $rows;
 
         $req->respond([200,'OK',{ 'Content-Type' => 'text/json' }, encode_json($response)]);
