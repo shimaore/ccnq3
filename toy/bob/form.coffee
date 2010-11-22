@@ -109,7 +109,7 @@ client search: ->
 
 get '/user': ->
   # Return a JSON record for the specified username (must exist)
-  sql 'SELECT * FROM realuser WHERE username = %', [@username], (row) ->
+  sql 'SELECT * FROM realuser WHERE username = ?', [@username], (row) ->
     send row
 
 # send { user_id: '5678', username: @username}
@@ -117,7 +117,7 @@ get '/user': ->
 get '/search': ->
   rows = []
   # Return a list of usernames matching the @term parameter
-  sql 'SELECT username FROM realuser WHERE username LIKE %', [@term+'%'], (data) ->
+  sql 'SELECT username FROM realuser WHERE username LIKE ?', [@term+'%'], (data) ->
     send data
 
 # send ['bob','henry','max']
@@ -148,7 +148,7 @@ client account: ->
 get '/account/:account': ->
   check_agent(@account)
   rows = []
-  sql 'SELECT username FROM realuser WHERE account = %', [@account], (rows) ->
+  sql 'SELECT username FROM realuser WHERE account = ?', [@account], (rows) ->
     send { aaData: rows }
 
 #  send {
