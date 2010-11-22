@@ -162,7 +162,7 @@ get '/account/:account': ->
   check_agent(@account)
   rows = []
   sql 'SELECT username FROM realuser WHERE account = ?', [@account], (data) ->
-    send { aaData: data.rows. map (a) -> [a.username] }
+    send { aaData: data.rows.map (a) -> [a.username] }
 
 #  send {
 #    aaData: [
