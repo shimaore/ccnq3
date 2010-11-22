@@ -34,10 +34,10 @@ sub config {
   return decode_json($json);
 }
 
-my $_db = {};
-
 sub run {
   my $config = config(@_);
+
+  my $cv = AE::cv;
 
   my $httpd = AnyEvent::HTTPD->new (
     host => $config->{httpd_host},
@@ -81,9 +81,7 @@ sub run {
       );
 
       $dbh->on_error( sub { return $error->([500,$@]) } );
-      # $dbh->timeout(12);
-
-      print STDERR "Ready\n";
+      $dbh->timeout(12);
 
       $dbh->exec($sql,@$params,sub {
         my ($dbh,$rows,$rv) = @_;
@@ -95,10 +93,12 @@ sub run {
 
         $req->respond([200,'OK',{ 'Content-Type' => 'text/json' }, encode_json($response)]);
       });
+
+      $cv->cb($dbh);
     },
   );
 
-  $httpd->run;
+  $cv->recv;
 }
 
 run(@ARGV);
