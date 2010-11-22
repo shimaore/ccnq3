@@ -66,7 +66,7 @@ sub run {
       my $path = $url->path;
 
       my ($db_name) = ($path =~ m{^/(\w+)$}) or return $error->(404);
-      my $conf = $config->{db}->{$name} or return $error->(404);
+      my $conf = $config->{db}->{$db_name} or return $error->(404);
 
       my $json = eval { decode_json($req->content) };
       !$@ && ref($json) eq 'HASH' or return $error->(418,$@);
@@ -81,7 +81,7 @@ sub run {
         {AutoCommit => 1},
         on_error => sub { $req->respond([500,$@]) },
         timeout  => 12,
-      });
+      );
 
       $dbh->exec($sql,@$params,sub {
         my ($dbh,$rows,$rv) = @_;
