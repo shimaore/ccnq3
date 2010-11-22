@@ -2,12 +2,14 @@
 
 using 'http'
 
-helper query: (db,sql,p...,cb) ->
+def db_name: 'default'
+
+helper query: (sql,p...,cb) ->
   data =
     sql: sql
     params: [p...]
   db = http.createClient(6789,'localhost')
-  request = db.request('POST','/'+db)
+  request = db.request('POST','/'+db_name)
   request.write JSON.stringify(data)
   request.end
   request.on 'response', (response) ->
