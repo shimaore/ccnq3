@@ -51,7 +51,7 @@ sub run {
       print STDERR pp {
         method => $req->method,
         URL    => $req->url,
-        vars   => $req->vars,
+        vars   => {$req->vars},
         headers=> $req->headers,
         body   => $req->content,
       };
