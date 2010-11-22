@@ -6,21 +6,6 @@ use AnyEvent;
 use AnyEvent::HTTPD;
 use AnyEvent::DBI;
 
-use Encode;
-use Scalar::Util qw(blessed);
-
-sub pp {
-  my $v = shift;
-  return qq(nil)  if !defined($v);
-  return encode_utf8(blessed($v).":".qq("$v")) if blessed($v);
-  return encode_utf8(qq("$v")) if !ref($v);
-  return '[ '.join(', ', map { pp($_) } @{$v}).' ]'
-    if UNIVERSAL::isa($v,'ARRAY');
-  return '{ '.join(', ', map { pp($_).q(: ).pp($v->{$_}) } sort keys %{$v}).' }'
-    if UNIVERSAL::isa($v,'HASH');
-  return encode_utf8(qq("???:$v"));
-}
-
 use JSON;
 use URI;
 
@@ -47,14 +32,6 @@ sub run {
   $httpd->reg_cb(
     '' => sub {
       my ($httpd,$req) = @_;
-
-      print STDERR pp {
-        method => $req->method,
-        URL    => $req->url,
-        vars   => {$req->vars},
-        headers=> $req->headers,
-        body   => $req->content,
-      };
 
       my $error = sub {
         $req->respond([@_]);
