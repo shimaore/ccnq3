@@ -63,6 +63,7 @@ exports = module.exports = function bodyDecoder(){
 */
 
 exports.decode = {
-    'application/x-www-form-urlencoded': form2json.decode,
+    // 'application/x-www-form-urlencoded': form2json.decode,
+    'application/x-www-form-urlencoded': queryString.parse,
     'application/json': JSON.parse
 };
