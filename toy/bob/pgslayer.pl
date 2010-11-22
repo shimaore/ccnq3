@@ -80,8 +80,10 @@ sub run {
         $conf->{password},
       );
 
-      $dbh->on_error( sub { $req->respond([500,$@]); return } );
-      $dbh->timeout(12);
+      $dbh->on_error( sub { return $error->([500,$@]) } );
+      # $dbh->timeout(12);
+
+      print STDERR "Ready\n";
 
       $dbh->exec($sql,@$params,sub {
         my ($dbh,$rows,$rv) = @_;
