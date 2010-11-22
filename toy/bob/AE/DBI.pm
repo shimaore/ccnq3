@@ -2,6 +2,9 @@
 
 AE::DBI - asynchronous DBI access
 
+The only difference between this package and AnyEvent::DBI is that
+we return an arrayref of hashref for queries, instead of an arrayref of arrayrefs.
+
 =cut
 
 package AE::DBI;
