@@ -35,7 +35,8 @@ function mime(req) {
 exports = module.exports = function bodyDecoder(){
     return function bodyDecoder(req, res, next) {
         var decoder = exports.decode[mime(req)];
-        if (decoder && !req.body && req['content-length']) {
+        if (decoder && req['content-length']) {
+        // if (decoder && !req.body && req['content-length']) {
             var data = '';
             req.setEncoding('utf8');
             req.addListener('data', function(chunk) { data += chunk; });

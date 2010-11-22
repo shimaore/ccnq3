@@ -102,7 +102,7 @@ client search: ->
     $('#load').click ->
       $.getJSON 'user',{username:$('#username').val()}, (data) ->
         $('#modify').deserialize(data)
-        $('#modify input#password').val('').removeClass('required')
+        $('#modify input#password').val(undefined).removeClass('required')
         $('#modify input[type="submit"]').val('Modify')
         $('#delete').show()
 
