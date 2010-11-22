@@ -62,10 +62,11 @@ post '/': ->
   # Need special handling for password
   @password = md5_hex([@email,'realtunnel.com',@password].join(':')) if @password?
   values = (params[f] for f in fields)
+  setters = (f+' = ?' for f in fields).join(',')
 
   if(@user_id)
     # Update
-    sql 'UPDATE realuser SET '+[f+' = ?' for f in fields].join(',')+' WHERE user_id = ?', [values..., @user_id], ->
+    sql 'UPDATE realuser SET '+setters+' WHERE user_id = ?', [values..., @user_id], ->
       render 'default', apply: 'restrict'
   else
     # Create
