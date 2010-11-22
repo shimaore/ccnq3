@@ -145,6 +145,12 @@ client account: ->
 
       return false
 
+get '/account/': ->
+  check_admin(@account)
+  rows = []
+  sql 'SELECT username FROM realuser', (rows) ->
+    send { aaData: rows }
+
 get '/account/:account': ->
   check_agent(@account)
   rows = []
