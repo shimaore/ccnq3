@@ -4,7 +4,7 @@ use strict; use warnings;
 
 use AnyEvent;
 use AnyEvent::HTTPD;
-use AnyEvent::DBI;
+use AE::DBI;
 
 use JSON;
 use URI;
@@ -49,7 +49,7 @@ sub run {
       my $sql = $json->{sql} or return $error->(501);
       my $params = $json->{params} || [];
 
-      my $dbh = AnyEvent::DBI->new (
+      my $dbh = AE::DBI->new (
         $conf->{location},
         $conf->{username},
         $conf->{password},
