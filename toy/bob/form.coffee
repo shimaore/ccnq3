@@ -109,8 +109,8 @@ client search: ->
 
 get '/user': ->
   # Return a JSON record for the specified username (must exist)
-  sql 'SELECT * FROM realuser WHERE username = ?', [@username], (row) ->
-    send row
+  sql 'SELECT * FROM realuser WHERE username = ?', [@username], (data) ->
+    send data.rows[0]
 
 # send { user_id: '5678', username: @username}
 
@@ -148,14 +148,14 @@ client account: ->
 get '/account/': ->
   check_admin(@account)
   rows = []
-  sql 'SELECT username FROM realuser', [], (rows) ->
-    send { aaData: rows }
+  sql 'SELECT username FROM realuser', [], (data) ->
+    send { aaData: data.rows }
 
 get '/account/:account': ->
   check_agent(@account)
   rows = []
-  sql 'SELECT username FROM realuser WHERE account = ?', [@account], (rows) ->
-    send { aaData: rows }
+  sql 'SELECT username FROM realuser WHERE account = ?', [@account], (data) ->
+    send { aaData: data.rows }
 
 #  send {
 #    aaData: [
