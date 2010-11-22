@@ -138,8 +138,7 @@ class App
 
   register_route: (verb, path, response) ->
     if typeof response isnt 'function'
-      @http_server[verb] path, (req, res) ->
-        res.send String(response)
+      @http_server[verb] path, (req, res) -> res.send String(response)
     else
       handler = new RequestHandler(response, @defs, @helpers, @postrenders, @views, @layouts, @vars)
       @http_server[verb] path, (req, res, next) ->
