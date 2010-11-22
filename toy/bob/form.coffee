@@ -1,6 +1,34 @@
 #!/usr/bin/env zappa
 
+using 'fs'
 
+def PASS_FILE: '/etc/ccn/pg-avistar.pass'
+def data: fs.readFileSync(PASS_FILE,'utf8').split("\n")
+
+using 'crypto'
+
+def md5_hex: (t) ->
+  hash = crypto.createHash('md5')
+  hash.update(t)
+  return hash.digest('hex')
+
+
+def db_info =
+    database: 'realtunnel',
+    username: data[0],
+    password: data[1],
+    port: 5432,
+    hostname: '4.53.161.142',
+
+pg = require 'postgres-pure'
+def db: pg.Connection(db_info)
+
+# ALTER TABLE realuser ADD agent TEXT;
+# ALTER TABLE realuser ADD user_type TEXT;
+# ALTER TABLE realuser ADD license TEXT;
+# ALTER TABLE realuser ADD account TEXT;
+# ALTER TABLE realuser ADD installation_id TEXT;
+# ALTER TABLE realuser ADD activate_date TEXT;
 
 postrender restrict: ->
   # remove fields that non-admins should not see
@@ -23,9 +51,33 @@ get '/': ->
   check_agent
   render 'default', apply: 'restrict'
 
+def fields: 'username name address city zip country agent user_type license phone account installation_id activation_date'.split(' ')
+def fw_name: 'ts1.sotelips.net'
+
 put '/': ->
   check_admin
-  render 'default', apply: 'restrict'
+
+  # Need special handling for password
+  @password = md5_hex([@email,'realtunnel.com',@password].join(':'))
+
+  if(@user_id) {
+    # Update
+    values = (params[f] for f in fields)
+    db.execute 'UPDATE realuser SET '+(f+' = ?' for f in fields).join(',')+' WHERE user_id = ?', values..., @user_id, ->
+      render 'default', apply: 'restrict'
+  } else {
+    # Create
+    new_user_id = Math.floor(Math.random()*2000000000)
+    db.execute 'INSERT INTO realuser (user_id,'+fields.join(',')+') VALUES (?,'('?' for f in fields).join(',)+')', new_user_id, values..., ->
+      sip_name = uri_escape(@email)
+      db.execute 'INSERT INTO sip_user (sipuser_id,user_id,sipid,sipname,password) VALUES (?,?,?,?,?)',
+        new_user_id,
+        new_user_id,
+        [sip_name,fw_name].join('@'),
+        sip_name,
+        md5_hex([sip_name,fw_name,@password].join(':'))
+      render 'default', apply: 'restrict'
+  }
 
 postrender restrict: ->
   # $('.staff').remove() unless @user.role is 'staff'
@@ -38,14 +90,14 @@ client validate: ->
 
 client search: ->
   $(document).ready ->
-    $('#user_id').focus()
-    $('#user_id').autocomplete {
+    $('#username').focus()
+    $('#username').autocomplete {
       source: 'search',
       minLength: 2,
     }
 
     $('#load').click ->
-      $.getJSON 'user',{user_id:$('#user_id').val()}, (data) ->
+      $.getJSON 'user',{username:$('#username').val()}, (data) ->
         $('#modify').deserialize(data)
         $('#modify input[type="submit"]').val('Modify')
         $('#delete').show()
@@ -53,10 +105,20 @@ client search: ->
       return false
 
 get '/user': ->
-  send { user_id: @user_id, name: 'bob' }
+  # Return a JSON record for the specified username (must exist)
+  db.query 'SELECT * FROM realuser WHERE username = %', @username, (row) ->
+    send row
+
+# send { user_id: '5678', username: @username}
 
 get '/search': ->
-  send [ @term+'mini', @term+'mani', @term+'moe' ]
+  rows = []
+  # Return a list of usernames matching the @term parameter
+  db.query 'SELECT username FROM realuser WHERE username LIKE %', @term+'%', (row) ->
+    if(row) rows.push row
+    else    send rows   # null indicates no more rows
+
+# send ['bob','henry','max']
 
 # List user_id in account
 
@@ -83,35 +145,18 @@ client account: ->
 
 get '/account/:account': ->
   check_agent(@account)
-  send {
-    aaData: [
-      ["bob"],
-      ["charley"],
-      ["henry"],
-      ["all content"]
-      ["bob"],
-      ["charley"],
-      ["henry"],
-      ["bob"],
-      ["charley"],
-      ["henry"],
-      ["bob"],
-      ["charley"],
-      ["henry"],
-      ["bob"],
-      ["charley"],
-      ["henry"],
-      ["bob"],
-      ["charley"],
-      ["henry"],
-      ["bob"],
-      ["charley"],
-      ["henry"],
-      ["bob"],
-      ["charley"],
-      ["henry"],
-    ]
-  }
+  rows = []
+  db.query 'SELECT username FROM realuser WHERE account = %', @account, (row) ->
+    if(row) rows.push [row.username]
+    else    send { aaData: rows }
+
+#  send {
+#    aaData: [
+#      ["bob"],
+#      ["charley"],
+#      ["henry"],
+#    ]
+#  }
 
 client ->
   $(document).ready ->
@@ -176,11 +221,17 @@ view ->
     form id: 'modify', class: 'validate', ->
       input type: 'hidden', name: '_method', value: 'put'
       div ->
-        lr 'user_id', 'User ID (email)'
+        lr 'username', 'Username (email)'
         button id: 'load', -> 'Load'
+      input type: 'hidden', name: 'user_id', value: @user_id
+
       div -> lr 'name', 'Name'
       div -> lr 'password', 'Password'
       div -> lr 'address', 'Address'
+      div -> lr 'zip', 'ZIP'
+      div -> lr 'city', 'City'
+      div -> lr 'country', 'Country'
+
       div -> l  'agent', 'Agent'
       div ->
         label for: 'user_type', -> 'User Type'
