@@ -5,7 +5,7 @@
       // "this" refers to the DOM element
       if(this.type && (this.type == 'reset' || this.type == 'submit'))
         return;
-      # Do not deserialize the "_method" field
+      // Do not deserialize the "_method" field
       if(this.name && this.name == '_method')
         return;
       if(this.name && data[this.name]) $(this).val(data[this.name])
