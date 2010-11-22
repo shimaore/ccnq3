@@ -98,9 +98,9 @@ sub run {
 
         $req->respond([200,'OK',{ 'Content-Type' => 'text/json' }, encode_json($response)]);
       }) };
-      if($@) {
+      if($@ || $dbh->errstr) {
         my $response = {};
-        $response->{error} = $@;
+        $response->{error} = $@ || $dbh->errstr;
         $req->respond([500,'Internal error',{ 'Content-Type' => 'text/json' }, encode_json($response)]);
       }
     },
