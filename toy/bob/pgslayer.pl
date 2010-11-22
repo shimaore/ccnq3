@@ -53,7 +53,7 @@ sub run {
       my $url = URI->new($req->url);
       my $path = $url->path;
 
-      print STDERR "path $path\n";
+      print STDERR "path $path, content ".$req->content."\n";
 
       my ($db_name) = ($path =~ m{^/(\w+)$}) or return $error->(404);
 
