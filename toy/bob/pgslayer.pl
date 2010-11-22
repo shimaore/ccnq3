@@ -51,7 +51,7 @@ sub run {
       my $sql = $json->{sql} or return $error->(501);
       my $params = $json->{params} || [];
 
-      my $dbh = $dbh->{$db_name} ||= AnyEvent::DBI->new (
+      my $dbh = $dbh{$db_name} ||= AnyEvent::DBI->new (
         $conf->{location},
         $conf->{username},
         $conf->{password},
