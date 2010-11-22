@@ -88,7 +88,7 @@ sub run {
 
       my $dbh = $db->($db_name) or return $error->(404);
 
-      eval { $dbh->exec($sql,@$params,sub {
+      $dbh->exec($sql,@$params,sub {
         my ($dbh,$rows,$rv) = @_;
 
         my $response = {};
@@ -97,12 +97,7 @@ sub run {
         $response->{rows}   = $rows if $rows;
 
         $req->respond([200,'OK',{ 'Content-Type' => 'text/json' }, encode_json($response)]);
-      }) };
-      if($@ || $dbh->errstr) {
-        my $response = {};
-        $response->{error} = $@ || $dbh->errstr;
-        $req->respond([500,'Internal error',{ 'Content-Type' => 'text/json' }, encode_json($response)]);
-      }
+      });
     },
   );
 
