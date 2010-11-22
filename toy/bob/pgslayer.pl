@@ -19,7 +19,7 @@ sub config {
   return decode_json($json);
 }
 
-# our %_dbh;
+my %dbh;
 
 sub run {
   my $config = config(@_);
@@ -51,7 +51,7 @@ sub run {
       my $sql = $json->{sql} or return $error->(501);
       my $params = $json->{params} || [];
 
-      my $dbh = AnyEvent::DBI->new (
+      my $dbh = $dbh->{$db_name} ||= AnyEvent::DBI->new (
         $conf->{location},
         $conf->{username},
         $conf->{password},
