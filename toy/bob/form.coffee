@@ -201,11 +201,11 @@ view ->
 
   lr = (_id,_label) ->
     label for: _id, -> _label
-    input id: _id, class: 'required'
+    input id: _id, name: _id, class: 'required'
 
   l = (_id,_label) ->
     label for: _id, -> _label
-    input id: _id
+    input id: _id, name: _id
 
 
   h1 @title
@@ -226,7 +226,7 @@ view ->
         tbody -> ''
 
     # Modify/Create
-    form id: 'modify', class: 'validate', ->
+    form id: 'modify', class: 'validate', method: 'post'->
       input type: 'hidden', name: '_method', value: 'put'
       div ->
         lr 'username', 'Username (email)'
@@ -252,7 +252,6 @@ view ->
         div -> l 'account', 'Account number'
         div -> l 'installation_id', 'Installation ID'
         div -> l 'activation_date', 'Date of activation'
-
 
       div ->
         input type: 'submit', -> @user_id? ? 'Modify' : 'Create'
