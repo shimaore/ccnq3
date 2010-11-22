@@ -44,28 +44,17 @@ sub run {
     port => $config->{httpd_port},
   );
 
-  my $db = sub {
-    my ($name) = @_;
-    my $conf = $config->{db}->{$name} or return;
-    return $_db->{$name} ||=
-      AnyEvent::DBI->new (
-        $conf->{location},
-        $conf->{username},
-        $conf->{password},
-      );
-  };
-
   $httpd->reg_cb(
     '' => sub {
       my ($httpd,$req) = @_;
 
-      print STDERR join(', ',
-        'method=' => $req->method,
-        'URL='    => pp($req->url),
-        'vars='   => pp({$req->vars}),
-        'headers='=> pp($req->headers),
-        'body='   => pp($req->content),
-      );
+      print STDERR pp {
+        method => $req->method,
+        URL    => $req->url,
+        vars   => $req->vars,
+        headers=> $req->headers,
+        body   => $req->content,
+      };
 
       my $error = sub {
         $req->respond([@_]);
@@ -75,8 +64,6 @@ sub run {
 
       my $url = URI->new($req->url);
       my $path = $url->path;
-
-      print STDERR "path $path, content ".$req->content."\n";
 
       my ($db_name) = ($path =~ m{^/(\w+)$}) or return $error->(404);
 
