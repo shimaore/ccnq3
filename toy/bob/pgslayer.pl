@@ -72,7 +72,7 @@ sub run {
         $response->{status} = $rv   if $rv;
         $response->{rows}   = $rows if $rows;
 
-        $req->respond({ content => ['application/json', encode_json($response)]});
+        $req->respond([200,'OK',{ 'Content-Type' => 'text/json' }, encode_json($response)]});
       });
     },
   );
