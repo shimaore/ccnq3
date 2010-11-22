@@ -9,6 +9,7 @@
 */
 
 var form2json = require('form2json');
+var queryString = require('querystring');
 
 /**
 * Extract the mime type from the given request's
