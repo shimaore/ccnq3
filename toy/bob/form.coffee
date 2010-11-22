@@ -148,7 +148,7 @@ client account: ->
 get '/account/': ->
   check_admin(@account)
   rows = []
-  sql 'SELECT username FROM realuser', (rows) ->
+  sql 'SELECT username FROM realuser', [], (rows) ->
     send { aaData: rows }
 
 get '/account/:account': ->
