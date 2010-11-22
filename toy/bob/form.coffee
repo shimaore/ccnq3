@@ -60,7 +60,7 @@ put '/': ->
   check_admin
 
   # Need special handling for password
-  @password = md5_hex([@email,'realtunnel.com',@password].join(':'))
+  @password = md5_hex([@email,'realtunnel.com',@password].join(':')) if @password?
   values = (params[f] for f in fields)
 
   if(@user_id)
@@ -102,6 +102,7 @@ client search: ->
     $('#load').click ->
       $.getJSON 'user',{username:$('#username').val()}, (data) ->
         $('#modify').deserialize(data)
+        $('#modify input[name="password"]').val('')
         $('#modify input[type="submit"]').val('Modify')
         $('#delete').show()
 
