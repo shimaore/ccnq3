@@ -118,7 +118,7 @@ get '/search': ->
   rows = []
   # Return a list of usernames matching the @term parameter
   sql 'SELECT username FROM realuser WHERE username LIKE ?', [@term+'%'], (data) ->
-    send data
+    send data.rows
 
 # send ['bob','henry','max']
 
