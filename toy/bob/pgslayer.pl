@@ -6,6 +6,7 @@ use AnyEvent;
 use AnyEvent::HTTPD;
 use AnyEvent::DBI;
 
+use Encode;
 use Scalar::Util qw(blessed);
 
 sub pp {
