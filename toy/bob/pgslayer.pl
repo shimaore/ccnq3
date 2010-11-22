@@ -34,6 +34,8 @@ sub config {
   return decode_json($json);
 }
 
+# our %_dbh;
+
 sub run {
   my $config = config(@_);
 
@@ -80,11 +82,15 @@ sub run {
         $conf->{password},
       );
 
-      $dbh->on_error( sub { return $error->([500,$@]) } );
+      # $_dbh{$dbh} = $dbh;
+
+      $dbh->on_error( sub { undef $dbh; return $error->([500,$@]) } );
       $dbh->timeout(12);
 
       $dbh->exec($sql,@$params,sub {
-        my ($dbh,$rows,$rv) = @_;
+        my ($dbh2,$rows,$rv) = @_;
+
+        undef $dbh;
 
         my $response = {};
         $response->{status} = $rv   if $rv;
