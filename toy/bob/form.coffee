@@ -4,10 +4,10 @@ using 'http'
 
 def db_name: 'default'
 
-helper sql: (_sql,_p...,cb) ->
+helper sql: (_sql,_p,cb) ->
   data =
     sql: _sql
-    params: _p if _p?
+    params: _p
   db = http.createClient(6789,'localhost',{'content-type':'text/json'})
   request = db.request('POST','/'+db_name)
   request.write JSON.stringify(data)
@@ -64,19 +64,20 @@ put '/': ->
 
   if(@user_id)
     # Update
-    sql 'UPDATE realuser SET '+(f+' = ?' for f in fields).join(',')+' WHERE user_id = ?', values..., @user_id, ->
+    sql 'UPDATE realuser SET '+(f+' = ?' for f in fields).join(',')+' WHERE user_id = ?', [values..., @user_id], ->
       render 'default', apply: 'restrict'
   else
     # Create
     new_user_id = Math.floor(Math.random()*2000000000)
-    sql 'INSERT INTO realuser (user_id,'+fields.join(',')+') VALUES (?,'('?' for f in fields).join(',')+')', new_user_id, values..., ->
+    sql 'INSERT INTO realuser (user_id,'+fields.join(',')+') VALUES (?,'('?' for f in fields).join(',')+')', [new_user_id, values...], ->
       sip_name = uri_escape(@email)
-      sql 'INSERT INTO sip_user (sipuser_id,user_id,sipid,sipname,password) VALUES (?,?,?,?,?)',
+      sql 'INSERT INTO sip_user (sipuser_id,user_id,sipid,sipname,password) VALUES (?,?,?,?,?)', [
         new_user_id,
         new_user_id,
         [sip_name,fw_name].join('@'),
         sip_name,
         md5_hex([sip_name,fw_name,@password].join(':'))
+      ]
       render 'default', apply: 'restrict'
 
 
@@ -107,7 +108,7 @@ client search: ->
 
 get '/user': ->
   # Return a JSON record for the specified username (must exist)
-  sql 'SELECT * FROM realuser WHERE username = %', @username, (row) ->
+  sql 'SELECT * FROM realuser WHERE username = %', [@username], (row) ->
     send row
 
 # send { user_id: '5678', username: @username}
@@ -115,7 +116,7 @@ get '/user': ->
 get '/search': ->
   rows = []
   # Return a list of usernames matching the @term parameter
-  sql 'SELECT username FROM realuser WHERE username LIKE %', @term+'%', (data) ->
+  sql 'SELECT username FROM realuser WHERE username LIKE %', [@term+'%'], (data) ->
     send data
 
 # send ['bob','henry','max']
@@ -146,7 +147,7 @@ client account: ->
 get '/account/:account': ->
   check_agent(@account)
   rows = []
-  sql 'SELECT username FROM realuser WHERE account = %', @account, (rows) ->
+  sql 'SELECT username FROM realuser WHERE account = %', [@account], (rows) ->
     send { aaData: rows }
 
 #  send {
