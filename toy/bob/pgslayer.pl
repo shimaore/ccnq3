@@ -81,7 +81,6 @@ sub run {
         {AutoCommit => 1},
         on_error => sub { $req->respond([500,$@]) },
         timeout  => 12,
-
       });
 
       $dbh->exec($sql,@$params,sub {
@@ -89,7 +88,6 @@ sub run {
 
         my $response = {};
         $response->{status} = $rv   if $rv;
-        $response->{error}  = $dbh->errstr;
         $response->{rows}   = $rows if $rows;
 
         $req->respond([200,'OK',{ 'Content-Type' => 'text/json' }, encode_json($response)]);
