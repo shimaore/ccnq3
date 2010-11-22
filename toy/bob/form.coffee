@@ -7,7 +7,7 @@ def db_name: 'default'
 helper sql: (_sql,_p...,cb) ->
   data =
     sql: _sql
-    params: [_p...]
+    params: _p if _p?
   db = http.createClient(6789,'localhost',{'content-type':'text/json'})
   request = db.request('POST','/'+db_name)
   request.write JSON.stringify(data)
