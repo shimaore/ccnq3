@@ -149,7 +149,7 @@ get '/account/': ->
   check_admin(@account)
   rows = []
   sql 'SELECT username FROM realuser', [], (data) ->
-    send { aaData: data.rows }
+    send { aaData: data.rows.map (a) -> [a.username] }
 
 get '/account/:account': ->
   check_agent(@account)
