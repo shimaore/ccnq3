@@ -56,7 +56,7 @@ get '/': ->
 def fields: 'username name address city zip country agent user_type license phone account installation_id activation_date'.split(' ')
 def fw_name: 'ts1.sotelips.net'
 
-put '/': ->
+post '/': ->
   check_admin
 
   # Need special handling for password
