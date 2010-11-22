@@ -8,8 +8,8 @@ helper sql: (_sql,_p,cb) ->
   data =
     sql: _sql
     params: _p
-  db = http.createClient(6789,'localhost',{'content-type':'text/json'})
-  request = db.request('POST','/'+db_name)
+  db = http.createClient(6789,'localhost')
+  request = db.request('POST','/'+db_name,{'content-type':'text/json'})
   request.write JSON.stringify(data)
   request.end
   request.on 'response', (response) ->
