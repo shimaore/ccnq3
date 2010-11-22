@@ -226,7 +226,7 @@ view ->
         tbody -> ''
 
     # Modify/Create
-    form id: 'modify', class: 'validate', method: 'post'->
+    form id: 'modify', class: 'validate', method: 'post', ->
       input type: 'hidden', name: '_method', value: 'put'
       div ->
         lr 'username', 'Username (email)'
