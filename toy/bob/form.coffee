@@ -22,6 +22,7 @@ db_info =
     hostname: '4.53.161.142',
 
 pg = require process.cwd()+'/lib/postgres-pure.js'
+pg.DEBUG = 4
 
 def db: new pg.Connection(db_info)
 
