@@ -68,7 +68,7 @@ put '/': ->
   } else {
     # Create
     new_user_id = Math.floor(Math.random()*2000000000)
-    db.execute 'INSERT INTO realuser (user_id,'+fields.join(',')+') VALUES (?,'('?' for f in fields).join(',)+')', new_user_id, values..., ->
+    db.execute 'INSERT INTO realuser (user_id,'+fields.join(',')+') VALUES (?,'('?' for f in fields).join(',')+')', new_user_id, values..., ->
       sip_name = uri_escape(@email)
       db.execute 'INSERT INTO sip_user (sipuser_id,user_id,sipid,sipname,password) VALUES (?,?,?,?,?)',
         new_user_id,
