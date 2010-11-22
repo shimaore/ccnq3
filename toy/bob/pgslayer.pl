@@ -61,7 +61,7 @@ sub run {
       $@ || ref($json) ne 'HASH' and return $error->(418);
 
       my $sql = $json->{sql} or return $error->(418);
-      my $params = $json->{params} or return $error->(418);
+      my $params = $json->{params} || [];
 
       my $dbh = $db->($db_name) or return $error->(404);
 
