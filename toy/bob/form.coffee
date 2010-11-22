@@ -65,7 +65,7 @@ post '/': ->
 
   if(@user_id)
     # Update
-    sql 'UPDATE realuser SET '+(f+' = ?' for f in fields).join(',')+' WHERE user_id = ?', [values..., @user_id], ->
+    sql 'UPDATE realuser SET '+[f+' = ?' for f in fields].join(',')+' WHERE user_id = ?', [values..., @user_id], ->
       render 'default', apply: 'restrict'
   else
     # Create
