@@ -1,9 +1,9 @@
 #!/usr/bin/env zappa
 
-using 'fs'
+def access: require './lib/access.js'
 
 def PASS_FILE: '/etc/ccn/pg-avistar.pass'
-def data: fs.readFileSync(PASS_FILE,'utf8').split("\n")
+def data: access.get(PASS_FILE)
 
 using 'crypto'
 
@@ -13,14 +13,14 @@ def md5_hex: (t) ->
   return hash.digest('hex')
 
 
-def db_info =
+def db_info:
     database: 'realtunnel',
-    username: data[0],
-    password: data[1],
+    username: data.username,
+    password: data.password,
     port: 5432,
     hostname: '4.53.161.142',
 
-pg = require 'postgres-pure'
+pg = require './lib/postgres-pure'
 def db: pg.Connection(db_info)
 
 # ALTER TABLE realuser ADD agent TEXT;
