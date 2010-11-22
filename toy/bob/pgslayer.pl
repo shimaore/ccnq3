@@ -39,8 +39,6 @@ sub config {
 sub run {
   my $config = config(@_);
 
-  my $cv = AE::cv;
-
   my $httpd = AnyEvent::HTTPD->new (
     host => $config->{httpd_host},
     port => $config->{httpd_port},
@@ -99,12 +97,10 @@ sub run {
 
         $req->respond([200,'OK',{ 'Content-Type' => 'text/json' }, encode_json($response)]);
       });
-
-      $cv->cb($dbh);
     },
   );
 
-  $cv->recv;
+  $httpd->run;
 }
 
 run(@ARGV);
