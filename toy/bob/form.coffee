@@ -23,7 +23,7 @@ db_info =
 
 pg = require process.cwd()+'/lib/postgres-pure.js'
 
-def db: pg.Connection(db_info)
+def db: new pg.Connection(db_info)
 
 # ALTER TABLE realuser ADD agent TEXT;
 # ALTER TABLE realuser ADD user_type TEXT;
