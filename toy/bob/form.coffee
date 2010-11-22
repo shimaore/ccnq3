@@ -111,7 +111,10 @@ client search: ->
 get '/user': ->
   # Return a JSON record for the specified username (must exist)
   sql 'SELECT * FROM realuser WHERE username = ?', [@username], (data) ->
-    send data.rows[0]
+    try
+      send data.rows[0]
+    catch error
+      send {}
 
 # send { user_id: '5678', username: @username}
 
@@ -159,7 +162,7 @@ get '/account/:account': ->
   check_agent(@account)
   rows = []
   sql 'SELECT username FROM realuser WHERE account = ?', [@account], (data) ->
-    send { aaData: data.rows }
+    send { aaData: data.rows. map (a) -> [a.username] }
 
 #  send {
 #    aaData: [
