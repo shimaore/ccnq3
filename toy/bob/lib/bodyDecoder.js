@@ -9,7 +9,6 @@
 */
 
 var form2json = require('form2json');
-var queryString = require('querystring');
 
 /**
 * Extract the mime type from the given request's
@@ -35,8 +34,7 @@ function mime(req) {
 exports = module.exports = function bodyDecoder(){
     return function bodyDecoder(req, res, next) {
         var decoder = exports.decode[mime(req)];
-        if (decoder && req['content-length']) {
-        // if (decoder && !req.body && req['content-length']) {
+        if (decoder && !req.body && req['content-length']) {
             var data = '';
             req.setEncoding('utf8');
             req.addListener('data', function(chunk) { data += chunk; });
@@ -65,7 +63,6 @@ exports = module.exports = function bodyDecoder(){
 */
 
 exports.decode = {
-    // 'application/x-www-form-urlencoded': form2json.decode,
-    'application/x-www-form-urlencoded': queryString.parse,
+    'application/x-www-form-urlencoded': form2json.decode,
     'application/json': JSON.parse
 };
