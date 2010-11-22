@@ -233,7 +233,7 @@ view ->
 
     # Modify/Create
     form id: 'modify', class: 'validate', method: 'post', ->
-      input type: 'hidden', name: '_method', value: 'put'
+      input type: 'hidden', name: '_method', value: 'PUT'
       div ->
         lr 'username', 'Username (email)'
         button id: 'load', -> 'Load'
