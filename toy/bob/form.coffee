@@ -80,7 +80,7 @@ put '/': ->
       values.push user_password
       setters.push 'password=?'
 
-    sql 'UPDATE realuser SET '+setters.join(',')+' WHERE user_id = ?', [values..., @user_id], (r) ->
+    sql 'UPDATE realuser SET '+setters.join(',')+' WHERE user_id = ?', [values..., @user_id], (r) =>
 
       if r.error?
         return render 'error'
@@ -91,7 +91,7 @@ put '/': ->
         sip_values.push sip_password
         sip_setters.push 'password=?'
 
-      sql 'UPDATE sipuser SET '+sip_setters.join(',')+' WHERE user_id = ?', [sip_values...,@user_id], (r) ->
+      sql 'UPDATE sipuser SET '+sip_setters.join(',')+' WHERE user_id = ?', [sip_values...,@user_id], (r) =>
         if r.error?
           return render 'error'
         @log = 'User account modified successfully'
@@ -99,7 +99,7 @@ put '/': ->
   else
     # Create
     new_user_id = Math.floor(Math.random()*2000000000)
-    sql 'INSERT INTO realuser (user_id,password,'+fields.join(',')+') VALUES (?,?,'+('?' for f in fields).join(',')+')', [new_user_id, user_password, values...], (r) ->
+    sql 'INSERT INTO realuser (user_id,password,'+fields.join(',')+') VALUES (?,?,'+('?' for f in fields).join(',')+')', [new_user_id, user_password, values...], (r) =>
       if r.error?
         return render 'error'
       sql 'INSERT INTO sipuser (sipuser_id,user_id,sipid,sipname,password) VALUES (?,?,?,?,?)', [
@@ -108,7 +108,7 @@ put '/': ->
         sip_id,
         sip_name,
         sip_password
-      ], (r) ->
+      ], (r) =>
         if r.error?
           return render 'error'
         @log = 'User account created successfully'
@@ -119,12 +119,12 @@ del '/': ->
 
   if(@user_id)
 
-    sql 'DELETE FROM realuser WHERE user_id = ?', [@user_id], (r) ->
+    sql 'DELETE FROM realuser WHERE user_id = ?', [@user_id], (r) =>
 
       if r.error?
         return render 'error'
 
-      sql 'DELETE FROM sipuser WHERE user_id = ?', [@user_id], (r) ->
+      sql 'DELETE FROM sipuser WHERE user_id = ?', [@user_id], (r) =>
         if r.error?
           return render 'error'
         @log = 'User account deleted successfully'
