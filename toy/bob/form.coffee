@@ -55,7 +55,7 @@ get '/': ->
   check_agent
   render 'default', apply: 'restrict'
 
-def fields: 'username name address city zip country agent user_type license phone account installation_id activation_date'.split(' ')
+def fields: 'username name address city zip country agent user_type license phone account installation_id activate_date'.split(' ')
 def fw_name: 'ts1.sotelips.net'
 
 using 'querystring'
@@ -88,13 +88,13 @@ post '/': ->
         sip_setters.push 'password=?'
         sip_values.push sip_password
 
-      sql 'UPDATE sip_user SET '+sip_setters.join(',')+' WHERE user_id = ?', [sip_values...,@user_id], ->
+      sql 'UPDATE sipuser SET '+sip_setters.join(',')+' WHERE user_id = ?', [sip_values...,@user_id], ->
         render 'default', apply: 'restrict'
   else
     # Create
     new_user_id = Math.floor(Math.random()*2000000000)
     sql 'INSERT INTO realuser (user_id,password,'+fields.join(',')+') VALUES (?,?,'+('?' for f in fields).join(',')+')', [new_user_id, user_password, values...], ->
-      sql 'INSERT INTO sip_user (sipuser_id,user_id,sipid,sipname,password) VALUES (?,?,?,?,?)', [
+      sql 'INSERT INTO sipuser (sipuser_id,user_id,sipid,sipname,password) VALUES (?,?,?,?,?)', [
         new_user_id,
         new_user_id,
         sip_id,
@@ -278,7 +278,7 @@ view ->
         div -> l 'phone', 'Phone number'
         div -> l 'account', 'Account number'
         div -> l 'installation_id', 'Installation ID'
-        div -> l 'activation_date', 'Date of activation'
+        div -> l 'activate_date', 'Date of activation'
 
       div ->
         input type: 'submit', -> @user_id? ? 'Modify' : 'Create'
