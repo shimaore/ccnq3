@@ -59,26 +59,43 @@ def fw_name: 'ts1.sotelips.net'
 post '/': ->
   check_admin
 
+  sip_name = uri_escape(@email)
+  sip_id   = [sip_name,fw_name].join('@')
+
   # Need special handling for password
-  @password = md5_hex([@email,'realtunnel.com',@password].join(':')) if @password?
+  if @password? and @password != ''
+    user_password = md5_hex([@email,'realtunnel.com',@password].join(':'))
+    sip_password  = md5_hex([sip_name,fw_name,@password].join(':'))
+
   values = (params[f] for f in fields)
-  setters = (f+' = ?' for f in fields).join(',')
 
   if(@user_id)
     # Update
-    sql 'UPDATE realuser SET '+setters+' WHERE user_id = ?', [values..., @user_id], ->
-      render 'default', apply: 'restrict'
+    setters = (f+'=?' for f in fields)
+    if hex_password
+      values.push user_password
+      setters.push 'password=?'
+
+    sql 'UPDATE realuser SET '+setters.join(',')+' WHERE user_id = ?', [values..., @user_id], ->
+
+      sip_setters = ['sipid=?','sipname=?']
+      sip_value   = [sip_id, sip_name]
+      if sip_password
+        sip_setters.push 'password=?'
+        sip_values.push sip_password
+
+      sql 'UPDATE sip_user SET '+sip_setters.join(',')+' WHERE user_id = ?', [sip_values...,@user_id], ->
+        render 'default', apply: 'restrict'
   else
     # Create
     new_user_id = Math.floor(Math.random()*2000000000)
-    sql 'INSERT INTO realuser (user_id,'+fields.join(',')+') VALUES (?,'('?' for f in fields).join(',')+')', [new_user_id, values...], ->
-      sip_name = uri_escape(@email)
+    sql 'INSERT INTO realuser (user_id,password,'+fields.join(',')+') VALUES (?,'+('?' for f in fields).join(',')+')', [new_user_id, user_password, values...], ->
       sql 'INSERT INTO sip_user (sipuser_id,user_id,sipid,sipname,password) VALUES (?,?,?,?,?)', [
         new_user_id,
         new_user_id,
-        [sip_name,fw_name].join('@'),
+        sip_id,
         sip_name,
-        md5_hex([sip_name,fw_name,@password].join(':'))
+        sip_password
       ]
       render 'default', apply: 'restrict'
 
