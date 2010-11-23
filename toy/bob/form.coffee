@@ -3,7 +3,6 @@
 include 'server.coffee'
 
 using 'http'
-using 'querystring'
 
 def db_name: 'default'
 
@@ -58,6 +57,8 @@ get '/': ->
 
 def fields: 'username name address city zip country agent user_type license phone account installation_id activation_date'.split(' ')
 def fw_name: 'ts1.sotelips.net'
+
+using 'querystring'
 
 post '/': ->
   check_admin
