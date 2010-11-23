@@ -239,12 +239,12 @@ client ->
 view 'error': ->
   @title = 'Error'
   @scripts = [
-    '/javascripts/jquery',
-    '/javascripts/jquery-ui',
+    'javascripts/jquery',
+    'javascripts/jquery-ui',
   ]
   @stylesheets = [
-    '/stylesheets/style',
-    '/stylesheets/jquery-ui',
+    'stylesheets/style',
+    'stylesheets/jquery-ui',
   ]
 
   h1 @title
@@ -254,18 +254,18 @@ view 'error': ->
 view ->
   @title = 'Portal'
   @scripts = [
-    '/javascripts/jquery',
-    '/javascripts/jquery-ui',
-    '/javascripts/jquery.validate',
-    '/javascripts/jquery.datatables',
-    '/javascripts/jquery.deserialize',
-    '/default',
-    '/search', '/account', '/validate'
+    'javascripts/jquery',
+    'javascripts/jquery-ui',
+    'javascripts/jquery.validate',
+    'javascripts/jquery.datatables',
+    'javascripts/jquery.deserialize',
+    'default',
+    'search', 'account', 'validate'
   ]
   @stylesheets = [
-    '/stylesheets/style',
-    '/stylesheets/jquery-ui',
-    '/stylesheets/datatables'
+    'stylesheets/style',
+    'stylesheets/jquery-ui',
+    'stylesheets/datatables'
   ]
 
   lr = (_id,_label) ->
