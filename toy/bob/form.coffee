@@ -199,7 +199,6 @@ client ->
     $('#content').addClass('ui-widget')
     $('form').addClass('ui-widget-content')
     $('button').button()
-    $('#on_license').find('input').attr('disabled',true)
 
     $('#license').change ->
       if($(this).val())
