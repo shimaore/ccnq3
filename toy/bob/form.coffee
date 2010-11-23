@@ -276,8 +276,8 @@ view ->
           th -> 'Username (email)'
         tbody -> ''
 
-    div id: 'error', -> @error?
-    div id: 'log',   -> @log?
+    div id: 'error', -> @error
+    div id: 'log',   -> @log
 
     # Modify/Create
     form id: 'modify', class: 'validate', method: 'post', ->
