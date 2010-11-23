@@ -217,7 +217,7 @@ client ->
       else
         $('#on_license').find('input').removeClass('required')
 
-view 'error' ->
+view 'error': ->
   @title = 'Error'
   @scripts = [
     '/javascripts/jquery',
