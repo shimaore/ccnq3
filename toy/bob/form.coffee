@@ -94,6 +94,7 @@ put '/': ->
       sql 'UPDATE sipuser SET '+sip_setters.join(',')+' WHERE user_id = ?', [sip_values...,@user_id], (r) ->
         if r.error?
           return render 'error'
+        @log = 'User account modified successfully'
         render 'default', apply: 'restrict'
   else
     # Create
@@ -110,6 +111,7 @@ put '/': ->
       ], (r) ->
         if r.error?
           return render 'error'
+        @log = 'User account created successfully'
         render 'default', apply: 'restrict'
 
 
@@ -259,7 +261,6 @@ view ->
 
 
   h1 @title
-  div id: 'log'
 
 
   div id: 'content', ->
@@ -276,6 +277,7 @@ view ->
         tbody -> ''
 
     div id: 'error', -> @error?
+    div id: 'log',   -> @log?
 
     # Modify/Create
     form id: 'modify', class: 'validate', method: 'post', ->
