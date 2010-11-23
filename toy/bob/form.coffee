@@ -93,14 +93,14 @@ post '/': ->
   else
     # Create
     new_user_id = Math.floor(Math.random()*2000000000)
-    sql 'INSERT INTO realuser (user_id,password,'+fields.join(',')+') VALUES (?,'+('?' for f in fields).join(',')+')', [new_user_id, user_password, values...], ->
+    sql 'INSERT INTO realuser (user_id,password,'+fields.join(',')+') VALUES (?,?,'+('?' for f in fields).join(',')+')', [new_user_id, user_password, values...], ->
       sql 'INSERT INTO sip_user (sipuser_id,user_id,sipid,sipname,password) VALUES (?,?,?,?,?)', [
         new_user_id,
         new_user_id,
         sip_id,
         sip_name,
         sip_password
-      ] ->
+      ], ->
         render 'default', apply: 'restrict'
 
 
