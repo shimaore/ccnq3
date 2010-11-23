@@ -154,7 +154,7 @@ client search: ->
         $('#modify').deserialize(data)
         $('#modify input#password').val(undefined).removeClass('required')
         $('#modify input[type="submit"]').val('Modify')
-        $('#delete').show()
+        $('#delete').show().find('input[name="user_id"']).val(data.user_id)
 
       return false
 
@@ -302,7 +302,7 @@ view ->
       div ->
         lr 'username', 'Username (email)'
         button id: 'load', -> 'Load'
-      input type: 'hidden', name: 'user_id', value: @user_id
+      input type: 'hidden', name: 'user_id'
 
       div -> lr 'name', 'Name'
       div -> lr 'password', 'Password'
@@ -331,5 +331,5 @@ view ->
     # Delete
     form id: 'delete', method: 'post', ->
       input type: 'hidden', name: '_method', value: 'delete'
-      input type: 'hidden', name: 'user_id', value: @user_id
+      input type: 'hidden', name: 'user_id'
       input type: 'submit', value: 'Delete'
