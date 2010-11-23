@@ -100,8 +100,8 @@ post '/': ->
         sip_id,
         sip_name,
         sip_password
-      ]
-      render 'default', apply: 'restrict'
+      ] ->
+        render 'default', apply: 'restrict'
 
 
 postrender restrict: ->
