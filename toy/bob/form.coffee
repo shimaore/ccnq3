@@ -3,6 +3,7 @@
 include 'server.coffee'
 
 using 'http'
+using 'querystring'
 
 def db_name: 'default'
 
@@ -61,7 +62,7 @@ def fw_name: 'ts1.sotelips.net'
 post '/': ->
   check_admin
 
-  sip_name = uri_escape(@email)
+  sip_name = querystring.escape(@email)
   sip_id   = [sip_name,fw_name].join('@')
 
   # Need special handling for password
