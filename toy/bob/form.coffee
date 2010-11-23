@@ -211,7 +211,7 @@ client ->
     $('#modify input[type="submit"]').val('Create')
     $('#content').addClass('ui-widget')
     $('form').addClass('ui-widget-content')
-    $('button').button()
+    $('button,input[type="submit"],input[type="reset"]').button()
 
     $('#license').change ->
       if($(this).val())
