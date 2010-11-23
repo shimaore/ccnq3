@@ -70,7 +70,7 @@ sub run {
         $response->{error}  = $@    if $@;
         $response->{rows}   = $rows if $rows;
 
-        $req->respond([200,'OK',{ 'Content-Type' => 'text/json' }, encode_json($response)]);
+        $req->respond([200,'OK',{ 'Content-Type' => 'application/json' }, encode_json($response)]);
       });
     },
   );
