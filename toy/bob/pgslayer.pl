@@ -33,7 +33,15 @@ sub run {
       my ($httpd,$req) = @_;
 
       my $error = sub {
-        $req->respond([@_]);
+        my ($code,$msg,$params) = @_;
+        $code ||= 500;
+        $msg ||= 'Internal error';
+        $params ||= '';
+        my $response = {
+          error=>$msg,
+          info=>$params
+        };
+        $req->respond([$code,$msg,{ 'Content-Type' => 'application/json' }, encode_json($response)]);
         $httpd->stop_request;
         return;
       };
@@ -41,13 +49,13 @@ sub run {
       my $url = URI->new($req->url);
       my $path = $url->path;
 
-      my ($db_name) = ($path =~ m{^/(\w+)$}) or return $error->(404);
-      my $conf = $config->{db}->{$db_name} or return $error->(404);
+      my ($db_name) = ($path =~ m{^/(\w+)$}) or return $error->(404,'Not found');
+      my $conf = $config->{db}->{$db_name} or return $error->(404,'Not found');
 
       my $json = eval { decode_json($req->content) };
-      !$@ && ref($json) eq 'HASH' or return $error->(418,'Invalid JSON',{ 'Content-Type' => 'text/plain' }, $@);
+      !$@ && ref($json) eq 'HASH' or return $error->(418,'Invalid JSON',$@);
 
-      my $sql = $json->{sql} or return $error->(501);
+      my $sql = $json->{sql} or return $error->(501,'No sql query');
       my $params = $json->{params} || [];
 
       my $dbh = AE::DBI->new (
@@ -58,7 +66,7 @@ sub run {
 
       # $_dbh{$dbh} = $dbh;
 
-      $dbh->on_error( sub { undef $dbh; return $error->(500,'Database error',{ 'Content-Type' => 'text/plain' }, $@) } );
+      $dbh->on_error( sub { undef $dbh; return $error->(500,'Database error',$@) } );
       $dbh->timeout(12);
 
       $dbh->exec($sql,@$params,sub {
