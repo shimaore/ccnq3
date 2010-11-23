@@ -60,7 +60,7 @@ def fw_name: 'ts1.sotelips.net'
 
 using 'querystring'
 
-post '/': ->
+put '/': ->
   check_admin
 
   sip_name = querystring.escape(@email)
