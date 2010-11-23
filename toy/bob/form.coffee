@@ -80,7 +80,9 @@ put '/': ->
       values.push user_password
       setters.push 'password=?'
 
-    sql 'UPDATE realuser SET '+setters.join(',')+' WHERE user_id = ?', [values..., @user_id], ->
+    sql 'UPDATE realuser SET '+setters.join(',')+' WHERE user_id = ?', [values..., @user_id], (r) ->
+
+      r.error? and return render 'error'
 
       sip_setters = ['sipid=?','sipname=?']
       sip_values = [sip_id, sip_name]
@@ -88,19 +90,22 @@ put '/': ->
         sip_values.push sip_password
         sip_setters.push 'password=?'
 
-      sql 'UPDATE sipuser SET '+sip_setters.join(',')+' WHERE user_id = ?', [sip_values...,@user_id], ->
+      sql 'UPDATE sipuser SET '+sip_setters.join(',')+' WHERE user_id = ?', [sip_values...,@user_id], (r) ->
+        r.error? and return render 'error'
         render 'default', apply: 'restrict'
   else
     # Create
     new_user_id = Math.floor(Math.random()*2000000000)
-    sql 'INSERT INTO realuser (user_id,password,'+fields.join(',')+') VALUES (?,?,'+('?' for f in fields).join(',')+')', [new_user_id, user_password, values...], ->
+    sql 'INSERT INTO realuser (user_id,password,'+fields.join(',')+') VALUES (?,?,'+('?' for f in fields).join(',')+')', [new_user_id, user_password, values...], (r) ->
+      r.error? and return render 'error'
       sql 'INSERT INTO sipuser (sipuser_id,user_id,sipid,sipname,password) VALUES (?,?,?,?,?)', [
         new_user_id,
         new_user_id,
         sip_id,
         sip_name,
         sip_password
-      ], ->
+      ], (r) ->
+        r.error? and return render 'error'
         render 'default', apply: 'restrict'
 
 
@@ -208,6 +213,20 @@ client ->
       else
         $('#on_license').find('input').removeClass('required')
 
+view 'error' ->
+  @title = 'Error'
+  @scripts = [
+    '/javascripts/jquery',
+    '/javascripts/jquery-ui',
+  ]
+  @stylesheets = [
+    '/stylesheets/style',
+    '/stylesheets/jquery-ui',
+  ]
+
+  h1 @title
+  div id: 'error', -> 'An errror occurred. Please try again.'
+
 
 view ->
   @title = 'Portal'
@@ -251,6 +270,8 @@ view ->
         thead -> tr ->
           th -> 'Username (email)'
         tbody -> ''
+
+    div id: 'error', -> @error?
 
     # Modify/Create
     form id: 'modify', class: 'validate', method: 'post', ->
