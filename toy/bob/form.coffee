@@ -76,7 +76,7 @@ put '/': ->
   if(@user_id)
     # Update
     setters = (f+'=?' for f in fields)
-    if hex_password
+    if user_password?
       values.push user_password
       setters.push 'password=?'
 
@@ -84,9 +84,9 @@ put '/': ->
 
       sip_setters = ['sipid=?','sipname=?']
       sip_value   = [sip_id, sip_name]
-      if sip_password
-        sip_setters.push 'password=?'
+      if sip_password?
         sip_values.push sip_password
+        sip_setters.push 'password=?'
 
       sql 'UPDATE sipuser SET '+sip_setters.join(',')+' WHERE user_id = ?', [sip_values...,@user_id], ->
         render 'default', apply: 'restrict'
