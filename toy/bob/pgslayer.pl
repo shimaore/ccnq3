@@ -68,7 +68,7 @@ sub run {
 
       $dbh->on_error( sub { undef $dbh; return $error->(500,'Database error',$@) } );
       $dbh->timeout(12);
-      $dbh->attr(pg_enable_utf8 => 1);
+      $dbh->attr(pg_enable_utf8 => 1,sub{});
 
       $dbh->exec($sql,@$params,sub {
         my ($dbh2,$rows,$rv) = @_;
