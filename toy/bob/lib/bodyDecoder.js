@@ -37,8 +37,8 @@ var util = require('util')
 exports = module.exports = function bodyDecoder(){
     return function bodyDecoder(req, res, next) {
         var decoder = exports.decode[mime(req)];
-        util.debug("mime="+mime(req)+",body="+util.inspect(req.body)+",length="+util.inspect(req['Content-Length']));
-        if (decoder && !req.body && req['Content-Length']) {
+        util.debug("mime="+mime(req)+",body="+util.inspect(req.body)+",length="+util.inspect(req.headers['content-length']));
+        if (decoder && !req.body && req.headers['content-length']) {
             var data = '';
             req.setEncoding('utf8');
             req.addListener('data', function(chunk) { data += chunk; });
