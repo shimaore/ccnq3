@@ -154,7 +154,7 @@ client search: ->
         $('#modify').deserialize(data)
         $('#modify input#password').val(undefined).removeClass('required')
         $('#modify input[type="submit"]').val('Modify')
-        $('#delete').show().find('input[name="user_id"']).val(data.user_id)
+        $('#delete').show().find('input[name="user_id"]').val(data.user_id)
 
       return false
 
