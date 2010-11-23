@@ -63,12 +63,12 @@ using 'querystring'
 put '/': ->
   check_admin
 
-  sip_name = querystring.escape(@email)
+  sip_name = querystring.escape(@username)
   sip_id   = [sip_name,fw_name].join('@')
 
   # Need special handling for password
   if @password? and @password != ''
-    user_password = md5_hex([@email,'realtunnel.com',@password].join(':'))
+    user_password = md5_hex([@username,'realtunnel.com',@password].join(':'))
     sip_password  = md5_hex([sip_name,fw_name,@password].join(':'))
 
   values = (params[f] for f in fields)
@@ -249,7 +249,7 @@ view ->
     div id: 'account_users_container', ->
       table id: "account_users", class: 'display', ->
         thead -> tr ->
-          th -> 'User ID (email)'
+          th -> 'Username (email)'
         tbody -> ''
 
     # Modify/Create
