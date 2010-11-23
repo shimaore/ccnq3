@@ -32,9 +32,12 @@ function mime(req) {
  * @api public
  */
 
+var util = require('util')
+
 exports = module.exports = function bodyDecoder(){
     return function bodyDecoder(req, res, next) {
         var decoder = exports.decode[mime(req)];
+        util.debug("mime="+mime(req)+",body="+util.inspect(req.body)+",length="+util.inspect(req['content-length']));
         if (decoder && !req.body && req['content-length']) {
             var data = '';
             req.setEncoding('utf8');
