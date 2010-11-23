@@ -1,5 +1,7 @@
 #!/usr/bin/env zappa
 
+include 'server.coffee'
+
 using 'http'
 
 def db_name: 'default'
