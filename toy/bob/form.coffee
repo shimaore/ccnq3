@@ -297,7 +297,7 @@ view ->
       div -> l  'agent', 'Agent'
       div ->
         label for: 'user_type', -> 'User Type'
-        select id: 'user_type', ->
+        select id: 'user_type', name: 'user_type', ->
           option value: 'demo', -> 'Demo'
           option value: 'paid', -> 'Paid'
       div -> l  'license', 'License'
