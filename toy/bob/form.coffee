@@ -12,8 +12,9 @@ helper sql: (_sql,_p,cb) ->
     params: _p
   db = http.createClient(6789,'localhost')
   content = JSON.stringify(data)
-  request = db.request('POST','/'+db_name,{'Content-Type':'text/json','Content-length': content.length})
-  request.write content
+  buffer = new Buffer(content)
+  request = db.request('POST','/'+db_name,{'Content-Type':'application/json','Content-length': buffer.byteLength})
+  request.write buffer
   request.end
   request.on 'response', (response) ->
     _data = ''
