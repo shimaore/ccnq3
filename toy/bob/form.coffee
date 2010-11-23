@@ -114,6 +114,22 @@ put '/': ->
         @log = 'User account created successfully'
         render 'default', apply: 'restrict'
 
+del '/': ->
+  check_admin
+
+  if(@user_id)
+
+    sql 'DELETE FROM realuser WHERE user_id = ?', [@user_id], (r) ->
+
+      if r.error?
+        return render 'error'
+
+      sql 'DELETE FROM sipuser WHERE user_id = ?', [@user_id], (r) ->
+        if r.error?
+          return render 'error'
+        @log = 'User account deleted successfully'
+        render 'default', apply: 'restrict'
+
 
 postrender restrict: ->
   # $('.staff').remove() unless @user.role is 'staff'
@@ -312,7 +328,7 @@ view ->
         input type: 'reset', value: "Reset/New"
 
     # Delete
-    form id: 'delete', ->
+    form id: 'delete', method: 'post', ->
       input type: 'hidden', name: '_method', value: 'delete'
       input type: 'hidden', name: 'user_id', value: @user_id
       input type: 'submit', value: 'Delete'
