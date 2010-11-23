@@ -1,23 +1,24 @@
+
 /*!
-* Ext JS Connect
-* Copyright(c) 2010 Sencha Inc.
-* MIT Licensed
-*/
+ * Ext JS Connect
+ * Copyright(c) 2010 Sencha Inc.
+ * MIT Licensed
+ */
 
 /**
-* Module dependencies.
-*/
+ * Module dependencies.
+ */
 
-var form2json = require('form2json');
+var queryString = require('querystring');
 
 /**
-* Extract the mime type from the given request's
-* _Content-Type_ header.
-*
-* @param {IncomingMessage} req
-* @return {String}
-* @api private
-*/
+ * Extract the mime type from the given request's
+ * _Content-Type_ header.
+ *
+ * @param {IncomingMessage} req
+ * @return {String}
+ * @api private
+ */
 
 function mime(req) {
     var str = req.headers['content-type'] || '';
@@ -25,11 +26,11 @@ function mime(req) {
 }
 
 /**
-* Decode request bodies.
-*
-* @return {Function}
-* @api public
-*/
+ * Decode request bodies.
+ *
+ * @return {Function}
+ * @api public
+ */
 
 exports = module.exports = function bodyDecoder(){
     return function bodyDecoder(req, res, next) {
@@ -56,13 +57,13 @@ exports = module.exports = function bodyDecoder(){
 };
 
 /**
-* Supported decoders.
-*
-* - application/x-www-form-urlencoded
-* - application/json
-*/
+ * Supported decoders.
+ *
+ * - application/x-www-form-urlencoded
+ * - application/json
+ */
 
 exports.decode = {
-    'application/x-www-form-urlencoded': form2json.decode,
+    'application/x-www-form-urlencoded': queryString.parse,
     'application/json': JSON.parse
 };
