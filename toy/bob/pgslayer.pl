@@ -33,7 +33,7 @@ sub run {
       my ($httpd,$req) = @_;
 
       my $error = sub {
-        $req->respond([map { encode_utf8($_) } @_]);
+        $req->respond([@_]);
         $httpd->stop_request;
         return;
       };
@@ -45,7 +45,7 @@ sub run {
       my $conf = $config->{db}->{$db_name} or return $error->(404);
 
       my $json = eval { decode_json($req->content) };
-      !$@ && ref($json) eq 'HASH' or return $error->(418,$@);
+      !$@ && ref($json) eq 'HASH' or return $error->(418,'Invalid JSON',{ 'Content-Type' => 'text/plain' }, $@);
 
       my $sql = $json->{sql} or return $error->(501);
       my $params = $json->{params} || [];
@@ -58,7 +58,7 @@ sub run {
 
       # $_dbh{$dbh} = $dbh;
 
-      $dbh->on_error( sub { undef $dbh; return $error->(500,$@) } );
+      $dbh->on_error( sub { undef $dbh; return $error->(500,'Database error',{ 'Content-Type' => 'text/plain' }, $@) } );
       $dbh->timeout(12);
 
       $dbh->exec($sql,@$params,sub {
