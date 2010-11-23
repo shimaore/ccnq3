@@ -83,7 +83,7 @@ put '/': ->
     sql 'UPDATE realuser SET '+setters.join(',')+' WHERE user_id = ?', [values..., @user_id], ->
 
       sip_setters = ['sipid=?','sipname=?']
-      sip_value   = [sip_id, sip_name]
+      sip_values = [sip_id, sip_name]
       if sip_password?
         sip_values.push sip_password
         sip_setters.push 'password=?'
