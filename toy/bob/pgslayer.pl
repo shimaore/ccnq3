@@ -6,6 +6,7 @@ use AnyEvent;
 use AnyEvent::HTTPD;
 use AE::DBI;
 
+use Encode;
 use JSON;
 use URI;
 
@@ -32,7 +33,7 @@ sub run {
       my ($httpd,$req) = @_;
 
       my $error = sub {
-        $req->respond([@_]);
+        $req->respond([map { encode_utf8($_) } @_]);
         $httpd->stop_request;
         return;
       };
@@ -43,7 +44,7 @@ sub run {
       my ($db_name) = ($path =~ m{^/(\w+)$}) or return $error->(404);
       my $conf = $config->{db}->{$db_name} or return $error->(404);
 
-      my $json = eval { decode_json($req->content) };
+      my $json = eval { decode_json(decode_utf8($req->content)) };
       !$@ && ref($json) eq 'HASH' or return $error->(418,$@);
 
       my $sql = $json->{sql} or return $error->(501);
@@ -57,7 +58,7 @@ sub run {
 
       # $_dbh{$dbh} = $dbh;
 
-      $dbh->on_error( sub { undef $dbh; return $error->([500,$@]) } );
+      $dbh->on_error( sub { undef $dbh; return $error->(500,$@) } );
       $dbh->timeout(12);
 
       $dbh->exec($sql,@$params,sub {
@@ -70,7 +71,7 @@ sub run {
         $response->{error}  = $@    if $@;
         $response->{rows}   = $rows if $rows;
 
-        $req->respond([200,'OK',{ 'Content-Type' => 'application/json' }, encode_json($response)]);
+        $req->respond([200,'OK',{ 'Content-Type' => 'application/json' }, encode_utf8(encode_json($response))]);
       });
     },
   );
