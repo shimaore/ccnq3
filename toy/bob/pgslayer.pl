@@ -44,7 +44,7 @@ sub run {
       my ($db_name) = ($path =~ m{^/(\w+)$}) or return $error->(404);
       my $conf = $config->{db}->{$db_name} or return $error->(404);
 
-      my $json = eval { decode_json(decode_utf8($req->content)) };
+      my $json = eval { decode_json($req->content) };
       !$@ && ref($json) eq 'HASH' or return $error->(418,$@);
 
       my $sql = $json->{sql} or return $error->(501);
@@ -71,7 +71,7 @@ sub run {
         $response->{error}  = $@    if $@;
         $response->{rows}   = $rows if $rows;
 
-        $req->respond([200,'OK',{ 'Content-Type' => 'application/json' }, encode_utf8(encode_json($response))]);
+        $req->respond([200,'OK',{ 'Content-Type' => 'application/json' }, encode_json($response)]);
       });
     },
   );
