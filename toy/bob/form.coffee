@@ -82,7 +82,8 @@ put '/': ->
 
     sql 'UPDATE realuser SET '+setters.join(',')+' WHERE user_id = ?', [values..., @user_id], (r) ->
 
-      r.error? and return render 'error'
+      if r.error?
+        return render 'error'
 
       sip_setters = ['sipid=?','sipname=?']
       sip_values = [sip_id, sip_name]
@@ -91,13 +92,15 @@ put '/': ->
         sip_setters.push 'password=?'
 
       sql 'UPDATE sipuser SET '+sip_setters.join(',')+' WHERE user_id = ?', [sip_values...,@user_id], (r) ->
-        r.error? and return render 'error'
+        if r.error?
+          return render 'error'
         render 'default', apply: 'restrict'
   else
     # Create
     new_user_id = Math.floor(Math.random()*2000000000)
     sql 'INSERT INTO realuser (user_id,password,'+fields.join(',')+') VALUES (?,?,'+('?' for f in fields).join(',')+')', [new_user_id, user_password, values...], (r) ->
-      r.error? and return render 'error'
+      if r.error?
+        return render 'error'
       sql 'INSERT INTO sipuser (sipuser_id,user_id,sipid,sipname,password) VALUES (?,?,?,?,?)', [
         new_user_id,
         new_user_id,
@@ -105,7 +108,8 @@ put '/': ->
         sip_name,
         sip_password
       ], (r) ->
-        r.error? and return render 'error'
+        if r.error?
+          return render 'error'
         render 'default', apply: 'restrict'
 
 
