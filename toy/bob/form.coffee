@@ -2,7 +2,13 @@
 
 include 'server.coffee'
 
-using 'http'
+using 'request'
+
+def json_h:
+  accept:'application/json'
+  'content-type':'application/json'
+
+
 
 def db_name: 'default'
 
@@ -10,16 +16,13 @@ helper sql: (_sql,_p,cb) ->
   data =
     sql: _sql
     params: _p
-  db = http.createClient(6789,'localhost')
-  content = JSON.stringify(data)
-  buffer = new Buffer(content)
-  request = db.request('POST','/'+db_name,{'Content-Type':'application/json','Content-length': buffer.length})
-  request.write buffer
-  request.end
-  request.on 'response', (response) ->
-    _data = ''
-    response.on 'data', (chunk) -> _data += chunk
-    response.on 'end', -> cb(JSON.parse(_data))
+
+  options =
+    method:  'POST'
+    uri:     'http://localhost:6789/'+db_name
+    headers: json_h
+    body:    new Buffer(JSON.stringify(data))
+  request options, (error,response,body) -> cb(JSON.parse(body))
 
 crypto = require 'crypto'
 
