@@ -2,7 +2,7 @@
 
 include 'server.coffee'
 
-def req = require 'request'
+def req: require 'request'
 
 def json_h:
   accept:'application/json'
