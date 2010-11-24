@@ -2,7 +2,7 @@
 
 include 'server.coffee'
 
-using 'request'
+def req = require 'request'
 
 def json_h:
   accept:'application/json'
@@ -22,7 +22,7 @@ helper sql: (_sql,_p,cb) ->
     uri:     'http://localhost:6789/'+db_name
     headers: json_h
     body:    new Buffer(JSON.stringify(data))
-  request options, (error,response,body) -> cb(JSON.parse(body))
+  req options, (error,response,body) -> cb(JSON.parse(body))
 
 crypto = require 'crypto'
 
