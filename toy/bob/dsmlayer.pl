@@ -60,7 +60,7 @@ sub run {
 
       my $json = new JSON;
       my $data_json = $json->allow_blessed->convert_blessed->encode($data);
-      $req->respond([200,'OK',{ 'Content-Type' => 'application/json' }, $data_json)]);
+      $req->respond([200,'OK',{ 'Content-Type' => 'application/json' }, $data_json]);
     },
   );
 
