@@ -26,7 +26,7 @@ sub config {
 sub run {
   my $config = config(@_);
 
-  my $cache = Cache::Memcached->new(servers => '127.0.0.1:11211');
+  my $cache = Cache::Memcached->new(servers => ['127.0.0.1:11211']);
 
   my $httpd = AnyEvent::HTTPD->new (
     host => $config->{httpd_host},
