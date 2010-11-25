@@ -3,6 +3,9 @@ use strict; use warnings;
 
 use Cache::Memcached;
 
+use AnyEvent;
+use AnyEvent::HTTPD;
+
 use Encode;
 use JSON;
 use URI;
