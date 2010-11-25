@@ -22,7 +22,11 @@ helper sql: (_sql,_p,cb) ->
     uri:     'http://localhost:6789/'+db_name
     headers: json_h
     body:    new Buffer(JSON.stringify(data))
-  req options, (error,response,body) -> cb(JSON.parse(body))
+  req options, (error,response,body) ->
+    if(!error && response.statusCode == 200)
+      cb(JSON.parse(body))
+    else
+      cb({error:error})
 
 crypto = require 'crypto'
 
