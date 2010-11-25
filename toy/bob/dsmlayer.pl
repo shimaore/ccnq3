@@ -3,6 +3,10 @@ use strict; use warnings;
 
 use Cache::Memcached;
 
+use Encode;
+use JSON;
+use URI;
+
 sub config {
   my ($name) = @_;
   $name or die "$0 <configfile>";
