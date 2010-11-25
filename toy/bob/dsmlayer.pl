@@ -12,6 +12,8 @@ use AnyEvent::HTTPD;
 use Encode;
 use JSON;
 use URI;
+use Data::Structure::Util qw(unbless);
+
 
 sub config {
   my ($name) = @_;
@@ -58,9 +60,7 @@ sub run {
 
       my $data = $cache->get($id);
 
-      my $json = new JSON;
-      my $data_json = $json->allow_blessed->convert_blessed->encode($data);
-      $req->respond([200,'OK',{ 'Content-Type' => 'application/json' }, $data_json]);
+      $req->respond([200,'OK',{ 'Content-Type' => 'application/json' }, encode_json(unbless($data))]);
     },
   );
 
