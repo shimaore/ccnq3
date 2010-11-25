@@ -55,7 +55,7 @@ sub run {
 
       my $data = $cache->get($id);
 
-      $req->respond([200,'OK',{ 'Content-Type' => 'application/json' }, encode_json({data => $data})]);
+      $req->respond([200,'OK',{ 'Content-Type' => 'application/json' }, encode_json({id => $id, data => $data})]);
     },
   );
 
