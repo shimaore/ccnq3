@@ -3,6 +3,9 @@ use strict; use warnings;
 
 use Cache::Memcached;
 
+# required to thaw the response
+use Dancer::Session::Memcached;
+
 use AnyEvent;
 use AnyEvent::HTTPD;
 
