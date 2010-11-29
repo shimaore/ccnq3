@@ -59,8 +59,13 @@ sub run {
       my ($id) = ($path =~ m{^/(.+)$}) or return $error->(404,'Not found');
 
       my $data = $cache->get($id);
+      $data or return $error->(404,'No such session');
 
-      $req->respond([200,'OK',{ 'Content-Type' => 'application/json' }, encode_json(unbless($data))]);
+      my $json = eval { encode_json(unbless($data)) };
+      $@   and return $error->(500,'Data error',$@);
+      $json or return $error->(500,'Data error');
+
+      $req->respond([200,'OK',{ 'Content-Type' => 'application/json' },$json]);
     },
   );
 
