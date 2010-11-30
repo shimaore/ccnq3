@@ -74,12 +74,12 @@ postrender restrict: ->
 helper check_user: (account,cb) ->
   dancer_session (s) =>
     if s.error? or not s.user_id?
-      @error = "Session error"
+      @error = "Session error (#{s.error})"
       return render 'error'
 
     user_info s.user_id, (u) =>
       if u.error?
-        @error = "User access error"
+        @error = "User access error (#{u.error})"
         return render 'error'
       cb() if u.is_sysadmin
       if account?
@@ -91,12 +91,12 @@ helper check_user: (account,cb) ->
 helper check_admin: (cb) ->
   dancer_session (s) =>
     if s.error? or not s.user_id?
-      @error = "Session error"
+      @error = "Session error (#{s.error})"
       return render 'error'
 
     user_info s.user_id, (u) =>
       if u.error?
-        @error = "User access error"
+        @error = "User access error (#{u.error})"
         return render 'error'
       cb() if u.is_sysadmin
       @error = "Not authorized"
