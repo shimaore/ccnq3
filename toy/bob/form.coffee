@@ -76,27 +76,27 @@ postrender restrict: ->
 helper check_user: (account,cb) ->
   dancer_session (s) =>
     if s.error? or not s.user_id?
-      cb "Session error (#{s.error})"
+      return cb "Session error (#{s.error})"
 
     user_info s.user_id, (u) =>
       if u.error?
-        cb "User access error (#{u.error})"
-      cb() if u.is_sysadmin
+        return cb "User access error (#{u.error})"
+      return cb() if u.is_sysadmin
       if account?
         if not u.portal_accounts or u.portal_accounts.indexOf(account) is -1
-          cb "You do not have access to this account"
-      cb()
+          return cb "You do not have access to this account"
+      return cb()
 
 helper check_admin: (cb) ->
   dancer_session (s) =>
     if s.error? or not s.user_id?
-      cb "Session error (#{s.error})"
+      return cb "Session error (#{s.error})"
 
     user_info s.user_id, (u) =>
       if u.error?
-        cb "User access error (#{u.error})"
-      cb() if u.is_sysadmin
-      cb "Not authorized"
+        return cb "User access error (#{u.error})"
+      return cb() if u.is_sysadmin
+      return cb "Not authorized"
 
 get '/': ->
   check_user undefined, (error) =>
@@ -269,7 +269,7 @@ client account: ->
 get '/account/': ->
   check_admin (error) =>
     if(error?)
-      send
+      return send
     rows = []
     sql 'SELECT username FROM realuser', [], (data) ->
       send { aaData: data.rows.map (a) -> [a.username] }
@@ -277,7 +277,7 @@ get '/account/': ->
 get '/account/:account': ->
   check_user @account, (error) =>
     if(error?)
-      send
+      return send
     rows = []
     sql 'SELECT username FROM realuser WHERE account = ?', [@account], (data) ->
       send { aaData: data.rows.map (a) -> [a.username] }
