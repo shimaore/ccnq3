@@ -269,7 +269,7 @@ client account: ->
 get '/account/': ->
   check_admin (error) =>
     if(error?)
-      client.disconnect()
+      send
     rows = []
     sql 'SELECT username FROM realuser', [], (data) ->
       send { aaData: data.rows.map (a) -> [a.username] }
@@ -277,7 +277,7 @@ get '/account/': ->
 get '/account/:account': ->
   check_user @account, (error) =>
     if(error?)
-      client.disconnect()
+      send
     rows = []
     sql 'SELECT username FROM realuser WHERE account = ?', [@account], (data) ->
       send { aaData: data.rows.map (a) -> [a.username] }
