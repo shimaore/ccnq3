@@ -2,6 +2,7 @@
 
 include 'server.coffee'
 using 'querystring'
+using 'fs'
 
 def req: require 'request'
 
