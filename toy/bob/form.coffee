@@ -46,7 +46,7 @@ helper user_info: (username,cb) ->
   options =
     method:   'GET'
     uri:      config.portal_couchdb_uri+'portal/'+querystring.escape(username)
-    headers:  json_h
+    headers:  {accept:'application/json'}
   req options, (error,response,body) ->
     if(!error && response.statusCode == 200)
       cb(JSON.parse(body))
