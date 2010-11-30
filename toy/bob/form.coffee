@@ -44,7 +44,7 @@ helper dancer_session: (cb) ->
       cb({error:error})
 
 helper user_info: (username,cb) ->
-  cdb_uri = config.portal_couchdb_uri+'portal/'+querystring.escape(username)
+  cdb_uri = config().portal_couchdb_uri+'portal/'+querystring.escape(username)
   print(cdb_uri)
   options =
     method:   'GET'
