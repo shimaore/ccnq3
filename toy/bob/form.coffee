@@ -72,22 +72,22 @@ postrender restrict: ->
 
 # account parameter is optional
 helper check_user: (account,cb) ->
-  dancer_session (s) ->
+  dancer_session (s) =>
     client.disconnect() if s.error
     client.disconnect() unless s.user_id
 
-    user_info s.user_id, (u) ->
+    user_info s.user_id, (u) =>
       cb() if u.is_sysadmin
       if(account?)
         client.disconnect() unless u.portal_accounts and u.portal_accounts.indexOf(account) isnt -1
       cb()
 
 helper check_admin: (cb) ->
-  dancer_session (s) ->
+  dancer_session (s) =>
     client.disconnect() if s.error
     client.disconnect() unless s.user_id
 
-    user_info s.user_id, (u) ->
+    user_info s.user_id, (u) =>
       client.disconnect() if u.error
       cb() if u.is_sysadmin
       client.disconnect()
