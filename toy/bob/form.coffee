@@ -1,6 +1,7 @@
 #!/usr/bin/env zappa
 
 include 'server.coffee'
+using 'querystring'
 
 def req: require 'request'
 
@@ -8,7 +9,9 @@ def json_h:
   accept:'application/json'
   'content-type':'application/json'
 
-
+def config:
+  location = 'form.config'
+  return JSON.parse(fs.readFileSync(location, 'utf8'))
 
 def db_name: 'default'
 
@@ -28,10 +31,21 @@ helper sql: (_sql,_p,cb) ->
     else
       cb({error:error})
 
-helper session: (cb) ->
+helper dancer_session: (cb) ->
   id = cookies["dancer.session"]
   options =
     uri:      'http://localhost:6790/'+id
+    headers:  json_h
+  req options, (error,response,body) ->
+    if(!error && response.statusCode == 200)
+      cb(JSON.parse(body))
+    else
+      cb({error:error})
+
+helper user_info: (username,cb) ->
+  options =
+    method:   'GET'
+    uri:      config.portal_couchdb_uri+'portal/'+querystring.escape(username)
     headers:  json_h
   req options, (error,response,body) ->
     if(!error && response.statusCode == 200)
@@ -56,23 +70,31 @@ def md5_hex: (t) ->
 postrender restrict: ->
   # remove fields that non-admins should not see
 
-helper check_agent: (account) ->
-  return # XXX
-  if request?
-    redirect '/login' unless @user_is_agent or @user_is_admin
-  else
-    client.disconnect() unless @user_is_agent or @user_is_admin
+# account parameter is optional
+helper check_user: (account,cb) ->
+  dancer_session (s) ->
+    client.disconnect() if s.error
+    client.disconnect() unless s.user_id
 
-helper check_admin: ->
-  return # XXX
-  if request?
-    redirect '/login' unless @user_is_admin
-  else
-    client.disconnect() unless @user_is_admin
+    user_info s.user_id, (u) ->
+      cb() if u.is_sysadmin
+      if(account?)
+        client.disconnect() unless u.portal_accounts and u.portal_accounts.indexOf(account) isnt -1
+      cb()
+
+helper check_admin: (cb) ->
+  dancer_session (s) ->
+    client.disconnect() if s.error
+    client.disconnect() unless s.user_id
+
+    user_info s.user_id, (u) ->
+      client.disconnect() if u.error
+      cb() if u.is_sysadmin
+      client.disconnect()
 
 get '/': ->
-  check_agent
-  render 'default', apply: 'restrict'
+  check_user undefined, =>
+    render 'default', apply: 'restrict'
 
 def fields: 'username name address city zip country agent user_type license phone account installation_id activate_date'.split(' ')
 def fw_name: 'ts1.sotelips.net'
@@ -80,7 +102,10 @@ def fw_name: 'ts1.sotelips.net'
 using 'querystring'
 
 put '/': ->
-  check_admin
+  check_admin =>
+    create_user
+
+helper create_user: ->
 
   sip_name = querystring.escape(@username)
   sip_id   = [sip_name,fw_name].join('@')
@@ -134,8 +159,10 @@ put '/': ->
         render 'default', apply: 'restrict'
 
 del '/': ->
-  check_admin
+  check_admin => delete_user
 
+
+helper delete_user: ->
   if(@user_id)
 
     sql 'DELETE FROM realuser WHERE user_id = ?', [@user_id], (r) =>
@@ -221,16 +248,16 @@ client account: ->
       return false
 
 get '/account/': ->
-  check_admin(@account)
-  rows = []
-  sql 'SELECT username FROM realuser', [], (data) ->
-    send { aaData: data.rows.map (a) -> [a.username] }
+  check_admin =>
+    rows = []
+    sql 'SELECT username FROM realuser', [], (data) ->
+      send { aaData: data.rows.map (a) -> [a.username] }
 
 get '/account/:account': ->
-  check_agent(@account)
-  rows = []
-  sql 'SELECT username FROM realuser WHERE account = ?', [@account], (data) ->
-    send { aaData: data.rows.map (a) -> [a.username] }
+  check_user @account), =>
+    rows = []
+    sql 'SELECT username FROM realuser WHERE account = ?', [@account], (data) ->
+      send { aaData: data.rows.map (a) -> [a.username] }
 
 #  send {
 #    aaData: [
