@@ -76,37 +76,35 @@ postrender restrict: ->
 helper check_user: (account,cb) ->
   dancer_session (s) =>
     if s.error? or not s.user_id?
-      @error = "Session error (#{s.error})"
-      return request? ? render 'error' : client.disconnect()
+      cb "Session error (#{s.error})"
 
     user_info s.user_id, (u) =>
       if u.error?
-        @error = "User access error (#{u.error})"
-        return request? ? render 'error' : client.disconnect()
+        cb "User access error (#{u.error})"
       cb() if u.is_sysadmin
       if account?
         if not u.portal_accounts or u.portal_accounts.indexOf(account) is -1
-          @error = "You do not have access to this account"
-          return request? ? render 'error' : client.disconnect()
+          cb "You do not have access to this account"
       cb()
 
 helper check_admin: (cb) ->
   dancer_session (s) =>
     if s.error? or not s.user_id?
-      @error = "Session error (#{s.error})"
-      return request? ? render 'error' : client.disconnect()
+      cb "Session error (#{s.error})"
 
     user_info s.user_id, (u) =>
       if u.error?
-        @error = "User access error (#{u.error})"
-        return request? ? render 'error' : client.disconnect()
+        cb "User access error (#{u.error})"
       cb() if u.is_sysadmin
-      @error = "Not authorized"
-      return request? ? render 'error' : client.disconnect()
+      cb "Not authorized"
 
 get '/': ->
-  check_user undefined, =>
-    render 'default', apply: 'restrict'
+  check_user undefined, (error) =>
+    if error?
+      @error = error
+      render 'error'
+    else
+      render 'default', apply: 'restrict'
 
 def fields: 'username name address city zip country agent user_type license phone account installation_id activate_date'.split(' ')
 def fw_name: 'ts1.sotelips.net'
@@ -114,7 +112,11 @@ def fw_name: 'ts1.sotelips.net'
 using 'querystring'
 
 put '/': ->
-  check_admin =>
+  check_admin (error) =>
+  if(error?)
+    @error = error
+    render 'error'
+  else
     create_user
 
 helper create_user: ->
@@ -171,7 +173,12 @@ helper create_user: ->
         render 'default', apply: 'restrict'
 
 del '/': ->
-  check_admin => delete_user
+  check_admin (error) =>
+    if(error?)
+      @error = error
+      render 'error'
+    else
+      delete_user
 
 
 helper delete_user: ->
@@ -260,13 +267,19 @@ client account: ->
       return false
 
 get '/account/': ->
-  check_admin =>
+  check_admin (error) =>
+    if(error?)
+      @error = error
+      render 'error'
     rows = []
     sql 'SELECT username FROM realuser', [], (data) ->
       send { aaData: data.rows.map (a) -> [a.username] }
 
 get '/account/:account': ->
-  check_user @account, =>
+  check_user @account, (error) =>
+    if(error?)
+      @error = error
+      render 'error'
     rows = []
     sql 'SELECT username FROM realuser WHERE account = ?', [@account], (data) ->
       send { aaData: data.rows.map (a) -> [a.username] }
