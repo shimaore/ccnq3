@@ -254,7 +254,7 @@ get '/account/': ->
       send { aaData: data.rows.map (a) -> [a.username] }
 
 get '/account/:account': ->
-  check_user @account), =>
+  check_user @account, =>
     rows = []
     sql 'SELECT username FROM realuser WHERE account = ?', [@account], (data) ->
       send { aaData: data.rows.map (a) -> [a.username] }
