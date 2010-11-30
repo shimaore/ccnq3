@@ -43,9 +43,11 @@ helper dancer_session: (cb) ->
       cb({error:error})
 
 helper user_info: (username,cb) ->
+  cdb_uri = config.portal_couchdb_uri+'portal/'+querystring.escape(username)
+  log(cdb_uri)
   options =
     method:   'GET'
-    uri:      config.portal_couchdb_uri+'portal/'+querystring.escape(username)
+    uri:      cdb_uri
     headers:  {accept:'application/json'}
   req options, (error,response,body) ->
     if(!error && response.statusCode == 200)
