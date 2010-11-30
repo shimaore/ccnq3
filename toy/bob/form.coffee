@@ -83,27 +83,27 @@ helper check_user: (account,cb) ->
     user_info s.user_id, (u) =>
       if u.error?
         @error = "User access error (#{u.error})"
-        return render 'error'
+        return request? ? render 'error' : client.disconnect()
       cb() if u.is_sysadmin
       if account?
         if not u.portal_accounts or u.portal_accounts.indexOf(account) is -1
           @error = "You do not have access to this account"
-          return render 'error'
+          return request? ? render 'error' : client.disconnect()
       cb()
 
 helper check_admin: (cb) ->
   dancer_session (s) =>
     if s.error? or not s.user_id?
       @error = "Session error (#{s.error})"
-      return render 'error'
+      return request? ? render 'error' : client.disconnect()
 
     user_info s.user_id, (u) =>
       if u.error?
         @error = "User access error (#{u.error})"
-        return render 'error'
+        return request? ? render 'error' : client.disconnect()
       cb() if u.is_sysadmin
       @error = "Not authorized"
-      return render 'error'
+      return request? ? render 'error' : client.disconnect()
 
 get '/': ->
   check_user undefined, =>
