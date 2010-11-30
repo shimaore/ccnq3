@@ -113,11 +113,11 @@ using 'querystring'
 
 put '/': ->
   check_admin (error) =>
-  if(error?)
-    @error = error
-    render 'error'
-  else
-    create_user
+    if(error?)
+      @error = error
+      render 'error'
+    else
+      create_user
 
 helper create_user: ->
 
@@ -269,8 +269,7 @@ client account: ->
 get '/account/': ->
   check_admin (error) =>
     if(error?)
-      @error = error
-      render 'error'
+      client.disconnect()
     rows = []
     sql 'SELECT username FROM realuser', [], (data) ->
       send { aaData: data.rows.map (a) -> [a.username] }
@@ -278,8 +277,7 @@ get '/account/': ->
 get '/account/:account': ->
   check_user @account, (error) =>
     if(error?)
-      @error = error
-      render 'error'
+      client.disconnect()
     rows = []
     sql 'SELECT username FROM realuser WHERE account = ?', [@account], (data) ->
       send { aaData: data.rows.map (a) -> [a.username] }
