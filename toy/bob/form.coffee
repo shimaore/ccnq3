@@ -78,7 +78,7 @@ helper check_user: (account,cb) ->
   dancer_session (s) =>
     if s.error? or not s.user_id?
       @error = "Session error (#{s.error})"
-      return render 'error'
+      return request? ? render 'error' : client.disconnect()
 
     user_info s.user_id, (u) =>
       if u.error?
