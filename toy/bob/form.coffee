@@ -9,7 +9,7 @@ def json_h:
   accept:'application/json'
   'content-type':'application/json'
 
-def config:
+def config: ->
   location = 'form.config'
   return JSON.parse(fs.readFileSync(location, 'utf8'))
 
