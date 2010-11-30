@@ -73,31 +73,27 @@ postrender restrict: ->
 # account parameter is optional
 helper check_user: (account,cb) ->
   dancer_session (s) =>
-    if s.error?
-      return render 'error'
-    if not s.user_id?
-      return render 'error'
+    if s.error? or not s.user_id?
+      return render 'error', { locals: { error: "Session error" } }
 
     user_info s.user_id, (u) =>
       if u.error?
-        return render 'error'
+        return render 'error', { locals: { error: "User data error" } }
       cb() if u.is_sysadmin
-      if(account?)
-        return render 'error' unless u.portal_accounts and u.portal_accounts.indexOf(account) isnt -1
+      if account?
+        return render 'error', { locals: { error: "You do not have access to this account" } } unless u.portal_accounts and u.portal_accounts.indexOf(account) isnt -1
       cb()
 
 helper check_admin: (cb) ->
   dancer_session (s) =>
-    if s.error?
-      return render 'error'
-    if not s.user_id?
-      return render 'error'
+    if s.error? or not s.user_id?
+      return render 'error', { locals: { error: "Session error" } }
 
     user_info s.user_id, (u) =>
       if u.error?
-        return render 'error'
+        return render 'error', { locals: { error: "User data error" } }
       cb() if u.is_sysadmin
-      return render 'error'
+      return render 'error', { locals: { error: "Not authorized" } }
 
 get '/': ->
   check_user undefined, =>
@@ -301,6 +297,7 @@ view 'error': ->
 
   h1 @title
   div id: 'error', -> 'An errror occurred. Please try again.'
+  div id: 'info', -> @error
 
 
 view ->
