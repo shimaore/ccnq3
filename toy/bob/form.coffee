@@ -74,26 +74,33 @@ postrender restrict: ->
 helper check_user: (account,cb) ->
   dancer_session (s) =>
     if s.error? or not s.user_id?
-      return render 'error', { locals: { error: "Session error" } }
+      @error = "Session error"
+      return render 'error'
 
     user_info s.user_id, (u) =>
       if u.error?
-        return render 'error', { locals: { error: "User data error" } }
+        @error = "User access error"
+        return render 'error'
       cb() if u.is_sysadmin
       if account?
-        return render 'error', { locals: { error: "You do not have access to this account" } } unless u.portal_accounts and u.portal_accounts.indexOf(account) isnt -1
+        if not u.portal_accounts or u.portal_accounts.indexOf(account) is -1
+          @error = "You do not have access to this account"
+          return render 'error'
       cb()
 
 helper check_admin: (cb) ->
   dancer_session (s) =>
     if s.error? or not s.user_id?
-      return render 'error', { locals: { error: "Session error" } }
+      @error = "Session error"
+      return render 'error'
 
     user_info s.user_id, (u) =>
       if u.error?
-        return render 'error', { locals: { error: "User data error" } }
+        @error = "User access error"
+        return render 'error'
       cb() if u.is_sysadmin
-      return render 'error', { locals: { error: "Not authorized" } }
+      @error = "Not authorized"
+      return render 'error'
 
 get '/': ->
   check_user undefined, =>
