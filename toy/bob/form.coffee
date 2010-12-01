@@ -359,11 +359,11 @@ view ->
   h1 @title
 
 
-  div id: 'content', =>
+  div id: 'content', ->
     # List all user_id in account
-    form id: 'list_account', =>
+    form id: 'list_account', ->
       label for: 'in_account', -> 'Account'
-      input  id: 'in_account', => @account
+      input  id: 'in_account', -> params.account
       button -> 'Display'
 
     div id: 'account_users_container', ->
