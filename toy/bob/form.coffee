@@ -71,6 +71,9 @@ def md5_hex: (t) ->
 
 postrender restrict: ->
   # remove fields that non-admins should not see
+  check_admin (not_admin) ->
+    if not_admin
+      $('.admin_only').remove
 
 # account parameter is optional
 helper check_user: (account,cb) ->
@@ -375,7 +378,7 @@ view ->
     div id: 'log',   -> @log
 
     # Modify/Create
-    form id: 'modify', class: 'validate', method: 'post', ->
+    form id: 'modify', class: 'validate admin_only', method: 'post', ->
       input type: 'hidden', name: '_method', value: 'PUT'
       div ->
         lr 'username', 'Username (email)'
@@ -407,7 +410,7 @@ view ->
         input type: 'reset', value: "Reset/New"
 
     # Delete
-    form id: 'delete', method: 'post', ->
+    form id: 'delete', class: 'admin_only', method: 'post', ->
       input type: 'hidden', name: '_method', value: 'delete'
       input type: 'hidden', name: 'user_id'
       input type: 'submit', value: 'Delete'
