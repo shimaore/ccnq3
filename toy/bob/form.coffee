@@ -304,9 +304,9 @@ client ->
       else
         $('#on_license').find('input').removeClass('required')
 
-    password_charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-".split('');
+    password_charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-".split('')
 
-    random_password(l) ->
+    random_password = (l) ->
       return '' if l is 0
       return random_password(l-1)+password_charset[Math.floor(Math.random()*password_charset.length)]
 
