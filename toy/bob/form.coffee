@@ -85,7 +85,7 @@ helper check_user: (account,cb) ->
           return cb "You do not have access to this account"
       return cb()
 
-def check_admin: (cb) ->
+helper check_admin: (cb) ->
   dancer_session (s) =>
     if s.error? or not s.user_id?
       return cb "Session error (#{s.error})"
@@ -98,9 +98,9 @@ def check_admin: (cb) ->
 
 postrender restrict: ->
   # remove fields that non-admins should not see
-  check_admin (not_admin) ->
-    if not_admin
-      $('.admin_only').remove
+  ##check_admin (not_admin) ->
+  ##  if not_admin
+  ##    $('.admin_only').remove
 
 get '/': ->
   check_user undefined, (error) =>
