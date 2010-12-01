@@ -80,6 +80,7 @@ helper check_user: (account,cb) ->
   dancer_session (s) =>
     if s.error? or not s.user_id?
       return cb "Session error (#{s.error})"
+    @account = s.account
 
     user_info s.user_id, (u) =>
       if u.error?
@@ -365,7 +366,7 @@ view ->
     # List all user_id in account
     form id: 'list_account', ->
       label for: 'in_account', -> 'Account'
-      input  id: 'in_account'
+      input  id: 'in_account', @account
       button -> 'Display'
 
     div id: 'account_users_container', ->
