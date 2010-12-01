@@ -69,12 +69,6 @@ def md5_hex: (t) ->
 # ALTER TABLE realuser ADD installation_id TEXT;
 # ALTER TABLE realuser ADD activate_date TEXT;
 
-postrender restrict: ->
-  # remove fields that non-admins should not see
-  check_admin (not_admin) ->
-    if not_admin
-      $('.admin_only').remove
-
 # account parameter is optional
 helper check_user: (account,cb) ->
   dancer_session (s) =>
@@ -101,6 +95,12 @@ helper check_admin: (cb) ->
         return cb "User access error (#{u.error})"
       return cb() if u.is_sysadmin
       return cb "Not authorized"
+
+postrender restrict: ->
+  # remove fields that non-admins should not see
+  check_admin (not_admin) ->
+    if not_admin
+      $('.admin_only').remove
 
 get '/': ->
   check_user undefined, (error) =>
