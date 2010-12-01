@@ -200,9 +200,6 @@ helper delete_user: ->
         render 'default', apply: 'restrict'
 
 
-postrender restrict: ->
-  # $('.staff').remove() unless @user.role is 'staff'
-
 client validate: ->
   $(document).ready ->
     $("form.validate").validate();
