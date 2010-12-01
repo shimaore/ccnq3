@@ -85,7 +85,7 @@ helper check_user: (account,cb) ->
           return cb "You do not have access to this account"
       return cb()
 
-helper check_admin: (cb) ->
+check_admin = (cb) ->
   dancer_session (s) =>
     if s.error? or not s.user_id?
       return cb "Session error (#{s.error})"
