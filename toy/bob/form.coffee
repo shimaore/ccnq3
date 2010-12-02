@@ -98,9 +98,14 @@ helper check_admin: (cb) ->
 
 postrender restrict: ->
   # remove fields that non-admins should not see
-  ##check_admin (not_admin) ->
-  ##  if not_admin
-  ##    $('.admin_only').remove
+  if @not_admin
+    $('.admin_only').remove
+
+helper render_d: (log) ->
+  @log = log if log?
+  check_admin (not_admin) ->
+    @not_admin = not_admin?
+    render 'default', apply: 'restrict'
 
 get '/': ->
   check_user undefined, (error) =>
@@ -108,7 +113,7 @@ get '/': ->
       @error = error
       render 'error'
     else
-      render 'default', apply: 'restrict'
+      render_d()
 
 def fields: 'username name address city zip country agent user_type license phone account installation_id activate_date'.split(' ')
 def fw_name: 'ts1.sotelips.net'
@@ -156,8 +161,7 @@ helper create_user: ->
       sql 'UPDATE sipuser SET '+sip_setters.join(',')+' WHERE user_id = ?', [sip_values...,@user_id], (r) =>
         if r.error?
           return render 'error'
-        @log = 'User account modified successfully'
-        render 'default', apply: 'restrict'
+        render_d 'User account modified successfully'
   else
     # Create
     new_user_id = Math.floor(Math.random()*2000000000)
@@ -173,8 +177,7 @@ helper create_user: ->
       ], (r) =>
         if r.error?
           return render 'error'
-        @log = 'User account created successfully'
-        render 'default', apply: 'restrict'
+        render_d 'User account created successfully'
 
 del '/': ->
   check_admin (error) =>
@@ -196,8 +199,7 @@ helper delete_user: ->
       sql 'DELETE FROM sipuser WHERE user_id = ?', [@user_id], (r) =>
         if r.error?
           return render 'error'
-        @log = 'User account deleted successfully'
-        render 'default', apply: 'restrict'
+        render_d 'User account deleted successfully'
 
 
 client validate: ->
@@ -358,6 +360,7 @@ view ->
 
   h1 @title
 
+  noscript -> 'Please enable Javascript in your web browser.'
 
   div id: 'content', ->
     # List all user_id in account
@@ -375,10 +378,6 @@ view ->
     div id: 'error', -> @error
     div id: 'log',   -> @log
 
-    check_admin ->
-      modify_create_delete
-
-  modify_create_delete = =>
     # Modify/Create
     form id: 'modify', class: 'validate admin_only', method: 'post', ->
       input type: 'hidden', name: '_method', value: 'PUT'
