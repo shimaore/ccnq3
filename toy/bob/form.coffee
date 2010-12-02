@@ -123,15 +123,13 @@ get '/': ->
 def fields: 'username name address city zip country agent user_type license phone account installation_id activate_date'.split(' ')
 def fw_name: 'ts1.sotelips.net'
 
-using 'querystring'
-
 put '/': ->
   check_admin (error) =>
     if(error?)
       @error = error
       render 'error'
     else
-      create_user
+      create_user()
 
 helper create_user: ->
 
@@ -190,7 +188,7 @@ del '/': ->
       @error = error
       render 'error'
     else
-      delete_user
+      delete_user()
 
 
 helper delete_user: ->
