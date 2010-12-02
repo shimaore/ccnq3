@@ -368,7 +368,7 @@ view ->
     # List all user_id in account
     form id: 'list_account', ->
       label for: 'in_account', -> 'Account'
-      input  id: 'in_account', -> params.account
+      input  id: 'in_account', => @account
       button -> 'Display'
 
     div id: 'account_users_container', ->
