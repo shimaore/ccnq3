@@ -105,7 +105,7 @@ postrender restrict: ->
 
 helper render_d: (log) ->
   @log = log if log?
-  check_admin (not_admin) ->
+  check_admin (not_admin) =>
     @not_admin = not_admin?
     render 'default', apply: 'restrict'
 
