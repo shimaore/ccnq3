@@ -37,7 +37,7 @@ var util = require('util')
 exports = module.exports = function bodyDecoder(){
     return function bodyDecoder(req, res, next) {
         var decoder = exports.decode[mime(req)];
-        if (decoder && !req.body && req.headers['content-length']) {
+        if (decoder && !req.body && !req.complete) {
             var data = '';
             req.setEncoding('utf8');
             req.addListener('data', function(chunk) { data += chunk; });
