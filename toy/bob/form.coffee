@@ -276,16 +276,14 @@ get '/account/': ->
   check_admin (error) =>
     if(error?)
       return send
-    rows = []
     sql 'SELECT username FROM realuser', [], (data) ->
       send { aaData: data.rows.map (a) -> [a.username] }
 
-get '/account/:account': ->
-  check_user @account, (error) =>
+get '/account/:some_account': ->
+  check_user @some_account, (error) =>
     if(error?)
       return send
-    rows = []
-    sql 'SELECT username FROM realuser WHERE account = ?', [@account], (data) ->
+    sql 'SELECT username FROM realuser WHERE account = ?', [@some_account], (data) ->
       send { aaData: data.rows.map (a) -> [a.username] }
 
 #  send {
