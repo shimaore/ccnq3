@@ -29,6 +29,7 @@ sub run {
   my $httpd = AnyEvent::HTTPD->new (
     host => $config->{httpd_host},
     port => $config->{httpd_port},
+    request_timeout => 3,
   );
 
   $httpd->reg_cb(
