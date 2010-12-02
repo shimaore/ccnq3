@@ -40,7 +40,7 @@ helper dancer_session: (cb) ->
   id = cookies["dancer.session"]
   options =
     uri:      'http://localhost:6790/'+id
-    headers:  json_h
+    headers:  {accept:'application/json'}
   req options, (error,response,body) ->
     if(!error && response.statusCode == 200)
       cb(JSON.parse(body))
