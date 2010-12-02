@@ -1,8 +1,8 @@
 zappa = exports
 express = require 'express'
 fs = require 'fs'
-sys = require 'sys'
-puts = sys.puts
+puts = console.log
+inspect = require('sys').inspect
 coffee = null
 jquery = require 'jquery'
 io = null
@@ -30,6 +30,7 @@ class Zappa
 
   include: (file) ->
     @define_with @read_and_compile(file)
+    puts "Included file \"#{file}\""
 
   define_with: (code) ->
     scoped(code)(@context, @locals)
@@ -58,9 +59,9 @@ class Zappa
     for k, a of @apps
       opts = {}
       if options.port
-        opts.port = if options.port[i]? then options.port[i] else v.port + i
+        opts.port = if options.port[i]? then options.port[i] else a.port + i
       else if i isnt 0
-        opts.port = v.port + i
+        opts.port = a.port + i
 
       a.start opts
       i++
@@ -165,12 +166,12 @@ class App
   at: (pairs) ->
     io = require 'socket.io'
     for k, v of pairs
-      @socket_handlers[k] = new MessageHandler(v, @defs, @helpers, @postrenders, @views, @layouts, @vars)
+      @socket_handlers[k] = new MessageHandler(v, @)
 
   msg: (pairs) ->
     io = require 'socket.io'
     for k, v of pairs
-      @msg_handlers[k] = new MessageHandler(v, @defs, @helpers, @postrenders, @views, @layouts, @vars)
+      @msg_handlers[k] = new MessageHandler(v, @)
 
   layout: (arg) ->
     pairs = if typeof arg is 'object' then arg else {default: arg}
@@ -208,8 +209,10 @@ class RequestHandler
     @locals = {}
     @locals.app = @vars
     @locals.render = @render
+    @locals.partial = @partial
     @locals.redirect = @redirect
     @locals.send = @send
+    @locals.puts = puts
 
     for k, v of @defs
       @locals[k] = v
@@ -252,55 +255,63 @@ class RequestHandler
   redirect: -> @response.redirect.apply @response, arguments
   send: -> @response.send.apply @response, arguments
 
-  render: (what, options) ->
+  render: (template, options) ->
     options ?= {}
-    options.layout ?= yes
-    layout = @layouts.default
+    options.layout ?= 'default'
 
-    view = if typeof what is 'function' then what else @views[what]
+    opts = options.options or {} # Options for the templating engine.
+    opts.context ?= @context
+    opts.context.zappa = partial: @partial
+    opts.locals ?= {}
+    opts.locals.partial = (template, context) ->
+      text ck_options.context.zappa.partial template, context
 
-    inner = coffeekup.render view, context: @context
+    template = @views[template] if typeof template is 'string'
+
+    result = coffeekup.render template, opts
 
     if typeof options.apply is 'string'
       postrender = @postrenders[options.apply]
-      body = jquery 'body'
-      body.empty().html inner
-      postrender @context, $: jquery
+      body = jquery('body')
+      body.empty().html(result)
+      postrender opts.context, $: jquery
       result = body.html()
-      if options.layout
-        @context.content = result
-        html = coffeekup.render layout, context: @context
-        @response.send html
-      else @response.send result
-    else
-      if options.layout
-        @context.content = inner
-        @response.send(coffeekup.render layout, context: @context)
-      else
-        @response.send inner
+
+    if options.layout
+      layout = @layouts[options.layout]
+      opts.context.content = result
+      result = coffeekup.render layout, opts
+
+    @response.send result
 
     null
 
+  partial: (template, context) =>
+    template = @views[template]
+    coffeekup.render(template, context: context)
+
 class MessageHandler
-  constructor: (handler, @defs, @helpers, @postrenders, @views, @layouts, @vars) ->
+  constructor: (handler, @app) ->
     @handler = scoped(handler)
     @locals = null
 
   init_locals: ->
     @locals = {}
-    @locals.app = @vars
+    @locals.app = @app.vars
     @locals.render = @render
+    @locals.partial = @partial
+    @locals.puts = puts
 
-    for k, v of @defs
+    for k, v of @app.defs
       @locals[k] = v
 
-    for k, v of @helpers
+    for k, v of @app.helpers
       @locals[k] = ->
         v(@context, @, arguments)
 
-    @locals.postrenders = @postrenders
-    @locals.views = @views
-    @locals.layouts = @layouts
+    @locals.postrenders = @app.postrenders
+    @locals.views = @app.views
+    @locals.layouts = @app.layouts
 
   execute: (client, params) ->
     @init_locals() unless @locals?
@@ -308,35 +319,65 @@ class MessageHandler
     @locals.context = {}
     @locals.params = @locals.context
     @locals.client = client
+    # TODO: Move this to context.
     @locals.id = client.sessionId
-    @locals.send = (title, data) -> client.send build_msg(title, data)
-    @locals.broadcast = (title, data) -> client.broadcast build_msg(title, data)
+    @locals.send = (title, data) => client.send build_msg(title, data)
+    @locals.broadcast = (title, data, except) =>
+      except ?= []
+      if except not instanceof Array then except = [except]
+      except.push @locals.id
+      @app.ws_server.broadcast build_msg(title, data), except
 
     for k, v of params
       @locals.context[k] = v
 
     @handler(@locals.context, @locals)
 
-  render: (what, options) ->
+  render: (template, options) ->
     options ?= {}
-    layout = @layouts.default
-    view = if typeof what is 'function' then what else @views[what]
+    options.layout ?= 'default'
 
-    inner = coffeekup.render view, context: @context
+    opts = options.options or {} # Options for the templating engine.
+    opts.context ?= @context
+    opts.context.zappa = partial: @partial
+    opts.locals ?= {}
+    opts.locals.partial = (template, context) ->
+      text ck_options.context.zappa.partial template, context
+
+    template = @app.views[template] if typeof template is 'string'
+
+    result = coffeekup.render template, opts
 
     if typeof options.apply is 'string'
       postrender = @postrenders[options.apply]
-      body = jquery 'body'
-      body.empty().html inner
-      postrender @context, $: jquery
+      body = jquery('body')
+      body.empty().html(result)
+      postrender opts.context, $: jquery
       result = body.html()
-      if options.layout
-        @context.content = result
-        html = coffeekup.render layout, context: @context
-        @send 'render', value: html
-    else
-      @context.content = inner
-      @send 'render', value: (coffeekup.render layout, context: @context)
+
+    if options.layout
+      layout = @layouts[options.layout]
+      opts.context.content = result
+      result = coffeekup.render layout, opts
+
+    @send 'render', value: result
+
+    null
+
+  partial: (template, context) =>
+    template = @app.views[template]
+    coffeekup.render(template, context: context)
+
+coffeescript_support = """
+  var __slice = Array.prototype.slice;
+  var __hasProp = Object.prototype.hasOwnProperty;
+  var __bind = function(func, context) {return function(){ return func.apply(context, arguments); };};
+  var __extends = function(child, parent) { var ctor = function(){}; ctor.prototype = parent.prototype;
+    child.prototype = new ctor(); child.prototype.constructor = child;
+    if (typeof parent.extended === "function") parent.extended(child);
+    child.__super__ = parent.prototype;
+  };
+"""
 
 build_msg = (title, data) ->
   obj = {}
@@ -349,10 +390,9 @@ parse_msg = (raw_msg) ->
     return {title: k, params: v}
 
 scoped = (code) ->
-  bind = 'var __bind = function(func, context){return function(){return func.apply(context, arguments);};};'
   code = String(code)
   code = "function () {#{code}}" unless code.indexOf('function') is 0
-  code = "#{bind} with(locals) {return (#{code}).apply(context, args);}"
+  code = "#{coffeescript_support} with(locals) {return (#{code}).apply(context, args);}"
   new Function('context', 'locals', 'args', code)
 
 publish_api = (from, to, methods) ->
@@ -363,6 +403,7 @@ publish_api = (from, to, methods) ->
       to[name] = from[name]
 
 z = new Zappa()
-zappa.version = '0.1.2'
+
+zappa.version = '0.1.3'
 zappa.run = -> z.run.apply z, arguments
 zappa.run_file = -> z.run_file.apply z, arguments
