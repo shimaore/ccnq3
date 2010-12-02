@@ -35,6 +35,8 @@ helper sql: (_sql,_p,cb) ->
       cb({error:error})
 
 helper dancer_session: (cb) ->
+  if not cookies
+    return cb({error:"No cookies"})
   id = cookies["dancer.session"]
   options =
     uri:      'http://localhost:6790/'+id
@@ -102,7 +104,7 @@ postrender restrict: ->
   # remove fields that non-admins should not see
   if @not_admin
     $('.admin_only').remove()
-    return
+  return
 
 helper render_d: (log) ->
   @log = log if log?
