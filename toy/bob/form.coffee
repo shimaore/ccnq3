@@ -375,6 +375,10 @@ view ->
     div id: 'error', -> @error
     div id: 'log',   -> @log
 
+    check_admin ->
+      modify_create_delete
+
+  modify_create_delete = =>
     # Modify/Create
     form id: 'modify', class: 'validate admin_only', method: 'post', ->
       input type: 'hidden', name: '_method', value: 'PUT'
