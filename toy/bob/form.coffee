@@ -99,7 +99,7 @@ helper check_admin: (cb) ->
 postrender restrict: ->
   # remove fields that non-admins should not see
   if @not_admin
-    $('.admin_only').remove
+    $('.admin_only').remove()
 
 helper render_d: (log) ->
   @log = log if log?
