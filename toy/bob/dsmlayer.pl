@@ -1,4 +1,8 @@
 #!/usr/bin/env perl
+# dsmlayer: a web proxy for Perl's DBI
+# Copyright (c) 2010  Stephane Alnet
+# License: Affero GPL 3+
+
 use strict; use warnings;
 
 use Cache::Memcached;

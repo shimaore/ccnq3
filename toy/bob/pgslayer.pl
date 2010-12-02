@@ -1,4 +1,7 @@
 #!/usr/bin/env perl
+# dsmlayer: a web proxy for Dancer's sessions
+# Copyright (c) 2010  Stephane Alnet
+# License: Affero GPL 3+
 
 use strict; use warnings;
 

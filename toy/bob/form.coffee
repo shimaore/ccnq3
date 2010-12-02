@@ -1,4 +1,6 @@
 #!/usr/bin/env zappa
+# Copyright (c) 2010  Stephane Alnet
+# License: Affero GPL 3+
 
 include 'server.coffee'
 using 'querystring'
@@ -69,7 +71,7 @@ def md5_hex: (t) ->
 # ALTER TABLE realuser ADD installation_id TEXT;
 # ALTER TABLE realuser ADD activate_date TEXT;
 
-# account parameter is optional
+# account parameter might be undefined
 helper check_user: (account,cb) ->
   dancer_session (s) =>
     if s.error? or not s.user_id?
