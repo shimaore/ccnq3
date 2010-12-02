@@ -364,9 +364,9 @@ view ->
 
   noscript -> 'Please enable Javascript in your web browser.'
 
-  div id: 'content', ->
+  div id: 'content', =>
     # List all user_id in account
-    form id: 'list_account', ->
+    form id: 'list_account', =>
       label for: 'in_account', -> 'Account'
       input  id: 'in_account', => @account
       button -> 'Display'
