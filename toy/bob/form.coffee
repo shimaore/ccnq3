@@ -102,6 +102,7 @@ postrender restrict: ->
   # remove fields that non-admins should not see
   if @not_admin
     $('.admin_only').remove()
+    return
 
 helper render_d: (log) ->
   @log = log if log?
