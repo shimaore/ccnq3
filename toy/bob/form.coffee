@@ -309,7 +309,8 @@ client ->
         $('#on_license').find('input').removeClass('required')
 
     $('#email').change ->
-      $('#username').val( $('#email').val().replace('@','*') )
+      if not $('#username').val()
+        $('#username').val( $('#email').val().replace('@','*') )
 
     password_charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-".split('')
 
