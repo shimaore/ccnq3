@@ -350,13 +350,16 @@ view ->
     'stylesheets/datatables'
   ]
 
-  lr = (_id,_label) ->
+  lr = (_id,_label,_class) ->
     label for: _id, -> _label
-    input id: _id, name: _id, class: 'required'
+    input id: _id, name: _id, class: _class? ? _class : 'required'
 
-  l = (_id,_label) ->
+  l = (_id,_label,_class) ->
     label for: _id, -> _label
-    input id: _id, name: _id
+    if _class?
+      input id: _id, name: _id, class: _class
+    else
+      input id: _id, name: _id
 
 
   h1 @title
@@ -387,6 +390,7 @@ view ->
         button id: 'load', -> 'Load'
       input type: 'hidden', name: 'user_id'
 
+      div -> lr 'email', 'Email', 'required email'
       div -> lr 'name', 'Name'
       div -> lr 'password', 'Password'
       div -> lr 'address', 'Address'
@@ -403,9 +407,9 @@ view ->
       div -> l  'license', 'License'
       div id: "on_license", ->
         div -> l 'phone', 'Phone number'
-        div -> l 'account', 'Account number'
+        div -> l 'account', 'Account number', 'digits'
         div -> l 'installation_id', 'Installation ID'
-        div -> l 'activate_date', 'Date of activation'
+        div -> l 'activate_date', 'Date of activation', 'date'
 
       div ->
         input type: 'submit', -> @user_id? ? 'Modify' : 'Create'
