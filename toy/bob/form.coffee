@@ -352,7 +352,7 @@ view ->
 
   lr = (_id,_label,_class) ->
     label for: _id, -> _label
-    input id: _id, name: _id, class: _class? ? _class : 'required'
+    input id: _id, name: _id, class: if _class? then _class else 'required'
 
   l = (_id,_label,_class) ->
     label for: _id, -> _label
