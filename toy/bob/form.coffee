@@ -120,7 +120,7 @@ get '/': ->
     else
       render_d()
 
-def fields: 'username name address city zip country agent user_type license phone account installation_id activate_date'.split(' ')
+def fields: 'username email name address city zip country agent user_type license phone account installation_id activate_date'.split(' ')
 def fw_name: 'ts1.sotelips.net'
 
 put '/': ->
@@ -373,7 +373,7 @@ view ->
     div id: 'account_users_container', ->
       table id: "account_users", class: 'display', ->
         thead -> tr ->
-          th -> 'Username (email)'
+          th -> 'Username'
         tbody -> ''
 
     div id: 'error', -> @error
@@ -383,7 +383,7 @@ view ->
     form id: 'modify', class: 'validate admin_only', method: 'post', ->
       input type: 'hidden', name: '_method', value: 'PUT'
       div ->
-        lr 'username', 'Username (email)'
+        lr 'username', 'Username'
         button id: 'load', -> 'Load'
       input type: 'hidden', name: 'user_id'
 
