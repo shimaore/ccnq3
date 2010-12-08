@@ -1,6 +1,6 @@
 def req: require 'request'
 
-helper _sql: (_uri,_sql,_p,cb) ->
+def _sql: (_uri,_sql,_p,cb) ->
   data =
     sql: _sql
     params: _p
@@ -16,7 +16,7 @@ helper _sql: (_uri,_sql,_p,cb) ->
     else
       cb({error:error})
 
-helper _dancer_session: (_uri,cb) ->
+def _dancer_session: (_uri,cb) ->
   if not cookies
     return cb({error:"No cookies"})
   id = cookies["dancer.session"]
@@ -29,7 +29,7 @@ helper _dancer_session: (_uri,cb) ->
     else
       cb({error:error})
 
-helper _user_info: (_uri,user_id,cb) ->
+def _user_info: (_uri,user_id,cb) ->
   options =
     method:   'GET'
     uri:      _uri+'/'+querystring.escape(user_id)
