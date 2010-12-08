@@ -272,6 +272,8 @@ client ->
       return random_password(l-1)+password_charset[Math.floor(Math.random()*password_charset.length)]
 
     $('#password').val -> random_password(16)
+    $('#generate').button().submit ->
+      $('#password').val -> random_password(16)
 
 
 view 'error': ->
@@ -349,7 +351,9 @@ view ->
 
       div -> lr 'email', 'Email', 'required email'
       div -> lr 'name', 'Name'
-      div -> lr 'password', 'Password'
+      div ->
+        lr 'password', 'Password'
+        button id: 'generate', -> 'Generate'
       div -> lr 'address', 'Address'
       div -> lr 'zip', 'ZIP'
       div -> lr 'city', 'City'
