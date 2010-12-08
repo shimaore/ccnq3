@@ -6,23 +6,11 @@ include 'server.coffee'
 using 'querystring'
 using 'fs'
 
-include 'backends.coffee'
-
 helper config: ->
   location = 'form.config'
   return JSON.parse(fs.readFileSync(location, 'utf8'))
 
-helper sql: (_sql,_p,cb) ->
-  _uri = config().sql_db_uri
-  return _sql(_uri,_sql,_p,cb)
-
-helper dancer_session: (cb) ->
-  _uri = config().dancer_session_uri
-  return _dancer_session(_uri,cb)
-
-helper user_info: (user_id,cb) ->
-  _uri = config().portal_couchdb_uri
-  return _user_info(_uri,user_id,cb)
+include 'backends.coffee'
 
 crypto = require 'crypto'
 

@@ -1,6 +1,7 @@
 def req: require 'request'
 
-def _sql: (_uri,_sql,_p,cb) ->
+helper sql: (_sql,_p,cb) ->
+  _uri = config().sql_db_uri
   data =
     sql: _sql
     params: _p
@@ -16,7 +17,8 @@ def _sql: (_uri,_sql,_p,cb) ->
     else
       cb({error:error})
 
-def _dancer_session: (_uri,cb) ->
+helper dancer_session: (cb) ->
+  _uri = config().dancer_session_uri
   if not cookies
     return cb({error:"No cookies"})
   id = cookies["dancer.session"]
@@ -29,7 +31,8 @@ def _dancer_session: (_uri,cb) ->
     else
       cb({error:error})
 
-def _user_info: (_uri,user_id,cb) ->
+helper user_info: (user_id,cb) ->
+  _uri = config().portal_couchdb_uri
   options =
     method:   'GET'
     uri:      _uri+'/'+querystring.escape(user_id)
