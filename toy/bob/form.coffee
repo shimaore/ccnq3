@@ -16,8 +16,6 @@ helper config: ->
   location = 'form.config'
   return JSON.parse(fs.readFileSync(location, 'utf8'))
 
-def db_name: 'default'
-
 helper sql: (_sql,_p,cb) ->
   data =
     sql: _sql
@@ -25,7 +23,7 @@ helper sql: (_sql,_p,cb) ->
 
   options =
     method:  'POST'
-    uri:     'http://localhost:6789/'+db_name
+    uri:     config().sql_db_uri
     headers: json_h
     body:    new Buffer(JSON.stringify(data))
   req options, (error,response,body) ->
