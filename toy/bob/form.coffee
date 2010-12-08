@@ -273,7 +273,8 @@ client ->
 
     $('#password').val -> random_password(16)
     $('#generate').button().submit ->
-      $('#password').val -> random_password(16)
+      $('#password').val(random_password(16))
+      return false
 
 
 view 'error': ->
