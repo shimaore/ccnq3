@@ -273,7 +273,7 @@ client ->
 
     $('#password').val -> random_password(16)
     $('#generate').click ->
-      $('#password').val(random_password(16))
+      $('#password').val -> random_password(16)
       return false
 
 
