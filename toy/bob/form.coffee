@@ -121,6 +121,10 @@ helper create_user: ->
   else
     # Create
     new_user_id = Math.floor(Math.random()*2000000000)
+
+    if not @password or not @username
+      return render 'error'
+
     sql 'INSERT INTO realuser (user_id,password,'+fields.join(',')+') VALUES (?,?,'+('?' for f in fields).join(',')+')', [new_user_id, user_password, values...], (r) =>
       if r.error?
         return render 'error'
