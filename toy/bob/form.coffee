@@ -272,7 +272,7 @@ client ->
       return random_password(l-1)+password_charset[Math.floor(Math.random()*password_charset.length)]
 
     $('#password').val -> random_password(16)
-    $('#generate').button().submit ->
+    $('#generate').button().click ->
       $('#password').val(random_password(16))
       return false
 
