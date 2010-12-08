@@ -6,56 +6,23 @@ include 'server.coffee'
 using 'querystring'
 using 'fs'
 
-def req: require 'request'
-
-def json_h:
-  accept:'application/json'
-  'content-type':'application/json'
+include 'backends.coffee'
 
 helper config: ->
   location = 'form.config'
   return JSON.parse(fs.readFileSync(location, 'utf8'))
 
 helper sql: (_sql,_p,cb) ->
-  data =
-    sql: _sql
-    params: _p
-
-  options =
-    method:  'POST'
-    uri:     config().sql_db_uri
-    headers: json_h
-    body:    new Buffer(JSON.stringify(data))
-  req options, (error,response,body) ->
-    if(!error && response.statusCode == 200)
-      cb(JSON.parse(body))
-    else
-      cb({error:error})
+  _uri = config().sql_db_uri
+  return _sql(_uri,_sql,_p,cb)
 
 helper dancer_session: (cb) ->
-  if not cookies
-    return cb({error:"No cookies"})
-  id = cookies["dancer.session"]
-  options =
-    uri:      'http://localhost:6790/'+id
-    headers:  {accept:'application/json'}
-  req options, (error,response,body) ->
-    if(!error && response.statusCode == 200)
-      cb(JSON.parse(body))
-    else
-      cb({error:error})
+  _uri = config().dancer_session_uri
+  return _dancer_session(_uri,cb)
 
 helper user_info: (user_id,cb) ->
-  cdb_uri = config().portal_couchdb_uri+'portal/'+querystring.escape(user_id)
-  options =
-    method:   'GET'
-    uri:      cdb_uri
-    headers:  {accept:'application/json'}
-  req options, (error,response,body) ->
-    if(!error && response.statusCode == 200)
-      cb(JSON.parse(body))
-    else
-      cb({error:error})
+  _uri = config().portal_couchdb_uri
+  return _user_info(_uri,user_id,cb)
 
 crypto = require 'crypto'
 
