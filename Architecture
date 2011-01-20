@@ -1,0 +1,30 @@
+In ccnq3 the system architecture is different:
+- CDR collection is only done at the ingress and egress carrier SBCs.
+- The inbound-proxy is gone.
+- An ingress carrier SBC will locate the number and retrieve the account number (for CDR), the routing information, ...
+  (In other words it accesses the provisioning record for the number.)
+      (Hmmm... does FS actually do SRV failover?)
+  If needed it will perform CNAM query (and update both From and PID information).
+  Data query, call routing.. are done inside a Lua script.
+  It might route the call directly to a customer domain, or to this operator's call-handling machines.
+- An egress carrier SBC will use the account number (reject the call otherwise) and create the CDR.
+
+- The outbound-proxy is used for LCR; it authenticates "trusted" senders which must provide it with account information.
+  (I don't think this is much different from today.)
+
+  Investigate having savvy customers dial directly into the outbound-proxy (over the Internet) and assigning account number locally that way.
+  (No features are provided by the outbound-proxy / egress SBC pair, and numbering format must be adhered to, including for emergency calling.)
+
+  LCR group selection based (e.g.) on domain used. -- allows for fax-capable routing, etc.
+  However must make sure that selected group is available to account (issues with post-paid rating).
+
+
+- The customer-side system is independent and can provide SIP virtual hosting (i.e. accepts other domains than the operator's internal customer domain).
+  No CDRs are collected there.
+  Therefor it accepts ingress calls from an ingress SBC just like it would accept ingress calls from any Internet host.
+  Conversely, it "authenticates" with an egress SBC (via IP address) and forwards appropriate call settlement information.
+
+  LCR table is used to eventually provide other information (e.g. call rates references) in the description field. (Well, at least having the prefix used for routing available in the customer SBC would help a lot.)
+
+  Outbound, always query internal ENUM (for our own numbers) and if applicable public ENUM (per account flag).
+
