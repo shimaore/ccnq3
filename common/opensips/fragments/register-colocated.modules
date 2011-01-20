@@ -1,0 +1,32 @@
+# register-colocated.modules -- modules and configuration for register-colocated.cfg
+# Copyright (C) 2009  Stephane Alnet
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+## This needs to be re-done since it is a co-located registrar.
+
+loadmodule "registrar.so"
+modparam("registrar", "min_expires", 60)
+modparam("registrar", "max_expires", 3600)
+modparam("registrar", "default_expires", 300)
+# Append Branches is the default
+modparam("registrar", "append_branches", 1)
+# No more than 10 contacts per AOR
+modparam("registrar", "max_contacts", 10)
+# RFC3261 section 20.33
+# modparam("registrar", "retry_after", 30)
+# AVP used by nat_traversal
+modparam("registrar", "received_avp", "$avp(received_avp)")
+
+modparam("registrar", "tcp_persistent_flag", 21)

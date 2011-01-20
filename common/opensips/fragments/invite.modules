@@ -1,0 +1,38 @@
+# invite.modules -- modules and configuration shared by all forwarding INVITE modules
+# Copyright (C) 2009  Stephane Alnet
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+if not skip_uac_auth
+  loadmodule "uac.so"
+
+  modparam("uac","auth_realm_avp",    "$(avp(uac_realm))")
+  modparam("uac","auth_username_avp", "$(avp(uac_user))")
+  modparam("uac","auth_password_avp", "$(avp(uac_pass))")
+  modparam("uac","rr_store_param",    "${UAC_VSF}")
+end if not skip_uac_auth
+
+loadmodule "uac_redirect.so"
+if accounting is radius
+  modparam("uac_redirect","acc_function","acc_rad_request")
+end if accounting is radius
+if accounting is flatstore
+  modparam("uac_redirect","acc_function","acc_db_request")
+end if accounting is flatstore
+
+loadmodule "dialog.so"
+modparam("dialog", "dlg_flag", 19)
+# Set maximum duration of dialog (=call)
+# modparam("dialog", "timeout_avp", "$avp(i:10)")
+modparam("dialog", "db_mode", 0) # No database of dialogs

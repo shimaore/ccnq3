@@ -1,0 +1,42 @@
+# accounting.modules -- modules and configuration for accounting
+# Copyright (C) 2009  Stephane Alnet
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+loadmodule "acc.so"
+
+modparam("acc", "log_extra", "${cdr_extra}")
+if accounting is flatstore
+  modparam("acc", "db_extra", "${cdr_extra}")
+  modparam("acc", "db_flag",2)
+  modparam("acc", "db_missed_flag", 3)
+  modparam("acc", "db_table_acc", "acc")
+  modparam("acc", "db_table_missed_calls", "missed_calls")
+  modparam("acc", "db_url", "flatstore:/var/log/opensips")
+end if accounting is flatstore
+
+if accounting is radius
+  modparam("acc", "radius_config", "${radius_config}")
+  # These attributes need to be defined in a "dictionary" file first.
+  modparam("acc", "radius_extra", "${radius_extra}")
+  modparam("acc", "radius_flag", 4)
+  modparam("acc", "radius_missed_flag", 5)
+end if accounting is radius
+
+modparam("acc", "log_flag",1) # Normally not used
+modparam("acc", "log_level",1)
+
+modparam("acc", "report_cancels", 1)
+modparam("acc", "early_media", 1)
+modparam("acc", "report_ack", 1)
+modparam("acc", "failed_transaction_flag", 12)

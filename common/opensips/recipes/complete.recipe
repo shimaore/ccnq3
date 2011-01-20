@@ -1,0 +1,19 @@
+# Recipe for a standalone proxy that does it all
+generic
+accounting
+toolbox
+forwarder
+authenticate
+nat
+mediaproxy
+invite-router
+invite
+# obsolete:
+invite-trunk-side
+loose-route
+non-loose-route
+routing-logic
+routing-lineside
+routing-trunkside-transparent
+register-colocated
+generic2

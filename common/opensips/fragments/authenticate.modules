@@ -1,0 +1,38 @@
+# authenticate.modules -- modules and configuration for authentication
+# Copyright (C) 2009  Stephane Alnet
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+loadmodule "auth.so"
+modparam("auth", "rpid_prefix", "")             # Default value, explicited
+modparam("auth", "rpid_suffix", ";party=calling;id-type=subscriber;screen=yes") # Default value, explicited
+modparam("auth", "nonce_expire", 60)
+
+# testing
+# SJPhone breaks otherwise
+modparam("auth", "disable_nonce_check", 1)
+# /testing
+
+if authentication is database
+  loadmodule "auth_db.so"
+  modparam("auth_db", "db_url", "${db_type}://${db_name}:${db_password}@${db_host}/${db_name}")
+  modparam("auth_db", "calculate_ha1", 0)  # calculate_ha1 MUST be 0 in production
+  modparam("auth_db", "use_domain", 1)
+end if authentication is database
+
+if authentication is radius
+  loadmodule "auth_radius.so"
+  modparam("auth_radius", "radius_config", "${radius_config}")
+  modparam("auth_radius", "service_type", 15)
+end if authentication is radius
