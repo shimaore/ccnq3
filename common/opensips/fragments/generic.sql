@@ -99,22 +99,32 @@ CREATE INDEX value_idx ON avpops (value);
 INSERT INTO version (table_name, table_version) values ('trusted','5');
 CREATE TABLE trusted (
     id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    src_ip CHAR(50) NOT NULL,
+    -- grp
+    ip CHAR(50) NOT NULL,
+    -- mask
+    -- port
     proto CHAR(4) NOT NULL,
-    from_pattern CHAR(64) DEFAULT NULL,
-    tag CHAR(32)
+    pattern CHAR(64) DEFAULT NULL,
+    context_info CHAR(32)
 );
 
-CREATE INDEX peer_idx ON trusted (src_ip);
+CREATE INDEX peer_idx ON trusted (ip);
+
+-- USE trusted_reload (MI) TO RELOAD
 
 INSERT INTO version (table_name, table_version) values ('address','4');
 CREATE TABLE address (
     id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY NOT NULL,
     grp SMALLINT(5) UNSIGNED DEFAULT 0 NOT NULL,
-    ip_addr CHAR(15) NOT NULL,
+    ip CHAR(15) NOT NULL,
     mask TINYINT DEFAULT 32 NOT NULL,
     port SMALLINT(5) UNSIGNED DEFAULT 0 NOT NULL
+    -- proto
+    -- pattern
+    -- context_info
 );
+
+-- USE address_reload (MI) TO RELOAD
 
 
 --
