@@ -1,6 +1,11 @@
 Core changes:
 - Replace most of XMPP exchanges with CouchDB replication
   -> Note: needs either CouchDB to support automatic replication startup, or do our own
+  -> RabbitMQ could also be a solution
+  .. also need to differentiate between:
+    - OS-level issues (apt-get) -- should be seldom necessary
+    - component configuration (generate FS config, configure routes) -- should always be feasible from API/GUI
+    - day-to-day config changes (high-volume, realtime)
 - Replace API server with direct access to a CouchDB instance
   -> This means the manager will drop.
 - Replace AnyEvent with Node.js
@@ -45,6 +50,7 @@ Core:
 
   System configuration (currently in DNS) must be explicited
     can change it from within (with proper reconfig & restarts)
+    + investigate proper multi-machine management systems
 
   System monitoring
 
@@ -53,6 +59,7 @@ Core:
 
 Portal:
   Portal = CouchDB + Node.js for authorization
+  (use Node.js for register, login, and redirect)
 
 
 
