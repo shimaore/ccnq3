@@ -1,0 +1,18 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", "Helvetica Nueue", Arial, sans-serif;
+}
+
+form.main {
+  padding: 11px;
+}
+form.main label, form.main input, form.main button, form.main select {
+  margin: 11px;
+}
+form.main label {
+  width: 100px;
+  display: inline-block;
+}
+#login_container {
+  display: inline;
+}
