@@ -54,8 +54,9 @@ Core:
 
   System monitoring
 
-  Get rid of the "request" system -- each module gets _changes and implements accordingly
+  Get rid of the "request" system -- each module gets _changes and implements accordingly (this can be implemented with "filter" in nginx)
   New routing system -- use JS code snippets where RequestManager db was used ? Or can these be abstracted and put in a UI ?
+    -> why? the servers will monitor _changes, so it's up to them to implement these. Therefor need a generic way of defining these.
 
 Portal:
   Portal = CouchDB + Node.js for authorization
@@ -72,3 +73,9 @@ Rating:
 
 Marketing:
   "Shared-Nothing" is how voice-system.ro calls it. :)
+
+
+Other things to test, validate, implement:
+  IPv6
+  bill based on route actually taken by call
+  Virtual Domain Hosting
