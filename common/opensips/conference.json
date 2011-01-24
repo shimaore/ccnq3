@@ -1,0 +1,27 @@
+{
+  "opensips_base_lib": ".",
+  "model": "conference",
+  "runtime_opensips_cfg": "/tmp/opensips.cfg",
+  "runtime_opensips_sql": "/tmp/opensips.sql",
+
+  "proxy_ip": "",
+  "proxy_port": "5060",
+  "internal_ip": "",
+  "external_ip": "",
+
+  "local_port":"5064",
+
+  "accounting": "none",
+  "authentication": "none",
+  "skip_uac_auth": 1,
+  "mp_allowed": 1,
+  "mp_always": 1,
+  "debug": 0,
+
+  "inv_timer": 90,
+
+  "mpath": "/usr/lib/opensips/modules/",
+  "uac_vsf": "vsf",
+  "max_hops": "10"
+
+}

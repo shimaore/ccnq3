@@ -5,9 +5,8 @@ forwarder
 nat
 mediaproxy
 register-ignore
-invite-router
 invite
+invite-router-local
 loose-route
 non-loose-route
-register-colocated
 generic2
