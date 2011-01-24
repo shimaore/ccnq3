@@ -8,8 +8,7 @@ nat
 mediaproxy
 invite-router
 invite
-# obsolete:
-invite-trunk-side
+invite-trunk-drouting
 loose-route
 non-loose-route
 routing-logic
