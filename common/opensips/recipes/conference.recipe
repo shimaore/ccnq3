@@ -1,0 +1,13 @@
+# Recipe for a standalone proxy that does it all
+generic
+toolbox
+forwarder
+nat
+mediaproxy
+register-ignore
+invite-router
+invite
+loose-route
+non-loose-route
+register-colocated
+generic2
