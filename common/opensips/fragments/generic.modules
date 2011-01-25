@@ -86,6 +86,7 @@ modparam("avpops", "avp_table",       "avpops")
 modparam("avpops", "use_domain",      1)
 
 # -- permissions (allow_trusted) --
+if need_trusted
 loadmodule "permissions.so"
 modparam("permissions", "db_url",     "${db_type}://${db_name}:${db_password}@${db_host}/${db_name}")
 modparam("permissions", "peer_tag_avp", "$avp(peer_tag_avp)")
@@ -93,6 +94,7 @@ modparam("permissions", "peer_tag_avp", "$avp(peer_tag_avp)")
 # 0 is "disable cache"
 modparam("permissions", "db_mode", 0)
 modparam("permissions", "trusted_table", "trusted")
+end if need_trusted
 
 # -- signaling --
 loadmodule "signaling.so"

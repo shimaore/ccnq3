@@ -24,54 +24,7 @@ CREATE TABLE version (
     CONSTRAINT t_name_idx UNIQUE (table_name)
 );
 
--- These tables are updated dynamically (and never provisioned).
-
---
--- Table structure for table 'location' -- that is persistent UsrLoc
---
--- usrloc-create.sql
-INSERT INTO version (table_name, table_version) values ('location','1005');
-CREATE TABLE location (
-    id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    username CHAR(64) DEFAULT '' NOT NULL,
-    domain CHAR(64) DEFAULT NULL,
-    contact CHAR(255) DEFAULT '' NOT NULL,
-    received CHAR(128) DEFAULT NULL,
-    path CHAR(128) DEFAULT NULL,
-    expires DATETIME DEFAULT '2020-05-28 21:32:15' NOT NULL,
-    q FLOAT(10,2) DEFAULT 1.0 NOT NULL,
-    callid CHAR(255) DEFAULT 'Default-Call-ID' NOT NULL,
-    cseq INT(11) DEFAULT 13 NOT NULL,
-    last_modified DATETIME DEFAULT '1900-01-01 00:00:01' NOT NULL,
-    flags INT(11) DEFAULT 0 NOT NULL,
-    cflags INT(11) DEFAULT 0 NOT NULL,
-    user_agent CHAR(255) DEFAULT '' NOT NULL,
-    socket CHAR(64) DEFAULT NULL,
-    methods INT(11) DEFAULT NULL
-);
-
-CREATE INDEX account_contact_idx ON location (username, domain, contact);
-
 -- These tables are provisioned.
-
---
--- Table structure for table 'subscriber' -- user database
---
--- auth_db-create.sql
-INSERT INTO version (table_name, table_version) values ('subscriber','7');
-CREATE TABLE subscriber (
-    id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    username CHAR(64) DEFAULT '' NOT NULL,
-    domain CHAR(64) DEFAULT '' NOT NULL,
-    password CHAR(25) DEFAULT '' NOT NULL,
-    email_address CHAR(64) DEFAULT '' NOT NULL,
-    ha1 CHAR(64) DEFAULT '' NOT NULL,
-    ha1b CHAR(64) DEFAULT '' NOT NULL,
-    rpid CHAR(64) DEFAULT NULL,
-    CONSTRAINT account_idx UNIQUE (username, domain)
-);
-
-CREATE INDEX username_idx ON subscriber (username);
 
 --
 -- Table structure for table 'avpops'
@@ -93,6 +46,7 @@ CREATE INDEX ua_idx ON avpops (uuid, attribute);
 CREATE INDEX uda_idx ON avpops (username, domain, attribute);
 CREATE INDEX value_idx ON avpops (value);
 
+if need_trusted
 --
 -- Table structure for table trusted
 -- permissions-create.sql
@@ -111,7 +65,9 @@ CREATE TABLE trusted (
 CREATE INDEX peer_idx ON trusted (ip);
 
 -- USE trusted_reload (MI) TO RELOAD
+end if need_trusted
 
+if need_address
 INSERT INTO version (table_name, table_version) values ('address','4');
 CREATE TABLE address (
     id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY NOT NULL,
@@ -125,7 +81,7 @@ CREATE TABLE address (
 );
 
 -- USE address_reload (MI) TO RELOAD
-
+end if need_address
 
 --
 -- Table structure for table 'domain' -- domains this proxy is responsible for
@@ -137,21 +93,6 @@ CREATE TABLE domain (
     domain CHAR(64) DEFAULT '' NOT NULL,
     last_modified DATETIME DEFAULT '1900-01-01 00:00:01' NOT NULL,
     CONSTRAINT domain_idx UNIQUE (domain)
-);
-
---
--- Maps a username@domain to a specific groupid (in dr_rules).
--- NOTE: Although this table is only used by the OpenSIPS code if the
---       recipe includes "invite-trunk-side.cfg", since the
---       local_number provisioning code depends on it, it has to be
---       present in all configurations.
-INSERT INTO version (table_name, table_version) values ('dr_groups','2');
-CREATE TABLE dr_groups (
-    id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    username CHAR(64) NOT NULL,
-    domain CHAR(128) DEFAULT '' NOT NULL,
-    groupid CHAR(255) NOT NULL,
-    description CHAR(128) DEFAULT '' NOT NULL
 );
 
 -- END
