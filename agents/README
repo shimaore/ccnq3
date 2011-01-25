@@ -1,0 +1,16 @@
+These agents will track CouchDB's _changes and run applications based
+on the changes.
+
+Database: _users
+
+  * send_email:
+    Send confirmation email for users who requested registration.
+
+  * track_roles:
+    Create target databases for "account:" roles and each base database
+      (if the target database does not already exist)
+    Add the proper role as a reader on the target database
+    Push the "-user.js" couchapp onto the target database
+      This is mostly done so that the views are not implemented on the base database.
+    Start replication between the base database and the target database
+      using a filter to only replicate at or below the "account:" role.
