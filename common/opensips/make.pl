@@ -15,9 +15,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 use strict; use warnings;
-use Logger::Syslog;
 use File::Spec;
 use CCNQ::Util;
+
+sub warning { print STDERR "Warning: ".join(' ',@_) }
 
 =h1 clean_cfg
 
@@ -26,31 +27,8 @@ use CCNQ::Util;
 
 =cut
 
-sub clean_cfg {
+sub macros_cfg {
   my ($t,$params) = @_;
-
-  my @available = ($t =~ m{ \b route \[ ([^\]]+) \] }gsx);
-  my %available = map { $_ => 0 } @available;
-  $t =~ s{ \b route \( ([^\)]+) \) }{
-    exists($available{$1})
-      ? ($available{$1}++, "route($1)")
-      : (warning("Removing unknown route($1)"),"")
-  }gsxe;
-
-  my @unused = grep { !$available{$_} } sort keys %available;
-  warning( q(Unused routes: ).join(', ',@unused) ) if @unused;
-
-  my @used = grep { $available{$_} } sort keys %available;
-
-  my $route = 0;
-  my %route = map { $_ => ++$route } sort @used;
-
-  warning("Found $route routes");
-
-  $t =~ s{ \b route \( ([^\)]+) \) \s* ([;\#\)]) }{ "route($route{$1}) $2" }gsxe;
-  $t =~ s{ \b route \[ ([^\]]+) \] \s* ([\{\#]) }{ "route[$route{$1}] $2" }gsxe;
-
-  $t .= "\n".join('', map { "# route($route{$_}) => route($_)\n" } sort keys %route);
 
   # Macro pre-processing
   $t =~ s{ define          \s+ (\w+) \b }
@@ -83,6 +61,35 @@ sub clean_cfg {
 
   warning("Unmatched rule $1 $2") if $t =~ m{(if|if\s+not|is|is\+not) \s+ (\w+) }gsx;
   return $t;
+}
+
+sub clean_cfg {
+  my ($t,$params) = @_;
+
+  my @available = ($t =~ m{ \b route \[ ([^\]]+) \] }gsx);
+  my %available = map { $_ => 0 } @available;
+  $t =~ s{ \b route \( ([^\)]+) \) }{
+    exists($available{$1})
+      ? ($available{$1}++, "route($1)")
+      : (warning("Removing unknown route($1)"),"")
+  }gsxe;
+
+  my @unused = grep { !$available{$_} } sort keys %available;
+  warning( q(Unused routes: ).join(', ',@unused) ) if @unused;
+
+  my @used = grep { $available{$_} } sort keys %available;
+
+  my $route = 0;
+  my %route = map { $_ => ++$route } sort @used;
+
+  warning("Found $route routes");
+
+  $t =~ s{ \b route \( ([^\)]+) \) \s* ([;\#\)]) }{ "route($route{$1}) $2" }gsxe;
+  $t =~ s{ \b route \[ ([^\]]+) \] \s* ([\{\#]) }{ "route[$route{$1}] $2" }gsxe;
+
+  $t .= "\n".join('', map { "# route($route{$_}) => route($_)\n" } sort keys %route);
+
+  return macros($t,$params);
 }
 
 
@@ -153,7 +160,7 @@ sub compile_sql {
       $result .= CCNQ::Util::content_of($file);
     }
   }
-  return $result;
+  return macros_cfg($result,$params);
 }
 
 =pod
