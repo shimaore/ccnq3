@@ -1,0 +1,26 @@
+* Account identifiers are formatted as paths:
+
+  /path1/path2/path3/path4
+
+* The billing database references information about paths using records
+which IDs are:
+
+  account:/path1/path2/path3/path4
+
+* User roles contains (amongst other values) a list of
+
+  account:/path1/path2
+
+prefixes.
+
+* A database is created for each base database (e.g. provisioning) and
+user-assigned prefix combination. The database thus created is made
+available (as readers) to users whose roles list that prefix.
+
+For example databases
+
+  provisioning:/path1/path2
+  cdr:/path1/path2
+
+will be made accessible to users who have account:/path1/path2 listed in
+their roles.
