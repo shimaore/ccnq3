@@ -19,8 +19,9 @@ available (as readers) to users whose roles list that prefix.
 
 For example databases
 
-  provisioning:/path1/path2
-  cdr:/path1/path2
+  provisioning$/path1/path2
+  cdr$/path1/path2
 
 will be made accessible to users who have account:/path1/path2 listed in
 their roles.
+(Colon cannot be used as part of CouchDB name, so dollar-sign is used.)

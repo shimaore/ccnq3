@@ -19,8 +19,14 @@ server {
     deny  all;
   }
 
-  # Example configuration for a node.js application as the default.
+  # Example configuration for a node.js application as the default
+  # if no static document is found.
   location / {
+    root /var/www/public/html;
+    try_files $uri $uri/index.html $uri.html @node;
+  }
+
+  location @node {
     proxy_pass http://127.0.0.1:5678;
     proxy_redirect off;
     proxy_set_header Host $host;
@@ -29,7 +35,8 @@ server {
   }
 
   # Access to account-specific database is controlled by the database.
-  location ~ ^/(provisioning|cdr)%3A {
+  # Note: ASCII %24 (dollar sign) is the delimiter used to indicate user-databases.
+  location ~ ^/(provisioning|cdr)%24 {
     proxy_pass http://localhost:5984;
     proxy_redirect off;
     proxy_buffering off;
@@ -39,7 +46,7 @@ server {
   }
 
   error_page   500 502 503 504  /50x.html;
-    location = /50x.html {
+  location = /50x.html {
     root   /var/www/nginx-default;
   }
 }

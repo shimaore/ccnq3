@@ -3,6 +3,9 @@
 Released under the Affero GPL3 license or above
 */
 
+// Install:
+//  couchapp push provisioning.js http://127.0.0.1:5984/provisioning
+
 var couchapp = require('couchapp');
 var path     = require('path');
 
@@ -19,6 +22,10 @@ module.exports = ddoc;
 
 // http://wiki.apache.org/couchdb/Document_Update_Validation
 ddoc.validate_doc_update = function (newDoc, oldDoc, userCtx) {
+
+  if(newDoc._id === "_design/userapp") {
+    throw({forbidden:'The user application should not be replicated here.'});
+  }
 
   function required(field, message) {
     message = message || "Document must have a " + field;
@@ -38,17 +45,20 @@ ddoc.validate_doc_update = function (newDoc, oldDoc, userCtx) {
     throw({forbidden : message||"No access to this account"});
   }
 
+  function user_is(role) {
+    return userCtx.roles.indexOf(role) >= 0;
+  }
+
   // Only admins or confirmed users may modify documents.
   // (Newly registered users may not.)
-  if ( userCtx.roles.indexOf('_admin') < 0 &&
-       userCtx.roles.indexOf("confirmed") < 0 ) {
+  if ( !user_is('_admin') && !user_is('confirmed') ) {
     throw({forbidden : "Not a confirmed user."});
   }
 
   // Handle delete documents.
   if (newDoc._deleted === true) {
 
-    if (userCtx.roles.indexOf('_admin') < 0) {
+    if (!user_is('_admin')) {
       throw({forbidden: 'Only admins may delete documents.'});
     }
 
@@ -89,7 +99,7 @@ ddoc.validate_doc_update = function (newDoc, oldDoc, userCtx) {
   // Validate create
   if( !oldDoc ) {
     if(newDoc.type === "number") {
-      if (userCtx.roles.indexOf('_admin') < 0) {
+      if (!user_is('_admin')) {
         throw({forbidden: 'Only admins may create new numbers.'});
       }
     }
@@ -109,7 +119,23 @@ ddoc.validate_doc_update = function (newDoc, oldDoc, userCtx) {
   }
 
 }
-*/
+
+ddoc.filters.user_replication = function(doc, req) {
+  # Prefix is required
+  if(!req.prefix) {
+    return false;
+  }
+  # Only replicate documents, do not replicate _design objects (for example).
+  if(!doc.account) {
+    return false;
+  }
+  # Replicate documents for which the account is a subset of the prefix.
+  if(doc.account.substr(0,req.prefix.length) === req.prefix) {
+    return true;
+  }
+  # Do not otherwise replicate
+  return false;
+}
 
 // Attachments are loaded from portal/*
 couchapp.loadAttachments(ddoc, path.join(__dirname, 'provisioning'));

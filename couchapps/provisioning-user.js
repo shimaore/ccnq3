@@ -8,7 +8,7 @@ var couchapp = require('couchapp');
 var path     = require('path');
 
 ddoc = {
-    _id: '_design/app'
+    _id: '_design/userapp'
   , views: {}
   , lists: {} // http://guide.couchdb.org/draft/transforming.html
   , shows: {} // http://guide.couchdb.org/draft/show.html
@@ -30,7 +30,10 @@ ddoc.validate_doc_update = function (newDoc, oldDoc, userCtx) {
   }
 
   // Other checks here (could be a duplicate of the provisioning-global checks, used to validate replication).
-
+  if(newDoc._id && newDoc._id === "design/app") {
+    // Do not replicate the main design app.
+    throw({forbidden:'The main application should not be replicated here.'});
+  }
 }
 
 
