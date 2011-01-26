@@ -40,6 +40,9 @@ sub macros_cfg {
   # Macros may contain params, so substitute them first.
   $t =~ s{ \$ \{ (\w+) \} }
          { defined $macros{$1} ? $macros{$1} : qq(\${$1}) }gsxe;
+  # One more time (macros within macros)
+  $t =~ s{ \$ \{ (\w+) \} }
+         { defined $macros{$1} ? $macros{$1} : qq(\${$1}) }gsxe;
 
   # Evaluate parameters after macro substitution
   $t =~ s{ \b define          \s+ (\w+) \b }
