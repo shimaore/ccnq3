@@ -17,8 +17,8 @@ def line: (a) ->
 #   GET /opensips/domain/?k=domain&v=requested_domain&c=domain
 
 get '/opensips/domain/': ->
-  t = line ("string" for field in @c)
+  t = line ["string" for field in @c]
   for domain_name in @v
-    t += line domain_name if config.domains[domain_name]?
+    t += line [domain_name] if config.domains[domain_name]?
   return t
 
