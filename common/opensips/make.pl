@@ -134,6 +134,31 @@ EOH
 
 =cut
 
+sub help_on_sql {
+  my ($params) = @_;
+
+  return unless $params->{db_name};
+
+  # Print out some info on how to use the SQL file.
+  my $runtime_opensips_sql = $params->{runtime_opensips_sql};
+  my $db_name     = $params->{db_name};
+  my $db_login    = $params->{db_login};
+  my $db_password = $params->{db_password};
+  info(<<TXT);
+Please run the following commands:
+mysql <<SQL
+  CREATE DATABASE ${db_name};
+  CONNECT ${db_name};
+  CREATE USER ${db_login} IDENTIFIED BY '${db_password}';
+  GRANT ALL ON ${db_name}.* TO ${db_login};
+SQL
+
+mysql ${db_name} < ${runtime_opensips_sql}
+
+TXT
+
+}
+
 sub compile_sql {
   my ($base_dir,$params) = @_;
 
@@ -178,24 +203,7 @@ sub configure_opensips {
   CCNQ::Util::print_to($params->{runtime_opensips_cfg},$cfg_text);
   CCNQ::Util::print_to($params->{runtime_opensips_sql},$sql_text);
 
-  # Print out some info on how to use the SQL file.
-  my $runtime_opensips_sql = $params->{runtime_opensips_sql};
-  my $db_name     = $params->{db_name};
-  my $db_login    = $params->{db_login};
-  my $db_password = $params->{db_password};
-  info(<<TXT);
-Please run the following commands:
-mysql <<SQL
-  CREATE DATABASE ${db_name};
-  CONNECT ${db_name};
-  CREATE USER ${db_login} IDENTIFIED BY '${db_password}';
-  GRANT ALL ON ${db_name}.* TO ${db_login};
-SQL
-
-mysql ${db_name} < ${runtime_opensips_sql}
-
-TXT
-
+  help_on_sql($params);
 }
 
 configure_opensips(decode_json(CCNQ::Util::content_of($ARGV[0])));
