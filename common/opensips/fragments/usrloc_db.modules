@@ -1,0 +1,11 @@
+# -- usrloc --
+loadmodule "usrloc.so"
+# Use usrloc-cl (DB-based)
+modparam("usrloc", "db_url",          "${db_type}://${db_name}:${db_password}@${db_host}/${db_name}")
+modparam("usrloc", "db_mode",         2)
+modparam("usrloc", "timer_interval",  60)
+modparam("usrloc", "desc_time_order", 1)
+modparam("usrloc", "nat_bflag",       6)
+modparam("usrloc", "use_domain",      1)
+
+define has_usrloc
