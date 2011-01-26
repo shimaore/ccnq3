@@ -1,0 +1,2 @@
+* No local SQL database; use the HTTP DB module.
+* User information, etc. is available in JSON form.
