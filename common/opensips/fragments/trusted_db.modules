@@ -1,0 +1,10 @@
+# -- permissions (allow_trusted) --
+loadmodule "permissions.so"
+modparam("permissions", "db_url",     "${db_type}://${db_name}:${db_password}@${db_host}/${db_name}")
+modparam("permissions", "peer_tag_avp", "$avp(peer_tag_avp)")
+# How the permissions module should use SQL for its data
+# 0 is "disable cache"
+modparam("permissions", "db_mode", 0)
+modparam("permissions", "trusted_table", "trusted")
+
+define has_trusted
