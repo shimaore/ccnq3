@@ -1,4 +1,4 @@
-#!/usr/bin/env zappa
+#!/usr/bin/env zappa -p 34340
 
 # Get configuration
 fs = require('fs')
