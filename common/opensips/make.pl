@@ -106,7 +106,8 @@ sub compile_cfg {
 
   my $result = <<EOH;
 #
-# Automatically generated for recipe ${recipe_name}
+# Automatically generated
+# $params->{comment}
 #
 EOH
 
