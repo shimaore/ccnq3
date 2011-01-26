@@ -3,6 +3,8 @@
 
   "recipe":[
     "generic",
+    "domain_db",
+    "db_http",
     "accounting",
     "toolbox",
     "forwarder",
