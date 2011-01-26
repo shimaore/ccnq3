@@ -35,6 +35,10 @@ sub macros_cfg {
          { $params->{$1} = 1, '' }gsxe;
   $t =~ s{ undef           \s+ (\w+) \b }
          { $params->{$1} = 0, '' }gsxe;
+  $t =~ s{ macro           \s+ (\w+) \b
+           (.*?)
+           end \s+ macro \s+ \1 \b }
+         { $params->{$1} = $2, '' }gsxe;
   $t =~ s{ if \s+ not \s+ (\w+) \b
            (.*?)
            end \s+ if \s+ not \s+ \1 \b }
@@ -66,6 +70,8 @@ sub macros_cfg {
 sub clean_cfg {
   my ($t,$params) = @_;
 
+  $t = macros_cfg($t,$params);
+
   my @available = ($t =~ m{ \b route \[ ([^\]]+) \] }gsx);
   my %available = map { $_ => 0 } @available;
   $t =~ s{ \b route \( ([^\)]+) \) }{
@@ -89,7 +95,7 @@ sub clean_cfg {
 
   $t .= "\n".join('', map { "# route($route{$_}) => route($_)\n" } sort keys %route);
 
-  return macros($t,$params);
+  return $t;
 }
 
 
