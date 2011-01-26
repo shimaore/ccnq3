@@ -31,29 +31,29 @@ sub macros_cfg {
   my ($t,$params) = @_;
 
   # Macro pre-processing
-  $t =~ s{ define          \s+ (\w+) \b }
+  $t =~ s{ \b define          \s+ (\w+) \b }
          { $params->{$1} = 1, '' }gsxe;
-  $t =~ s{ undef           \s+ (\w+) \b }
+  $t =~ s{ \b undef           \s+ (\w+) \b }
          { $params->{$1} = 0, '' }gsxe;
-  $t =~ s{ macro           \s+ (\w+) \b
+  $t =~ s{ \b macro           \s+ (\w+) \b
            (.*?)
-           end \s+ macro \s+ \1 \b }
+           \b end \s+ macro \s+ \1 \b }
          { $params->{$1} = $2, '' }gsxe;
-  $t =~ s{ if \s+ not \s+ (\w+) \b
+  $t =~ s{ \b if \s+ not \s+ (\w+) \b
            (.*?)
-           end \s+ if \s+ not \s+ \1 \b }
+           \b end \s+ if \s+ not \s+ \1 \b }
          { exists($params->{$1}) && $params->{$1} ? '' : $2 }gsxe;
-  $t =~ s{ if \s+ (\w+) \s+ is \s+ not \s+ (\w+) \b
+  $t =~ s{ \b if \s+ (\w+) \s+ is \s+ not \s+ (\w+) \b
            (.*?)
-           end \s+ if \s+ \1 \s+ is \s+ not \s+ \2 \b }
+           \b end \s+ if \s+ \1 \s+ is \s+ not \s+ \2 \b }
          { exists($params->{$1}) && $params->{$1} eq $2 ? '' : $3 }gsxe;
-  $t =~ s{ if \s+ (\w+) \s+ is \s+ (\w+) \b
+  $t =~ s{ \b if \s+ (\w+) \s+ is \s+ (\w+) \b
            (.*?)
-           end \s+ if \s+ \1 \s+ is \s+ \2 \b }
+           \b end \s+ if \s+ \1 \s+ is \s+ \2 \b }
          { exists($params->{$1}) && $params->{$1} eq $2 ? $3 : '' }gsxe;
-  $t =~ s{ if \s+ (\w+) \b
+  $t =~ s{ \b if \s+ (\w+) \b
            (.*?)
-           end \s+ if \s+ \1 \b }
+           \b end \s+ if \s+ \1 \b }
          { exists($params->{$1}) && $params->{$1} ? $2 : '' }gsxe;
 
   # Substitutions
@@ -63,7 +63,7 @@ sub macros_cfg {
          { defined $params->{$1} ? $params->{$1} : (warning("Undefined $1"),'') }gsxe;
 
 
-  warning("Unmatched rule $1 $2") if $t =~ m{(if|if\s+not|is|is\+not) \s+ (\w+) }gsx;
+  warning(qq(Unmatched rule "$1 $2")) if $t =~ m{\b(if|if\s+not|is|is\+not) \s+ (\w+) }gsx;
   return $t;
 }
 
