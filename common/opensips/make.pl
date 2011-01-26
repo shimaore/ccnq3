@@ -30,6 +30,8 @@ use JSON;
 sub macros_cfg {
   my ($t,$params) = @_;
 
+  my %macros;
+
   # Macro pre-processing
   $t =~ s{ \b define          \s+ (\w+) \b }
          { $params->{$1} = 1, '' }gsxe;
@@ -38,7 +40,7 @@ sub macros_cfg {
   $t =~ s{ \b macro           \s+ (\w+) \b
            (.*?)
            \b end \s+ macro \s+ \1 \b }
-         { $params->{$1} = $2, '' }gsxe;
+         { $macros->{$1} = $2, '' }gsxe;
   $t =~ s{ \b if \s+ not \s+ (\w+) \b
            (.*?)
            \b end \s+ if \s+ not \s+ \1 \b }
@@ -58,7 +60,11 @@ sub macros_cfg {
 
   # Substitutions
 
+  # Macros may contain params, so substitute them first.
+  $t =~ s{ \$ \{ (\w+) \} }
+         { defined $macros->{$1} ? $macros->{$1} : qq(\${$1}) }gsxe;
 
+  # Substitute parameters
   $t =~ s{ \$ \{ (\w+) \} }
          { defined $params->{$1} ? $params->{$1} : (error("Undefined $1"),'') }gsxe;
 
@@ -79,7 +85,7 @@ sub clean_cfg {
   }gsxe;
 
   my @unused = grep { !$available{$_} } sort keys %available;
-  error( q(Unused routes: ).join(', ',@unused).q(, use macros instead.) ) if @unused;
+  error( q(Unused routes (replace with macros): ).join(', ',@unused) ) if @unused;
 
   my @used = grep { $available{$_} } sort keys %available;
 
