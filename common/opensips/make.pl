@@ -67,7 +67,7 @@ sub macros_cfg {
 
   # Substitute parameters
   $t =~ s{ \$ \{ (\w+) \} }
-         { defined $params->{$1} ? $params->{$1} : (error("Undefined $1"),'') }gsxe;
+         { defined $params->{$1} ? $params->{$1} : (error("Undefined $1"),qq(\${$1})) }gsxe;
 
   return $t;
 }
