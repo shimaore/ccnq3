@@ -2,7 +2,7 @@
   "comment":"Model for a complete proxy that does it all (almost).",
 
   "recipe":[
-    "generic"
+    "generic",
     "accounting",
     "toolbox",
     "forwarder",
@@ -18,7 +18,11 @@
     "routing-lineside",
     "routing-trunkside-transparent",
     "register-colocated",
-    "generic2"
+    "avpops_db",
+    "domain_db",
+    "trusted_db",
+    "uri_db",
+    "usrloc_db"
 
   ],
 
