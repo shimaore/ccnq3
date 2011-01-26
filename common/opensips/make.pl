@@ -165,6 +165,15 @@ sub configure_opensips {
   CCNQ::Util::print_to($params->{runtime_opensips_cfg},$cfg_text);
 }
 
-configure_opensips(decode_json(CCNQ::Util::content_of($ARGV[0])));
+my $params = {};
+
+while(@ARGV) {
+  $params = {
+    %$params,
+    %{decode_json(CCNQ::Util::content_of(shift))}
+  };
+}
+
+configure_opensips($params);
 
 1;
