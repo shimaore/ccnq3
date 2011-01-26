@@ -18,6 +18,7 @@ use strict; use warnings;
 use File::Spec;
 use CCNQ::Logger;
 use CCNQ::Util;
+use JSON;
 
 =h1 clean_cfg
 
@@ -209,8 +210,6 @@ mysql ${db_name} < ${runtime_opensips_sql}
 TXT
 
 }
-
-use JSON;
 
 configure_opensips(decode_json(CCNQ::Util::content_of($ARGV[0])));
 
