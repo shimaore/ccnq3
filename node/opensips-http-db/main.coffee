@@ -14,11 +14,11 @@ def line: (a) ->
   a.join("\t") + "\n"
 
 # Typical:
-#   GET /opensips/domain/?k=domain&v=12.34.56.78&c=domain
+#   GET /opensips/domain/?k=domain&v=requested_domain&c=domain
+
 get '/opensips/domain/': ->
   t = line ("string" for field in @c)
-  for local_ip in @v
-    for entry in config[@local_ip]
-      t += line (entry[field] for field in @c)
+  for domain_name in @v
+    t += line domain_name if config.domains[domain_name]?
   return t
 
