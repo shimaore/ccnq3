@@ -47,22 +47,23 @@ sub macros_cfg {
   $t =~ s{ \b undef           \s+ (\w+) \b }
          { $params->{$1} = 0, '' }gsxe;
 
+  # Since we don't use a real (LR) parser, these are sorted by match order.
   $t =~ s{ \b if \s+ not \s+ (\w+) \b
            (.*?)
            \b end \s+ if \s+ not \s+ \1 \b }
-         { exists($params->{$1}) && $params->{$1} ? '' : $2 }gsxe;
+         { (exists($params->{$1}) && $params->{$1}) ? '' : $2 }gsxe;
   $t =~ s{ \b if \s+ (\w+) \s+ is \s+ not \s+ (\w+) \b
            (.*?)
            \b end \s+ if \s+ \1 \s+ is \s+ not \s+ \2 \b }
-         { exists($params->{$1}) && $params->{$1} eq $2 ? '' : $3 }gsxe;
+         { (exists($params->{$1}) && $params->{$1} eq $2) ? '' : $3 }gsxe;
   $t =~ s{ \b if \s+ (\w+) \s+ is \s+ (\w+) \b
            (.*?)
            \b end \s+ if \s+ \1 \s+ is \s+ \2 \b }
-         { exists($params->{$1}) && $params->{$1} eq $2 ? $3 : '' }gsxe;
+         { (exists($params->{$1}) && $params->{$1} eq $2) ? $3 : '' }gsxe;
   $t =~ s{ \b if \s+ (\w+) \b
            (.*?)
            \b end \s+ if \s+ \1 \b }
-         { exists($params->{$1}) && $params->{$1} ? $2 : '' }gsxe;
+         { (exists($params->{$1}) && $params->{$1}) ? $2 : '' }gsxe;
 
   # Substitute parameters
   $t =~ s{ \$ \{ (\w+) \} }
