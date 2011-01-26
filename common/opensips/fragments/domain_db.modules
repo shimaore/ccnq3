@@ -1,0 +1,5 @@
+# -- domain --
+loadmodule "domain.so"
+modparam("domain", "db_url",          "${db_type}://${db_name}:${db_password}@${db_host}/${db_name}")
+modparam("domain", "domain_table",    "domain")
+
