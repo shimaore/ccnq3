@@ -2,7 +2,6 @@
 
 app 'opensips', (server) ->
   server.use (require 'express').bodyDecoder()
-  @port = 34340
 
 # Get configuration
 fs = require('fs')
