@@ -60,10 +60,8 @@ sub macros_cfg {
 
 
   $t =~ s{ \$ \{ (\w+) \} }
-         { defined $params->{$1} ? $params->{$1} : (warning("Undefined $1"),'') }gsxe;
+         { defined $params->{$1} ? $params->{$1} : (error("Undefined $1"),'') }gsxe;
 
-
-  warning(qq(Unmatched rule "$1 $2")) if $t =~ m{\b(if|if\s+not|is|is\+not) \s+ (\w+) }gsx;
   return $t;
 }
 
@@ -81,7 +79,7 @@ sub clean_cfg {
   }gsxe;
 
   my @unused = grep { !$available{$_} } sort keys %available;
-  warning( q(Unused routes: ).join(', ',@unused) ) if @unused;
+  error( q(Unused routes: ).join(', ',@unused).q(, use macros instead.) ) if @unused;
 
   my @used = grep { $available{$_} } sort keys %available;
 
