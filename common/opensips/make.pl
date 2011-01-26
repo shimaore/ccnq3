@@ -33,14 +33,20 @@ sub macros_cfg {
   my %macros;
 
   # Macro pre-processing
-  $t =~ s{ \b define          \s+ (\w+) \b }
-         { $params->{$1} = 1, '' }gsxe;
-  $t =~ s{ \b undef           \s+ (\w+) \b }
-         { $params->{$1} = 0, '' }gsxe;
   $t =~ s{ \b macro           \s+ (\w+) \b
            (.*?)
            \b end \s+ macro \s+ \1 \b }
          { $macros{$1} = $2, '' }gsxe;
+  # Macros may contain params, so substitute them first.
+  $t =~ s{ \$ \{ (\w+) \} }
+         { defined $macros{$1} ? $macros{$1} : qq(\${$1}) }gsxe;
+
+  # Evaluate parameters after macro substitution
+  $t =~ s{ \b define          \s+ (\w+) \b }
+         { $params->{$1} = 1, '' }gsxe;
+  $t =~ s{ \b undef           \s+ (\w+) \b }
+         { $params->{$1} = 0, '' }gsxe;
+
   $t =~ s{ \b if \s+ not \s+ (\w+) \b
            (.*?)
            \b end \s+ if \s+ not \s+ \1 \b }
@@ -57,12 +63,6 @@ sub macros_cfg {
            (.*?)
            \b end \s+ if \s+ \1 \b }
          { exists($params->{$1}) && $params->{$1} ? $2 : '' }gsxe;
-
-  # Substitutions
-
-  # Macros may contain params, so substitute them first.
-  $t =~ s{ \$ \{ (\w+) \} }
-         { defined $macros{$1} ? $macros{$1} : qq(\${$1}) }gsxe;
 
   # Substitute parameters
   $t =~ s{ \$ \{ (\w+) \} }
