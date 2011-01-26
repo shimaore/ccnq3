@@ -23,6 +23,7 @@
   "ignore_dest_domain": 1,
   "ignore_account": 1,
   "ignore_location": 1,
+  "skip_lineside": 1,
 
   "proxy_ip": "",
   "proxy_port": "5060",
