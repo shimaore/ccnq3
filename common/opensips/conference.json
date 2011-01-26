@@ -3,6 +3,7 @@
 
   "recipe":[
     "generic",
+    "accounting",
     "toolbox",
     "forwarder",
     "nat",
