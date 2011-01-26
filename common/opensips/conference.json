@@ -46,7 +46,9 @@
   "uac_vsf": "vsf",
   "max_hops": "10",
 
-  "avp_aliases": {},
+  "avp_aliases": {
+    "inv_timer"       : 43
+  },
 
   "ok":true
 }
