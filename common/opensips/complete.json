@@ -28,14 +28,13 @@
 
   "opensips_base_lib": ".",
   "runtime_opensips_cfg": "/tmp/opensips.cfg",
-  "runtime_opensips_sql": "/tmp/opensips.sql",
 
   "proxy_ip": "",
   "proxy_port": "5060",
   "internal_ip": "",
   "external_ip": "",
 
-  "db_type": "mysql",
+  "db_type": "http",
   "db_host": "127.0.0.1",
   "db_login": "opensips",
   "db_password": "remplace_this_with_a_long_randomly-generated_password__thanks",

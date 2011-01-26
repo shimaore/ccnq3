@@ -19,7 +19,6 @@
   "opensips_base_lib": ".",
   "model": "conference",
   "runtime_opensips_cfg": "/tmp/opensips.cfg",
-  "runtime_opensips_sql": "/tmp/opensips.sql",
 
   "proxy_ip": "",
   "proxy_port": "5060",
@@ -28,8 +27,8 @@
 
   "local_port":"5064",
 
-  "accounting": 0,
-  "authentication": 0,
+  "accounting": "",
+  "authentication": "",
   "skip_uac_auth": 1,
   "mp_allowed": 1,
   "mp_always": 1,

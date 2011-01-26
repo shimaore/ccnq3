@@ -117,7 +117,7 @@ sub compile_cfg {
 
   my $result = <<EOH;
 #
-# Automatically generated
+# Automatically generated configuration file.
 # $params->{comment}
 #
 EOH
@@ -133,53 +133,6 @@ EOH
     }
   }
   return clean_cfg($result,$params);
-}
-
-=h1 compile_sql
-
-  Build SQL configuration from fragments.
-
-=cut
-
-sub help_on_sql {
-  my ($params) = @_;
-
-  return unless $params->{db_name};
-
-  # Print out some info on how to use the SQL file.
-  my $runtime_opensips_sql = $params->{runtime_opensips_sql};
-  my $db_name     = $params->{db_name};
-  my $db_login    = $params->{db_login};
-  my $db_password = $params->{db_password};
-  info(<<TXT);
-Please run the following commands:
-mysql <<SQL
-  CREATE DATABASE ${db_name};
-  CONNECT ${db_name};
-  CREATE USER ${db_login} IDENTIFIED BY '${db_password}';
-  GRANT ALL ON ${db_name}.* TO ${db_login};
-SQL
-
-mysql ${db_name} < ${runtime_opensips_sql}
-
-TXT
-
-}
-
-sub compile_sql {
-  my ($base_dir,$params) = @_;
-
-  my @recipe = @{$params->{recipe}};
-
-  my $result = '';
-  my $extension = 'sql';
-  for my $building_block (@recipe) {
-    my $file = File::Spec->catfile($base_dir,'src',"${building_block}.${extension}");
-    if( -f $file ) {
-      $result .= CCNQ::Util::content_of($file);
-    }
-  }
-  return macros_cfg($result,$params);
 }
 
 =pod
@@ -205,12 +158,8 @@ sub configure_opensips {
   }
 
   my $cfg_text = compile_cfg($params->{opensips_base_lib},$params);
-  my $sql_text = compile_sql($params->{opensips_base_lib},$params);
 
   CCNQ::Util::print_to($params->{runtime_opensips_cfg},$cfg_text);
-  CCNQ::Util::print_to($params->{runtime_opensips_sql},$sql_text);
-
-  help_on_sql($params);
 }
 
 configure_opensips(decode_json(CCNQ::Util::content_of($ARGV[0])));
