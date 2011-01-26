@@ -1,4 +1,20 @@
 {
+  "comment":"Open proxy with media relay (SBC)",
+
+  "recipe":[
+    "generic",
+    "toolbox",
+    "forwarder",
+    "nat",
+    "mediaproxy",
+    "register-ignore",
+    "invite",
+    "invite-router-local",
+    "loose-route",
+    "non-loose-route",
+    "generic2"
+  ],
+
   "opensips_base_lib": ".",
   "model": "conference",
   "runtime_opensips_cfg": "/tmp/opensips.cfg",
@@ -22,6 +38,7 @@
 
   "mpath": "/usr/lib/opensips/modules/",
   "uac_vsf": "vsf",
-  "max_hops": "10"
+  "max_hops": "10",
 
+  "ok":true
 }

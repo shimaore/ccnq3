@@ -1,6 +1,28 @@
 {
+  "comment":"Model for a complete proxy that does it all (almost).",
+
+  "recipe":[
+    "generic"
+    "accounting",
+    "toolbox",
+    "forwarder",
+    "authenticate",
+    "nat",
+    "mediaproxy",
+    "invite-router",
+    "invite",
+    "invite-trunk-drouting",
+    "loose-route",
+    "non-loose-route",
+    "routing-logic",
+    "routing-lineside",
+    "routing-trunkside-transparent",
+    "register-colocated",
+    "generic2"
+
+  ],
+
   "opensips_base_lib": ".",
-  "model": "complete",
   "runtime_opensips_cfg": "/tmp/opensips.cfg",
   "runtime_opensips_sql": "/tmp/opensips.sql",
 
@@ -53,6 +75,10 @@
   "challenge": "",
   "inv_timer": 90,
 
+  "mpath": "/usr/lib/opensips/modules/",
+  "uac_vsf": "vsf",
+  "max_hops": "10",
+
   "avp_aliases": {
         "received_avp": 42,
 
@@ -104,9 +130,7 @@
         "host_info"       : 160,
         "forwarding_sbc"  : 161,
         "peer_context_info"  : 162
-    },
-    "mpath": "/usr/lib/opensips/modules/",
-    "uac_vsf": "vsf",
-    "max_hops": "10"
+  },
 
+  "ok":true
 }

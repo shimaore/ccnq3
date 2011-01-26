@@ -93,24 +93,6 @@ sub clean_cfg {
 }
 
 
-sub recipe_for {
-  my ($base_dir,$recipe_name) = @_;
-
-  my $recipe_file = File::Spec->catfile($base_dir,'recipes',"${recipe_name}.recipe");
-
-  my @recipe = ();
-
-  open(my $fh,'<:utf8',$recipe_file) or die "$recipe_file: $!";
-  while(<$fh>) {
-    chomp;
-    next if /^#/;
-    push @recipe, $_;
-  }
-  close($fh) or die "$recipe_file: $!";
-
-  return @recipe;
-}
-
 =h1 compile_cfg
 
     Build OpenSIPS configuration from fragments.
@@ -118,9 +100,9 @@ sub recipe_for {
 =cut
 
 sub compile_cfg {
-  my ($base_dir,$recipe_name,$params) = @_;
+  my ($base_dir,$params) = @_;
 
-  my @recipe = recipe_for($base_dir,$recipe_name);
+  my @recipe = @{$params->{recipe}};
 
   my $result = <<EOH;
 #
@@ -148,9 +130,9 @@ EOH
 =cut
 
 sub compile_sql {
-  my ($base_dir,$recipe_name,$params) = @_;
+  my ($base_dir,$params) = @_;
 
-  my @recipe = recipe_for($base_dir,$recipe_name);
+  my @recipe = @{$params->{recipe}};
 
   my $result = '';
   my $extension = 'sql';
@@ -185,8 +167,8 @@ sub configure_opensips {
     $params->{radius_extra} = join(';',@{$params->{radius_extra}});
   }
 
-  my $cfg_text = compile_cfg($params->{opensips_base_lib},$params->{model},$params);
-  my $sql_text = compile_sql($params->{opensips_base_lib},$params->{model},$params);
+  my $cfg_text = compile_cfg($params->{opensips_base_lib},$params);
+  my $sql_text = compile_sql($params->{opensips_base_lib},$params);
 
   CCNQ::Util::print_to($params->{runtime_opensips_cfg},$cfg_text);
   CCNQ::Util::print_to($params->{runtime_opensips_sql},$sql_text);
