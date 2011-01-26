@@ -8,3 +8,4 @@ modparam("permissions", "db_mode", 0)
 modparam("permissions", "trusted_table", "trusted")
 
 define has_trusted
+define has_addresses
