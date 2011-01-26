@@ -40,5 +40,7 @@
   "uac_vsf": "vsf",
   "max_hops": "10",
 
+  "avp_aliases": [],
+
   "ok":true
 }
