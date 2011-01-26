@@ -1,4 +1,7 @@
-#!/usr/bin/env zappa -p 34340
+#!/usr/bin/env zappa
+
+app 'opensips', (server) ->
+  server.use (require 'express').bodyDecoder()
 
 # Get configuration
 fs = require('fs')
