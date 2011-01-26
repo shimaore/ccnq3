@@ -14,13 +14,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-if accounting
 loadmodule "acc.so"
 
+if accounting
 modparam("acc", "log_extra", "${cdr_extra}")
-
-modparam("acc", "log_flag",1) # Normally not used
-modparam("acc", "log_level",1)
 
 modparam("acc", "report_cancels", 1)
 modparam("acc", "early_media", 1)
@@ -28,6 +25,11 @@ modparam("acc", "report_ack", 1)
 modparam("acc", "failed_transaction_flag", 12)
 
 end if accounting
+
+if accounting is syslog
+  modparam("acc", "log_flag",1) # Normally not used
+  modparam("acc", "log_level",1)
+end if accounting is syslog
 
 if accounting is flatstore
   modparam("acc", "db_extra", "${cdr_extra}")
