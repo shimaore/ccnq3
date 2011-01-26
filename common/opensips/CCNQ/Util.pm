@@ -14,7 +14,7 @@ package CCNQ::Util;
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 use strict; use warnings;
-use Logger::Syslog;
+use CCNQ::Logger;
 use Carp qw(croak);
 
 =head1 DESCRIPTION
