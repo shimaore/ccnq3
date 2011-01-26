@@ -28,8 +28,8 @@
 
   "local_port":"5064",
 
-  "accounting": false,
-  "authentication": false,
+  "accounting": 0,
+  "authentication": 0,
   "skip_uac_auth": 1,
   "mp_allowed": 1,
   "mp_always": 1,
