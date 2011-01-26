@@ -15,7 +15,6 @@
     "invite-router-local",
     "loose-route",
     "non-loose-route",
-    "generic2"
   ],
 
   "opensips_base_lib": ".",
