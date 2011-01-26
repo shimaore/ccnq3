@@ -13,9 +13,22 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+if accounting
 loadmodule "acc.so"
 
 modparam("acc", "log_extra", "${cdr_extra}")
+
+modparam("acc", "log_flag",1) # Normally not used
+modparam("acc", "log_level",1)
+
+modparam("acc", "report_cancels", 1)
+modparam("acc", "early_media", 1)
+modparam("acc", "report_ack", 1)
+modparam("acc", "failed_transaction_flag", 12)
+
+end if accounting
+
 if accounting is flatstore
   modparam("acc", "db_extra", "${cdr_extra}")
   modparam("acc", "db_flag",2)
@@ -32,11 +45,3 @@ if accounting is radius
   modparam("acc", "radius_flag", 4)
   modparam("acc", "radius_missed_flag", 5)
 end if accounting is radius
-
-modparam("acc", "log_flag",1) # Normally not used
-modparam("acc", "log_level",1)
-
-modparam("acc", "report_cancels", 1)
-modparam("acc", "early_media", 1)
-modparam("acc", "report_ack", 1)
-modparam("acc", "failed_transaction_flag", 12)
