@@ -40,7 +40,7 @@ sub macros_cfg {
   $t =~ s{ \b macro           \s+ (\w+) \b
            (.*?)
            \b end \s+ macro \s+ \1 \b }
-         { $macros->{$1} = $2, '' }gsxe;
+         { $macros{$1} = $2, '' }gsxe;
   $t =~ s{ \b if \s+ not \s+ (\w+) \b
            (.*?)
            \b end \s+ if \s+ not \s+ \1 \b }
@@ -62,7 +62,7 @@ sub macros_cfg {
 
   # Macros may contain params, so substitute them first.
   $t =~ s{ \$ \{ (\w+) \} }
-         { defined $macros->{$1} ? $macros->{$1} : qq(\${$1}) }gsxe;
+         { defined $macros{$1} ? $macros{$1} : qq(\${$1}) }gsxe;
 
   # Substitute parameters
   $t =~ s{ \$ \{ (\w+) \} }
