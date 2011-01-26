@@ -26,6 +26,7 @@ CREATE TABLE version (
 
 -- These tables are provisioned.
 
+if need_avp_db
 --
 -- Table structure for table 'avpops'
 --
@@ -45,6 +46,7 @@ CREATE TABLE avpops (
 CREATE INDEX ua_idx ON avpops (uuid, attribute);
 CREATE INDEX uda_idx ON avpops (username, domain, attribute);
 CREATE INDEX value_idx ON avpops (value);
+end if need_avp_db
 
 if need_trusted
 --

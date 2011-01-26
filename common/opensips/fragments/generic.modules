@@ -81,9 +81,11 @@ modparam("domain", "domain_table",    "domain")
 
 # -- avpops --
 loadmodule "avpops.so"
+if need_avp_db
 modparam("avpops", "db_url",          "${db_type}://${db_name}:${db_password}@${db_host}/${db_name}")
 modparam("avpops", "avp_table",       "avpops")
 modparam("avpops", "use_domain",      1)
+end if need_avp_db
 
 # -- permissions (allow_trusted) --
 if need_trusted
@@ -100,7 +102,9 @@ end if need_trusted
 loadmodule "signaling.so"
 
 # -- alias_db (alias_db_lookup) --
+if need_alias_db
 loadmodule "alias_db.so"
 modparam("alias_db", "db_url",     "${db_type}://${db_name}:${db_password}@${db_host}/${db_name}")
 modparam("alias_db", "use_domain", 1)
 modparam("alias_db", "append_branches", 1)
+end if need_alias_db
