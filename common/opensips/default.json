@@ -1,0 +1,118 @@
+{
+  "comment default": "Lists default values (not specific to a profile). There's no reason to modify these.",
+
+  "mpath": "/usr/lib/opensips/modules/",
+  "uac_vsf": "vsf",
+  "max_hops": "10",
+
+  "cdr_extra": [
+    "from_user"       ,  "$fU",
+    "from_domain"     ,  "$fd",
+    "ruri_user"       ,  "$rU",
+    "ruri_domain"     ,  "$rd",
+    "src_ip"          ,  "$avp(host_info)",
+    "src_type"        ,  "$avp(src_type)",
+    "dst_type"        ,  "$avp(dst_type)",
+    "src_subs"        ,  "$avp(src_subs)",
+    "dst_subs"        ,  "$avp(dst_subs)",
+    "account"         ,  "$avp(account)",
+    "to_user"         ,  "$tU",
+    "to_domain"       ,  "$td",
+    "from_display"    ,  "$fn",
+    "to_display"      ,  "$tn",
+    "contact"         ,  "$ct",
+    "src_port"        ,  "$sp",
+    "user_agent"      ,  "$ua",
+    "content_type"    ,  "$cT"
+  ],
+
+  "radius_extra": [
+    "OpenSER-Src-Type"  ,  "$avp(src_type)",
+    "OpenSER-Dst-Type"  ,  "$avp(dst_type)",
+    "OpenSER-Src-Subs"  ,  "$avp(src_subs)",
+    "OpenSER-Dst-Subs"  ,  "$avp(dst_subs)"
+
+  ],
+
+  "avp_aliases": {
+    "received_avp": 42,
+
+    "dr_ruri"         : 155,
+    "dr_attrs"        : 156,
+
+    "uac_realm"       : 10,
+    "uac_user"        : 11,
+    "uac_pass"        : 12,
+
+    "src_subs"        : 170,
+    "src_disabled"    : 171,
+    "user_ip"         : 174,
+    "user_port"       : 175,
+    "user_srv"        : 178,
+    "user_via"        : 176,
+    "user_location"   : 177,
+    "strip_digit"     : 179,
+    "user_force_mp"   : 140,
+    "user_forbid_mp"  : 141,
+    "dest_domain"     : 143,
+    "user_outbound_route"           : 144,
+    "ignore_default_outbound_route" : 145,
+    "ignore_caller_outbound_route"  : 146,
+    "check_from"      : 147,
+    "allow_onnet"     : 200,
+
+    "valid_from"      : 100,
+
+    "dst_subs"        : 180,
+    "dst_disabled"    : 189,
+    "cfa"             : 181,
+    "cfnr"            : 182,
+    "cfb"             : 183,
+    "cfda"            : 184,
+    "dst_domain"      : 186,
+    "number_location" : 187,
+    "inv_timer"       : 43,
+
+    "location_routing" : 110,
+
+    "src_type"        : 190,
+    "dst_type"        : 191,
+    "account"         : 192,
+    "account_sub"     : 193,
+    "number_account"  : 194,
+    "number_account_sub" : 195,
+
+    "host_info"       : 160,
+    "forwarding_sbc"  : 161,
+    "peer_context_info"  : 162
+  },
+
+  "comment bflag": "Branch flags",
+  "bflag_request_mp_callee":          6,
+  "bflag_cfb_used":                   9,
+  "bflag_cfda_used":                 10,
+  "bflag_auth_attempted":            11,
+  "bflag_in_progress":               18,
+
+  "comment flag": "Transaction flags",
+  "flag_accounting_syslog":           1,
+  "flag_accounting_flatstore_calls":  2,
+  "flag_accounting_flatstore_missed": 3,
+  "flag_accounting_radius_calls":     4,
+  "flag_accounting_radius_missed":    5,
+  "flag_request_mp_callee":           6,
+  "flag_request_mp_caller":           7,
+  "flag_failed_transaction":         12,
+  "flag_dest_domain_set":            16,
+  "flag_sock":                       18,
+  "flag_dialog":                     19,
+  "flag_register_authenticated":     20,
+  "flag_tcp_persistent":             21,
+  "flag_trunk_routing":              22,
+  "flag_bye_on_timeout":             23,
+
+  "comment dflag": "Dialog flags",
+  "dflag_mediaproxy":                 8,
+
+  "ok":true
+}

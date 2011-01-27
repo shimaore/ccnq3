@@ -1,6 +1,6 @@
 {
   "comment":"Open proxy with media relay (SBC)",
-  "run-as": "sudo ./make.pl conference.json local-vars.json",
+  "run-as": "sudo ./make.pl default.json conference.json local-vars.json",
 
   "recipe":[
     "generic",
@@ -48,14 +48,6 @@
   "debug": 0,
 
   "inv_timer": 90,
-
-  "mpath": "/usr/lib/opensips/modules/",
-  "uac_vsf": "vsf",
-  "max_hops": "10",
-
-  "avp_aliases": {
-    "inv_timer"       : 43
-  },
 
   "ok":true
 }
