@@ -34,9 +34,9 @@ modparam("tm", "fr_inv_timer_avp", "$(avp(inv_timer))")
 # noisy_ctimer: Recommended by Gafachi, probably makes sense in this application
 # modparam("tm", "noisy_ctimer", 1)
 
-# For better interaction with broken (pre-3261) devices
-modparam("tm", "ruri_matching", 0)
-modparam("tm", "via1_matching", 0)
+# For better interaction with broken (pre-3261) devices, turn these off.
+# modparam("tm", "ruri_matching", 0)
+# modparam("tm", "via1_matching", 0)
 
 # Timeout for Final reply for request or ACK for negative INVITE reply
 # This is the time we wait to failover if a carrier is dead, basically.
