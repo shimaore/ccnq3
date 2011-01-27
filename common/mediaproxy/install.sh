@@ -26,6 +26,16 @@ if [ "x$ACTION" == "xrelay" ]; then
     sudo tee /etc/mediaproxy/config.ini >/dev/null
   sudo cp ./relay/relay.* /etc/mediaproxy/tls
 
+  sudo sed -i -e 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1' /etc/sysctl.conf
+  egrep -q '^net.ipv4.ip_forward=1$' /etc/sysctl.conf || exit
+
+  sudo sed -i -e 's/#net.ipv6.conf.all.forwarding=1/net.ipv6.conf.all.forwarding=1/' /etc/sysctl.conf
+  egrep -q '^net.ipv6.conf.all.forwarding=1$' /etc/sysctl.conf || exit
+  # Maybe
+  #  net.ipv6.conf.default.forwarding=1
+  # also?
+
+  sudo sysctl -p /etc/sysctl.conf
   sudo /etc/init.d/mediaproxy-relay restart
 
 fi
