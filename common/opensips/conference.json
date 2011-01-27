@@ -1,5 +1,6 @@
 {
   "comment":"Open proxy with media relay (SBC)",
+  "run-as": "sudo ./make.pl conference.json local-vars.json",
 
   "recipe":[
     "generic",
@@ -24,7 +25,7 @@
   "db_type": "http",
   "db_host": "127.0.0.1:34340",
   "db_login": "opensips",
-  "db_password": "remplace_this_with_a_long_randomly-generated_password__thanks",
+  "db_password": "replace_this_with_a_long_randomly-generated_password__thanks",
   "db_name": "opensips",
 
   "ignore_dest_domain": 1,
