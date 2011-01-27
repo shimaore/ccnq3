@@ -5,7 +5,7 @@ modparam("usrloc", "db_url",          "${db_type}://${db_name}:${db_password}@${
 modparam("usrloc", "db_mode",         2)
 modparam("usrloc", "timer_interval",  60)
 modparam("usrloc", "desc_time_order", 1)
-modparam("usrloc", "nat_bflag",       6)
+modparam("usrloc", "nat_bflag",       ${bflag_request_mp_callee})
 modparam("usrloc", "use_domain",      1)
 
 define has_usrloc

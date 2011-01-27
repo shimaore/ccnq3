@@ -30,5 +30,5 @@ modparam("registrar", "max_contacts", 10)
 modparam("registrar", "received_avp", "$avp(received_avp)")
 
 
-modparam("registrar", "sock_flag", 18)
+modparam("registrar", "sock_flag", ${flag_sock})
 modparam("registrar", "sock_hdr_name", "Sock-Info")
