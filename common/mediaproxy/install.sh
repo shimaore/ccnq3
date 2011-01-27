@@ -43,7 +43,7 @@ Again,
     if you do not first update your settings.
 
 EOT
-
+fi
 
 
 function do_sysctl {
