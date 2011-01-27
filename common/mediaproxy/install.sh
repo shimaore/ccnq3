@@ -6,7 +6,7 @@ ACTION=$1
 shift
 
 function do_sysctl {
-  sudo sed -i -e 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1' /etc/sysctl.conf
+  sudo sed -i -e 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/' /etc/sysctl.conf
   egrep -q '^net.ipv4.ip_forward=1$' /etc/sysctl.conf || exit
 
   sudo sed -i -e 's/#net.ipv6.conf.all.forwarding=1/net.ipv6.conf.all.forwarding=1/' /etc/sysctl.conf
