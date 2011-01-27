@@ -17,7 +17,8 @@ def line: (a) ->
 #   GET /opensips/domain/?k=domain&v=requested_domain&c=domain
 
 get '/opensips/domain/': ->
-  t = line ["string"]
-  t += line [@v] if config.domains[@v]?
-  return t
+  if config.domains[@v]?
+    return line(["string"]) + line([@v])
+  else
+    return ""
 
