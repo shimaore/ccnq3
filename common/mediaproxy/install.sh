@@ -20,7 +20,7 @@ If you are using IPv6, routing will break at this point, because enabling
 IPv6 forwarding will disable autoconfiguration.
 
 Make sure you statically set both your IPv6 address and your default IPv6 route
-before running the installation for a MediaProxy relay, otherwise you WILL LOOSE
+before running the installation for a MediaProxy relay, otherwise you WILL LOSE
 ACCESS TO THIS MACHINE.
 
 This can be done for example by adding the following lines under your eth0 entry
