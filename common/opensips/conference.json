@@ -20,7 +20,7 @@
 
   "opensips_base_lib": ".",
   "model": "conference",
-  "runtime_opensips_cfg": "/tmp/opensips.cfg",
+  "runtime_opensips_cfg": "/etc/opensips/opensips.cfg",
 
   "db_type": "http",
   "db_host": "127.0.0.1:34340",
