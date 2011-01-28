@@ -159,6 +159,9 @@ sub configure_opensips {
   if(exists($params->{radius_extra})) {
     $params->{radius_extra} = join(';',@{$params->{radius_extra}});
   }
+  if(exists($params->{listen})) {
+    $params->{listen} = join('',map { "listen=$_\n" } @{$params->{listen}});
+  }
 
   my $cfg_text = compile_cfg($params->{opensips_base_lib},$params);
 

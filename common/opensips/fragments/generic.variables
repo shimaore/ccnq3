@@ -23,8 +23,13 @@
 if proxy_ip
 listen=${proxy_ip}
 end if proxy_ip
-port=${proxy_port}
 
+if proxy_port
+port=${proxy_port}
+end if proxy_port
+
+# Additionally can support multiple listen statements
+${listen}
 
 ## ------- Variables ---------- ##
 
