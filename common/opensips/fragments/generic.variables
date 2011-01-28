@@ -29,7 +29,9 @@ port=${proxy_port}
 end if proxy_port
 
 # Additionally can support multiple listen statements
+if listen
 ${listen}
+end if listen
 
 ## ------- Variables ---------- ##
 
