@@ -49,6 +49,8 @@ rev_dns=no
 # This is now the default in 1.3.
 disable_dns_blacklist=yes
 
+dns_try_ipv6=yes
+
 avp_aliases="${avp_aliases}"
 
 mpath="${mpath}"
