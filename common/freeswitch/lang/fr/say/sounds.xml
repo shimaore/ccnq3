@@ -1,0 +1,425 @@
+<!--
+  This is a replacement for mod_say_fr (fr-FR) since I couldn't get upstream to
+  merge changes for France localization. ;)
+-->
+<include><!--This line will be ignored it's here to validate the xml and is optional -->
+
+  <macro name="say-iterated">
+
+    <!-- iterated -->
+    <input pattern="^([0-9.#,*])(.*)$"/>
+      <match>
+        <action function="phrase" data="say,$1"/>
+        <action function="phrase" data="say-iterated,$2"/>
+      </match>
+    </input>
+
+    <input pattern="^([0-9.#,*])$"/>
+      <match>
+        <action function="phrase" data="say,$1"/>
+      </match>
+    </input>
+
+  </macro>
+
+  <macro name="say-currency">
+
+    <!-- currency -->
+    <input pattern="^([0-9]+) *€?$">
+      <match>
+        <action function="phrase" data="say,$1"/>
+        <action function="play-file" data="currency/euro.wav"/>
+      </match>
+    </input>
+
+    <input pattern="^([0-9]+)\.0([0-9]) *€?$">
+      <match>
+        <action function="phrase" data="say,$1"/>
+        <action function="play-file" data="currency/euro.wav"/>
+        <action function="phrase" data="say,$2"/>
+        <action function="play-file" data="currency/cent.wav"/>
+      </match>
+    </input>
+
+    <input pattern="^([0-9]+)\.([1-9][0-9]) *€?$">
+      <match>
+        <action function="phrase" data="say,$1"/>
+        <action function="play-file" data="currency/euro.wav"/>
+        <action function="phrase" data="say,$2"/>
+        <action function="play-file" data="currency/cent.wav"/>
+      </match>
+    </input>
+
+  </macro>
+
+  <macro name="ip-addr">
+
+    <!-- IPv4 address -->
+    <!-- optional parameter (#5): iterated -->
+    <input pattern="^([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})(.*)$">
+      <match>
+        <action function="phrase" data="say,$1 $5"/>
+        <action function="play-file" data="digits/dot.wav"/>
+        <action function="phrase" data="say,$1 $5"/>
+        <action function="play-file" data="digits/dot.wav"/>
+        <action function="phrase" data="say,$1 $5"/>
+        <action function="play-file" data="digits/dot.wav"/>
+        <action function="phrase" data="say,$1 $5"/>
+      </match>
+    </input>
+
+    <!-- IPv6 address -->
+    <input pattern="^([0-9a-f]{1,4})(\:.*)$">
+      <match>
+        <action function="phrase" data="say,$1 iterated"/>
+        <action function="phrase" data="ip-addr,$2"/>
+      </match>
+    </input>
+
+    <input pattern="^:([0-9a-f]{1,4})(.*)$">
+      <match>
+        <action function="phrase" data="say,:"/>
+        <action function="phrase" data="say,$1 iterated"/>
+        <action function="phrase" data="ip-addr,$2"/>
+      </match>
+    </input>
+
+    <input pattern="^::(.*)$">
+      <match>
+        <action function="phrase" data="ip-addr,::"/>
+        <action function="phrase" data="ip-addr,$1"/>
+      </match>
+    </input>
+
+    <input pattern="^::$">
+      <match>
+        <action function="phrase" data="say,:"/>
+        <action function="phrase" data="say,:"/>
+      </match>
+    </input>
+
+  </macro>
+
+  <macro name="say-counted">
+
+    <!-- workaround -->
+
+    <input pattern="^([1-9])_(0)$">
+      <match>
+        <action function="play-file" data="digits/h-$1$2.wav"/>
+      </match>
+    </input>
+
+    <!-- ignore leading zeros -->
+    <input pattern="^0(.*)$">
+      <match>
+        <action function="say-counted" data="$1"/>
+      </match>
+    </input>
+
+    <!-- 9 digits counted -->
+
+    <input pattern="^([1-9]|[1-9][0-9]|[1-9][0-9][0-9])000000( |$)">
+      <match>
+        <action function="phrase" data="say,$1"/>
+        <action function="play-file" data="digits/h-million.wav"/>
+      </match>
+    </input>
+
+    <!-- 6 digits counted -->
+
+    <input pattern="^([1-9]|[1-9][0-9]|[1-9][0-9][0-9])000( |$)">
+      <match>
+        <action function="phrase" data="say,$1"/>
+        <action function="play-file" data="digits/h-thousand.wav"/>
+      </match>
+    </input>
+
+    <!-- 3 digits counted -->
+
+    <input pattern="^([1-9])00( |$)">
+      <match>
+        <action function="phrase" data="say,$1"/>
+        <action function="play-file" data="digits/h-hundred.wav"/>
+      </match>
+    </input>
+
+    <input pattern="^([0-9]+)([0-9][0-9])( |$)">
+      <match>
+        <action function="phrase" data="say,$1"/>
+        <action function="phrase" data="say-counted,$2"/>
+      </match>
+    </input>
+
+    <!-- two digits and less -->
+
+    <input pattern="^([1-9]0|1[0-9]|[1-9])( |$)">
+      <match>
+        <action function="play-file" data="digits/h-$1.wav"/>
+      </match>
+    </input>
+
+    <input pattern="^([23456]1)( |$)">
+      <match>
+        <action function="phrase" data="say-counted,$1_0"/>
+        <action function="play-file" data="digits/h-1n.wav"/> <!-- "et unième" -->
+      </match>
+    </input>
+
+    <input pattern="^([234568])([2-9])( |$)">
+      <match>
+        <action function="phrase" data="say,$1"/>
+        <action function="play-file" data="digits/h-$2.wav"/>
+      </match>
+    </input>
+
+    <input pattern="^71( |$)">
+      <match>
+        <action function="play-file" data="digits/60.wav"/>
+        <action function="play-file" data="currency/and.wav"/>
+        <action function="play-file" data="digits/h-11.wav"/>
+      </match>
+    </input>
+
+    <input pattern="^7([2-9])( |$)">
+      <match>
+        <action function="play-file" data="digits/60.wav"/>
+        <action function="play-file" data="digits/h-1$1.wav"/>
+      </match>
+    </input>
+
+    <input pattern="^81( |$)">
+      <match>
+        <action function="play-file" data="digits/80.wav"/>
+        <action function="play-file" data="digits/h-1.wav"/>
+      </match>
+    </input>
+
+    <input pattern="^9([1-9])( |$)">
+      <match>
+        <action function="play-file" data="digits/80.wav"/>
+        <action function="play-file" data="digits/h-1$1.wav"/>
+      </match>
+    </input>
+
+    <!-- single digit -->
+
+    <input pattern="^([02-9])( |$)">
+      <match>
+        <action function="play-file" data="digits/h-$1.wav"/>
+      </match>
+    </input>
+
+    <input pattern="^1 +feminine">
+      <match>
+        <action function="play-file" data="digits/h-1f.wav"/>
+      </match>
+    </input>
+
+    <input pattern="^1$">
+      <match>
+        <action function="play-file" data="digits/h-1.wav"/>
+      </match>
+    </input>
+
+  </macro>
+
+  <macro name="say">
+
+    <input pattern="^(.*) iterated(.*)$">
+      <match>
+        <action function="phrase" data="say-iterated,$1$2"/>
+      </match>
+    </input>
+
+    <input pattern="^(.*) (€|currency)(.*)$">
+      <match>
+        <action function="phrase" data="say-currency,$1$2"/>
+      </match>
+    </input>
+
+    <!-- default -->
+    <input pattern="^(.*) masculine?(.*)$">
+      <match>
+        <action function="phrase" data="say,$1$2"/>
+      </match>
+    </input>
+
+    <!-- work around bug in switch_perform_substitution which prevents from
+         doing for example ${1}0, while $10 is interpreted as 'dollar-ten' -->
+    <input pattern="^([1-9])_(0)$">
+      <match>
+        <action function="play-file" data="digits/$1$2.wav"/>
+      </match>
+    </input>
+
+    <!-- ignore leading zeros -->
+    <input pattern="^0(.*)$">
+      <match>
+        <action function="phrase" data="say-counted,$1"/>
+      </match>
+    </input>
+
+    <!-- fractions -->
+    <!-- note: in french you would say "21 secondes virgule 1" so we do not
+         deal with feminine here -->
+    <!-- pronounce initial zeros -->
+    <input pattern="^([0-9]*)\.([0]+)([1-9][0-9]*)( .*)">
+      <match>
+        <action function="phrase" data="say,$1"/>
+        <action function="play-file" data="digits/point.wav"/>
+        <action function="phrase" data="say-iterated,$2"/>
+        <action function="phrase" data="say,$3"/>
+      </match>
+    </input>
+    <input pattern="^([0-9]*)\.([1-9][0-9]*)( .*)">
+      <match>
+        <action function="phrase" data="say,$1"/>
+        <action function="play-file" data="digits/point.wav"/>
+        <action function="phrase" data="say,$3"/>
+      </match>
+    </input>
+
+    <!-- 9 digits or less -->
+
+    <input pattern="^([1-9]|[1-9][0-9]|[1-9][0-9][0-9])000000( |$)">
+      <match>
+        <action function="phrase" data="say,$1"/>
+        <action function="play-file" data="digits/million.wav"/>
+      </match>
+    </input>
+
+    <input pattern="^([1-9]|[1-9][0-9]|[1-9][0-9][0-9])([0-9]{6})( .*|)$">
+      <match>
+        <action function="phrase" data="say,$1"/>
+        <action function="play-file" data="digits/million.wav"/>
+        <action function="phrase" data="say,$2$3"/>
+      </match>
+    </input>
+
+    <!-- six digits or less -->
+
+    <input pattern="^([1-9]|[1-9][0-9]|[1-9][0-9][0-9])000( |$)">
+      <match>
+        <action function="phrase" data="say,$1"/>
+        <action function="play-file" data="digits/thousand.wav"/>
+        <action function="phrase" data="say,$2$3"/>
+      </match>
+    </input>
+
+    <input pattern="^([1-9]|[1-9][0-9]|[1-9][0-9][0-9])([0-9]{3})( .*|)$">
+      <match>
+        <action function="phrase" data="say,$1"/>
+        <action function="play-file" data="digits/thousand.wav"/>
+        <action function="phrase" data="say,$2$3"/>
+      </match>
+    </input>
+
+    <!-- three digits or less -->
+
+    <input pattern="^([1-9])00( |$)">
+      <match>
+        <action function="phrase" data="say,$1"/>
+        <action function="play-file" data="digits/hundred.wav"/>
+      </match>
+    </input>
+
+    <input pattern="^([1-9])([0-9][0-9])( .*|)$">
+      <match>
+        <action function="phrase" data="say,$1"/>
+        <action function="play-file" data="digits/hundred.wav"/>
+        <action function="phrase" data="say,$2$3"/>
+      </match>
+    </input>
+
+    <!-- two digits or less -->
+
+    <input pattern="^([234568])([2-9])( .*|)$">
+      <match>
+        <action function="phrase" data="say,$1_0"/>
+        <action function="play-file" data="digits/$2.wav"/>
+      </match>
+    </input>
+
+    <input pattern="^([23456])1(.*)$">
+      <match>
+        <action function="phrase" data="say,$1_0"/>
+        <action function="play-file" data="currency/and.wav"/>
+        <action function="phrase" data="say,1$2"/>
+      </match>
+    </input>
+
+    <input pattern="^81(.*)$">
+      <match>
+        <action function="play-file" data="digits/80.wav"/>
+        <action function="phrase" data="say,$1"/>
+      </match>
+    </input>
+
+    <!-- we recorded these specially. YMMV -->
+    <input pattern="^(71|91)( |$)">
+      <match>
+        <action function="play-file" data="digits/$1.wav"/>
+      </match>
+    </input>
+
+    <input pattern="^7([2-9])( .*|)$">
+      <match>
+        <action function="phrase" data="60"/>
+        <action function="phrase" data="1$2$3"/>
+      </match>
+    </input>
+
+    <input pattern="^9([1-9])( .*|)$">
+      <match>
+        <action function="phrase" data="80"/>
+        <action function="phrase" data="1$2$3"/>
+      </match>
+    </input>
+
+    <!-- 10 through 19 -->
+
+    <input pattern="^(1[0-9])( |$)">
+      <match>
+        <action function="play-file" data="digits/$1.wav"/>
+      </match>
+    </input>
+
+    <!-- single digit -->
+
+    <input pattern="^1 +feminine">
+      <match>
+        <action function="play-file" data="digits/$1f.wav"/>
+      </match>
+    </input>
+
+    <input pattern="^([0-9])( |$)">
+      <match>
+        <action function="play-file" data="digits/$1.wav"/>
+      </match>
+    </input>
+
+    <!-- single character -->
+
+    <input pattern="^[*]$">
+      <match>
+        <action function="play-file" data="digits/star.wav"/>
+      </match>
+    </input>
+
+    <input pattern="^[#]$">
+      <match>
+        <action function="play-file" data="digits/pound.wav"/>
+      </match>
+    </input>
+
+    <!-- we did not think of recording "colon", did you? -->
+    <input pattern="^:$">
+      <match>
+        <action function="play-file" data="digits/2.wav"/>
+        <action function="play-file" data="digits/dot.wav"/>
+      </match>
+    </input>
+
+  </macro>
+</include>
