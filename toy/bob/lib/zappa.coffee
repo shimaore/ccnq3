@@ -79,7 +79,7 @@ class App
       @http_server.use express.staticProvider("#{process.cwd()}/public")
       @http_server.use require('./bodyDecoder')()
       @http_server.use express.cookieDecoder()
-      @http_server.use express.session()
+      @http_server.use express.session(secret: Math.random())
 
     # App-level vars, exposed to handlers as [app]."
     @vars = {}
