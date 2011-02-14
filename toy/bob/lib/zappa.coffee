@@ -86,7 +86,7 @@ class App
       @http_server.set 'view engine', 'coffee'
     @http_server.configure =>
       @http_server.use express.staticProvider("#{process.cwd()}/public")
-      @http_server.use require('./bodyDecoder')()
+      @http_server.use require('./lib/bodyDecoder')()
       @http_server.use express.cookieDecoder()
       @http_server.use express.session(secret: Math.random())
 
