@@ -2,9 +2,9 @@ zappa = exports
 express = require 'express'
 fs = require 'fs'
 puts = console.log
-inspect = require('sys').inspect
+{inspect} = require 'sys'
 coffee = null
-jquery = require 'jquery'
+jquery = null
 io = null
 coffeekup = null
 
@@ -18,11 +18,15 @@ class Zappa
       app: (name) => @app name
       include: (path) => @include path
       require: require
+      global: global
+      process: process
+      module: module
 
     for name in 'get|post|put|del|route|at|msg|client|using|def|helper|postrender|layout|view|style'.split '|'
-      @locals[name] = =>
-        @ensure_app 'default' unless @current_app?
-        @current_app[name].apply @current_app, arguments
+      do (name) =>
+        @locals[name] = =>
+          @ensure_app 'default' unless @current_app?
+          @current_app[name].apply @current_app, arguments
 
   app: (name) ->
     @ensure_app name
@@ -47,6 +51,9 @@ class Zappa
   read: (file) -> fs.readFileSync file, 'utf8'
 
   run_file: (file, options) ->
+    @locals.__filename = require('path').join(process.cwd(), file)
+    @locals.__dirname = process.cwd()
+    @locals.module.filename = @locals.__filename
     code = if file.match /\.coffee$/ then @read_and_compile file else @read file
     @run code, options
 
@@ -62,6 +69,8 @@ class Zappa
         opts.port = if options.port[i]? then options.port[i] else a.port + i
       else if i isnt 0
         opts.port = a.port + i
+
+      opts.hostname = options.hostname if options.hostname
 
       a.start opts
       i++
@@ -111,6 +120,7 @@ class App
   start: (options) ->
     options ?= {}
     @port = options.port if options.port
+    @hostname = options.hostname if options.hostname
 
     if io?
       @ws_server = io.listen @http_server, {log: ->}
@@ -121,8 +131,10 @@ class App
           msg = parse_msg raw_msg
           @msg_handlers[msg.title]?.execute client, msg.params
 
-    @http_server.listen @port
-    puts "App \"#{@name}\" listening on port #{@port}..."
+    if @hostname? then @http_server.listen @port, @hostname
+    else @http_server.listen @port
+
+    puts "App \"#{@name}\" listening on #{if @hostname? then @hostname + ':' else '*:'}#{@port}..."
     @http_server
 
   get: -> @route 'get', arguments
@@ -159,7 +171,7 @@ class App
       @helpers[k] = scoped(v)
 
   postrender: (pairs) ->
-    jsdom = require 'jsdom'
+    jquery = require 'jquery'
     for k, v of pairs
       @postrenders[k] = scoped(v)
 
@@ -188,17 +200,19 @@ class App
   client: (arg) ->
     pairs = if typeof arg is 'object' then arg else {default: arg}
     for k, v of pairs
-      code = ";(#{v})();"
-      @http_server.get "/#{k}.js", (req, res) ->
-        res.contentType 'bla.js'
-        res.send code
+      do (k, v) =>
+        code = ";(#{v})();"
+        @http_server.get "/#{k}.js", (req, res) ->
+          res.contentType 'bla.js'
+          res.send code
 
   style: (arg) ->
     pairs = if typeof arg is 'object' then arg else {default: arg}
     for k, v of pairs
-      @http_server.get "/#{k}.css", (req, res) ->
-        res.contentType 'bla.css'
-        res.send v
+      do (k, v) =>
+        @http_server.get "/#{k}.css", (req, res) ->
+          res.contentType 'bla.css'
+          res.send v
 
 class RequestHandler
   constructor: (handler, @defs, @helpers, @postrenders, @views, @layouts, @vars) ->
@@ -218,9 +232,11 @@ class RequestHandler
       @locals[k] = v
 
     for k, v of @helpers
-      @locals[k] = ->
-        v(@context, @, arguments)
+      do (k, v) =>
+        @locals[k] = ->
+          v(@context, @, arguments)
 
+    @locals.defs = @defs
     @locals.postrenders = @postrenders
     @locals.views = @views
     @locals.layouts = @layouts
@@ -274,7 +290,7 @@ class RequestHandler
       postrender = @postrenders[options.apply]
       body = jquery('body')
       body.empty().html(result)
-      postrender opts.context, $: jquery
+      postrender opts.context, jquery.extend(@defs, {$: jquery})
       result = body.html()
 
     if options.layout
@@ -306,9 +322,11 @@ class MessageHandler
       @locals[k] = v
 
     for k, v of @app.helpers
-      @locals[k] = ->
-        v(@context, @, arguments)
+      do (k, v) =>
+        @locals[k] = ->
+          v(@context, @, arguments)
 
+    @locals.defs = @app.defs
     @locals.postrenders = @app.postrenders
     @locals.views = @app.views
     @locals.layouts = @app.layouts
@@ -352,7 +370,7 @@ class MessageHandler
       postrender = @postrenders[options.apply]
       body = jquery('body')
       body.empty().html(result)
-      postrender opts.context, $: jquery
+      postrender opts.context, jquery.extend(@defs, {$: jquery})
       result = body.html()
 
     if options.layout
@@ -371,11 +389,18 @@ class MessageHandler
 coffeescript_support = """
   var __slice = Array.prototype.slice;
   var __hasProp = Object.prototype.hasOwnProperty;
-  var __bind = function(func, context) {return function(){ return func.apply(context, arguments); };};
-  var __extends = function(child, parent) { var ctor = function(){}; ctor.prototype = parent.prototype;
-    child.prototype = new ctor(); child.prototype.constructor = child;
-    if (typeof parent.extended === "function") parent.extended(child);
-    child.__super__ = parent.prototype;
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  var __extends = function(child, parent) {
+    for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
+    function ctor() { this.constructor = child; }
+    ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype;
+    return child;
+  };
+  var __indexOf = Array.prototype.indexOf || function(item) {
+    for (var i = 0, l = this.length; i < l; i++) {
+      if (this[i] === item) return i;
+    }
+    return -1;
   };
 """
 
@@ -397,13 +422,14 @@ scoped = (code) ->
 
 publish_api = (from, to, methods) ->
   for name in methods.split '|'
-    if typeof from[name] is 'function'
-      to[name] = -> from[name].apply from, arguments
-    else
-      to[name] = from[name]
+    do (name) ->
+      if typeof from[name] is 'function'
+        to[name] = -> from[name].apply from, arguments
+      else
+        to[name] = from[name]
 
 z = new Zappa()
 
-zappa.version = '0.1.3'
+zappa.version = '0.1.4'
 zappa.run = -> z.run.apply z, arguments
 zappa.run_file = -> z.run_file.apply z, arguments
