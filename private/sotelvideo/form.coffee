@@ -3,6 +3,7 @@
 # License: Affero GPL 3+
 
 app "default", (server) ->
+  express = require('express')
   server.use express.staticProvider("#{process.cwd()}/public")
   server.use express.bodyDecoder()
   server.use express.cookieDecoder()
@@ -11,8 +12,6 @@ app "default", (server) ->
   server.use express.methodOverride()
   server.use express.logger()
 
-
-include 'server.coffee'
 using 'querystring'
 using 'fs'
 
