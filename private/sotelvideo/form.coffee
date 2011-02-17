@@ -4,13 +4,13 @@
 
 app "default", (server) ->
   express = require('express')
+  server.use express.logger()
   server.use express.staticProvider("#{process.cwd()}/public")
   server.use express.bodyDecoder()
   server.use express.cookieDecoder()
   server.use express.session(secret: Math.random())
   server.use express.favicon()
   server.use express.methodOverride()
-  server.use express.logger()
 
 using 'querystring'
 using 'fs'
