@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 NAME=sotel-video-portal
+SCRIPT=form.coffee
 
 SCRIPT_DIR=`dirname "$0"`
 if [ "x${SCRIPT_DIR}" == "x." ]; then
@@ -9,7 +10,7 @@ fi
 
 case "$1" in
   start)
-    daemon -n "${NAME}" -r -D "${SCRIPT_DIR}" -o daemon.debug -- ./form.cofee
+    daemon -n "${NAME}" -r -D "${SCRIPT_DIR}" -o daemon.debug -- zappa "${SCRIPT}"
     ;;
 
   stop)
