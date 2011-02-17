@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Note: you'll probably want to install the "conntrack" package to troubleshoot
+#       interaction between media-relay and the kernel.
 
 ACTION=$1
 shift
