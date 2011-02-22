@@ -3,14 +3,6 @@
 # Released under the GPL3 license
 ###
 
-# Additional modules for the zappa server
-
-express = require 'express'
-
-app().http_server.use express.favicon()
-app().http_server.use express.methodOverride()
-app().http_server.use express.logger()
-
 # Configuration
 
 fs = require('fs')
