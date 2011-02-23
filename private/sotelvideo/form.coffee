@@ -95,7 +95,11 @@ put '/': ->
 
 using 'milk'
 
-get '/:user_id/user.reg': ->
+get '/user.reg': ->
+  if not user_id?
+    @error = 'Missing parameter'
+    return render 'error'
+
   check_admin (error) =>
     if error?
       @error = error
