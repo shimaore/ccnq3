@@ -367,7 +367,7 @@ view ->
   div id: 'content', =>
     # List all user_id in account
     form id: 'list_account', =>
-      label for: 'in_account', -> 'Account'
+      label "for": 'in_account', -> 'Account'
       input  id: 'in_account', value: if @account? then @account else ''
       button -> 'Display'
 
@@ -400,7 +400,7 @@ view ->
 
       div -> l  'agent', 'Agent'
       div ->
-        label for: 'user_type', -> 'User Type'
+        label "for": 'user_type', -> 'User Type'
         select id: 'user_type', name: 'user_type', class: 'required', ->
           option value: 'demo', -> 'Demo'
           option value: 'paid', -> 'Paid'
