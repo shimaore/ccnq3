@@ -110,11 +110,13 @@ post '/user.reg': ->
         @error = r.error
         return render 'error'
 
-      password_buffer = new Buffer(r.password.length+3)
+      @username = data.rows[0].username
+      password  = data.rows[0].password
+      password_buffer = new Buffer(password.length+3)
       password_buffer[0] = 4
-      password_buffer[1] = r.password.length+1
-      password_buffer.write(r.password,2)
-      password_buffer[r.password.length+2] = 0
+      password_buffer[1] = password.length+1
+      password_buffer.write(password,2)
+      password_buffer[password.length+2] = 0
       @password_base64 = password_buffer.toString('base64')
 
       res.contentType 'application/binary'
