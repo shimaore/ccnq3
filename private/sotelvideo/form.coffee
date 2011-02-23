@@ -21,7 +21,7 @@ helper config: ->
 
 helper registry_template: ->
   location = 'user.reg.mustache'
-  fs.readFileSync(location, 'utf8')
+  return fs.readFileSync(location, 'utf8')
 
 include 'backends.coffee'
 
@@ -124,7 +124,7 @@ post '/user.reg': ->
       @password_base64 = password_buffer.toString('base64')
 
       response.contentType 'application/binary'
-      response.send milk.render(registry_template,@)
+      response.send milk.render(registry_template(),@)
 
 
 helper create_user: ->
