@@ -19,6 +19,10 @@ helper config: ->
   location = 'form.config'
   return JSON.parse(fs.readFileSync(location, 'utf8'))
 
+helper registry_template: ->
+  location = 'user.reg.mustache'
+  fs.readFileSync(location, 'utf8')
+
 include 'backends.coffee'
 
 crypto = require 'crypto'
@@ -120,7 +124,7 @@ post '/user.reg': ->
       @password_base64 = password_buffer.toString('base64')
 
       response.contentType 'application/binary'
-      response.send milk.render('user.reg.mustache',@)
+      response.send milk.render(registry_template,@)
 
 
 helper create_user: ->
