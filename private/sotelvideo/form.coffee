@@ -93,6 +93,8 @@ put '/': ->
     else
       create_user()
 
+using 'milk'
+
 get '/:user_id/user.reg': ->
   check_admin (error) =>
     if error?
@@ -109,14 +111,10 @@ get '/:user_id/user.reg': ->
       password_buffer.write(r.password,2)
       password_buffer[r.password.length+2] = 0
       @password_base64 = password_buffer.toString('base64')
-      return render 'registry', layout: 'plain'
 
-layout plain: -> @content
+      res.contentType 'application/binary'
+      res.send milk.render('user.reg.mustache',@)
 
-using 'milk'
-
-view registry: ->
-  milk.render('user.reg.mustache',@)
 
 helper create_user: ->
 
