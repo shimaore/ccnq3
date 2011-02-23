@@ -119,8 +119,8 @@ post '/user.reg': ->
       password_buffer[password.length+2] = 0
       @password_base64 = password_buffer.toString('base64')
 
-      res.contentType 'application/binary'
-      res.send milk.render('user.reg.mustache',@)
+      response.contentType 'application/binary'
+      response.send milk.render('user.reg.mustache',@)
 
 
 helper create_user: ->
