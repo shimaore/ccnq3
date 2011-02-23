@@ -105,7 +105,7 @@ get '/user.reg': ->
       @error = error
       return render 'error'
 
-    sql 'SELECT password FROM realuser where user_id = ?', [@user_id], (r) =>
+    sql 'SELECT username, password FROM realuser WHERE user_id = ?', [@user_id], (r) =>
       if r.error?
         @error = r.error
         return render 'error'
