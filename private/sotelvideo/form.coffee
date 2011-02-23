@@ -93,6 +93,31 @@ put '/': ->
     else
       create_user()
 
+get '/:user_id/user.reg': ->
+  check_admin (error) =>
+    if error?
+      @error = error
+      return render 'error'
+
+    sql 'SELECT password FROM realuser where user_id = ?', [@user_id], (r) =>
+      if r.error?
+        return render 'error'
+
+      password_buffer = new Buffer(r.password.length+3)
+      password_buffer[0] = 4
+      password_buffer[1] = r.password.length+1
+      password_buffer.write(r.password,2)
+      password_buffer[r.password.length+2] = 0
+      @password_base64 = password_buffer.toString('base64')
+      return render 'registry', layout: 'plain'
+
+layout plain: -> @content
+
+using 'milk'
+
+view registry: ->
+  milk.render('user.reg.mustache',@)
+
 helper create_user: ->
 
   sip_name = querystring.escape(@username)
