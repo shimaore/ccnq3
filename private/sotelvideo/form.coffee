@@ -107,6 +107,7 @@ get '/user.reg': ->
 
     sql 'SELECT password FROM realuser where user_id = ?', [@user_id], (r) =>
       if r.error?
+        @error = r.error
         return render 'error'
 
       password_buffer = new Buffer(r.password.length+3)
