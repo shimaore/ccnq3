@@ -38,6 +38,7 @@ def md5_hex: (t) ->
 # ALTER TABLE realuser ADD account TEXT;
 # ALTER TABLE realuser ADD installation_id TEXT;
 # ALTER TABLE realuser ADD activate_date TEXT;
+# ALTER TABLE realuser ADD original_password TEXT;
 
 # account parameter might be undefined
 helper check_user: (account,cb) ->
@@ -109,13 +110,13 @@ post '/user.reg': ->
       @error = error
       return render 'error'
 
-    sql 'SELECT username, password FROM realuser WHERE user_id = ?', [@user_id], (r) =>
+    sql 'SELECT username, original_password FROM realuser WHERE user_id = ?', [@user_id], (r) =>
       if r.error?
         @error = r.error
         return render 'error'
 
       @username = r.rows[0].username
-      password  = r.rows[0].password
+      password  = r.rows[0].original_password
       password_buffer = new Buffer(password.length+3)
       password_buffer[0] = 4
       password_buffer[1] = password.length+1
@@ -145,6 +146,8 @@ helper create_user: ->
     if user_password?
       values.push user_password
       setters.push 'password=?'
+      values.push @password
+      setters.push 'original_password=?'
 
     sql 'UPDATE realuser SET '+setters.join(',')+' WHERE user_id = ?', [values..., @user_id], (r) =>
 
@@ -168,7 +171,7 @@ helper create_user: ->
     if not @password or not @username
       return render 'error'
 
-    sql 'INSERT INTO realuser (user_id,password,'+fields.join(',')+') VALUES (?,?,'+('?' for f in fields).join(',')+')', [new_user_id, user_password, values...], (r) =>
+    sql 'INSERT INTO realuser (user_id,password,original_password,'+fields.join(',')+') VALUES (?,?,'+('?' for f in fields).join(',')+')', [new_user_id, user_password, @password, values...], (r) =>
       if r.error?
         return render 'error'
       sql 'INSERT INTO sipuser (sipuser_id,user_id,sipid,sipname,password) VALUES (?,?,?,?,?)', [
