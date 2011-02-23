@@ -427,6 +427,6 @@ view ->
       input type: 'submit', value: 'Delete'
 
     # Registry
-    form id: 'registry', class: 'admin_only', method: 'get', action: '/user.reg' ->
+    form id: 'registry', class: 'admin_only', method: 'get', action: '/user.reg', ->
       input type: 'hidden', name: 'user_id'
       input type: 'submit', value: 'Download Registry'
