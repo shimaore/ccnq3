@@ -110,8 +110,8 @@ post '/user.reg': ->
         @error = r.error
         return render 'error'
 
-      @username = data.rows[0].username
-      password  = data.rows[0].password
+      @username = r.rows[0].username
+      password  = r.rows[0].password
       password_buffer = new Buffer(password.length+3)
       password_buffer[0] = 4
       password_buffer[1] = password.length+1
