@@ -12,7 +12,7 @@ Windows Registry Editor Version 5.00
 [HKEY_CURRENT_USER\Software\Avistar\C3Communicator\MediaEngine\FirewallTraversal]
 "SignalingMode"=dword:00000002
 "ServerAddresses"="ts1.sotelips.net"
-"Username"="{{user_id}}"
+"Username"="{{username}}"
 "Password"="{{password_base64}}"
 "Enabled"=dword:00000001
 "AlwaysTunnelMedia"=dword:00000001
@@ -22,8 +22,8 @@ Windows Registry Editor Version 5.00
 "SipTransport"=dword:00000000
 
 [HKEY_CURRENT_USER\Software\Avistar\C3Communicator\MediaEngine\SIPRegistration]
-"AOR"="sip:{{user_id}}@ts1.sotelips.net"
+"AOR"="sip:{{usernamed}}@ts1.sotelips.net"
 "Registrar"="sip:ts1.sotelips.net:5060"
-"RegistrarUser"="{{user_id}}"
+"RegistrarUser"="{{username}}"
 "RegistrarPassword"="{{password_base64}}"
 "Enabled"=dword:00000001
