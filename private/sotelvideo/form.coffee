@@ -219,6 +219,7 @@ client search: ->
         $('#modify input#password').val(undefined).removeClass('required')
         $('#modify input[type="submit"]').val('Modify')
         $('#delete').show().find('input[name="user_id"]').val(data.user_id)
+        $('#registry').show().find('input[name="user_id"]').val(data.user_id)
 
       return false
 
@@ -291,6 +292,7 @@ get '/account/:some_account': ->
 client ->
   $(document).ready ->
     $('#delete').hide()
+    $('#registry').hide()
     $('#modify input[type="submit"]').val('Create')
     $('#content').addClass('ui-widget')
     $('form').addClass('ui-widget-content')
@@ -423,3 +425,8 @@ view ->
       input type: 'hidden', name: '_method', value: 'delete'
       input type: 'hidden', name: 'user_id'
       input type: 'submit', value: 'Delete'
+
+    # Registry
+    form id: 'registry', class: 'admin_only', method: 'get', action: '/user.reg' ->
+      input type: 'hidden', name: 'user_id'
+      input type: 'submit', value: 'Download Registry'
