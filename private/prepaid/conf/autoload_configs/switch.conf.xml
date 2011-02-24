@@ -1,0 +1,34 @@
+<configuration name="switch.conf" description="Core Configuration">
+
+  <cli-keybindings>
+    <key name="1" value="help"/>
+    <key name="2" value="status"/>
+    <key name="3" value="show channels"/>
+    <key name="4" value="show calls"/>
+    <key name="5" value="sofia status"/>
+    <key name="6" value="reloadxml"/>
+    <key name="7" value="console loglevel 0"/>
+    <key name="8" value="console loglevel 7"/>
+    <key name="9" value="sofia status profile internal"/>
+    <key name="10" value="fsctl pause"/>
+    <key name="11" value="fsctl resume"/>
+    <key name="12" value="version"/>
+  </cli-keybindings>
+
+  <settings>
+    <param name="colorize-console" value="true"/>
+    <param name="max-sessions" value="2000"/>
+    <param name="sessions-per-second" value="200"/>
+    <param name="loglevel" value="alert"/>
+    <param name="crash-protection" value="true"/>
+    <!--<param name="max_dtmf_duration" value="192000"/>-->
+    <!--<param name="default_dtmf_duration" value="8000"/>-->
+    <param name="mailer-app" value="sendmail"/>
+    <param name="mailer-app-args" value="-t"/>
+    <param name="dump-cores" value="no"/>
+
+    <param name="rtp-start-port" value="42000"/>
+    <param name="rtp-end-port" value="42998"/>
+  </settings>
+
+</configuration>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<include>
+  <!-- egress  -->
+  <context name="egress-$${profile_name}">
+
+    <extension name="unloop">
+      <condition field="${unroll_loops}" expression="^true$"/>
+      <condition field="${sip_looped_call}" expression="^true$">
+        <action application="deflect" data="${destination_number}"/>
+      </condition>
+    </extension>
+
+    <X-PRE-PROCESS cmd="include" data="$${profile_name}-egress.xml"/>
+
+    <!-- Place the call -->
+    <extension name="place-call">
+      <condition field="destination_number" expression="^call$"/>
+      <condition field="${ccnq_from_e164}" expression="."/> <!-- Must be non-empty -->
+      <condition field="${ccnq_to_e164}" expression="."> <!-- Must be non-empty -->
+        <action application="set" data="ccnq_direction=egress"/>
+        <action application="set" data="progress_timeout=12"/>
+        <action application="set" data="call_timeout=300"/>
+        <action application="export" data="t38_passthru=true"/>
+        <action application="set" data="ccnq_account=${regex(${sip_req_params}|account=([^;]*)|%1)}"/>
+        <action application="set" data="ccnq_account_sub=${regex(${sip_req_params}|account_sub=([^;]*)|%1)}"/>
+        <action application="set" data="ccnq_location=${regex(${sip_req_params}|location=([^;]*)|%1)}"/>
+        <action application="set" data="effective_caller_id_number=${ccnq_from_e164}"/>
+        <action application="transfer" data="send-call"/>
+      </condition>
+    </extension>
+
+    <!-- invalid number -->
+    <extension name="invalid-number">
+      <condition field="destination_number" expression="">
+        <action application="hangup" data="INVALID_NUMBER_FORMAT"/>
+      </condition>
+    </extension>
+
+  </context>
+
+  <!-- ingress  -->
+  <context name="ingress-$${profile_name}">
+
+    <extension name="unloop">
+      <condition field="${unroll_loops}" expression="^true$"/>
+      <condition field="${sip_looped_call}" expression="^true$">
+        <action application="deflect" data="${destination_number}"/>
+      </condition>
+    </extension>
+
+    <!-- billing data -->
+    <extension name="save" continue="true">
+      <condition field="destination_number" expression="^call">
+        <anti-action application="set" data="ccnq_from_e164=${caller_id_number}"/>
+        <anti-action application="set" data="ccnq_to_e164=${destination_number}"/>
+        <anti-action application="set" data="ccnq_account=${regex(${sip_req_params}|account=([^;]*)|%1)}"/>
+        <anti-action application="set" data="ccnq_account_sub=${regex(${sip_req_params}|account_sub=([^;]*)|%1)}"/>
+      </condition>
+    </extension>
+
+    <X-PRE-PROCESS cmd="include" data="$${profile_name}-ingress.xml"/>
+
+    <!-- Place the call -->
+    <extension name="default-ingress">
+      <condition field="destination_number" expression="^call-(.*)$">
+        <action application="set" data="ccnq_direction=ingress"/>
+        <action application="set" data="progress_timeout=12"/>
+        <action application="set" data="call_timeout=300"/>
+        <action application="export" data="t38_passthru=true"/>
+        <action application="set" data="force_transfer_context=refer-$${profile_name}"/>
+        <action application="transfer" data="send-call"/>
+      </condition>
+    </extension>
+
+    <!-- invalid number -->
+    <extension name="invalid-number">
+      <condition field="destination_number" expression="">
+        <action application="hangup"/>
+      </condition>
+    </extension>
+
+  </context>
+
+  <!-- ingress + REFER -->
+  <context name="refer-$${profile_name}">
+
+    <extension name="unloop">
+      <condition field="${unroll_loops}" expression="^true$"/>
+      <condition field="${sip_looped_call}" expression="^true$">
+        <action application="deflect" data="${destination_number}"/>
+      </condition>
+    </extension>
+
+    <extension name="refer-block">
+      <!-- do not accept REFER pointing to the destination_number at the local domain -->
+      <condition field="${sip_refer_to}">
+       <expression><![CDATA[<sip:${destination_number}@${domain_name}]]></expression>
+      </condition>
+    </extension>
+
+    <extension name="refer">
+      <condition field="${sip_refer_to}">
+        <expression><![CDATA[<sip:(.*)@(.*)>]]></expression>
+        <action application="set" data="refer_user=$1"/>
+        <action application="set" data="refer_domain=$2"/>
+        <action application="transfer" data="send-call"/>
+      </condition>
+    </extension>
+  </context>
+
+</include>

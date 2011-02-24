@@ -1,0 +1,25 @@
+<!-- NOTE: using "ani" instead of "caller_id_number" might prove a better choice -->
+
+<!-- from: national number -->
+<extension name="cleanup-caller-id-1" continue="true">
+  <condition field="destination_number" expression="^call"/>
+  <condition field="caller_id_number" expression="^(1[2-9][0-9]{9})$">
+    <action application="set" data="effective_caller_id_number=$1"/>
+  </condition>
+</extension>
+
+<!-- from: international number -->
+<extension name="cleanup-caller-id-2" continue="true">
+  <condition field="destination_number" expression="^call"/>
+  <condition field="caller_id_number" expression="^([2-9][0-9]+)$">
+    <action application="set" data="effective_caller_id_number=011$1"/>
+  </condition>
+</extension>
+
+
+<!-- to: US number -->
+<extension name="cleanup-called-1">
+  <condition field="destination_number" expression="^(1[2-9][0-9]+)$">
+    <action application="transfer" data="call-$1"/>
+  </condition>
+</extension>

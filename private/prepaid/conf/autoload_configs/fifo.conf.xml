@@ -1,0 +1,7 @@
+<configuration name="fifo.conf" description="FIFO Configuration">
+  <fifos>
+    <fifo name="ccnq@$${domain}" importance="0">
+      <!--<member timeout="60" simo="1" lag="20">{member_wait=nowait}user/1005@$${domain}</member>-->
+    </fifo>
+  </fifos>
+</configuration>

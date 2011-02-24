@@ -1,0 +1,48 @@
+<!-- Verify that the caller-id follows the proper format (liberally) -->
+
+<!-- from: national number -->
+<extension name="cleanup-caller-id-1" continue="true">
+  <condition field="caller_id_number" expression="^\+?1([2-9][0-9]{9})$">
+    <action application="set" data="ccnq_from_e164=1$1"/>
+  </condition>
+</extension>
+
+<!-- from: national number (10 digits only) -->
+<extension name="cleanup-caller-id-2" continue="true">
+  <condition field="caller_id_number" expression="^([2-9][0-9]{9})$">
+    <action application="set" data="ccnq_from_e164=1$1"/>
+  </condition>
+</extension>
+
+<!-- from: international number -->
+<extension name="cleanup-caller-id-intl" continue="true">
+  <condition field="caller_id_number" expression="^(011|\+)([2-9][0-9]*)$">
+    <action application="set" data="ccnq_from_e164=$2"/>
+  </condition>
+</extension>
+
+<!-- Verify that the called number follows the proper format (liberally) -->
+
+<!-- national number -->
+<extension name="cleanup-called-1">
+  <condition field="destination_number" expression="^\+?1?([2-9][0-9]{9})$">
+    <action application="set" data="ccnq_to_e164=1$1"/>
+    <action application="transfer" data="call"/>
+  </condition>
+</extension>
+
+<!-- international call -->
+<extension name="cleanup-called-2">
+  <condition field="destination_number" expression="^(011|\+)([2-9][0-9]*)$">
+    <action application="set" data="ccnq_to_e164=$2"/>
+    <action application="transfer" data="call"/>
+  </condition>
+</extension>
+
+<!-- special numbers -->
+<extension name="cleanup-called-3">
+  <condition field="destination_number" expression="^([2-9]11)$">
+    <action application="set" data="ccnq_to_e164=1$1"/>
+    <action application="transfer" data="call"/>
+  </condition>
+</extension>

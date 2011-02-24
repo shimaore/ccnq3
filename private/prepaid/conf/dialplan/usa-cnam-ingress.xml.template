@@ -1,0 +1,7 @@
+<extension name="apply-cnam" continue="true">
+    <condition field="destination_number" expression="^call">
+      <action application="lua" data="cnam.lua"/>
+    </condition>
+</extension>
+
+<X-PRE-PROCESS cmd="include" data="usa-ingress.xml.template"/>

@@ -1,0 +1,13 @@
+
+Types of records:
+
+  /:account
+    type:       "account"
+    account:    account ID (same as _id)
+    interval:   value of the unit interval (in seconds)
+
+  /:uuid
+    type:       "interval_record"
+    account:    account ID
+    intervals:  number of used intervals (if negative) or added intervals (if positive)
+
