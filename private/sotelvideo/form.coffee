@@ -166,7 +166,7 @@ helper create_user: ->
         if r.error?
           @error = r.error
           return render 'error'
-        render_d 'User account modified successfully'
+        redirect '/user.reg?user_id=#{querystring.escape(new_user_id)}'
   else
     # Create
     new_user_id = Math.floor(Math.random()*2000000000)
