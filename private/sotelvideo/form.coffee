@@ -152,6 +152,7 @@ helper create_user: ->
     sql 'UPDATE realuser SET '+setters.join(',')+' WHERE user_id = ?', [values..., @user_id], (r) =>
 
       if r.error?
+        @error = r.error
         return render 'error'
 
       sip_setters = ['sipid=?','sipname=?']
@@ -162,6 +163,7 @@ helper create_user: ->
 
       sql 'UPDATE sipuser SET '+sip_setters.join(',')+' WHERE user_id = ?', [sip_values...,@user_id], (r) =>
         if r.error?
+          @error = r.error
           return render 'error'
         render_d 'User account modified successfully'
   else
@@ -169,10 +171,12 @@ helper create_user: ->
     new_user_id = Math.floor(Math.random()*2000000000)
 
     if not @password or not @username
+      @error = 'Not password or username'
       return render 'error'
 
     sql 'INSERT INTO realuser (user_id,password,original_password,'+fields.join(',')+') VALUES (?,?,'+('?' for f in fields).join(',')+')', [new_user_id, user_password, @password, values...], (r) =>
       if r.error?
+        @error = r.error
         return render 'error'
       sql 'INSERT INTO sipuser (sipuser_id,user_id,sipid,sipname,password) VALUES (?,?,?,?,?)', [
         new_user_id,
@@ -182,6 +186,7 @@ helper create_user: ->
         sip_password
       ], (r) =>
         if r.error?
+          @error = r.error
           return render 'error'
         render_d 'User account created successfully'
 
@@ -200,10 +205,12 @@ helper delete_user: ->
     sql 'DELETE FROM realuser WHERE user_id = ?', [@user_id], (r) =>
 
       if r.error?
+        @error = r.error
         return render 'error'
 
       sql 'DELETE FROM sipuser WHERE user_id = ?', [@user_id], (r) =>
         if r.error?
+          @error = r.error
           return render 'error'
         render_d 'User account deleted successfully'
 
