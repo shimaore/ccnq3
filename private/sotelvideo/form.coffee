@@ -336,6 +336,9 @@ client ->
       $('#password').val -> random_password(16)
       return false
 
+    $('#modify input[type="reset"]').click ->
+      windows.reload()
+
 
 view 'error': ->
   @title = 'Error'
@@ -435,7 +438,7 @@ view ->
 
       div ->
         input type: 'submit', -> 'Create'
-        input type: 'reset', value: "Reset/New"
+        input type: 'reset', value: 'New'
 
     # Delete
     form id: 'delete', class: 'admin_only', method: 'post', ->
