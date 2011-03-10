@@ -188,7 +188,7 @@ helper create_user: ->
         if r.error?
           @error = r.error
           return render 'error'
-        render_d 'User account created successfully'
+        redirect '/user.reg?user_id=#{querystring.escape(new_user_id)}'
 
 del '/': ->
   check_admin (error) =>
@@ -433,7 +433,7 @@ view ->
         div -> l 'activate_date', 'Date of activation', 'date'
 
       div ->
-        input type: 'submit', -> @user_id? ? 'Modify' : 'Create'
+        input type: 'submit', -> 'Create'
         input type: 'reset', value: "Reset/New"
 
     # Delete
