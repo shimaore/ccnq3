@@ -337,7 +337,8 @@ client ->
       return false
 
     $('#modify input[type="reset"]').click ->
-      windows.reload()
+      window.reload()
+      return false
 
 
 view 'error': ->
