@@ -174,7 +174,7 @@ helper create_user: ->
       @error = 'Not password or username'
       return render 'error'
 
-    sql 'INSERT INTO realuser (user_id,password,original_password,'+fields.join(',')+') VALUES (?,?,'+('?' for f in fields).join(',')+')', [new_user_id, user_password, @password, values...], (r) =>
+    sql 'INSERT INTO realuser (user_id,password,original_password,'+fields.join(',')+') VALUES (?,?,?,'+('?' for f in fields).join(',')+')', [new_user_id, user_password, @password, values...], (r) =>
       if r.error?
         @error = r.error
         return render 'error'
