@@ -110,7 +110,7 @@ post '/user.reg': ->
       @error = error
       return render 'error'
 
-    sql 'SELECT username, original_password FROM realuser WHERE user_id = ?', [@user_id], (r) =>
+    sql 'SELECT username, original_password, name FROM realuser WHERE user_id = ?', [@user_id], (r) =>
       if r.error?
         @error = r.error
         return render 'error'
@@ -123,6 +123,7 @@ post '/user.reg': ->
       password_buffer.write(password,2)
       password_buffer[password.length+2] = 0
       @password_base64 = password_buffer.toString('base64')
+      @name =  r.rows[0].name
 
       response.contentType 'application/binary'
       response.send milk.render(registry_template(),@)
