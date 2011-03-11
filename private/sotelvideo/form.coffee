@@ -166,7 +166,7 @@ helper create_user: ->
         if r.error?
           @error = r.error
           return render 'error'
-        redirect "/user.reg?user_id=#{querystring.escape(new_user_id)}"
+        redirect "/user.reg?user_id=#{querystring.escape(@user_id)}"
   else
     # Create
     new_user_id = Math.floor(Math.random()*2000000000)
