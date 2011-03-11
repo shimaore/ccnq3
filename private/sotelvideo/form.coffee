@@ -117,6 +117,11 @@ get '/user.reg': ->
 
       @username = r.rows[0].username
       password  = r.rows[0].original_password
+
+      if not password? or password is ''
+        @error = 'No password, cannot generate'
+        return render 'error'
+
       password_buffer = new Buffer(password.length+3)
       password_buffer[0] = 4
       password_buffer[1] = password.length+1
