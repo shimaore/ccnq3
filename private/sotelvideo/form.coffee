@@ -100,7 +100,7 @@ put '/': ->
 
 using 'milk'
 
-post '/user.reg': ->
+get '/user.reg': ->
   if not @user_id?
     @error = 'Missing parameter'
     return render 'error'
@@ -448,6 +448,6 @@ view ->
       input type: 'submit', value: 'Delete'
 
     # Registry
-    form id: 'registry', class: 'admin_only', method: 'post', action: 'user.reg', ->
+    form id: 'registry', class: 'admin_only', method: 'get', action: 'user.reg', ->
       input type: 'hidden', name: 'user_id'
       input type: 'submit', value: 'Download Registry'
