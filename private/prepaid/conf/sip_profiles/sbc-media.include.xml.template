@@ -119,6 +119,8 @@
     <!--<param name="aggressive-nat-detection" value="true"/>-->
     <!--<param name="local-network-acl" value="localnet.auto"/>-->
     <!--<param name="NDLB-force-rport" value="true"/>-->
+    <param name="stun-enabled" value="false"/>
+    <param name="stun-auto-disable" value="true"/>
 
     <!-- Call Recording -->
     <!--<param name="record-path" value="$${recordings_dir}"/> -->
