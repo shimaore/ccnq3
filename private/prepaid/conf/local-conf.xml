@@ -8,28 +8,28 @@
 
 <X-PRE-PROCESS cmd="include" data="dialplan/client-sbc.xml.template"/>
 
-<context name="egress-$${profile_name}">
+<context name="egress-$${profile_name}-$${profile_type}">
   <extension name="send-call">
     <condition field="destination_number" expression="^send-call">
       <action application="set" data="prepaid_uri=$${prepaid_uri}" />
-      <action application="lua" data="prepaid.lua ${ccnq_account} sofia/sbc-$${profile_name}/${ccnq_to_e164}@$${egress_target};location=${ccnq_location}"/>
+      <action application="lua" data="prepaid.lua ${ccnq_account} sofia/ingress-$${profile_name}/${ccnq_to_e164}@$${egress_target};location=${ccnq_location}"/>
     </condition>
   </extension>
 </context>
 
-<context name="ingress-$${profile_name}">
+<context name="ingress-$${profile_name}-$${profile_type}">
   <extension name="send-call">
     <condition field="destination_number" expression="^send-call">
       <action application="set" data="prepaid_uri=$${prepaid_uri}" />
-      <action application="lua" data="prepaid.lua ${ccnq_account} sofia/internal-$${profile_name}/$1@$${ingress_target}"/>
+      <action application="lua" data="prepaid.lua ${ccnq_account} sofia/egress-$${profile_name}/${ccnq_to_e164}@$${ingress_target}"/>
     </condition>
   </extension>
 </context>
 
-<context name="refer-$${profile_name}">
+<context name="refer-$${profile_name}-$${profile_type}">
   <extension name="send-call">
     <condition field="destination_number" expression="^send-call">
-      <action application="bridge" data="sofia/internal-$${profile_name}/${refer_user}@${refer_domain}"/>
+      <action application="bridge" data="sofia/egress-$${profile_name}/${refer_user}@${refer_domain}"/>
     </condition>
   </extension>
 </context>

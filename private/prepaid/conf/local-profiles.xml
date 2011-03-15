@@ -1,4 +1,5 @@
 <!-- Prepaid profile -->
 <X-PRE-PROCESS cmd="set" data="profile_name=$${prepaid_profile_name}"/>
+<X-PRE-PROCESS cmd="set" data="profile_type=$${prepaid_profile_type}"/>
 
 <X-PRE-PROCESS cmd="include" data="sip_profiles/sbc-nomedia.xml.template"/>
