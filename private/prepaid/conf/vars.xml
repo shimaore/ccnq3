@@ -14,9 +14,6 @@
   <X-PRE-PROCESS cmd="set" data="global_codec_prefs=PCMU@8000h@20i,G729@8000h@20i"/>
   <X-PRE-PROCESS cmd="set" data="outbound_codec_prefs=PCMU@8000h@20i,G729@8000h@20i"/>
 
-  <X-PRE-PROCESS cmd="set" data="external_rtp_ip=$${local_ip_v4}"/>
-  <X-PRE-PROCESS cmd="set" data="external_sip_ip=$${local_ip_v4}"/>
-
   <X-PRE-PROCESS cmd="set" data="outbound_caller_name="/>
   <X-PRE-PROCESS cmd="set" data="outbound_caller_id="/>
 

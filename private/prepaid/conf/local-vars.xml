@@ -5,3 +5,9 @@
 <X-PRE-PROCESS cmd="set" data="prepaid_profile_name=usa-cnam"/>
 <X-PRE-PROCESS cmd="set" data="prepaid_egress_target="/><!-- DNS name to send egress calls to -->
 <X-PRE-PROCESS cmd="set" data="prepaid_ingress_target="/><!-- DNS name to send ingress calls to -->
+
+<X-PRE-PROCESS cmd="set" data="rtp_ip=auto"/>
+<X-PRE-PROCESS cmd="set" data="ingress_sip_ip=auto"/>
+<X-PRE-PROCESS cmd="set" data="ingress_sip_port=5200"/>
+<X-PRE-PROCESS cmd="set" data="egress_sip_ip=auto"/>
+<X-PRE-PROCESS cmd="set" data="egress_sip_port=15200"/>

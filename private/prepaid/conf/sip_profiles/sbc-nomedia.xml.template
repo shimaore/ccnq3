@@ -2,11 +2,12 @@
 <X-PRE-PROCESS cmd="set" data="sip_ip=$${ingress_sip_ip}"/>
 <X-PRE-PROCESS cmd="set" data="sip_port=$${ingress_sip_port}"/>
 
+<!--
 ssl_enable
 tls_port
 auth_calls
 rtp_ip
-
+-->
 
 <X-PRE-PROCESS cmd="include" data="sbc-nomedia.include.xml.template"/>
 
@@ -14,9 +15,11 @@ rtp_ip
 <X-PRE-PROCESS cmd="set" data="sip_ip=$${egress_sip_ip}"/>
 <X-PRE-PROCESS cmd="set" data="sip_port=$${egress_sip_port}"/>
 
+<!--
 ssl_enable
 tls_port
 auth_calls
 rtp_ip
+-->
 
 <X-PRE-PROCESS cmd="include" data="sbc-nomedia.include.xml.template"/>
