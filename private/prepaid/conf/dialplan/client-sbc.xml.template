@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <include>
   <!-- egress  -->
-  <context name="egress-$${profile_name}">
+  <context name="egress-$${profile_name}-$${profile_type}">
 
     <extension name="unloop">
       <condition field="${unroll_loops}" expression="^true$"/>
@@ -10,7 +10,7 @@
       </condition>
     </extension>
 
-    <X-PRE-PROCESS cmd="include" data="$${profile_name}-egress.xml.template"/>
+    <X-PRE-PROCESS cmd="include" data="$${profile_type}-egress.xml.template"/>
 
     <!-- Place the call -->
     <extension name="place-call">
@@ -42,7 +42,7 @@
   </context>
 
   <!-- ingress  -->
-  <context name="ingress-$${profile_name}">
+  <context name="ingress-$${profile_name}-$${profile_type}">
 
     <extension name="unloop">
       <condition field="${unroll_loops}" expression="^true$"/>
@@ -61,7 +61,7 @@
       </condition>
     </extension>
 
-    <X-PRE-PROCESS cmd="include" data="$${profile_name}-ingress.xml.template"/>
+    <X-PRE-PROCESS cmd="include" data="$${profile_type}-ingress.xml.template"/>
 
     <!-- Place the call -->
     <extension name="default-ingress">
@@ -70,7 +70,7 @@
         <action application="set" data="progress_timeout=12"/>
         <action application="set" data="call_timeout=300"/>
         <action application="export" data="t38_passthru=true"/>
-        <action application="set" data="force_transfer_context=refer-$${profile_name}"/>
+        <action application="set" data="force_transfer_context=refer-$${profile_name}-$${profile_type}"/>
         <action application="set" data="sip_contact_user=${ccnq_from_e164}"/>
         <action application="set" data="sip_cid_type=pid"/>
         <action application="transfer" data="send-call"/>
@@ -80,7 +80,7 @@
   </context>
 
   <!-- ingress + REFER -->
-  <context name="refer-$${profile_name}">
+  <context name="refer-$${profile_name}-$${profile_type}">
 
     <extension name="unloop">
       <condition field="${unroll_loops}" expression="^true$"/>

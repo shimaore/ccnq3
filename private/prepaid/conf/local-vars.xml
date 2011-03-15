@@ -2,7 +2,8 @@
 <X-PRE-PROCESS cmd="set" data="prepaid_uri=http://127.0.0.1:5984/prepaid"/>
 <X-PRE-PROCESS cmd="set" data="cnam_uri=http://127.0.0.1:5984/callingname.yaws?Number="/>
 
-<X-PRE-PROCESS cmd="set" data="prepaid_profile_name=usa-cnam"/>
+<X-PRE-PROCESS cmd="set" data="prepaid_profile_name=prepaid"/>
+<X-PRE-PROCESS cmd="set" data="prepaid_profile_type=usa-cnam"/>
 <X-PRE-PROCESS cmd="set" data="prepaid_egress_target="/><!-- DNS name to send egress calls to -->
 <X-PRE-PROCESS cmd="set" data="prepaid_ingress_target="/><!-- DNS name to send ingress calls to -->
 
