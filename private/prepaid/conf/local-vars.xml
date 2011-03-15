@@ -8,7 +8,9 @@
 <X-PRE-PROCESS cmd="set" data="prepaid_ingress_target="/><!-- DNS name to send ingress calls to -->
 
 <X-PRE-PROCESS cmd="set" data="rtp_ip=auto"/>
-<X-PRE-PROCESS cmd="set" data="ingress_sip_ip=auto"/>
+<!-- <X-PRE-PROCESS cmd="set" data="ingress_sip_ip=auto"/> --><!-- This will only bind to IPv4 -->
+<X-PRE-PROCESS cmd="set" data="ingress_sip_ip=::"/>
 <X-PRE-PROCESS cmd="set" data="ingress_sip_port=5200"/>
-<X-PRE-PROCESS cmd="set" data="egress_sip_ip=auto"/>
-<X-PRE-PROCESS cmd="set" data="egress_sip_port=15200"/>
+<!-- <X-PRE-PROCESS cmd="set" data="egress_sip_ip=auto"/> --><!-- This will only bind to IPv4 -->
+<X-PRE-PROCESS cmd="set" data="egress_sip_ip=::"/>
+<X-PRE-PROCESS cmd="set" data="egress_sip_port=1$${ingress_sip_port}"/>
