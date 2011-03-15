@@ -5,5 +5,8 @@
     <!-- <param name="auto-restart" value="false"/> -->
     <param name="debug-presence" value="0"/>
   </global_settings>
+  <profiles>
+    <X-PRE-PROCESS cmd="include" data="../local-profiles.xml"/>
+  </profiles>
 
 </configuration>

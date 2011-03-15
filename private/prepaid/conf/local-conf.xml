@@ -35,10 +35,3 @@
 
 </section>
 
-<section name="configuration" description="Various Configuration">
-  <configuration name="sofia.conf" description="sofia Endpoint">
-    <profiles>
-    <X-PRE-PROCESS cmd="include" data="sip_profiles/sbc-nomedia.xml.template"/>
-    </profiles>
-  </configuration>
-</section>
