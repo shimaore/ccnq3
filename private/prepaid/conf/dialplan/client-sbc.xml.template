@@ -25,6 +25,9 @@
         <action application="set" data="ccnq_account_sub=${regex(${sip_req_params}|account_sub=([^;]*)|%1)}"/>
         <action application="set" data="ccnq_location=${regex(${sip_req_params}|location=([^;]*)|%1)}"/>
         <action application="set" data="effective_caller_id_number=${ccnq_from_e164}"/>
+   <!-- <action application="set" data="effective_caller_id_name=_undef_"/> -->
+        <action application="set" data="sip_contact_user=${ccnq_from_e164}"/>
+        <action application="set" data="sip_cid_type=pid"/>
         <action application="transfer" data="send-call"/>
       </condition>
     </extension>
@@ -68,14 +71,9 @@
         <action application="set" data="call_timeout=300"/>
         <action application="export" data="t38_passthru=true"/>
         <action application="set" data="force_transfer_context=refer-$${profile_name}"/>
+        <action application="set" data="sip_contact_user=${ccnq_from_e164}"/>
+        <action application="set" data="sip_cid_type=pid"/>
         <action application="transfer" data="send-call"/>
-      </condition>
-    </extension>
-
-    <!-- invalid number -->
-    <extension name="invalid-number">
-      <condition field="destination_number" expression="">
-        <action application="hangup"/>
       </condition>
     </extension>
 

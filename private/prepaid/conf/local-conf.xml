@@ -1,0 +1,40 @@
+<section name="dialplan" description="Regex/XML Dialplan">
+
+<X-PRE-PROCESS cmd="include" data="dialplan/client-sbc.xml.template"/>
+
+<context name="egress-$${profile_name}">
+  <extension name="send-call">
+    <condition field="destination_number" expression="^send-call">
+      <action application="set" data="prepaid_uri=$${prepaid_uri}" />
+      <action application="lua" data="prepaid.lua ${ccnq_account} sofia/sbc-$${profile_name}/${ccnq_to_e164}@$${egress_target};location=${ccnq_location}"/>
+    </condition>
+  </extension>
+</context>
+
+<context name="ingress-$${profile_name}">
+  <extension name="send-call">
+    <condition field="destination_number" expression="^send-call">
+      <action application="set" data="prepaid_uri=$${prepaid_uri}" />
+      <action application="lua" data="prepaid.lua ${ccnq_account} sofia/internal-$${profile_name}/$1@$${ingress_target}"/>
+    </condition>
+  </extension>
+</context>
+
+<context name="refer-$${profile_name}">
+  <extension name="send-call">
+    <condition field="destination_number" expression="^send-call">
+      <action application="bridge" data="sofia/internal-$${profile_name}/${refer_user}@${refer_domain}"/>
+    </condition>
+  </extension>
+</context>
+
+</section>
+
+<configuration name="sofia.conf" description="sofia Endpoint">
+
+  <profiles>
+    <X-PRE-PROCESS cmd="include" data="sip_profiles/*.xml"/>
+  </profiles>
+
+</configuration>
+

@@ -6,9 +6,11 @@
 
 -- A simple single-bucket duration-based prepaid application.
 
--- This script expects the following variables:
+-- This script expects the following parameters:
 --   prepaid_account       -- account to be decremented
 --   prepaid_destination   -- where to bridge the call
+
+-- This script expects the following variables:
 --   prepaid_uri           -- URI for the prepaid API
 
 prepaid_account     = argv[1]
@@ -23,8 +25,6 @@ require("json")
 require("cgilua.urlcode")
 require("os")
 
-prepaid_account      = session:getVariable("prepaid_account")
-prepaid_destination  = session:getVariable("prepaid_destination")
 prepaid_uri          = session:getVariable("prepaid_uri")
 
 urlencoded_account   = cgilua.urlcode.escape(prepaid_account)

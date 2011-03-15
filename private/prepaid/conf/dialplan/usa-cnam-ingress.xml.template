@@ -1,5 +1,6 @@
 <extension name="apply-cnam" continue="true">
     <condition field="destination_number" expression="^call">
+      <action application="set" data="cnam_uri=$${cnam_uri}" />
       <action application="lua" data="cnam.lua"/>
     </condition>
 </extension>
