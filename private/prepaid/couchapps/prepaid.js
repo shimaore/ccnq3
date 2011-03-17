@@ -28,4 +28,4 @@ ddoc.views.current = {
 };
 
 // Attachments are loaded from prepaid/*
-couchapp.loadAttachments(ddoc, path.join(__dirname, 'prepaid'));
+// couchapp.loadAttachments(ddoc, path.join(__dirname, 'prepaid'));
