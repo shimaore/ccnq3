@@ -58,7 +58,7 @@ start_time        = os.time()  -- seconds
 recorded_duration = 0          -- seconds
 
 function record_interval()
-  session:execute("curl", prepaid_uri .. "/" .. urlencoded_account .. " post intervals=1" )
+  session:execute("curl", prepaid_uri .. "/_design/prepaid/_view/current?reduce=true&group=true&key=" .. urlencoded_account .. " post intervals=1" )
   curl_response_code = session:getVariable("curl_response_code")
 
   freeswitch.consoleLog("DEBUG", "response: "..curl_response_code)
