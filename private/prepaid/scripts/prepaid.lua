@@ -71,6 +71,7 @@ function prepaid()
     if account == nil then
       freeswitch.consoleLog("NOTICE", "Account does not exist.\n")
       session:hangup()
+      return
     end
 
     interval_duration = account.interval_duration -- seconds
@@ -124,6 +125,7 @@ function prepaid()
       if row == nil or row.value < 2 then
         -- Hangup Hook will do record_interval()
         session:hangup()
+        return
       else
         record_interval()
       end
