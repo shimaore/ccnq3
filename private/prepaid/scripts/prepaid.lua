@@ -117,8 +117,8 @@ check_time()
 -- Set up the second leg of the call
 
 if session:ready() then
-  new_session = freeswitch.Session()
-  new_session:originate(session,prepaid_destination,interval_duration)
+  new_session = freeswitch.Session(prepaid_destination)
+  freeswitch.bridge(session,new_session)
   session:waitForAnswer(new_session)
 end
 
