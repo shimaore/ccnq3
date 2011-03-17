@@ -92,7 +92,7 @@ function prepaid()
 
 
   function record_interval()
-    session:execute("curl", prepaid_uri .. "/" .. urlencoded_account .. " post intervals=1" )
+    session:execute("curl", prepaid_uri .. "/" .. urlencoded_account .. " post intervals=-1" )
     local curl_response_code = session:getVariable("curl_response_code")
 
     freeswitch.consoleLog("DEBUG", "response: "..curl_response_code)
