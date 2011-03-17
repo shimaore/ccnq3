@@ -30,7 +30,7 @@ prepaid_uri          = session:getVariable("prepaid_uri")
 urlencoded_account   = cgilua.urlcode.escape(prepaid_account)
 
 function get_account()
-  session:execute("curl", prepaid_uri .. "/" .. urlencoded_account )
+  session:execute("curl", prepaid_uri .. '/' .. urlencoded_account )
 
   if session:ready() then
     local curl_response_code = session:getVariable("curl_response_code")
@@ -46,7 +46,7 @@ function get_account()
 end
 
 function get_current()
-  session:execute("curl", prepaid_uri .. "/_design/prepaid/_view/current?reduce=true&group=true&key=" .. urlencoded_account )
+  session:execute("curl", prepaid_uri .. '/_design/prepaid/_view/current?reduce=true&group=true&key=%22' .. urlencoded_account .. '%22')
 
   if session:ready() then
     local curl_response_code = session:getVariable("curl_response_code")
@@ -92,7 +92,7 @@ function prepaid()
 
 
   function record_interval()
-    session:execute("curl", prepaid_uri .. "/" .. urlencoded_account .. " post intervals=-1" )
+    session:execute("curl", prepaid_uri .. '/' .. urlencoded_account .. ' post intervals=-1' )
     local curl_response_code = session:getVariable("curl_response_code")
 
     freeswitch.consoleLog("DEBUG", "response: "..curl_response_code)
