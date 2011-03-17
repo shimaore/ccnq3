@@ -28,7 +28,7 @@
    <!-- <action application="set" data="effective_caller_id_name=_undef_"/> -->
         <action application="set" data="sip_contact_user=${ccnq_from_e164}"/>
         <action application="set" data="sip_cid_type=pid"/>
-        <action application="transfer" data="send-call"/>
+        <action application="transfer" data="${ccnq_to_e164} XML egress-$${profile_name}-$${profile_type}-send-call"/>
       </condition>
     </extension>
 
@@ -73,7 +73,7 @@
         <action application="set" data="force_transfer_context=refer-$${profile_name}-$${profile_type}"/>
         <action application="set" data="sip_contact_user=${ccnq_from_e164}"/>
         <action application="set" data="sip_cid_type=pid"/>
-        <action application="transfer" data="send-call"/>
+        <action application="transfer" data="${ccnq_to_e164} XML ingress-$${profile_name}-$${profile_type}-send-call"/>
       </condition>
     </extension>
 
