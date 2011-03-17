@@ -81,9 +81,11 @@ function prepaid()
       freeswitch.consoleLog("NOTICE", "No time on account.\n")
       session:hangup()
     else
-      session:originate(sofia_dest)
-      session:waitForAnswer()
+      new_session = freeswitch.Session()
+      new_session:originate(session,sofia_dest)
+      new_session:waitForAnswer()
       session:setHangupHook("session_hangup_hook")
+      new_session:setHangupHook("session_hangup_hook")
     end
   end
 
