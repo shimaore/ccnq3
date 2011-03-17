@@ -78,7 +78,7 @@ end
 start_time        = os.time()  -- seconds
 recorded_duration = 0          -- seconds
 
-interval_duration = account.interval
+interval_duration = account.interval_duration -- seconds
 
 function record_interval()
   session:execute("curl", prepaid_uri .. "/" .. urlencoded_account .. " post intervals=1" )
