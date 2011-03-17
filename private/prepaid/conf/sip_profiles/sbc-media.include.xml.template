@@ -11,7 +11,7 @@
     <!--<param name="odbc-dsn" value="dsn:user:pass"/>-->
 
     <!-- SIP Parameters -->
-    <param name="alias" value="sip:$${sip_ip}:$${sip_port}"/>
+    <!-- <param name="alias" value="sip:$${sip_ip}:$${sip_port}"/> -->
     <param name="sip-ip" value="$${sip_ip}"/>
     <param name="sip-port" value="$${sip_port}"/>
     <param name="ext-sip-ip" value="$${sip_ip}"/>
