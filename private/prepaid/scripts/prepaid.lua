@@ -33,8 +33,8 @@ function get_account()
   session:execute("curl", prepaid_uri .. "/" .. urlencoded_account )
 
   if session:ready() then
-    curl_response_code = session:getVariable("curl_response_code")
-    curl_response_data = session:getVariable("curl_response_data")
+    local curl_response_code = session:getVariable("curl_response_code")
+    local curl_response_data = session:getVariable("curl_response_data")
 
     freeswitch.consoleLog("DEBUG", "response: "..curl_response_code.." "..curl_response_data)
 
@@ -49,8 +49,8 @@ function get_current()
   session:execute("curl", prepaid_uri .. "/_design/prepaid/_view/current?reduce=true&group=true&key=" .. urlencoded_account )
 
   if session:ready() then
-    curl_response_code = session:getVariable("curl_response_code")
-    curl_response_data = session:getVariable("curl_response_data")
+    local curl_response_code = session:getVariable("curl_response_code")
+    local curl_response_data = session:getVariable("curl_response_data")
 
     freeswitch.consoleLog("DEBUG", "response: "..curl_response_code.." "..curl_response_data)
 
@@ -66,7 +66,7 @@ interval_duration = 0
 
 if session:ready() then
 
-  account = get_account()
+  local account = get_account()
   if account == nil then
     freeswitch.consoleLog("NOTICE", "Account does not exist.\n")
     session:hangup()
@@ -74,7 +74,7 @@ if session:ready() then
 
   interval_duration = account.interval_duration -- seconds
 
-  row = get_current()
+  local row = get_current()
   if row == nil or row.value < 2 then
     freeswitch.consoleLog("NOTICE", "No time on account.\n")
     session:hangup()
@@ -91,7 +91,7 @@ recorded_duration = 0          -- seconds
 
 function record_interval()
   session:execute("curl", prepaid_uri .. "/" .. urlencoded_account .. " post intervals=1" )
-  curl_response_code = session:getVariable("curl_response_code")
+  local curl_response_code = session:getVariable("curl_response_code")
 
   freeswitch.consoleLog("DEBUG", "response: "..curl_response_code)
 
@@ -119,7 +119,7 @@ while session:ready() do
   sleep(wait_for*1000-10)
 
   if session:ready() then
-    row = get_current()
+    local row = get_current()
     if row == nil or row.value < 2 then
       -- Hangup Hook will do record_interval()
       session:hangup()
