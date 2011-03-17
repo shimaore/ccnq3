@@ -72,7 +72,7 @@ function session_hangup_hook(status)
   record_interval()
 end
 
-while(session:ready()) {
+while session:ready() do
 
   actual_duration = os.time()-start_time -- seconds
   -- Offset the next check time to try to keep things in sync, since the
@@ -82,7 +82,7 @@ while(session:ready()) {
   freeswitch.consoleLog("NOTICE", string.format("Waiting for %d seconds\n",wait_for))
   sleep(wait_for*1000-10)
 
-  if(session:ready()) {
+  if session:ready() then
     row = get_current()
     if row == nil or row.value < 2 then
       -- Hangup Hook will do record_interval()
@@ -90,5 +90,5 @@ while(session:ready()) {
     else
       record_interval()
     end
-  }
-}
+  end
+end
