@@ -37,7 +37,8 @@ function get_current()
   freeswitch.consoleLog("DEBUG", "response: "..curl_response_code.." "..curl_response_data)
 
   if curl_response_code == "200" then
-    return json.decode(curl_response_data)  -- use pcall() if this ends up crashing
+    doc = json.decode(curl_response_data)  -- use pcall() if this ends up crashing
+    return doc.rows[0]
   end
   return nil
 end
