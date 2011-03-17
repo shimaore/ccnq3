@@ -62,69 +62,73 @@ function get_current()
   return nil
 end
 
-interval_duration = 0
-
-if session:ready() then
-
-  local account = get_account()
-  if account == nil then
-    freeswitch.consoleLog("NOTICE", "Account does not exist.\n")
-    session:hangup()
-  end
-
-  interval_duration = account.interval_duration -- seconds
-
-  local row = get_current()
-  if row == nil or row.value < 2 then
-    freeswitch.consoleLog("NOTICE", "No time on account.\n")
-    session:hangup()
-  else
-    session:originate(sofia_dest)
-    session:waitForAnswer()
-    session:setHangupHook("session_hangup_hook")
-  end
-end
-
-start_time        = os.time()  -- seconds
-recorded_duration = 0          -- seconds
-
-
-function record_interval()
-  session:execute("curl", prepaid_uri .. "/" .. urlencoded_account .. " post intervals=1" )
-  local curl_response_code = session:getVariable("curl_response_code")
-
-  freeswitch.consoleLog("DEBUG", "response: "..curl_response_code)
-
-  if curl_response_code == "200" then
-    recorded_duration = recorded_duration + interval_duration -- seconds
-  else
-    freeswitch.consoleLog("ERROR", "No access to timer, stopping the call.\n")
-    session:hangup()
-  end
-end
-
-function session_hangup_hook(status)
-  -- note: status is userdata and cannot be concatenated
-  record_interval()
-end
-
-while session:ready() do
-
-  actual_duration = os.time()-start_time -- seconds
-  -- Offset the next check time to try to keep things in sync, since the
-  -- curl code might take a little while to complete.
-  wait_for = interval_duration + (recorded_duration - actual_duration) -- seconds
-
-  freeswitch.consoleLog("NOTICE", string.format("Waiting for %d seconds\n",wait_for))
-  sleep(wait_for*1000-10)
+function prepaid() {
+  interval_duration = 0
 
   if session:ready() then
+
+    local account = get_account()
+    if account == nil then
+      freeswitch.consoleLog("NOTICE", "Account does not exist.\n")
+      session:hangup()
+    end
+
+    interval_duration = account.interval_duration -- seconds
+
     local row = get_current()
     if row == nil or row.value < 2 then
-      -- Hangup Hook will do record_interval()
+      freeswitch.consoleLog("NOTICE", "No time on account.\n")
       session:hangup()
     else
-      record_interval()
+      session:originate(sofia_dest)
+      session:waitForAnswer()
+      session:setHangupHook("session_hangup_hook")
     end
   end
-end
+
+  start_time        = os.time()  -- seconds
+  recorded_duration = 0          -- seconds
+
+
+  function record_interval()
+    session:execute("curl", prepaid_uri .. "/" .. urlencoded_account .. " post intervals=1" )
+    local curl_response_code = session:getVariable("curl_response_code")
+
+    freeswitch.consoleLog("DEBUG", "response: "..curl_response_code)
+
+    if curl_response_code == "200" then
+      recorded_duration = recorded_duration + interval_duration -- seconds
+    else
+      freeswitch.consoleLog("ERROR", "No access to timer, stopping the call.\n")
+      session:hangup()
+    end
+  end
+
+  function session_hangup_hook(status)
+    -- note: status is userdata and cannot be concatenated
+    record_interval()
+  end
+
+  while session:ready() do
+
+    actual_duration = os.time()-start_time -- seconds
+    -- Offset the next check time to try to keep things in sync, since the
+    -- curl code might take a little while to complete.
+    wait_for = interval_duration + (recorded_duration - actual_duration) -- seconds
+
+    freeswitch.consoleLog("NOTICE", string.format("Waiting for %d seconds\n",wait_for))
+    sleep(wait_for*1000-10)
+
+    if session:ready() then
+      local row = get_current()
+      if row == nil or row.value < 2 then
+        -- Hangup Hook will do record_interval()
+        session:hangup()
+      else
+        record_interval()
+      end
+    end
+  end
+}
+
+prepaid_handler()
