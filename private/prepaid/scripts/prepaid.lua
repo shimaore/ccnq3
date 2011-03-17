@@ -62,7 +62,7 @@ function get_current()
   return nil
 end
 
-local interval_duration = 0
+interval_duration = 0
 
 if session:ready() then
 
@@ -79,18 +79,17 @@ if session:ready() then
   if row == nil or row.value < 2 then
     freeswitch.consoleLog("NOTICE", "No time on account.\n")
     session:hangup()
+    return
   else
     new_session = freeswitch.Session()
     new_session:originate(session,prepaid_destination,interval_duration)
     session:waitForAnswer(new_session)
     session:setHangupHook("session_hangup_hook")
-    new_session:setHangupHook("new_session_hangup_hook")
   end
 end
 
 start_time        = os.time()  -- seconds
 recorded_duration = 0          -- seconds
-
 
 function record_interval()
   session:execute("curl", prepaid_uri .. '/' .. urlencoded_account .. ' post intervals=-1' )
@@ -103,17 +102,14 @@ function record_interval()
   else
     freeswitch.consoleLog("ERROR", "No access to timer, stopping the call.\n")
     session:hangup()
+    return
   end
 end
 
 function session_hangup_hook(status)
+  freeswitch.consoleLog("DEBUG", "Call hung up")
   -- note: status is userdata and cannot be concatenated
   record_interval()
-end
-
-function new_session_hangup_hook(status)
-  -- note: status is userdata and cannot be concatenated
-  session:hangup()
 end
 
 while session:ready() do
