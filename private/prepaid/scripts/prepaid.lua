@@ -123,6 +123,9 @@ check_time()
 
 if session:ready() then
   new_session = freeswitch.Session(prepaid_destination)
+end
+
+if session:ready() and new_session:ready() then
   freeswitch.bridge(session,new_session)
 end
 
@@ -132,7 +135,7 @@ end
 
 start_time        = os.time()  -- seconds
 
-while session:ready() do
+while session:ready() and new_session:ready() do
 
   -- Record the interval at the beginning of each period.
   record_interval()
