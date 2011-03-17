@@ -31,30 +31,38 @@ urlencoded_account   = cgilua.urlcode.escape(prepaid_account)
 
 function get_account()
   session:execute("curl", prepaid_uri .. "/" .. urlencoded_account )
-  curl_response_code = session:getVariable("curl_response_code")
-  curl_response_data = session:getVariable("curl_response_data")
 
-  freeswitch.consoleLog("DEBUG", "response: "..curl_response_code.." "..curl_response_data)
+  if session:ready() then
+    curl_response_code = session:getVariable("curl_response_code")
+    curl_response_data = session:getVariable("curl_response_data")
 
-  if curl_response_code == "200" then
-    return json.decode(curl_response_data)  -- use pcall() if this ends up crashing
+    freeswitch.consoleLog("DEBUG", "response: "..curl_response_code.." "..curl_response_data)
+
+    if curl_response_code == "200" then
+      return json.decode(curl_response_data)  -- use pcall() if this ends up crashing
+    end
   end
   return nil
 end
 
 function get_current()
   session:execute("curl", prepaid_uri .. "/_design/prepaid/_view/current?reduce=true&group=true&key=" .. urlencoded_account )
-  curl_response_code = session:getVariable("curl_response_code")
-  curl_response_data = session:getVariable("curl_response_data")
 
-  freeswitch.consoleLog("DEBUG", "response: "..curl_response_code.." "..curl_response_data)
+  if session:ready() then
+    curl_response_code = session:getVariable("curl_response_code")
+    curl_response_data = session:getVariable("curl_response_data")
 
-  if curl_response_code == "200" then
-    doc = json.decode(curl_response_data)  -- use pcall() if this ends up crashing
-    return doc.rows[0]
+    freeswitch.consoleLog("DEBUG", "response: "..curl_response_code.." "..curl_response_data)
+
+    if curl_response_code == "200" then
+      doc = json.decode(curl_response_data)  -- use pcall() if this ends up crashing
+      return doc.rows[0]
+    end
   end
   return nil
 end
+
+interval_duration = 0
 
 if session:ready() then
 
@@ -63,6 +71,8 @@ if session:ready() then
     freeswitch.consoleLog("NOTICE", "Account does not exist.\n")
     session:hangup()
   end
+
+  interval_duration = account.interval_duration -- seconds
 
   row = get_current()
   if row == nil or row.value < 2 then
@@ -78,7 +88,6 @@ end
 start_time        = os.time()  -- seconds
 recorded_duration = 0          -- seconds
 
-interval_duration = account.interval_duration -- seconds
 
 function record_interval()
   session:execute("curl", prepaid_uri .. "/" .. urlencoded_account .. " post intervals=1" )
