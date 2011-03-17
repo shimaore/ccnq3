@@ -62,7 +62,7 @@ function get_current()
   return nil
 end
 
-function prepaid() {
+function prepaid() begin
   interval_duration = 0
 
   if session:ready() then
@@ -129,6 +129,6 @@ function prepaid() {
       end
     end
   end
-}
+end
 
 prepaid_handler()
