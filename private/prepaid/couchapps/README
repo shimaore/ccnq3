@@ -2,9 +2,9 @@
 Types of records:
 
   /:account
-    type:       "account"
-    account:    account ID (same as _id)
-    interval:   value of the unit interval (in seconds)
+    type:               "account"
+    account:            account ID (same as _id)
+    interval_duration:  value of the unit interval (in seconds)
 
   /:uuid
     type:       "interval_record"
