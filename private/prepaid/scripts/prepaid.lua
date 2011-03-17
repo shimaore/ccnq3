@@ -62,8 +62,8 @@ function get_current()
   return nil
 end
 
-function prepaid() begin
-  interval_duration = 0
+function prepaid()
+  local interval_duration = 0
 
   if session:ready() then
 
