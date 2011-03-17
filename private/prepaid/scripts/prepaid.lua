@@ -32,44 +32,48 @@ urlencoded_account   = cgilua.urlcode.escape(prepaid_account)
 -- Utility functions
 
 function get_account()
+  if not session:ready() then return nil end
+
   session:execute("curl", prepaid_uri .. '/' .. urlencoded_account )
 
-  if session:ready() then
-    local curl_response_code = session:getVariable("curl_response_code")
-    local curl_response_data = session:getVariable("curl_response_data")
+  if not session:ready() then return nil end
 
-    freeswitch.consoleLog("DEBUG", "response: "..curl_response_code.." "..curl_response_data)
+  local curl_response_code = session:getVariable("curl_response_code")
+  local curl_response_data = session:getVariable("curl_response_data")
 
-    if curl_response_code == "200" then
-      return json.decode(curl_response_data)  -- use pcall() if this ends up crashing
-    end
+  freeswitch.consoleLog("DEBUG", "response: "..curl_response_code.." "..curl_response_data)
+
+  if curl_response_code == "200" then
+    return json.decode(curl_response_data)  -- use pcall() if this ends up crashing
   end
   return nil
 end
 
 function get_current()
+  if not session:ready() then return nil end
+
   session:execute("curl", prepaid_uri .. '/_design/prepaid/_view/current?reduce=true&group=true&key=%22' .. urlencoded_account .. '%22')
 
-  if session:ready() then
-    local curl_response_code = session:getVariable("curl_response_code")
-    local curl_response_data = session:getVariable("curl_response_data")
+  if not session:ready() then return nil end
 
-    freeswitch.consoleLog("DEBUG", "response: "..curl_response_code.." "..curl_response_data)
+  local curl_response_code = session:getVariable("curl_response_code")
+  local curl_response_data = session:getVariable("curl_response_data")
 
-    if curl_response_code == "200" then
-      local doc = json.decode(curl_response_data)  -- use pcall() if this ends up crashing
-      return doc.rows[1]
-    end
+  freeswitch.consoleLog("DEBUG", "response: "..curl_response_code.." "..curl_response_data)
+
+  if curl_response_code == "200" then
+    local doc = json.decode(curl_response_data)  -- use pcall() if this ends up crashing
+    return doc.rows[1]
   end
   return nil
 end
 
 function check_time()
-  if session:ready() then
-    local row = get_current()
-    if row == nil or row.value < 2 then
-      session:hangup()
-    end
+  if not session:ready() then return nil end
+
+  local row = get_current()
+  if row == nil or row.value < 2 then
+    session:hangup()
   end
 end
 
@@ -107,6 +111,7 @@ function record_interval()
   else
     freeswitch.consoleLog("ERROR", "No access to timer, stopping the call.\n")
     session:hangup()
+    return
   end
 end
 
