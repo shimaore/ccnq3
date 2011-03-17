@@ -74,7 +74,7 @@ end
 
 while(session:ready()) {
 
-  actual_duration = os.time()-start_time() -- seconds
+  actual_duration = os.time()-start_time -- seconds
   -- Offset the next check time to try to keep things in sync, since the
   -- curl code might take a little while to complete.
   wait_for = row.interval + (recorded_duration - actual_duration) -- seconds
