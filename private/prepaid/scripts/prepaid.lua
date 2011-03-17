@@ -34,6 +34,8 @@ function get_current()
   curl_response_code = session:getVariable("curl_response_code")
   curl_response_data = session:getVariable("curl_response_data")
 
+  freeswitch.consoleLog("DEBUG", "response: "..curl_response_code.." "..curl_response_data)
+
   if curl_response_code == "200" then
     return json.decode(curl_response_data)  -- use pcall() if this ends up crashing
   end
