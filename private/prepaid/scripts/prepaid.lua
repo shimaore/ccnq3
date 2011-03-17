@@ -124,6 +124,9 @@ check_time()
 if session:ready() then
   new_session = freeswitch.Session(prepaid_destination)
   freeswitch.bridge(session,new_session)
+end
+
+if session:ready() and new_session:ready() then
   session:waitForAnswer(new_session)
 end
 
