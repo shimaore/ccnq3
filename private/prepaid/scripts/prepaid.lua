@@ -83,7 +83,7 @@ function prepaid()
     else
       new_session = freeswitch.Session()
       new_session:originate(session,prepaid_destination,interval_duration)
-      new_session:waitForAnswer()
+      session:waitForAnswer(new_session)
       session:setHangupHook("session_hangup_hook")
       new_session:setHangupHook("session_hangup_hook")
     end
