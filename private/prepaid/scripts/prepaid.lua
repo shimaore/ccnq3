@@ -131,4 +131,4 @@ function prepaid()
   end
 end
 
-prepaid_handler()
+prepaid()
