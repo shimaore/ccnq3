@@ -6,8 +6,9 @@ server = esl.createServer (res) ->
       util.log "Event"+util.inspect req
 
     res.on 'esl_disconnect_notice', (req,res) ->
+      util.log "No linger needed, closing"
       # If nothing else is needed, close the connection
-      res.close()
+      res.end()
 
     res.send 'connect', (req,res) ->
       @channel_data = req.headers
