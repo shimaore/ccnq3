@@ -16,7 +16,7 @@ parse_header_text = (header_text) ->
   # the headers are all URI-encoded.
   if headers['Reply-Text']?[0] is '%'
     for name, value in headers
-      value = querystring.unescape(value)
+      headers[name] = querystring.unescape(value)
 
   util.log "headers = " + util.inspect headers
   return headers
