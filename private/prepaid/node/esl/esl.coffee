@@ -84,8 +84,8 @@ class eslResponse
 
       @socket.write "#{command}\n"
       if args?
-        for key of args
-          @socket.write "#{key}: #{args[key]}\n"
+        for key, value of args
+          @socket.write "#{key}: #{value}\n"
       @socket.write "\n"
 
   on: (event,listener) -> @socket.on(event,listener)
