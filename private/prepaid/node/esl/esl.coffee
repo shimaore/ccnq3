@@ -2,7 +2,6 @@
 net         = require 'net'
 querystring = require 'querystring'
 util        = require 'util'
-json        = require 'json'
 
 parse_header_text = (header_text) ->
   header_lines = header_text.split("\n")
@@ -108,7 +107,7 @@ connectionListener= (socket) ->
       when 'command/reply'
         event = 'esl_command_reply'
       when 'text/event-json'
-        body = json.parse(body)
+        body = JSON.parse(body)
         event = 'esl_event'
       when 'text/event-plain'
         body = parse_header_text(body)
