@@ -51,6 +51,8 @@ class eslParser
     # Figure out whether a body is expected
     if @headers["Content-Length"]
       @body_left = @headers["Content-Length"]
+      [@buffer,data] = ["",@buffer]
+      @capture_body(data)
     else
       @process @headers
       @headers = {}
