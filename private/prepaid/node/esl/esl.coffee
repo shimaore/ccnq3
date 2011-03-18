@@ -17,7 +17,6 @@ parse_header_text = (header_text) ->
     for name of headers
       headers[name] = querystring.unescape(headers[name])
 
-  util.log "headers = " + util.inspect headers
   return headers
 
 class eslParser
@@ -97,7 +96,6 @@ class eslResponse
 # This is modelled after Node.js' http.js
 
 connectionListener= (socket) ->
-  util.log "connection established"
   socket.setEncoding('ascii')
   parser = new eslParser socket
   socket.on 'data', (data) ->  parser.on_data(data)
@@ -129,7 +127,7 @@ connectionListener= (socket) ->
         event = headers['Content-Type']
     req = new eslRequest headers,body
     res = new eslResponse socket
-    util.log "sending #{event}"
+    util.log "sending #{event}"+util.inspect(req,res)
     socket.emit event, req, res
   # Get things started
   @emit 'esl_connect', new eslResponse socket
