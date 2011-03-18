@@ -127,7 +127,7 @@ connectionListener= (socket) ->
         event = headers['Content-Type']
     req = new eslRequest headers,body
     res = new eslResponse socket
-    util.log "sending #{event}"+util.inspect(req,res)
+    # util.log "emit #{event}"+util.inspect(req,res)
     socket.emit event, req, res
   # Get things started
   @emit 'esl_connect', new eslResponse socket
