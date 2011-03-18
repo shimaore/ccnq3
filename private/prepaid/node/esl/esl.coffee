@@ -101,8 +101,6 @@ connectionListener= (socket) ->
   socket.on 'data', (data) ->  parser.on_data(data)
   socket.on 'end',  ()     ->  parser.on_end()
   parser.process = (headers,body) ->
-    req = new eslRequest headers,body
-    res = new eslResponse socket
     switch headers['Content-Type']
       when 'auth/request'
         event = 'esl_auth_request'
@@ -120,6 +118,8 @@ connectionListener= (socket) ->
         event = 'esl_disconnect_notice'
       else
         event = headers['Content-Type']
+    req = new eslRequest headers,body
+    res = new eslResponse socket
     util.log "sending #{event}"
     socket.emit event, req, res
   # Get things started
