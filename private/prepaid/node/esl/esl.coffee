@@ -1,7 +1,8 @@
 
-net = require('net')
-querystring = require('querystring')
-util = require('util')
+net         = require 'net'
+querystring = require 'querystring'
+util        = require 'util'
+json        = require 'json'
 
 parse_header_text = (header_text) ->
   header_lines = header_text.split("\n")
