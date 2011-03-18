@@ -1,7 +1,7 @@
 esl = require "./esl"
 
 server = esl.createServer()
-server.on 'start', () ->
+server.on 'connect', () ->
     @send 'connect', (headers) ->
       @call_data = headers
       @send 'linger', () ->

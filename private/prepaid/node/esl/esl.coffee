@@ -14,7 +14,7 @@ parse_header_text = (header_text) ->
 
   # Decode headers: in the case of the "connect" command,
   # the headers are all URI-encoded.
-  if headers["Reply-Text"].charAt[0] is '%'
+  if headers["Reply-Text"]?.charAt[0] is '%'
     for name, value in headers
       value = querystring.unescape(value)
 
@@ -37,7 +37,7 @@ class eslParser
       @buffer = data.substring(@body_left)
       @body_left = 0
       @process @headers, body
-      @header = {}
+      @headers = {}
 
   capture_headers: (data) ->
     util.log "capture_headers: #{data}"
@@ -127,7 +127,7 @@ exports.createClient = (host,port) -> return new eslClient(host,port)
 ###
 
 server = createServer()
-server.on 'start', () ->
+server.on 'connect', () ->
     @send 'connect', (headers) ->
       @call_data = headers
       @send 'linger', () ->
