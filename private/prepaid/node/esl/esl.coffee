@@ -14,7 +14,7 @@ parse_header_text = (header_text) ->
 
   # Decode headers: in the case of the "connect" command,
   # the headers are all URI-encoded.
-  if headers["Reply-Text"]?.charAt[0] is '%'
+  if headers['Reply-Text']?[0] is '%'
     for name, value in headers
       value = querystring.unescape(value)
 
