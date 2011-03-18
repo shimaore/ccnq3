@@ -4,7 +4,6 @@ querystring = require('querystring')
 util = require('util')
 
 parse_header_text = (header_text) ->
-  util.log "parse_header_text #{header_text}"
   header_lines = header_text.split("\n")
   headers = {}
   for line in header_lines
@@ -23,12 +22,10 @@ parse_header_text = (header_text) ->
 
 class eslParser
   constructor: (@socket) ->
-    util.log "eslParser started"
     @body_left = 0
     @buffer = ""
 
   capture_body: (data) ->
-    util.log "capture_body: #{data}"
     if data.length < @body_left
       @buffer    += data
       @body_left -= data.length
@@ -40,7 +37,6 @@ class eslParser
       @headers = {}
 
   capture_headers: (data) ->
-    util.log "capture_headers: #{data}"
     header_end = data.indexOf("\n\n")
 
     if header_end < 0
@@ -78,12 +74,13 @@ class eslResponse
 
   send: (command,args,cb) ->
       [args,cb] = [null,args] if typeof(args) is 'function'
-      util.log "send #{command}" + util.inspect args
+
       # Make sure we are the only one receiving command replies
       @socket.removeAllListeners('esl_command_reply')
       if cb?
         @on 'esl_command_reply', (req,res) ->
           cb(req,res)
+
       @socket.write "#{command}\n"
       if args?
         for key of args
@@ -102,7 +99,6 @@ connectionListener= (socket) ->
   socket.on 'data', (data) ->  parser.on_data(data)
   socket.on 'end',  ()     ->  parser.on_end()
   parser.process = (headers,body) ->
-    util.log "process: " + util.inspect headers,body
     req = new eslRequest headers,body
     res = new eslResponse socket
     switch headers['Content-Type']
