@@ -114,7 +114,11 @@ connectionListener= (socket) ->
             headers[n] = body[n]
             delete body[n]
       when 'text/event-json'
-        body = JSON.parse(body)
+        try
+          body = JSON.parse(body)
+        catch error
+          util.log error
+          return
         event = 'esl_event'
       when 'text/event-plain'
         body = parse_header_text(body)
