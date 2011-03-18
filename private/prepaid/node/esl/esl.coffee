@@ -144,16 +144,6 @@ exports.createClient = (host,port) -> return new eslClient(host,port)
 # Examples:
 ###
 
-server = createServer (res) ->
-    res.on 'esl_event', (req,res) ->
-      util.log "Event"+util.inspect req
-
-    res.send 'connect', (req,res) ->
-      @call_data = req.headers
-      res.send 'linger', (req,res) ->
-        res.send 'event json HEARTBEAT'
-server.listen(7000)
-
 client =  createClient(host,port)
 client.on 'esl_auth_request', (req,res) ->
     res.send "auth #{auth}", () ->
