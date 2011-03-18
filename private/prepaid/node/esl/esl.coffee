@@ -91,6 +91,8 @@ class eslResponse
 
   on: (event,listener) -> @socket.on(event,listener)
 
+  close: () -> @socket.close()
+
 
 # This is modelled after Node.js' http.js
 

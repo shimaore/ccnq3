@@ -5,6 +5,10 @@ server = esl.createServer (res) ->
     res.on 'esl_event', (req,res) ->
       util.log "Event"+util.inspect req
 
+    res.on 'esl_disconnect_notice', (req,res) ->
+      # If nothing else is needed, close the connection
+      res.close()
+
     res.send 'connect', (req,res) ->
       @channel_data = req.headers
       res.send 'linger', (req,res) ->
