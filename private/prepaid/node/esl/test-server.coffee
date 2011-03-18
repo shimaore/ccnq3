@@ -12,7 +12,7 @@ server = esl.createServer (res) ->
         res.end()
 
     res.send 'connect', (req,res) ->
-      @channel_data = req.headers
+      @channel_data = req.body
       res.send 'linger', (req,res) ->
         res.send 'event json HEARTBEAT', (req,res) ->
           options =
