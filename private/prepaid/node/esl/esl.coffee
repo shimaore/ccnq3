@@ -108,6 +108,13 @@ connectionListener= (socket) ->
         event = 'esl_auth_request'
       when 'command/reply'
         event = 'esl_command_reply'
+        # Apparently a bug in the response to "connect"
+        if headers['Event-Name'] is 'CHANNEL_DATA'
+          body = headers
+          headers = {}
+          for n in ['Content-Type','Reply-Text','Socket-Mode','Control']
+            headers[n] = body[n]
+            delete body[n]
       when 'text/event-json'
         body = JSON.parse(body)
         event = 'esl_event'
