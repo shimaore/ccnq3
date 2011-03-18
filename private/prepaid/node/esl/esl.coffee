@@ -69,13 +69,26 @@ class eslParser
 
   on_end: () ->
 
-  send: (command,args,@command_reply) ->
+
+class eslRequest
+  constructor: (@headers,@body) ->
+
+class eslResponse
+  constructor: (@socket) ->
+
+  send: (command,args,cb) ->
       util.log "send #{command}" + util.inspect args
+      # Make sure we are the only one receiving command replies
+      @socket.removeAllListeners('esl_command_reply')
       @socket.write "#{command}\n"
       if args?
         for key, value of args
           @socket.write "#{key}: #{value}\n"
       @socket.write "\n"
+      @on 'esl_command_reply', (req,res) ->
+        cb(req,res)
+
+  on: (event,listener) -> @socket.on(event,listener)
 
 
 # This is modelled after Node.js' http.js
@@ -88,6 +101,8 @@ connectionListener= (socket) ->
   socket.on 'end',  ()     ->  parser.on_end()
   parser.process = (headers,body) ->
     util.log "process: " + util.inspect headers,body
+    req = new eslRequest headers,body
+    res = new eslResponse socket
     switch headers['Content-Type']
       when 'auth/request'
         event = 'esl_auth_request'
@@ -105,15 +120,18 @@ connectionListener= (socket) ->
         event = 'esl_disconnect_notice'
       else
         event = headers['Content-Type']
-    @emit event, headers, body
-  @emit 'connect'
+    util.log "sending #{event}"
+    socket.emit event, req, res
+  # Get things started
+  @emit 'esl_connect', new eslResponse socket
 
 class eslServer extends net.Server
-  constructor: () ->
+  constructor: (requestListener) ->
+    @on 'esl_connect', requestListener
     @on 'connection', connectionListener
     super()
 
-exports.createServer = () -> return new eslServer()
+exports.createServer = (requestListener) -> return new eslServer(requestListener)
 
 class eslClient extends net.Socket
   constructor: (host,port) ->
@@ -126,18 +144,20 @@ exports.createClient = (host,port) -> return new eslClient(host,port)
 # Examples:
 ###
 
-server = createServer()
-server.on 'connect', () ->
-    @send 'connect', (headers) ->
-      @call_data = headers
-      @send 'linger', () ->
-        @send 'event json HEARTBEAT'
+server = createServer (res) ->
+    res.on 'esl_event', (req,res) ->
+      util.log "Event"+util.inspect req
+
+    res.send 'connect', (req,res) ->
+      @call_data = req.headers
+      res.send 'linger', (req,res) ->
+        res.send 'event json HEARTBEAT'
 server.listen(7000)
 
 client =  createClient(host,port)
-client.on 'esl_auth_request', () ->
-    @send "auth #{auth}", () ->
-      @send 'event json HEARTBEAT'
+client.on 'esl_auth_request', (req,res) ->
+    res.send "auth #{auth}", () ->
+      res.send 'event json HEARTBEAT'
 
 ###
 
