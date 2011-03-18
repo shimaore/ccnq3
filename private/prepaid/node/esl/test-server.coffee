@@ -1,4 +1,5 @@
 esl = require "./esl"
+util = require 'util'
 
 server = esl.createServer (res) ->
     res.on 'esl_event', (req,res) ->
