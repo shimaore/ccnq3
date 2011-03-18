@@ -117,7 +117,7 @@ connectionListener= (socket) ->
         try
           body = JSON.parse(body)
         catch error
-          util.log error
+          util.log "#{error} in #{body}"
           return
         event = 'esl_event'
       when 'text/event-plain'
