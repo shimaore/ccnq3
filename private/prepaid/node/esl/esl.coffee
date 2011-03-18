@@ -77,16 +77,18 @@ class eslResponse
   constructor: (@socket) ->
 
   send: (command,args,cb) ->
+      [args,cb] = [nil,args] if typeof args is 'function'
       util.log "send #{command}" + util.inspect args
       # Make sure we are the only one receiving command replies
       @socket.removeAllListeners('esl_command_reply')
       @socket.write "#{command}\n"
       if args?
-        for key, value of args
-          @socket.write "#{key}: #{value}\n"
+        for key of args
+          @socket.write "#{key}: #{args[key]}\n"
       @socket.write "\n"
-      @on 'esl_command_reply', (req,res) ->
-        cb(req,res)
+      if cb?
+        @on 'esl_command_reply', (req,res) ->
+          cb(req,res)
 
   on: (event,listener) -> @socket.on(event,listener)
 
