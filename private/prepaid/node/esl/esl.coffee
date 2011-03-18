@@ -9,7 +9,7 @@ parse_header_text = (header_text) ->
   headers = {}
   for line in header_lines
     do (line) ->
-      [name,value] = line.split /: /, 1
+      [name,value] = line.split /: /, 2
       headers[name] = value
 
   # Decode headers: in the case of the "connect" command,
