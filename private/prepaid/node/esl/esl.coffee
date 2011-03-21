@@ -137,7 +137,7 @@ class eslResponse
   exit: (cb)                -> @send "exit", null, cb
 
   log: (level,cb) ->
-    [level,cb] = [null,level] if typeof level is 'function'
+    [level,cb] = [null,level] if typeof(level) is 'function'
     if level?
       @send "log #{level}", null, cb
     else
