@@ -166,16 +166,16 @@ class eslResponse
     options =
       'execute-app-name': app_name
       'execute-app-arg':  app_arg
-    @sendmsg uuid, 'execute', options, cb
+    @sendmsg_uuid uuid, 'execute', options, cb
 
   hangup_uuid: (uuid,hangup_cause,cb) ->
     hangup_cause ?= 'NORMAL_UNSPECIFIED'
     options =
       'hangup-cause': hangup_cause
-    @sendmsg uuid, 'hangup', options, cb
+    @sendmsg_uuid uuid, 'hangup', options, cb
 
   unicast_uuid: (uuid,args,cb) ->
-    @sendmsg uuid, 'unicast', args, cb
+    @sendmsg_uuid uuid, 'unicast', args, cb
 
   # nomedia_uuid:
 
