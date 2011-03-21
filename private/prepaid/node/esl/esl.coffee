@@ -155,7 +155,7 @@ class eslResponse
 
   # Same, assuming server/outbound ESL mode:
 
-  sendmsg: (command,args,cb) -> sendmsg_uuid null, command, args, cb
+  sendmsg: (command,args,cb) -> @sendmsg_uuid null, command, args, cb
 
   # Execute an application for the given UUID (in client mode)
 
