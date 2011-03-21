@@ -73,6 +73,8 @@ class eslRequest
 class eslResponse
   constructor: (@socket) ->
 
+  # send (string,[hash],function(req,res))
+
   send: (command,args,cb) ->
       [args,cb] = [null,args] if typeof(args) is 'function'
 
@@ -91,6 +93,98 @@ class eslResponse
   on: (event,listener) -> @socket.on(event,listener)
 
   end: () -> @socket.end()
+
+  # Channel-level commands:
+
+  api: (command,cb) ->
+    @send "api #{command}", null, cb
+
+  bgapi: (command,cb) ->
+    @send "api #{command}", null, (req,res) ->
+      r = res.header['Reply-Text']?.match /\+OK Job-UUID: (.+)$/
+      cb r[1]
+
+  # Event reception and filtering
+
+  event_json: (events...,cb) ->
+    @send "event json #{events.join(' ')}", null, cb
+
+  nixevent: (events...,cb) ->
+    @send "nixevent #{events.join(' ')}", null, cb
+
+  noevents: (cb) ->
+    @send "noevents", null, cb
+
+  filter: (header,value,cb) ->
+    @send "filter #{header} #{value}", null, cb
+
+  filter_delete: (header,value,cb) ->
+    if value?
+      @send "filter #{header} #{value}", null, cb
+    else
+      @send "filter #{header}", null, cb
+
+  sendevent: (event_name,args,cb) ->
+    @send "sendevent #{event_name}", args, cb
+
+  auth: (password,cb)       -> @send "auth #{password}", null, cb
+
+  connect: (cb)             -> @send "connect", null, cb    # Outbound mode
+
+  linger: (cb)              -> @send "linger", null, cb     # Outbound mode
+
+  exit: (cb)                -> @send "exit", null, cb
+
+  log: (level,cb) ->
+    [level,cb] = [null,level] if typeof level is 'function'
+    if level?
+      @send "log #{level}", null, cb
+    else
+      @send "log", null, cb
+
+  nolog: (cb)                 -> @send "nolog", null, cb
+
+
+  # Send Message (to a UUID)
+
+  sendmsg_uuid: (uuid,command,args,cb) ->
+    options = args
+    options['call-command'] = command
+    execute_text = if uuid? then "sendmsg #{uuid}" else 'sendmsg'
+    @send execute_text, options, cb
+
+  # Same, assuming server/outbound ESL mode:
+
+  sendmsg: (command,args,cb) -> sendmsg_uuid null, command, args, cb
+
+  # Execute an application for the given UUID (in client mode)
+
+  execute_uuid: (uuid,app_name,app_arg,cb) ->
+    options =
+      'execute-app-name': app_name
+      'execute-app-arg':  app_arg
+    @sendmsg uuid, 'execute', options, cb
+
+  hangup_uuid: (uuid,hangup_cause,cb) ->
+    hangup_cause ?= 'NORMAL_UNSPECIFIED'
+    options =
+      'hangup-cause': hangup_cause
+    @sendmsg uuid, 'hangup', options, cb
+
+  unicast_uuid: (uuid,args,cb) ->
+    @sendmsg uuid, 'unicast', args, cb
+
+  # nomedia_uuid:
+
+  # Execute an application for the current UUID (in server/outbound mode)
+
+  execute: (app_name,app_arg,cb)  -> @execute_uuid null, options, cb
+
+  hangup: (hangup_cause,cb)       -> @hangup_uuid  null, hangup_cause, cb
+
+  unicast: (args,cb)              -> @unicast_uuid null, args, cb
+
+  # nomedia:
 
 
 # This is modelled after Node.js' http.js
