@@ -10,11 +10,15 @@ server = esl.createServer (res) ->
         when 'linger'      then res.exit()
         when 'disconnect'  then res.end()
 
+    util.log 'connect'
     res.connect (req,res) ->
       @channel_data = req.body
+      util.log 'linger'
       res.linger (req,res) ->
+        util.log 'event_json'
         res.event_json 'HEARTBEAT', (req,res) ->
           # variable_target is present because of "set" ... "target=..." in the XML dialplan
+          util.log 'bridge'
           res.execute 'bridge', @channel_data.variable_target
 
 server.listen(7000)
