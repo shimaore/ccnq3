@@ -78,6 +78,8 @@ class eslResponse
   send: (command,args,cb) ->
       [args,cb] = [null,args] if typeof(args) is 'function'
 
+      util.log util.inspect command: command, args: args, cb: cb
+
       # Make sure we are the only one receiving command replies
       @socket.removeAllListeners('esl_command_reply')
       if cb?
