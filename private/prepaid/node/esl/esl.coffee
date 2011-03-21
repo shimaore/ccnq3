@@ -178,7 +178,7 @@ class eslResponse
 
   # Execute an application for the current UUID (in server/outbound mode)
 
-  execute: (app_name,app_arg,cb)  -> @execute_uuid null, options, cb
+  execute: (app_name,app_arg,cb)  -> @execute_uuid null, app_name, app_arg, cb
 
   hangup: (hangup_cause,cb)       -> @hangup_uuid  null, hangup_cause, cb
 
