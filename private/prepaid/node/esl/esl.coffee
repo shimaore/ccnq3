@@ -2,6 +2,7 @@
 net         = require 'net'
 querystring = require 'querystring'
 util        = require 'util'
+assert      = require 'assert'
 
 parse_header_text = (header_text) ->
   header_lines = header_text.split("\n")
@@ -76,7 +77,8 @@ class eslResponse
   # send (string,[hash],function(req,res))
 
   send: (command,args,cb) ->
-      [args,cb] = [null,args] if typeof(args) is 'function'
+      assert.ok typeof(command) is 'string'
+      assert.ok cb is null or typeof(cb) is 'function'
 
       util.log util.inspect command: command, args: args, cb: cb
 
@@ -151,7 +153,11 @@ class eslResponse
   # Send Message (to a UUID)
 
   sendmsg_uuid: (uuid,command,args,cb) ->
-    options = args
+    assert.ok uuid is null or typeof(uuid) is 'string'
+    assert.ok typeof(command) is 'string'
+    assert.ok cb is null or typeof(cb) is 'function'
+
+    options = args ? {}
     options['call-command'] = command
     execute_text = if uuid? then "sendmsg #{uuid}" else 'sendmsg'
     @send execute_text, options, cb
