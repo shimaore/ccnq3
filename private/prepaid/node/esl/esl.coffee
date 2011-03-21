@@ -74,7 +74,7 @@ class eslRequest
 class eslResponse
   constructor: (@socket) ->
 
-  # send (string,[hash],function(req,res))
+  # send (string,hash,function(req,res))
 
   send: (command,args,cb) ->
       assert.ok typeof(command) is 'string'
@@ -86,6 +86,7 @@ class eslResponse
       @socket.removeAllListeners('esl_command_reply')
       if cb?
         @on 'esl_command_reply', (req,res) ->
+          util.log typeof cb
           cb(req,res)
 
       @socket.write "#{command}\n"
