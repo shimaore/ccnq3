@@ -101,8 +101,9 @@ class eslResponse
 
   bgapi: (command,cb) ->
     @send "api #{command}", null, (req,res) ->
-      r = res.header['Reply-Text']?.match /\+OK Job-UUID: (.+)$/
-      cb r[1]
+      if cb?
+        r = res.header['Reply-Text']?.match /\+OK Job-UUID: (.+)$/
+        cb r[1]
 
   # Event reception and filtering
 
