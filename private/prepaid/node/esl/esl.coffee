@@ -77,13 +77,10 @@ class eslResponse
   # send (string,hash,function(req,res))
 
   send: (command,args,cb) ->
-      util.log util.inspect command: command, args: args, cb: cb
-
       # Make sure we are the only one receiving command replies
       @socket.removeAllListeners('esl_command_reply')
       if cb?
         @on 'esl_command_reply', (req,res) ->
-          util.log typeof cb
           cb(req,res)
 
       @socket.write "#{command}\n"
@@ -214,7 +211,7 @@ connectionListener= (socket) ->
         try
           body = JSON.parse(body)
         catch error
-          util.log "#{error} in #{body}"
+          util.log "JSON #{error} in #{body}"
           return
         event = 'esl_event'
       when 'text/event-plain'
@@ -228,7 +225,6 @@ connectionListener= (socket) ->
         event = headers['Content-Type']
     req = new eslRequest headers,body
     res = new eslResponse socket
-    # util.log "emit #{event}"+util.inspect(req,res)
     socket.emit event, req, res
   # Get things started
   @emit 'esl_connect', new eslResponse socket
