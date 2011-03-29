@@ -29,12 +29,20 @@ class eslParser
     if data.length < @body_left
       @buffer    += data
       @body_left -= data.length
-    else
-      body = @buffer + data.substring(0,@body_left)
-      @buffer = data.substring(@body_left)
-      @body_left = 0
-      @process @headers, body
-      @headers = {}
+      return
+
+    # Consume the body
+    body = @buffer + data.substring(0,@body_left)
+    extra = data.substring(@body_left)
+    @body_left = 0
+    @buffer = ""
+
+    # Process the content
+    @process @headers, body
+    @headers = {}
+
+    # Re-parse
+    @capture_headers extra
 
   capture_headers: (data) ->
     header_end = data.indexOf("\n\n")
@@ -45,17 +53,25 @@ class eslParser
 
     # Consume the headers
     header_text = @buffer + data.substring(0,header_end)
-    @buffer = data.substring(header_end+2)
+    extra = data.substring(header_end+2)
+    @buffer = ""
+
     # Parse the header lines
     @headers = parse_header_text(header_text)
+
     # Figure out whether a body is expected
     if @headers["Content-Length"]
       @body_left = @headers["Content-Length"]
-      [@buffer,data] = ["",@buffer]
-      @capture_body(data)
+      # Re-parse
+      @capture_body extra
+
     else
+      # Process the content
       @process @headers
       @headers = {}
+
+      # Re-parse
+      @capture_headers extra
 
   on_data: (data) ->
 
