@@ -77,9 +77,6 @@ class eslResponse
   # send (string,hash,function(req,res))
 
   send: (command,args,cb) ->
-      assert.ok typeof(command) is 'string'
-      assert.ok cb is null or typeof(cb) is 'function'
-
       util.log util.inspect command: command, args: args, cb: cb
 
       # Make sure we are the only one receiving command replies
@@ -154,10 +151,6 @@ class eslResponse
   # Send Message (to a UUID)
 
   sendmsg_uuid: (uuid,command,args,cb) ->
-    assert.ok uuid is null or typeof(uuid) is 'string', 'uuid is '+typeof(uuid)
-    assert.ok typeof(command) is 'string', 'command is '+typeof(command)
-    assert.ok cb is null or typeof(cb) is 'function', 'cb is '+typeof(cb)
-
     options = args ? {}
     options['call-command'] = command
     execute_text = if uuid? then "sendmsg #{uuid}" else 'sendmsg'
