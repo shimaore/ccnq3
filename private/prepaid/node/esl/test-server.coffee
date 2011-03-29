@@ -19,7 +19,8 @@ server = esl.createServer (res) ->
         res.event_json 'HEARTBEAT', (req,res) ->
           # variable_target is present because of "set" ... "target=..." in the XML dialplan
           util.log 'bridge'
-          res.execute 'bridge', @channel_data.variable_target
+          res.execute 'bridge', @channel_data.variable_target, (req,res) ->
+            util.log "bridge says: "+util.inspect req
 
 server.listen(7000)
 
