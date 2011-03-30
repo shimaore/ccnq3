@@ -57,8 +57,8 @@ server = esl.createServer (@res) ->
 
             intervals_remaining = r?.rows?[0]?.value
 
-            if intervals_remaining? and r.value > 1
-              util.log "Account #{prepaid_account} has #{r.value} intervals left."
+            if intervals_remaining? and intervals_remaining > 1
+              util.log "Account #{prepaid_account} has #{intervals_remaining} intervals left."
               cb?()
 
             util.log "Account #{prepaid_account} is exhausted."
