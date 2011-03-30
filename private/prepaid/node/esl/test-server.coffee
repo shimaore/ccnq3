@@ -55,12 +55,15 @@ server = esl.createServer (@res) ->
             if r.error?
               return res.end()
 
-            if r.value < 2
-              util.log "Account #{prepaid_account} is exhausted."
-              return res.end()
+            intervals_remaining = r?.rows?[0]?.value
 
-            util.log "Account #{prepaid_account} has #{r.value} intervals left."
-            cb?()
+            if intervals_remaining? and r.value > 1
+              util.log "Account #{prepaid_account} has #{r.value} intervals left."
+              cb?()
+
+            util.log "Account #{prepaid_account} is exhausted."
+            return res.end()
+
 
         record_interval = (intervals,cb) ->
           util.log "Recording #{intervals} intervals for account #{prepaid_account}."
