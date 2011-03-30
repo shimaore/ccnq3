@@ -41,14 +41,27 @@ server = esl.createServer (res) ->
     force_disconnect = () ->
       util.log 'Hangup call'
       prepaid_cdb = null
-      if interval_id
-        clearInterval interval_id
+
+      # Clear timer
+      v = interval_id
+      interval_id = null
+      if v
+        util.log 'Clear timer'
+        clearInterval v
+
+      # Hangup leg A
+      v = unique_id
+      unique_id = null
       if unique_id
         util.log 'Hangup leg A'
-        res.hangup_uuid unique_id
-      if other_leg_unique_id
+        res.hangup_uuid v
+
+      # Hangup leg B
+      v = other_leg_unique_id
+      other_leg_unique_id = null
+      if v
         util.log 'Hangup leg B'
-        res.hangup_uuid other_leg_unique_id
+        res.hangup_uuid v
 
 
     prepaid_cdb.exists (it_does) ->
