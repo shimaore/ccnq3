@@ -3,7 +3,7 @@
 # Released under the GPL3 license
 ###
 
-cdb = require process.cwd()+'/../lib/cdb.coffee'
+cdb = require './cdb.coffee'
 
 util = require 'util'
 querystring = require 'querystring'
