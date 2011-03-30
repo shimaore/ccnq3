@@ -108,7 +108,11 @@ server = esl.createServer (res) ->
           util.log "Call answer processed."
 
         res.on 'esl_event', (req,res) ->
-          on_answer(req,res)
+          switch req.headers['Event-Name']
+            when 'CHANNEL_ANSWER'
+              on_answer(req,res)
+            else
+              util.log "Unhandled event #{req.headers['Event-Name']}"
 
         on_connect = (req,res) ->
 
@@ -122,7 +126,7 @@ server = esl.createServer (res) ->
         # Handle the incoming connection
         res.linger (req,res) ->
           res.filter Unique_ID, unique_id, (req,res) ->
-            res.event_json 'CHANNEL_ANSWER', on_connect
+            res.event_json 'ALL', on_connect
 
 server.listen(7000)
 
