@@ -60,7 +60,7 @@ server = esl.createServer (@res) ->
             account: @prepaid_account
             intervals: - intervals
 
-          db.put rec, (r) ->
+          prepaid_cdb.put rec, (r) ->
             if r.error?
               util.log "Error: #{r.error}"
               res.hangup()
