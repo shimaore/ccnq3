@@ -35,30 +35,35 @@ server = esl.createServer (@res) ->
     prepaid_cdb.exists (it_does) ->
       if not it_does
         util.log "Database #{channel_data.prepaid_uri} is not accessible."
-        res.hangup()
+        return res.end()
 
       # Get account parameters
       prepaid_cdb.get prepaid_account, (r) ->
         if r.error?
           util.log "Could not find account #{account}"
-          res.hangup()
+          return res.end()
 
         interval_duration = r.interval_duration # seconds
         util.log "Account #{prepaid_account} interval duration is #{interval_duration} seconds."
 
         check_time = (cb) ->
+          util.log "Checking account #{prepaid_account}."
           account_key = "\"#{prepaid_account}\""
           options =
             uri: "/_design/prepaid/_view/current?reduce=true&group=true&key=#{querystring.escape(account_key)}"
           prepaid_cdb.req options, (r) ->
             if r.error?
-              res.hangup()
-            if not r? or r.value < 2
-              res.hangup()
+              return res.end()
+
+            if r.value < 2
+              util.log "Account #{prepaid_account} is exhausted."
+              return res.end()
+
             util.log "Account #{prepaid_account} has #{r.value} intervals left."
             cb?()
 
-        record_interval = (intervals) ->
+        record_interval = (intervals,cb) ->
+          util.log "Recording #{intervals} intervals for account #{prepaid_account}."
           rec =
             type: 'interval_record'
             account: prepaid_account
@@ -67,12 +72,14 @@ server = esl.createServer (@res) ->
           prepaid_cdb.put rec, (r) ->
             if r.error?
               util.log "Error: #{r.error}"
-              res.hangup()
+              return res.end()
+
+            util.log "Recorded #{intervals} intervals for account #{prepaid_account}."
+            cb?()
 
         # Handle ANSWER event
-        each_interval = () ->
-          record_interval(1)
-          check_time
+        each_interval = (cb) ->
+          record_interval(1) -> check_time(cb)
 
         on_answer = (req,res) ->
           util.log "Call was answered"
@@ -86,14 +93,14 @@ server = esl.createServer (@res) ->
             # Check whether the call can proceed
             check_time () ->
 
-              util.log 'bridge'
+              util.log 'Bridging call'
               res.execute 'bridge', prepaid_destination, (req,res) ->
-                util.log "bridge says: "+util.inspect req
+                util.log "Call bridged"
 
         # Handle the incoming connection
-        res.linger (req,res) ->
-          res.filter Unique_ID, unique_id, (req,res) ->
-            res.event_json 'CHANNEL_ANSWER', on_connect
+        # res.linger (req,res) ->
+        res.filter Unique_ID, unique_id, (req,res) ->
+          res.event_json 'CHANNEL_ANSWER', on_connect
 
 server.listen(7000)
 
