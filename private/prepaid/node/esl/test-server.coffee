@@ -108,7 +108,7 @@ server = esl.createServer (res) ->
           util.log "Call answer processed."
 
         res.on 'esl_event', (req,res) ->
-          switch req.headers['Event-Name']
+          switch req.body['Event-Name']
             when 'CHANNEL_ANSWER'
               on_answer(req,res)
             else
