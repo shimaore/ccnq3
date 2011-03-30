@@ -79,7 +79,7 @@ server = esl.createServer (@res) ->
 
         # Handle ANSWER event
         each_interval = (cb) ->
-          record_interval(1), () ->
+          record_interval 1, () ->
             check_time(cb)
 
         on_answer = (req,res) ->
