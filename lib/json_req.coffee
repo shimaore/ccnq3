@@ -18,4 +18,4 @@ app_json = 'application/json'
       finally
         cb(value)
     else
-      cb({error:error})
+      cb({error:error or response.statusCode})
