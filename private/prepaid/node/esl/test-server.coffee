@@ -19,6 +19,12 @@ server = esl.createServer (@res) ->
 
   res.on 'esl_disconnect_notice', on_disconnect
 
+  force_disconnect = () ->
+    util.log 'Disconnecting call'
+    clearInterval(@interval_id)
+    res.hangup undefined, () ->
+      res.end()
+
   res.connect (req,res) ->
 
     # Retrieve channel parameters
@@ -35,13 +41,13 @@ server = esl.createServer (@res) ->
     prepaid_cdb.exists (it_does) ->
       if not it_does
         util.log "Database #{channel_data.prepaid_uri} is not accessible."
-        return res.end()
+        return force_disconnect()
 
       # Get account parameters
       prepaid_cdb.get prepaid_account, (r) ->
-        if r.error?
+        if r.error
           util.log "Could not find account #{account}"
-          return res.end()
+          return force_disconnect()
 
         interval_duration = r.interval_duration # seconds
         util.log "Account #{prepaid_account} interval duration is #{interval_duration} seconds."
@@ -52,17 +58,17 @@ server = esl.createServer (@res) ->
           options =
             uri: "/_design/prepaid/_view/current?reduce=true&group=true&key=#{querystring.escape(account_key)}"
           prepaid_cdb.req options, (r) ->
-            if r.error?
-              return res.end()
+            if r.error
+              return force_disconnect()
 
             intervals_remaining = r?.rows?[0]?.value
 
             if intervals_remaining? and intervals_remaining > 1
               util.log "Account #{prepaid_account} has #{intervals_remaining} intervals left."
-              cb?()
+              return cb?()
 
             util.log "Account #{prepaid_account} is exhausted."
-            return res.end()
+            return force_disconnect()
 
 
         record_interval = (intervals,cb) ->
@@ -73,9 +79,9 @@ server = esl.createServer (@res) ->
             intervals: - intervals
 
           prepaid_cdb.put rec, (r) ->
-            if r.error?
+            if r.error
               util.log "Error: #{r.error}"
-              return res.end()
+              return force_disconnect()
 
             util.log "Recorded #{intervals} intervals for account #{prepaid_account}."
             cb?()
@@ -87,8 +93,14 @@ server = esl.createServer (@res) ->
 
         on_answer = (req,res) ->
           util.log "Call was answered"
+
+          # Clear the ringback timer
+          clearInterval(@interval_id)
+          # Set the in-call timer
+          @interval_id = setInterval each_interval, interval_duration*1000
+
+          # First interval for the connected call
           each_interval()
-          setInterval each_interval, interval_duration*1000
 
         res.on 'esl_event', on_answer
 
@@ -100,6 +112,9 @@ server = esl.createServer (@res) ->
               util.log 'Bridging call'
               res.execute 'bridge', prepaid_destination, (req,res) ->
                 util.log "Call bridged"
+                # During call progress, check every ten seconds whether
+                # the account is exhausted.
+                @interval_id = setInterval check_time, 10*1000
 
         # Handle the incoming connection
         # res.linger (req,res) ->
