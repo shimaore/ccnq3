@@ -29,7 +29,7 @@ server = esl.createServer (@res) ->
     prepaid_account      = channel_data.variable_ccnq_account
     prepaid_destination  = channel_data.variable_target
 
-    prepaid_cdb = cdb.new (channel_data.prepaid_uri)
+    prepaid_cdb = cdb.new (channel_data.variable_prepaid_uri)
 
     prepaid_cdb.exists (it_does) ->
       if not it_does
