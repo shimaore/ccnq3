@@ -10,7 +10,7 @@ cdb = require process.cwd()+'/../../../../lib/cdb'
 
 Unique_ID = 'Unique-ID'
 
-server = esl.createServer (@res) ->
+server = esl.createServer (res) ->
 
   on_disconnect = (req,res) ->
     switch req.headers['Content-Disposition']
@@ -22,7 +22,7 @@ server = esl.createServer (@res) ->
   force_disconnect = () ->
     util.log 'Disconnecting call'
     clearInterval(@interval_id)
-    res.hangup undefined, () ->
+    res.hangup null, (req,res) ->
       res.end()
 
   res.connect (req,res) ->
@@ -95,7 +95,7 @@ server = esl.createServer (@res) ->
           util.log "Call was answered"
 
           # Clear the ringback timer
-          clearInterval(@interval_id)
+          clearInterval @interval_id
           # Set the in-call timer
           @interval_id = setInterval each_interval, interval_duration*1000
 
