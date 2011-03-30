@@ -12,6 +12,8 @@ Unique_ID = 'Unique-ID'
 
 server = esl.createServer (res) ->
 
+  interval_id = null
+
   on_disconnect = (req,res) ->
     switch req.headers['Content-Disposition']
       when 'linger'      then res.exit()
@@ -20,8 +22,9 @@ server = esl.createServer (res) ->
   res.on 'esl_disconnect_notice', on_disconnect
 
   force_disconnect = () ->
-    util.log 'Disconnecting call'
-    clearInterval(@interval_id)
+    util.log 'Hangup call'
+    if interval_id
+      clearInterval interval_id
     res.hangup()
 
   res.connect (req,res) ->
@@ -98,12 +101,13 @@ server = esl.createServer (res) ->
 
           # Clear the ringback timer
           clearInterval interval_id
+          interval_id = null
 
           # First interval for the connected call
           each_interval()
 
           # Set the in-call timer
-          setInterval each_interval, interval_duration*1000
+          interval_id = setInterval each_interval, interval_duration*1000
 
           util.log "Call answer processed."
 
