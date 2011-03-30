@@ -12,10 +12,6 @@ Unique_ID = 'Unique-ID'
 
 server = esl.createServer (res) ->
 
-  interval_id = null
-  unique_id   = null
-  other_leg_unique_id = null
-
   on_disconnect = (req,res) ->
     util.log "Receiving disconnection"
     switch req.headers['Content-Disposition']
@@ -23,15 +19,6 @@ server = esl.createServer (res) ->
       when 'disconnect'  then res.end()
 
   res.on 'esl_disconnect_notice', on_disconnect
-
-  force_disconnect = () ->
-    util.log 'Hangup call'
-    if interval_id
-      clearInterval interval_id
-    if unique_id
-      res.hangup_uuid unique_id
-    if other_leg_unique_id
-      res.hangup_uuid other_leg_unique_id
 
   res.connect (req,res) ->
 
@@ -45,6 +32,23 @@ server = esl.createServer (res) ->
     prepaid_destination  = channel_data.variable_target
 
     prepaid_cdb = cdb.new (channel_data.variable_prepaid_uri)
+
+    # Common values
+    interval_id = null
+    unique_id   = null
+    other_leg_unique_id = null
+
+    force_disconnect = () ->
+      util.log 'Hangup call'
+      prepaid_cdb = null
+      if interval_id
+        clearInterval interval_id
+      if unique_id
+        util.log 'Hangup leg A'
+        res.hangup_uuid unique_id
+      if other_leg_unique_id
+        util.log 'Hangup leg B'
+        res.hangup_uuid other_leg_unique_id
 
     prepaid_cdb.exists (it_does) ->
       if not it_does
