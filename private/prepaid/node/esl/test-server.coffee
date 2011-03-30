@@ -17,6 +17,7 @@ server = esl.createServer (res) ->
   other_leg_unique_id = null
 
   on_disconnect = (req,res) ->
+    util.log "Receiving disconnection"
     switch req.headers['Content-Disposition']
       when 'linger'      then res.exit()
       when 'disconnect'  then res.end()
@@ -117,7 +118,6 @@ server = esl.createServer (res) ->
           util.log "Call answer processed."
 
         res.on 'esl_event', (req,res) ->
-          util.log "Received event #{req.body['Event-Name']}"
           switch req.body['Event-Name']
             when 'CHANNEL_ANSWER'
               on_answer(req,res)
@@ -137,7 +137,7 @@ server = esl.createServer (res) ->
 
         # Handle the incoming connection
         res.linger (req,res) ->
-          res.filter Unique_ID, unique_id, (req,res) ->
+          # res.filter Unique_ID, unique_id, (req,res) ->
             res.event_json 'ALL', on_connect
 
 server.listen(7000)
