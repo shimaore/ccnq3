@@ -444,7 +444,10 @@ view ->
 
       div ->
         input type: 'submit', -> 'Create'
-        input type: 'reset', value: 'New'
+
+    # New
+    form id: 'new', class: 'admin_only', method: 'get', ->
+      input type: 'submit', value: 'New'
 
     # Delete
     form id: 'delete', class: 'admin_only', method: 'post', ->
