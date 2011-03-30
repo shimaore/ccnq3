@@ -10,7 +10,7 @@ app_json = 'application/json'
     options.body = new Buffer(JSON.stringify(options.body))
     options.headers['Content-Type'] = app_json
   request options, (error,response,body) ->
-    if not error and response.statusCode == 200 and body?
+    if not error and response.statusCode >= 200 and response.statusCode <= 299 and body?
       try
         value = JSON.parse(body)
       catch error
