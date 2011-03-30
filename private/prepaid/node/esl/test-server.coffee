@@ -25,6 +25,7 @@ server = esl.createServer (@res) ->
     channel_data = req.body
 
     unique_id             = channel_data[Unique_ID]
+    util.log "Incoming call UUID = #{unique_id}"
 
     prepaid_account      = channel_data.variable_ccnq_account
     prepaid_destination  = channel_data.variable_target
@@ -41,7 +42,9 @@ server = esl.createServer (@res) ->
         if r.error?
           util.log "Could not find account #{account}"
           res.hangup()
+
         interval_duration = r.interval_duration # seconds
+        util.log "Account #{prepaid_account} interval duration is #{interval_duration} seconds."
 
         check_time = (cb) ->
           account_key = "\"#{prepaid_account}\""
@@ -52,12 +55,13 @@ server = esl.createServer (@res) ->
               res.hangup()
             if not r? or r.value < 2
               res.hangup()
+            util.log "Account #{prepaid_account} has #{r.value} intervals left."
             cb?()
 
         record_interval = (intervals) ->
           rec =
             type: 'interval_record'
-            account: @prepaid_account
+            account: prepaid_account
             intervals: - intervals
 
           prepaid_cdb.put rec, (r) ->
@@ -71,8 +75,9 @@ server = esl.createServer (@res) ->
           check_time
 
         on_answer = (req,res) ->
+          util.log "Call was answered"
           each_interval()
-          setInterval each_interval, interval_duration
+          setInterval each_interval, interval_duration*1000
 
         res.on 'esl_event', on_answer
 
