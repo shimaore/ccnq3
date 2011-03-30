@@ -22,8 +22,7 @@ server = esl.createServer (res) ->
   force_disconnect = () ->
     util.log 'Disconnecting call'
     clearInterval(@interval_id)
-    res.hangup null, (req,res) ->
-      res.end()
+    res.hangup()
 
   res.connect (req,res) ->
 
@@ -70,6 +69,9 @@ server = esl.createServer (res) ->
             util.log "Account #{prepaid_account} is exhausted."
             return force_disconnect()
 
+        # During call progress, check every ten seconds whether
+        # the account is exhausted.
+        interval_id = setInterval check_time, 10*1000
 
         record_interval = (intervals,cb) ->
           util.log "Recording #{intervals} intervals for account #{prepaid_account}."
@@ -86,23 +88,27 @@ server = esl.createServer (res) ->
             util.log "Recorded #{intervals} intervals for account #{prepaid_account}."
             cb?()
 
-        # Handle ANSWER event
         each_interval = (cb) ->
           record_interval 1, () ->
             check_time(cb)
 
+        # Handle ANSWER event
         on_answer = (req,res) ->
           util.log "Call was answered"
 
           # Clear the ringback timer
-          clearInterval @interval_id
-          # Set the in-call timer
-          @interval_id = setInterval each_interval, interval_duration*1000
+          clearInterval interval_id
 
           # First interval for the connected call
           each_interval()
 
-        res.on 'esl_event', on_answer
+          # Set the in-call timer
+          setInterval each_interval, interval_duration*1000
+
+          util.log "Call answer processed."
+
+        res.on 'esl_event', (req,res) ->
+          on_answer(req,res)
 
         on_connect = (req,res) ->
 
@@ -112,14 +118,11 @@ server = esl.createServer (res) ->
               util.log 'Bridging call'
               res.execute 'bridge', prepaid_destination, (req,res) ->
                 util.log "Call bridged"
-                # During call progress, check every ten seconds whether
-                # the account is exhausted.
-                @interval_id = setInterval check_time, 10*1000
 
         # Handle the incoming connection
-        # res.linger (req,res) ->
-        res.filter Unique_ID, unique_id, (req,res) ->
-          res.event_json 'CHANNEL_ANSWER', on_connect
+        res.linger (req,res) ->
+          res.filter Unique_ID, unique_id, (req,res) ->
+            res.event_json 'CHANNEL_ANSWER', on_connect
 
 server.listen(7000)
 
