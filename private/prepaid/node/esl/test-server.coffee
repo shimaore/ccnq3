@@ -13,6 +13,8 @@ Unique_ID = 'Unique-ID'
 server = esl.createServer (res) ->
 
   interval_id = null
+  unique_id   = null
+  other_leg_unique_id = null
 
   on_disconnect = (req,res) ->
     switch req.headers['Content-Disposition']
@@ -25,7 +27,10 @@ server = esl.createServer (res) ->
     util.log 'Hangup call'
     if interval_id
       clearInterval interval_id
-    res.hangup()
+    if unique_id
+      res.hangup_uuid unique_id
+    if other_leg_unique_id
+      res.hangup_uuid other_leg_unique_id
 
   res.connect (req,res) ->
 
@@ -112,9 +117,12 @@ server = esl.createServer (res) ->
           util.log "Call answer processed."
 
         res.on 'esl_event', (req,res) ->
+          util.log "Received event #{req.body['Event-Name']}"
           switch req.body['Event-Name']
             when 'CHANNEL_ANSWER'
               on_answer(req,res)
+            when 'CHANNEL_BRIDGE'
+              other_leg_unique_id = req.body['Other-Leg-Unique-ID']
             else
               util.log "Unhandled event #{req.body['Event-Name']}"
 
