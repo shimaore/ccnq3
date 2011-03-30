@@ -112,7 +112,7 @@ server = esl.createServer (res) ->
             when 'CHANNEL_ANSWER'
               on_answer(req,res)
             else
-              util.log "Unhandled event #{req.headers['Event-Name']}"
+              util.log "Unhandled event #{req.body['Event-Name']}"
 
         on_connect = (req,res) ->
 
