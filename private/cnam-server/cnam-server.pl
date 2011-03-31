@@ -2,6 +2,16 @@
 # (c) 2011 Stephane Alnet
 # Licencse: AGPL3+
 # A web proxy for TNS's ENUM CNAM implementation.
+#
+# Installation on Debian:
+#   sudo aptitude install liburi-perl libobject-event-perl \
+#                         dh-make-perl \
+#                         libevent-perl libanyevent-perl
+#   dh-make-perl --build --cpan AnyEvent::HTTP
+#   sudo dpkg -i libanyevent-http-perl_*_all.deb
+#   dh-make-perl --build --cpan AnyEvent::HTTPD
+#   sudo dpkg -i libanyevent-httpd-perl_*_all.deb
+#
 use strict; use warnings;
 
 use URI::Escape;
