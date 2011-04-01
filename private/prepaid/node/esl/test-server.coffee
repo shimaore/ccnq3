@@ -40,20 +40,20 @@ server = esl.createServer (res) ->
     res.on 'esl_disconnect_notice', on_disconnect
 
 
-    force_disconnect = () ->
+    force_disconnect = (res) ->
       util.log 'Hangup call'
       res.execute 'hangup'
 
     prepaid_cdb.exists (it_does) ->
       if not it_does
         util.log "Database #{channel_data.prepaid_uri} is not accessible."
-        return force_disconnect()
+        return force_disconnect(res)
 
       # Get account parameters
       prepaid_cdb.get prepaid_account, (r) ->
         if r.error
           util.log "Account #{prepaid_account} Error: #{r.error}"
-          return force_disconnect()
+          return force_disconnect(res)
 
         interval_duration = r.interval_duration # seconds
         util.log "Account #{prepaid_account} interval duration is #{interval_duration} seconds."
@@ -66,7 +66,7 @@ server = esl.createServer (res) ->
           prepaid_cdb.req options, (r) ->
             if r.error
               util.log "Error: #{r.error}"
-              return force_disconnect()
+              return force_disconnect(res)
 
             intervals_remaining = r?.rows?[0]?.value
 
@@ -75,7 +75,7 @@ server = esl.createServer (res) ->
               return cb?()
 
             util.log "Account #{prepaid_account} is exhausted."
-            return force_disconnect()
+            return force_disconnect(res)
 
         # During call progress, check every ten seconds whether
         # the account is exhausted.
@@ -91,7 +91,7 @@ server = esl.createServer (res) ->
           prepaid_cdb.put rec, (r) ->
             if r.error
               util.log "Error: #{r.error}"
-              return force_disconnect()
+              return force_disconnect(res)
 
             util.log "Recorded #{intervals} intervals for account #{prepaid_account}."
             cb?()
