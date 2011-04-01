@@ -29,7 +29,6 @@ server = esl.createServer (res) ->
 
     # Common values
     interval_id = null
-    other_leg_unique_id = null
 
     on_disconnect = (req,res) ->
       util.log "Receiving disconnection"
@@ -124,10 +123,6 @@ server = esl.createServer (res) ->
 
             when 'CHANNEL_ANSWER'
               on_answer(req,res)
-
-            when 'CALL_UPDATE'
-              other_leg_unique_id ?= req.body['Other-Leg-Unique-ID']
-              res.filter Unique_ID, other_leg_unique_id
 
             when 'CHANNEL_HANGUP_COMPLETE'
               util.log 'Channel hangup complete'
