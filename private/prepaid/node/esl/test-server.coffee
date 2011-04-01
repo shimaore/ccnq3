@@ -41,10 +41,7 @@ server = esl.createServer (res) ->
 
     force_disconnect = (res) ->
       util.log 'Hangup call'
-      options =
-        'Event-Name': 'CHANNEL_HANGUP'
-        'Unique-ID': unique_id
-      res.sendevent 'CHANNEL_HANGUP', options
+      res.hangup_uuid unique_id
 
     prepaid_cdb.exists (it_does) ->
       if not it_does
