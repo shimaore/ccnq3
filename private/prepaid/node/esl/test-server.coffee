@@ -139,6 +139,7 @@ server = esl.createServer (res) ->
               on_answer(req,res)
             when 'CHANNEL_BRIDGE'
               other_leg_unique_id = req.body['Other-Leg-Unique-ID']
+              res.filter Unique_ID, other_leg_unique_id
 
             when 'CHANNEL_HANGUP_COMPLETE'
               util.log 'Channel hangup complete'
@@ -159,7 +160,7 @@ server = esl.createServer (res) ->
 
         # Handle the incoming connection
         res.linger (req,res) ->
-          # res.filter Unique_ID, unique_id, (req,res) ->
+          res.filter Unique_ID, unique_id, (req,res) ->
             res.event_json 'ALL', on_connect
 
 server.listen(7000)
