@@ -45,7 +45,7 @@ server = esl.createServer (res) ->
       options =
         'Event-Name': 'CHANNEL_HANGUP'
         'Unique-ID': unique_id
-      res.sendevent 'CHANNEL_HANGUP', options, 'hangup'
+      res.sendevent 'CHANNEL_HANGUP', options
 
     prepaid_cdb.exists (it_does) ->
       if not it_does
