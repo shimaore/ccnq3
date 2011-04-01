@@ -125,8 +125,8 @@ server = esl.createServer (res) ->
             when 'CHANNEL_ANSWER'
               on_answer(req,res)
 
-            when 'CHANNEL_BRIDGE'
-              other_leg_unique_id = req.body['Other-Leg-Unique-ID']
+            when 'CALL_UPDATE'
+              other_leg_unique_id ?= req.body['Other-Leg-Unique-ID']
               res.filter Unique_ID, other_leg_unique_id
 
             when 'CHANNEL_HANGUP_COMPLETE'
