@@ -87,7 +87,7 @@ server = esl.createServer (res) ->
             account: prepaid_account
             intervals: - intervals
 
-          prepaid_cdb.put rec, (r) ->
+          prepaid_cdb.post rec, (r) ->
             if r.error
               util.log "Error: #{r.error}"
               return force_disconnect(res)
