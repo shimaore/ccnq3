@@ -34,12 +34,15 @@ class cdb
 
   put: (p,cb) ->
     options =
+      uri:      querystring.escape(p._id)
       method:   'PUT'
       body:     p
-    if p._id?
-      options.uri = querystring.escape(p._id)
-    else
-      options.method = 'POST'
+    @req options, cb
+
+  post: (p,cb) ->
+    options =
+      method:   'POST'
+      body:     p
     @req options, cb
 
 @new = (db_uri) -> new cdb (db_uri)
