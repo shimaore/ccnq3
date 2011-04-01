@@ -41,7 +41,7 @@ server = esl.createServer (res) ->
 
     force_disconnect = (res) ->
       util.log 'Hangup call'
-      res.hangup_uuid unique_id
+      res.bgapi "uuid_kill #{unique_id}"
 
     prepaid_cdb.exists (it_does) ->
       if not it_does
