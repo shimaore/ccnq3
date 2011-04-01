@@ -29,7 +29,6 @@ server = esl.createServer (res) ->
 
     # Common values
     interval_id = null
-    unique_id   = null
     other_leg_unique_id = null
 
     on_disconnect = (req,res) ->
