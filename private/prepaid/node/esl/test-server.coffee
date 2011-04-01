@@ -37,10 +37,7 @@ server = esl.createServer (res) ->
         when 'linger'      then res.exit()
         when 'disconnect'  then res.end()
 
-
-
     res.on 'esl_disconnect_notice', on_disconnect
-
 
 
     force_disconnect = () ->
