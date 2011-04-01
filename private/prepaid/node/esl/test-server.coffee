@@ -137,8 +137,10 @@ server = esl.createServer (res) ->
 
         res.on 'esl_event', (req,res) ->
           switch req.body['Event-Name']
+
             when 'CHANNEL_ANSWER'
               on_answer(req,res)
+
             when 'CHANNEL_BRIDGE'
               other_leg_unique_id = req.body['Other-Leg-Unique-ID']
               res.filter Unique_ID, other_leg_unique_id
