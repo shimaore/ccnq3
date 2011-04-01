@@ -4,6 +4,9 @@ querystring = require 'querystring'
 util        = require 'util'
 assert      = require 'assert'
 
+# Change from the calling code to enable debugging.
+exports.debug = false
+
 parse_header_text = (header_text) ->
   header_lines = header_text.split("\n")
   headers = {}
@@ -211,6 +214,9 @@ connectionListener= (socket) ->
   socket.on 'data', (data) ->  parser.on_data(data)
   socket.on 'end',  ()     ->  parser.on_end()
   parser.process = (headers,body) ->
+    if exports.debug
+      util.log util.inspect headers: headers, body: body
+
     switch headers['Content-Type']
       when 'auth/request'
         event = 'esl_auth_request'

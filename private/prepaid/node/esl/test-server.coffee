@@ -8,6 +8,8 @@ util = require 'util'
 querystring = require 'querystring'
 cdb = require process.cwd()+'/../../../../lib/cdb'
 
+esl.debug = true
+
 Unique_ID = 'Unique-ID'
 
 server = esl.createServer (res) ->
