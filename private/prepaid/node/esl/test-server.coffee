@@ -46,13 +46,6 @@ server = esl.createServer (res) ->
       util.log 'Hangup call'
       prepaid_cdb = null
 
-      # Clear timer
-      v = interval_id
-      interval_id = null
-      if v
-        util.log 'Clear timer'
-        clearInterval v
-
       # Hangup leg A
       v = unique_id
       unique_id = null
@@ -146,6 +139,12 @@ server = esl.createServer (res) ->
               on_answer(req,res)
             when 'CHANNEL_BRIDGE'
               other_leg_unique_id = req.body['Other-Leg-Unique-ID']
+
+            when 'CHANNEL_HANGUP_COMPLETE'
+              util.log 'Channel hangup complete'
+              clearInterval interval_id
+              interval_id = null
+
             else
               util.log "Unhandled event #{req.body['Event-Name']}"
 
