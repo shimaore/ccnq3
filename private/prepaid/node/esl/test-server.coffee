@@ -50,7 +50,7 @@ server = esl.createServer (res) ->
       # Hangup leg A
       v = unique_id
       unique_id = null
-      if unique_id
+      if v
         util.log 'Hangup leg A'
         res.hangup_uuid v, (req,res) ->
           util.log util.inspect req
