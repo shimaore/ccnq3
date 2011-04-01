@@ -38,6 +38,8 @@ class cdb
       body:     p
     if p._id?
       options.uri = querystring.escape(p._id)
+    else
+      options.method = 'POST'
     @req options, cb
 
 @new = (db_uri) -> new cdb (db_uri)
