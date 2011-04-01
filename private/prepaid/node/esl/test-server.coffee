@@ -42,24 +42,7 @@ server = esl.createServer (res) ->
 
     force_disconnect = () ->
       util.log 'Hangup call'
-      prepaid_cdb = null
-
-      # Hangup leg A
-      v = unique_id
-      unique_id = null
-      if v
-        util.log 'Hangup leg A'
-        res.hangup_uuid v, (req,res) ->
-          util.log util.inspect req
-
-      # Hangup leg B
-      v = other_leg_unique_id
-      other_leg_unique_id = null
-      if v
-        util.log 'Hangup leg B'
-        res.hangup_uuid v, (req,res) ->
-          util.log util.inspect req
-
+      res.execute 'hangup'
 
     prepaid_cdb.exists (it_does) ->
       if not it_does
