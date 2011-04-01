@@ -12,14 +12,6 @@ Unique_ID = 'Unique-ID'
 
 server = esl.createServer (res) ->
 
-  on_disconnect = (req,res) ->
-    util.log "Receiving disconnection"
-    switch req.headers['Content-Disposition']
-      when 'linger'      then res.exit()
-      when 'disconnect'  then res.end()
-
-  res.on 'esl_disconnect_notice', on_disconnect
-
   res.connect (req,res) ->
 
     # Retrieve channel parameters
@@ -37,6 +29,18 @@ server = esl.createServer (res) ->
     interval_id = null
     unique_id   = null
     other_leg_unique_id = null
+
+    on_disconnect = (req,res) ->
+      util.log "Receiving disconnection"
+      switch req.headers['Content-Disposition']
+        when 'linger'      then res.exit()
+        when 'disconnect'  then res.end()
+
+
+
+    res.on 'esl_disconnect_notice', on_disconnect
+
+
 
     force_disconnect = () ->
       util.log 'Hangup call'
