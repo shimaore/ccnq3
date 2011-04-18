@@ -43,7 +43,7 @@ client main: ->
         '/public/javascripts/jquery.validate',
         'content'
     ]
-    for s in @scripts
+    for s in default_scripts
       $.getScript s + '.js'
 
 include 'content.coffee'
