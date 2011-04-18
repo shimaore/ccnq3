@@ -4,7 +4,7 @@ Fill-in the "content" div.
 
 client content: ->
   $(document).ready ->
-    $('#content').load 'content.html', ->
+    $('#content').load '/u/content.html', ->
       $.getScript('/u/login.js')
       $.getScript('/u/register.js')
 
