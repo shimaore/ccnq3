@@ -60,7 +60,9 @@ client password: ->
       return '' if l is 0
       return random_password(l-1)+password_charset[Math.floor(Math.random()*password_charset.length)]
 
-    $('register #password').val -> random_password(16)
+    $('register input[type="password"]').val -> random_password(16)
+    $('register #generate').click ->
+      $('register input[type="password"]').val -> random_password(16)
 
 # HTML
 
@@ -152,9 +154,9 @@ view register_widget: ->
   l = (_id,_label,_class) ->
     label for: _id, -> _label
     if _class?
-      input id: _id, name: _id, class: _class
+      input name: _id, class: _class
     else
-      input id: _id, name: _id
+      input name: _id
 
   lr = (_id,_label) -> l(_id,_label,'required')
 
