@@ -5,8 +5,8 @@ Fill-in the "content" div.
 client content: ->
   $(document).ready ->
     $('#content').load 'content.html', ->
-      $.getScript('login.js')
-      $.getScript('register.js')
+      $.getScript('/u/login.js')
+      $.getScript('/u/register.js')
 
 get 'content.html': ->
   widget 'content'

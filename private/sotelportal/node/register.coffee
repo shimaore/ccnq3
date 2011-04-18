@@ -19,8 +19,8 @@ def users_cdb: cdb.new (config.users_couchdb_uri)
 
 client register: ->
   $(document).ready ->
-    $('#register_container').load 'register.widget', ->
-      $.getScript 'password.js'
+    $('#register_container').load '/u/register.widget', ->
+      $.getScript '/u/password.js'
       # Add any other script we need to load.
 
 client password: ->

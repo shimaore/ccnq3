@@ -6,7 +6,7 @@ Released under the GPL3 license
 client login: ->
   $(document).ready ->
 
-    $('#login_container').load 'login.widget', ->
+    $('#login_container').load '/u/login.widget', ->
       $('#menu_buttons').buttonset()
       $('form.main').addClass('ui-widget-content')
       $('button,input[type="submit"],input[type="reset"]').button()

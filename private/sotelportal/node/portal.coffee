@@ -6,8 +6,8 @@
 
 app "portal", (server) ->
   express = require('express')
-  server.use express.static("#{process.cwd()}/public")
-  server.use express.favicon()
+  # server.use express.static("#{process.cwd()}/public")
+  # server.use express.favicon()
   server.use express.logger()
   server.use express.bodyParser()
   server.use express.cookieParser()
@@ -41,7 +41,7 @@ client main: ->
         '/public/javascripts/jquery',
         '/public/javascripts/jquery-ui',
         '/public/javascripts/jquery.validate',
-        'content'
+        '/u/content'
     ]
     for s in default_scripts
       $.getScript s + '.js'
