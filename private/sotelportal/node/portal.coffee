@@ -35,7 +35,7 @@ view 'error': ->
   div class: 'info', -> @error
 
 # This gets everything started.
-client main: ->
+client '/u/main': ->
   $(document).ready ->
     default_scripts = [
         '/public/javascripts/jquery',
