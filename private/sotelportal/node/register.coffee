@@ -17,13 +17,13 @@ def users_cdb: cdb.new (config.users_couchdb_uri)
 
 # Content
 
-client register: ->
+client '/u/register': ->
   $(document).ready ->
     $('#register_container').load 'register.widget', ->
       $.getScript 'password.js'
       # Add any other script we need to load.
 
-client password: ->
+client '/u/password': ->
   $(document).ready ->
     password_charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-".split('')
 
@@ -35,11 +35,11 @@ client password: ->
 
 # HTML
 
-get 'register.widget': -> widget 'register_widget'
+get '/u/register.widget': -> widget 'register_widget'
 
 using 'crypto'
 
-put '/register.html': ->
+put '/u/register.html': ->
 
   if not @first_name or not @last_name or not @email
     return error 'Invalid parameters, try again'
@@ -97,7 +97,7 @@ helper confirm_registration: (cb) ->
       else
         cb(p)
 
-get '/register/confirm.html': ->
+get '/u/register/confirm.html': ->
   if @email? and @code?
     confirm_registration (p) ->
       session.logged_in = p._id
@@ -105,7 +105,7 @@ get '/register/confirm.html': ->
   else
     page 'register_confirm'
 
-view 'register_confirm': ->
+view register_confirm: ->
   @title = 'Please confirm'
 
   form id: 'register', class: 'main validate', method: 'get', ->

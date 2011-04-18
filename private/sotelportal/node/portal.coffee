@@ -41,7 +41,7 @@ client main: ->
         '/public/javascripts/jquery',
         '/public/javascripts/jquery-ui',
         '/public/javascripts/jquery.validate',
-        'content'
+        '/u/content'
     ]
     for s in @scripts
       $.getScript s + '.js'
