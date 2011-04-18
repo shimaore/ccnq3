@@ -19,8 +19,9 @@ def users_cdb: cdb.new (config.users_couchdb_uri)
 
 client register: ->
   $(document).ready ->
-    $.getScript 'password.js'
-    # Add any other script we need to load.
+    $('#register_container').load 'register.widget', ->
+      $.getScript 'password.js'
+      # Add any other script we need to load.
 
 client password: ->
   $(document).ready ->
@@ -34,8 +35,7 @@ client password: ->
 
 # HTML
 
-get '/register.html': ->
-  page 'register_form'
+get 'register.widget': -> widget 'register_widget'
 
 using 'crypto'
 
@@ -118,7 +118,7 @@ view 'register_confirm': ->
     div ->
       input type: 'submit', value: 'Confirm'
 
-view register_form: ->
+view register_widget: ->
 
   l = (_id,_label,_class) ->
     label for: _id, -> _label

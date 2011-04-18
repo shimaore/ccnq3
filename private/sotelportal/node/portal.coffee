@@ -34,8 +34,18 @@ view 'error': ->
   div class: 'error', -> 'An errror occurred. Please try again.'
   div class: 'info', -> @error
 
+# This gets everything started.
 client main: ->
   $(document).ready ->
-    $.getScript('register.js')
+    default_scripts = [
+        '/public/javascripts/jquery',
+        '/public/javascripts/jquery-ui',
+        '/public/javascripts/jquery.validate',
+        'content'
+    ]
+    for s in @scripts
+      $.getScript s + '.js'
 
+include 'content.coffee'
+include 'login.coffee'
 include 'register.coffee'
