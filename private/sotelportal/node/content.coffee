@@ -12,10 +12,10 @@ get '/content.html': ->
   widget 'content'
 
 view content: ->
-  div id:'#login_container'
+  div id:'login_container'
   if @session.logged_in?
     div -> "You are currently logged in, congratulations!"
   else
     div ->
       span "Please register if you do not have access."
-      div id:'#register_container'
+      div id:'register_container'
