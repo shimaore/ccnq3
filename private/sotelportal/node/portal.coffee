@@ -11,7 +11,7 @@ app "portal", (server) ->
   server.use express.logger()
   server.use express.bodyParser()
   server.use express.cookieParser()
-  server.use express.session(secret: Math.random())
+  server.use express.session(secret: "a"+Math.random())
   server.use express.methodOverride()
 
 #
