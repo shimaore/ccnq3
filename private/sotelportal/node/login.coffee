@@ -3,7 +3,7 @@
 Released under the GPL3 license
 ###
 
-client '/u/login': ->
+client login: ->
   $(document).ready ->
 
     $('#login_container').load 'login.widget', ->
@@ -46,7 +46,7 @@ client '/u/login': ->
         $.ajax(ajax_options)
         return false
 
-get '/u/login.widget': -> widget 'login_widget'
+get 'login.widget': -> widget 'login_widget'
 
 view login_widget: ->
 
@@ -71,7 +71,7 @@ view login_widget: ->
       input type: 'submit', value: 'Login'
       button id: 'cancel_login', -> 'Cancel'
 
-get '/u/login.json': ->
+get 'login.json': ->
   if not @username? and not @password?
     return send {error:'Missing parameters'}
 
@@ -82,7 +82,7 @@ get '/u/login.json': ->
     session.logged_in = @username
     send 'success', 'ok'
 
-get '/u/logout.json': ->
+get 'logout.json': ->
   delete session.logged_in
   send 'success', 'ok'
 

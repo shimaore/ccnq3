@@ -2,13 +2,13 @@
 Fill-in the "content" div.
 ###
 
-client '/u/content': ->
+client content: ->
   $(document).ready ->
     $('#content').load 'content.html', ->
       $.getScript('login.js')
       $.getScript('register.js')
 
-get '/u/content.html': ->
+get 'content.html': ->
   widget 'content'
 
 view content: ->

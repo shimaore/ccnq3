@@ -35,13 +35,13 @@ view 'error': ->
   div class: 'info', -> @error
 
 # This gets everything started.
-client '/u/main': ->
+client main: ->
   $(document).ready ->
     default_scripts = [
         '/public/javascripts/jquery',
         '/public/javascripts/jquery-ui',
         '/public/javascripts/jquery.validate',
-        '/u/content'
+        'content'
     ]
     for s in @scripts
       $.getScript s + '.js'
