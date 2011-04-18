@@ -60,9 +60,9 @@ client password: ->
       return '' if l is 0
       return random_password(l-1)+password_charset[Math.floor(Math.random()*password_charset.length)]
 
-    $('register input[type="password"]').val -> random_password(16)
+    $('register input[name="password"]').val -> random_password(16)
     $('register #generate').click ->
-      $('register input[type="password"]').val -> random_password(16)
+      $('register input[name="password"]').val -> random_password(16)
 
 # HTML
 
