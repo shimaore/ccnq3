@@ -11,7 +11,7 @@ config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
 def config: config
 
 # Load CouchDB
-cdb = require process.cwd()+'/../lib/cdb.coffee'
+cdb = require process.cwd()+'/../../../lib/cdb.coffee'
 
 def users_cdb: cdb.new (config.users_couchdb_uri)
 
