@@ -13,7 +13,7 @@ get '/content.html': ->
 
 view content: ->
   div id:'#login_container'
-  if @session
+  if @session.logged_in?
     div -> "You are currently logged in, congratulations!"
   else
     div ->
