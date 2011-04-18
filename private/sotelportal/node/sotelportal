@@ -11,7 +11,7 @@ fi
 
 case "$1" in
   start)
-    daemon -n "${NAME}" -r -D "${SCRIPT_DIR}" -o daemon.debug -- zappa -n :: -p ${PORT} "${SCRIPT}"
+    daemon -n "${NAME}" -r -D "${SCRIPT_DIR}" -o daemon.debug -- zappa -n 127.0.0.1 -p ${PORT} "${SCRIPT}"
     ;;
 
   stop)
