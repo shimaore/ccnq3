@@ -23,6 +23,35 @@ client register: ->
       $.getScript '/u/password.js'
       # Add any other script we need to load.
 
+      $('#register_buttons').buttonset()
+      $('form.main').addClass('ui-widget-content')
+      $('button,input[type="submit"],input[type="reset"]').button()
+
+      $('#register').dialog({ autoOpen: false, modal: true, resizable: false })
+
+      $('#register_window').submit ->
+        $('#register').dialog('open')
+        return false
+
+      $('#cancel_register').click ->
+        $('#register').dialog('close')
+        return false
+
+      $('#register').submit ->
+        ajax_options =
+          url: '/u/register.json'
+          dataType: 'json'
+          data:
+            bob: "boo!"
+          success: (data) ->
+            if data.success is 'ok'
+              $('#register').dialog('close')
+              window.location.reload()
+            else
+              $('#register_error').html('Login failed')
+        $.ajax(ajax_options)
+        return false
+
 client password: ->
   $(document).ready ->
     password_charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-".split('')
@@ -129,6 +158,10 @@ view register_widget: ->
 
   lr = (_id,_label) -> l(_id,_label,'required')
 
+  div id: 'register_buttons', ->
+    form id: 'register_window', ->
+      input type: 'submit', value: 'Register'
+
   form id: 'register', class: 'main validate', method: 'post', ->
     input type: 'hidden', name: '_method', value: 'PUT'
     div -> lr 'first_name', 'First Name'
@@ -140,4 +173,5 @@ view register_widget: ->
       button id: 'generate', -> 'Generate'
     div ->
       input type: 'submit', value: 'Register'
+      button id: 'cancel_register', -> 'Cancel'
 

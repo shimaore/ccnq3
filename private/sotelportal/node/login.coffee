@@ -7,7 +7,7 @@ client login: ->
   $(document).ready ->
 
     $('#login_container').load '/u/login.widget', ->
-      $('#menu_buttons').buttonset()
+      $('#login_buttons').buttonset()
       $('form.main').addClass('ui-widget-content')
       $('button,input[type="submit"],input[type="reset"]').button()
 
@@ -50,7 +50,7 @@ get '/login.widget': -> widget 'login_widget'
 
 view login_widget: ->
 
-  div id: 'menu_buttons', ->
+  div id: 'login_buttons', ->
     if @session.logged_in?
       a href: '/profile/', -> @session.logged_in
       form id: 'logout', ->
