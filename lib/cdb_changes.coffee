@@ -38,7 +38,7 @@ cdb_changes.monitor = (cdb_uri,filter_name,since,cb)->
     return true
 
   stream.end = ->
-    util.log('Closed, attempting restart')
+    util.log("#{cdb_uri} closed, attempting restart")
     # Automatically restart
     cdb_changes.monitor(cdb_uri,filter_name,since,cb)
 
@@ -46,11 +46,12 @@ cdb_changes.monitor = (cdb_uri,filter_name,since,cb)->
 
   options =
     uri: '_changes?feed=continuous&heartbeat=10000'
-    responseBodyStream: stream
 
   options.uri += "&filter=#{querystring.escape(filter_name)}" if filter_name?
   options.uri += "&since=#{querystring.escape(since)}"        if since?
 
-  db.req options, (r) ->
+  cdb_stream = db.req options, (r) ->
     if r.error?
       util.log(r.error)
+
+  cdb_stream.pipe(stream)
