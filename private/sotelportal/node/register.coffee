@@ -20,8 +20,6 @@ def users_cdb: cdb.new (config.users_couchdb_uri)
 client register: ->
   $(document).ready ->
     $('#register_container').load '/u/register.widget', ->
-      $.getScript '/u/password.js'
-      # Add any other script we need to load.
 
       $('#register_buttons').buttonset()
       $('form.main').addClass('ui-widget-content')
@@ -51,18 +49,6 @@ client register: ->
               $('#register_error').html('Login failed')
         $.ajax(ajax_options)
         return false
-
-client password: ->
-  $(document).ready ->
-    password_charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-".split('')
-
-    random_password = (l) ->
-      return '' if l is 0
-      return random_password(l-1)+password_charset[Math.floor(Math.random()*password_charset.length)]
-
-    $('register input[name="password"]').val -> random_password(16)
-    $('register #generate').click ->
-      $('register input[name="password"]').val -> random_password(16)
 
 # HTML
 
@@ -170,9 +156,6 @@ view register_widget: ->
     div -> lr 'last_name', 'Last Name'
     div -> l  'email', 'Email', 'required email'
     # XXX TODO Captcha
-    div ->
-      lr 'password', 'Password'
-      button id: 'generate', -> 'Generate'
     div ->
       input type: 'submit', value: 'Register'
       button id: 'cancel_register', -> 'Cancel'
