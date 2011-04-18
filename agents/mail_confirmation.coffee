@@ -7,7 +7,7 @@ Released under the GPL3 license
 # Local configuration file
 
 fs = require 'fs'
-config_location = 'send_email.config'
+config_location = 'mail_confirmation.config'
 config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
 
 util = require 'util'
@@ -33,7 +33,7 @@ cdb_changes.monitor config.portal_couchdb_uri, config.filter_name, undefined, (p
     to: p.email
     from: "support@#{p.domain}"
     subject: "Please confirm your registration with #{p.domain}"
-    template: 'send_email.mustache'
+    template: 'mail_confirmation.mustache'
     data:
       email: p.email
       domain: p.domain
