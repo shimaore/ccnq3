@@ -35,11 +35,11 @@ client password: ->
 
 # HTML
 
-get 'register.widget': -> widget 'register_widget'
+get '/register.widget': -> widget 'register_widget'
 
 using 'crypto'
 
-put 'register.html': ->
+put '/register.widget': ->
 
   if not @first_name or not @last_name or not @email
     return error 'Invalid parameters, try again'
