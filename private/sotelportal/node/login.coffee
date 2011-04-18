@@ -23,7 +23,7 @@ client login: ->
 
       $('#login').submit ->
         ajax_options =
-          url: '/login.json'
+          url: '/u/login.json'
           dataType: 'json'
           data:
             username: $('#login_username').val()
