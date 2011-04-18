@@ -8,7 +8,7 @@ client content: ->
       $.getScript('/u/login.js')
       $.getScript('/u/register.js')
 
-get 'content.html': ->
+get '/content.html': ->
   widget 'content'
 
 view content: ->
