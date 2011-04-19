@@ -23,6 +23,7 @@ client register: ->
 
       $('#register_buttons').buttonset()
       $('form.main').addClass('ui-widget-content')
+      $('form.validate').validate()
       $('button,input[type="submit"],input[type="reset"]').button()
 
       $('#register').dialog({ autoOpen: false, modal: true, resizable: false })

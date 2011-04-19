@@ -9,6 +9,7 @@ client login: ->
     $('#login_container').load '/u/login.widget', ->
       $('#login_buttons').buttonset()
       $('form.main').addClass('ui-widget-content')
+      $('form.validate').validate()
       $('button,input[type="submit"],input[type="reset"]').button()
 
       $('#login').dialog({ autoOpen: false, modal: true, resizable: false })
