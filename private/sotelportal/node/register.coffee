@@ -153,9 +153,11 @@ view register_widget: ->
 
   form id: 'register', class: 'main validate', method: 'post', ->
     input type: 'hidden', name: '_method', value: 'PUT'
-    div -> lr 'first_name', 'First Name'
-    div -> lr 'last_name', 'Last Name'
+    div -> l  'first_name', 'First Name', 'required minlength(2)'
+    div -> l  'last_name', 'Last Name', 'required minlength(2)'
     div -> l  'email', 'Email', 'required email'
+    div -> l  'phone', 'Phone', 'required phone'
+
     # XXX TODO Captcha
     div ->
       input type: 'submit', value: 'Register'
