@@ -16,9 +16,10 @@ querystring = require 'querystring'
 cdb = require process.cwd()+'/../lib/cdb.coffee'
 portal_cdb = cdb.new (config.portal_couchdb_uri)
 
-# Reference for mailer:  https://github.com/Marak/node_mailer
+mailer = require 'nodemailer'
 
-email = require 'mailer'
+mailer.SMTP     = config.mailer.SMTP
+mailer.sendmail = config.mailer.sendmail
 
 
 cdb_changes = require process.cwd()+'/../lib/cdb_changes.coffee'
@@ -30,23 +31,35 @@ cdb_changes.monitor config.portal_couchdb_uri, config.filter_name, undefined, (p
     return util.log("Missing data: #{p.email} #{p.domain} #{p.confirmation_code}, skipping")
 
   email_options =
+    sender: "#{config.sender_local_part}@#{p.domain}"
     to: p.email
-    from: "support@#{p.domain}"
     subject: "Please confirm your registration with #{p.domain}"
-    template: 'mail_confirmation.mustache'
-    data:
-      email: p.email
-      domain: p.domain
-      confirmation_code: p.confirmation_code
-      link: "http://#{p.domain}/register/confirm/#{querystring.escape(p.email)}/#{querystring.escape(p.confirmation_code)}"
+    body: """
+              Someone (probably you) registered with our service at #{p.domain}.
+              To confirm your email address, please go to:
+              <http://#{p.domain}/register/confirm.html>
+              then copy and paste the following confirmation code:
+                #{confirmation_code}
 
-  email.send email_options, (err,result) ->
+              Thank you, and welcome to our exciting new service!
+          """
+    html: """
+              <p>Someone (probably you) registered with our service at #{p.domain}.
+              To confirm your email address, please click on the following link:
+              <a href="http://#{p.domain}/register/confirm/email=#{querystring.escape(p.email)}&code=#{querystring.escape(p.confirmation_code)}">Confirm my email address</a>.
+              <p>
+              </p>
+              Thank you, and welcome to our exciting new service!
+              </p>
+          """
+
+  mailer.send_mail email_options, (err,status) ->
     # Do not attempt to update the status if the email was not sent
     if err?
       return util.log(err)
 
     # Email was sent, update the status in CouchBD
-    p.status = 'confirmation_sent'
+    p.status = "confirmation_#{status}"
     portal_cdb.put p, (r) ->
       if r.error
         return util.log(r.error)
