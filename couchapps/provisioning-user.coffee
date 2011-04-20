@@ -1,0 +1,34 @@
+###
+(c) 2011 Stephane Alnet
+Released under the Affero GPL3 license or above
+###
+
+couchapp = require('couchapp')
+
+ddoc =
+  _id: '_design/userapp'
+  views: {}
+  lists: {}     # http://guide.couchdb.org/draft/transforming.html
+  shows: {}     # http://guide.couchdb.org/draft/show.html
+  filters: {}   # used by _changes
+  rewrites: {}  # http://blog.couchone.com/post/443028592/whats-new-in-apache-couchdb-0-11-part-one-nice-urls
+
+module.exports = ddoc
+
+# http://wiki.apache.org/couchdb/Document_Update_Validation
+ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
+
+  # Typically the "writer" role will only be given to the replication
+  # and dispatcher processes.
+  if userCtx.roles.indexOf('writer') is -1
+    throw {forbidden: 'Database cannot be updated.'}
+
+  # Other checks here (could be a duplicate of the provisioning-global checks, used to validate replication).
+  if newDoc._id and newDoc._id is "design/app"
+    # Do not replicate the main design app.
+    throw {forbidden:'The main application should not be replicated here.'}
+
+
+# Attachments are loaded from portal/*
+path = require('path');
+couchapp.loadAttachments(ddoc, path.join(__dirname, 'provisioning-user'))
