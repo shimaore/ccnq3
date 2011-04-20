@@ -30,5 +30,5 @@ ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
 
 
 # Attachments are loaded from portal/*
-path = require('path');
-couchapp.loadAttachments(ddoc, path.join(__dirname, 'provisioning-user'))
+path = require('path')
+couchapp.loadAttachments(ddoc, path.join(__dirname, 'portal-user'))

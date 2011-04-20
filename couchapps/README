@@ -1,5 +1,6 @@
 These use node-couchapp[1], to install them in a local CouchDB instance do:
-     couchapp push provisioning.js http://127.0.0.1:5984/provisioning
+     coffee -c script.js
+     couchapp push script.js http://127.0.0.1:5984/database
 
 They also depend on the content of /public/ to be available. See file
 nginx-site.conf for an way to do this.
