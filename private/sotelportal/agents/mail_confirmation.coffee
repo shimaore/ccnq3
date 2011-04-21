@@ -27,12 +27,14 @@ cdb_changes.monitor config.users_couchdb_uri, config.filter_name, undefined, (p)
   if p.error?
     return util.log(p.error)
 
-  if not p.email? or not p.domain? or not p.confirmation_code?
-    return util.log("Missing data: #{p.email} #{p.domain} #{p.confirmation_code}, skipping")
+  # Assume document's "name" is the email address.
+  # (There's also p.profile.email but might be an array.)
+  if not p.name? or not p.domain? or not p.confirmation_code?
+    return util.log("Missing data: #{p.name} #{p.domain} #{p.confirmation_code}, skipping")
 
   email_options =
     sender: "#{config.sender_local_part}@#{p.domain}"
-    to: p.email
+    to: p.name
     subject: "Please confirm your registration with #{p.domain}"
     body: """
               Someone (probably you) registered with our service at #{p.domain}.
