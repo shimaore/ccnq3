@@ -77,7 +77,7 @@ client login: ->
         ajax_options =
           url: '/logout.json'
           success: (data) ->
-            if data.success?
+            if data.ok
               window.location.reload()
         $.ajax(ajax_options)
         return false
