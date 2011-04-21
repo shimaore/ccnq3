@@ -117,7 +117,7 @@ post '/login.json': ->
 
   uri = url.parse(config.session_couchdb_uri)
   uri.auth = "#{querystring.escape @username}:#{querystring.escape @password}"
-  def session_cdb: cdb.new (url.format(uri))
+  session_cdb = cdb.new (url.format(uri))
   session_cdb.get '', (p) =>
     if p.error?
       return send p
