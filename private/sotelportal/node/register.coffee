@@ -64,7 +64,7 @@ put '/register.json': ->
 
   # Currently assumes username = email
   username = @email
-  db = portal_cdb
+  db = users_cdb
   db.exists (it_does) =>
     if it_does
       p = params
@@ -85,7 +85,7 @@ put '/register.json': ->
       return error 'Not connected to the database'
 
 helper confirm_registration: (cb) ->
-  db = portal_cdb
+  db = users_cdb
   db.get @email, (p) =>
     if p.error
       return error p.error
