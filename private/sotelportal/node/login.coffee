@@ -71,6 +71,7 @@ client login: ->
                 # All done.
                 $('#login').dialog('close')
                 window.location.reload()
+            $.ajax(couchdb_options)
         $.ajax(ajax_options)
 
 
