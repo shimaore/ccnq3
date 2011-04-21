@@ -117,6 +117,7 @@ post '/login.json': ->
 
   uri = url.parse login_config.session_couchdb_uri
   uri.auth = "#{querystring.escape @username}:#{querystring.escape @password}"
+  delete uri.href
   session_cdb = cdb.new url.format uri
   session_cdb.get '', (p) =>
     if p.error?
