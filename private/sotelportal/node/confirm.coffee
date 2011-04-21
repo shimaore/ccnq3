@@ -54,12 +54,12 @@ get '/confirm.html': ->
       session.logged_in = p.name
       redirect config.post_confirmation_uri
   else
-    page 'register_confirm'
+    page 'confirm'
 
-view register_confirm: ->
+view confirm: ->
   @title = 'Please confirm'
 
-  form id: 'register', class: 'main validate', method: 'get', ->
+  form id: 'confirm', class: 'main validate', method: 'get', ->
     div ->
       label for: 'email', -> 'Email'
       input id: 'email', name: 'email'
