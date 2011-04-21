@@ -40,8 +40,7 @@ client register: ->
         ajax_options =
           url: '/u/register.json'
           dataType: 'json'
-          data:
-            bob: "boo!"
+          data: $('#register').serialize()
           success: (data) ->
             if data.success is 'ok'
               $('#register').dialog('close')
@@ -57,7 +56,7 @@ get '/register.widget': -> widget 'register_widget'
 
 using 'crypto'
 
-put '/register.widget': ->
+put '/register.json': ->
 
   if not @first_name or not @last_name or not @email
     return error 'Invalid parameters, try again'
