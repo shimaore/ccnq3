@@ -37,7 +37,7 @@ cdb_changes.monitor = (cdb_uri,filter_name,since,cb)->
 
       p = JSON.parse line
       if p?.id?
-        db.get id, cb
+        db.get p.id, cb
 
     buffer = d[0]
 
