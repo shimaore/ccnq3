@@ -22,7 +22,7 @@ mailer.SMTP     = config.mailer.SMTP
 mailer.sendmail = config.mailer.sendmail
 
 
-cdb_changes = require process.cwd()+'/../lib/cdb_changes.coffee'
+cdb_changes = require process.cwd()+'/../../../lib/cdb_changes.coffee'
 cdb_changes.monitor config.users_couchdb_uri, config.filter_name, undefined, (p) ->
   if p.error?
     return util.log(p.error)
