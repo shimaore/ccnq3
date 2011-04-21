@@ -12,7 +12,11 @@ def config: config
 
 # Load CouchDB
 cdb = require process.cwd()+'/../../../lib/cdb.coffee'
-def session_cdb: cdb.new (config.session_couchdb_uri)
+
+def cdb: cdb
+
+using 'url'
+using 'querystring'
 
 client login: ->
   $(document).ready ->
@@ -111,7 +115,10 @@ post '/login.json': ->
   if not @username? and not @password?
     return send {error:'Missing parameters'}
 
-  session_cdb.post {name:@username,password:@password}, (p) =>
+  uri = url.parse(config.session_couchdb_uri)
+  uri.auth = "#{querystring.escape @username}:#{querystring.escape @password}"
+  def session_cdb: cdb.new (url.format(uri))
+  session_cdb.get '', (p) =>
     if p.error?
       return send p
     session.logged_in = p.name
