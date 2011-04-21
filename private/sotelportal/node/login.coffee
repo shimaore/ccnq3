@@ -53,7 +53,7 @@ client login: ->
               return
 
             # Use data.couchdb to login as well
-            $('#login_error').html('Logging you into the database.')
+            $('#login_error').html('Login you into the database.')
             couchdb_options =
               type: 'post'
               url: data.couchdb
@@ -67,6 +67,8 @@ client login: ->
 
                 # Log into the voice portal
                 # Log into the ticket portal
+
+                # All done.
                 $('#login').dialog('close')
                 window.location.reload()
         $.ajax(ajax_options)
