@@ -38,9 +38,10 @@ client register: ->
 
       $('#register').submit ->
         ajax_options =
+          type: 'PUT'
           url: '/u/register.json'
-          dataType: 'json'
           data: $('#register').serialize()
+          dataType: 'json'
           success: (data) ->
             if data.success is 'ok'
               $('#register').dialog('close')
