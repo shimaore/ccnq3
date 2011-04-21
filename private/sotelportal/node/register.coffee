@@ -37,6 +37,7 @@ client register: ->
         return false
 
       $('#register').submit ->
+        $('#register_error').html("")
         ajax_options =
           type: 'PUT'
           url: '/u/register.json'
