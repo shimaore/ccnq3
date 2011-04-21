@@ -24,19 +24,23 @@ cdb_changes.monitor = (cdb_uri,filter_name,since,cb)->
   # Stream to receive the data from CouchDB
   parser = new process.EventEmitter()
 
+  parser.buffer = ""
+
   parser.writable = true
 
-  parser.write = (chunk) ->
-    util.log("chunk #{chunk}")
-    try
-      # There's plenty of reasons this might fail, including heartbeat.
-      # Also note that chunk is a Buffer, not a string, but parse doesn't care.
-      p = JSON.parse(chunk)
-    catch error
-      return true
+  parser.write = (chunk,encoding) ->
+    parser.buffer += chunk.toString(encoding)
 
-    if p?.id?
-      db.get id, cb
+    d = parser.buffer.split("\n")
+    while(d.length > 1) {
+      line = d.shift()
+
+      p = JSON.parse line
+      if p?.id?
+        db.get id, cb
+
+    }
+    buffer = d[0]
 
     return true
 
