@@ -57,9 +57,8 @@ client login: ->
             couchdb_options =
               type: 'post'
               url: data.couchdb
-              data:
-                name:     $('#login_username').val()
-                password: $('#login_password').val()
+              username: $('#login_username').val()
+              password: $('#login_password').val()
               dataType:'json'
               success: (data) ->
                 if not data.ok
@@ -125,7 +124,7 @@ post '/login.json': ->
       return send p
     session.logged_in = p.name
     session.roles     = p.roles
-    return send ok:true, couchdb:config.session_couchdb_uri
+    return send ok:true, couchdb:login_config.session_couchdb_uri
 
 get '/logout.json': ->
   delete session.logged_in
