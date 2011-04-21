@@ -52,7 +52,7 @@ get '/confirm.html': ->
   if @email? and @code?
     confirm_registration (p) ->
       session.logged_in = p.name
-      redirect config.post_register_confirmation_uri
+      redirect config.post_confirmation_uri
   else
     page 'register_confirm'
 
