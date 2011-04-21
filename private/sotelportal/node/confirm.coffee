@@ -6,14 +6,14 @@
 # Load Configuration
 fs = require('fs')
 config_location = 'confirm.config'
-config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
+confirm_config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
 
-def config: config
+def confirm_config: confirm_config
 
 # Load CouchDB
 cdb = require process.cwd()+'/../../../lib/cdb.coffee'
 
-def users_cdb: cdb.new (config.users_couchdb_uri)
+def users_cdb: cdb.new (confirm_config.users_couchdb_uri)
 
 # Content
 
@@ -52,7 +52,7 @@ get '/confirm.html': ->
   if @email? and @code?
     confirm_registration (p) ->
       session.logged_in = p.name
-      redirect config.post_confirmation_uri
+      redirect confirm_config.post_confirmation_uri
   else
     page 'confirm'
 

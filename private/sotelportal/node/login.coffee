@@ -6,9 +6,9 @@ Released under the GPL3 license
 # Load Configuration
 fs = require('fs')
 config_location = 'login.config'
-config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
+login_config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
 
-def config: config
+def login_config: login_config
 
 # Load CouchDB
 cdb = require process.cwd()+'/../../../lib/cdb.coffee'
@@ -115,7 +115,7 @@ post '/login.json': ->
   if not @username? and not @password?
     return send {error:'Missing parameters'}
 
-  uri = url.parse config.session_couchdb_uri
+  uri = url.parse login_config.session_couchdb_uri
   uri.auth = "#{querystring.escape @username}:#{querystring.escape @password}"
   session_cdb = cdb.new url.format uri
   session_cdb.get '', (p) =>
