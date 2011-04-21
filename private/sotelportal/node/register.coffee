@@ -90,7 +90,7 @@ put '/register.json': ->
 
 helper confirm_registration: (cb) ->
   db = users_cdb
-  db.get @email, (p) =>
+  db.get "org.couchdb.user:#{@email}", (p) =>
     if p.error
       return error p.error
 
