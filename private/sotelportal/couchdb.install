@@ -71,3 +71,8 @@ curl -v -u admin:`cat ~/admin.txt` --basic \
   "password_sha": "$SHA1"
 }
 JSON
+
+# Import the couchapp (require nodejs, npm, etc.)
+
+(cd couchapps && coffee -c users.coffee && \
+ couchapp push users.js "http://admin:"`cat ~/admin.txt`"@127.0.0.1:5984/_users")
