@@ -42,7 +42,7 @@ cdb_changes.monitor = (cdb_uri,filter_name,since,cb)->
       if p?.id?
         db.get p.id, cb
 
-    buffer = d[0]
+    parser.buffer = d[0]
 
     return true
 
