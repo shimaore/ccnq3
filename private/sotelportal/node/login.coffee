@@ -55,7 +55,7 @@ client login: ->
             # Use data.couchdb to login as well
             $('#login_error').html('Login you into the database.')
             couchdb_options =
-              type: 'post'
+              type: 'get'
               url: data.couchdb
               username: $('#login_username').val()
               password: $('#login_password').val()
@@ -69,9 +69,12 @@ client login: ->
                 # Log into the ticket portal
 
                 # All done.
+                $('#login_error').html('')
                 $('#login').dialog('close')
                 window.location.reload()
+
             $.ajax(couchdb_options)
+
         $.ajax(ajax_options)
 
 
