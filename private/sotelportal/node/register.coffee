@@ -72,7 +72,7 @@ put '/register.json': ->
       p._id = 'org.couch.user:'+username
       p.name = username
       p.domain = request.header('Host')
-      p.confirmation_code = crypto.createHash('sha1').update(Math.random()).digest('hex')
+      p.confirmation_code = crypto.createHash('sha1').update("a"+Math.random()).digest('hex')
       p.confirmation_expires = (new Date()).valueOf() + 2*24*3600*1000
       p.status = 'send_confirmation'
       # PUT without _rev can only happen once
