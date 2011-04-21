@@ -67,26 +67,26 @@ put '/register.json': ->
   username = @email
   db = users_cdb
   db.exists (it_does) =>
-    if it_does
-      p =
-        _id: 'org.couchdb.user:'+username
-        type: 'user'
-        name: username
-        roles: []
-        domain: request.header('Host')
-        confirmation_code: crypto.createHash('sha1').update("a"+Math.random()).digest('hex')
-        confirmation_expires: (new Date()).valueOf() + 2*24*3600*1000
-        status: 'send_confirmation'
-        profile: params
-      # PUT without _rev can only happen once
-      db.put p, (r) ->
-        if r.error?
-          return send r
-        else
-          session.logged_in = username
-          return send ok:true
-    else
+    if not it_does
       return send error:'Not connected to the database'
+
+    p =
+      _id: 'org.couchdb.user:'+username
+      type: 'user'
+      name: username
+      roles: []
+      domain: request.header('Host')
+      confirmation_code: crypto.createHash('sha1').update("a"+Math.random()).digest('hex')
+      confirmation_expires: (new Date()).valueOf() + 2*24*3600*1000
+      status: 'send_confirmation'
+      profile: params
+    # PUT without _rev can only happen once
+    db.put p, (r) ->
+      if r.error?
+        return send r
+      else
+        session.logged_in = username
+        return send ok:true
 
 helper confirm_registration: (cb) ->
   db = users_cdb
