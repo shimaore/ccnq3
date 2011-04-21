@@ -18,9 +18,8 @@ def users_cdb: cdb.new (config.users_couchdb_uri)
 # Content
 
 helper confirm_registration: (cb) ->
-  db = users_cdb
-  db.get "org.couchdb.user:#{@email}", (p) =>
-    if p.error
+  users_cdb.get "org.couchdb.user:#{@email}", (p) =>
+    if p.error?
       return error p.error
 
     if not p.confirmation_code? or not p.confirmation_expires?
@@ -29,7 +28,7 @@ helper confirm_registration: (cb) ->
     if p.confirmation_expires < (new Date()).valueOf()
       p.confirmation_code = Math.random()
       p.confirmation_expires = (new Date()).valueOf() + 2*24*3600*1000
-      return db.put params, (r) ->
+      return users_cdb.put p, (r) ->
         if r.error?
           return error r.error
         else
@@ -43,7 +42,7 @@ helper confirm_registration: (cb) ->
     p.send_password = true
     delete p.confirmation_code
     delete p.confirmation_expires
-    db.put p, (r) ->
+    users_cdb.put p, (r) ->
       if r.error?
         return error r.error
       else
