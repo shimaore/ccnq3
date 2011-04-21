@@ -43,11 +43,11 @@ client register: ->
           data: $('#register').serialize()
           dataType: 'json'
           success: (data) ->
-            if data.success is 'ok'
+            if data.ok
               $('#register').dialog('close')
               window.location.reload()
             else
-              $('#register_error').html('Login failed')
+              $('#register_error').html("Registration failed: #{data.error}")
         $.ajax(ajax_options)
         return false
 
@@ -77,12 +77,12 @@ put '/register.json': ->
       # PUT without _rev can only happen once
       db.put params, (r) ->
         if r.error?
-          return error r.error
+          return send {error: r.error}
         else
           session.logged_in = username
-          return redirect config.post_register_uri
+          return send {ok:true}
     else
-      return error 'Not connected to the database'
+      return send {error:'Not connected to the database'}
 
 helper confirm_registration: (cb) ->
   db = users_cdb
