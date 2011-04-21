@@ -25,7 +25,7 @@ ddoc.filters.send_confirmation = (doc,req) ->
 ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
 
 
-  if oldDoc.status isnt 'confirmed'
+  if not oldDoc or oldDoc.status isnt 'confirmed'
     for role in newDoc.roles
       do (role) ->
         if role.match('^account:')
