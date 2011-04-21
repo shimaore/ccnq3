@@ -94,7 +94,7 @@ view login_widget: ->
       form id: 'login_window', ->
         input type: 'submit', value: 'Login'
 
-  form id: 'login', class: 'main validate', ->
+  form id: 'login', class: 'main validate', title: 'Login', ->
     span id: 'login_error', class: 'error'
     div ->
       label for: 'login_username', -> 'Username'
