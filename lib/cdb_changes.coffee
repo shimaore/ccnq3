@@ -29,11 +29,13 @@ cdb_changes.monitor = (cdb_uri,filter_name,since,cb)->
   parser.writable = true
 
   parser.write = (chunk,encoding) ->
+    util.log "Got chunk #{chunk}"
     parser.buffer += chunk.toString(encoding)
 
     d = parser.buffer.split("\n")
     while d.length > 1
       line = d.shift()
+      util.log "Processing line #{line}"
 
       try
         p = JSON.parse line
