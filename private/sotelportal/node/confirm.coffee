@@ -48,7 +48,7 @@ helper confirm_registration: (cb) ->
       else
         cb(p)
 
-get '/register/confirm.html': ->
+get '/confirm.html': ->
   if @email? and @code?
     confirm_registration (p) ->
       session.logged_in = p.name
