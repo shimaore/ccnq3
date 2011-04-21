@@ -3,6 +3,17 @@
 Released under the GPL3 license
 ###
 
+# Load Configuration
+fs = require('fs')
+config_location = 'login.config'
+config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
+
+def config: config
+
+# Load CouchDB
+cdb = require process.cwd()+'/../../../lib/cdb.coffee'
+def session_cdb: cdb.new (config.session_couchdb_uri)
+
 client login: ->
   $(document).ready ->
 
@@ -23,19 +34,42 @@ client login: ->
         return false
 
       $('#login').submit ->
+        # Log into the main portal (this application).
         ajax_options =
+          type: 'post'
           url: '/u/login.json'
-          dataType: 'json'
           data:
             username: $('#login_username').val()
             password: $('#login_password').val()
+          dataType: 'json'
           success: (data) ->
-            if data.success is 'ok'
-              $('#login').dialog('close')
-              window.location.reload()
-            else
+            if not data.ok
               $('#login_error').html('Login failed')
+              return
+
+            # Use data.couchdb to login as well
+            $('#login_error').html('Logging you into the database.')
+            couchdb_options =
+              type: 'post'
+              url: data.couchdb
+              data:
+                name:     $('#login_username').val()
+                password: $('#login_password').val()
+              dataType:'json'
+              success: (data) ->
+                if not data.ok
+                  $('#login_error').html('Database login failed')
+                  return
+
+                # Log into the voice portal
+                # Log into the ticket portal
+                $('#login').dialog('close')
+                window.location.reload()
         $.ajax(ajax_options)
+
+
+
+
         return false
 
       $('#logout').submit ->
@@ -53,7 +87,7 @@ view login_widget: ->
 
   div id: 'login_buttons', ->
     if @session.logged_in?
-      a href: '/profile/', -> @session.logged_in
+      a href: '/u/profile/', -> @session.logged_in
       form id: 'logout', ->
         input type: 'submit', value: 'Logout'
     else
@@ -61,7 +95,7 @@ view login_widget: ->
         input type: 'submit', value: 'Login'
 
   form id: 'login', class: 'main validate', ->
-    span id: 'login_error'
+    span id: 'login_error', class: 'error'
     div ->
       label for: 'login_username', -> 'Username'
       input id: 'login_username', class: 'required'
@@ -72,18 +106,18 @@ view login_widget: ->
       input type: 'submit', value: 'Login'
       button id: 'cancel_login', -> 'Cancel'
 
-get '/login.json': ->
+post '/login.json': ->
   if not @username? and not @password?
     return send {error:'Missing parameters'}
 
-  db = portal_cdb
-  db.get @username, (p) =>
-    if p.error? or p.password isnt @password
-      return send {error:'Invalid password'}
-    session.logged_in = @username
-    send 'success', 'ok'
+  session_cdb.post {name:@username,password:@password}, (p) =>
+    if p.error?
+      return send p
+    session.logged_in = p.name
+    session.roles     = p.roles
+    return send ok:true, couchdb:config.session_couchdb_uri
 
 get '/logout.json': ->
   delete session.logged_in
-  send 'success', 'ok'
+  return send ok:true
 
