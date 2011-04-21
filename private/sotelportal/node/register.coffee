@@ -152,6 +152,7 @@ view register_widget: ->
       input type: 'submit', value: 'Register'
 
   form id: 'register', class: 'main validate', method: 'post', ->
+    div id: 'register_errors', class: 'error'
     input type: 'hidden', name: '_method', value: 'PUT'
     div -> l  'first_name', 'First Name', 'required minlength(2)'
     div -> l  'last_name', 'Last Name', 'required minlength(2)'
