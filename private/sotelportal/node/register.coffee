@@ -69,7 +69,7 @@ put '/register.json': ->
   db.exists (it_does) =>
     if it_does
       p = params
-      p._id = 'org.couch.user:'+username
+      p._id = 'org.couchdb.user:'+username
       p.type = 'user'
       p.name = username
       p.roles = []
