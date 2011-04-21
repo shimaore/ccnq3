@@ -26,7 +26,7 @@ ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
 
 
   if oldDoc.status isnt 'confirmed'
-    for role in doc.roles
+    for role in newDoc.roles
       do (role) ->
         if role.match('^account:')
           throw {forbidden : "Only registered users might be granted account access."}
