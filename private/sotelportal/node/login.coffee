@@ -35,6 +35,7 @@ client login: ->
 
       $('#login').submit ->
         # Log into the main portal (this application).
+        $('#login_error').html("")
         ajax_options =
           type: 'post'
           url: '/u/login.json'
@@ -44,7 +45,7 @@ client login: ->
           dataType: 'json'
           success: (data) ->
             if not data.ok
-              $('#login_error').html("Login failed: #{data.error}")
+              $('#login_error').html('Login failed')
               return
 
             # Use data.couchdb to login as well
