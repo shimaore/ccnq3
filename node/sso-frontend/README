@@ -15,6 +15,6 @@ The only public entry points are the URLs:
   all operations related to sso-frontend.
   If a login operation succeeds, the client browser's current page is reloaded.
 
-/login.html?callback=:url
+/session.js?service=:service_name
   Same as above; if a login operation succeed, the client browser is redirected
   to the specified callback URL.

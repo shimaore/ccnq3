@@ -4,3 +4,6 @@ It provides three functions:
 - create a new session
 - obtain information about an ongoing session
 - delete an existing session
+
+
+PUT
