@@ -14,7 +14,7 @@ util = require 'util'
 querystring = require 'querystring'
 
 cdb = require process.cwd()+'/../lib/cdb.coffee'
-portal_cdb = cdb.new (config.portal_couchdb_uri)
+users_cdb = cdb.new (config.users_couchdb_uri)
 
 mailer = require 'nodemailer'
 
@@ -23,7 +23,7 @@ mailer.sendmail = config.mailer.sendmail
 
 
 cdb_changes = require process.cwd()+'/../lib/cdb_changes.coffee'
-cdb_changes.monitor config.portal_couchdb_uri, config.filter_name, undefined, (p) ->
+cdb_changes.monitor config.users_couchdb_uri, config.filter_name, undefined, (p) ->
   if p.error?
     return util.log(p.error)
 
@@ -60,6 +60,6 @@ cdb_changes.monitor config.portal_couchdb_uri, config.filter_name, undefined, (p
 
     # Email was sent, update the status in CouchBD
     p.status = "confirmation_#{status}"
-    portal_cdb.put p, (r) ->
+    users_cdb.put p, (r) ->
       if r.error
         return util.log(r.error)
