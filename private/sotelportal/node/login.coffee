@@ -115,9 +115,9 @@ post '/login.json': ->
   if not @username? and not @password?
     return send {error:'Missing parameters'}
 
-  uri = url.parse(config.session_couchdb_uri)
+  uri = url.parse config.session_couchdb_uri
   uri.auth = "#{querystring.escape @username}:#{querystring.escape @password}"
-  session_cdb = cdb.new (url.format(uri))
+  session_cdb = cdb.new url.format uri
   session_cdb.get '', (p) =>
     if p.error?
       return send p
