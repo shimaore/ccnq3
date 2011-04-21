@@ -32,14 +32,13 @@ cdb_changes.monitor = (cdb_uri,filter_name,since,cb)->
     parser.buffer += chunk.toString(encoding)
 
     d = parser.buffer.split("\n")
-    while(d.length > 1) {
+    while d.length > 1
       line = d.shift()
 
       p = JSON.parse line
       if p?.id?
         db.get id, cb
 
-    }
     buffer = d[0]
 
     return true
