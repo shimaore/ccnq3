@@ -27,6 +27,7 @@ cdb_changes.monitor = (cdb_uri,filter_name,since,cb)->
   parser.writable = true
 
   parser.write = (chunk) ->
+    util.log("chunk #{chunk}")
     try
       # There's plenty of reasons this might fail, including heartbeat.
       # Also note that chunk is a Buffer, not a string, but parse doesn't care.
