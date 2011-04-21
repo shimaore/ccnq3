@@ -22,6 +22,9 @@ module.exports = ddoc
 ddoc.filters.send_confirmation = (doc,req) ->
   return if doc.status is 'send_confirmation' then true else false
 
+ddoc.filters.send_password = (doc,req) ->
+  return doc.send_password? and doc.send_password
+
 ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
 
 
