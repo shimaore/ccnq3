@@ -68,17 +68,18 @@ put '/register.json': ->
   db = users_cdb
   db.exists (it_does) =>
     if it_does
-      p = params
-      p._id = 'org.couchdb.user:'+username
-      p.type = 'user'
-      p.name = username
-      p.roles = []
-      p.domain = request.header('Host')
-      p.confirmation_code = crypto.createHash('sha1').update("a"+Math.random()).digest('hex')
-      p.confirmation_expires = (new Date()).valueOf() + 2*24*3600*1000
-      p.status = 'send_confirmation'
+      p =
+        _id: 'org.couchdb.user:'+username
+        type: 'user'
+        name: username
+        roles: []
+        domain: request.header('Host')
+        confirmation_code: crypto.createHash('sha1').update("a"+Math.random()).digest('hex')
+        confirmation_expires: (new Date()).valueOf() + 2*24*3600*1000
+        status: 'send_confirmation'
+        profile: params
       # PUT without _rev can only happen once
-      db.put params, (r) ->
+      db.put p, (r) ->
         if r.error?
           return send {error: r.error}
         else
