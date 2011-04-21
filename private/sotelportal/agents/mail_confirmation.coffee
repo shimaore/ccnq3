@@ -48,7 +48,7 @@ cdb_changes.monitor config.users_couchdb_uri, config.filter_name, undefined, (p)
     html: """
               <p>Someone (probably you) registered with our service at #{p.domain}.
               To confirm your email address, please click on the following link:
-              <a href="https://#{p.domain}/u/register/confirm/email=#{querystring.escape(p.email)}&code=#{querystring.escape(p.confirmation_code)}">Confirm my email address</a>.
+              <a href="https://#{p.domain}/u/register/confirm/email=#{querystring.escape(p.name)}&code=#{querystring.escape(p.confirmation_code)}">Confirm my email address</a>.
               <p>
               </p>
               Thank you, and welcome to our exciting new service!
