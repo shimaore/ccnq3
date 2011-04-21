@@ -44,7 +44,7 @@ client login: ->
           dataType: 'json'
           success: (data) ->
             if not data.ok
-              $('#login_error').html('Login failed')
+              $('#login_error').html("Login failed: #{data.error}")
               return
 
             # Use data.couchdb to login as well
