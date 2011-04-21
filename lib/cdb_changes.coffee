@@ -22,9 +22,9 @@ cdb_changes.monitor = (cdb_uri,filter_name,since,cb)->
   db = cdb.new (cdb_uri)
 
   # Stream to receive the data from CouchDB
-  stream = new process.EventEmitter()
+  parser = new process.EventEmitter()
 
-  stream.write = (chunk) ->
+  parser.on 'data', (chunk) ->
     try
       # There's plenty of reasons this might fail, including heartbeat.
       # Also note that chunk is a Buffer, not a string, but parse doesn't care.
@@ -37,7 +37,7 @@ cdb_changes.monitor = (cdb_uri,filter_name,since,cb)->
 
     return true
 
-  stream.end = ->
+  parser.on 'end', ->
     util.log("#{cdb_uri} closed, attempting restart")
     # Automatically restart
     cdb_changes.monitor(cdb_uri,filter_name,since,cb)
@@ -54,4 +54,4 @@ cdb_changes.monitor = (cdb_uri,filter_name,since,cb)->
     if r.error?
       util.log(r.error)
 
-  cdb_stream.pipe(stream)
+  cdb_stream.pipe(parser)
