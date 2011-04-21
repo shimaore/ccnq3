@@ -57,11 +57,11 @@ cdb_changes.monitor config.users_couchdb_uri, config.filter_name, undefined, (p)
 
   mailer.send_mail email_options, (err,status) ->
     # Do not attempt to update the status if the email was not sent
-    if err?
+    if err? or not status
       return util.log(err)
 
     # Email was sent, update the status in CouchBD
-    p.status = "confirmation_#{status}"
+    p.status = "confirmation_sent"
     users_cdb.put p, (r) ->
       if r.error
         return util.log(r.error)
