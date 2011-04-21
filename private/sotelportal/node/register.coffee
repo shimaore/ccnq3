@@ -81,12 +81,12 @@ put '/register.json': ->
       # PUT without _rev can only happen once
       db.put p, (r) ->
         if r.error?
-          return send {error: r.error}
+          return send r
         else
           session.logged_in = username
-          return send {ok:true}
+          return send ok:true
     else
-      return send {error:'Not connected to the database'}
+      return send error:'Not connected to the database'
 
 helper confirm_registration: (cb) ->
   db = users_cdb
