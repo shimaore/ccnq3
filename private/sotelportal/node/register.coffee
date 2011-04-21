@@ -70,7 +70,9 @@ put '/register.json': ->
     if it_does
       p = params
       p._id = 'org.couch.user:'+username
+      p.type = 'user'
       p.name = username
+      p.roles = []
       p.domain = request.header('Host')
       p.confirmation_code = crypto.createHash('sha1').update("a"+Math.random()).digest('hex')
       p.confirmation_expires = (new Date()).valueOf() + 2*24*3600*1000
