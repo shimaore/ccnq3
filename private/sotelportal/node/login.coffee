@@ -39,7 +39,6 @@ client login: ->
 
       $('#login').submit ->
         # Log into the main portal (this application).
-        $('#login_error').html("")
         ajax_options =
           type: 'post'
           url: '/u/login.json'
@@ -53,7 +52,6 @@ client login: ->
               return
 
             # Use data.couchdb to login as well
-            $('#login_error').html('Login you into the database.')
             couchdb_options =
               type: 'get'
               url: data.couchdb
@@ -73,8 +71,10 @@ client login: ->
                 $('#login').dialog('close')
                 window.location.reload()
 
+            $('#login_error').html('Login you into the database.')
             $.ajax(couchdb_options)
 
+        $('#login_error').html("")
         $.ajax(ajax_options)
 
 
