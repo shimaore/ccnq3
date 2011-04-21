@@ -41,7 +41,7 @@ cdb_changes.monitor config.users_couchdb_uri, config.filter_name, undefined, (p)
               To confirm your email address, please go to:
               <https://#{p.domain}/register/confirm.html>
               then copy and paste the following confirmation code:
-                #{confirmation_code}
+                #{p.confirmation_code}
 
               Thank you, and welcome to our exciting new service!
           """
