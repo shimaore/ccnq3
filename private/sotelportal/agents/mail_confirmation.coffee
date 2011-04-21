@@ -13,7 +13,7 @@ config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
 util = require 'util'
 querystring = require 'querystring'
 
-cdb = require process.cwd()+'/../lib/cdb.coffee'
+cdb = require process.cwd()+'/../../../lib/cdb.coffee'
 users_cdb = cdb.new (config.users_couchdb_uri)
 
 mailer = require 'nodemailer'
