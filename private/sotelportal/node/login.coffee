@@ -21,6 +21,48 @@ using 'querystring'
 client login: ->
   $(document).ready ->
 
+    # Log into the main portal (this application).
+    main_login = (next) ->
+      ajax_options =
+        type: 'post'
+        url: '/u/login.json'
+        data:
+          username: $('#login_username').val()
+          password: $('#login_password').val()
+        dataType: 'json'
+        success: (data) ->
+          if not data.ok
+            $('#login_error').html('Login failed')
+            return
+          next()
+
+      $('#login_error').html("")
+      $.ajax(ajax_options)
+
+    # Use data.couchdb to login as well
+    # XXX This doesn't work due to same-site policy!!
+    couchdb_login = (next) ->
+      couchdb_options =
+        type: 'get'
+        url: '/u/couchdb_login.js'
+        data:
+          username: $('#login_username').val()
+          password: $('#login_password').val()
+        dataType:'jsonp'
+        success: (data) ->
+          if not data.ok
+            $('#login_error').html('Database login failed')
+            return
+
+      $('#login_error').html('Login you into the database.')
+      $.ajax(couchdb_options)
+
+    login_done = ->
+      # All done.
+      $('#login_error').html('')
+      $('#login').dialog('close')
+      window.location.reload()
+
     $('#login_container').load '/u/login.widget', ->
       $('#login_buttons').buttonset()
       $('form.main').addClass('ui-widget-content')
@@ -38,46 +80,10 @@ client login: ->
         return false
 
       $('#login').submit ->
-        # Log into the main portal (this application).
-        ajax_options =
-          type: 'post'
-          url: '/u/login.json'
-          data:
-            username: $('#login_username').val()
-            password: $('#login_password').val()
-          dataType: 'json'
-          success: (data) ->
-            if not data.ok
-              $('#login_error').html('Login failed')
-              return
+        main_login -> login_done()
 
-            # Use data.couchdb to login as well
-            couchdb_options =
-              type: 'get'
-              url: data.couchdb
-              username: $('#login_username').val()
-              password: $('#login_password').val()
-              dataType:'json'
-              success: (data) ->
-                if not data.ok
-                  $('#login_error').html('Database login failed')
-                  return
-
-                # Log into the voice portal
-                # Log into the ticket portal
-
-                # All done.
-                $('#login_error').html('')
-                $('#login').dialog('close')
-                window.location.reload()
-
-            $('#login_error').html('Login you into the database.')
-            $.ajax(couchdb_options)
-
-        $('#login_error').html("")
-        $.ajax(ajax_options)
-
-
+          # Log into the voice portal
+          # Log into the ticket portal
 
 
         return false
