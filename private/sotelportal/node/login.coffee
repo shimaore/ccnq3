@@ -23,10 +23,15 @@ post '/couchdb_login.js': ->
   uri.auth = "#{querystring.escape @username}:#{querystring.escape @password}"
   delete uri.href
   delete uri.host
-  code = ->
+  code = (next) ->
     couchdb_options =
       type: 'get'
       url: url.format uri
+      success: (data) ->
+        if not data.ok
+          $('#login_error').html("Database login failed.")
+          return
+        next()
     $.ajax(couchdb_options)
   return "#{@callback}(#{code})"
 
@@ -62,10 +67,7 @@ client login: ->
           password: $('#login_password').val()
         dataType:'jsonp'
         success: (data) ->
-          if not data.ok
-            $('#login_error').html("Database login failed: #{data}")
-            return
-          next()
+          data(next)
 
       $('#login_error').html('Login you into the database.')
       $.ajax(couchdb_options)
