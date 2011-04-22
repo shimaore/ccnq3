@@ -18,7 +18,7 @@ def cdb: cdb
 using 'url'
 using 'querystring'
 
-get '/couchdb_login.js': ->
+post '/couchdb_login.js': ->
   uri = url.parse login_config.session_couchdb_uri
   uri.auth = "#{querystring.escape @username}:#{querystring.escape @password}"
   delete uri.href
@@ -55,7 +55,7 @@ client login: ->
     # XXX This doesn't work due to same-site policy!!
     couchdb_login = (next) ->
       couchdb_options =
-        type: 'get'
+        type: 'post'
         url: '/u/couchdb_login.js'
         data:
           username: $('#login_username').val()
@@ -63,7 +63,7 @@ client login: ->
         dataType:'jsonp'
         success: (data) ->
           if not data.ok
-            $('#login_error').html('Database login failed')
+            $('#login_error').html("Database login failed: #{data}")
             return
           next()
 
