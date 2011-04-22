@@ -90,7 +90,7 @@ client login: ->
         return false
 
       $('#login').submit ->
-        main_login -> login_done()
+        main_login -> couchdb_login -> login_done
 
           # Log into the voice portal
           # Log into the ticket portal
