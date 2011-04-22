@@ -51,7 +51,6 @@ client login: ->
           if not data.ok
             $('#login_error').html('Database login failed.')
             return
-
           next()
 
       $('#login_error').html('Logging you into the database.')
@@ -80,7 +79,7 @@ client login: ->
         return false
 
       $('#login').submit ->
-        main_login -> couchdb_login -> login_done
+        main_login -> couchdb_login -> login_done()
 
           # Log into the voice portal
           # Log into the ticket portal
