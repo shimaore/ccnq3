@@ -18,7 +18,7 @@ def cdb: cdb
 using 'url'
 using 'querystring'
 
-get '/u/couchdb_login.js': ->
+get '/couchdb_login.js': ->
   uri = url.parse login_config.session_couchdb_uri
   uri.auth = "#{querystring.escape @username}:#{querystring.escape @password}"
   delete uri.href
