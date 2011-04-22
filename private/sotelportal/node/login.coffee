@@ -23,10 +23,12 @@ get '/couchdb_login.js': ->
   uri.auth = "#{querystring.escape @username}:#{querystring.escape @password}"
   delete uri.href
   delete uri.host
-  return () ->
+  code = ->
     couchdb_options =
       type: 'get'
       url: url.format uri
+    $.ajax(couchdb_options)
+  return "#{@callback}(#{code})"
 
 client login: ->
   $(document).ready ->
