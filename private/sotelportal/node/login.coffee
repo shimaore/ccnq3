@@ -67,9 +67,10 @@ client login: ->
           password: $('#login_password').val()
         dataType:'jsonp'
         success: (data) ->
+          $('#login_error').html('Logging you into the database.')
           data(next)
 
-      $('#login_error').html('Login you into the database.')
+      $('#login_error').html('Accessing database.')
       $.ajax(couchdb_options)
 
     login_done = ->
