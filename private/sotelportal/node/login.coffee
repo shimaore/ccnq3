@@ -18,24 +18,6 @@ def cdb: cdb
 using 'url'
 using 'querystring'
 
-post '/couchdb_login.js': ->
-  uri = url.parse login_config.session_couchdb_uri
-  uri.auth = "#{querystring.escape @username}:#{querystring.escape @password}"
-  delete uri.href
-  delete uri.host
-  the_url = url.format uri
-  code = (url,next) ->
-    couchdb_options =
-      type: 'get'
-      url: url
-      success: (data) ->
-        if not data.ok
-          $('#login_error').html("Database login failed.")
-          return
-        next()
-    $.ajax(couchdb_options)
-  return "#{@callback}({ok:true,fun:#{code},url:\"#{the_url}\"})"
-
 client login: ->
   $(document).ready ->
 
@@ -58,24 +40,21 @@ client login: ->
       $.ajax(ajax_options)
 
     # Use data.couchdb to login as well
-    # XXX This doesn't work due to same-site policy!!
     couchdb_login = (next) ->
       couchdb_options =
-        type: 'post'
-        url: '/u/couchdb_login.js'
-        data:
-          username: $('#login_username').val()
-          password: $('#login_password').val()
-        dataType:'jsonp'
+        type: 'get'
+        url: '/_session'
+        username: $('#login_username').val()
+        password: $('#login_password').val()
+        dataType:'json'
         success: (data) ->
           if not data.ok
-            $('#login_error').html("Internal error: #{data}")
+            $('#login_error').html('Database login failed.')
             return
 
-          $('#login_error').html('Logging you into the database.')
-          data.fun(data.url,next)
+          next()
 
-      $('#login_error').html('Accessing database.')
+      $('#login_error').html('Logging you into the database.')
       $.ajax(couchdb_options)
 
     login_done = ->
@@ -105,7 +84,7 @@ client login: ->
 
           # Log into the voice portal
           # Log into the ticket portal
-
+          # Redirect (in a frame?) to couchdb
 
         return false
 
