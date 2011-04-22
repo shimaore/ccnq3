@@ -63,6 +63,7 @@ client login: ->
           if not data.ok
             $('#login_error').html('Database login failed')
             return
+          next()
 
       $('#login_error').html('Login you into the database.')
       $.ajax(couchdb_options)
@@ -146,7 +147,7 @@ post '/login.json': ->
       return send p
     session.logged_in = p.name
     session.roles     = p.roles
-    return send ok:true, couchdb:login_config.session_couchdb_uri
+    return send ok:true
 
 get '/logout.json': ->
   delete session.logged_in
