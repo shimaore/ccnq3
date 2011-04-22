@@ -133,8 +133,8 @@ post '/login.json': ->
   session_cdb.get '', (p) =>
     if p.error?
       return send p
-    session.logged_in = p.name
-    session.roles     = p.roles
+    session.logged_in = p.userCtx.name
+    session.roles     = p.userCtx.roles
     return send ok:true
 
 get '/logout.json': ->
