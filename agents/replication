@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-NAME=registration
-SCRIPT=registration.coffee
+NAME=replication
+SCRIPT=replication.coffee
 
 SCRIPT_DIR=`dirname "$0"`
 if [ "x${SCRIPT_DIR}" == "x." ]; then
