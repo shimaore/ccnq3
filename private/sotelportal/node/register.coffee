@@ -48,7 +48,7 @@ client register: ->
               $('#register').dialog('close')
               window.location.reload()
             else
-              $('#register_error').html("Registration failed: #{data.error}")
+              $('#register_error').html("Account creation failed: #{data.error}")
         $.ajax(ajax_options)
         return false
 
@@ -103,7 +103,7 @@ view register_widget: ->
     form id: 'register_window', ->
       input type: 'submit', value: 'Register'
 
-  form id: 'register', class: 'main validate', method: 'post', title: 'Registration', ->
+  form id: 'register', class: 'main validate', method: 'post', title: 'Account creation', ->
     span id: 'register_error', class: 'error'
     input type: 'hidden', name: '_method', value: 'PUT'
     div -> l  'first_name', 'First Name', 'required minlength(2)'
@@ -113,6 +113,6 @@ view register_widget: ->
 
     # XXX TODO Captcha
     div ->
-      input type: 'submit', value: 'Register'
+      input type: 'submit', value: 'Create Account'
       button id: 'cancel_register', -> 'Cancel'
 

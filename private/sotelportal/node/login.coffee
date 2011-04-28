@@ -32,7 +32,7 @@ client login: ->
         dataType: 'json'
         success: (data) ->
           if not data.ok
-            $('#login_error').html('Login failed')
+            $('#login_error').html('Sign in failed')
             return
           next()
 
@@ -49,11 +49,11 @@ client login: ->
         dataType:'json'
         success: (data) ->
           if not data.ok
-            $('#login_error').html('Database login failed.')
+            $('#login_error').html('Database sign-in failed.')
             return
           next()
 
-      $('#login_error').html('Logging you into the database.')
+      $('#login_error').html('Signing you into the database.')
       $.ajax(couchdb_options)
 
     login_done = ->
@@ -107,9 +107,9 @@ view login_widget: ->
         input type: 'submit', value: 'Logout'
     else
       form id: 'login_window', ->
-        input type: 'submit', value: 'Login'
+        input type: 'submit', value: 'Sign in'
 
-  form id: 'login', class: 'main validate', title: 'Login', ->
+  form id: 'login', class: 'main validate', title: 'Sign in', ->
     span id: 'login_error', class: 'error'
     div ->
       label for: 'login_username', -> 'Username'
@@ -118,7 +118,7 @@ view login_widget: ->
       label for: 'login_password', -> 'Password'
       input type: 'password', id: 'login_password', class: 'required'
     div ->
-      input type: 'submit', value: 'Login'
+      input type: 'submit', value: 'Sign in'
       button id: 'cancel_login', -> 'Cancel'
 
 post '/login.json': ->
