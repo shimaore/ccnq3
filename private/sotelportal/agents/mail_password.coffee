@@ -22,11 +22,7 @@ mailer = require 'nodemailer'
 mailer.SMTP     = config.mailer.SMTP
 mailer.sendmail = config.mailer.sendmail
 
-password_charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-".split('')
-
-random_password = (l) ->
-  return '' if l is 0
-  return random_password(l-1)+password_charset[Math.floor(Math.random()*password_charset.length)]
+random_password = require process.cwd()+'/../../../lib/password.coffee'
 
 sha1_hex = (t) ->
   return crypto.createHash('sha1').update(t).digest('hex')
@@ -37,7 +33,7 @@ cdb_changes.monitor config.users_couchdb_uri, config.filter_name, undefined, (p)
   if p.error?
     return util.log(p.error)
 
-  password = random_password(16)
+  password = random_password(3)
 
   # Assume document's "name" is the email address.
   # (There's also p.profile.email but might be an array.)
