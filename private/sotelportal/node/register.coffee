@@ -101,7 +101,7 @@ view register_widget: ->
 
   div id: 'register_buttons', ->
     form id: 'register_window', ->
-      input type: 'submit', value: 'Register'
+      input type: 'submit', value: 'Create Account'
 
   form id: 'register', class: 'main validate', method: 'post', title: 'Account creation', ->
     span id: 'register_error', class: 'error'
