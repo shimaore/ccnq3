@@ -51,7 +51,6 @@ helper confirm_registration: (cb) ->
 get '/confirm.html': ->
   if @email? and @code?
     confirm_registration (p) ->
-      session.logged_in = p.name
       redirect confirm_config.post_confirmation_uri
   else
     page 'confirm'
