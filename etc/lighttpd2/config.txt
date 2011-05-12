@@ -1,0 +1,115 @@
+setup {
+  module_load ( 
+    "mod_access",
+    "mod_deflate",
+    "mod_accesslog",
+    "mod_redirect",
+    "mod_rewrite",
+    "mod_proxy",
+    "mod_openssl"
+  );
+
+  listen "0.0.0.0:80";
+  listen "[::]:80";
+
+  mime_types = (          ".png"  => "image/png",
+                          ".jpg"  => "image/jpeg",
+                          ".jpeg" => "image/jpeg",
+                          ".gif"  => "image/gif",
+                          ".html" => "text/html",
+                          ".txt"  => "text/plain",
+                          ".css"  => "text/css",
+                          ".js"   => "text/javascript",
+                          ".json" => "application/json",
+                          ""      => "text/plain" );
+
+  log = [ "*": "/var/log/lighttpd2/error.log" ];
+
+  accesslog = "/var/log/lighttpd2/access.log";
+  accesslog.format = "%h %V %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"";
+
+  static.exclude_extensions = ( ".php", ".pl", ".fcgi" );
+
+  openssl [
+    "listen": "0.0.0.0:443",
+    "pemfile": "/etc/lighttpd2/example.net.pem"
+  ];
+  openssl [
+    "listen": "[::]:443",
+    "pemfile": "/etc/lighttpd2/example.net.pem"
+  ];
+
+}
+
+server.name          = "example.net";
+
+# Redirects
+
+# Remove extraneous "www"
+if request.host =~ "^www\.(.*)$" {
+    if request.query == "" {
+        redirect "http://$1%{enc:request.path}";
+    } else {
+        redirect "http://$1%{enc:request.path}?%{request.query}";
+    }
+}
+
+# Force all access through SSL
+if request.scheme == "http" {
+    if request.query == "" {
+        redirect "https://%{request.host}%{enc:request.path}";
+    } else {
+        redirect "https://%{request.host}%{enc:request.path}?%{request.query}";
+    }
+}
+
+# Proxy
+
+if req.path =~ "^/support" {
+  proxy "[2001:100:200:1::1]:80";
+}
+
+if req.path =~ "^/portal" {
+  proxy "[2001:100:200:1::2]:3000";
+}
+
+if req.path =~ "^/conf" {
+  proxy "[2001:100:200:1::3]:3000";
+}
+
+# Portal application (local node.js)
+
+if req.path =~ "^/u/" {
+  rewrite "^/u/?(.*)$" => "/$1";
+  proxy "127.0.0.1:8765";
+}
+
+# Proxy Couchdb database
+
+if req.path =~ "^/(_users|_session|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})($|/)" {
+  proxy "[2001:100:200:1::6]:5984";
+}
+
+# Local
+
+if req.localport == 443 {
+  docroot "/var/www";
+
+  index ( "index.html" );
+
+  if req.path =~ "~" {
+    access.deny;
+  }
+}
+
+do_deflate {
+    # make sure static files get handled before we try deflate
+    static;
+    # we can only wait for response headers if we already have a request handler! (static only handles GET/HEAD requests)
+    if request.is_handled {
+        # limit content-types we want to compress -> see mimetypes
+        if response.header["Content-Type"] =~ "^(.*/javascript|text/.*)(;|$)" {
+            deflate;
+        }
+    }
+}
