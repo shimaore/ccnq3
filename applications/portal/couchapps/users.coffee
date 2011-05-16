@@ -20,13 +20,13 @@ ddoc =
 module.exports = ddoc
 
 ddoc.filters.send_confirmation = (doc,req) ->
-  return if doc.status is 'send_confirmation' then true else false
+  return doc.status is 'send_confirmation'
 
 ddoc.filters.send_password = (doc,req) ->
   return doc.send_password? and doc.send_password
 
 ddoc.filters.confirmed = (doc,req) ->
-  return if doc.status? is "confirmed" then true else false
+  return doc.status is 'confirmed'
 
 # Attachments are loaded from users/*
 # var path     = require('path');
