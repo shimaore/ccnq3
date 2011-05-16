@@ -10,7 +10,7 @@ Released under the Affero GPL3 license or above
 couchapp = require('couchapp')
 
 ddoc =
-  _id: '_design/app'
+  _id: '_design/portal'
   views: {}
   lists: {}     # http://guide.couchdb.org/draft/transforming.html
   shows: {}     # http://guide.couchdb.org/draft/show.html
