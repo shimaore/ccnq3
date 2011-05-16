@@ -25,15 +25,6 @@ ddoc.filters.send_confirmation = (doc,req) ->
 ddoc.filters.send_password = (doc,req) ->
   return doc.send_password? and doc.send_password
 
-ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
-
-
-  if not oldDoc or oldDoc.status isnt 'confirmed'
-    for role in newDoc.roles?
-      do (role) ->
-        if role.match('^account:')
-          throw {forbidden : "Only registered users might be granted account access."}
-
 # Attachments are loaded from users/*
 # var path     = require('path');
 # couchapp.loadAttachments(ddoc, path.join(__dirname, 'users'));
