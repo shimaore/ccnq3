@@ -22,24 +22,24 @@ cdb_changes.monitor config.users_couchdb_uri, config.filter_name, undefined, (p)
     return util.log(p.error)
 
   # Log in
-  p =
+  q =
     method: 'POST'
     uri: config.ccnq2_login_uri
     body: querystring.stringify
       username: config.ccnq2_admin_username
       password: config.ccnq2_admin_password
 
-  request p, (error,response,body) ->
+  request q, (error,response,body) ->
     if error or response.statusCode < 200 or response.statusCode > 299 or not body?
       return util.log(error or response.statusCode)
 
     # Submit record using the admin-level profile update defined in UserAuthentication
-    p =
+    q =
       method: 'PUT'
       uri: config.ccnq2_register_uri + p.name
       body: querystring.stringify
         name: [profile.first_name,profile.last_name].join(' ')
         email: profile.email
   
-    request p
+    request q
 
