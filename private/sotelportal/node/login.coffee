@@ -122,8 +122,10 @@ view login_widget: ->
       button id: 'cancel_login', -> 'Cancel'
 
 post '/login.json': ->
-  if not @username? and not @password?
-    return send {error:'Missing parameters'}
+  if not @username?
+    return send {error:'Missing username'}
+  if not @password?
+    return send {error:'Missing password'}
 
   uri = url.parse login_config.session_couchdb_uri
   uri.auth = "#{querystring.escape @username}:#{querystring.escape @password}"
