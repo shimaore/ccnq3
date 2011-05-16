@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-NAME=sotelportal
+NAME=portal
 SCRIPT=portal.coffee
 PORT=8765
 
