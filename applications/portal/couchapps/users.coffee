@@ -25,6 +25,9 @@ ddoc.filters.send_confirmation = (doc,req) ->
 ddoc.filters.send_password = (doc,req) ->
   return doc.send_password? and doc.send_password
 
+ddoc.filters.confirmed = (doc,req) ->
+  return doc.confirmed? and doc.confirmed
+
 # Attachments are loaded from users/*
 # var path     = require('path');
 # couchapp.loadAttachments(ddoc, path.join(__dirname, 'users'));
