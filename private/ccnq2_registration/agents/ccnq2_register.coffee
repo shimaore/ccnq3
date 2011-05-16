@@ -24,22 +24,25 @@ cdb_changes.monitor config.users_couchdb_uri, config.filter_name, undefined, (p)
   # Log in
   q =
     method: 'POST'
-    uri: config.ccnq2_login_uri
-    body: querystring.stringify
+    uri: config.ccnq2_login_uri+'?'+querystring.stringify
       username: config.ccnq2_admin_username
       password: config.ccnq2_admin_password
 
   request q, (error,response,body) ->
-    if error or response.statusCode < 200 or response.statusCode > 299 or not body?
+    if error or response.statusCode < 200 or response.statusCode > 399 or not body?
       return util.log(error or response.statusCode)
+
+    cookie = response.headers['set-cookie'].toString().split(/;/)[0]
 
     # Submit record using the admin-level profile update defined in UserAuthentication
     q =
       method: 'PUT'
       uri: config.ccnq2_register_uri + p.name
+      headers:
+        cookie: cookie
       body: querystring.stringify
-        name: [profile.first_name,profile.last_name].join(' ')
-        email: profile.email
+        name: [p.profile.first_name,p.profile.last_name].join(' ')
+        email: p.profile.email
   
     request q
 
