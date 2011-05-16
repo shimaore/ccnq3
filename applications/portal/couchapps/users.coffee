@@ -26,7 +26,7 @@ ddoc.filters.send_password = (doc,req) ->
   return doc.send_password? and doc.send_password
 
 ddoc.filters.confirmed = (doc,req) ->
-  return doc.confirmed? and doc.confirmed
+  return if doc.status? is "confirmed" then true else false
 
 # Attachments are loaded from users/*
 # var path     = require('path');
