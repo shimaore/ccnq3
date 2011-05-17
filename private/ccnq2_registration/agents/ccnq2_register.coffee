@@ -11,7 +11,7 @@ config_location = 'ccnq2_register.config'
 config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
 
 util = require 'util'
-querystring = require 'querystring'
+qs = require 'querystring'
 crypto = require 'crypto'
 
 request = require 'request'
@@ -24,7 +24,7 @@ cdb_changes.monitor config.users_couchdb_uri, config.filter_name, undefined, (p)
   # Log in
   q =
     method: 'POST'
-    uri: config.ccnq2_login_uri+'?'+querystring.stringify
+    uri: config.ccnq2_login_uri+'?'+qs.stringify
       username: config.ccnq2_admin_username
       password: config.ccnq2_admin_password
 
@@ -40,7 +40,7 @@ cdb_changes.monitor config.users_couchdb_uri, config.filter_name, undefined, (p)
       uri: config.ccnq2_register_uri + p.name
       headers:
         cookie: cookie
-      body: querystring.stringify
+      body: qs.stringify
         name: [p.profile.first_name,p.profile.last_name].join(' ')
         email: p.profile.email
   
