@@ -12,12 +12,13 @@ def json_req: json_req
 
 using 'querystring'
 
-def kayako_error_msg: ->
+def kayako_error_msg: (msg) ->
+  msg =? 'Invalid Username or Password'
   """
   <?xml version="1.0" encoding="UTF-8"?>
   <loginshare>
     <result>0</result>
-    <message>Invalid Username or Password</message>
+    <message>#{msg}</message>
   </loginshare>
   """
 
@@ -30,7 +31,7 @@ post '/loginshare': ->
 
   json_req.request q, (p) ->
     if p.error?
-      return send kayako_error_msg()
+      return send kayako_error_msg(p.error)
 
     q.uri = kayako_loginshare_config.profile_uri
     delete q.body
