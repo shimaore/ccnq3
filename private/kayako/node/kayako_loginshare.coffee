@@ -29,15 +29,17 @@ post '/loginshare': ->
       username: @username
       password: @password
 
-  json_req.request q, (p) ->
+  json_req.request q, (p,cookie) ->
     if p.error?
       return send kayako_error_msg(p.error)
 
-    q.uri = kayako_loginshare_config.profile_uri
-    delete q.body
+    s =
+      uri: kayako_loginshare_config.profile_uri
+      headers:
+        cookie: cookie
 
-    json_req.request q, (p) ->
-      if p.error?
+    json_req.request s, (r) ->
+      if r.error?
         return send kayako_error_msg()
 
       send """
@@ -46,11 +48,11 @@ post '/loginshare': ->
              <result>1</result>
              <user>
                <usergroup>Registered</usergroup>
-               <fullname>#{p.first_name} #{p.last_name}</fullname>
+               <fullname>#{r.first_name} #{r.last_name}</fullname>
                <emails>
-                 <email>#{p.email}</email>
+                 <email>#{r.email}</email>
                </emails>
-               <phone>#{p.phone}</phone>
+               <phone>#{r.phone}</phone>
              </user>
            </loginshare>
            """
