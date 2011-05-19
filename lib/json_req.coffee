@@ -10,6 +10,7 @@ app_json = 'application/json'
     options.body = new Buffer(JSON.stringify(options.body))
     options.headers['Content-Type'] = app_json
   request options, (error,response,body) ->
+    options.headers.cookie = response.headers['set-cookie'].toString().split(/;/)[0]
     if not error and response.statusCode >= 200 and response.statusCode <= 299 and body?
       try
         value = JSON.parse(body)
