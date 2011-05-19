@@ -24,6 +24,7 @@ def kayako_error_msg: (msg) ->
 
 post '/loginshare': ->
   q =
+    method: 'POST'
     uri: kayako_loginshare_config.login_uri
     body:
       username: @username
