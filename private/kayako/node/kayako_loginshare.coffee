@@ -19,11 +19,11 @@ post '/loginshare': ->
     headers:
       authorization: "Basic #{basic_auth.toString('base64')}"
 
-    json_req q, (p) ->
-      if p.error? or not p._id
-        return render 'loginshare-failed',  layout: 'loginshare'
+  json_req q, (p) ->
+    if p.error? or not p._id
+      return render 'loginshare-failed',  layout: 'loginshare'
 
-      render 'loginshare-success', layout: 'loginshare', context: p
+    render 'loginshare-success', layout: 'loginshare', context: p
 
 layout 'loginshare': ->
   """
