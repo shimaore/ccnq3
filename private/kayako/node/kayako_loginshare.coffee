@@ -32,7 +32,7 @@ post '/loginshare': ->
 
   json_req.request q, (p,cookie) ->
     if p.error?
-      return send kayako_error_msg(p.error)
+      return send kayako_error_msg()
 
     s =
       uri: kayako_loginshare_config.profile_uri
