@@ -16,8 +16,8 @@ cdb = require process.cwd()+'/../../../lib/cdb.coffee'
 def users_cdb: cdb.new (profile_config.users_couchdb_uri)
 
 get '/profile.json': ->
-  if session.logged_in?
-    users_cdb.get session.logged_in, (p) ->
-      send p.profile
-  else
-    send error:'Not logged in.'
+  if not session.logged_in?
+    return send error:'Not logged in.'
+
+  users_cdb.get "org.couchdb.user:#{session.logged_in}", (r) ->
+    send r.profile
