@@ -13,7 +13,7 @@ def json_req: json_req
 using 'querystring'
 
 def kayako_error_msg: (msg) ->
-  msg =? 'Invalid Username or Password'
+  msg ?= 'Invalid Username or Password'
   """
   <?xml version="1.0" encoding="UTF-8"?>
   <loginshare>
