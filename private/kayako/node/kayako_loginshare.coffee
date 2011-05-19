@@ -12,37 +12,44 @@ def json_req: json_req
 
 using 'querystring'
 
-post '/loginshare': ->
-  base = kayako_loginshare_config.base
-  basic_auth = new Buffer [@username,@password].join(':')
-  id = "org.couchdb.user:#{@username}"
+def kayako_error_msg: ->
+  """
+  <?xml version="1.0" encoding="UTF-8"?>
+  <loginshare>
+    <result>0</result>
+    <message>Invalid Username or Password</message>
+  </loginshare>
+  """
 
+post '/loginshare': ->
   q =
-    uri: "#{base}/_users/#{querystring.stringify(id)}"
-    headers:
-      authorization: "Basic #{basic_auth.toString('base64')}"
+    uri: kayako_loginshare_config.login_uri
+    body:
+      username: @username
+      password: @password
 
   json_req.request q, (p) ->
-    if p.error? or not p._id
-      send """
-           <?xml version="1.0" encoding="UTF-8"?>
-           <loginshare>
-             <result>0</result>
-             <message>Invalid Username or Password</message>
-           </loginshare>
-           """
-    else
+    if p.error?
+      return send kayako_error_msg()
+
+    q.uri = kayako_loginshare_config.profile_uri
+    delete q.body
+
+    json_req.request q, (p) ->
+      if p.error?
+        return send kayako_error_msg()
+
       send """
            <?xml version="1.0" encoding="UTF-8"?>
            <loginshare>
              <result>1</result>
              <user>
                <usergroup>Registered</usergroup>
-               <fullname>#{@first_name} #{@last_name}</fullname>
+               <fullname>#{p.first_name} #{p.last_name}</fullname>
                <emails>
-                 <email>#{@email}</email>
+                 <email>#{p.email}</email>
                </emails>
-               <phone>#{@phone}</phone>
+               <phone>#{p.phone}</phone>
              </user>
            </loginshare>
            """
