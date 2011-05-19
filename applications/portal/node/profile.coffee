@@ -20,4 +20,7 @@ get '/profile.json': ->
     return send error:'Not logged in.'
 
   users_cdb.get "org.couchdb.user:#{session.logged_in}", (r) ->
+    if r.error?
+      return send r
+
     send r.profile
