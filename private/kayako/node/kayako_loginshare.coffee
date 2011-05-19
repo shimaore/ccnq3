@@ -22,7 +22,7 @@ post '/loginshare': ->
     headers:
       authorization: "Basic #{basic_auth.toString('base64')}"
 
-  json_req q, (p) ->
+  json_req.request q, (p) ->
     if p.error? or not p._id
       return render 'loginshare-failed',  layout: 'loginshare'
 
