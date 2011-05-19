@@ -24,34 +24,25 @@ post '/loginshare': ->
 
   json_req.request q, (p) ->
     if p.error? or not p._id
-      return render 'loginshare-failed',  layout: 'loginshare'
-
-    render 'loginshare-success', layout: 'loginshare', context: p
-
-layout 'loginshare': ->
-  """
-  <?xml version="1.0" encoding="UTF-8"?>
-  <loginshare>
-  #{@content}
-  </loginshare>
-  """
-
-view 'loginshare-failed': ->
-  """
-  <result>0</result>
-  <message>Invalid Username or Password</message>
-  """
-
-view 'loginshare-success': ->
-  """
-  <result>1</result>
-  <user>
-      <usergroup>Registered</usergroup>
-      <fullname>#{@first_name} #{@last_name}</fullname>
-      <emails>
-          <email>#{@email}</email>
-      </emails>
-      <phone>#{@phone}</phone>
-  </user>
-  """
-
+      send """
+           <?xml version="1.0" encoding="UTF-8"?>
+           <loginshare>
+             <result>0</result>
+             <message>Invalid Username or Password</message>
+           </loginshare>
+           """
+    else
+      send """
+           <?xml version="1.0" encoding="UTF-8"?>
+           <loginshare>
+             <result>1</result>
+             <user>
+               <usergroup>Registered</usergroup>
+               <fullname>#{@first_name} #{@last_name}</fullname>
+               <emails>
+                 <email>#{@email}</email>
+               </emails>
+               <phone>#{@phone}</phone>
+             </user>
+           </loginshare>
+           """
