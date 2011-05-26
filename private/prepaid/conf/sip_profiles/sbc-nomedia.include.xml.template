@@ -58,7 +58,7 @@
     <param name="nonce-ttl" value="60"/>
     <param name="challenge-realm" value="auto_from"/>
 
-    <!--<param name="pass-callee-id" value="false"/>-->
+    <param name="pass-callee-id" value="false"/>
 
     <!-- CID -->
     <!--<param name="caller-id-type" value="rpid"/>-->
