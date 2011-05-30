@@ -27,6 +27,7 @@ Here is an example pgslayer.config:
 
 Note: Any DBD backend could be used, even though this example only shows
 PostgreSQL, and only PostgreSQL has been tested so far.
+(The name should probably be dbdlayer rather than pgslayer.)
 
 
 The mapping named "default" can then be accessed at
@@ -53,8 +54,8 @@ DBI request may be). This structure follows the layout:
     "status": "optional status",
     "error": "optional error message",
     "rows": [
-      { "name":"foo", "surname":"john", ""company":"bar", "likes":"turtles" },
-      { "name":"foo", "surname":"jerry", ""company":"bar", "likes":"sunsets" }
+      { "name":"foo", "surname":"john", "company":"bar", "likes":"turtles" },
+      { "name":"foo", "surname":"jerry", "company":"bar", "likes":"sunsets" }
     ]
   }
 
