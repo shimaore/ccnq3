@@ -1,0 +1,4 @@
+check process ssh with pidfile /var/run/sshd.pid
+  start program = "/etc/init.d/ssh start" with timeout 60 seconds
+  stop  program = "/etc/init.d/ssh stop"
+  group server

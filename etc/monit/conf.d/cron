@@ -1,0 +1,4 @@
+check process cron with pidfile /var/run/crond.pid
+  start program = "/etc/init.d/cron start" with timeout 60 seconds
+  stop  program = "/etc/init.d/cron stop"
+  group server

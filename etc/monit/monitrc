@@ -1,0 +1,22 @@
+# check services at 2-minute intervals
+set daemon  120
+    with start delay 20
+
+set logfile syslog facility log_daemon
+set mailserver smtp.example.com
+set alert alert@example.com mail-format {
+       from: monit@$HOST
+   reply-to: support@example.com
+    subject: $EVENT $SERVICE@$HOST
+    message: Monit $ACTION $SERVICE at $DATE on $HOST: $DESCRIPTION
+} with reminder on 30 cycles  # every 1h
+
+set alert alert+timeout@example.com only on { timeout }
+
+# HTTP is needed for the CLI tools to connect to the daemon
+set httpd port 2812 and
+    use address localhost  # only accept connection from localhost
+    allow localhost        # allow localhost to connect to the server and
+    allow admin:monit      # require user 'admin' with password 'monit'
+
+include /etc/monit/conf.d/*

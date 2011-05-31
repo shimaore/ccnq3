@@ -1,0 +1,3 @@
+check filesystem root-fs with path /
+  group fs
+  if space usage > 55% then alert
