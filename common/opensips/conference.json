@@ -48,6 +48,7 @@
   "debug": 0,
 
   "inv_timer": 90,
+  "dialog_timer": 28800,
 
   "ok":true
 }

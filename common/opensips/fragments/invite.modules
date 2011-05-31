@@ -42,7 +42,7 @@ modparam("dialog", "dlg_match_mode", 1) # default 0 (match on rr_param only); 1 
 # timeout/BYE
 modparam("dialog", "default_timeout", 21600) # default 43200 (12h)
 # Set maximum duration of dialog (=call)
-# modparam("dialog", "timeout_avp", "$avp(i:10)")
+modparam("dialog", "timeout_avp", "$avp(dialog_timer)")
 modparam("dialog", "bye_on_timeout_flag", ${flag_bye_on_timeout})
 modparam("dialog", "dlg_extra_hdrs", "X-Reason: Call too long\r\n")
 

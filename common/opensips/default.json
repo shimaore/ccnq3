@@ -60,6 +60,7 @@
     "ignore_caller_outbound_route"  : 146,
     "check_from"      : 147,
     "allow_onnet"     : 200,
+    "dialog_timer"    : 201,
 
     "valid_from"      : 100,
 

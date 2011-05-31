@@ -52,6 +52,7 @@
 
   "radius_config": "",
   "inv_timer": 90,
+  "dialog_timer": 28800,
 
   "challenge": "",
 
