@@ -51,8 +51,8 @@
   "debug": 0,
 
   "radius_config": "",
-  "inv_timer": 90,
-  "dialog_timer": 28800,
+  "inv_timeout": 90,
+  "dialog_timeout": 28800,
 
   "challenge": "",
 

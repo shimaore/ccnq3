@@ -27,7 +27,7 @@ loadmodule "tm.so"
 
 # Timeout for Final reply for INVITE after provisional msg (1xx).
 # This is e.g. the time we wait for ringing before trying the next route.
-modparam("tm", "fr_inv_timer", ${inv_timer})
+modparam("tm", "fr_inv_timer", ${inv_timeout})
 # default is 120
 # Same, as an AVP
 modparam("tm", "fr_inv_timer_avp", "$(avp(inv_timer))")
