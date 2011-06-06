@@ -80,6 +80,9 @@ put '/register.json': ->
       confirmation_expires: (new Date()).valueOf() + 2*24*3600*1000
       status: 'send_confirmation'
       profile: params
+      access: {} # source: [prefix,..], ..
+      update: {} # source|application: [prefix,..], ..
+
     # PUT without _rev can only happen once
     db.put p, (r) ->
       if r.error?
