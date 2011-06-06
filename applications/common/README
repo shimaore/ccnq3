@@ -1,0 +1,2 @@
+agents/replication  -- A replication agent, similar to the one currently being developped within CouchDB.
+agents/send_mail    -- An agent that sends arbitrary email (can be used to implement an outgoing mail spool in CouchDB).
