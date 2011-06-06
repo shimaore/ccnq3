@@ -23,7 +23,7 @@ cdb_changes.monitor config.databases_couchdb_uri, config.filter_name, undefined,
     return util.log(doc.error)
 
   # Typically target_db_name will be a UUID
-  target_db_name = doc._id
+  target_db_name = doc.uuid
   target_db_uri  = config.base_cdb_uri + target_db_name
   target_db      = cdb.new target_db_uri
 
