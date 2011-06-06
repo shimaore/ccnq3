@@ -1,0 +1,44 @@
+----- Conventions for username in CouchDB -----
+
+For people, use people's actual email addresses.
+For processes, use process_name@server_name.
+  (For example: freeswitch@prepaid.example.net, replicator@cdb1.example.net.)
+Reserve shortnames (no "@" sign) for admin accounts.
+
+----- Conventions for CouchDB access -----
+
+View as a single system (using potential scaling arch., replication).
+
+Common definitions:
+- "source" is the name of a generic database, such as:
+       billing
+       provisioning
+       _users
+    "source" is also the name of the database used as replication source
+    source-database can only be accessed via a node.js process (which enforces the prefix-matching rules)
+    (node.js access might be used for R/W access)
+
+- "prefix" is an authorization prefix (format is site-dependent)
+     matched against the "account" field in records (prefix must be a left-prefix of the account value for user to gain access)
+     "prefix" is used as a replication filter on "source" to create a target database
+
+- "target database" is a database identified by a UUID which is a replicating copy of a "source" database with a "prefix" filter
+  The target database only contains record from the source database where the "account" field of the record has "prefix" as a left-prefix.
+  The target database contains a security object that requires ${UUID}-reader access.
+
+
+Common _users database.
+/_users record contain:
+  access: { source: [prefix,..], .. }
+  update: { source|application: [prefix,..], .. }
+
+/databases maps between actual db-name (a UUID) and the associated role
+  _id: JSON.stringify [source,prefix]
+  uuid: UUID of database (CouchDB database name)
+  source: same as source in _users (replication source)
+  prefix: same as prefix in _users (replication filter)
+
+/${UUID}
+  one database created from a source db using replication and the prefix as filter
+  security object requires "${UUID}-reader"
+
