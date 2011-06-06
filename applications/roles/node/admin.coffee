@@ -34,7 +34,7 @@ def _user_is: (doc,role) ->
 def user_is: (role) ->
   return _user_is session
 
-def _ready:
+def _ready: ()->
   # CouchDB _admin users are always granted access.
   if user_is('_admin')
     return true
@@ -63,7 +63,7 @@ def user_may: (operation,source,account) ->
 # REST: Grant another user access to one of the accounts (or sub account)
 #       you have access to.
 
-def _admin_handle: (operation,cb)
+def _admin_handle: (operation,cb)->
 
   if not _ready()
     return
