@@ -1,9 +1,0 @@
-The Single Sign-On backend provides access to the session management database.
-
-It provides three functions:
-- create a new session
-- obtain information about an ongoing session
-- delete an existing session
-
-
-PUT
