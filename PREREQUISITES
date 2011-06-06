@@ -1,0 +1,12 @@
+Node.js (version 0.4.7 or above)
+npm (version 0.3.18 or above)
+
+npm packages:
+  request
+  nodemailer
+  couchapp
+  coffee-script
+  node-uuid
+  coffeekup
+  connect (might need git://stephane.shimaore.net/git/connect.git , contains bugfix for #163)
+  zappa (from git://stephane.shimaore.net/git/zappa.git , contains enhancement #25)
