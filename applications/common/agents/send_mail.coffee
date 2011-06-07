@@ -7,7 +7,7 @@ Released under the GPL3 license
 # Local configuration file
 
 fs = require 'fs'
-config_location = 'send_mail.config'
+config_location = process.ARGV[2] or 'send_mail.config'
 config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
 
 util = require 'util'

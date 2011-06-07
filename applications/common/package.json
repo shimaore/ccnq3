@@ -1,0 +1,20 @@
+{
+  "name": "ccnq3_applications_common",
+  "version": "0.0.1",
+  "description": "Generic applications for CCNQ3",
+  "keywords": "",
+  "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
+  "files": ["./agents/"],
+  "bin": { 
+    "ccnq3_replication": "agents/replication",
+    "ccnq3_replication.coffee": "agents/replication.coffee",
+    "ccnq3_send_mail": "agents/send_mail",
+    "ccnq3_send_mail.coffee": "agents/send_mail.coffee"
+  },
+  "dependencies": { "coffee-script": ">=1.1.1", "cdb": "*", "cdb_changes": "*" },
+  "engines": { "node": ">=0.4.7" },
+
+  "comment FIXME": "Add scripts to automatically handle database creation/push etc.",
+
+  "ok": true
+}
