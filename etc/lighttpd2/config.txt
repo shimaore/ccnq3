@@ -86,7 +86,7 @@ if req.path =~ "^/u/" {
 
 # Proxy Couchdb database
 
-if req.path =~ "^/(_users|_session|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})($|/)" {
+if req.path =~ "^/(_users|_session|provisioning|billing|cdr|log|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})($|/)" {
   proxy "[2001:100:200:1::6]:5984";
 }
 
