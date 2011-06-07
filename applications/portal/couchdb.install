@@ -48,7 +48,7 @@ JSON
 
 # Register a trusted application
 
-APPLICATION=register@server.fqdn
+APPLICATION=register@`hostname`
 
 openssl rand 32 | openssl sha512 -hex -r | cut -d" " -f 1 > ~/${APPLICATION}.txt
 chmod og-rwx ~/${APPLICATION}.txt
