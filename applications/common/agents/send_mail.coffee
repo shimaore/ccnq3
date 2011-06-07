@@ -12,7 +12,7 @@ config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
 
 util = require 'util'
 
-cdb = require process.cwd()+'/../lib/cdb.coffee'
+cdb = require 'cdb'
 send_mail_cdb = cdb.new (config.send_mail_couchdb_uri)
 
 # Reference for Nodemailer:  https://github.com/andris9/Nodemailer
@@ -22,7 +22,7 @@ mailer = require 'nodemailer'
 mailer.SMTP     = config.mailer.SMTP
 mailer.sendmail = config.mailer.sendmail
 
-cdb_changes = require process.cwd()+'/../lib/cdb_changes.coffee'
+cdb_changes = require 'cdb_changes'
 cdb_changes.monitor config.send_mail_couchdb_uri, config.filter_name, (p) ->
   if p.error?
     return util.log(p.error)

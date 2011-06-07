@@ -13,7 +13,7 @@ config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
 util = require 'util'
 querystring = require 'querystring'
 
-cdb = require process.cwd()+'/../lib/cdb.coffee'
+cdb = require 'cdb'
 
 # The replication database should contains documents suitable
 # for POSTing to /_replicate, i.e.:
@@ -57,7 +57,7 @@ replication_cdb.req { uri: '/_all_docs' }, (replication_doc) ->
   replicate(replication_doc)
 
 # Then monitor changes to update replications as needed.
-cdb_changes = require process.cwd()+'/../lib/cdb_changes.coffee'
+cdb_changes = require 'cdb_changes'
 cdb_changes.monitor replication_couchdb_uri, config.filter_name, (replication_doc) ->
   if replication_doc.error?
     return util.log(replication_doc.error)
