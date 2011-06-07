@@ -4,7 +4,7 @@
 ###
 
 querystring = require 'querystring'
-json_req = require './json_req.coffee'
+json_req = require 'json_req'
 
 class cdb
   constructor: (@db_uri) ->

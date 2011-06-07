@@ -1,0 +1,13 @@
+{
+  "name": "json_req",
+  "version": "0.0.1",
+  "description": "Overlay for the request package to ease access to JSON REST interfaces",
+  "keywords": "json request",
+  "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
+  "files": ["./lib/"],
+  "main": "lib/json_req.js",
+  "dependencies": { "request": ">=1.9.5" },
+  "scripts": { "preinstall": "coffee -c ./lib/json_req.coffee" },
+  "engines": { "node": ">=0.4.7" },
+  "ok": true
+}
