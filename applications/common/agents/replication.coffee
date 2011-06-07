@@ -58,7 +58,7 @@ replication_cdb.req { uri: '/_all_docs' }, (replication_doc) ->
 
 # Then monitor changes to update replications as needed.
 cdb_changes = require process.cwd()+'/../lib/cdb_changes.coffee'
-cdb_changes.monitor replication_couchdb_uri, config.filter_name, undefined, (replication_doc) ->
+cdb_changes.monitor replication_couchdb_uri, config.filter_name, (replication_doc) ->
   if replication_doc.error?
     return util.log(replication_doc.error)
   replicate(replication_doc)

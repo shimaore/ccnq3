@@ -29,7 +29,7 @@ sha1_hex = (t) ->
 
 
 cdb_changes = require process.cwd()+'/../../../lib/cdb_changes.coffee'
-cdb_changes.monitor config.users_couchdb_uri, config.filter_name, undefined, (p) ->
+cdb_changes.monitor config.users_couchdb_uri, config.filter_name, (p) ->
   if p.error?
     return util.log(p.error)
 

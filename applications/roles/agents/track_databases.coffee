@@ -18,7 +18,7 @@ cdb = require process.cwd()+'/../lib/cdb.coffee'
 replication_cdb = cdb.new config.replication_couchdb_uri
 
 cdb_changes = require process.cwd()+'/../lib/cdb_changes.coffee'
-cdb_changes.monitor config.databases_couchdb_uri, config.filter_name, undefined, (doc) ->
+cdb_changes.monitor config.databases_couchdb_uri, config.filter_name, (doc) ->
   if doc.error?
     return util.log(doc.error)
 

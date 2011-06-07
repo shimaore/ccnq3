@@ -16,8 +16,14 @@ querystring = require 'querystring'
 
 cdb_changes = exports
 
-cdb_changes.monitor = (cdb_uri,filter_name,since,cb)->
+# monitor (cdb_uri,filter_name,[filter_params,[since]],cb)
+
+cdb_changes.monitor = (cdb_uri,filter_name,params...)->
   util.log "Starting"
+
+  cb            = params.pop()
+  filter_params = params.shift()
+  since         = params.shift()
 
   db = cdb.new (cdb_uri)
 
@@ -49,7 +55,7 @@ cdb_changes.monitor = (cdb_uri,filter_name,since,cb)->
   parser.end = ->
     util.log("#{cdb_uri} closed, attempting restart")
     # Automatically restart
-    cdb_changes.monitor(cdb_uri,filter_name,since,cb)
+    cdb_changes.monitor(cdb_uri,filter_name,filter_params,since,cb)
 
   # Send the request
 
@@ -58,6 +64,7 @@ cdb_changes.monitor = (cdb_uri,filter_name,since,cb)->
 
   options.uri += "&filter=#{querystring.escape(filter_name)}" if filter_name?
   options.uri += "&since=#{querystring.escape(since)}"        if since?
+  options.uri += "&#{querystring.stringify filter_params}"    if filter_params?
 
   cdb_stream = db.req options, (r) ->
     if r.error?

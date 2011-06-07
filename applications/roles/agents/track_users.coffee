@@ -44,7 +44,7 @@ get_uuid = (source,prefix,cb)->
 
 
 cdb_changes = require process.cwd()+'/../lib/cdb_changes.coffee'
-cdb_changes.monitor config.users_couchdb_uri, config.filter_name, undefined, (user_doc) ->
+cdb_changes.monitor config.users_couchdb_uri, config.filter_name, (user_doc) ->
   if user_doc.error?
     return util.log(user_doc.error)
 
