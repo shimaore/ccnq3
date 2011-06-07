@@ -55,3 +55,11 @@ Moreover these are only provided for databases updates (where the node/ code
 allows writer access without allowing reader access to the global CouchDB databases).
 For databases read, the application is a couchapp or (equivalently) static client-side
 HTML and Javascript, accessing the "source+prefix"-specific database directly.
+
+* Central databases
+
+The following central databases are available:
+  provisioning  -- System-wide provisioning information (host, endpoint, location, number, ..)
+  billing       -- System-wide billing information (account, ..)
+  cdr           -- System-wide CDR repository
+  log           -- System-wide log repository (runnable_results, trace_results) -- only accessible by system administrators
