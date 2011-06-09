@@ -39,7 +39,10 @@ cdb_changes.monitor config.provisioning_couchdb_uri, filter_name, filter_params,
     code: runnable.code
     start: Date.now()
   try
-    vm.runInNewContext(code,{host:p})
+    # Just like in CouchDB, a runnable must return a function.
+    f = vm.runInNewContext(code)
+    # The function receives two arguments.
+    f(runnable.result,p)
   catch error
     runnable.result.error = error
   finally
