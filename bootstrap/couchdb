@@ -1,0 +1,35 @@
+#!/bin/bash
+
+set -e
+export LANG=
+
+# CouchDBInstall
+echo '*** BEGIN Install CouchDB'
+
+sudo aptitude install -y couchdb couchdb-bin
+
+# Install default config file
+sudo tee /etc/couchdb/local.ini <<'EOT' >/dev/null
+[httpd]
+port = 5984
+bind_address = ::
+WWW-Authenticate = Basic realm="couchdb"
+
+[couch_httpd_auth]
+require_valid_user = true
+
+[log]
+level = error
+
+[admins]
+EOT
+
+# Add authentication, etc.
+cd
+ADMIN_PASSWORD=`openssl rand 256 -hex`
+echo "admin = ${ADMIN_PASSWORD}" | sudo tee -a /etc/couchdb/local.ini
+
+sudo /etc/init.d/couchdb restart
+
+echo '*** END Install CouchDB Completed OK.'
+

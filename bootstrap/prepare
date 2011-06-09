@@ -1,0 +1,95 @@
+#!/bin/bash
+
+echo '** BEGIN prepare'
+
+export LANG=
+
+REPOSITORY=${REPOSITORY:debian.sotelips.net}
+
+echo "Using ${REPOSITORY} to download packages."
+
+sudo tee /etc/apt/sources.list > /dev/null <<"EOT"
+deb http://${REPOSITORY}/debian   testing main
+deb http://${REPOSITORY}/debian   unstable main
+deb http://${REPOSITORY}/shimaore shimaore main
+EOT
+
+sudo tee /etc/apt/preferences > /dev/null <<'EOT'
+Package: *
+Pin: release a=testing
+Pin-Priority: 500
+Package: *
+Pin: release a=shimaore
+Pin-Priority: 500
+Package: *
+Pin: release a=unstable
+Pin-Priority: 100
+EOT
+
+sudo apt-key add - <<'EOT'
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: GnuPG v1.4.11 (GNU/Linux)
+
+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
+=yCJE
+-----END PGP PUBLIC KEY BLOCK-----
+EOT
+
+echo '*** update'
+sudo aptitude update
+echo '*** dist-upgrade'
+sudo aptitude -y dist-upgrade
+echo '*** ccnq-base'
+sudo aptitude -y install ccnq-base
+
+sudo mv /etc/rsyslog.conf /etc/rsyslog.conf.bak
+sudo tee /etc/rsyslog.conf >/dev/null <<'EOT'
+$ModLoad imuxsock # provides support for local system logging
+$ModLoad imklog   # provides kernel logging support (previously done by rklogd)
+$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
+$FileOwner root
+$FileGroup adm
+$FileCreateMode 0640
+$DirCreateMode 0755
+auth,authpriv.*             /var/log/auth.log
+*.info;auth,authpriv.none  -/var/log/syslog
+# Uncomment the following line to gather debug messages
+# *.debug                  -/var/log/debug
+EOT
+sudo /etc/init.d/rsyslog reload
+
+echo '** END prepare'

@@ -1,0 +1,25 @@
+#!/bin/bash
+
+set -e
+export LANG=
+
+# NodeInstall
+echo '** BEGIN Install Node and npm'
+
+sudo aptitude install -y daemon
+sudo aptitude install -y -t unstable nodejs nodejs-dev
+
+mkdir -p ~/Node
+cd ~/Node
+(
+  export http_proxy=${NEED_PROXY}
+  sudo rm -rf npm/
+  git clone http://github.com/isaacs/npm.git
+  cd npm
+  sed -i -e 's/git:/http:/' .gitmodules
+  git submodule update --init
+  sudo make install
+)
+
+echo '** END Install Node and npm Completed OK.'
+ 

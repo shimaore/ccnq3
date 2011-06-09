@@ -1,0 +1,25 @@
+#!/bin/bash
+
+set -e
+export LANG=
+
+echo '*** Install ccnq3'
+
+echo '*** Install pre-requisites'
+(
+  mkdir -p ~/Node
+  export http_proxy="${NEED_PROXY}"
+  sudo npm config set proxy "$http_proxy"
+  sudo npm install cdb cdb_changes
+  sudo npm install request nodemailer couchapp coffee-script node-uuid coffeekup
+
+  # This version might work better.
+  # ( cd ~/Node && rm -rf connect          && git clone git://stephane.shimaore.net/git/connect.git           && cd connect          && sudo npm install )
+  sudo npm install connect
+  # This one is required.
+  ( cd ~/Node && rm -rf zappa            && git clone git://stephane.shimaore.net/git/zappa.git             && cd zappa            && sudo npm install )
+
+)
+
+echo '*** Completed OK.'
+
