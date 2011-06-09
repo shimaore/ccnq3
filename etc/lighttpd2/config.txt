@@ -86,8 +86,16 @@ if req.path =~ "^/u/" {
 
 # Proxy Couchdb database
 
-if req.path =~ "^/(_users|_session|provisioning|billing|cdr|log|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})($|/)" {
+# All-methods allowed
+if req.path =~ "^/(_session|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})($|/)" {
   proxy "[2001:100:200:1::6]:5984";
+}
+
+# Global databases, write-only access (no enumeration)
+if req.path =~ "^/(_users|provisioning|billing|cdr)/([^/]+)$" {
+  if req.method == "PUT" or req.method == "DELETE" {
+    proxy "[2001:100:200:1::6]:5984";
+  }
 }
 
 # Local
