@@ -36,7 +36,7 @@ ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
   user_match = (account,message) ->
     for prefix in userCtx.roles
       do (prefix) ->
-        if ("account:"+account).substring(0,prefix.length) is prefix
+        if ("update:provisioning:"+account).substring(0,prefix.length) is prefix
           return
     throw {forbidden : message||"No access to this account"}
 
