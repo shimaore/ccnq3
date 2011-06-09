@@ -24,8 +24,8 @@ ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
   if not oldDoc or oldDoc.status isnt 'confirmed'
     for role in newDoc.roles?
       do (role) ->
-        if role.match /-reader$/
-          throw {forbidden : "Only registered users might be granted account access."}
+        if role.match /^(access|update):/
+          throw {forbidden : "Only confirmed users might be granted account access."}
 
 # Attachments are loaded from users/*
 # var path     = require('path');

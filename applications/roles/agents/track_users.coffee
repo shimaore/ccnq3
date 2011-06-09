@@ -39,8 +39,7 @@ get_uuid = (source,prefix,cb)->
           return util.log r.error
         cb r._id
 
-    cb p._id
-
+    cb? p._id
 
 
 cdb_changes = require process.cwd()+'/../lib/cdb_changes.coffee'
@@ -48,19 +47,6 @@ cdb_changes.monitor config.users_couchdb_uri, config.filter_name, (user_doc) ->
   if user_doc.error?
     return util.log(user_doc.error)
 
-  user_doc.roles = user_doc.roles.filter (v)-> not v.match /-reader$/
-
-  next = ()->
-    users_cdb.put user_doc, (r)->
-      if r.error
-        return util.log r.error
-
   for source, prefixes of user_doc.access
-    # Verify the source is valid
     if config.sources[source]?
-      for prefix in prefixes
-        next = ()->
-          get_uuid source, prefix, (the_uuid)->
-            user_doc.roles.push "#{the_uuid}-reader"
-            next()
-
+      get_uuid source, prefix

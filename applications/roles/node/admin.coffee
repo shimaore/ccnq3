@@ -80,6 +80,18 @@ def _admin_handle: (operation,cb)->
       return send error: p.error
 
     cb p, (q)->
+
+      # Map the new content to roles for the user.
+      q.roles = q.roles.filter (v)-> not v.match /^(access|update):/
+
+      # These are used by the replicated databases to allow access.
+      for source, prefixes of user_doc.access
+        q.roles.push "access:#{source}:#{prefix}" for prefix in prefixes
+
+      # These are used by the primary databases' validate_doc_update
+      for source, prefixes of user_doc.update
+        q.roles.push "update:#{source}:#{prefix}" for prefix in prefixes
+
       users_cdb.put q, (r) ->
         if r.error?
           return send error: r.error

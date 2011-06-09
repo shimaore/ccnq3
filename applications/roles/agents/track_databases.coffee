@@ -39,7 +39,7 @@ cdb_changes.monitor config.databases_couchdb_uri, config.filter_name, (doc) ->
         uri:"_security"
         body:
           readers:
-            roles: [ target_db_name + '-reader' ]
+            roles: [ "access:#{doc.source}:#{doc.prefix}" ]
 
       target_db.req security_req, (r) ->
         if r.error
