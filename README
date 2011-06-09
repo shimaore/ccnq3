@@ -63,7 +63,6 @@ The following central databases are available:
   provisioning  -- System-wide provisioning information (host, endpoint, location, number, ..)
   billing       -- System-wide billing information (account, ..)
   cdr           -- System-wide CDR repository
-  log           -- System-wide log repository (runnable_results, trace_results) -- only accessible by system administrators
 
 * Unified web access
 
