@@ -20,7 +20,7 @@ ddoc =
 module.exports = ddoc
 
 # http://wiki.apache.org/couchdb/Document_Update_Validation
-ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
+ddoc.validate_doc_update = (newDoc, oldDoc) ->
 
   if newDoc._id is "_design/userapp"
     throw {forbidden:'The user application should not be replicated here.'}
@@ -33,30 +33,13 @@ ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
     if oldDoc and toJSON(oldDoc[field]) is toJSON(newDoc[field])
       throw {forbidden : "Field can't be changed: " + field}
 
-  user_match = (account,message) ->
-    for prefix in userCtx.roles
-      do (prefix) ->
-        if ("update:provisioning:"+account).substring(0,prefix.length) is prefix
-          return
-    throw {forbidden : message||"No access to this account"}
-
-  user_is = (role) ->
-    return userCtx.roles.indexOf(role) >= 0
-
-  # Only admins or confirmed users may modify documents.
-  # (Newly registered users may not.)
-  if not user_is('_admin') and not user_is('confirmed')
-    throw {forbidden : "Not a confirmed user."}
-
   # Handle delete documents.
   if newDoc._deleted is true
-
-    if not user_is('_admin')
-      throw {forbidden: 'Only admins may delete documents.'}
 
     if oldDoc.do_not_delete
       throw {forbidden: 'Document is tagged as do_not_delete.'}
 
+    # No further processing is required on deleted documents.
     return
   else
     # Document was not deleted, any tests here?
@@ -66,32 +49,24 @@ ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
   # Validate the document's type
   required("type")
   unchanged("type")
+  type = newDoc.type
   if  type isnt "number" and type isnt "endpoint" and type isnt "location" and type isnt "host"
     throw {forbidden: 'Invalid type.'}
 
   # Each document of type T should have a .T record.
-  required(newDoc.type)
-  unchanged(newDoc.type)
-  if newDoc._id isnt newDoc.type+":"+newDoc[newDoc.type]
-    throw {forbidden: "Document ID must be #{newDoc.type}:#{newDoc[newDoc.type]}."}
-
-  # User should have access to the account to be able to create or update document inside it.
-  user_match(newDoc.account)
+  required(type)
+  unchanged(type)
+  if newDoc._id isnt type+":"+newDoc[type]
+    throw {forbidden: "Document ID must be #{type}:#{newDoc[type]}."}
 
   # Validate updates
   if oldDoc
-    if newDoc.account isnt oldDoc.account
-      user_match(oldDoc.account,"Attempt to change document account failed.")
-    # Other updates
 
   # Validate create
   if not oldDoc
-    if newDoc.type is "number"
-      if not user_is('_admin')
-        throw {forbidden: 'Only admins may create new numbers.'}
 
   # Validate fields
-  if newDoc.type is "endpoint"
+  if type is "endpoint"
     if not newDoc.ip and not newDoc.username
       throw {forbidden: 'IP or Username must be provided.'}
 
@@ -101,22 +76,6 @@ ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
       required("password")
 
 
-ddoc.filters.user_replication = (doc, req) ->
-  # Prefix is required
-  if not req.prefix
-    return false
-
-  # Only replicate documents, do not replicate _design objects (for example).
-  if not doc.account
-    return false
-
-  # Replicate documents for which the account is a subset of the prefix.
-  if doc.account.substr(0,req.prefix.length) is req.prefix
-    return true
-
-  # Do not otherwise replicate
-  return false
-
 # Attachments are loaded from provisioning-global/*
-path = require('path')
-couchapp.loadAttachments(ddoc, path.join(__dirname, 'provisioning-global'))
+# path = require('path')
+# couchapp.loadAttachments(ddoc, path.join(__dirname, 'provisioning-global'))
