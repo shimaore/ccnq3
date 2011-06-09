@@ -66,7 +66,7 @@ ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
   # Validate the document's type
   required("type")
   unchanged("type")
-  if  type isnt "number" and type isnt "endpoint" and type isnt "location"
+  if  type isnt "number" and type isnt "endpoint" and type isnt "location" and type isnt "host"
     throw {forbidden: 'Invalid type.'}
 
   # Each document of type T should have a .T record.
