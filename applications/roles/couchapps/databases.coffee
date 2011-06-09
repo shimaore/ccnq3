@@ -22,8 +22,11 @@ ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
       throw {forbidden : message || "Document must have a " + field}
 
   unchanged = (field) ->
-    if oldDoc and toJSON(oldDoc[field]) is toJSON(newDoc[field])
+    if oldDoc? and toJSON(oldDoc[field]) is toJSON(newDoc[field])
       throw {forbidden : "Field can't be changed: " + field}
+
+  user_is = (role) ->
+    return userCtx.roles.indexOf(role) >= 0
 
   if not user_is('_admin') and not user_is('databases-writer')
     throw {forbidden : "Not authorized to make modifications."}
@@ -35,8 +38,6 @@ ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
       throw {forbidden: 'Database is tagged as do_not_delete.'}
 
     return
-  else
-    # Document was not deleted, any tests here?
 
   # Basically you can add any other field, etc, just don't touch these.
   required('uuid')
