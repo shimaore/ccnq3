@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+set -e
+export LANG=
+
+. bootstrap/prepare
+. bootstrap/node
+sudo npm install coffee-script cdb cdb_changes
+
+# Start application/host
+MAIN_URI="$1"
+shift
+
+cat <<"JSON" > application/host/agents/host.config"
+{
+  "provisioning_couchdb_uri": "${MAIN_URI}/provisioning"
+}
+JSON
+
+. applications/host/agents/host stop || echo
+. applications/host/agents/host start

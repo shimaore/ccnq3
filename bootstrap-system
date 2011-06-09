@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# (c) 2011 Stephane Alnet
+# License: APGL3+
+
+set -e
+export LANG=
+
+. bootstrap/prepare
+. bootstrap/node
+sudo npm install coffee-script cdb cdb_changes couchapps
+
+HOSTNAME=`hostname`
+
+if [ "x$1" == "x" ]; then
+  echo "** Proceeding with installation of CouchDB on local host ${HOSTNAME}."
+  . bootstrap/couchdb
+  CDB_URI="http://admin:${ADMIN_PASSWORD}@${HOSTNAME}:5984/"
+else
+  CDB_URI="$1"
+  shift
+fi
+
+echo "Bootstrapping database using administrative access at ${CDB_URI}"
+echo -n "${CDB_URI}" > ~/bootstrap_cdb_uri
+. applications/roles/couchapps/install.sh
+. applications/provisioning/couchapps/install.sh
+
+echo "Adding this host in the _users and provisioning databases."
+
+
+# Set a temporary access for the "host" process.
+cat <<"JSON" > application/host/agents/host.config"
+{
+  "provisioning_couchdb_uri": "${CDB_URI}/provisioning"
+}
+JSON
+
+. applications/host/agents/host start
+
+echo "To manage your system, please access ${CDB_URI}/provisioning/_design/app/index.html or a suitable redirection."
