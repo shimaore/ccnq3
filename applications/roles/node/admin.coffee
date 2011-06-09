@@ -97,6 +97,8 @@ def _admin_handle: (operation,cb)->
           return send error: r.error
         return send ok: true
 
+# TODO GET /admin/grant/:user , using a user's "primary account" (the _users' record "account" field).
+
 # Grant right
 put '/admin/grant/:user/(update|access)/:source/:prefix': ->
   _admin_handle params[0], (p,cb)->
