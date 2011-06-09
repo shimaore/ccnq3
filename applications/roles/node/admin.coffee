@@ -71,7 +71,7 @@ def _admin_handle: (operation,cb)->
   if not user_may(@operation,@source,@prefix)
     return send forbidden: "You cannot grant access you do not have."
 
-  if not user_may('update','_users',@prefix)
+  if not user_may('update','_users',@prefix) and not user_is('_admin')
     return send forbidden: "You do not have administrative access."
 
   users_cdb.get "org.couchdb.user:#{@user}", (p) =>
