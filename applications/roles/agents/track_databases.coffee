@@ -38,6 +38,7 @@ cdb_changes.monitor config.databases_couchdb_uri, config.filter_name, (doc) ->
       security_req =
         uri:"_security"
         body:
+          # no admin roles => need to be _admin
           readers:
             roles: [ "access:#{doc.source}:#{doc.prefix}" ]
 
@@ -46,6 +47,7 @@ cdb_changes.monitor config.databases_couchdb_uri, config.filter_name, (doc) ->
           return util.log(r.error)
 
         # Push the user couchapp into the database
+        # FIXME Replace spawn with a call to the couchapp module, duh
         couchapp = child_process.spawn '/usr/bin/env', [
           'couchapp',
           config[doc.source].couchapp,
