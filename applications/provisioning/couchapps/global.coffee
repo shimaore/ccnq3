@@ -75,6 +75,11 @@ ddoc.validate_doc_update = (newDoc, oldDoc) ->
     if newDoc.username
       required("password")
 
+  if type is "host"
+    if newDoc.account isnt ''
+      throw {forbidden: 'Hosts currently can only be added at the root.'}
+
+
 
 # Attachments are loaded from provisioning-global/*
 # path = require('path')
