@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# FIXME This would need to be ran on the host(s) that will run the node code
+# (agents or web UIs)
+
 set -e
 export LANG=
 
