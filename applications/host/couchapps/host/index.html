@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="css/smoothness/jquery-ui.css" />
+    <script src="js/jquery.min.js" type="text/javascript"></script>
+    <script src="js/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="js/coffee-script.js" type="text/javascript"></script>
+    <script src="js/coffeekup.coffee" type="text/coffeescript"></script>
+
+    <script type="text/coffeescript">
+      $(document).ready ->
+        $.ajax
+          url: 'index.coffee'
+          dataType: 'text'
+          success: (data)->
+            $('body').html CoffeeKup.render data
+          error: (_jq,status) ->
+            $('body').html "Error: #{status}"
+    </script>
+  </head>
+  <body>
+    <img src="indicator.white.gif" />
+  </body>
+</html>
+  
