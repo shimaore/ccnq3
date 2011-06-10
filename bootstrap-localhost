@@ -7,15 +7,19 @@ export LANG=
 ./bootstrap/node
 sudo npm install coffee-script cdb cdb_changes
 
+echo "*** Install the host agent"
+(cd applications/host/ && sudo npm install)
+
 # Start application/host
 MAIN_URI="$1"
 shift
 
-cat <<"JSON" > application/host/agents/host.config"
+sudo mkdir -p /etc/ccnq3
+sudo tee /etc/ccnq3/host.config <<"JSON" >/dev/null
 {
   "provisioning_couchdb_uri": "${MAIN_URI}/provisioning"
 }
 JSON
 
-. applications/host/agents/host stop || echo
-. applications/host/agents/host start
+ccnq3_host stop || echo
+ccnq3_host start
