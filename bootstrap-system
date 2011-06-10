@@ -7,7 +7,7 @@ export LANG=
 
 ./bootstrap/prepare
 ./bootstrap/node
-sudo npm install coffee-script cdb cdb_changes couchapps
+(cd && npm install coffee-script cdb cdb_changes couchapps)
 
 HOSTNAME=`hostname`
 
@@ -34,7 +34,7 @@ echo "*** Performing local Host installation"
 # For all other hosts, the URI will be provided to the bootstrap-localhost script, which will
 # write the configuration file itself.
 echo "*** Install the host agent"
-(cd applications/host/ && sudo npm install)
+(cd applications/host/ && sudo npm -g install)
 
 sudo mkdir -p /etc/ccnq3
 ./applications/host/node/host_cli.coffee /etc/ccnq3/host.config

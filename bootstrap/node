@@ -12,6 +12,7 @@ sudo aptitude install -y -t unstable nodejs nodejs-dev
 mkdir -p ~/Node
 cd ~/Node
 (
+  # Work over IPv6 with NEED_PROXY
   export http_proxy=${NEED_PROXY}
   sudo rm -rf npm/
   git clone http://github.com/isaacs/npm.git
@@ -22,4 +23,3 @@ cd ~/Node
 )
 
 echo '** END Install Node and npm Completed OK.'
- 
