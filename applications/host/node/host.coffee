@@ -20,11 +20,11 @@ shell_runnable = (script) ->
         stderr: stderr
 
 
-export.record = (hostname,cb)->
+export.record = (hostname,cdb_uri,cb)->
   username = "host@#{hostname}"
 
-  users = cdb.new "#{process.env.CDB_URI}/_users"
-  provisioning = cdb.new "#{process.env.CDB_URI}/provisioning"
+  users = cdb.new "#{cdb_uri}/_users"
+  provisioning = cdb.new "#{cdb_uri}/provisioning"
 
   salt = sha1_hex "a"+Math.random()
   password = sha1_hex "a"+Math.random()

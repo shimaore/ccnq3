@@ -6,7 +6,7 @@ host = require './host.coffee'
 
 hostname = os.hostname()
 
-host.record hostname, (username,password)->
+host.record hostname, process.env.CDB_URI, (username,password)->
     url = require 'url'
     p = url.parse "#{process.env.CDB_URI}/provisioning"
     delete p.href
