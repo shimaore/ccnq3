@@ -3,8 +3,8 @@
 set -e
 export LANG=
 
-. bootstrap/prepare
-. bootstrap/node
+./bootstrap/prepare
+./bootstrap/node
 sudo npm install coffee-script cdb cdb_changes
 
 # Start application/host

@@ -5,15 +5,15 @@
 set -e
 export LANG=
 
-. bootstrap/prepare
-. bootstrap/node
+./bootstrap/prepare
+./bootstrap/node
 sudo npm install coffee-script cdb cdb_changes couchapps
 
 HOSTNAME=`hostname`
 
 if [ "x$1" == "x" ]; then
   echo "** Proceeding with installation of CouchDB on local host ${HOSTNAME}."
-  . bootstrap/couchdb
+  ./bootstrap/couchdb
   CDB_URI="http://admin:${ADMIN_PASSWORD}@${HOSTNAME}:5984/"
 else
   CDB_URI="$1"
