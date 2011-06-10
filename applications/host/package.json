@@ -1,13 +1,13 @@
 {
-  "name": "ccnq3_applications_common",
+  "name": "ccnq3_applications_host",
   "version": "0.0.1",
-  "description": "Generic applications for CCNQ3",
+  "description": "Host-specific applications for CCNQ3",
   "keywords": "",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
   "files": ["./agents/"],
   "bin": { 
     "ccnq3_host": "agents/host",
-    "ccnq3_host.coffee": "agents/host.coffee",
+    "ccnq3_host.coffee": "agents/host.coffee"
   },
   "dependencies": { "coffee-script": ">=1.1.1", "cdb": "*", "cdb_changes": "*" },
   "engines": { "node": ">=0.4.7" },
