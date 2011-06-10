@@ -1,10 +1,7 @@
-# Create a username for the new host's main process so that it can bootstrap its own installation.
 
-# Add the host in the main CDB's provisioning table.
-# with a first runnable set to " host.installed = true " to confirm that the agent is running and accessible
-# and a second runnable set to install the daemon in @reboot crontab.
+# Create the same type of entries as the ones done by ../node/host.coffee
 
-# Finally run the ssh code if requested to do so
+# If requested, run the ssh code if requested to do so
 if $SSH_INSTALL; then
   ssh $HOST "cd && rm -rf ccnq3 && git clone git://stephane.shimaore.net/git/ccnq3.git && cd ccnq3 && ./bootstrap-localhost ${CDB_URI}"
 fi
