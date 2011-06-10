@@ -20,21 +20,27 @@ else
   shift
 fi
 
-echo "Bootstrapping database using administrative access at ${CDB_URI}"
-echo -n "${CDB_URI}" > ~/bootstrap_cdb_uri
-. applications/roles/couchapps/install.sh
-. applications/provisioning/couchapps/install.sh
+echo "Bootstrapping database using ${CDB_URI}"
+./applications/_users/node/security.coffee
 
-echo "Adding this host in the _users and provisioning databases."
+(cd ./applications/provisioning/couchapps/ && install.sh)
+./applications/provisioning/node/security.coffee
 
+(cd ./applications/host/couchapps/ && install.sh)
 
-# Set a temporary access for the "host" process.
-cat <<"JSON" > application/host/agents/host.config"
-{
-  "provisioning_couchdb_uri": "${CDB_URI}/provisioning"
-}
-JSON
+echo "*** Performing local Host installation"
+# What follows is a version of "bootstrap-localhost" modified for the primary system.
+# Note: the bootstrap host is the only one where we will directly store the configuration.
+# For all other hosts, the URI will be provided to the bootstrap-localhost script, which will
+# write the configuration file itself.
+echo "*** Install the host agent"
+(cd applications/host/ && sudo npm install)
 
-. applications/host/agents/host start
+sudo mkdir -p /etc/ccnq3
+./applications/host/node/host_cli.coffee /etc/ccnq3/host.config
 
+ccnq3_host stop || echo
+ccnq3_host start
+
+echo
 echo "To manage your system, please access ${CDB_URI}/provisioning/_design/app/index.html or a suitable redirection."
