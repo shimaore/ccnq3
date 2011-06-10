@@ -5,10 +5,13 @@ export LANG=
 
 ./bootstrap/prepare
 ./bootstrap/node
-(cd && npm install coffee-script cdb cdb_changes)
+(cd && sudo npm -g install coffee-script)
+(cd && npm install request)
+npm install lib/cdb
+npm install lib/cdb_changes
 
 echo "*** Install the host agent"
-(cd applications/host/ && sudo npm -g install)
+sudo npm -g install applications/host
 
 # Start application/host
 MAIN_URI="$1"
