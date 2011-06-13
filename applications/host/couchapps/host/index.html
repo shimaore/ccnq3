@@ -7,17 +7,9 @@
     <script src="js/jquery-ui.min.js" type="text/javascript"></script>
     <script src="js/coffee-script.js" type="text/javascript"></script>
     <script src="js/coffeekup.coffee" type="text/coffeescript"></script>
+    <script src="js/sammy.min.js" type="text/javascript"></script>
 
-    <script type="text/coffeescript">
-      $(document).ready ->
-        $.ajax
-          url: 'index.coffee'
-          dataType: 'text'
-          success: (data)->
-            $('body').html CoffeeKup.render data
-          error: (_jq,status) ->
-            $('body').html "Error: #{status}"
-    </script>
+    <script src="index.coffee" type="text/coffeescript"></script>
   </head>
   <body>
     <img src="indicator.white.gif" />
