@@ -14,11 +14,11 @@ util = require 'util'
 querystring = require 'querystring'
 child_process = require 'child_process'
 
-cdb = require process.cwd()+'/../lib/cdb.coffee'
+cdb = require 'cdb'
 replication_cdb = cdb.new config.replication_couchdb_uri
 
-cdb_changes = require process.cwd()+'/../lib/cdb_changes.coffee'
-cdb_changes.monitor config.databases_couchdb_uri, config.filter_name, (doc) ->
+cdb_changes = require 'cdb_changes'
+cdb_changes.monitor { uri: config.databases_couchdb_uri }, (doc) ->
   if doc.error?
     return util.log(doc.error)
 

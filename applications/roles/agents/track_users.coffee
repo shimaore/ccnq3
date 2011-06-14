@@ -15,7 +15,7 @@ qs = require 'querystring'
 child_process = require 'child_process'
 uuid = require 'node-uuid'
 
-cdb = require process.cwd()+'/../lib/cdb.coffee'
+cdb = require 'cdb'
 users_cdb     = cdb.new config.users_couchdb_uri
 databases_cdb = cdb.new config.databases_couchdb_uri
 
@@ -42,8 +42,11 @@ get_uuid = (source,prefix,cb)->
     cb? p._id
 
 
-cdb_changes = require process.cwd()+'/../lib/cdb_changes.coffee'
-cdb_changes.monitor config.users_couchdb_uri, config.filter_name, (user_doc) ->
+cdb_changes = require 'cdb_changes'
+options =
+  uri: config.users_couchdb_uri
+  filter_name: 'confirmed'
+cdb_changes.monitor options, (user_doc) ->
   if user_doc.error?
     return util.log(user_doc.error)
 

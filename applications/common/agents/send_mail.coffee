@@ -23,7 +23,10 @@ mailer.SMTP     = config.mailer.SMTP
 mailer.sendmail = config.mailer.sendmail
 
 cdb_changes = require 'cdb_changes'
-cdb_changes.monitor config.send_mail_couchdb_uri, config.filter_name, (p) ->
+options =
+  uri: config.send_mail_couchdb_uri
+  filter_name: config.filter_name
+cdb_changes.monitor options, (p) ->
   if p.error?
     return util.log(p.error)
 

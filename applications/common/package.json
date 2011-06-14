@@ -11,7 +11,7 @@
     "ccnq3_send_mail": "agents/send_mail",
     "ccnq3_send_mail.coffee": "agents/send_mail.coffee"
   },
-  "dependencies": { "coffee-script": ">=1.1.1", "cdb": "*", "cdb_changes": "*" },
+  "dependencies": { "coffee-script": ">=1.1.1", "cdb": "*", "cdb_changes": ">=0.0.3" },
   "engines": { "node": ">=0.4.7" },
 
   "comment FIXME": "Add scripts to automatically handle database creation/push etc.",

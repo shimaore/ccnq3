@@ -43,8 +43,11 @@ kayako_request = (method,controller,args,cb) ->
 
 
 
-cdb_changes = require process.cwd()+'/../../../lib/cdb_changes.coffee'
-cdb_changes.monitor config.users_couchdb_uri, config.filter_name, (p) ->
+cdb_changes = require 'cdb_changes'
+options:
+  uri: config.users_couchdb_uri
+  filter_name: "confirmed"
+cdb_changes.monitor options, (p) ->
   if p.error?
     return util.log(p.error)
 

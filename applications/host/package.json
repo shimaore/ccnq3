@@ -9,7 +9,7 @@
     "ccnq3_host": "agents/host",
     "ccnq3_host.coffee": "agents/host.coffee"
   },
-  "dependencies": { "coffee-script": ">=1.1.1", "cdb": "*", "cdb_changes": "*" },
+  "dependencies": { "coffee-script": ">=1.1.1", "cdb": "*", "cdb_changes": ">=0.0.3" },
   "engines": { "node": ">=0.4.7" },
 
   "ok": true

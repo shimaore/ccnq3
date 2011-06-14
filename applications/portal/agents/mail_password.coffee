@@ -14,7 +14,7 @@ util = require 'util'
 querystring = require 'querystring'
 crypto = require 'crypto'
 
-cdb = require process.cwd()+'/../../../lib/cdb.coffee'
+cdb = require 'cdb'
 users_cdb = cdb.new (config.users_couchdb_uri)
 
 mailer = require 'nodemailer'
@@ -22,14 +22,17 @@ mailer = require 'nodemailer'
 mailer.SMTP     = config.mailer.SMTP
 mailer.sendmail = config.mailer.sendmail
 
-random_password = require process.cwd()+'/../../../lib/password.coffee'
+random_password = require 'password'
 
 sha1_hex = (t) ->
   return crypto.createHash('sha1').update(t).digest('hex')
 
 
-cdb_changes = require process.cwd()+'/../../../lib/cdb_changes.coffee'
-cdb_changes.monitor config.users_couchdb_uri, config.filter_name, (p) ->
+cdb_changes = require 'cdb_changes'
+options =
+  uri: config.users_couchdb_uri
+  filter_name: "portal/send_password"
+cdb_changes.monitor options, (p) ->
   if p.error?
     return util.log(p.error)
 

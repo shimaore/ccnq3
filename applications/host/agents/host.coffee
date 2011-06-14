@@ -13,15 +13,17 @@ config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
 util = require 'util'
 vm   = require 'vm'
 
-cdb         = require process.cwd()+'/../lib/cdb.coffee'
-cdb_changes = require process.cwd()+'/../lib/cdb_changes.coffee'
+cdb         = require 'cdb'
+cdb_changes = require 'cdb_changes'
 
-filter_name = "host/hostname"
 hostname = os.hostname()
-filter_params =
-  hostname: hostname
+options =
+  uri: config.provisioning_couchdb_uri
+  filter_name: "host/hostname"
+  filter_params:
+    hostname: hostname
 
-cdb_changes.monitor config.provisioning_couchdb_uri, filter_name, filter_params, (p) ->
+cdb_changes.monitor options, (p) ->
   if p.error? then return util.log(p.error)
 
   # p.runnables is a ring with new runnables at the start of the list
