@@ -3,11 +3,6 @@
 # Released under the GPL3 license
 ###
 
-# Load CouchDB
-cdb = require 'cdb'
-
-def users_cdb: cdb.new config.register.users_couchdb_uri
-
 # Content
 
 client register: ->
@@ -58,7 +53,7 @@ put '/register.json': ->
 
   # Currently assumes username = email
   username = @email
-  db = users_cdb
+  db = cdb.new config.register.users_couchdb_uri
   db.exists (it_does) =>
     if not it_does
       return send error:'Not connected to the database'

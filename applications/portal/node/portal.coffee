@@ -23,6 +23,8 @@ config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
 
 def config: config
 
+def cdb: require 'cdb'
+
 #
 # Special rendering helpers
 #

@@ -3,14 +3,10 @@
 # Released under the GPL3 license
 ###
 
-# Load CouchDB
-cdb = require 'cdb'
-
-def users_cdb: cdb.new config.confirm.users_couchdb_uri
-
 # Content
 
 helper confirm_registration: (cb) ->
+  users_cdb = cdb.new config.confirm.users_couchdb_uri
   users_cdb.get "org.couchdb.user:#{@email}", (p) =>
     if p.error?
       return error p.error
