@@ -81,7 +81,7 @@ cdb_changes.monitor = (options,cb)->
     header:
       cookie: options.cookie
 
-  cdb_stream = db.req options, (r) ->
+  cdb_stream = json_req.request options, (r) ->
     if r.error?
       util.log(r.error)
 
