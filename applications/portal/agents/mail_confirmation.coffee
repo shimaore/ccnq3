@@ -8,7 +8,7 @@ Released under the GPL3 license
 
 fs = require('fs')
 config_location = process.env.npm_package_config_config_file or '/etc/ccnq3/portal.config'
-config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
+config = JSON.parse(fs.readFileSync(config_location, 'utf8')).mail_confirmation
 
 util = require 'util'
 querystring = require 'querystring'
