@@ -4,13 +4,6 @@
 # Released under the GPL3 license
 ###
 
-# Load Configuration
-fs = require('fs')
-config_location = 'changes.config'
-changes_config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
-
-def changes_config: changes_config
-
 # Proxy a "_changes" CouchDB API for a Socket.IO client.
 # The client must provide a full, valid URI (including authentication if needed).
 
@@ -25,7 +18,7 @@ at disconnection: ->
   delete client.cdb_client
 
 msg changes: ->
-  uri = url.parse changes_config.base_couchdb_uri
+  uri = url.parse config.changes.base_couchdb_uri
   delete uri.href
   uri.pathname = message.database
   options =

@@ -3,17 +3,10 @@
 # Released under the GPL3 license
 ###
 
-# Load Configuration
-fs = require('fs')
-config_location = 'confirm.config'
-confirm_config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
-
-def confirm_config: confirm_config
-
 # Load CouchDB
 cdb = require process.cwd()+'/../../../lib/cdb.coffee'
 
-def users_cdb: cdb.new (confirm_config.users_couchdb_uri)
+def users_cdb: cdb.new (config.confirm.users_couchdb_uri)
 
 # Content
 

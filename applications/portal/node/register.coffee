@@ -3,17 +3,10 @@
 # Released under the GPL3 license
 ###
 
-# Load Configuration
-fs = require('fs')
-config_location = 'register.config'
-register_config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
-
-def register_config: register_config
-
 # Load CouchDB
-cdb = require process.cwd()+'/../../../lib/cdb.coffee'
+cdb = require 'cdb'
 
-def users_cdb: cdb.new (register_config.users_couchdb_uri)
+def users_cdb: cdb.new config.register.users_couchdb_uri
 
 # Content
 
