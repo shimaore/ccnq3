@@ -42,8 +42,6 @@ cdb_changes.monitor = (options,cb)->
       # Processing line
       try
         p = JSON.parse line
-      catch error
-        util.log "JSON did not parse #{line}: #{error}"
       if p?.id?
         cb p
       # /Processing line
