@@ -6,7 +6,7 @@
 # Load CouchDB
 cdb = require 'cdb'
 
-def users_cdb: cdb.new (config.confirm.users_couchdb_uri)
+def users_cdb: cdb.new config.confirm.users_couchdb_uri
 
 # Content
 
@@ -44,7 +44,7 @@ helper confirm_registration: (cb) ->
 get '/confirm.html': ->
   if @email? and @code?
     confirm_registration (p) ->
-      redirect confirm_config.post_confirmation_uri
+      redirect config.confirm.post_confirmation_uri
   else
     page 'confirm'
 
