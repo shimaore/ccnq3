@@ -21,7 +21,9 @@ app "portal", (server) ->
 # Load Configuration
 fs = require('fs')
 config_location = process.env.npm_package_config_config_file or '/etc/ccnq3/portal.config'
-confirm_config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
+config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
+
+def config: config
 
 #
 # Special rendering helpers
