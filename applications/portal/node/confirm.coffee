@@ -4,7 +4,7 @@
 ###
 
 # Load CouchDB
-cdb = require process.cwd()+'/../../../lib/cdb.coffee'
+cdb = require 'cdb'
 
 def users_cdb: cdb.new (config.confirm.users_couchdb_uri)
 

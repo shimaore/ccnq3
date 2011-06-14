@@ -6,8 +6,6 @@
 
 app "portal", (server) ->
   express = require('express')
-  # server.use express.static("#{process.cwd()}/public")
-  # server.use express.favicon()
   server.use express.logger()
   server.use express.bodyParser()
   server.use express.cookieParser()

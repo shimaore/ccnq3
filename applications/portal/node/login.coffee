@@ -4,7 +4,7 @@ Released under the GPL3 license
 ###
 
 # Load CouchDB
-cdb = require process.cwd()+'/../../../lib/cdb.coffee'
+cdb = require 'cdb'
 
 def cdb: cdb
 
