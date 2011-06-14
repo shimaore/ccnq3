@@ -3,10 +3,9 @@
 # Released under the GPL3 license
 ###
 
-cdb = require 'cdb'
-
 util = require 'util'
-querystring = require 'querystring'
+url = require 'url'
+json_req = require 'json_req'
 
 # Reference for request: https://github.com/mikeal/node-utils/tree/master/request
 
@@ -16,16 +15,15 @@ querystring = require 'querystring'
 
 cdb_changes = exports
 
-# monitor (cdb_uri,filter_name,[filter_params,[since]],cb)
+# monitor ( uri: cdb_uri,filter_name,[filter_params,[since]],cb)
+# options should be:
+#    uri
+#    filter_name
+#    filter_params
+#    since
+#    cookie
 
-cdb_changes.monitor = (cdb_uri,filter_name,params...)->
-  util.log "Starting"
-
-  cb            = params.pop()
-  filter_params = params.shift()
-  since         = params.shift()
-
-  db = cdb.new (cdb_uri)
+cdb_changes.monitor = (options,cb)->
 
   # Stream to receive the data from CouchDB
   parser = new process.EventEmitter()
@@ -44,8 +42,10 @@ cdb_changes.monitor = (cdb_uri,filter_name,params...)->
       # Processing line
       try
         p = JSON.parse line
+      catch error
+        util.log "JSON did not parse #{line}: #{error}"
       if p?.id?
-        db.get p.id, cb
+        cb p
       # /Processing line
 
     parser.buffer = d[0]
@@ -53,18 +53,32 @@ cdb_changes.monitor = (cdb_uri,filter_name,params...)->
     return true
 
   parser.end = ->
-    util.log("#{cdb_uri} closed, attempting restart")
+    util.log("#{options.uri} closed, attempting restart")
     # Automatically restart
-    cdb_changes.monitor(cdb_uri,filter_name,filter_params,since,cb)
+    cdb_changes.monitor(options,cb)
 
   # Send the request
 
-  options =
-    uri: '_changes?feed=continuous&heartbeat=10000'
+  uri = url.parse options.uri
+  # Delete the computed values
+  delete uri.href
+  delete uri.host
+  delete uri.search
+  # And re-build
+  uri.pathname += '/_changes'
+  uri.query =
+    feed: 'continuous'
+    heartbeat: 10000
+    include_docs: if options.include_docs? then options.include_docs else true
 
-  options.uri += "&filter=#{querystring.escape(filter_name)}" if filter_name?
-  options.uri += "&since=#{querystring.escape(since)}"        if since?
-  options.uri += "&#{querystring.stringify filter_params}"    if filter_params?
+  uri.query.filter = options.filter_name if options.filter_name?
+  uri.query.since  = options.since       if options.since?
+  uri.query[k] = v for k, v of options.filter_params?
+
+  options =
+    uri: url.format uri
+    header:
+      cookie: options.cookie
 
   cdb_stream = db.req options, (r) ->
     if r.error?
