@@ -45,7 +45,7 @@ get_uuid = (source,prefix,cb)->
 cdb_changes = require 'cdb_changes'
 options =
   uri: config.users_couchdb_uri
-  filter_name: 'confirmed'
+  filter_name: 'portal/confirmed'
 cdb_changes.monitor options, (user_doc) ->
   if user_doc.error?
     return util.log(user_doc.error)

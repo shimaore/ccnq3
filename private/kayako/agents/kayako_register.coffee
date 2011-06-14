@@ -46,7 +46,7 @@ kayako_request = (method,controller,args,cb) ->
 cdb_changes = require 'cdb_changes'
 options:
   uri: config.users_couchdb_uri
-  filter_name: "confirmed"
+  filter_name: "portal/confirmed"
 cdb_changes.monitor options, (p) ->
   if p.error?
     return util.log(p.error)

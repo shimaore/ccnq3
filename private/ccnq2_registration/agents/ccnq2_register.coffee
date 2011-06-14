@@ -18,7 +18,7 @@ request = require 'request'
 cdb_changes = require 'cdb_changes'
 options =
   uri: config.users_couchdb_uri
-  filter_name: 'confirmed'
+  filter_name: 'portal/confirmed'
 cdb_changes.monitor config.users_couchdb_uri, config.filter_name, (p) ->
   if p.error?
     return util.log(p.error)
