@@ -1,16 +1,12 @@
 #!/usr/bin/env bash
 
 NAME=host
-SCRIPT=host.coffee
-
-SCRIPT_DIR=`dirname "$0"`
-if [ "x${SCRIPT_DIR}" == "x." ]; then
-  SCRIPT_DIR=`pwd`
-fi
+CONFIG=/etc/ccnq3/$NAME.config
+SCRIPT=ccnq3_${NAME}.coffee
 
 case "$1" in
   start)
-    daemon -n "${NAME}" -r -D "${SCRIPT_DIR}" -o daemon.debug -- coffee "${SCRIPT}"
+    daemon -n "${NAME}" -r -o daemon.debug -- "${SCRIPT}" "${CONFIG}"
     ;;
 
   stop)
