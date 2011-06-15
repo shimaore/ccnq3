@@ -1,0 +1,19 @@
+{
+  "name": "ccnq3_portal",
+  "version": "0.0.5",
+  "description": "Portal applications for CCNQ3",
+  "keywords": "",
+  "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
+  "files": ["./agents/", "./node/"],
+  "config": {
+    "config_file": "/etc/ccnq3/portal.config"
+  },
+  "scripts": {
+    "start": "./start.sh",
+    "stop":  "./stop.sh"
+  },
+  "dependencies": { "coffee-script": ">=1.1.1", "cdb": "*", "cdb_changes": ">=0.0.3", "couchapp": "*", "node-uuid": "*", "zappa": "*" },
+  "engines": { "node": ">=0.4.7" },
+
+  "ok": true
+}

@@ -7,8 +7,8 @@ Released under the GPL3 license
 # Local configuration file
 
 fs = require 'fs'
-config_location = 'track_databases.config'
-config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
+config_location = process.env.npm_package_config_config_file or '/etc/ccnq3/roles.config'
+config = JSON.parse(fs.readFileSync(config_location, 'utf8')).track_databases
 
 util = require 'util'
 querystring = require 'querystring'
@@ -71,4 +71,3 @@ cdb_changes.monitor { uri: config.databases_couchdb_uri }, (doc) ->
           replication_cdb.put replication_req, (r) ->
             if r.error
               return util.log(r.error)
-

@@ -5,13 +5,13 @@ Released under the GPL3 license
 
 # Load Configuration
 fs = require('fs')
-config_location = 'admin.config'
-admin_config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
+config_location = process.env.npm_package_config_config_file or '/etc/ccnq3/roles.config'
+admin_config = JSON.parse(fs.readFileSync(config_location, 'utf8')).admin
 
 def admin_config: admin_config
 
 # Load CouchDB
-cdb = require process.cwd()+'/../../../lib/cdb.coffee'
+cdb = require 'cdb'
 def users_cdb: cdb.new (admin_config.users_couchdb_uri)
 def databases_cdb: cdb.new (admin_config.databases_couchdb_uri)
 

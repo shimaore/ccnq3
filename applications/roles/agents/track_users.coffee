@@ -7,8 +7,8 @@ Released under the GPL3 license
 # Local configuration file
 
 fs = require 'fs'
-config_location = 'track_users.config'
-config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
+config_location = process.env.npm_package_config_config_file or '/etc/ccnq3/roles.config'
+config = JSON.parse(fs.readFileSync(config_location, 'utf8')).track_users
 
 util = require 'util'
 qs = require 'querystring'
