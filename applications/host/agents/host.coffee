@@ -6,9 +6,10 @@ Released under the GPL3 license
 
 # Local configuration file
 
-fs = require 'fs'
-config_location = process.ARGV[2] or 'host.config'
+fs = require('fs')
+config_location = process.env.npm_package_config_config_file or '/etc/ccnq3/host.config'
 config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
+
 
 util = require 'util'
 vm   = require 'vm'
