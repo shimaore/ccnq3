@@ -1,7 +1,5 @@
 #!/usr/bin/env coffee
 
-process.chdir('node')
-
 zappa = require 'zappa'
 zappa.run_file 'portal.coffee',
   port: [parseInt(process.env.npm_package_config_port) or 8765]
