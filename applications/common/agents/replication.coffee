@@ -7,8 +7,8 @@ Released under the GPL3 license
 # Local configuration file
 
 fs = require 'fs'
-config_location = process.ARGV[2] or 'replication.config'
-config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
+config_location = process.env.npm_package_config_config_file or '/etc/ccnq3/common.config'
+config = JSON.parse(fs.readFileSync(config_location, 'utf8')).send_mail
 
 util = require 'util'
 querystring = require 'querystring'
