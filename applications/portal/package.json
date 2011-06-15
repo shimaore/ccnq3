@@ -6,8 +6,6 @@
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
   "files": ["./agents/", "./node/"],
   "config": {
-    "port": 8765,
-    "hostname": "127.0.0.1",
     "config_file": "/etc/ccnq3/portal.config"
   },
   "scripts": {
