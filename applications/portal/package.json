@@ -5,12 +5,6 @@
   "keywords": "",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
   "files": ["./agents/", "./node/"],
-  "bin": { 
-    "ccnq3_mail_confirmation": "agents/mail_confirmation",
-    "ccnq3_mail_confirmation.coffee": "agents/mail_confirmation.coffee",
-    "ccnq3_mail_password": "agents/mail_password",
-    "ccnq3_mail_password.coffee": "agents/mail_password.coffee"
-  },
   "config": {
     "port": 8765,
     "hostname": "127.0.0.1",
