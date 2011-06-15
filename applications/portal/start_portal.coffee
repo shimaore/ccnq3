@@ -4,5 +4,5 @@ process.chdir('node')
 
 zappa = require 'zappa'
 zappa.run_file 'portal.coffee',
-  port: process.env.npm_package_config_port or 8765
+  port: [parseInt(process.env.npm_package_config_port) or 8765]
   hostname: process.env.npm_package_config_hostname or '127.0.0.1'
