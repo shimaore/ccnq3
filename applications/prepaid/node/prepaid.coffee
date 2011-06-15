@@ -1,16 +1,15 @@
 
-using 'fs'
 using 'querystring'
 
 fs = require('fs')
-config_location = 'prepaid.config'
+config_location = process.env.npm_package_config_config_file or '/etc/ccnq3/prepaid.config'
 config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
 
 def config: config
 
-cdb = require process.cwd()+'/../../../lib/cdb.coffee'
+cdb = require 'cdb'
 
-def prepaid_cdb: cdb.new (config.prepaid_couchdb_uri)
+def prepaid_cdb: cdb.new config.prepaid_couchdb_uri
 
 
 get '/:account': ->

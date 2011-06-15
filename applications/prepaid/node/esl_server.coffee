@@ -3,10 +3,14 @@
 #   target             -- where to bridge the call
 #   prepaid_uri        -- URI for the prepaid API
 
-esl = require "./esl"
+esl = require 'esl'
 util = require 'util'
 querystring = require 'querystring'
-cdb = require process.cwd()+'/../../../../lib/cdb'
+cdb = require 'cdb'
+
+fs = require('fs')
+config_location = process.env.npm_package_config_config_file or '/etc/ccnq3/prepaid.config'
+config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
 
 # esl.debug = true
 
@@ -143,5 +147,5 @@ server = esl.createServer (res) ->
           res.filter Unique_ID, unique_id, (req,res) ->
             res.event_json 'ALL', on_connect
 
-server.listen(7000)
+server.listen(config.esl_port)
 
