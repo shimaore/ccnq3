@@ -5,6 +5,10 @@
   "keywords": "",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
   "files": ["./agents/"],
+  "scripts": {
+    "start": "./start.sh",
+    "stop":  "./stop.sh"
+  },
   "dependencies": { "coffee-script": ">=1.1.1", "cdb": "*", "cdb_changes": ">=0.0.3" },
   "engines": { "node": ">=0.4.7" },
 
