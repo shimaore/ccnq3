@@ -1,3 +1,7 @@
+###
+(c) 2010 Stephane Alnet
+Released under the AGPL3 license
+###
 request = require 'request'
 
 app_json = 'application/json'

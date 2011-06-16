@@ -1,3 +1,7 @@
+###
+(c) 2010 Stephane Alnet
+Released under the AGPL3 license
+###
 def req: require 'request'
 
 helper sql: (_sql,_p,cb) ->

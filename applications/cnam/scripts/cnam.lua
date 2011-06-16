@@ -1,3 +1,5 @@
+-- (c) 2010 Stephane Alnet
+-- Released under the AGPL3 license
 -- This script expects the following parameters:
 --   number             -- number to resolve
 

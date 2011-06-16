@@ -1,4 +1,8 @@
 ###
+(c) 2010 Stephane Alnet
+Released under the AGPL3 license
+###
+###
 Fill-in the "content" div.
 ###
 

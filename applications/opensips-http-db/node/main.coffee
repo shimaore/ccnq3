@@ -1,4 +1,8 @@
 #!/usr/bin/env zappa
+###
+(c) 2010 Stephane Alnet
+Released under the AGPL3 license
+###
 
 app 'opensips', (server) ->
   server.use (require 'express').bodyDecoder()

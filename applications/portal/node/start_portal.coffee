@@ -1,4 +1,8 @@
 #!/usr/bin/env coffee
+###
+(c) 2010 Stephane Alnet
+Released under the AGPL3 license
+###
 
 fs = require('fs')
 config_location = process.env.npm_package_config_config_file or '/etc/ccnq3/portal.config'

@@ -1,6 +1,6 @@
 ###
 (c) 2010 Stephane Alnet
-Released under the GPL3 license
+Released under the AGPL3 license
 ###
 
 get '/profile.json': ->

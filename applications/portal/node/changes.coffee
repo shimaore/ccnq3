@@ -1,7 +1,7 @@
 #!/usr/bin/env coffee
 ###
 # (c) 2010 Stephane Alnet
-# Released under the GPL3 license
+# Released under the AGPL3 license
 ###
 
 # Proxy a "_changes" CouchDB API for a Socket.IO client.

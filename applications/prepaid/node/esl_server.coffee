@@ -1,3 +1,7 @@
+###
+(c) 2010 Stephane Alnet
+Released under the AGPL3 license
+###
 # This script expects the following variables:
 #   ccnq_account       -- account to be decremented
 #   target             -- where to bridge the call
