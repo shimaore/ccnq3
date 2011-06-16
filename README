@@ -10,6 +10,12 @@ applications/
   prepaid/    -- Prepaid call handling
   cnam/       -- CNAM client
 
+  common/     -- Generic applications (replication, sending mail)
+  _users/     -- Bootstrapping
+  host/       -- Host installation
+
+  provisioning/   -- Installation and application for the provisioning database
+
 lib/          -- CoffeeScript libraries
   cdb         -- CouchDB access helpers
   cdb_changes -- monitor CouchDB _changes handler

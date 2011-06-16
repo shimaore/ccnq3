@@ -1,39 +1,40 @@
 - You will need a CouchDB database.
-  This can be BigCouch, a proxy (look under etc/lighttpd2), or a regular database.
+  This can be BigCouch, a proxy (look under etc/lighttpd2), or a plain CouchDB instance.
   It must be network-accessible from the local host (which is used to bootstrap installation) and from any other host in the system.
+  (Using SSL is OK, and recommended.)
   Alternatively the bootstrap script can install CouchDB locally for you.
 
-- All our script rely on sudo.
+- All scripts rely on sudo.
   Make sure sudo is available on every host, and that at least one user is able to use
   sudo with NOPASSWD.
 
 
-- On the bootstrap host (the first host in the system), download this code
+- On the bootstrap host (the first host in the system), download the code
 
-    cd && rm -rf ccnq3 && git clone git://stephane.shimaore.net/git/ccnq3.git && cd ccnq3
+    cd && rm -rf ccnq3 && git clone git://stephane.shimaore.net/git/ccnq3.git
 
   then run
 
-    ./bootstrap-system
+    cd ~/ccnq3 && ./bootstrap-system
 
   to make system adjustments, install CouchDB, and bootstrap the database.
 
   Alternatively, if you already have a CouchDB database system, use
 
-    ./bootstrap-systems <URI>
+    cd ~/ccnq3 && ./bootstrap-system <URI>
 
   replacing the URI with your CouchDB installation's URI, including a system-level
-  administrative account, such as: https://admin:password@cdb.example.net/
+  administrative account, such as: https://admin:password@cdb.example.net:5984/
   In that later case, make sure your CouchDB installation has "require_valid_user = true".
 
 - To register an additional host in the system, use the web interface.
 
 - On any host you'd like to use in the system, download the code
 
-    cd && rm -rf ccnq3 && git clone git://stephane.shimaore.net/git/ccnq3.git && cd ccnq3
+    cd && rm -rf ccnq3 && git clone git://stephane.shimaore.net/git/ccnq3.git
 
   then run
 
-    ./bootstrap-localhost <URI>
+    cd ~/ccnq3 && ./bootstrap-localhost <URI>
 
-  where <URI> is the URI provided by the bootstrap-host script in the previous step.
+  where <URI> is the URI provided by the web interface in the previous step.

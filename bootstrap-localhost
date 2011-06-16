@@ -2,16 +2,17 @@
 
 set -e
 export LANG=
+SRC="`pwd`"
 
 ./bootstrap/prepare
 ./bootstrap/node
 (cd && sudo npm -g install coffee-script)
 (cd && npm install request)
-npm install lib/cdb
-npm install lib/cdb_changes
+(cd && npm install "${SRC}/"lib/cdb)
+(cd && npm install "${SRC}/"lib/cdb_changes)
 
 echo "*** Install the host agent"
-sudo npm -g install applications/host
+(cd && npm install "${SRC}/"applications/host)
 
 # Start application/host
 MAIN_URI="$1"
@@ -24,5 +25,5 @@ sudo tee /etc/ccnq3/host.config <<"JSON" >/dev/null
 }
 JSON
 
-ccnq3_host stop || echo
-ccnq3_host start
+npm stop  ccnq3_host || echo
+npm start ccnq3_host
