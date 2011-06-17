@@ -42,8 +42,8 @@ cdb_changes.monitor = (options,cb)->
       # Processing line
       try
         p = JSON.parse line
-      if p?.id?
-        cb p
+      if p?.doc?
+        cb p.doc
       # /Processing line
 
     parser.buffer = d[0]
