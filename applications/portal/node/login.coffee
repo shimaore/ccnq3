@@ -37,8 +37,6 @@ client login: ->
       couchdb_options =
         type: 'post'
         url: '/_session'
-        username: $('#login_username').val()
-        password: $('#login_password').val()
         data:
           name: $('#login_username').val()
           password: $('#login_password').val()
