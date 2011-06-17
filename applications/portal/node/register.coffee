@@ -51,7 +51,8 @@ put '/register.json': ->
   if not @first_name or not @last_name or not @email
     return error 'Invalid parameters, try again'
 
-  params = params.filter (v) -> not v.match /^_/
+  for k,v in params when k.match /^_/
+    delete params.k
 
   # Currently assumes username = email
   username = @email
