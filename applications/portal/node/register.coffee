@@ -52,7 +52,7 @@ put '/register.json': ->
     return error 'Invalid parameters, try again'
 
   for k,v in params when k.match /^_/
-    delete params.k
+    delete params[k]
 
   # Currently assumes username = email
   username = @email
