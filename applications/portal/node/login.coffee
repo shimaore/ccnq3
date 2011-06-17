@@ -39,6 +39,9 @@ client login: ->
         url: '/_session'
         username: $('#login_username').val()
         password: $('#login_password').val()
+        data:
+          name: $('#login_username').val()
+          password: $('#login_password').val()
         dataType:'json'
         success: (data) ->
           if not data.ok
