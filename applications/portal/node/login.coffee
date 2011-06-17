@@ -35,7 +35,7 @@ client login: ->
     # Use data.couchdb to login as well
     couchdb_login = (next) ->
       couchdb_options =
-        type: 'get'
+        type: 'post'
         url: '/_session'
         username: $('#login_username').val()
         password: $('#login_password').val()
