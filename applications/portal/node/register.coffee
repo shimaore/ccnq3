@@ -51,6 +51,8 @@ put '/register.json': ->
   if not @first_name or not @last_name or not @email
     return error 'Invalid parameters, try again'
 
+  params = params.filter (v) -> not v.match /^_/
+
   # Currently assumes username = email
   username = @email
   db = cdb.new config.register.users_couchdb_uri
