@@ -33,7 +33,7 @@ cdb_changes.monitor options, (p) ->
   # Assume document's "name" is the email address.
   # (There's also p.profile.email but might be an array.)
   if not p.name? or not p.domain? or not p.confirmation_code?
-    return util.log("Missing data: #{p.name} #{p.domain} #{p.confirmation_code}, skipping")
+    return util.log("Missing data: #{util.inspect p}, skipping")
 
   email_options =
     sender: "#{config.sender_local_part}@#{p.domain}"
