@@ -3,28 +3,15 @@
 set -e
 export LANG=
 
-echo '*** BEGIN Install stunnel for CouchDB'
+# FIXME In CouchDB 1.1.0, we can instantiate an SSL server from within
+#       CouchDB, so stunnel is no longer required.
+#       However this script should be integrated with the CouchDB script
+#       so that /etc/couchdb/local.ini reflects the proper configuration.
 
-sudo aptitude -y install stunnel
-sudo sed -i -e 's/ENABLED=0/ENABLED=1/' /etc/default/stunnel4
-
-sudo tee /etc/stunnel/stunnel.conf <<'EOT' >/dev/null
-cert = /etc/stunnel/stunnel.pem
-sslVersion = SSLv3
-chroot = /var/lib/stunnel4/
-setuid = stunnel4
-setgid = stunnel4
-pid = /stunnel4.pid
-socket = l:TCP_NODELAY=1
-socket = r:TCP_NODELAY=1
-[couchdbs]
-accept  = :::5985
-connect = 5984
-TIMEOUTclose = 0
-EOT
+echo '*** BEGIN Creating SSL key for CouchDB'
 
 # Generate SSL key and CSR
-cd /etc/stunnel
+cd /etc/couchdb
 umask 0077
 sudo rm -f server.key.pass server.key server.csr server.crt stunnel.pem
 sudo openssl genrsa -des3 -out server.key.pass 4096 <<'EOT'
@@ -48,6 +35,5 @@ EOT
 sudo openssl x509 -req -in server.csr -out server.crt -signkey server.key -days 3660
 sudo cat server.crt server.key | sudo tee stunnel.pem >/dev/null
 sudo rm /etc/stunnel/server.*
-sudo /etc/init.d/stunnel4 restart
 
-echo '*** Install stunnel for CouchDB Completed OK.'
+echo '*** Create SSL key for CouchDB Completed OK.'
