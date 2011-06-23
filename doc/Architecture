@@ -14,7 +14,7 @@ In ccnq3 the system architecture is different:
 - An egress carrier SBC will use the account number (reject the call otherwise) and create the CDR.
 
 - The outbound-proxy is used for LCR; it authenticates "trusted" senders which must provide it with account information.
-  Each originating host will be allowed to provide account information based on one or more prefixes (allows third-party billing).
+  Each originating host will be allowed to provide account information based on one or more prefixes.
 
   This will allow third-party billing, having savvy customers (say, wholesale or multi-tenant systems) dial directly into the outbound-proxy (over the Internet).
   (No features are provided by the outbound-proxy / egress SBC pair, and numbering format must be adhered to, including for emergency calling.)
