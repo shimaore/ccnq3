@@ -1,13 +1,12 @@
 {
   "name": "cdb_changes",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Minimalist interface for CouchDB _changes",
   "keywords": "couchdb",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
-  "files": ["lib"],
   "main": "lib/cdb_changes.js",
-  "dependencies": { "json_req": ">=0.0.2", "coffee-script": ">=1.1.1" },
-  "scripts": { "preinstall": "coffee -c lib/cdb_changes.coffee" },
+  "dependencies": { "json_req": ">=0.0.3" },
+  "scripts": { "prepublish": "coffee -c lib/cdb_changes.coffee" },
   "engines": { "node": ">=0.4.7" },
   "ok": true
 }
