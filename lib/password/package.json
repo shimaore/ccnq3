@@ -1,11 +1,11 @@
 {
   "name": "password",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Memorable passwords generator",
   "keywords": "password generator",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
   "main": "lib/password.js",
-  "scripts": { "prepublish": "coffee -c lib/password.coffee" },
+  "scripts": { "install": "coffee -c lib/password.coffee" },
   "engines": { "node": ">=0.4.7" },
   "ok": true
 }
