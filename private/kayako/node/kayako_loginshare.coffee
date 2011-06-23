@@ -10,7 +10,7 @@ kayako_loginshare_config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
 
 def kayako_loginshare_config: kayako_loginshare_config
 
-json_req = require process.cwd()+'/../../../lib/json_req.coffee'
+json_req = require 'json_req'
 
 def json_req: json_req
 
