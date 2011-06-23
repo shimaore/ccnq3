@@ -74,12 +74,12 @@ cdb_changes.monitor = (options,cb)->
   uri.query.limit  = options.limit       if options.limit?
   uri.query[k] = v for k, v of options.filter_params?
 
-  options =
+  req =
     uri: url.format uri
     header:
       cookie: options.cookie
 
-  cdb_stream = json_req.request options, (r) ->
+  cdb_stream = json_req.request req, (r) ->
     if r.error?
       util.log(r.error)
 
