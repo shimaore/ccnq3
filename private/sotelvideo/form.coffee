@@ -4,8 +4,6 @@
 
 app "default", (server) ->
   express = require('express')
-  server.use express.staticProvider("#{process.cwd()}/public")
-  server.use express.favicon()
   server.use express.logger()
   server.use express.bodyDecoder()
   server.use express.cookieDecoder()
@@ -223,7 +221,7 @@ helper delete_user: ->
 
 client validate: ->
   $(document).ready ->
-    $("form.validate").validate();
+    $("form.validate").validate()
 
 # Search by user_id
 
@@ -349,12 +347,12 @@ client ->
 view 'error': ->
   @title = 'Error'
   @scripts = [
-    'javascripts/jquery',
-    'javascripts/jquery-ui',
+    '/public/js/jquery',
+    '/public/js/jquery-ui',
   ]
   @stylesheets = [
-    'stylesheets/style',
-    'stylesheets/jquery-ui',
+    '/public/css/style',
+    '/public/css/smoothness/jquery-ui',
   ]
 
   h1 @title
@@ -365,18 +363,18 @@ view 'error': ->
 view ->
   @title = 'Portal'
   @scripts = [
-    'javascripts/jquery',
-    'javascripts/jquery-ui',
-    'javascripts/jquery.validate',
-    'javascripts/jquery.datatables',
-    'javascripts/jquery.deserialize',
+    '/public/js/jquery',
+    '/public/js/jquery-ui',
+    '/public/js/jquery.validate',
+    '/public/js/jquery.datatables',
+    '/public/js/jquery.deserialize',
     'default',
     'search', 'account', 'validate'
   ]
   @stylesheets = [
-    'stylesheets/style',
-    'stylesheets/jquery-ui',
-    'stylesheets/datatables'
+    '/public/css/style',
+    '/public/css/jquery-ui',
+    '/public/css/datatables'
   ]
 
   lr = (_id,_label,_class) ->
