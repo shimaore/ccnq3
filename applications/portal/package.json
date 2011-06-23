@@ -4,7 +4,6 @@
   "description": "Portal applications for CCNQ3",
   "keywords": "",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
-  "files": ["./agents/", "./node/"],
   "config": {
     "config_file": "/etc/ccnq3/portal.config"
   },

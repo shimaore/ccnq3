@@ -4,7 +4,6 @@
   "description": "Generic applications for CCNQ3",
   "keywords": "",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
-  "files": ["./agents/"],
   "config": {
     "config_file": "/etc/ccnq3/common.config"
   }

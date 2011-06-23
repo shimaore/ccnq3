@@ -4,7 +4,6 @@
   "description": "Simple prepaid for CCNQ3",
   "keywords": "",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
-  "files": ["./node/"],
   "config": {
     "config_file": "/etc/ccnq3/prepaid.config"
   },
