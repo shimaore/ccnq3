@@ -1,18 +1,22 @@
 In ccnq3 the system architecture is different:
+
 - CDR collection is only done at the ingress and egress carrier SBCs.
+
 - The inbound-proxy is gone.
+
 - An ingress carrier SBC will locate the number and retrieve the account number (for CDR), the routing information, ...
   (In other words it accesses the provisioning record for the number.)
       (Hmmm... does FS actually do SRV failover?)
   If needed it will perform CNAM query (and update both From and PID information).
   Data query, call routing.. are done inside a Lua script.
   It might route the call directly to a customer domain, or to this operator's call-handling machines.
+
 - An egress carrier SBC will use the account number (reject the call otherwise) and create the CDR.
 
 - The outbound-proxy is used for LCR; it authenticates "trusted" senders which must provide it with account information.
-  (I don't think this is much different from today.)
+  Each originating host will be allowed to provide account information based on one or more prefixes (allows third-party billing).
 
-  Investigate having savvy customers dial directly into the outbound-proxy (over the Internet) and assigning account number locally that way.
+  This will allow third-party billing, having savvy customers (say, wholesale or multi-tenant systems) dial directly into the outbound-proxy (over the Internet).
   (No features are provided by the outbound-proxy / egress SBC pair, and numbering format must be adhered to, including for emergency calling.)
 
   LCR group selection based (e.g.) on domain used. -- allows for fax-capable routing, etc.
@@ -25,6 +29,13 @@ In ccnq3 the system architecture is different:
   Conversely, it "authenticates" with an egress SBC (via IP address) and forwards appropriate call settlement information.
 
   LCR table is used to eventually provide other information (e.g. call rates references) in the description field. (Well, at least having the prefix used for routing available in the customer SBC would help a lot.)
+  Need to be able to pass intra/inter-state information accross to the outbound-proxy (e.g. in domain name).
 
   Outbound, always query internal ENUM (for our own numbers) and if applicable public ENUM (per account flag).
+
+
+- The XMPP bus is gone. RabbitMQ may be used but this hasn't been finalized yet.
+  Most functions of the XMPP bus will be replaced by using the CouchDB _changes interface. System configuration will either be done via _changes triggers, or simply direcly access CouchDB for information.
+  The API interface is gone. Data is directly stored in CouchDB, update validation is used to reject invalid data.
+  The portal will mostly be implemented as couchapps.
 
