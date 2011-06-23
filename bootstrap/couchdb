@@ -6,7 +6,8 @@ export LANG=
 # CouchDBInstall
 echo '*** BEGIN Install CouchDB'
 
-sudo aptitude install -y couchdb couchdb-bin
+# CouchDB 1.1.0 is only in unstable as of 2011-06-21.
+sudo aptitude install -y -t unstable couchdb/unstable
 
 # Install default config file
 sudo tee /etc/couchdb/local.ini <<'EOT' >/dev/null

@@ -4,6 +4,11 @@
   (Using SSL is OK, and recommended.)
   Alternatively the bootstrap script can install CouchDB locally for you.
 
+- You will need a web server.
+  This can be any server you'd like.
+  Look in etc/lighttpd2/ for a way to do this with lighttpd2.
+  The directory "public/" must be available as /public/ in your web site.
+
 - All scripts rely on sudo.
   Make sure sudo is available on every host, and that at least one user is able to use
   sudo with NOPASSWD.
