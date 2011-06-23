@@ -4,10 +4,10 @@
   "description": "Minimalist interface for CouchDB access",
   "keywords": "couchdb",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
-  "files": ["./lib/"],
+  "files": ["lib"],
   "main": "lib/cdb.js",
   "dependencies": { "json_req": ">=0.0.1" },
-  "scripts": { "preinstall": "coffee -c ./lib/cdb.coffee" },
+  "scripts": { "preinstall": "coffee -c lib/cdb.coffee" },
   "engines": { "node": ">=0.4.7" },
   "ok": true
 }

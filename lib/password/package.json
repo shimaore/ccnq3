@@ -4,10 +4,10 @@
   "description": "Memorable passwords generator",
   "keywords": "password generator",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
-  "files": ["./lib/"],
+  "files": ["lib"],
   "main": "lib/password.js",
   "dependencies": { "coffee-script": ">=1.1.1" },
-  "scripts": { "preinstall": "coffee -c ./lib/password.coffee" },
+  "scripts": { "preinstall": "coffee -c lib/password.coffee" },
   "engines": { "node": ">=0.4.7" },
   "ok": true
 }
