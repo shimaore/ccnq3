@@ -42,9 +42,10 @@ lib/          -- CoffeeScript libraries
   password    -- A memorable password generator
 
 public/       -- Common content that should be installed under the root of the main site
+              -- and made available as (relative URI) /public/...
   images/
-  javascripts/
-  stylesheets/
+  js/         -- javascripts
+  css/        -- stylesheets
 
 private/      -- Misc. application under development (might eventually move under applications/)
 
