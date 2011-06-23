@@ -35,7 +35,7 @@ In ccnq3 the system architecture is different:
 
 
 - The XMPP bus is gone. RabbitMQ may be used but this hasn't been finalized yet.
-  Most functions of the XMPP bus will be replaced by using the CouchDB _changes interface. System configuration will either be done via _changes triggers, or simply direcly access CouchDB for information.
+  Most functions of the XMPP bus will be replaced by using the CouchDB _changes interface. System configuration will either be done via _changes triggers, or direct access to CouchDB for information.
   The API interface is gone. Data is directly stored in CouchDB, update validation is used to reject invalid data.
   The portal will mostly be implemented as couchapps.
 
