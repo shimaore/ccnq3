@@ -8,7 +8,7 @@ REPOSITORY=${REPOSITORY:-debian.sotelips.net}
 
 echo "Using ${REPOSITORY} to download packages."
 
-sudo tee /etc/apt/sources.list > /dev/null <<"EOT"
+sudo tee /etc/apt/sources.list > /dev/null <<EOT
 deb http://${REPOSITORY}/debian   testing main
 deb http://${REPOSITORY}/debian   unstable main
 deb http://${REPOSITORY}/shimaore shimaore main
