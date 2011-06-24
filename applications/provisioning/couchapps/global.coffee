@@ -60,10 +60,10 @@ ddoc.validate_doc_update = (newDoc, oldDoc) ->
     throw {forbidden: "Document ID must be #{type}:#{newDoc[type]}."}
 
   # Validate updates
-  if oldDoc
+  # if oldDoc
 
   # Validate create
-  if not oldDoc
+  # if not oldDoc
 
   # Validate fields
   if type is "endpoint"
