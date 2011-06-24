@@ -102,6 +102,6 @@ auth,authpriv.*             /var/log/auth.log
 # Uncomment the following line to gather debug messages
 # *.debug                  -/var/log/debug
 EOT
-sudo /etc/init.d/rsyslog reload
+sudo /etc/init.d/rsyslog restart
 
 echo '** END prepare'
