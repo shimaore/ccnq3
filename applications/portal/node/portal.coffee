@@ -49,7 +49,6 @@ view 'error': ->
 client main: ->
   $(document).ready ->
     default_scripts = [
-        '/public/js/jquery',
         '/public/js/jquery-ui',
         '/public/js/jquery.validate',
         '/u/content'
