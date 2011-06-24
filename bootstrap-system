@@ -13,22 +13,26 @@ SRC="`pwd`"
 
 HOSTNAME=`hostname`
 
-if [ "x$1" == "x" ]; then
-  echo "** Proceeding with installation of CouchDB on local host ${HOSTNAME}."
-  ./bootstrap/couchdb
-  CDB_URI="http://admin:${ADMIN_PASSWORD}@${HOSTNAME}:5984/"
-else
-  CDB_URI="$1"
-  shift
-fi
-
-echo "Bootstrapping database using ${CDB_URI}"
 sudo mkdir -p /etc/ccnq3
-sudo tee /etc/ccnq3/bootstrap.config <<"JSON" >/dev/null
-{
-  "couchdb_uri": "${CDB_URI}"
-}
+if [ -e /etc/ccnq3/bootstrap.config ]; then
+  echo "** bootstrap.config already exists, re-using it"
+else
+  if [ "x$1" == "x" ]; then
+    echo "** Proceeding with installation of CouchDB on local host ${HOSTNAME}."
+    ./bootstrap/couchdb
+    CDB_URI="http://admin:${ADMIN_PASSWORD}@${HOSTNAME}:5984/"
+  else
+    CDB_URI="$1"
+    shift
+  fi
+
+  echo "Bootstrapping database using ${CDB_URI}"
+  sudo tee /etc/ccnq3/bootstrap.config <<"JSON" >/dev/null
+  {
+    "couchdb_uri": "${CDB_URI}"
+  }
 JSON
+fi
 
 (cd && npm install "${SRC}/"applications/_users)
 (cd && npm run-script security ccqn3_users)
