@@ -23,7 +23,7 @@ Pin: release a=shimaore
 Pin-Priority: 500
 Package: *
 Pin: release a=unstable
-Pin-Priority: 0
+Pin-Priority: -1
 EOT
 
 sudo apt-key add - <<'EOT'
