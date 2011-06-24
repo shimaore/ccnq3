@@ -21,6 +21,6 @@ app_json = 'application/json'
       catch error
         value = {error:error}
       finally
-        cb(value,cookie)
+        cb?(value,cookie)
     else
-      cb({error:error or response.statusCode})
+      cb?({error:error or response.statusCode})
