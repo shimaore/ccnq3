@@ -39,15 +39,15 @@ if [ -e /etc/ccnq3/host.config ]; then
 fi
 
 (cd && npm install "${SRC}/"applications/_users)
-(cd && npm run-script security ccqn3_users)
+(cd && npm run-script ccnq3_users security)
 
 (cd && npm install "${SRC}/"applications/provisioning)
-(cd && npm run-script couchapps ccnq3_provisioning)
-(cd && npm run-script security  ccnq3_provisioning)
+(cd && npm run-script ccnq3_provisioning couchapps)
+(cd && npm run-script ccnq3_provisioning security )
 
 (cd && npm install "${SRC}/"applications/host)
-(cd && npm run-script couchapps ccnq3_host)
-(cd && npm run-script bootstrap ccnq3_host)
+(cd && npm run-script ccnq3_host couchapps)
+(cd && npm run-script ccnq3_host bootstrap)
 
 ccnq3_host stop || echo
 ccnq3_host start
