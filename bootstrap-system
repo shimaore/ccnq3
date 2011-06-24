@@ -15,7 +15,7 @@ HOSTNAME=`hostname`
 
 sudo mkdir -p /etc/ccnq3
 if [ -e /etc/ccnq3/bootstrap.config ]; then
-  echo "** bootstrap.config already exists, re-using it"
+  echo "** WARNING: bootstrap.config already exists, re-using it"
 else
   if [ "x$1" == "x" ]; then
     echo "** Proceeding with installation of CouchDB on local host ${HOSTNAME}."
@@ -32,6 +32,10 @@ else
     "couchdb_uri": "${CDB_URI}"
   }
 JSON
+fi
+
+if [ -e /etc/ccnq3/host.config ]; then
+  echo "** WARNING: This host has already been bootstrapped. Configuration will be overwritten."
 fi
 
 (cd && npm install "${SRC}/"applications/_users)

@@ -4,6 +4,21 @@ set -e
 export LANG=
 SRC="`pwd`"
 
+sudo mkdir -p /etc/ccnq3
+if [ -e /etc/ccnq3/bootstrap.config ]; then
+  echo "** This host is a bootstrap host, please do not run this script."
+  exit
+fi
+
+if [ "x$1" == "x" ]; then
+  echo "** You must provide a reference URI."
+  exit
+fi
+
+if [ -e /etc/ccnq3/host.config ]; then
+  echo "** WARNING: This host has already been bootstrapped. Configuration will be overwritten."
+fi
+
 ./bootstrap/prepare
 ./bootstrap/node
 (cd && sudo npm -g install coffee-script)
@@ -21,7 +36,6 @@ echo "*** Install the host agent"
 MAIN_URI="$1"
 shift
 
-sudo mkdir -p /etc/ccnq3
 sudo tee /etc/ccnq3/host.config <<"JSON" >/dev/null
 {
   "provisioning_couchdb_uri": "${MAIN_URI}/provisioning"
