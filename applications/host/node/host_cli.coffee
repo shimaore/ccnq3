@@ -8,16 +8,22 @@ Released under the AGPL3 license
 os = require 'os'
 host = require './host.coffee'
 
+# Load Configuration
+fs = require('fs')
+config_location = process.env.npm_package_config_bootstrap_file
+config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
+
 hostname = os.hostname()
 
-host.record hostname, process.env.CDB_URI, (username,password)->
+host.record hostname, config.couchdb_uri, (username,password)->
     url = require 'url'
-    p = url.parse "#{process.env.CDB_URI}/provisioning"
+    p = url.parse "#{config.couchdb_uri}/provisioning"
     delete p.href
     delete p.host
     p.auth = "#{username}:#{password}"
 
-    fs.writeFileSync process.ARGV[2], """
+    config_file_name = process.env.npm_package_config_config_file
+    fs.writeFileSync config_file_name, """
       {
         "provisioning_couchdb_uri": "#{url.format(p)}"
       }

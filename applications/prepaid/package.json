@@ -1,6 +1,6 @@
 {
   "name": "ccnq3_prepaid",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Simple prepaid for CCNQ3",
   "keywords": "",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
@@ -9,10 +9,11 @@
   },
   "scripts": {
     "start": "./start.sh",
-    "stop":  "./stop.sh"
+    "stop":  "./stop.sh",
+    "couchapps": "cd couchapps && coffee install.coffee"
   },
-  "dependencies": { "coffee-script": ">=1.1.1", "cdb": "*", "couchapp": "*", "zappa": "*" },
-  "engines": { "node": ">=0.4.7" },
+  "dependencies": { "cdb": "*", "couchapp": "*", "zappa": "*" },
+  "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },
 
   "ok": true
 }

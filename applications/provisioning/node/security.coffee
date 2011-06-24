@@ -6,7 +6,13 @@ Released under the AGPL3 license
 
 util = require 'util'
 cdb = require 'cdb'
-users = cdb.new "#{process.env.CDB_URI}/provisioning"
+
+# Load Configuration
+fs = require('fs')
+config_location = process.env.npm_package_config_bootstrap_file
+config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
+
+users = cdb.new "#{config.couchdb_uri}/provisioning"
 
 # Set the security object for the provisioning database.
 cdb.get '_security', (p)->

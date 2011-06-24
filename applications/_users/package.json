@@ -1,0 +1,17 @@
+{
+  "name": "ccnq3_common",
+  "version": "0.0.3",
+  "description": "Common applications for CCNQ3",
+  "keywords": "",
+  "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
+  "config": {
+    "bootstrap_file": "/etc/ccnq3/bootstrap.config"
+  },
+  "scripts": {
+    "security": "coffee node/security.coffee"
+  },
+  "dependencies": { "cdb": "*" },
+  "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },
+
+  "ok": true
+}

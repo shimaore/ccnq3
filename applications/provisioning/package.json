@@ -1,0 +1,19 @@
+{
+  "name": "ccnq3_provisioning",
+  "version": "0.0.2",
+  "description": "Provisioning applications for CCNQ3",
+  "keywords": "",
+  "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
+  "config": {
+    "config_file": "/etc/ccnq3/provisioning.config",
+    "bootstrap_file": "/etc/ccnq3/bootstrap.config"
+  },
+  "scripts": {
+    "security": "coffee node/security.coffee",
+    "couchapps": "cd couchapps && coffee install.coffee"
+  },
+  "dependencies": { "cdb": "*", "couchapp": "*" },
+  "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },
+
+  "ok": true
+}
