@@ -8,8 +8,11 @@ SRC="`pwd`"
 ./bootstrap/node
 (cd && sudo npm -g install coffee-script)
 (cd && npm install request)
-(cd && npm install "${SRC}/"lib/cdb)
-(cd && npm install "${SRC}/"lib/cdb_changes)
+
+# (cd && npm install "${SRC}/"lib/cdb)
+# (cd && npm install "${SRC}/"lib/cdb_changes)
+# Install the versions from the registry:
+(cd && npm install cdb cdb_changes)
 
 echo "*** Install the host agent"
 (cd && npm install "${SRC}/"applications/host)

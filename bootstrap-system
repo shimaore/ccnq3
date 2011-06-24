@@ -12,8 +12,11 @@ SRC="`pwd`"
 (cd && sudo npm -g install coffee-script couchapp)
 # Require
 (cd && npm install request couchapp)
-(cd && npm install "${SRC}/"lib/cdb)
-(cd && npm install "${SRC}/"lib/cdb_changes)
+
+# (cd && npm install "${SRC}/"lib/cdb)
+# (cd && npm install "${SRC}/"lib/cdb_changes)
+# Install the versions from the registry:
+(cd && npm install cdb cdb_changes)
 
 HOSTNAME=`hostname`
 
