@@ -8,7 +8,7 @@ util = require 'util'
 cdb = require 'cdb'
 users = cdb.new "#{process.env.CDB_URI}/provisioning"
 
-# Set the security object for the _users database.
+# Set the security object for the provisioning database.
 cdb.get '_security', (p)->
   if p.error? then return util.log p.error
   push p.admins.roles, "provisioning_admin"   if p.admins?.indexOf("provisioning_admin") < 0
