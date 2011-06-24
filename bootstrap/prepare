@@ -4,7 +4,7 @@ echo '** BEGIN prepare'
 
 export LANG=
 
-REPOSITORY=${REPOSITORY:debian.sotelips.net}
+REPOSITORY=${REPOSITORY:-debian.sotelips.net}
 
 echo "Using ${REPOSITORY} to download packages."
 
