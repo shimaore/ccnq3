@@ -1,6 +1,6 @@
 {
-  "name": "ccnq3_common",
-  "version": "0.0.3",
+  "name": "ccnq3_users",
+  "version": "0.0.4",
   "description": "Common applications for CCNQ3",
   "keywords": "",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
