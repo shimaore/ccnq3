@@ -12,5 +12,7 @@ uri = "#{config.couchdb_uri}/provisioning"
 
 cdb.new(uri).create()
 
-for script in ['authorize','replicate','global']
-  couchapp.createApp require("./#{script}"), uri, (app)-> app.push()
+push_script = (script,cb) ->
+  couchapp.createApp require("./#{script}"), uri, (app)-> app.push(cb)
+
+push_script 'authorize', -> push_script 'replicate' -> push_script 'global'
