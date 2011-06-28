@@ -59,11 +59,7 @@ client login: ->
         data:
           username: $('#login_username').val()
           password: $('#login_password').val()
-        dataType:'json'
         success: (data) ->
-          if not data.ok
-            $('#login_error').html('Voice portal sign-in failed.')
-            return
           next()
 
       $('#login_error').html('Signing you into the voice portal.')
