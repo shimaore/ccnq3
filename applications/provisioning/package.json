@@ -10,7 +10,7 @@
   },
   "scripts": {
     "security": "coffee node/security.coffee",
-    "couchapps": "cd couchapps && coffee install.coffee"
+    "couchapps": "cd couchapps && coffee install.coffee authorize && coffee install.coffee replicate && coffee install.coffee authorize"
   },
   "dependencies": { "cdb": "*", "couchapp": "*" },
   "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },
