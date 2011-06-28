@@ -59,7 +59,7 @@ client login: ->
         data:
           username: $('#login_username').val()
           password: $('#login_password').val()
-        success: (data) ->
+        complete: ->
           next()
 
       $('#login_error').html('Signing you into the voice portal.')
