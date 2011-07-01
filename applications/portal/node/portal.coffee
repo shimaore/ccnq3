@@ -13,10 +13,10 @@ app "portal", (server) ->
   express = require('express')
   if config.session.memcached_store?
     MemcachedStore = require 'connect-memcached'
-    store = new MemcachedStore config.session.memcached_store
+    store = new MemcachedStore(config.session.memcached_store)
   if config.session.redis_store?
     RedisStore = require('connect-redis')(express)
-    store = new RedisStore config.session.redis_store
+    store = new RedisStore(config.session.redis_store)
 
   server.use express.logger()
   server.use express.bodyParser()
