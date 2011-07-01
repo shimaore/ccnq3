@@ -4,22 +4,25 @@
 # Released under the AGPL3 license
 ###
 
+#
+# Configuration
+#
+
+fs = require 'fs'
+config_location = process.env.npm_package_config_config_file
+config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
+
+if config.session.memcached_store?
+  MemcachedStore = require 'connect-memcached'
+  store = new MemcachedStore config.session.memcached_store
+
 app "portal", (server) ->
   express = require('express')
   server.use express.logger()
   server.use express.bodyParser()
   server.use express.cookieParser()
-  server.use express.session(secret: "a"+Math.random())
+  server.use express.session secret: config.session.secret, store: store
   server.use express.methodOverride()
-
-#
-# Configuration
-#
-
-# Load Configuration
-fs = require('fs')
-config_location = process.env.npm_package_config_config_file or '/etc/ccnq3/portal.config'
-config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
 
 def config: config
 
