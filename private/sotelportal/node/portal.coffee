@@ -8,20 +8,20 @@ app "portal", (server) ->
   # Configuration
   fs = require 'fs'
   config_location = process.env.npm_package_config_config_file
-  config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
+  config = JSON.parse(fs.readFileSync(config_location, 'utf8')).session
   # Session store
   express = require('express')
-  if config.session.memcached_store?
+  if config.memcached_store
     MemcachedStore = require 'connect-memcached'
-    store = new MemcachedStore config.session.memcached_store
-  if config.session.redis_store?
+    store = new MemcachedStore(config.session.memcached_store)
+  if config.redis_store
     RedisStore = require('connect-redis')(express)
-    store = new RedisStore config.session.redis_store
+    store = new RedisStore(config.session.redis_store)
 
   server.use express.logger()
   server.use express.bodyParser()
   server.use express.cookieParser()
-  server.use express.session secret: config.session.secret, store: store
+  server.use express.session( secret: config.secret, store: store )
   server.use express.methodOverride()
 
 #
