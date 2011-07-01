@@ -10,5 +10,5 @@ config = JSON.parse(fs.readFileSync(config_location, 'utf8')).sotel_portal
 
 zappa = require 'zappa'
 zappa.run_file 'portal.coffee',
-  port: [config?.port or 8765]
-  hostname: config?.hostname or '127.0.0.1'
+  port: [config?.port]
+  hostname: config?.hostname
