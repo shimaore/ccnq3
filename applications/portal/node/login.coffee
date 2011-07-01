@@ -96,7 +96,6 @@ view login_widget: ->
 
   div id: 'login_buttons', ->
     if @session.logged_in?
-      a href: '/u/profile/', -> @session.logged_in
       form id: 'logout', ->
         input type: 'submit', value: 'Logout'
     else

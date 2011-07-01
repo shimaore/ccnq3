@@ -63,5 +63,6 @@ include 'content.coffee'
 include 'login.coffee'
 include 'register.coffee'
 include 'confirm.coffee'
+include 'recover.coffee'
 include 'profile.coffee'
-include 'changes.coffee'
+# include 'changes.coffee' # not needed if jquery.cdbcc.js works

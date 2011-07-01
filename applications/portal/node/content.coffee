@@ -11,6 +11,7 @@ client content: ->
     $('#content').load '/u/content.html', ->
       $.getScript('/u/login.js')
       $.getScript('/u/register.js')
+      $.getScript '/u/recover.js'
 
 get '/content.html': ->
   widget 'content'
@@ -23,3 +24,4 @@ view content: ->
     div ->
       span "Please create an account if you do not have access."
       div id:'register_container'
+      div id:'password_recovery_container'
