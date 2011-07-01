@@ -4,17 +4,12 @@
 # Released under the AGPL3 license
 ###
 
-#
-# Configuration
-#
-
-fs = require 'fs'
-config_location = process.env.npm_package_config_config_file
-config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
-
-def config: config
-
 app "portal", (server) ->
+  # Configuration
+  fs = require 'fs'
+  config_location = process.env.npm_package_config_config_file
+  config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
+  # Session store
   if config.session.memcached_store?
     MemcachedStore = require 'connect-memcached'
     store = new MemcachedStore config.session.memcached_store
@@ -25,6 +20,16 @@ app "portal", (server) ->
   server.use express.cookieParser()
   server.use express.session secret: config.session.secret, store: store
   server.use express.methodOverride()
+
+#
+# Configuration
+#
+
+fs = require 'fs'
+config_location = process.env.npm_package_config_config_file
+config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
+
+def config: config
 
 def cdb: require 'cdb'
 
