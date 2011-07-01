@@ -27,5 +27,5 @@ view content: ->
 
   # Here goes the main page layout.
   div ->
-    div id: 'main' ->
+    div id: 'main', ->
       'Welcome to the Sotel Portal. Great content expected here soon.'
