@@ -40,6 +40,10 @@ client recover: ->
           success: (data) ->
             if not data.ok
               $('#recover_error').html('Operation failed')
+            else
+              $('#login_error').html('')
+              $('#login').dialog('close')
+              window.location.reload()
 
         $('#recover_error').html("")
         $.ajax(ajax_options)
