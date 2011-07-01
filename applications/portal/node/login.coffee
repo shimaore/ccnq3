@@ -130,9 +130,15 @@ post '/login.json': ->
       return send p
     session.logged_in = p.userCtx.name
     session.roles     = p.userCtx.roles
-    return send ok:true
+    session.save (err) ->
+      if err
+        return send error:err
+      return send ok:true
 
 get '/logout.json': ->
   delete session.logged_in
-  return send ok:true
+  session.save (err) ->
+    if err
+      return send error:err
+    return send ok:true
 
