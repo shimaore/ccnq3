@@ -52,19 +52,6 @@ client login: ->
       $('#login_error').html('Signing you into the database.')
       $.ajax(couchdb_options)
 
-    ccnq2_login = (next) ->
-      ccnq2_options =
-        type: 'post'
-        url: '/portal/login'
-        data:
-          username: $('#login_username').val()
-          password: $('#login_password').val()
-        complete: ->
-          next()
-
-      $('#login_error').html('Signing you into the voice portal.')
-      $.ajax(ccnq2_options)
-
     login_done = ->
       # All done.
       $('#login_error').html('')
@@ -88,12 +75,10 @@ client login: ->
         return false
 
       $('#login').submit ->
-        main_login -> couchdb_login -> ccnq2_login -> login_done()
-
-          # Log into the voice portal
-          # Log into the ticket portal
-          # Redirect (in a frame?) to couchdb
-
+        if $.extra_login
+          main_login -> couchdb_login -> $.extra_login -> login_done()
+        else
+          main_login -> couchdb_login -> login_done()
         return false
 
       $('#logout').submit ->
