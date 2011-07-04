@@ -73,4 +73,4 @@ include 'register.coffee'
 include 'confirm.coffee'
 include 'recover.coffee'
 include 'profile.coffee'
-# include 'changes.coffee' # not needed if jquery.cdbcc.js works
+include 'changes.coffee'
