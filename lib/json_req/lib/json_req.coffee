@@ -16,6 +16,8 @@ app_json = 'application/json'
   request options, (error,response,body) ->
     if not error and response.statusCode >= 200 and response.statusCode <= 299 and body?
       cookie = response.headers['set-cookie']?.toString().split(/;/)[0]
+      if options.method is 'HEAD'
+        return cb?(response,cookie)
       try
         value = JSON.parse(body)
       catch error

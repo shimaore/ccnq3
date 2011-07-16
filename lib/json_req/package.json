@@ -1,6 +1,6 @@
 {
   "name": "json_req",
-  "version": "0.0.5",
+  "version": "0.0.7",
   "description": "Overlay for the request package to ease access to JSON REST interfaces",
   "keywords": "json request",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
