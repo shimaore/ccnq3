@@ -4,16 +4,14 @@ Released under the AGPL3 license
 ###
 
 # Load Configuration
-fs = require('fs')
-config_location = process.env.npm_package_config_config_file or '/etc/ccnq3/roles.config'
-admin_config = JSON.parse(fs.readFileSync(config_location, 'utf8')).admin
+config = require('ccnq3_config').config
 
-def admin_config: admin_config
+def config: config
 
 # Load CouchDB
 cdb = require 'cdb'
-def users_cdb: cdb.new (admin_config.users_couchdb_uri)
-def databases_cdb: cdb.new (admin_config.databases_couchdb_uri)
+def users_cdb: cdb.new (config.users.couchdb_uri)
+def databases_cdb: cdb.new (config.databases.couchdb_uri)
 
 # REST: required: initialize an admin session
 get '/admin': ->

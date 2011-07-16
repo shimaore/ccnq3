@@ -5,11 +5,8 @@ Released under the AGPL3 license
 ###
 
 # Local configuration file
-
-fs = require('fs')
-config_location = process.env.npm_package_config_config_file or '/etc/ccnq3/host.config'
-config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
-
+ccnq3_config = require('ccnq3_config')
+config = ccnq3_config.config
 
 util = require 'util'
 vm   = require 'vm'
@@ -17,15 +14,17 @@ vm   = require 'vm'
 cdb         = require 'cdb'
 cdb_changes = require 'cdb_changes'
 
-hostname = os.hostname()
+hostname = config.host
 options =
-  uri: config.provisioning_couchdb_uri
+  uri: config.provisioning.couchdb_uri
   filter_name: "host/hostname"
   filter_params:
     hostname: hostname
 
 cdb_changes.monitor options, (p) ->
   if p.error? then return util.log(p.error)
+
+  ccnq3_config.update p
 
   # p.runnables is a ring with new runnables at the start of the list
   # and old ones being pushed at the back.

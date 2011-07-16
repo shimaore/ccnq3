@@ -8,11 +8,9 @@ util = require 'util'
 cdb = require 'cdb'
 
 # Load Configuration
-fs = require('fs')
-config_location = process.env.npm_package_config_bootstrap_file
-config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
+config = require('ccnq3_config').config
 
-users = cdb.new "#{config.couchdb_uri}/_users"
+users = cdb.new config.users.couchdb_uri
 
 # Set the security object for the _users database.
 users.get '_security', (p)->

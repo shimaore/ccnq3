@@ -3,19 +3,17 @@
 set -e
 export LANG=
 SRC="`pwd`"
+DIR=/etc/ccnq3
+CONF=${DIR}/host.json
 
-sudo mkdir -p /etc/ccnq3
-if [ -e /etc/ccnq3/bootstrap.config ]; then
-  echo "** This host is a bootstrap host, please do not run this script."
-  exit
-fi
-
+sudo mkdir -p "${DIR}"
 if [ "x$1" == "x" ]; then
   echo "** You must provide a reference URI."
   exit
 fi
+URI=$1
 
-if [ -e /etc/ccnq3/host.config ]; then
+if [ -e "${CONF}" ]; then
   echo "** WARNING: This host has already been bootstrapped. Configuration will be overwritten."
 fi
 
@@ -36,9 +34,14 @@ echo "*** Install the host agent"
 MAIN_URI="$1"
 shift
 
-sudo tee /etc/ccnq3/host.config <<"JSON" >/dev/null
+sudo tee "${CONF}" <<"JSON" >/dev/null
 {
-  "provisioning_couchdb_uri": "${MAIN_URI}/provisioning"
+  "_id": "host:${HOSTNAME}",
+  "type": "host",
+  "host": "${HOSTNAME}",
+  "provisioning": {
+    "couchdb_uri": "$URI"
+  }
 }
 JSON
 

@@ -4,9 +4,7 @@
 Released under the AGPL3 license
 ###
 
-fs = require('fs')
-config_location = process.env.npm_package_config_config_file or '/etc/ccnq3/roles.config'
-config = JSON.parse(fs.readFileSync(config_location, 'utf8')).admin
+config = require('ccnq3_config').config
 
 zappa = require 'zappa'
 zappa.run_file 'admin.coffee',

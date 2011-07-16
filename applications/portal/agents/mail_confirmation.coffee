@@ -7,14 +7,14 @@ Released under the AGPL3 license
 # Local configuration file
 
 fs = require('fs')
-config_location = process.env.npm_package_config_config_file or '/etc/ccnq3/portal.config'
-config = JSON.parse(fs.readFileSync(config_location, 'utf8')).mail_confirmation
+config_location = process.env.npm_package_config_config_file
+config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
 
 util = require 'util'
 querystring = require 'querystring'
 
 cdb = require 'cdb'
-users_cdb = cdb.new (config.users_couchdb_uri)
+users_cdb = cdb.new (config.users.couchdb_uri)
 
 mailer = require 'nodemailer'
 
@@ -24,7 +24,7 @@ mailer.sendmail = config.mailer.sendmail
 
 cdb_changes = require 'cdb_changes'
 options =
-  uri: config.users_couchdb_uri
+  uri: config.users.couchdb_uri
   filter_name: "portal/send_confirmation"
 cdb_changes.monitor options, (p) ->
   if p.error?
@@ -36,7 +36,7 @@ cdb_changes.monitor options, (p) ->
     return util.log("Missing data: #{util.inspect p}, skipping")
 
   email_options =
-    sender: "#{config.sender_local_part}@#{p.domain}"
+    sender: "#{config.mail_confirmation.sender_local_part}@#{p.domain}"
     to: p.name
     subject: "Please confirm your registration with #{p.domain}"
     body: """

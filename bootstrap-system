@@ -5,6 +5,8 @@
 set -e
 export LANG=
 SRC="`pwd`"
+DIR=/etc/ccnq3
+CONF=${DIR}/host.json
 
 ./bootstrap/prepare
 ./bootstrap/node
@@ -13,9 +15,9 @@ SRC="`pwd`"
 
 HOSTNAME=`hostname`
 
-sudo mkdir -p /etc/ccnq3
-if [ -e /etc/ccnq3/bootstrap.config ]; then
-  echo "** WARNING: bootstrap.config already exists, re-using it"
+sudo mkdir -p "${DIR}"
+if [ -e "${CONF}" ]; then
+  echo "** WARNING: $CONF already exists, re-using it"
 else
   if [ "x$1" == "x" ]; then
     echo "** Proceeding with installation of CouchDB on local host ${HOSTNAME}."
@@ -27,15 +29,25 @@ else
   fi
 
   echo "Bootstrapping database using ${CDB_URI}"
-  sudo tee /etc/ccnq3/bootstrap.config <<"JSON" >/dev/null
+  sudo tee "${CONF}" <<"JSON" >/dev/null
   {
-    "couchdb_uri": "${CDB_URI}"
+    "_id": "host:${HOSTNAME}",
+    "type": "host",
+    "host": "${HOSTNAME}",
+    "bootstrap": {
+      "couchdb_uri": "${CDB_URI}"
+    },
+    "users": {
+      "couchdb_uri": "${CDB_URI}/_users"
+    },
+    "provisioning": {
+      "couchdb_uri": "${CDB_URI}/provisioning"
+    },
+    "databases": {
+      "couchdb_uri": "${CDB_URI}/databases"
+    }
   }
 JSON
-fi
-
-if [ -e /etc/ccnq3/host.config ]; then
-  echo "** WARNING: This host has already been bootstrapped. Configuration will be overwritten."
 fi
 
 (cd && npm install "${SRC}/"applications/_users)

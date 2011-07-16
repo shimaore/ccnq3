@@ -4,14 +4,11 @@
   "description": "Generic applications for CCNQ3",
   "keywords": "",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
-  "config": {
-    "config_file": "/etc/ccnq3/common.config"
-  }
   "scripts": {
     "start": "./start.sh",
     "stop":  "./stop.sh"
   },
-  "dependencies": { "coffee-script": ">=1.1.1", "cdb": "*", "cdb_changes": ">=0.0.3" },
+  "dependencies": { "coffee-script": ">=1.1.1", "cdb": "*", "cdb_changes": ">=0.0.3", "ccnq3_config": "*" },
   "engines": { "node": ">=0.4.7" },
 
   "comment FIXME": "Add scripts to automatically handle database creation/push etc.",

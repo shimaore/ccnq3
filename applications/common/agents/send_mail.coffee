@@ -6,14 +6,12 @@ Released under the AGPL3 license
 
 # Local configuration file
 
-fs = require 'fs'
-config_location = process.env.npm_package_config_config_file or '/etc/ccnq3/common.config'
-config = JSON.parse(fs.readFileSync(config_location, 'utf8')).replication
+config = require('ccnq3_config').config
 
 util = require 'util'
 
 cdb = require 'cdb'
-send_mail_cdb = cdb.new (config.send_mail_couchdb_uri)
+send_mail_cdb = cdb.new (config.send_mail.couchdb_uri)
 
 # Reference for Nodemailer:  https://github.com/andris9/Nodemailer
 
@@ -24,8 +22,8 @@ mailer.sendmail = config.mailer.sendmail
 
 cdb_changes = require 'cdb_changes'
 options =
-  uri: config.send_mail_couchdb_uri
-  filter_name: config.filter_name
+  uri: config.send_mail.couchdb_uri
+  filter_name: config.send_mail.filter_name
 cdb_changes.monitor options, (p) ->
   if p.error?
     return util.log(p.error)

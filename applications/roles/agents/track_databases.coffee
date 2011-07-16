@@ -5,26 +5,23 @@ Released under the AGPL3 license
 ###
 
 # Local configuration file
-
-fs = require 'fs'
-config_location = process.env.npm_package_config_config_file or '/etc/ccnq3/roles.config'
-config = JSON.parse(fs.readFileSync(config_location, 'utf8')).track_databases
+config = require('ccnq3_config').config
 
 util = require 'util'
 querystring = require 'querystring'
 child_process = require 'child_process'
 
 cdb = require 'cdb'
-replication_cdb = cdb.new config.replication_couchdb_uri
+replication_cdb = cdb.new config.replication.couchdb_uri
 
 cdb_changes = require 'cdb_changes'
-cdb_changes.monitor { uri: config.databases_couchdb_uri }, (doc) ->
+cdb_changes.monitor { uri: config.databases.couchdb_uri }, (doc) ->
   if doc.error?
     return util.log(doc.error)
 
   # Typically target_db_name will be a UUID
   target_db_name = doc.uuid
-  target_db_uri  = config.base_cdb_uri + target_db_name
+  target_db_uri  = config.track_databases.base_cdb_uri + target_db_name
   target_db      = cdb.new target_db_uri
 
   target_db.exists (it_does_exist) ->
@@ -50,7 +47,7 @@ cdb_changes.monitor { uri: config.databases_couchdb_uri }, (doc) ->
         # FIXME Replace spawn with a call to the couchapp module, duh
         couchapp = child_process.spawn '/usr/bin/env', [
           'couchapp',
-          config[doc.source].couchapp,
+          config.track_databases.sources[doc.source].couchapp,
           target_db_uri
         ]
 
@@ -62,7 +59,7 @@ cdb_changes.monitor { uri: config.databases_couchdb_uri }, (doc) ->
 
           # Start replication
           replication_req =
-            source: config[doc.source].db_uri
+            source: config.track_databases.sources[doc.source].db_uri
             target: target_db_uri
             filter: 'app/user_replication'
             query_params:

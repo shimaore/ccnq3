@@ -5,7 +5,7 @@
   "keywords": "",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
   "config": {
-    "bootstrap_file": "/etc/ccnq3/bootstrap.config"
+    "config_file": "/etc/ccnq3/host.json"
   },
   "scripts": {
     "security": "coffee node/security.coffee"

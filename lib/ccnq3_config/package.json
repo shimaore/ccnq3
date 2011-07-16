@@ -1,0 +1,15 @@
+{
+  "name": "ccnq3_config",
+  "version": "0.0.1",
+  "description": "CCNQ3 config access",
+  "keywords": "ccnq3",
+  "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
+  "main": "lib/ccnq3_config.js",
+  "dependencies": { },
+  "config": {
+    "config_file": "/etc/ccnq3/host.json"
+  },
+  "scripts": { "install": "coffee -c lib/ccnq3_config.coffee" },
+  "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },
+  "ok": true
+}
