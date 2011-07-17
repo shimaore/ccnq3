@@ -4,56 +4,49 @@
 Released under the AGPL3 license
 ###
 
-# Local configuration file
-ccnq3_config = require('ccnq3_config')
-config = ccnq3_config.config
+ccnq3_logger  = require 'ccnq3_logger'
+vm            = require 'vm'
+
+run_handler = (code,old_config,new_config) ->
+
+  result =
+    hostname: hostname
+    code: code
+    start: Date.now()
+
+  try
+    # Similarly to CouchDB, a runnable must return a function.
+    f = vm.runInNewContext(code)
+    # The function receives three arguments. old_config and new_config
+    # should not be modified; result can be used to report errors, etc.
+    f(result,old_config,new_config)
+  catch error
+    result.error = error
+  finally
+    result.end = Date.now()
+    result.freemem = os.freemem()
+    result.loadavg = os.loadavg()
+
+    ccnq3_logger.log result
+
+# Main
 
 util = require 'util'
-vm   = require 'vm'
-
-cdb         = require 'cdb'
+config = require('ccnq3_config').config
 cdb_changes = require 'cdb_changes'
 
-hostname = config.host
 options =
   uri: config.provisioning.couchdb_uri
   filter_name: "host/hostname"
   filter_params:
-    hostname: hostname
+    hostname: config.host
+
+new_config = config
 
 cdb_changes.monitor options, (p) ->
   if p.error? then return util.log(p.error)
 
-  ccnq3_config.update p
+  (old_config,new_config) = (new_config,p)
 
-  # p.runnables is a ring with new runnables at the start of the list
-  # and old ones being pushed at the back.
-
-  # Only run the first one if it has not been ran yet.
-  runnable = shift p.runnables?
-  # None is available
-  return if not runnable?
-  # Already ran the last one
-  return if runnable.result?
-
-  runnable.result =
-    hostname: hostname
-    code: runnable.code
-    start: Date.now()
-  try
-    # Just like in CouchDB, a runnable must return a function.
-    f = vm.runInNewContext(code)
-    # The function receives two arguments.
-    f(runnable.result,p)
-  catch error
-    runnable.result.error = error
-  finally
-    runnable.result.end = Date.now()
-    runnable.result.freemem = os.freemem()
-    runnable.result.loadavg = os.loadavg()
-
-  # Put this one at the end of the ring
-  p.push runnable
-
-  cdb.put p, (r) ->
-    if r.error? then return util.log(r.error)
+  for handler in new_config.change_handlers
+    run_handler handler, old_config, new_config

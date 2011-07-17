@@ -14,8 +14,7 @@ sha1_hex = (t) ->
 
 # shell_runnable generates a "runnable" function from a shell script.
 shell_runnable = (script) ->
-  # Ignore the "host" parameter as we do not use it.
-  (result) ->
+  (result,old_config,new_config) ->
     exec = require('child_process').exec
     exec script, {timeout:20}, (error,stdout,stderr)->
       result.script =
@@ -52,17 +51,25 @@ export.record = (hostname,users_uri,provisioning_uri,cb)->
       type: "host"
       host: hostname
       _id: "host:#{hostname}"
-      runnables: [
+      change_handlers: [
+
         # First runnable confirms that the agent is running and accessible.
-        (result,host) -> host.bootstrapped = true
+        (result,old_config,new_config) ->
+          result.running = true
+
         # Second runnable installs the agent daemon in @reboot crontab.
         shell_runnable '''
-            if crontab -l | grep -q host/agents; then
+            if crontab -l | grep -q ccnq3_host; then
               echo "Already installed."
             else
               (crontab -l; echo "@reboot ccnq3_host start") | crontab -;
             fi
           '''
+
+        # Third one automatically saves the new configuration
+        (result,old_config,new_config) ->
+          require('ccnq3_config').update new_config
+
       ]
 
     provisioning.put p, (r)->
