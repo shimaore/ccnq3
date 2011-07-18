@@ -5,7 +5,6 @@ Released under the AGPL3 license
 ###
 
 # Create a username for the new host's main process so that it can bootstrap its own installation.
-os = require 'os'
 host = require './host.coffee'
 
 # Load Configuration

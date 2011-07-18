@@ -3,8 +3,6 @@
 Released under the Affero GPL3 license or above
 ###
 
-couchapp = require('couchapp')
-
 ddoc =
   _id: '_design/roles'
   views: {}
@@ -48,6 +46,7 @@ ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
   unchanged('prefix')
 
 
-# Attachments are loaded from users/*
-# var path     = require('path');
+# Attachments
+# couchapp = require('couchapp')
+# path     = require('path')
 # couchapp.loadAttachments(ddoc, path.join(__dirname, 'databases'));

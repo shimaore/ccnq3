@@ -45,6 +45,9 @@ else
     },
     "databases": {
       "couchdb_uri": "${CDB_URI}/databases"
+    },
+    "logger": {
+      "couchdb_uri": "${CDB_URI}/logger"
     }
   }
 JSON

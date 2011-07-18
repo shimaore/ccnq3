@@ -7,8 +7,6 @@ Released under the Affero GPL3 license or above
 #   coffee -c users.coffee
 #   couchapp push users.js http://127.0.0.1:5984/_users
 
-couchapp = require('couchapp')
-
 ddoc =
   _id: '_design/roles'
   views: {}
@@ -27,6 +25,7 @@ ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
         if role.match /^(access|update):/
           throw {forbidden : "Only confirmed users might be granted account access."}
 
-# Attachments are loaded from users/*
-# var path     = require('path');
+# Attachments
+# couchapp = require('couchapp')
+# path     = require('path')
 # couchapp.loadAttachments(ddoc, path.join(__dirname, 'users'));
