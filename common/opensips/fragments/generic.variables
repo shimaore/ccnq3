@@ -53,8 +53,6 @@ disable_dns_blacklist=yes
 
 dns_try_ipv6=yes
 
-avp_aliases="${avp_aliases}"
-
 mpath="${mpath}"
 
 server_header="Server: CCNQ3 Proxy"

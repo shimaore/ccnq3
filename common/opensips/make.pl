@@ -150,9 +150,6 @@ sub configure_opensips {
   my ($params) = @_;
 
   # Handle special parameters specially
-  if(exists($params->{avp_aliases})) {
-    $params->{avp_aliases}= join(';',map { "$_=I:$params->{avp_aliases}->{$_}" } (sort keys %{$params->{avp_aliases}}));
-  }
   if(exists($params->{cdr_extra})) {
     $params->{cdr_extra} = join(';',@{$params->{cdr_extra}});
   }
