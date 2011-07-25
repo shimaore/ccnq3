@@ -106,7 +106,6 @@
   "flag_failed_transaction":         12,
   "flag_dest_domain_set":            16,
   "flag_sock":                       18,
-  "flag_dialog":                     19,
   "flag_register_authenticated":     20,
   "flag_tcp_persistent":             21,
   "flag_trunk_routing":              22,
