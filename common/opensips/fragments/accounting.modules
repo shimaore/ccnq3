@@ -21,7 +21,6 @@ modparam("acc", "log_extra", "${cdr_extra}")
 
 modparam("acc", "report_cancels", 1)
 modparam("acc", "early_media", 1)
-modparam("acc", "report_ack", 1)
 modparam("acc", "failed_transaction_flag", ${flag_failed_transaction})
 
 end if accounting
