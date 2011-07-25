@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 if not skip_uac_auth
+  loadmodule "uac_auth.so"
   loadmodule "uac.so"
 
   modparam("uac","auth_realm_avp",    "$(avp(uac_realm))")
