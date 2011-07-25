@@ -52,8 +52,6 @@ end if not use_shorter_fr_timer
 
 
 loadmodule "rr.so"
-# Workaround for older SIP clients
-modparam("rr", "enable_full_lr", 1)
 
 loadmodule "maxfwd.so"
 loadmodule "uri.so"
