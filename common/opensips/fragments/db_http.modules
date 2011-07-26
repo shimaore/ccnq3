@@ -1,4 +1,4 @@
 loadmodule "db_http.so"
 modparam("db_http", "field_delimiter","\t")
 modparam("db_http", "row_delimiter","\n")
-modparam("db_http", "qoute_delimiter","\"")
+modparam("db_http", "quote_delimiter","\"")
