@@ -6,6 +6,7 @@
     "generic",
     "domain_db",
     "db_http",
+    "avp_ops",
     "accounting",
     "toolbox",
     "forwarder",
