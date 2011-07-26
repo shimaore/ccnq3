@@ -9,3 +9,6 @@ CCNQ3
 
 This wiki is powered by [ikiwiki](http://ikiwiki.info).
 
+For syntax see [markdown](http://daringfireball.net/projects/markdown/syntax).
+
+Read http://ikiwiki.info/tips/integrated_issue_tracking_with_ikiwiki/ for use of the bugtracker.
