@@ -17,6 +17,9 @@
 
 ## ------- Modules ---------- ##
 
+# -- JSON --
+loadmodule "json.so"
+
 # -- FIFO --
 loadmodule "mi_fifo.so"
 modparam("mi_fifo","fifo_name", "/tmp/opensips_fifo")
