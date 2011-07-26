@@ -1,0 +1,11 @@
+CCNQ3
+
+* [[news]]
+* [[documentation|doc]]
+* [[bugs]]
+* [[contact]]
+
+----
+
+This wiki is powered by [ikiwiki](http://ikiwiki.info).
+
