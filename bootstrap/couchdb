@@ -10,6 +10,7 @@ echo '*** BEGIN Install CouchDB'
 sudo aptitude install -y -t unstable couchdb/unstable
 
 # Install default config file
+# XXX Use /etc/couchdb/local.d instead?
 sudo tee /etc/couchdb/local.ini <<'EOT' >/dev/null
 [httpd]
 port = 5984
