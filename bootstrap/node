@@ -17,7 +17,6 @@ cd ~/Node
   sudo rm -rf npm/
   git clone http://github.com/isaacs/npm.git
   cd npm
-  sed -i -e 's/git:/http:/' .gitmodules
   git submodule update --init
   sudo make install
 )
