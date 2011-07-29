@@ -19,7 +19,10 @@ module.exports = ddoc
 
 ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
 
-  if not oldDoc or oldDoc.status isnt 'confirmed'
+  user_was = (role) ->
+    oldDoc.roles?.indexOf(role) >= 0
+
+  if not oldDoc or not user_was 'confirmed'
     for role in newDoc.roles?
       do (role) ->
         if role.match /^(access|update):/

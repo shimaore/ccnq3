@@ -12,4 +12,15 @@ get '/profile.json': ->
     if r.error?
       return send r
 
-    send r.profile
+    user_is = (role) ->
+      return r.roles.indexOf(role) >= 0
+
+    if user_is 'confirmed'
+      return send r.profile
+
+    r.roles.push 'confirmed'
+    users_cdb.put r, (s) ->
+      if s.error?
+        return send s
+
+      send r.profile

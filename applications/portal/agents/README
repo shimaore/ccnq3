@@ -1,4 +1,4 @@
 If the _users database is protected (it should), make sure that the user
-specified for mail_confirmation or mail_password is a database admin user
+specified for mail_password is a database admin user
 (specified in /etc/couchdb/local.ini), since that user will have to update user
 documents for other users than itself (and only database admins can do that).

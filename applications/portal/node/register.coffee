@@ -67,9 +67,6 @@ put '/register.json': ->
       name: username
       roles: []
       domain: request.header('Host')
-      confirmation_code: crypto.createHash('sha1').update("a"+Math.random()).digest('hex')
-      confirmation_expires: (new Date()).valueOf() + 2*24*3600*1000
-      status: 'send_confirmation'
       profile: params
       access: {} # source: [prefix,..], ..
       update: {} # source|application: [prefix,..], ..
