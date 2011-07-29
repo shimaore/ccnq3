@@ -24,7 +24,7 @@ ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
       throw {forbidden : "Field can't be changed: " + field}
 
   user_is = (role) ->
-    return userCtx.roles.indexOf(role) >= 0
+    return userCtx.roles?.indexOf(role) >= 0
 
   if not user_is('_admin') and not user_is('databases-writer')
     throw {forbidden : "Not authorized to make modifications."}

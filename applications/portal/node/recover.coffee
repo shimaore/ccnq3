@@ -72,13 +72,10 @@ post '/recover.json': ->
   if not @email?
     return send {error:'Missing username'}
 
-  users_cdb = cdb.new config.confirm.users_couchdb_uri
+  users_cdb = cdb.new config.register.users_couchdb_uri
   users_cdb.get "org.couchdb.user:#{@email}", (p) =>
     if p.error?
-      return send error: p.error
-
-    if p.status isnt 'confirmed'
-      return send error: 'Invalid request.'
+      return send error: 'Please make sure you register first.'
 
     # Everything is OK
     p.send_password = true
