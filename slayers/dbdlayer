@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-NAME=pgslayer
+NAME=dbdlayer
 SCRIPT=$NAME.pl
 CONFIG=$NAME.config
 

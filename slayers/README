@@ -4,14 +4,14 @@ Note: the names are a variation on DBSlayer, which is cool but didn't do
       what I needed (updates, for example).
         http://code.nytimes.com/projects/dbslayer
 
-=== pgslayer ===
+=== dbdlayer ===
 
 
-pgslayer gives access to Perl's DBI for one or more databases. The
-database mappings are defined in the configuration file pgslayer.config.
+dbdlayer gives access to Perl's DBI for one or more databases. The
+database mappings are defined in the configuration file dbdlayer.config.
 
 
-Here is an example pgslayer.config:
+Here is an example dbdlayer.config:
 
   {
     "httpd_host":"127.0.0.1",
@@ -27,7 +27,6 @@ Here is an example pgslayer.config:
 
 Note: Any DBD backend could be used, even though this example only shows
 PostgreSQL, and only PostgreSQL has been tested so far.
-(The name should probably be dbdlayer rather than pgslayer.)
 
 
 The mapping named "default" can then be accessed at
@@ -104,7 +103,7 @@ be used:
 
 
 Credits and dependencies:
-  pgslayer relies on AnyEvent::HTTPD (not included) and on a minimally
+  dbdlayer relies on AnyEvent::HTTPD (not included) and on a minimally
   modified (so that it returns an array of hashes) version of AE::DBI.
 
 
