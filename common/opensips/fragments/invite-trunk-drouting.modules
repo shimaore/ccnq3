@@ -1,5 +1,5 @@
 loadmodule "drouting.so"
-modparam("drouting", "db_url", "${db_url}/drouting")
+modparam("drouting", "db_url", "${db_url}")
 modparam("drouting", "drd_table", "dr_gateways")
 modparam("drouting", "drr_table", "dr_rules")
 modparam("drouting", "drg_table", "dr_groups")

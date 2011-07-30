@@ -26,7 +26,7 @@ modparam("auth", "disable_nonce_check", 1)
 
 if authentication is database
   loadmodule "auth_db.so"
-  modparam("auth_db", "db_url", "${db_url}/authenticate")
+  modparam("auth_db", "db_url", "${db_url}")
   modparam("auth_db", "calculate_ha1", 0)  # calculate_ha1 MUST be 0 in production
   modparam("auth_db", "use_domain", 1)
 end if authentication is database

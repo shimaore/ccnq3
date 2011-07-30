@@ -1,6 +1,6 @@
 # -- domain --
 # Only used for "is_uri_host_local()".
 loadmodule "domain.so"
-modparam("domain", "db_url",          "${db_url}/domain")
+modparam("domain", "db_url",          "${db_url}")
 modparam("domain", "domain_table",    "domain")
 

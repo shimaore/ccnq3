@@ -1,6 +1,6 @@
 # -- avpops --
 loadmodule "avpops.so"
-modparam("avpops", "db_url",          "${db_url}/avpops")
+modparam("avpops", "db_url",          "${db_url}")
 modparam("avpops", "avp_table",       "avpops")
 modparam("avpops", "use_domain",      1)
 
