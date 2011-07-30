@@ -60,6 +60,7 @@
   "dflag_mediaproxy":                 8,
 
   "auth_table": "subscriber",
+  "usrloc_table": "location",
 
   "ok":true
 }
