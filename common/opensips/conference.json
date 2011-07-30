@@ -46,5 +46,7 @@
   "inv_timeout": 90,
   "dialog_timeout": 28800,
 
+  "sort_order": 1,
+
   "ok":true
 }

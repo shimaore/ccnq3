@@ -1,7 +1,14 @@
 loadmodule "drouting.so"
 modparam("drouting", "db_url", "${db_url}/drouting")
+modparam("drouting", "drd_table", "dr_gateways")
+modparam("drouting", "drr_table", "dr_rules")
+modparam("drouting", "drg_table", "dr_groups")
+modparam("drouting", "drl_table", "dr_gw_lists")
+
+modparam("drouting", "attrs_avp",      '$avp(dr_attrs)')
+modparam("drouting", "gw_attrs_avp",   '$avp(dr_gw_attrs)')
+modparam("drouting", "rule_attrs_avp", '$avp(dr_rule_attrs)')
+
 modparam("drouting", "ruri_avp", '$avp(dr_ruri)')
-modparam("drouting", "attrs_avp", '$avp(dr_attrs)')
 modparam("drouting", "force_dns", 0)
-modparam("drouting", "sort_order", 1) # randomized inside a group
 modparam("drouting", "use_domain", 0) # default is 1
