@@ -23,8 +23,6 @@
     "register-colocated",
     "avpops_db",
     "domain_db",
-    "trusted_db",
-    "uri_db",
     "usrloc_db"
 
   ],
@@ -37,11 +35,7 @@
   "internal_ip": "",
   "external_ip": "",
 
-  "db_type": "http",
-  "db_host": "127.0.0.1",
-  "db_login": "opensips",
-  "db_password": "remplace_this_with_a_long_randomly-generated_password__thanks",
-  "db_name": "opensips",
+  "db_url": "http://127.0.0.1:34340/",
 
   "accounting": "none",
   "authentication": "database",

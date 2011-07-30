@@ -1,5 +1,5 @@
 loadmodule "drouting.so"
-modparam("drouting", "db_url", "${db_type}://${db_name}:${db_password}@${db_host}/${db_name}")
+modparam("drouting", "db_url", "${db_url}/drouting")
 modparam("drouting", "ruri_avp", '$avp(dr_ruri)')
 modparam("drouting", "attrs_avp", '$avp(dr_attrs)')
 modparam("drouting", "force_dns", 0)

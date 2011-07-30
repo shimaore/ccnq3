@@ -1,6 +1,0 @@
-# -- uri_db ---
-loadmodule "uri_db.so"
-modparam("uri_db", "db_url",          "${db_type}://${db_name}:${db_password}@${db_host}/${db_name}")
-modparam("uri_db", "use_domain",      1)
-modparam("uri_db", "use_uri_table",   0) # use the "subscriber" table
-

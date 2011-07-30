@@ -22,11 +22,7 @@
   "model": "conference",
   "runtime_opensips_cfg": "/etc/opensips/opensips.cfg",
 
-  "db_type": "http",
-  "db_host": "127.0.0.1:34340",
-  "db_login": "opensips",
-  "db_password": "replace_this_with_a_long_randomly-generated_password__thanks",
-  "db_name": "opensips",
+  "db_url": "http://127.0.0.1:34340/",
 
   "ignore_dest_domain": 1,
   "ignore_account": 1,
