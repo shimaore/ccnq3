@@ -1,0 +1,19 @@
+{
+  "name": "ccnq3_opensips_http_db",
+  "version": "0.0.1",
+  "description": "OpenSIPS / CouchDB proxy for CCNQ3",
+  "keywords": "",
+  "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
+  "config": {
+    "config_file": "/etc/ccnq3/host.json"
+  },
+  "scripts": {
+    "start": "./start.sh",
+    "stop":  "./stop.sh",
+    "couchapps": "cd couchapps && coffee install.coffee"
+  },
+  "dependencies": { "cdb": "*", "stephane-zappa": "*" },
+  "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },
+
+  "ok": true
+}
