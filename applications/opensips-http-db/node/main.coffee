@@ -18,11 +18,27 @@ def line: (a) ->
   a.join("\t") + "\n"
 
 # Typical:
-#   GET /opensips/domain/?k=domain&v=requested_domain&c=domain
+#   GET /domain/?k=domain&v=${requested_domain}&c=domain
 
-get '/opensips/domain/': ->
+get '/domain/': ->
   if config.domains[@v]?
     return line(["string"]) + line([@v])
   else
     return ""
 
+get '/subscriber/': -> # auth_table
+
+get '/location/': -> # usrloc_table
+
+post '/location/': ->
+
+get '/avpops/': ->
+
+
+get '/dr_gateways/': ->
+
+get '/dr_rules/': ->
+
+get '/dr_groups/': ->
+
+get '/dr_gw_lists/': ->
