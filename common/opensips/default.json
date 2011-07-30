@@ -59,5 +59,7 @@
   "comment dflag": "Dialog flags",
   "dflag_mediaproxy":                 8,
 
+  "auth_table": "subscriber",
+
   "ok":true
 }
