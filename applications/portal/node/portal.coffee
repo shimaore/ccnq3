@@ -48,14 +48,6 @@ helper widget: (t) ->
   @session = session
   render t #, layout: 'widget'
 
-helper error: (m) ->
-  @error = m
-  render 'error'
-
-view 'error': ->
-  div class: 'error', -> 'An errror occurred. Please try again.'
-  div class: 'info', -> @error
-
 # This gets everything started.
 client main: ->
   $(document).ready ->
