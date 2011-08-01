@@ -6,9 +6,7 @@ Released under the AGPL3 license
 
 # Local configuration file
 
-fs = require('fs')
-config_location = process.env.npm_package_config_config_file or '/etc/ccnq3/portal.config'
-config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
+config = require('ccnq3_config').config
 
 util = require 'util'
 querystring = require 'querystring'

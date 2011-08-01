@@ -12,9 +12,7 @@ util = require 'util'
 querystring = require 'querystring'
 cdb = require 'cdb'
 
-fs = require('fs')
-config_location = process.env.npm_package_config_config_file or '/etc/ccnq3/prepaid.config'
-config = JSON.parse(fs.readFileSync(config_location, 'utf8')).esl
+config = require('ccnq3_config').config
 
 # esl.debug = true
 
@@ -33,7 +31,7 @@ server = esl.createServer (res) ->
     prepaid_account      = channel_data.variable_ccnq_account
     prepaid_destination  = channel_data.variable_target
 
-    prepaid_cdb = cdb.new config.prepaid_uri
+    prepaid_cdb = cdb.new config.prepaid.uri
 
     # Common values
     interval_id = null

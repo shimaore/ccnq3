@@ -6,9 +6,7 @@ Released under the AGPL3 license
 
 # Local configuration file
 
-fs = require 'fs'
-config_location = 'ccnq2_register.config'
-config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
+config = require('ccnq3_config').config
 
 util = require 'util'
 qs = require 'querystring'
@@ -20,19 +18,19 @@ kayako_request = (method,controller,args,cb) ->
 
   salt = "1029381092"
 
-  sha256 = crypto.createHmac 'sha256',config.secret_key
+  sha256 = crypto.createHmac 'sha256',config.kayako_register.secret_key
   sha256.update salt.toString()
   signature = sha256.digest 'base64'
 
   params = qs.stringify(args)+'&'+qs.stringify
     e: controller
     signature: signature
-    apikey: config.api_key
+    apikey: config.kayako_register.api_key
     salt: salt
 
   q =
     method: method
-    uri: config.api_url+if method is 'GET' then params else ""
+    uri: config.kaykao_register.api_url+if method is 'GET' then params else ""
     headers:
       "Content-Type": "application/x-www-form-urlencoded"
     body: if method isnt 'GET' then params else ""
@@ -45,7 +43,7 @@ kayako_request = (method,controller,args,cb) ->
 
 cdb_changes = require 'cdb_changes'
 options:
-  uri: config.users_couchdb_uri
+  uri: config.users.couchdb_uri
   filter_name: "portal/confirmed"
 cdb_changes.monitor options, (p) ->
   if p.error?

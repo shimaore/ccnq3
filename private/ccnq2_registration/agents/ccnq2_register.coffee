@@ -6,9 +6,7 @@ Released under the AGPL3 license
 
 # Local configuration file
 
-fs = require 'fs'
-config_location = 'ccnq2_register.config'
-config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
+config = require('ccnq3_config').config
 
 util = require 'util'
 qs = require 'querystring'
@@ -17,18 +15,18 @@ request = require 'request'
 
 cdb_changes = require 'cdb_changes'
 options =
-  uri: config.users_couchdb_uri
+  uri: config.users.couchdb_uri
   filter_name: 'portal/confirmed'
-cdb_changes.monitor config.users_couchdb_uri, config.filter_name, (p) ->
+cdb_changes.monitor options, (p) ->
   if p.error?
     return util.log(p.error)
 
   # Log in
   q =
     method: 'POST'
-    uri: config.ccnq2_login_uri+'?'+qs.stringify
-      username: config.ccnq2_admin_username
-      password: config.ccnq2_admin_password
+    uri: config.ccnq2.login_uri+'?'+qs.stringify
+      username: config.ccnq2.admin_username
+      password: config.ccnq2.admin_password
 
   request q, (error,response,body) ->
     if error or response.statusCode < 200 or response.statusCode > 399 or not body?
@@ -39,7 +37,7 @@ cdb_changes.monitor config.users_couchdb_uri, config.filter_name, (p) ->
     # Submit record using the admin-level profile update defined in UserAuthentication
     q =
       method: 'PUT'
-      uri: config.ccnq2_register_uri + p.name
+      uri: config.ccnq2.register_uri + p.name
       headers:
         cookie: cookie
       body: qs.stringify

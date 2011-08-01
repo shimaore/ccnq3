@@ -4,11 +4,9 @@
 Released under the AGPL3 license
 ###
 
-fs = require('fs')
-config_location = process.env.npm_package_config_config_file
-config = JSON.parse(fs.readFileSync(config_location, 'utf8')).sotel_portal
+config = require('ccnq3_portal').config
 
 zappa = require 'stephane-zappa'
 zappa.run_file 'portal.coffee',
-  port: [config.port]
-  hostname: config.hostname
+  port: [config.sotel_portal.port]
+  hostname: config.sotel_portal.hostname

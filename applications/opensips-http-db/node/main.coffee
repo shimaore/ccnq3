@@ -8,9 +8,7 @@ app 'opensips', (server) ->
   server.use (require 'express').bodyDecoder()
 
 # Get configuration
-fs = require('fs')
-config_location = 'server.config'
-config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
+config = require('ccnq3_config').config
 
 def config: config
 
@@ -21,7 +19,7 @@ def line: (a) ->
 #   GET /domain/?k=domain&v=${requested_domain}&c=domain
 
 get '/domain/': ->
-  if config.domains[@v]?
+  if config.opensips_proxy.domains[@v]?
     return line(["string"]) + line([@v])
   else
     return ""

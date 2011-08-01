@@ -40,7 +40,7 @@ put '/register.json': ->
 
   # Currently assumes username = email
   username = @email
-  db = cdb.new config.register.users_couchdb_uri
+  db = cdb.new config.register.users.couchdb_uri
   db.exists (it_does) =>
     if not it_does
       return send error:'Not connected to the database'

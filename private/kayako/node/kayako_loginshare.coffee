@@ -4,11 +4,9 @@ Released under the AGPL3 license
 ###
 # Zappa
 
-fs = require('fs')
-config_location = 'kayako_loginshare.config'
-kayako_loginshare_config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
+config = require('ccnq3_config').config
 
-def kayako_loginshare_config: kayako_loginshare_config
+def config: config
 
 json_req = require 'json_req'
 
@@ -29,7 +27,7 @@ def kayako_error_msg: (msg) ->
 post '/loginshare': ->
   q =
     method: 'POST'
-    uri: kayako_loginshare_config.login_uri
+    uri: config.kayako_loginshare.login_uri
     body:
       username: @username
       password: @password
@@ -39,7 +37,7 @@ post '/loginshare': ->
       return send kayako_error_msg()
 
     s =
-      uri: kayako_loginshare_config.profile_uri
+      uri: config.kayako_loginshare.profile_uri
       headers:
         cookie: cookie
 

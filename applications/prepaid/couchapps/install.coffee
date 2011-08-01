@@ -4,11 +4,9 @@ couchapp = require 'couchapp'
 cdb = require 'cdb'
 
 # Load Configuration
-fs = require('fs')
-config_location = process.env.npm_package_config_bootstrap_file
-config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
+config = require('ccnq3_config').config
 
-uri = "#{config.couchdb_uri}/prepaid"
+uri = config.prepaid.couchdb_uri
 
 cdb.new(uri).create()
 
