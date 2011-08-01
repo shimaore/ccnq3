@@ -14,14 +14,15 @@ client content: ->
       $.getScript '/u/recover.js'
 
 get '/content.html': ->
+  if not session.logged_in?
+    return widget 'public'
+
   widget 'content'
 
-view content: ->
+view public: ->
   div id:'login_container'
-  if not @session.logged_in?
-    return div ->
-      span "Please create an account if you do not have access."
-      div id:'register_container'
-      div id:'password_recovery_container'
+  div id:'register_container'
+  div id:'password_recovery_container'
 
+view content: ->
   div -> "You are currently signed in, congratulations!"

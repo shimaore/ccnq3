@@ -6,7 +6,6 @@
 
 app "portal", (server) ->
   # Configuration
-  fs = require 'fs'
   config = require('ccnq3_config').config
   # Session store
   express = require('express')
@@ -42,7 +41,6 @@ layout ->
   html -> @content
 
 helper widget: (t) ->
-  @session = session
   render t #, layout: 'widget'
 
 # This gets everything started.

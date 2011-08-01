@@ -41,7 +41,6 @@ layout ->
   html -> @content
 
 helper widget: (t) ->
-  @session = session
   render t #, layout: 'widget'
 
 # This gets everything started.

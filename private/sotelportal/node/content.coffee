@@ -16,14 +16,18 @@ client content: ->
       $.getScript('/p/login.js')
 
 get '/content.html': ->
+  if not session.logged_in?
+    return widget 'public'
+
   widget 'content'
+
+view public: ->
+  div id:'login_container'
+  div id:'register_container'
+  div id:'password_recovery_container'
 
 view content: ->
   div id:'login_container'
-  if not @session.logged_in?
-    return div ->
-      div id:'register_container'
-      div id:'password_recovery_container'
 
   # Here goes the main page layout.
   div ->
