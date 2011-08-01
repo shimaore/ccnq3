@@ -149,5 +149,5 @@ server = esl.createServer (res) ->
           res.filter Unique_ID, unique_id, (req,res) ->
             res.event_json 'ALL', on_connect
 
-server.listen(config.port)
+server.listen(config.prepaid.port)
 

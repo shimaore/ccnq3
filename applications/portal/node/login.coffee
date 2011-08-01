@@ -106,7 +106,7 @@ post '/login.json': ->
   if not @password?
     return send {error:'Missing password'}
 
-  uri = url.parse config.login.session_couchdb_uri
+  uri = url.parse config.session.couchdb_uri
   uri.auth = "#{querystring.escape @username}:#{querystring.escape @password}"
   delete uri.href
   delete uri.host

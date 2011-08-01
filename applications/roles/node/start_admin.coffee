@@ -8,5 +8,5 @@ config = require('ccnq3_config').config
 
 zappa = require 'zappa'
 zappa.run_file 'admin.coffee',
-  port: [config?.port or 8767]
-  hostname: config?.hostname or '127.0.0.1'
+  port: [config.prepaid.admin_port] # 8767
+  hostname: config.prepaid.admin_hostname # '127.0.0.1'
