@@ -3,26 +3,13 @@
 # Released under the AGPL3 license
 ###
 
-# Content
-
 client register: ->
   $(document).ready ->
     $('#register_container').load '/u/register.widget', ->
 
-      $('#register_buttons').buttonset()
       $('form.main').addClass('ui-widget-content')
       $('form.validate').validate()
       $('button,input[type="submit"],input[type="reset"]').button()
-
-      $('#register').dialog({ autoOpen: false, modal: true, resizable: false })
-
-      $('#register_window').submit ->
-        $('#register').dialog('open')
-        return false
-
-      $('#cancel_register').click ->
-        $('#register').dialog('close')
-        return false
 
       $('#register').submit ->
         $('#register_error').html("")
@@ -33,14 +20,11 @@ client register: ->
           dataType: 'json'
           success: (data) ->
             if data.ok
-              $('#register').dialog('close')
               window.location.reload()
             else
               $('#register_error').html("Account creation failed: #{data.error}")
         $.ajax(ajax_options)
         return false
-
-# HTML
 
 get '/register.widget': -> widget 'register_widget'
 
@@ -87,12 +71,6 @@ view register_widget: ->
     else
       input name: _id
 
-  lr = (_id,_label) -> l(_id,_label,'required')
-
-  div id: 'register_buttons', ->
-    form id: 'register_window', ->
-      input type: 'submit', value: 'Create Account'
-
   form id: 'register', class: 'main validate', method: 'post', title: 'Account creation', ->
     span id: 'register_error', class: 'error'
     input type: 'hidden', name: '_method', value: 'PUT'
@@ -104,5 +82,4 @@ view register_widget: ->
     # XXX TODO Captcha
     div ->
       input type: 'submit', value: 'Create Account'
-      button id: 'cancel_register', -> 'Cancel'
 

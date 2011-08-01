@@ -59,20 +59,9 @@ client login: ->
       window.location.reload()
 
     $('#login_container').load '/u/login.widget', ->
-      $('#login_buttons').buttonset()
       $('form.main').addClass('ui-widget-content')
       $('form.validate').validate()
       $('button,input[type="submit"],input[type="reset"]').button()
-
-      $('#login').dialog({ autoOpen: false, modal: true, resizable: false })
-
-      $('#login_window').submit ->
-        $('#login').dialog('open')
-        return false
-
-      $('#cancel_login').click ->
-        $('#login').dialog('close')
-        return false
 
       $('#login').submit ->
         if $.extra_login
@@ -99,20 +88,17 @@ view login_widget: ->
       form id: 'logout', ->
         input type: 'submit', value: 'Logout'
     else
-      form id: 'login_window', ->
-        input type: 'submit', value: 'Sign in'
 
-  form id: 'login', class: 'main validate', title: 'Sign in', ->
-    span id: 'login_error', class: 'error'
-    div ->
-      label for: 'login_username', -> 'Username'
-      input id: 'login_username', class: 'required'
-    div ->
-      label for: 'login_password', -> 'Password'
-      input type: 'password', id: 'login_password', class: 'required'
-    div ->
-      input type: 'submit', value: 'Sign in'
-      button id: 'cancel_login', -> 'Cancel'
+      form id: 'login', class: 'main validate', title: 'Sign in', ->
+        span id: 'login_error', class: 'error'
+        div ->
+          label for: 'login_username', -> 'Username'
+          input id: 'login_username', class: 'required'
+        div ->
+          label for: 'login_password', -> 'Password'
+          input type: 'password', id: 'login_password', class: 'required'
+        div ->
+        input type: 'submit', value: 'Sign in'
 
 post '/login.json': ->
   if not @username?
