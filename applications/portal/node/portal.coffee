@@ -26,7 +26,7 @@ app "portal", (server) ->
 # Configuration
 #
 
-config = require('ccqn3_config').config
+config = require('ccnq3_config').config
 
 def config: config
 
