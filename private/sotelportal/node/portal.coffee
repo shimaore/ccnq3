@@ -32,6 +32,8 @@ fs = require 'fs'
 config_location = process.env.npm_package_config_config_file
 config = JSON.parse(fs.readFileSync(config_location, 'utf8'))
 
+def config: config
+
 def cdb: require 'cdb'
 
 #
