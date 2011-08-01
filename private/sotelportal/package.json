@@ -1,11 +1,11 @@
 {
   "name": "sotel_portal",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Sotel portal",
   "keywords": "",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
   "config": {
-    "config_file": "/etc/ccnq3/portal.config"
+    "config_file": "/etc/ccnq3/host.json"
   },
   "scripts": {
     "start": "./start.sh",
