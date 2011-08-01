@@ -1,6 +1,6 @@
 {
   "name": "ccnq3_host",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Host-specific applications for CCNQ3",
   "keywords": "",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
@@ -13,7 +13,7 @@
     "bootstrap": "coffee node/host_cli.coffee",
     "couchapp": "cd couchapps && coffee install.coffee"
   },
-  "dependencies": { "cdb": "*", "cdb_changes": ">=0.0.3", "couchapp": "*" },
+  "dependencies": { "cdb": "*", "cdb_changes": ">=0.0.3", "couchapp": "*", "ccnq3_config": "*" },
   "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },
 
   "ok": true

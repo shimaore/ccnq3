@@ -1,6 +1,6 @@
 {
   "name": "ccnq3_prepaid",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Simple prepaid for CCNQ3",
   "keywords": "",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
