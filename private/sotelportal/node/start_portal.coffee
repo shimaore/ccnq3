@@ -4,7 +4,7 @@
 Released under the AGPL3 license
 ###
 
-config = require('ccnq3_portal').config
+config = require('ccnq3_config').config
 
 zappa = require 'stephane-zappa'
 zappa.run_file 'portal.coffee',
