@@ -93,7 +93,7 @@ client sip_signup: ->
 
           $('.auto_add').each (index,table) -> auto_add(table)
           
-get 'sip_signup.html': ->
+get '/sip_signup.html': ->
   partial 'sip_signup'
 
 view sip_signup: ->
