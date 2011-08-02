@@ -1,8 +1,8 @@
 # TODO Refactor using sammy.form.js and sammy.form_2_json.js
 
-client cs_signup: ->
+client sip_signup: ->
 
-        $('#content').load 'cs_signup.html', ->
+        $('#content').load '/p/sip_signup.html', ->
 
           options =
             buttons:
@@ -93,10 +93,10 @@ client cs_signup: ->
 
           $('.auto_add').each (index,table) -> auto_add(table)
           
-get 'cs_signup.html': ->
-  partial 'cs_signup'
+get 'sip_signup.html': ->
+  partial 'sip_signup'
 
-view cs_signup: ->
+view sip_signup: ->
 
   div id:'confirm_invalid', ->
     p -> 'The form contains errors.'
