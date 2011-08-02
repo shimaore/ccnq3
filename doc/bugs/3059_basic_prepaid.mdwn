@@ -1,0 +1,4 @@
+= Prepaid platform =
+
+The project is to have a simple platform with N minutes, US-only, no-prompt type of accounting, for low call-volume ("demo") type of accounts.
+The code for that is written and needs stress-testing, validation, integration with the portal, documentation, training.
