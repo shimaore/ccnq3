@@ -36,13 +36,6 @@ def cdb: require 'cdb'
 # Special rendering helpers
 #
 
-# Default layout is to render a widget
-layout widget: ->
-  html -> @content
-
-helper widget: (name) ->
-  render name, layout: 'widget'
-
 # This gets everything started.
 client main: ->
   $(document).ready ->

@@ -14,7 +14,7 @@ client content: ->
       $.getScript '/u/recover.js'
 
 get '/content.html': ->
-  widget  if session.logged_in? then 'content' else 'public'
+  partial  if session.logged_in? then 'content' else 'public'
 
 view public: ->
   div id:'login_container'
