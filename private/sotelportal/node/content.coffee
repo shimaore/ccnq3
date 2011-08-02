@@ -16,10 +16,7 @@ client content: ->
       $.getScript('/p/login.js')
 
 get '/content.html': ->
-  if not session.logged_in?
-    return widget 'public'
-
-  widget 'content'
+  widget if session.logged_in? then 'content' else 'public'
 
 view public: ->
   div id:'login_container'
