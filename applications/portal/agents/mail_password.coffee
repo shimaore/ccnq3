@@ -48,12 +48,14 @@ cdb_changes.monitor options, (p) ->
     body: """
               Someone (probably you) requested a new password for #{p.domain}.
 
+              Your username is: #{p.name}
               Your new password is: #{password}
 
               Thank you, and welcome to our exciting new service!
           """
     html: """
-              <p>Someone (probably you) requested a new password for #{p.domain}.</p>
+              <p>Someone (probably you) requested a new password for <em>#{p.domain}</em>.</p>
+              <p>Your username is <tt>#{p.name}</tt>
               <p>Your new password is <tt>#{password}</tt>
               </p>
               Thank you, and welcome to our exciting new service!
