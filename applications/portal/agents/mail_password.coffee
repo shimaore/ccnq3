@@ -54,7 +54,7 @@ cdb_changes.monitor options, (p) ->
           """
     html: """
               <p>Someone (probably you) requested a new password for #{p.domain}.</p>
-              <p>Your new password is <tt>#{password}</tt>.
+              <p>Your new password is <tt>#{password}</tt>
               </p>
               Thank you, and welcome to our exciting new service!
               </p>
