@@ -103,7 +103,7 @@ view cs_signup: ->
 
   form method:'post', class:'validate', ->
 
-    div id:"wizard" class:"swMain", ->
+    div id:"wizard", class:"swMain", ->
       ul ->
         li a href:'#step-0', ->
           label class:'stepNumber', -> 0
