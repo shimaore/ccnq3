@@ -60,6 +60,8 @@ put '/register.json': ->
       if r.error?
         return send r
       else
+        session.logged_in = username
+        session.roles     = []
         return send ok:true
 
 view register_widget: ->
