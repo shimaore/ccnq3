@@ -51,7 +51,7 @@ client recover: ->
         return false
 
 
-get '/recover.widget': -> widget 'recover_widget'
+get '/recover.widget': -> partial 'recover_widget'
 
 view recover_widget: ->
 

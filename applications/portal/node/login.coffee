@@ -79,7 +79,7 @@ client login: ->
         $.ajax(ajax_options)
         return false
 
-get '/login.widget': -> widget 'login_widget'
+get '/login.widget': -> partial 'login_widget'
 
 view login_widget: ->
 

@@ -26,7 +26,7 @@ client register: ->
         $.ajax(ajax_options)
         return false
 
-get '/register.widget': -> widget 'register_widget'
+get '/register.widget': -> partial 'register_widget'
 
 using 'crypto'
 
