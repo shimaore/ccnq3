@@ -42,6 +42,9 @@ client main: ->
     default_scripts = [
         '/public/js/jquery-ui',
         '/public/js/jquery.validate',
+        # '/public/js/sammy',
+        # '/public/js/jquery.deserialize.js',
+        '/public/js/jquery.smartWizard-2.0.js',
         '/p/content'
     ]
     for s in default_scripts
@@ -49,3 +52,6 @@ client main: ->
 
 include 'content.coffee'
 include 'login.coffee'
+
+include 'actions/default.coffee'
+include 'actions/sip_signup.coffee'
