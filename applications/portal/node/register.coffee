@@ -54,6 +54,7 @@ put '/register.json': ->
       profile: params
       access: {} # source: [prefix,..], ..
       update: {} # source|application: [prefix,..], ..
+      send_password: true # send them their new password
 
     # PUT without _rev can only happen once
     db.put p, (r) ->
