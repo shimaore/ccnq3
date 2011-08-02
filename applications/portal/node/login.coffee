@@ -79,15 +79,15 @@ client login: ->
         $.ajax(ajax_options)
         return false
 
-get '/login.widget': -> partial 'login_widget'
+get '/login.widget': ->
+  partial if session.logged_in? then 'logout_widget' else 'login_widget'
 
-view login_widget: ->
+view logout_widget: ->
 
-  div id: 'login_buttons', ->
-    if @session.logged_in?
       form id: 'logout', ->
         input type: 'submit', value: 'Logout'
-    else
+
+view login_widget: ->
 
       form id: 'login', class: 'main validate', title: 'Sign in', ->
         span id: 'login_error', class: 'error'
