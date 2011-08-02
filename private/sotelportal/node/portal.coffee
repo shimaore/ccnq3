@@ -37,11 +37,11 @@ def cdb: require 'cdb'
 #
 
 # Default layout is to render a widget
-layout ->
+layout widget: ->
   html -> @content
 
-helper widget: (t) ->
-  render t #, layout: 'widget'
+helper widget: (name) ->
+  render name, layout: 'widget'
 
 # This gets everything started.
 client main: ->
