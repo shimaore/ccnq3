@@ -1,4 +1,4 @@
-get '/cs_signup.css': ->
+get '/style.css': ->
   '''
   label.normal {
     margin: 6px;
