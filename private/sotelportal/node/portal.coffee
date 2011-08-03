@@ -43,8 +43,8 @@ client main: ->
         '/public/js/jquery-ui',
         '/public/js/jquery.validate',
         # '/public/js/sammy',
-        # '/public/js/jquery.deserialize.js',
-        '/public/js/jquery.smartWizard-2.0.js',
+        # '/public/js/jquery.deserialize',
+        '/public/js/jquery.smartWizard-2.0',
         '/p/content'
     ]
     for s in default_scripts
