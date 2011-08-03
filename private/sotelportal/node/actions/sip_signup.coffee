@@ -107,32 +107,32 @@ view sip_signup: ->
 
     div id:"wizard", class:"swMain", ->
       ul ->
-        li a href:'#step-0', ->
+        li -> a href:'#intro', ->
           label class:'stepNumber', -> 0
           span class:'stepDesc', -> 'Introduction<br/><small></small>'
-        li a href:'#step-1', ->
+        li -> a href:'#step-1', ->
           label class:'stepNumber', -> 1
           span class:'stepDesc', -> 'Step 1<br/><small>Physical Location</small>'
-        li a href:'#step-2', ->
+        li -> a href:'#step-2', ->
           label class:'stepNumber', -> 2
           span class:'stepDesc', -> 'Step 2<br/><small>Choose and Customize Services</small>'
-        li a href:'#step-3', ->
+        li -> a href:'#step-3', ->
           label class:'stepNumber', -> 3
           span class:'stepDesc', -> 'Step 3<br/><small>Billing Information</small>'
-        li a href:'#step-4', ->
+        li -> a href:'#step-4', ->
           label class:'stepNumber', -> 4
           span class:'stepDesc', -> 'Step 4<br/><small>Existing Service Information</small>'
-        li a href:'#step-5', ->
+        li -> a href:'#step-5', ->
           label class:'stepNumber', -> 5
           span class:'stepDesc', -> 'Step 5<br/><small>Technical Contact</small>'
-        li a href:'#step-6', ->
+        li -> a href:'#step-6', ->
           label class:'stepNumber', -> 6
           span class:'stepDesc', -> 'Step 6<br/><small>Terms, Conditions, and Signatures</small>'
-        li a href:'#step-7', ->
+        li -> a href:'#step-7', ->
           label class:'stepNumber', -> 7
           span class:'stepDesc', -> 'Step 7<br/><small>Confirmation</small>'
 
-      div id:'step-0', ->
+      div id:'intro', ->
         h2 class:'stepTitle', -> 'Introduction'
 
         p -> 'This formulaire is to be used by Sotel Agent to signup a new SIP Services Customer.'
