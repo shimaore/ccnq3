@@ -274,8 +274,8 @@ view partner_signup: ->
  
         div id:'siemens_mx', ->
           text_area 'siemens_mx.reason', "Reason for partner’s interest in picking up the Siemens OpenScape Solution."
-          check_box 'siemens_mx.training', "Partner will commit to allocate resources to attend and complete all Siemens OpenScape Office related Sales and maintenance training within 2 months from the becoming a registered Sotel partner and reseller of the Siemens OpenScape Office solution."
-          check_box 'siemens_mx.demo', "Partner has agreed to purchase a Siemens OpenScape Office MX demonstration system as part of their first stocking order with Sotel."
+          checkbox 'siemens_mx.training', "Partner will commit to allocate resources to attend and complete all Siemens OpenScape Office related Sales and maintenance training within 2 months from the becoming a registered Sotel partner and reseller of the Siemens OpenScape Office solution."
+          checkbox 'siemens_mx.demo', "Partner has agreed to purchase a Siemens OpenScape Office MX demonstration system as part of their first stocking order with Sotel."
 
 
       div id:'step-5', ->
