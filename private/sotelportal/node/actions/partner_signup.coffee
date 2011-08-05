@@ -101,7 +101,7 @@ view partner_signup: ->
 
   checkbox = (name,title) ->
     label  for:name, class:'normal', -> title
-    input name:name, type:'checbox', value:'yes'
+    input name:name, type:'checkbox', value:'yes'
 
   textbox = (name,title,some_class) ->
     label  for:name, class:'normal', -> title
