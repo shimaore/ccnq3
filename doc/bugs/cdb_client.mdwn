@@ -1,0 +1,4 @@
+= Use standard CDB interface =
+
+Look into https://github.com/creationix/couch-client
+(has auto-batching + _changes)
