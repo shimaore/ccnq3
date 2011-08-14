@@ -42,6 +42,7 @@ client main: ->
     default_scripts = [
         '/public/js/jquery-ui',
         '/public/js/jquery.validate',
+        '/public/js/jquery.jsonforms',
         # '/public/js/sammy',
         # '/public/js/jquery.deserialize',
         '/public/js/jquery.smartWizard-2.0',
