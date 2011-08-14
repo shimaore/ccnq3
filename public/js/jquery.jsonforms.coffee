@@ -1,6 +1,8 @@
-#  Deserialize and update a Javascript record into an HTML form.
-#  Copyright (c) 2010 Stephane Alnet
-#  Released under the Affero GPL3 license or above.
+###
+Deserialize and update a Javascript record into an HTML form.
+Copyright (c) 2010 Stephane Alnet
+Released under the Affero GPL3 license or above.
+###
 
 ($) ->
 
@@ -66,7 +68,7 @@
     return @
 
   # Fills in the form with the data in the record.
-  $.fn.update_json = (data) ->
+  $.fn.form_update_json = (data) ->
     # "this" refers to the jQuery object
     @find('input,textarea,select').each ->
       # "this" refers to the DOM element
