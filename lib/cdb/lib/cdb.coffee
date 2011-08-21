@@ -25,6 +25,9 @@ class cdb
   create: (cb) ->
     @req {method:'PUT'}, cb
 
+  erase: (cb) ->
+    @req {method:'DELETE'}, cb
+
   # Record-level operations
 
   get: (id,cb) ->
