@@ -29,6 +29,7 @@ client register: ->
 get '/register.widget': -> partial 'register_widget'
 
 using 'crypto'
+using 'uuid'
 
 put '/register.json': ->
 
@@ -54,6 +55,7 @@ put '/register.json': ->
       profile: params
       access: {} # source: [prefix,..], ..
       update: {} # source|application: [prefix,..], ..
+      uuid: uuid() # User's database UUID (or UUID prefix)
       send_password: true # send them their new password
 
     # PUT without _rev can only happen once
