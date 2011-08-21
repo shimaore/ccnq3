@@ -11,7 +11,6 @@ def config: config
 # Load CouchDB
 cdb = require 'cdb'
 def users_cdb: cdb.new (config.users.couchdb_uri)
-def databases_cdb: cdb.new (config.databases.couchdb_uri)
 
 # REST: required: initialize an admin session
 get '/admin': ->
