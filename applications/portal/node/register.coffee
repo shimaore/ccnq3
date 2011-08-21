@@ -29,7 +29,7 @@ client register: ->
 get '/register.widget': -> partial 'register_widget'
 
 using 'crypto'
-using 'uuid'
+def uuid: require 'node-uuid'
 
 put '/register.json': ->
 
