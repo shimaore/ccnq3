@@ -1,8 +1,4 @@
 
 track_users
-  inspect "_users" cdb records for their "access" field
-  record new needed databases in the "databases" cdb
-
-track_databases
-  inspect "databases" cdb records
-  create any new target databases (with proper replication) as needed
+  inspect "_users" cdb records for changes
+  create a new, empty / delete existing user database as needed
