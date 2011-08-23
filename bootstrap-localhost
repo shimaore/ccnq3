@@ -34,7 +34,7 @@ echo "*** Install the host agent"
 MAIN_URI="$1"
 shift
 
-sudo tee "${CONF}" <<"JSON" >/dev/null
+sudo tee "${CONF}" <<JSON >/dev/null
 {
   "_id": "host:${HOSTNAME}",
   "type": "host",

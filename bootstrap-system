@@ -29,7 +29,7 @@ else
   fi
 
   echo "Bootstrapping database using ${CDB_URI}"
-  sudo tee "${CONF}" <<"JSON" >/dev/null
+  sudo tee "${CONF}" <<JSON >/dev/null
   {
     "_id": "host:${HOSTNAME}",
     "type": "host",
