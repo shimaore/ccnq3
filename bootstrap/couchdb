@@ -31,7 +31,8 @@ cd
 ADMIN_PASSWORD=`openssl rand 256 -hex`
 echo "admin = ${ADMIN_PASSWORD}" | sudo tee -a /etc/couchdb/local.ini >/dev/null
 
-sudo /etc/init.d/couchdb restart
+sudo /etc/init.d/couchdb stop
+sudo /etc/init.d/couchdb start
 
 echo '*** END Install CouchDB Completed OK.'
 
