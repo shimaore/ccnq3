@@ -26,9 +26,9 @@ Common definitions:
   summarization/invoicing, etc.
 
 - User databases are databases accessible by a given user, who has "reader" rights only.
-  A user database name is stored in that user's "_users" record as "uuid", since the names
-  will tend to be UUIDs. It is freely accessible from an authenticated client, which locates
-  it by querying for the user's profile data.
+  A user's database's name is stored in that user's "_users" record as "user_database".
+  It is freely accessible from an authenticated client, which locates it by querying for
+  the user's profile data.
 
   User changes are processed and validated in the user database first.
   Authorization is enforced by the design documents found in the user database.

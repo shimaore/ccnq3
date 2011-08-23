@@ -15,7 +15,7 @@ get '/profile.json': ->
     user_is = (role) ->
       return r.roles.indexOf(role) >= 0
 
-    session.uuid = r.uuid
+    session.user_database = r.user_database
 
     if user_is 'confirmed'
       return send r.profile

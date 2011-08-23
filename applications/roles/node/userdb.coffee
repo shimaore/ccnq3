@@ -15,7 +15,7 @@ put '/replicate/push/:target': ->
     method: 'POST'
     uri: config.users.replicate_uri
     body:
-      source: session.uuid
+      source: session.user_database
       target: @target
 
   json_req.request replication_req, (r) ->
@@ -38,7 +38,7 @@ put '/replicate/pull/:source': ->
           uri: config.users.replicate_uri
           body:
             source: @source
-            target: session.uuid
+            target: session.user_database
             filter: 'user_replication'
             query_params:
               prefix: prefix
