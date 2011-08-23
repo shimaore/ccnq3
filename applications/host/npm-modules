@@ -11,8 +11,6 @@ echo '*** Install ccnq3'
 echo '*** Install pre-requisites'
 (
   mkdir -p ~/Node
-  export http_proxy="${NEED_PROXY}"
-  npm config set proxy "$http_proxy"
   npm install nodemailer node-uuid
 
   # This version might work better.
