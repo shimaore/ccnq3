@@ -53,8 +53,6 @@ put '/register.json': ->
       roles: []
       domain: request.header('Host')
       profile: params
-      access: {} # source: [prefix,..], ..
-      update: {} # source|application: [prefix,..], ..
       uuid: uuid() # User's database UUID (or UUID prefix)
       send_password: true # send them their new password
 

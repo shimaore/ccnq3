@@ -1,4 +1,4 @@
------ Conventions for username in CouchDB -----
+----- Conventions for usernames in CouchDB -----
 
 For people, use people's actual email addresses.
 For processes, use process_name@server_name.
@@ -8,71 +8,50 @@ Reserve shortnames (no "@" sign) for admin accounts.
 ----- Conventions for CouchDB access -----
 
 View as a single system (using potential scaling arch., replication).
+(See BigCouch, CouchBase.)
 
 Common definitions:
 - Source databases are global databases containing the entire system information.
-  Examples: "provisioning", "billing"
+  Examples: "provisioning", "billing", "_users"
 
-- Therefor a "source" is the name of such a global database, such as:
-       billing
-       provisioning
-       _users
-    "source" is also the name of that database, used as replication source.
-    Source (global) databases can only be accessed via a node.js API process (which enforces the prefix-matching rules)
-    (API access might be used for R/W access, since for some global databases no prefix-specific replication is provided.)
+  They are only accessible by system accounts.
 
-- Account identifiers are formatted as paths, for example:
+  The _users database is maintained by the "portal" application, which takes care of
+  registering users, etc.
 
-  /path1/path2/path3/path4
+  The main provisioning database is never accessed directly, it is always replicated
+  (to/from user databases, or to servers copies).
 
-  (format is site-dependent)
+  The main billing database is accessed by system scripts that insert CDRs, provide
+  summarization/invoicing, etc.
 
-- A user may have access to one or more prefixes, which
-  are path prefixes.
-  (For example /path1/path2/ or /path1/path2/path3/path4 in the above example.)
+- User databases are databases accessible by a given user, who has "reader" rights only.
+  A user database name is stored in that user's "_users" record as "uuid", since the names
+  will tend to be UUIDs. It is freely accessible from an authenticated client, which locates
+  it by querying for the user's profile data.
 
-- Therefor a "prefix" is an authorization prefix (format is site-dependent)
-     matched against the "account" field in records (prefix must be a left-prefix of the account value for user to gain access)
-     "prefix" is used as a replication filter on "source" to create a target database
+  User changes are processed and validated in the user database first.
+  Authorization is enforced by the design documents found in the user database.
+  (The user does not have database-admin access to their own database, which prevents
+  them from circumscribing the design documents.)
+  User changes are replicated back into the main/source (provisioning) database via a client
+  trigger.
 
-- A "target database" is a database identified by a UUID which is a replicating copy of a "source" database with a "prefix" filter.
-  The target database only contains record from the source database where the "account" field of the record has "prefix" as a left-prefix.
-  The target database contains a security object that requires ${UUID}-reader access.
+  Global changes are pulled into a user database from a source database using filters
+  so that users only have access to authorized information. Pull operation is triggered by
+  the client.
 
-  Such a database is created for each user-assigned prefix and each source database.
-  The database thus created is made available (as readers) to users whose
-  "access" property list that prefix under the specified source.
+  Users may also freely replicate to/from their own databases if they wish.
 
-  For example a "billing" database corresponding to the prefix  /path1/path2
-  will be made accessible to users who have /path1/path2 listed
-  as one of their "billing" access prefixes.
+- A user may have access to one or more account prefixes which are used to authorize
+  operations.
 
-  The database is named using a UUID which can be found in the "databases"
-  cross-reference CouchDB.
+  For example if an account is "ProviderA/ResellerB/CustomerC" then a prefix of
+  "ProviderA/ResellerB/" would give access to that account (and others that share the same
+  prefix).
 
-  A single database is kept per-source-and-prefix. The master databases
-  (provisioning, cdr, etc.) are replicated into those databases.
-  Uniqueness of IDs is enforced by using "type:key" IDs. (Provisioning
-  will contain types such as "number", "endpoint", "location"; CDR will
-  contain the "cdr" type.)
+- Individual operations are allowed based on the _users' standard "roles" array, using the format
+  operation:database:account_prefix; for example:
 
-  Since readers have write (modify) access to the database, a user could
-  add comments, etc., on a private database, which would not replicate
-  into the master.
+    [ 'access:provisioning:ProviderA/ResellerB/', 'update:provisioning:ProviderA/ResellerB/CustomerC' ]
 
-
-Common databases:
-
-/_users record contain:
-  access: { source: [prefix,..], .. }
-  update: { source|application: [prefix,..], .. }
-
-/databases maps between actual db-name (a UUID) and the associated role
-  _id: JSON.stringify [source,prefix]
-  uuid: UUID of database (CouchDB database name)
-  source: same as source in _users (replication source)
-  prefix: same as prefix in _users (replication filter)
-
-/${UUID}
-  one database created from a source db using replication and the prefix as filter
-  security object requires "${UUID}-reader"
