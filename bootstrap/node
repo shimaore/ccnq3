@@ -27,6 +27,10 @@ cd ~/Node
   sudo make install
 )
 
-sudo npm -g install coffee-script
+(
+  export http_proxy=${NEED_PROXY}
+  export https_proxy=${NEED_PROXY}
+  sudo npm -g install coffee-script
+)
 
 echo '** END Install Node and npm Completed OK.'
