@@ -1,6 +1,6 @@
 {
   "name": "ccnq3_users",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Common applications for CCNQ3",
   "keywords": "",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
@@ -10,7 +10,7 @@
   "scripts": {
     "security": "coffee node/security.coffee"
   },
-  "dependencies": { "cdb": "*" },
+  "dependencies": { "cdb": "*", "ccnq3_config": "*" },
   "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },
 
   "ok": true
