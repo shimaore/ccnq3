@@ -60,7 +60,7 @@ cdb_changes.monitor options, (user_doc) ->
               names: [ user_doc.name ]
 
         target_db.req security_req, (r) ->
-          if r.error return util.log r.error
+          if r.error then return util.log r.error
 
           # TODO verify that this can actually be done (body is not JSON)
           revs_limit =
@@ -69,5 +69,4 @@ cdb_changes.monitor options, (user_doc) ->
             body: 0
 
           target_db.req revs_limit, (r) ->
-            if r.error
-              return util.log r.error
+            if r.error then return util.log r.error
