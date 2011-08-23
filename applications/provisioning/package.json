@@ -11,7 +11,7 @@
     "security": "coffee node/security.coffee",
     "couchapps": "cd couchapps && coffee install.coffee"
   },
-  "dependencies": { "cdb": "*", "couchapp": "*" },
+  "dependencies": { "cdb": "*", "couchapp": "*", "ccnq3_config": "*" },
   "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },
 
   "ok": true
