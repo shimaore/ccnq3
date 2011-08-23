@@ -12,13 +12,18 @@ sudo aptitude install -y -t unstable nodejs nodejs-dev
 mkdir -p ~/Node
 cd ~/Node
 (
-  # Work over IPv6 with NEED_PROXY
-  export http_proxy=${NEED_PROXY}
-  export https_proxy=${NEED_PROXY}
   sudo rm -rf npm/
-  git clone http://github.com/isaacs/npm.git
+
+  # # Work over IPv6 with NEED_PROXY
+  # export http_proxy=${NEED_PROXY}
+  # export https_proxy=${NEED_PROXY}
+  # git clone http://github.com/isaacs/npm.git
+
+  curl http://stephane.shimaore.net/debian/src/npm-clean.tar.gz | tar xzvf -
+  mv npm-clean npm
+
   cd npm
-  git submodule update --init
+  # git submodule update --init
   sudo make install
 )
 
