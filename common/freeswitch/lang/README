@@ -1,0 +1,9 @@
+These are used by the "phrase" command.
+
+Available commands inside an "action" tag:
+  play-file    switch_ivr_play_file
+  phrase       switch_ivr_phrase_macro
+  break
+  execute      switch_core_session_exec
+  say          say function of selected module
+  speak-text   switch_ivr_speak_text
