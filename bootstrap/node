@@ -14,6 +14,7 @@ cd ~/Node
 (
   # Work over IPv6 with NEED_PROXY
   export http_proxy=${NEED_PROXY}
+  export https_proxy=${NEED_PROXY}
   sudo rm -rf npm/
   git clone http://github.com/isaacs/npm.git
   cd npm
