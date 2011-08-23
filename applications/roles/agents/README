@@ -1,4 +1,4 @@
 
 track_users
   inspect "_users" cdb records for changes
-  create a new, empty / delete existing user database as needed
+  create a new / delete existing user database as needed
