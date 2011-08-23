@@ -29,7 +29,7 @@ EOT
 # Add authentication, etc.
 cd
 ADMIN_PASSWORD=`openssl rand 256 -hex`
-echo "admin = ${ADMIN_PASSWORD}" | sudo tee -a /etc/couchdb/local.ini
+echo "admin = ${ADMIN_PASSWORD}" | sudo tee -a /etc/couchdb/local.ini >/dev/null
 
 sudo /etc/init.d/couchdb restart
 
