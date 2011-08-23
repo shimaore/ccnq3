@@ -11,6 +11,9 @@ sudo aptitude install -y -t unstable nodejs nodejs-dev
 
 mkdir -p ~/Node
 cd ~/Node
+if npm -v | egrep '^1\.0'; then
+  echo "Using npm version `npm -v`"
+else
 (
   sudo rm -rf npm/
   git clone http://github.com/isaacs/npm.git
@@ -18,6 +21,7 @@ cd ~/Node
   git submodule update --init --recursive
   sudo make install
 )
+fi
 
 sudo npm -g install coffee-script
 
