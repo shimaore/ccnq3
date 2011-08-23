@@ -1,11 +1,11 @@
 {
   "name": "ccnq3_provisioning",
   "version": "0.0.3",
-  "description": "Environemnt for the main (source) provisioning database in CCNQ3",
+  "description": "Environment for the main (source) provisioning database in CCNQ3",
   "keywords": "",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
   "config": {
-    "config_file": "/etc/ccnq3/host.json",
+    "config_file": "/etc/ccnq3/host.json"
   },
   "scripts": {
     "security": "coffee node/security.coffee",
