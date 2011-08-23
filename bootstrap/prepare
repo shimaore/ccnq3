@@ -1,5 +1,8 @@
 #!/bin/bash
 
+set -e
+export LANG=
+
 echo '** BEGIN prepare'
 
 export LANG=
