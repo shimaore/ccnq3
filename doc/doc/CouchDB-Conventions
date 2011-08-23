@@ -8,7 +8,7 @@ Reserve shortnames (no "@" sign) for admin accounts.
 ----- Conventions for CouchDB access -----
 
 View as a single system (using potential scaling arch., replication).
-(See BigCouch, CouchBase.)
+(See BigCouch.)
 
 Common definitions:
 - Source databases are global databases containing the entire system information.
