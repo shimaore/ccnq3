@@ -4,9 +4,24 @@
 Released under the AGPL3 license
 ###
 
+zappa = require 'zappa'
 config = require('ccnq3_config').config
 
-zappa = require 'zappa'
-zappa.run_file 'admin.coffee',
-  port: [config.prepaid.admin_port] # 8767
-  hostname: config.prepaid.admin_hostname # '127.0.0.1'
+zappa config.roles.port, config.roles.hostname ->
+  # Configuration
+  config = require('ccnq3_config').config
+  # Session store
+  express = require('express')
+  if config.session.memcached_store
+    MemcachedStore = require 'connect-memcached'
+    store = new MemcachedStore(config.session.memcached_store)
+  if config.session.redis_store
+    RedisStore = require('connect-redis')(express)
+    store = new RedisStore(config.session.redis_store)
+
+  use 'logger', 'bodyParser', 'cookieParser', 'methodOverride'
+  use session: { secret: config.session.secret, store: store  }
+
+  include 'admin'
+  include 'login'
+  include 'replicate'

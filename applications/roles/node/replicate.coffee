@@ -1,49 +1,51 @@
-# Although the replicator would allow the end-users to start replicating, since the source database is not accessible to them, they will (should) not be able to replicate from it.
-# However the design rules inside the user's database enforce data consistency (and policies), so we can replicate from it without having to check per-user information in the main database.
-# Conversely, we can replicate from the source database using a simple filter.
+@include = ->
 
-# Start replication from user's database back to a main database.
+  # Although the replicator would allow the end-users to start replicating, since the source database is not accessible to them, they will (should) not be able to replicate from it.
+  # However the design rules inside the user's database enforce data consistency (and policies), so we can replicate from it without having to check per-user information in the main database.
+  # Conversely, we can replicate from the source database using a simple filter.
 
-using 'json_req'
+  # Start replication from user's database back to a main database.
 
-put '/replicate/push/:target': ->
-  if not session.logged_in?
-    return send error:'Not logged in.'
+  requiring 'json_req'
 
-  # The only database we can push to is 'provisioning'.
-  return send error:'Invalid target' unless @target in ['provisioning']
+  put '/replicate/push/:target': ->
+    if not session.logged_in?
+      return send error:'Not logged in.'
 
-  replication_req =
-    method: 'POST'
-    uri: config.users.replicate_uri
-    body:
-      source: session.user_database
-      target: @target
+    # The only database we can push to is 'provisioning'.
+    return send error:'Invalid target' unless @target in ['provisioning']
 
-  json_req.request replication_req, (r) ->
-    send r
+    replication_req =
+      method: 'POST'
+      uri: config.users.replicate_uri
+      body:
+        source: session.user_database
+        target: @target
 
-# Start replication from a main database to the user's database
-put '/replicate/pull/:source': ->
-  if not session.logged_in?
-    return send error:'Not logged in.'
+    json_req.request replication_req, (r) ->
+      send r
 
-  return send error:'Invalid source' unless @source in ['provisioning','billing']
+  # Start replication from a main database to the user's database
+  put '/replicate/pull/:source': ->
+    if not session.logged_in?
+      return send error:'Not logged in.'
 
-  for role in session.roles
-    do (role) ->
-      prefix = role.match("^access:#{@source}:(.*)$")?[1]
-      if prefix?
+    return send error:'Invalid source' unless @source in ['provisioning','billing']
 
-        replication_req =
-          method: 'POST'
-          uri: config.users.replicate_uri
-          body:
-            source: @source
-            target: session.user_database
-            filter: 'user_replication'
-            query_params:
-              prefix: prefix
+    for role in session.roles
+      do (role) ->
+        prefix = role.match("^access:#{@source}:(.*)$")?[1]
+        if prefix?
 
-        json_req.request replication_req, (r) ->
-          send r
+          replication_req =
+            method: 'POST'
+            uri: config.users.replicate_uri
+            body:
+              source: @source
+              target: session.user_database
+              filter: 'user_replication'
+              query_params:
+                prefix: prefix
+
+          json_req.request replication_req, (r) ->
+            send r
