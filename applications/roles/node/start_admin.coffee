@@ -22,7 +22,7 @@ zappa config.roles.port, config.roles.hostname, ->
     store = new RedisStore(config.session.redis_store)
 
   use 'logger', 'bodyParser', 'cookieParser', 'methodOverride'
-  use session: { secret: config.session?.secret, store: store  }
+  use session: { secret: config.session.secret, store: store  }
 
   include 'admin'
   include 'login'
