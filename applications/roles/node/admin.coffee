@@ -5,12 +5,8 @@ Released under the AGPL3 license
 
 @include = ->
 
-  # Load Configuration
-  config = require('ccnq3_config').config
-  def config: config
-
   # Load CouchDB
-  cdb = require 'cdb'
+  requiring 'cdb'
   def users_cdb: cdb.new (config.users.couchdb_uri)
 
 

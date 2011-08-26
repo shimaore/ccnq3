@@ -8,14 +8,17 @@ zappa = require 'zappa'
 config = require('ccnq3_config').config
 
 zappa config.roles.port, config.roles.hostname, ->
-  # Configuration
-  config = require('ccnq3_config').config
+
+  requiring 'ccnq3_config'
+  config = ccnq3_config.config
+  def config: config
+
   # Session store
   express = require('express')
-  if config.session.memcached_store
+  if config.session?.memcached_store
     MemcachedStore = require 'connect-memcached'
     store = new MemcachedStore(config.session.memcached_store)
-  if config.session.redis_store
+  if config.session?.redis_store
     RedisStore = require('connect-redis')(express)
     store = new RedisStore(config.session.redis_store)
 
