@@ -1,6 +1,6 @@
 {
   "name": "sotel_portal",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "Sotel portal",
   "keywords": "",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
@@ -12,7 +12,7 @@
     "stop":  "./stop.sh",
     "couchapps": "cd couchapps && coffee install.coffee"
   },
-  "dependencies": { "cdb": "*", "cdb_changes": ">=0.0.3", "couchapp": "*", "nodemailer": "*", "stephane-zappa": "*", "connect-memcached": "*", "connect-redis": "*", "ccnq3_config": "*" },
+  "dependencies": { "cdb": "*", "cdb_changes": ">=0.0.3", "couchapp": "*", "nodemailer": "*", "stephane-zappa": "*", "connect-couchdb": "*", "ccnq3_config": "*" },
   "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },
 
   "ok": true

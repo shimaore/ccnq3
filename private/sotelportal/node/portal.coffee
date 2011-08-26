@@ -9,12 +9,8 @@ app "portal", (server) ->
   config = require('ccnq3_config').config
   # Session store
   express = require('express')
-  if config.session.memcached_store
-    MemcachedStore = require 'connect-memcached'
-    store = new MemcachedStore(config.session.memcached_store)
-  if config.session.redis_store
-    RedisStore = require('connect-redis')(express)
-    store = new RedisStore(config.session.redis_store)
+  CouchDBStore = require('connect-couchdb')(express)
+  store = new CouchDBStore(config.session.couchdb_store)
 
   server.use express.logger()
   server.use express.bodyParser()
