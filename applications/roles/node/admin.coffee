@@ -6,7 +6,7 @@ Released under the AGPL3 license
 @include = ->
 
   # Load CouchDB
-  requiring 'cdb'
+  cdb = require 'cdb'
   def users_cdb: cdb.new (config.users.couchdb_uri)
 
 
