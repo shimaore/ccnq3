@@ -104,3 +104,6 @@ del '/admin/grant/:user/(update|access)/:source/:prefix': ->
     p.roles = p.roles.filter (v)->
       not ( (v).substring(0,matching.length) is matching )
     cb(p)
+
+include 'login'
+include 'replicate'
