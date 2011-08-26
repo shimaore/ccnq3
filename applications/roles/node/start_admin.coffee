@@ -7,7 +7,7 @@ Released under the AGPL3 license
 zappa = require 'zappa'
 config = require('ccnq3_config').config
 
-zappa config.roles.port, config.roles.hostname ->
+zappa config.roles.port, config.roles.hostname, ->
   # Configuration
   config = require('ccnq3_config').config
   # Session store
