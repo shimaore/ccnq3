@@ -32,26 +32,6 @@ client login: ->
       $('#login_error').html("")
       $.ajax(ajax_options)
 
-    # Use data.couchdb to login as well
-    couchdb_login = (next) ->
-      couchdb_options =
-        type: 'post'
-        url: '/_session'
-        username: $('#login_username').val()
-        password: $('#login_password').val()
-        data:
-          name: $('#login_username').val()
-          password: $('#login_password').val()
-        dataType:'json'
-        success: (data) ->
-          if not data.ok
-            $('#login_error').html('Database sign-in failed.')
-            return
-          next()
-
-      $('#login_error').html('Signing you into the database.')
-      $.ajax(couchdb_options)
-
     login_done = ->
       # All done.
       $('#login_error').html('')
@@ -65,9 +45,9 @@ client login: ->
 
       $('#login').submit ->
         if $.extra_login
-          main_login -> couchdb_login -> $.extra_login -> login_done()
+          main_login -> $.extra_login -> login_done()
         else
-          main_login -> couchdb_login -> login_done()
+          main_login -> login_done()
         return false
 
       $('#logout').submit ->
