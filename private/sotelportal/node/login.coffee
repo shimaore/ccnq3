@@ -5,6 +5,8 @@ Released under the AGPL3 license
 
 client login: ->
 
+  extra_login = $.extra_login
+
   $.extra_login = (next) ->
 
     ccnq2_login = (next) ->
@@ -34,4 +36,7 @@ client login: ->
       # $.ajax(kayako_options)
       next()
 
-    ccnq2_login -> kayako_login (next)
+    if extra_login?
+      extra_login -> ccnq2_login -> kayako_login (next)
+    else
+      ccnq2_login -> kayako_login (next)
