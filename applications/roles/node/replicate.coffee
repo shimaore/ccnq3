@@ -6,7 +6,7 @@
 
   # Start replication from user's database back to a main database.
 
-  requiring 'json_req'
+  json_req = require 'json_req'
 
   put '/replicate/push/:target': ->
     if not session.logged_in?
