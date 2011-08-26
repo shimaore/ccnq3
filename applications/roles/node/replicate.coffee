@@ -1,8 +1,10 @@
-
-
-# Start replication from user's database back to a main database.
 # Although the replicator would allow the end-users to start replicating, since the source database is not accessible to them, they will (should) not be able to replicate from it.
 # However the design rules inside the user's database enforce data consistency (and policies), so we can replicate from it without having to check per-user information in the main database.
+# Conversely, we can replicate from the source database using a simple filter.
+
+# Start replication from user's database back to a main database.
+
+using 'json_req'
 
 put '/replicate/push/:target': ->
   if not session.logged_in?
@@ -43,8 +45,5 @@ put '/replicate/pull/:source': ->
             query_params:
               prefix: prefix
 
-  json_req.request replication_req, (r) ->
-    send r
-
-
-# TODO (Less urgent, can be done other ways) Install couchapps in the user's database
+        json_req.request replication_req, (r) ->
+          send r
