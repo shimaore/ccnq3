@@ -1,8 +1,16 @@
 
-# Create the same type of entries as the ones done by ../node/host.coffee
+# The HTML page should create the same type of entries as the ones done by ../node/host.coffee
 
+# The following is an example of a shell_runnable:
+
+'''
 # If requested, run the ssh code if requested to do so
 if $SSH_INSTALL; then
   ssh $HOST "cd && rm -rf ccnq3 && git clone git://stephane.shimaore.net/git/ccnq3.git && cd ccnq3 && ./bootstrap-localhost ${CDB_URI}"
 fi
+'''
 
+# More generally speaking, hosts currently have no way to provide feedback to the management interface.
+# (They cannot update their own "host" record, for example.)
+# This also means that although we can run generic "install-type" snippets (PUT-style, provisioning-only), we cannot run one-time code (GET-style) to retrieve state out of a given host.
+# This could be done with RabbitMQ, or a dedicate database in CouchDB -- similar to the "events" database in ccnq2.0, but only to do information retrieval, and with clean-up code --, or a dedicated server on each host (but this assumes unfiltered two-way access, which might not be the case).

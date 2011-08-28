@@ -2,7 +2,7 @@
 fs = require 'fs'
 util = require 'util'
 
-# XXX Test: is this going to use ccnq3_config's config_file, or the package, or the apps..?
+# Use a package-provided configuration file, if any.
 config_location = process.env.npm_package_config_config_file
 
 if not config_location?
@@ -15,9 +15,15 @@ exports.location = config_location
 
 exports.config = JSON.parse fs.readFileSync config_location, 'utf8'
 
+# TODO After reading the initial configuration and retrieving config.provisioning.couchdb_uri,
+#      retrieve our CouchDB configuration record from the live database
+#      and automatically save it
+#      return the file configuration if the CouchDB query failed
+
 exports.update = (content) ->
   fs.writeFileSync config_location, JSON.stringify content
 
+# Which store should we use for express/zappa session management?
 exports.session_store = ->
   config = exports.config
   express = require 'express'
