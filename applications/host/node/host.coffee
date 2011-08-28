@@ -42,7 +42,7 @@ exports.record = (hostname,users_uri,provisioning_uri,cb)->
     password_sha: sha1_hex password+salt
 
   users.put p, (r)->
-    if r.error? return util.log r.error
+    if r.error? then return util.log r.error
 
     # Add the host in the main CDB's provisioning table,
     # with two initialization runnables.
@@ -73,6 +73,6 @@ exports.record = (hostname,users_uri,provisioning_uri,cb)->
       ]
 
     provisioning.put p, (r)->
-      if r.error? return util.log r.error
+      if r.error? then return util.log r.error
 
       cb? username, password
