@@ -53,11 +53,11 @@ exports.record = (hostname,users_uri,provisioning_uri,cb)->
       _id: "host:#{hostname}"
       change_handlers: [
 
-        # First runnable confirms that the agent is running and accessible.
+        # Automatically save the new configuration in the static configuration file.
         (result,old_config,new_config) ->
-          result.running = true
+          require('ccnq3_config').update new_config
 
-        # Second runnable installs the agent daemon in @reboot crontab.
+        # Install the agent daemon in @reboot crontab.
         shell_runnable '''
             if crontab -l | grep -q ccnq3_host; then
               echo "Already installed."
@@ -65,10 +65,6 @@ exports.record = (hostname,users_uri,provisioning_uri,cb)->
               (crontab -l; echo "@reboot cd && npm run-script ccnq3_host start") | crontab -;
             fi
           '''
-
-        # Third one automatically saves the new configuration
-        (result,old_config,new_config) ->
-          require('ccnq3_config').update new_config
 
       ]
 
