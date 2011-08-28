@@ -24,7 +24,7 @@ shell_runnable = (script) ->
         stderr: stderr
 
 
-export.record = (hostname,users_uri,provisioning_uri,cb)->
+exports.record = (hostname,users_uri,provisioning_uri,cb)->
   username = "host@#{hostname}"
 
   users = cdb.new users_uri
