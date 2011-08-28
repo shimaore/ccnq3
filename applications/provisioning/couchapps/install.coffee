@@ -21,7 +21,7 @@ provisioning.get '_security', (p)->
     uri: '_security'
     body: p
   provisioning.req options, (r)->
-    if r.error? then return util.log p.error
+    if r.error? then return util.log r.error
 
 # Install the couchapp scripts.
 push_script = (script,cb) ->
