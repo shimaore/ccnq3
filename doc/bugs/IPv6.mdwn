@@ -1,0 +1,3 @@
+Due to npm limitations and github/npmregistry not being available over IPv6, installation must use IPv4.
+
+Due to Node.js URL parsing bug, use host names (DNS) instead of IPv6 IP Addresses for configuration of the system.
