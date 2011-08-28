@@ -8,7 +8,6 @@
     "config_file": "/etc/ccnq3/host.json"
   },
   "scripts": {
-    "security": "coffee node/security.coffee",
     "couchapps": "cd couchapps && coffee install.coffee"
   },
   "dependencies": { "cdb": "*", "couchapp": "*", "ccnq3_config": "*" },

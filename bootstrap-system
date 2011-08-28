@@ -59,7 +59,6 @@ fi
 
 (cd && npm install "${SRC}/"applications/provisioning)
 (cd && npm run-script ccnq3_provisioning couchapps)
-(cd && npm run-script ccnq3_provisioning security )
 
 (cd && npm install "${SRC}/"applications/host)
 (cd && npm run-script ccnq3_host couchapps)
