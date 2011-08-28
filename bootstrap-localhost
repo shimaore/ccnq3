@@ -6,44 +6,39 @@ SRC="`pwd`"
 DIR=/etc/ccnq3
 CONF=${DIR}/host.json
 
-sudo mkdir -p "${DIR}"
-if [ "x$1" == "x" ]; then
-  echo "** You must provide a reference URI."
-  exit
-fi
-URI=$1
-
-if [ -e "${CONF}" ]; then
-  echo "** WARNING: This host has already been bootstrapped. Configuration will be overwritten."
-fi
-
 ./bootstrap/prepare
 ./bootstrap/node
-(cd && sudo npm -g install coffee-script)
-(cd && npm install request)
 
-# (cd && npm install "${SRC}/"lib/cdb)
-# (cd && npm install "${SRC}/"lib/cdb_changes)
-# Install the versions from the registry:
-(cd && npm install cdb cdb_changes)
+HOSTNAME=`hostname`
 
-echo "*** Install the host agent"
-(cd && npm install "${SRC}/"applications/host)
+sudo mkdir -p "${DIR}"
+if [ -e "${CONF}" ]; then
+  echo "** WARNING: This host has already been bootstrapped. The previous configuration will be used. To start over please remove ${CONF} before using this script."
+else
+  if [ "x$1" == "x" ]; then
+    echo "** You must provide a reference URI."
+    exit
+  else
+    URI=$1
+    shift
+  fi
 
-# Start application/host
-MAIN_URI="$1"
-shift
-
-sudo tee "${CONF}" <<JSON >/dev/null
-{
-  "_id": "host:${HOSTNAME}",
-  "type": "host",
-  "host": "${HOSTNAME}",
-  "provisioning": {
-    "couchdb_uri": "$URI"
+  sudo tee "${CONF}" <<JSON >/dev/null
+  {
+    "_id": "host:${HOSTNAME}",
+    "type": "host",
+    "host": "${HOSTNAME}",
+    "provisioning": {
+      "couchdb_uri": "$URI"
+    }
   }
-}
 JSON
+fi
+
+# Cleanup any previous run
+(cd && rm -rf node_modules)
+
+(cd && npm install "${SRC}/"applications/host)
 
 npm stop  ccnq3_host || echo
 npm start ccnq3_host
