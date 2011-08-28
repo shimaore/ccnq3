@@ -62,7 +62,7 @@ exports.record = (hostname,users_uri,provisioning_uri,cb)->
             if crontab -l | grep -q ccnq3_host; then
               echo "Already installed."
             else
-              (crontab -l; echo "@reboot ccnq3_host start") | crontab -;
+              (crontab -l; echo "@reboot cd && npm run-script ccnq3_host start") | crontab -;
             fi
           '''
 
