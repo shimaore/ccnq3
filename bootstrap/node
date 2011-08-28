@@ -12,7 +12,7 @@ sudo aptitude install -y -t unstable nodejs nodejs-dev
 mkdir -p ~/Node
 cd ~/Node
 if npm -v | egrep -q '^1\.0'; then
-  echo "Using npm version `npm -v`"
+  echo "** WARNING: Using existing npm version `npm -v`"
 else
 (
   sudo rm -rf npm/
