@@ -8,9 +8,7 @@ app "portal", (server) ->
   # Configuration
   config = require('ccnq3_config').config
   # Session store
-  express = require('express')
-  CouchDBStore = require('connect-couchdb')(express)
-  store = new CouchDBStore(config.session.couchdb_store)
+  store = config.session_store
 
   server.use express.logger()
   server.use express.bodyParser()

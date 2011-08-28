@@ -13,9 +13,7 @@ zappa config.roles.port, config.roles.hostname, ->
   def config: config
 
   # Session store
-  express = require('express')
-  CouchDBStore = require('connect-couchdb')(express)
-  store = new CouchDBStore(config.session.couchdb_store)
+  store = config.session_store
 
   use 'logger', 'bodyParser', 'cookieParser', 'methodOverride',
     session: { secret: config.session.secret, store: store  }
