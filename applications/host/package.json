@@ -1,20 +1,29 @@
 {
-  "name": "ccnq3_host",
-  "version": "0.0.4",
-  "description": "Host-specific applications for CCNQ3",
-  "keywords": "",
-  "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
-  "config": {
-    "config_file": "/etc/ccnq3/host.json",
-  },
-  "scripts": {
-    "start": "daemon -n \"ccnq3_host\" -o daemon.debug -D \"`pwd`\" -r -- coffee agents/host.coffee",
-    "stop":  "daemon -n \"ccnq3_host\" -o daemon.debug --stop",
-    "bootstrap": "coffee node/host_cli.coffee",
-    "couchapp": "cd couchapps && coffee install.coffee"
-  },
-  "dependencies": { "cdb": "*", "cdb_changes": ">=0.0.3", "couchapp": "*", "ccnq3_config": "*" },
-  "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },
-
-  "ok": true
+  "name": "ccnq3_host"
+, "version": "0.0.5"
+, "description": "Host-specific applications for CCNQ3"
+, "keywords": ""
+, "author": {
+    "name": "Stephane Alnet"
+  , "email": "stephane@shimaore.net"
+  }
+, "config": {
+    "config_file": "/etc/ccnq3/host.json"
+  }
+, "scripts": {
+    "start": "daemon -n \"ccnq3_host\" -o daemon.debug -D \"`pwd`\" -r -- coffee agents/host.coffee"
+  , "stop":  "daemon -n \"ccnq3_host\" -o daemon.debug --stop"
+  , "bootstrap": "coffee node/host_cli.coffee"
+  , "couchapp": "cd couchapps && coffee install.coffee"
+  }
+, "dependencies": {
+    "cdb": "*"
+  , "cdb_changes": ">=0.0.3"
+  , "couchapp": "*"
+  , "ccnq3_config": "*"
+  }
+, "engines": {
+    "node": ">=0.4.7"
+  , "coffee": ">=1.1.1"
+  }
 }
