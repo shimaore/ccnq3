@@ -40,5 +40,5 @@ fi
 
 (cd && npm install "${SRC}/"applications/host)
 
-npm stop  ccnq3_host || echo
-npm start ccnq3_host
+(cd && npm run-script ccnq3_host stop) || echo
+(cd && npm run-script ccnq3_host start)
