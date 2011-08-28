@@ -64,8 +64,11 @@ fi
 (cd && npm run-script ccnq3_host couchapps)
 (cd && npm run-script ccnq3_host bootstrap)
 
+# Starting host service
 (cd && npm run-script ccnq3_host stop || echo)
 (cd && npm run-script ccnq3_host start)
+
+# Other services are started using the host framework.
 
 echo
 echo "To manage your system, please access ${CDB_URI}/provisioning/_design/app/index.html or a suitable redirection."
