@@ -8,4 +8,10 @@ config = require('ccnq3_config').config
 
 uri = config.provisioning.couchdb_uri
 cdb.new(uri).create()
-couchapp.createApp require('./host'), uri, (app)-> app.push()
+
+# Install the couchapp scripts.
+push_script = (script,cb) ->
+  couchapp.createApp require("./#{script}"), uri, (app)-> app.push(cb)
+
+# These couchapps are available to provisioning_admin (and _admin) users.
+push_script 'host'
