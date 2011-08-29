@@ -12,7 +12,16 @@
     "stop":  "./stop.sh",
     "couchapps": "cd couchapps && coffee install.coffee"
   },
-  "dependencies": { "cdb": "*", "cdb_changes": ">=0.0.3", "couchapp": "*", "nodemailer": "*", "stephane-zappa": "*", "password": "*", "ccnq3_config": "*", "uuid": ">=1.2.0" },
+  "dependencies": {
+    "cdb": "*"
+  , "cdb_changes": ">=0.0.3"
+  , "couchapp": "*"
+  , "nodemailer": "*"
+  , "stephane-zappa": "*"
+  , "password": "*"
+  , "ccnq3_config": "*"
+  , "uuid": ">=1.2.0"
+  },
   "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },
 
   "ok": true
