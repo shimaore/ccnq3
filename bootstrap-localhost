@@ -42,3 +42,9 @@ fi
 
 (cd && npm run-script ccnq3_host stop) || echo
 (cd && npm run-script ccnq3_host start)
+
+(cd && npm install "${SRC}/"applications/commands)
+
+# On an non-bootstrap host, the "commands" module is started later
+# since we first need to donwload the configuration to know the
+# location of the database.

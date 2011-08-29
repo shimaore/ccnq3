@@ -56,9 +56,11 @@ fi
 
 (cd && npm install "${SRC}/"applications/_users)
 (cd && npm run-script ccnq3_users security)
+(cd && npm uninstall  ccnq3_users)
 
 (cd && npm install "${SRC}/"applications/provisioning)
 (cd && npm run-script ccnq3_provisioning couchapps)
+(cd && npm uninstall  ccnq3_provisioning)
 
 (cd && npm install "${SRC}/"applications/host)
 (cd && npm run-script ccnq3_host couchapps)
@@ -68,8 +70,30 @@ fi
 (cd && npm run-script ccnq3_host stop || echo)
 (cd && npm run-script ccnq3_host start)
 
+
+# TODO [Local] Could be done from ccnq3_host
+(cd && npm install "${SRC}/"applications/commands)
+(cd && npm run-script ccnq3_commands couchapps)
+
+(cd && npm run-script ccnq3_commands stop || echo)
+(cd && npm run-script ccnq3_commands start)
+
+# TODO [Global] Could be done from ccnq3_host
+(cd && npm install "${SRC}/"applications/roles)
+(cd && npm run-script ccnq3_roles couchapps)
+
+(cd && npm install "${SRC}/"applications/portal)
+(cd && npm run-script ccnq3_portal couchapps)
+
+# TODO [Global] Code these as "ccnq3_host" templates.
+(cd && npm run-script ccnq3_roles stop || echo)
+(cd && npm run-script ccnq3_roles start)
+
+(cd && npm run-script ccnq3_portal stop || echo)
+(cd && npm run-script ccnq3_portal start)
+
+
 # Other services are started using the "host" framework.
-# (Including installing the "portal" and "roles" modules on a dedicated host.)
 
 echo
 echo "To manage your system, please access ${CDB_URI}/provisioning/_design/app/index.html or a suitable redirection."
