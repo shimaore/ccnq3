@@ -1,0 +1,29 @@
+{
+  "name": "ccnq3_commands"
+, "version": "0.0.5"
+, "description": "Real-time commands for CCNQ3"
+, "keywords": ""
+, "author": {
+    "name": "Stephane Alnet"
+  , "email": "stephane@shimaore.net"
+  }
+, "config": {
+    "config_file": "/etc/ccnq3/host.json"
+  }
+, "scripts": {
+    "start": "./start.sh"
+  , "stop":  "./stop.sh"
+  , "couchapp": "cd couchapps && coffee install.coffee"
+  }
+, "dependencies": {
+    "cdb": "*"
+  , "cdb_changes": ">=0.0.3"
+  , "couchapp": "*"
+  , "ccnq3_config": "*"
+  , "ccnq3_logger": "*"
+  }
+, "engines": {
+    "node": ">=0.4.7"
+  , "coffee": ">=1.1.1"
+  }
+}
