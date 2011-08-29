@@ -13,6 +13,15 @@ ddoc =
 
 module.exports = ddoc
 
+ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
+
+  user_is = (role) ->
+    userCtx.roles?.indexOf(role) >= 0
+
+  if not user_is('provisioning_writer') or not user_is('_admin')
+    throw forbidden:'Not authorized to write in this database.'
+
+
 ddoc.filters.user_replication = (doc, req) ->
   # Prefix is required
   if not req.prefix

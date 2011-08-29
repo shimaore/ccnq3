@@ -5,6 +5,7 @@
 
 querystring = require 'querystring'
 json_req = require 'json_req'
+util = require 'util'
 
 class cdb
   constructor: (@db_uri) ->
@@ -27,6 +28,18 @@ class cdb
 
   erase: (cb) ->
     @req {method:'DELETE'}, cb
+
+  security: (cb) ->
+    @get '_security', (p)->
+      if p.error? then return util.log p.error
+      cb(p)
+      options =
+        method: 'PUT'
+        uri: '_security'
+        body: p
+      @req options, (r)->
+        if r.error? then return util.log r.error
+
 
   # Record-level operations
 
