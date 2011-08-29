@@ -37,7 +37,7 @@ exports.record = (hostname,users_uri,provisioning_uri,cb)->
     _id: "ord.couchdb.user:#{username}"
     type: "user"
     name: username
-    roles: ["provisioning_reader"]
+    roles: ["host"]
     salt: salt
     password_sha: sha1_hex password+salt
 
