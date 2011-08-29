@@ -51,7 +51,7 @@ new_config = config
 cdb_changes.monitor options, (p) ->
   if p.error? then return util.log(p.error)
 
-  (old_config,new_config) = (new_config,p)
+  [old_config,new_config] = [new_config,p]
 
   for handler in new_config.change_handlers
     run_handler handler, old_config, new_config
