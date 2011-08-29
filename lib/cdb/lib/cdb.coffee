@@ -30,7 +30,7 @@ class cdb
     @req {method:'DELETE'}, cb
 
   security: (cb) ->
-    @get '_security', (p)->
+    @get '_security', (p) =>
       if p.error? then return util.log p.error
       cb(p)
       options =
