@@ -55,3 +55,5 @@ Common definitions:
 
     [ 'access:provisioning:ProviderA/ResellerB/', 'update:provisioning:ProviderA/ResellerB/CustomerC' ]
 
+- Some databases ("commands", "logger") are used by the hosts in the system to run realtime
+  information-retrieval ("GET"-type) activities.
