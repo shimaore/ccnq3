@@ -1,6 +1,6 @@
 {
   "name": "ccnq3_logger",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "CCNQ3 logging",
   "keywords": "ccnq3",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },

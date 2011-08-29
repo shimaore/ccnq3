@@ -3,7 +3,7 @@ util    = require 'util'
 config  = require('ccnq3_config').config
 cdb     = require 'cdb'
 
-exports.log = (data)
+exports.log = (data) ->
   # Use centralized logging if configured.
   if config.logger?.couchdb_uri?
     log_db = cdb.new config.logger.couchdb_uri
