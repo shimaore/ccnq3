@@ -3,9 +3,8 @@
 Released under the Affero GPL3 license or above
 ###
 
-# Install:
-#   coffee -c authorize.coffee
-#   couchapp push authorize.js http://127.0.0.1:5984/provisioning
+# This couchapp is automatically inserted in a user database
+# by the track_users agent.
 
 ddoc =
   _id: '_design/authorize'

@@ -3,9 +3,8 @@
 Released under the Affero GPL3 license or above
 ###
 
-# Install:
-#   coffee -c provisioning-global.coffee
-#   couchapp push provisioning-global.js http://127.0.0.1:5984/provisioning
+# This couchapp is automatically inserted in a user database
+# by the track_users agent.
 
 couchapp = require('couchapp')
 
