@@ -4,6 +4,9 @@
 Released under the AGPL3 license
 ###
 
+push_script = (uri,script,cb) ->
+  couchapp.createApp require("./#{script}"), uri, (app)-> app.push(cb)
+
 # Local configuration file
 config = require('ccnq3_config').config
 
@@ -30,8 +33,6 @@ cdb_changes.monitor options, (user_doc) ->
   target_db      = cdb.new target_db_uri
 
   couchapp = require 'couchapp'
-  push_script = (script,cb) ->
-    couchapp.createApp require("./#{script}"), uri, (app)-> app.push(cb)
 
   target_db.exists (it_does_exist) ->
     if user_doc.deleted
@@ -48,25 +49,18 @@ cdb_changes.monitor options, (user_doc) ->
     target_db.create ->
 
       # Push the "user" couchapp into the database
-      push_script 'user_authorize', -> push_script 'user_app', ->
+      push_script uri, 'user_authorize', -> push_script uri, 'user_app', ->
 
         # Make sure the user can access it.
-        security_req =
+        target_db.security (p) ->
+
+          p.readers.names = [ user_doc.name ]
+
+        # TODO verify that this can actually be done (body is not JSON)
+        revs_limit =
           method: 'PUT'
-          uri:"_security"
-          body:
-            # no admin roles => need to be _admin
-            readers:
-              names: [ user_doc.name ]
+          uri: '_revs_limit'
+          body: 0
 
-        target_db.req security_req, (r) ->
+        target_db.req revs_limit, (r) ->
           if r.error then return util.log r.error
-
-          # TODO verify that this can actually be done (body is not JSON)
-          revs_limit =
-            method: 'PUT'
-            uri: '_revs_limit'
-            body: 0
-
-          target_db.req revs_limit, (r) ->
-            if r.error then return util.log r.error
