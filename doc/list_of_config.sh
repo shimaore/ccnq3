@@ -1,2 +1,5 @@
 #!/bin/bash
-rgrep '[^_]config\.' applications/ private/ | perl -p -e '@a = /(config\.[\w.]+)/; $_ = join("\n",@a)."\n"' | sort -u
+for DIR in applications/ private/; do
+echo "# In $DIR"
+rgrep '[^_]config\.' "${DIR}" | perl -p -e '@a = /(config\.[\w.]+)/g; $_ = join("\n",@a)."\n"' | sort -u
+done
