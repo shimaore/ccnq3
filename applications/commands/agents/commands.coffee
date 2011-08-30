@@ -14,7 +14,7 @@ vm            = require 'vm'
 
 run_handler = (q) ->
 
-  q.start: Date.now()
+  q.start = Date.now()
 
   try
     # Similarly to CouchDB, a runnable must return a function.
