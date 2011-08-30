@@ -23,8 +23,20 @@ shell_runnable = (script) ->
         stdout: stdout
         stderr: stderr
 
+# "config" is the (possibly empty) configuration for the new host.
+#
+# "users_uri" and "provisioning_uri" and the URI for the matching
+# databases, with administrative access. Since the new host is most
+# probably NOT the local host, since the local host should be a
+# management system, the admin URIs for _users and provisioning
+# ought not to be present in the "config" record, and therefor must be
+# provided separately.
 
-exports.record = (hostname,users_uri,provisioning_uri,cb)->
+# (However there's little chance this code will be used by anything
+# but the bootstrap server, since all other hosts additions should
+# be done by an admin account using the "host" couchapp.)
+
+exports.record = (config,hostname,users_uri,provisioning_uri,cb)->
   username = "host@#{hostname}"
 
   users = cdb.new users_uri
@@ -47,11 +59,10 @@ exports.record = (hostname,users_uri,provisioning_uri,cb)->
     # Add the host in the main CDB's provisioning table,
     # with two initialization runnables.
 
-    p =
-      type: "host"
-      host: hostname
-      _id: "host:#{hostname}"
-      change_handlers: [
+    config.type = "host"
+    config.host = hostname
+    config._id  = "host:#{hostname}"
+    config.change_handlers = [
 
         # Automatically save the new configuration in the static configuration file.
         (result,old_config,new_config) ->
@@ -68,7 +79,16 @@ exports.record = (hostname,users_uri,provisioning_uri,cb)->
 
       ]
 
-    provisioning.put p, (r)->
-      if r.error? then return util.log r.error
+    # Update the provisioning URI to use the host's new username and password.
+    url = require 'url'
+    p = url.parse config.provisioning.couchdb_uri
+    delete p.href
+    delete p.host
+    p.auth = "#{username}:#{password}"
 
-      cb? username, password
+    config.provisioning =
+      couchdb_uri: url.format p
+
+    provisioning.put config, (r)->
+      if r.error? then return util.log r.error
+      cb? config

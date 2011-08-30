@@ -11,16 +11,10 @@ host = require './host.coffee'
 ccnq3_config = require 'ccnq3_config'
 config = ccnq3_config.config
 
+# Install the local (bootstrap) host in the database.
 hostname = config.host
 
-host.record hostname, config.users.couchdb_uri, config.provisioning.couchdb_uri, (username,password)->
-    url = require 'url'
-    p = url.parse "#{config.bootstrap.couchdb_uri}/provisioning"
-    delete p.href
-    delete p.host
-    p.auth = "#{username}:#{password}"
+host.record config, hostname, config.users.couchdb_uri, config.provisioning.couchdb_uri, (new_config,cb)->
+    ccnq3_config.update new_config
 
-    config.provisioning =
-      couchdb_uri: url.format p
-
-    ccnq3_config.update config
+    cb? new_config
