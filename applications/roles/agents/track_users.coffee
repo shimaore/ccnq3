@@ -29,7 +29,7 @@ cdb_changes.monitor options, (user_doc) ->
 
   # Typically target_db_name will be a UUID
   target_db_name = doc.user_database
-  target_db_uri  = config.users_databases.base_cdb_uri + target_db_name
+  target_db_uri  = config.users.userdb_base_uri + target_db_name
   target_db      = cdb.new target_db_uri
 
   couchapp = require 'couchapp'

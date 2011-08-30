@@ -37,6 +37,7 @@ else
     },
     "users": {
       "couchdb_uri": "${CDB_URI}/_users"
+    , "userdb_base_uri": "${CDB_URI}"
     },
     "provisioning": {
       "couchdb_uri": "${CDB_URI}/provisioning"
