@@ -8,6 +8,6 @@ config = require('ccnq3_config').config
 
 uri = config.prepaid.couchdb_uri
 
-cdb.new(uri).create()
+cdb.new(uri).create ->
 
-couchapp.createApp require("./prepaid"), uri, (app)-> app.push()
+  couchapp.createApp require("./prepaid"), uri, (app)-> app.push()

@@ -12,25 +12,25 @@ config = require('ccnq3_config').config
 # ==== Commands ====
 uri = config.commands.couchdb_uri
 commands = cdb.new(uri)
-commands.create()
+commands.create ->
 
-commands.security (p)->
-  push p.admins.roles,  "commands_admin"  if p.admins?.roles.indexOf("commands_admin") < 0
-  push p.readers.roles, "commands_reader" if p.readers?.roles.indexOf("commands_reader") < 0
-  push p.readers.roles, "commands_writer" if p.readers?.roles.indexOf("commands_reader") < 0
-  push p.readers.roles, "host"            if p.readers?.roles.indexOf("host") < 0
+  commands.security (p)->
+    push p.admins.roles,  "commands_admin"  if p.admins?.roles.indexOf("commands_admin") < 0
+    push p.readers.roles, "commands_reader" if p.readers?.roles.indexOf("commands_reader") < 0
+    push p.readers.roles, "commands_writer" if p.readers?.roles.indexOf("commands_reader") < 0
+    push p.readers.roles, "host"            if p.readers?.roles.indexOf("host") < 0
 
-push_script uri, 'commands'
+  push_script uri, 'commands'
 
 # ==== Logger ====
 uri = config.logger.couchdb_uri
 logger = cdb.new(uri)
-logger.create()
+logger.create ->
 
-logger.security (p)->
-  push p.admins.roles,  "logger_admin"  if p.admins?.roles.indexOf("logger_admin") < 0
-  push p.readers.roles, "logger_reader" if p.readers?.roles.indexOf("logger_reader") < 0
-  push p.readers.roles, "logger_writer" if p.readers?.roles.indexOf("logger_reader") < 0
-  push p.readers.roles, "host"          if p.readers?.roles.indexOf("host") < 0
+  logger.security (p)->
+    push p.admins.roles,  "logger_admin"  if p.admins?.roles.indexOf("logger_admin") < 0
+    push p.readers.roles, "logger_reader" if p.readers?.roles.indexOf("logger_reader") < 0
+    push p.readers.roles, "logger_writer" if p.readers?.roles.indexOf("logger_reader") < 0
+    push p.readers.roles, "host"          if p.readers?.roles.indexOf("host") < 0
 
-push_script uri, 'logger'
+  push_script uri, 'logger'
