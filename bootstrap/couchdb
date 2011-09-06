@@ -10,8 +10,9 @@ echo '*** BEGIN Install CouchDB'
 sudo aptitude install -y couchdb
 
 # Install default config file
-# XXX Use /etc/couchdb/local.d instead?
-sudo tee /etc/couchdb/local.ini <<'EOT' >/dev/null
+ADMIN_PASSWORD=`openssl rand 256 -hex`
+
+sudo tee /etc/couchdb/local.d/ccnq3 <<EOT >/dev/null
 [httpd]
 port = 5984
 bind_address = ::
@@ -24,15 +25,10 @@ require_valid_user = true
 level = error
 
 [admins]
+admin = ${ADMIN_PASSWORD}
 EOT
-
-# Add authentication, etc.
-cd
-ADMIN_PASSWORD=`openssl rand 256 -hex`
-echo "admin = ${ADMIN_PASSWORD}" | sudo tee -a /etc/couchdb/local.ini >/dev/null
 
 sudo /etc/init.d/couchdb stop
 sudo /etc/init.d/couchdb start
 
 echo '*** END Install CouchDB Completed OK.'
-
