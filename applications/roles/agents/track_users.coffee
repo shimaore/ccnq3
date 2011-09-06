@@ -4,6 +4,8 @@
 Released under the AGPL3 license
 ###
 
+couchapp = require 'couchapp'
+
 push_script = (uri,script,cb) ->
   couchapp.createApp require("./#{script}"), uri, (app)-> app.push(cb)
 
@@ -32,8 +34,6 @@ cdb_changes.monitor options, (user_doc) ->
   target_db_uri  = config.users.userdb_base_uri + target_db_name
   target_db      = cdb.new target_db_uri
 
-  couchapp = require 'couchapp'
-
   target_db.exists (it_does_exist) ->
     if user_doc.deleted
       # Nothing to do if the database does not exist
@@ -49,7 +49,7 @@ cdb_changes.monitor options, (user_doc) ->
     target_db.create ->
 
       # Push the "user" couchapp into the database
-      push_script uri, 'user_authorize', -> push_script uri, 'user_app', ->
+      push_script target_db_uri, 'user_authorize', -> push_script uri, 'user_app', ->
 
         # Make sure the user can access it.
         target_db.security (p) ->
@@ -60,7 +60,7 @@ cdb_changes.monitor options, (user_doc) ->
         revs_limit =
           method: 'PUT'
           uri: '_revs_limit'
-          body: 0
+          body: "0"
 
         target_db.req revs_limit, (r) ->
           if r.error then return util.log r.error
