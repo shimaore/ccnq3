@@ -15,7 +15,8 @@ HOSTNAME=`hostname`
 
 sudo mkdir -p "${DIR}"
 if [ -e "${CONF}" ]; then
-  echo "** WARNING: $CONF already exists, re-using it"
+  echo "** WARNING: $CONF already exists"
+  exit 0
 else
   if [ "x$1" == "x" ]; then
     echo "** Proceeding with installation of CouchDB on local host ${HOSTNAME}."
