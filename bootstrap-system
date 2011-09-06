@@ -53,7 +53,7 @@ fi
 (cd && npm install "${SRC}/"applications/roles)
 (cd && npm run-script ccnq3_roles couchapps)
 
-(cd && npm run-script ccnq3_roles stop || echo)
+(cd && npm run-script ccnq3_roles stop >/dev/null 2>&1 || echo)
 (cd && npm run-script ccnq3_roles start)
 
 # Provisioning couchapp and security
@@ -70,7 +70,7 @@ fi
 (cd && npm run-script ccnq3_host bootstrap)
 
 # Starting host service
-(cd && npm run-script ccnq3_host stop || echo)
+(cd && npm run-script ccnq3_host stop >/dev/null 2>&1 || echo)
 (cd && npm run-script ccnq3_host start)
 
 
