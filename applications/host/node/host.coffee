@@ -46,7 +46,7 @@ exports.record = (config,hostname,users_uri,provisioning_uri,cb)->
   password = sha1_hex "a"+Math.random()
 
   p =
-    _id: "ord.couchdb.user:#{username}"
+    _id: "org.couchdb.user:#{username}"
     type: "user"
     name: username
     roles: ["host"]
