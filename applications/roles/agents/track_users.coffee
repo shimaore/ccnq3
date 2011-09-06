@@ -31,7 +31,7 @@ cdb_changes.monitor options, (user_doc) ->
 
   # Typically target_db_name will be a UUID
   target_db_name = user_doc.user_database
-  target_db_uri  = config.users.userdb_base_uri + target_db_name
+  target_db_uri  = config.users.userdb_base_uri + '/' + target_db_name
   target_db      = cdb.new target_db_uri
 
   target_db.exists (it_does_exist) ->
@@ -49,12 +49,13 @@ cdb_changes.monitor options, (user_doc) ->
     target_db.create ->
 
       # Push the "user" couchapp into the database
-      push_script target_db_uri, 'user_authorize', -> push_script uri, 'user_app', ->
+      push_script target_db_uri, 'user_authorize', -> push_script target_db_uri, 'user_app', ->
 
         # Make sure the user can access it.
         target_db.security (p) ->
 
-          p.readers.names = [ user_doc.name ]
+          p.readers =
+            names: [ user_doc.name ]
 
         # TODO verify that this can actually be done (body is not JSON)
         revs_limit =
