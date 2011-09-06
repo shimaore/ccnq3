@@ -13,7 +13,7 @@
 , "scripts": {
     "start": "./start.sh"
   , "stop":  "./stop.sh"
-  , "couchapp": "cd couchapps && coffee install.coffee"
+  , "couchapps": "cd couchapps && coffee install.coffee"
   }
 , "dependencies": {
     "cdb": "*"
