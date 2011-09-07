@@ -41,7 +41,6 @@ client main: ->
     for s in default_scripts
       $.getScript s + '.js'
 
-include 'content.coffee'
 include 'login.coffee'
 include 'register.coffee'
 include 'recover.coffee'
