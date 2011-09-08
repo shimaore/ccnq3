@@ -8,16 +8,16 @@
     "config_file": "/etc/ccnq3/host.json"
   },
   "scripts": {
-    "start": "./start.sh",
-    "stop":  "./stop.sh",
-    "couchapps": "cd couchapps && coffee install.coffee"
+    "start": "daemon -n ccnq3_mail_password -o daemon.debug -r -D \"`pwd`/agents\" -- ./mail_password.coffee",
+    "stop":  "daemon -n ccnq3_mail_password -o daemon.debug --stop",
+    "couchapps": "cd couchapps && ./install.coffee"
   },
   "dependencies": {
     "cdb": "*"
   , "cdb_changes": ">=0.0.3"
   , "couchapp": "*"
   , "nodemailer": "*"
-  , "stephane-zappa": "*"
+  , "zappa": ">=0.2.0"
   , "password": "*"
   , "ccnq3_config": "*"
   , "node-uuid": ">=1.2.0"
