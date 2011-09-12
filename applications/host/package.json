@@ -14,7 +14,7 @@
     "start": "daemon -n ccnq3_host -o daemon.debug -D \"`pwd`/agents\" -r -- ./host.coffee"
   , "stop":  "daemon -n ccnq3_host -o daemon.debug --stop"
   , "bootstrap": "coffee node/host_cli.coffee"
-  , "couchapps": "cd couchapps && coffee install.coffee"
+  , "couchapps": "cd couchapps && ./install.coffee"
   }
 , "dependencies": {
     "cdb": "*"
