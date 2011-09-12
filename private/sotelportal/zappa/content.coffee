@@ -17,6 +17,13 @@ Fill-in the "content" div.
         $.getScript('/roles/login.js')
         $.getScript('/p/login.js')
 
+        # Mark the user record as complete / get user info.
+        $.getJSON '/u/profile.json', (data) ->
+          if data.error?
+            $('#log').html "Could not access your profile"
+          else
+            $('#log').html "Welcome #{data.name}."
+
   get '/p/content.html': ->
     if session.logged_in?
       render 'content', layout:no
@@ -30,6 +37,7 @@ Fill-in the "content" div.
 
   view content: ->
     div id:'login_container'
+    div id:'log'
 
     # Here goes the main page layout.
     div ->
