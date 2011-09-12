@@ -10,8 +10,6 @@
   "scripts": {
     "start": "daemon -n ccnq3_track_users -D \"`pwd`/agents\" -r -o daemon.debug -- ./track_users.coffee",
     "stop":  "daemon -n ccnq3_track_users -o daemon.debug --stop",
-    "start-web": "daemon -n ccnq3_admin -D \"`pwd`/node\" -r -o daemon.debug -- ./start_admin.coffee",
-    "stop-web": "daemon -n ccnq3_admin -o daemon.debug --stop",
     "couchapps": "cd couchapps && ./install.coffee"
   },
   "dependencies": {
