@@ -19,6 +19,7 @@
   , "nodemailer": "*"
   , "zappa": "0.2.0"
   , "connect-couchdb": "*"
+  , "json_req": "*"
   , "ccnq3_config": "*"
   , "ccnq3_portal": "*"
   , "ccnq3_roles": "*"
