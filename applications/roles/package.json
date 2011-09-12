@@ -14,7 +14,14 @@
     "stop-web": "daemon -n ccnq3_admin -o daemon.debug --stop",
     "couchapps": "cd couchapps && ./install.coffee"
   },
-  "dependencies": { "cdb": "*", "cdb_changes": ">=0.0.3", "couchapp": "*", "zappa": ">=0.2.0beta", "ccnq3_config": "*", "json_req": "*" },
+  "dependencies": {
+    "cdb": "*"
+  , "cdb_changes": ">=0.0.3"
+  , "couchapp": "*"
+  , "zappa": "0.2.0"
+  , "ccnq3_config": "*"
+  , "json_req": "*"
+  },
   "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },
 
   "ok": true

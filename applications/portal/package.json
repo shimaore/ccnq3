@@ -17,7 +17,7 @@
   , "cdb_changes": ">=0.0.3"
   , "couchapp": "*"
   , "nodemailer": "*"
-  , "zappa": ">=0.2.0"
+  , "zappa": "0.2.0"
   , "password": "*"
   , "ccnq3_config": "*"
   , "node-uuid": ">=1.2.0"
