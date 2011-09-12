@@ -25,11 +25,11 @@ zappa.run ->
 
   # applications/portal
   portal_modules = ['login','profile','recover','register']
-  include __dirname + "/portal/#{name}.coffee" for name in portal_modules
+  include __dirname + "../node_modules/ccnq3_portal/zappa/#{name}.coffee" for name in portal_modules
 
   # applications/roles
   roles_modules = ['login','admin','replicate']
-  include __dirname + "/roles/#{name}.coffee" for name in roles_modules
+  include __dirname + "../node_modules/ccnq3_roles/zappa/#{name}.coffee" for name in roles_modules
 
   # Provide a default index.html (default portal)
   get '/': ->
