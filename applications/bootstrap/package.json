@@ -1,0 +1,23 @@
+{
+  "name": "ccnq3_bootstrap",
+  "version": "0.0.1",
+  "description": "Bootstrap portal for CCNQ3",
+  "keywords": "",
+  "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
+  "config": {
+    "config_file": "/etc/ccnq3/host.json"
+  },
+  "scripts": {
+    "start": "./start.sh",
+    "stop":  "./stop.sh",
+  },
+  "dependencies": {
+    "zappa": ">=0.2.0"
+  , "ccnq3_config": ">=0.0.3"
+  , "cdb": ">=0.0.7"
+  , "json_req": ">=0.0.7"
+  },
+  "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },
+
+  "ok": true
+}
