@@ -8,7 +8,7 @@
 
   json_req = require 'json_req'
 
-  put '/replicate/push/:target': ->
+  put '/roles/replicate/push/:target': ->
     if not session.logged_in?
       return send error:'Not logged in.'
 
@@ -26,7 +26,7 @@
       send r
 
   # Start replication from a main database to the user's database
-  put '/replicate/pull/:source': ->
+  put '/roles/replicate/pull/:source': ->
     if not session.logged_in?
       return send error:'Not logged in.'
 
