@@ -13,7 +13,8 @@
       return send error:'Not logged in.'
 
     # The only database we can push to is 'provisioning'.
-    return send error:'Invalid target' unless @target in ['provisioning']
+    possible_targets = config.roles?.push_targets or ['provisioning']
+    return send error:'Invalid target' unless @target in possible_targets
 
     replication_req =
       method: 'POST'
@@ -30,7 +31,8 @@
     if not session.logged_in?
       return send error:'Not logged in.'
 
-    return send error:'Invalid source' unless @source in ['provisioning','billing']
+    possible_sources = config.roles?.pull_sources or ['provisioning','billing']
+    return send error:'Invalid source' unless @source in possible_sources
 
     for role in session.roles
       do (role) ->
