@@ -37,8 +37,8 @@
 
   put '/u/register.json': ->
 
-    if not @first_name or not @last_name or not @email
-      return error 'Invalid parameters, try again'
+    if not @name or not @email
+      return send error:'Invalid parameters, try again'
 
     for k,v of params when k.match /^_/
       delete params[k]
@@ -81,8 +81,7 @@
     form id: 'register', class: 'main validate', method: 'post', title: 'Account creation', ->
       span id: 'register_error', class: 'error'
       input type: 'hidden', name: '_method', value: 'PUT'
-      div -> l  'first_name', 'First Name', 'required minlength(2)'
-      div -> l  'last_name', 'Last Name', 'required minlength(2)'
+      div -> l  'name', 'Name', 'required minlength(2)'
       div -> l  'email', 'Email', 'required email'
       div -> l  'phone', 'Phone', 'required phone'
 

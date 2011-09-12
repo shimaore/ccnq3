@@ -51,7 +51,7 @@ post '/loginshare': ->
              <result>1</result>
              <user>
                <usergroup>Registered</usergroup>
-               <fullname>#{r.first_name} #{r.last_name}</fullname>
+               <fullname>#{r.name}</fullname>
                <emails>
                  <email>#{r.email}</email>
                </emails>
