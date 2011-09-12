@@ -57,7 +57,7 @@
         roles: []
         domain: request.header('Host')
         profile: params
-        user_database: 'U'+uuid() # User's database UUID (or UUID prefix)
+        user_database: 'u'+uuid() # User's database UUID (or UUID prefix)
         send_password: true # send them their new password
 
       # PUT without _rev can only happen once
