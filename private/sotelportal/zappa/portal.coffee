@@ -1,8 +1,10 @@
-#!/usr/bin/env zappa
+#!/usr/bin/env coffee
 ###
 # (c) 2010 Stephane Alnet
 # Released under the AGPL3 license
 ###
+
+config = require('ccnq3_config').config
 
 zappa = require 'zappa'
 zappa.run config.sotel_portal.port, config.sotel_portal.hostname, ->
