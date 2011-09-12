@@ -95,7 +95,7 @@
 
           $('#wizard').smartWizard({})
           
-  get '/partner_signup.html': ->
+  get '/p/partner_signup.html': ->
     render 'partner_signup', layout:no
 
   view partner_signup: ->
