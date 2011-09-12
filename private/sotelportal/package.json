@@ -20,6 +20,8 @@
   , "zappa": "0.2.0"
   , "connect-couchdb": "*"
   , "ccnq3_config": "*"
+  , "ccnq3_portal": "*"
+  , "ccnq3_roles": "*"
   },
   "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },
 
