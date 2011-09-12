@@ -6,27 +6,31 @@ Released under the AGPL3 license
 Fill-in the "content" div.
 ###
 
-client content: ->
-  $(document).ready ->
-    $('#content').load '/p/content.html', ->
-      $.getScript '/u/login.js'
-      $.getScript '/u/register.js'
-      $.getScript '/u/recover.js'
-      # Application-specific code here.
-      $.getScript('/p/login.js')
+@include = ->
+  coffee '/p/content.js': ->
+    $(document).ready ->
+      $('#content').load '/p/content.html', ->
+        $.getScript '/u/login.js'
+        $.getScript '/u/register.js'
+        $.getScript '/u/recover.js'
+        # Application-specific code here.
+        $.getScript('/p/login.js')
 
-get '/content.html': ->
-  partial if session.logged_in? then 'content' else 'public'
+  get '/p/content.html': ->
+    if session.logged_in?
+      render 'content', layout:no
+    else
+      render 'public', layout:no
 
-view public: ->
-  div id:'login_container'
-  div id:'register_container'
-  div id:'password_recovery_container'
+  view public: ->
+    div id:'login_container'
+    div id:'register_container'
+    div id:'password_recovery_container'
 
-view content: ->
-  div id:'login_container'
+  view content: ->
+    div id:'login_container'
 
-  # Here goes the main page layout.
-  div ->
-    div id: 'main', ->
-      'Welcome to the Sotel Portal. Great content expected here soon.'
+    # Here goes the main page layout.
+    div ->
+      div id: 'main', ->
+        'Welcome to the Sotel Portal. Great content expected here soon.'
