@@ -7,7 +7,7 @@ export LANG=
 echo '*** BEGIN Install CouchDB'
 
 # CouchDB 1.1.0 is only in unstable as of 2011-08-23.
-sudo aptitude install -y couchdb
+sudo aptitude install -y couchdb=1.1.0
 
 # Install default config file
 
