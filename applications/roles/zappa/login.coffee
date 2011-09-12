@@ -9,13 +9,13 @@
       # Log into CouchDB so that we can access the user's database directly.
       couchdb_login = (next) ->
         couchdb_options =
-          type: 'post'
+          type: 'get'
           url: '/_session'
           username: $('#login_username').val()
           password: $('#login_password').val()
-          data:
-            name: $('#login_username').val()
-            password: $('#login_password').val()
+          # data:
+          #   name: $('#login_username').val()
+          #   password: $('#login_password').val()
           dataType:'json'
           success: (data) ->
             if not data.ok
