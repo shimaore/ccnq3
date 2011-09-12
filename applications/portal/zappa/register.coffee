@@ -30,9 +30,9 @@
           $.ajax(ajax_options)
           return false
 
-  get '/u/register.widget': -> partial 'register_widget'
+  get '/u/register.widget': -> render 'register_widget', layout:no
 
-  using 'crypto'
+  requiring 'crypto'
   def uuid: require 'node-uuid'
 
   put '/u/register.json': ->

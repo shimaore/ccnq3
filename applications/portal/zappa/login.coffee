@@ -58,7 +58,10 @@ Released under the AGPL3 license
           return false
 
   get '/u/login.widget': ->
-    partial if session.logged_in? then 'logout_widget' else 'login_widget'
+    if session.logged_in?
+      render 'logout_widget', layout:no
+    else
+      render 'login_widget', layout:no
 
   view logout_widget: ->
 
