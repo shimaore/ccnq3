@@ -9,12 +9,12 @@ crud2 = ($) ->
 
   $.fn.load_couchdb_item = (id,cb) ->
     # load data from couchdb and display it in the form
-    @reset()
+    # @reset()
     that = @
     $$(@).cdb.openDoc id,
         error: ->
           $$(that).ldoc = {_id:id}
-          that.reset()
+          # that.reset()
         success: (doc) ->
           $$(that).ldoc = doc
           fdoc = $.flatten(doc)
@@ -26,7 +26,7 @@ crud2 = ($) ->
 
   $.fn.new_couchdb_item = ->
     # activate form for new items
-    @reset()
+    # @reset()
     doc = {}
     $$(@).ldoc = doc
 

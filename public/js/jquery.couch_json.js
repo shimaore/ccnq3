@@ -7,14 +7,12 @@
     };
     $.fn.load_couchdb_item = function(id, cb) {
       var that;
-      this.reset();
       that = this;
       return $$(this).cdb.openDoc(id, {
         error: function() {
-          $$(that).ldoc = {
+          return $$(that).ldoc = {
             _id: id
           };
-          return that.reset();
         },
         success: function(doc) {
           var fdoc, name, _fn, _i, _len;
@@ -34,7 +32,6 @@
     };
     $.fn.new_couchdb_item = function() {
       var doc;
-      this.reset();
       doc = {};
       return $$(this).ldoc = doc;
     };
