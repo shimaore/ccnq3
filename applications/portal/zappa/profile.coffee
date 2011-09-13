@@ -21,6 +21,7 @@ Released under the AGPL3 license
 
       session.user_database = r.user_database
       # Allow the user to know the location of their database.
+      r.profile.userdb_base_uri = config.users.public_userdb_base_uri
       r.profile.user_database = r.user_database
 
       if user_is 'confirmed'
