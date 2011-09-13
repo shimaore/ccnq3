@@ -36,6 +36,7 @@
             console.log "Submitting with was_validated = #{was_validated}"
             $('#wizard_form').each ->
               $(@).data('ldoc').was_validated = was_validated
+              $(@).data('ldoc').type = 'partner_signup'
               $(@).save_couchdb_item ->
                 $('#confirm_invalid').dialog 'close'
 
