@@ -23,11 +23,17 @@ cdb_changes = require 'cdb_changes'
 
 options =
   uri: config.users.couchdb_uri
-  filter_name: 'portal/confirmed'
 
 cdb_changes.monitor options, (user_doc) ->
   if user_doc.error?
     return util.log(user_doc.error)
+
+  user_is = (role) ->
+    role in user_doc.roles
+
+  # Filter: handle either deletions, or confirmed users.
+  if not user_doc.deleted and not user_is 'confirmed'
+    return
 
   # Typically target_db_name will be a UUID
   util.log "Processing changes for #{user_doc.name}"
