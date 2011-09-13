@@ -23,17 +23,11 @@ cdb_changes = require 'cdb_changes'
 
 options =
   uri: config.users.couchdb_uri
+  filter_name: 'portal/confirmed'
 
 cdb_changes.monitor options, (user_doc) ->
   if user_doc.error?
     return util.log(user_doc.error)
-
-  user_is = (role) ->
-    role in user_doc.roles
-
-  # Filter: handle either deletions, or confirmed users.
-  if not user_doc.deleted and not user_is 'confirmed'
-    return
 
   # Typically target_db_name will be a UUID
   util.log "Processing changes for #{user_doc.name}"
@@ -44,13 +38,6 @@ cdb_changes.monitor options, (user_doc) ->
   target_db      = cdb.new target_db_uri
 
   target_db.exists (it_does_exist) ->
-    if user_doc.deleted
-      # Nothing to do if the database does not exist
-      return if not it_does_exist
-      # Remove the database
-      util.log "Removing database for #{user_doc.name}"
-      target_db.erase()
-      return
 
     # Nothing to do if the database already exists
     return if it_does_exist
