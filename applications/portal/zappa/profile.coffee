@@ -20,7 +20,8 @@ Released under the AGPL3 license
         return r.roles.indexOf(role) >= 0
 
       session.user_database = r.user_database
-      r.profile.userdb_base_uri = config.users.userdb_base_uri
+      # Allow the user to know the location of their database.
+      r.profile.user_database = r.user_database
 
       if user_is 'confirmed'
         return send r.profile
