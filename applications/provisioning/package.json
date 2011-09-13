@@ -1,6 +1,6 @@
 {
   "name": "ccnq3_provisioning",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Environment for the main (source) provisioning database in CCNQ3",
   "keywords": "",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
