@@ -33,6 +33,7 @@ Fill-in the "content" div.
 
 
   get '/p/content.html': ->
+    @confirmed = 'confirmed' in session.roles
     if session.logged_in?
       render 'content', layout:no
     else
@@ -53,6 +54,6 @@ Fill-in the "content" div.
         'Welcome to the Sotel Portal. Great content expected here soon.'
 
     # These options are only available to confirmed users.
-    if 'confirmed' in session.roles
+    if @confirmed
       div id:'partner_signup_trigger', ->
         'Click on this text to sign-up to become a SoTel partner.'
