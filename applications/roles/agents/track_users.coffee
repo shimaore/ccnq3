@@ -30,6 +30,7 @@ cdb_changes.monitor options, (user_doc) ->
     return util.log(user_doc.error)
 
   # Typically target_db_name will be a UUID
+  util.log "Processing changes for #{user_doc.name}"
   target_db_name = user_doc.user_database
   if not target_db_name
     return util.log "No user_database provided for #{user_doc.name}"
@@ -41,6 +42,7 @@ cdb_changes.monitor options, (user_doc) ->
       # Nothing to do if the database does not exist
       return if not it_does_exist
       # Remove the database
+      util.log "Removing database for #{user_doc.name}"
       target_db.erase()
       return
 
