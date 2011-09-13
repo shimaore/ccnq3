@@ -19,8 +19,19 @@
 
           $('#confirm_invalid').dialog(options).dialog('close')
 
+          $.getJSON '/u/profile.json', (profile) ->
+            $.couch.urlPrefix = profile.userdb_base_uri
+            $('#wizard_form').set_couchdb_name(profile.user_database)
+
+          # Clear the form (alternatively, could use load_couchdb_item()
+          $('#wizard_form').new_couchdb_item()
+
           ajaxSubmit = (was_validated)->
             console.log "Submitting with was_validated = #{was_validated}"
+            $('#wizard_form').each ->
+              $$(@).ldoc.was_validated = was_validated
+              $(@).save_couchdb_item ->
+                alert "Form was saved successfully."
 
           $('form.validate').validate
 
@@ -115,7 +126,7 @@
     div id:'confirm_invalid', ->
       p -> 'The form contains errors.'
 
-    form method:'post', class:'validate', ->
+    form id:'wizard_form', method:'post', class:'validate', ->
 
       div id:"wizard", class:"swMain", ->
         ul ->

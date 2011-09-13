@@ -20,6 +20,7 @@ Released under the AGPL3 license
         return r.roles.indexOf(role) >= 0
 
       session.user_database = r.user_database
+      r.profile.userdb_base_uri = config.users.userdb_base_uri
 
       if user_is 'confirmed'
         return send r.profile
