@@ -30,6 +30,8 @@
           # Clear the form (alternatively, could use load_couchdb_item()
           $('#wizard_form').new_couchdb_item()
 
+          console.log 'Configuring form'
+
           ajaxSubmit = (was_validated)->
             console.log "Submitting with was_validated = #{was_validated}"
             $('#wizard_form').each ->
@@ -108,6 +110,7 @@
 
           $('.auto_add').each (index,table) -> auto_add(table)
 
+          console.log 'Starting wizard'
           $('#wizard').smartWizard({})
           
   get '/p/partner_signup.html': ->
