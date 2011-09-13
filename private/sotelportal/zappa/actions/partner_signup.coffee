@@ -3,6 +3,10 @@
 @include = ->
   coffee '/p/partner_signup.js': ->
 
+    $('#partner_signup_trigger').click ->
+
+        $('#content').html 'Please wait, loading...'
+
         $('#content').load '/p/partner_signup.html', ->
 
           options =

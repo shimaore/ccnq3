@@ -28,6 +28,9 @@ Fill-in the "content" div.
             $('#log').html "Could not access your profile"
           else
             $('#log').html "Welcome #{profile.name}."
+            # Load the applications
+            $.getScript('/p/partner_signup.js')
+
 
   get '/p/content.html': ->
     if session.logged_in?
@@ -48,3 +51,6 @@ Fill-in the "content" div.
     div ->
       div id: 'main', ->
         'Welcome to the Sotel Portal. Great content expected here soon.'
+
+    div id:'partner_signup_trigger', ->
+      'Click on this text to sign-up to become a SoTel partner.'
