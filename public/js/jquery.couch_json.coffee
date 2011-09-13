@@ -4,7 +4,7 @@
 
 crud2 = ($) ->
   $.fn.set_couchdb_name = (name) ->
-    $(@).data 'cdb', new $.couch.db name
+    $(@).data 'cdb', $.couch.db name
     return @
 
   $.fn.load_couchdb_item = (id,cb) ->

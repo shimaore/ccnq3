@@ -2,7 +2,7 @@
   var crud2;
   crud2 = function($) {
     $.fn.set_couchdb_name = function(name) {
-      $(this).data('cdb', new $.couch.db(name));
+      $(this).data('cdb', $.couch.db(name));
       return this;
     };
     $.fn.load_couchdb_item = function(id, cb) {
