@@ -15,7 +15,6 @@ module.exports = ddoc
 ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
 
   user_match = (account,message) ->
-    throw {forbidden: "No account"} if not account?
     for prefix in userCtx.roles
       do (prefix) ->
         if ("update:provisioning:"+account).substring(0,prefix.length) is prefix
@@ -45,7 +44,7 @@ ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
   # Document is not being deleted.
 
   # User should have access to the account to be able to create or update document inside it.
-  user_match(newDoc.account)
+  user_match(newDoc.account) if newDoc.account?
 
   # Validate updates
   if oldDoc

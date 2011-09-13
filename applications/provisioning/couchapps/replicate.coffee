@@ -23,11 +23,17 @@ ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
 
 
 ddoc.filters.user_replication = (doc, req) ->
+  provisioning_types = ["number","endpoint","location","host"]
+
   # Prefix is required
   if not req.prefix
     return false
 
-  # Only replicate documents, do not replicate _design objects (for example).
+  # Only replicate provisioning documents.
+  if not(doc.type in provisioning_type)
+    return false
+
+  # They must have a valid account.
   if not doc.account
     return false
 

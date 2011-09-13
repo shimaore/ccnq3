@@ -21,6 +21,8 @@ module.exports = ddoc
 # http://wiki.apache.org/couchdb/Document_Update_Validation
 ddoc.validate_doc_update = (newDoc, oldDoc) ->
 
+  provisioning_types = ["number","endpoint","location","host"]
+
   if newDoc._id is "_design/userapp"
     throw {forbidden:'The user application should not be replicated here.'}
 
@@ -43,14 +45,16 @@ ddoc.validate_doc_update = (newDoc, oldDoc) ->
   else
     # Document was not deleted, any tests here?
 
-  required("account")
-
   # Validate the document's type
   required("type")
   unchanged("type")
   type = newDoc.type
-  if  type isnt "number" and type isnt "endpoint" and type isnt "location" and type isnt "host"
-    throw {forbidden: 'Invalid type.'}
+
+  # This code only handles provisioning types.
+  if not type in provisioning_types
+    return
+
+  required("account")
 
   # Each document of type T should have a .T record.
   required(type)
