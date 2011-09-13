@@ -24,7 +24,7 @@
           $('#confirm_invalid').dialog(options).dialog('close')
 
           $.getJSON '/u/profile.json', (profile) ->
-            $.couch.urlPrefix = profile.userdb_base_uri
+            $.couch.urlPrefix = '/'
             $('#wizard_form').set_couchdb_name(profile.user_database)
 
           # Clear the form (alternatively, could use load_couchdb_item()
