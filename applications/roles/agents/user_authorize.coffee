@@ -32,7 +32,7 @@ ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
   # Handle delete documents.
   if newDoc._deleted is true
 
-    if type is 'number'
+    if oldDoc.type is 'number'
       if not user_is('_admin')
         throw {forbidden: 'Only admins may delete numbers.'}
 
@@ -53,6 +53,6 @@ ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
 
   # Validate create
   if not oldDoc
-    if type is "number"
+    if newDoc.type is "number"
       if not user_is('_admin')
         throw {forbidden: 'Only admins may create new numbers.'}
