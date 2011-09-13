@@ -9,6 +9,8 @@
 
         $('#content').load '/p/partner_signup.html', ->
 
+          console.log 'HTML loaded'
+
           options =
             buttons:
               'Correct': ->
