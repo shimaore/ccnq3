@@ -41,7 +41,7 @@ cdb_changes.monitor options, (user_doc) ->
       # Nothing to do if the database does not exist
       return if not it_does_exist
       # Remove the database
-      target_db.erase
+      target_db.erase()
       return
 
     # Nothing to do if the database already exists
