@@ -1,5 +1,5 @@
 @include = ->
-  css '/p/style.css': ->
+  css '/p/style.css':
     '''
     label.normal {
       margin: 6px;
