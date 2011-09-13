@@ -35,7 +35,7 @@
           ajaxSubmit = (was_validated)->
             console.log "Submitting with was_validated = #{was_validated}"
             $('#wizard_form').each ->
-              $$(@).ldoc.was_validated = was_validated
+              $(@).data('ldoc').was_validated = was_validated
               $(@).save_couchdb_item ->
                 alert "Form was saved successfully."
 
