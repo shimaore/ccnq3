@@ -4,14 +4,14 @@
 
 crud2 = ($) ->
   $.fn.set_couchdb_name = (name) ->
-    $(@).cdb = new $.couch.db name
+    $(@).data 'cdb', new $.couch.db name
     return @
 
   $.fn.load_couchdb_item = (id,cb) ->
     # load data from couchdb and display it in the form
     # @reset()
     that = @
-    $(@).cdb.openDoc id,
+    $(@).data('cdb').openDoc id,
         error: ->
           $(that).data 'ldoc', {_id:id}
           # that.reset()
@@ -33,14 +33,14 @@ crud2 = ($) ->
   $.fn.remove_couchdb_item = (cb) ->
     # Delete doc from couchdb
     if confirm("Are you sure?")
-      $(@).cdb.removeDoc($(@).data('ldoc'))
+      $(@).data('cdb').removeDoc($(@).data('ldoc'))
       cb?()
 
   $.fn.save_couchdb_item = (cb) ->
     # encode the data in form and save it to couchdb
     reg = $.extend({},$(@).data('ldoc'), $(@).toDeepJson())
     that = @
-    $(@).cdb.saveDoc reg,
+    $(@).data('cdb').saveDoc reg,
         success: (res) ->
           reg._id = res.id
           reg._rev = res.rev

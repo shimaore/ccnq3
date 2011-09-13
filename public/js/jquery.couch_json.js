@@ -2,13 +2,13 @@
   var crud2;
   crud2 = function($) {
     $.fn.set_couchdb_name = function(name) {
-      $(this).cdb = new $.couch.db(name);
+      $(this).data('cdb', new $.couch.db(name));
       return this;
     };
     $.fn.load_couchdb_item = function(id, cb) {
       var that;
       that = this;
-      return $(this).cdb.openDoc(id, {
+      return $(this).data('cdb').openDoc(id, {
         error: function() {
           return $(that).data('ldoc', {
             _id: id
@@ -37,7 +37,7 @@
     };
     $.fn.remove_couchdb_item = function(cb) {
       if (confirm("Are you sure?")) {
-        $(this).cdb.removeDoc($(this).data('ldoc'));
+        $(this).data('cdb').removeDoc($(this).data('ldoc'));
         return typeof cb === "function" ? cb() : void 0;
       }
     };
@@ -45,7 +45,7 @@
       var reg, that;
       reg = $.extend({}, $(this).data('ldoc'), $(this).toDeepJson());
       that = this;
-      $(this).cdb.saveDoc(reg, {
+      $(this).data('cdb').saveDoc(reg, {
         success: function(res) {
           reg._id = res.id;
           reg._rev = res.rev;
