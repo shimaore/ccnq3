@@ -37,7 +37,7 @@
             $('#wizard_form').each ->
               $(@).data('ldoc').was_validated = was_validated
               $(@).save_couchdb_item ->
-                $(@).dialog 'close'
+                $('#confirm_invalid').dialog 'close'
 
           $('form.validate').validate
 
