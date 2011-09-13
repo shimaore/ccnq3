@@ -65,8 +65,9 @@
         if r.error?
           return send r
         else
-          session.logged_in = username
-          session.roles     = []
+          if config.users.logged_in_after_initial_registration
+            session.logged_in = username
+            session.roles     = []
           return send ok:true
 
   view register_widget: ->
