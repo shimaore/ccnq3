@@ -35,8 +35,7 @@
           ajaxSubmit = (was_validated)->
             console.log "Submitting with was_validated = #{was_validated}"
             $('#wizard_form').each ->
-              $(@).data('ldoc').was_validated = was_validated
-              $(@).data('ldoc').type = 'partner_signup'
+              $('[name="was_validated"]').val was_validated
               $(@).save_couchdb_item ->
                 $('#confirm_invalid').dialog 'close'
 
@@ -135,6 +134,9 @@
       p -> 'The form contains errors.'
 
     form id:'wizard_form', method:'post', class:'validate', ->
+
+      input type:'hidden', name:'type', value:'partner_signup'
+      input type:'hidden', name:'was_validated'
 
       div id:"wizard", class:"swMain", ->
         ul ->
