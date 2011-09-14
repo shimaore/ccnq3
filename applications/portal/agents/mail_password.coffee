@@ -43,38 +43,37 @@ cdb_changes.monitor options, (p) ->
 
   util.log "Sending new password to #{p.name}"
 
-  email_options =
-    sender: "#{config.mail_password.sender_local_part}@#{p.domain}"
-    to: p.name
-    subject: "Your password for #{p.domain}"
-    body: """
-              Someone (probably you) requested a new password for #{p.domain}.
+  delete p.send_password
 
-              Your username is: #{p.name}
-              Your new password is: #{password}
+  salt = sha1_hex "a"+Math.random()
+  p.salt = salt
+  p.password_sha = sha1_hex password+salt
+  users_cdb.put p, (r) ->
+    if r.error
+      return util.log(r.error)
 
-              Thank you, and welcome to our exciting new service!
-          """
-    html: """
-              <p>Someone (probably you) requested a new password for <em>#{p.domain}</em>.</p>
-              <p>Your username is <tt>#{p.name}</tt>
-              <p>Your new password is <tt>#{password}</tt>
-              </p>
-              Thank you, and welcome to our exciting new service!
-              </p>
-          """
+    email_options =
+      sender: "#{config.mail_password.sender_local_part}@#{p.domain}"
+      to: p.name
+      subject: "Your password for #{p.domain}"
+      body: """
+                Someone (probably you) requested a new password for #{p.domain}.
 
-  mailer.send_mail email_options, (err,status) ->
-    # Do not attempt to update the status if the email was not sent
-    if err? or not status
-      return util.log(err)
+                Your username is: #{p.name}
+                Your new password is: #{password}
 
-    # Email was sent, update the status in CouchBD
-    delete p.send_password
+                Thank you, and welcome to our exciting new service!
+            """
+      html: """
+                <p>Someone (probably you) requested a new password for <em>#{p.domain}</em>.</p>
+                <p>Your username is <tt>#{p.name}</tt>
+                <p>Your new password is <tt>#{password}</tt>
+                </p>
+                Thank you, and welcome to our exciting new service!
+                </p>
+            """
 
-    salt = sha1_hex "a"+Math.random()
-    p.salt = salt
-    p.password_sha = sha1_hex password+salt
-    users_cdb.put p, (r) ->
-      if r.error
-        return util.log(r.error)
+    mailer.send_mail email_options, (err,status) ->
+      # Do not attempt to update the status if the email was not sent
+      if err? or not status
+        return util.log(err)
