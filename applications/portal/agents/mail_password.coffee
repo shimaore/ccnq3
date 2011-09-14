@@ -41,6 +41,8 @@ cdb_changes.monitor options, (p) ->
   if not p.name? or not p.domain?
     return util.log("Missing data: #{p.name} #{p.domain}, skipping")
 
+  util.log "Sending new password to #{p.name}"
+
   email_options =
     sender: "#{config.mail_password.sender_local_part}@#{p.domain}"
     to: p.name
