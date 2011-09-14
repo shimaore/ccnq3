@@ -28,6 +28,7 @@ Released under the AGPL3 license
         return send r.profile
 
       r.roles.push 'confirmed'
+      session.roles = r.roles
       users_cdb.put r, (s) ->
         if s.error?
           return send s
