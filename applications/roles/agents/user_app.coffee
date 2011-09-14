@@ -51,7 +51,8 @@ ddoc.validate_doc_update = (newDoc, oldDoc) ->
   type = newDoc.type
 
   # This code only handles provisioning types.
-  if not type in provisioning_types
+  # if not type in provisioning_types
+  if provisioning_types.indexOf(type) < 0
     return
 
   required("account")
