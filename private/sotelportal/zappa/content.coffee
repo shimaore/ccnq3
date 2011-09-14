@@ -53,7 +53,6 @@ Fill-in the "content" div.
       div id: 'main', ->
         'Welcome to the Sotel Portal. Great content expected here soon.'
 
-    # These options are only available to confirmed users.
-    if @confirmed
+    if not 'partner' in session.roles
       div id:'partner_signup_trigger', ->
         'Click on this text to sign-up to become a SoTel partner.'
