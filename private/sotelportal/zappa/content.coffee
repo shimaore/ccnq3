@@ -34,6 +34,7 @@ Fill-in the "content" div.
 
   get '/p/content.html': ->
     @confirmed = 'confirmed' in session.roles
+    @partner = 'partner' in session.roles
     if session.logged_in?
       render 'content', layout:no
     else
@@ -53,6 +54,6 @@ Fill-in the "content" div.
       div id: 'main', ->
         'Welcome to the Sotel Portal. Great content expected here soon.'
 
-    if not 'partner' in session.roles
+    if not @partner
       div id:'partner_signup_trigger', ->
         'Click on this text to sign-up to become a SoTel partner.'
