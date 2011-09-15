@@ -50,7 +50,7 @@ cdb_changes.monitor options, (p) ->
   p.password_sha = sha1_hex password+salt
   users_cdb.put p, (r) ->
     if r.error
-      return util.log(r.error)
+      return util.log("cdb PUT failed: #{r.error}")
 
     email_options =
       sender: "#{config.mail_password.sender_local_part}@#{p.domain}"
@@ -76,4 +76,4 @@ cdb_changes.monitor options, (p) ->
     mailer.send_mail email_options, (err,status) ->
       # Do not attempt to update the status if the email was not sent
       if err? or not status
-        return util.log(err)
+        return util.log("Email failed: #{err}")
