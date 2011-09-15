@@ -64,6 +64,9 @@ exports.record = (config,hostname,users_uri,provisioning_uri,cb)->
     config._id  = "host:#{hostname}"
     config.change_handlers = [
 
+        # TODO Storing change_handlers this way does not work.
+        # TODO Also, why not simply store them as attachments, that way we'll be able to have different types (javascript, coffeescript, shell script, etc.) based on Content-Type.
+
         # Automatically save the new configuration in the static configuration file.
         (result,old_config,new_config) ->
           require('ccnq3_config').update new_config
