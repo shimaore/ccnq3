@@ -51,9 +51,9 @@ Released under the AGPL3 license
             window.location.reload()
 
           if $.extra_login
-            main_login auth, -> $.extra_login auth, -> login_done
+            main_login auth, -> $.extra_login auth, login_done
           else
-            main_login auth, -> login_done
+            main_login auth, login_done
           return false
 
         $('#logout').submit ->
