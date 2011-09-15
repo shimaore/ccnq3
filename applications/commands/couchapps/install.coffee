@@ -15,7 +15,11 @@ commands = cdb.new(uri)
 commands.create ->
 
   commands.security (p)->
+    p.admins ||= {}
+    p.admins.roles ||= []
     push p.admins.roles,  "commands_admin"  if p.admins?.roles.indexOf("commands_admin") < 0
+    p.readers ||= {}
+    p.readers.roles ||= []
     push p.readers.roles, "commands_reader" if p.readers?.roles.indexOf("commands_reader") < 0
     push p.readers.roles, "commands_writer" if p.readers?.roles.indexOf("commands_reader") < 0
     push p.readers.roles, "host"            if p.readers?.roles.indexOf("host") < 0
