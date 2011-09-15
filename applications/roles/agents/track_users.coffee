@@ -45,8 +45,8 @@ cdb_changes.monitor options, (user_doc) ->
     # Create the database
     target_db.create ->
 
-      # Push the "user" couchapp into the database
-      push_script target_db_uri, 'user_authorize', -> push_script target_db_uri, 'user_app', ->
+    # # Push the "user" couchapp into the database
+    # push_script target_db_uri, 'user_authorize', -> push_script target_db_uri, 'user_app', ->
 
         # Make sure the user can access it.
         target_db.security (p) ->
