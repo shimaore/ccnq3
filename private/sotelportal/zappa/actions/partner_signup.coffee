@@ -26,6 +26,7 @@
           $.getJSON '/u/profile.json', (profile) ->
             $.couch.urlPrefix = profile.userdb_base_uri
             $('#wizard_form').set_couchdb_name(profile.user_database)
+            $('[name="_id"]').val "partner_signup:#{profile.name}"
 
           # Clear the form (alternatively, could use load_couchdb_item()
           $('#wizard_form').new_couchdb_item()
@@ -135,6 +136,10 @@
       p -> 'The form contains errors.'
 
     form id:'wizard_form', method:'post', class:'validate', ->
+
+      # TODO Yuck. Need to fix crud(2).json.js so that this isn't stored in the DOM.
+      input type:'hidden', name:'_id'
+      input type:'hidden', name:'_rev'
 
       input type:'hidden', name:'type', value:'partner_signup'
       input type:'hidden', name:'was_validated'
