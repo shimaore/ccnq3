@@ -25,7 +25,7 @@ Released under the AGPL3 license
             if not data.ok
               $('#login_error').html('Sign in failed')
               return
-            next()
+            next?()
 
         $('#login_error').html("")
         $.ajax(ajax_options)

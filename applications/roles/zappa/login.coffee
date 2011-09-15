@@ -21,7 +21,7 @@
             if not data.ok
               $('#login_error').html('Database sign-in failed.')
               return
-            next()
+            next?()
 
         $('#login_error').html('Signing you into the database.')
         $.ajax(couchdb_options)

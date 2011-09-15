@@ -18,7 +18,7 @@ Released under the AGPL3 license
             username: $('#login_username').val()
             password: $('#login_password').val()
           complete: ->
-            next()
+            next?()
 
         $('#login_error').html('Signing you into the voice portal.')
         $.ajax(ccnq2_options)
@@ -31,11 +31,11 @@ Released under the AGPL3 license
         #     username: $('#login_username').val()
         #     password: $('#login_password').val()
         #   complete: ->
-        #     next()
+        #     next?()
         #
         # $('#login_error').html('Signing you into support.')
         # $.ajax(kayako_options)
-        next()
+        next?()
 
       if extra_login?
         extra_login $, -> ccnq2_login $, -> kayako_login $, next
