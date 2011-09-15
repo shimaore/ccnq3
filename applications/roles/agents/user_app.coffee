@@ -41,7 +41,7 @@ ddoc.validate_doc_update = (newDoc, oldDoc) ->
       throw {forbidden: 'Document is tagged as do_not_delete.'}
 
     # No further processing is required on deleted documents.
-    return
+    return true
   else
     # Document was not deleted, any tests here?
 
@@ -53,7 +53,7 @@ ddoc.validate_doc_update = (newDoc, oldDoc) ->
   # This code only handles provisioning types.
   # if not type in provisioning_types
   if provisioning_types.indexOf(type) < 0
-    return
+    return true
 
   required("account")
 
