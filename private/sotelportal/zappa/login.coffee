@@ -18,7 +18,7 @@ Released under the AGPL3 license
             username: auth.username
             password: auth.password
           complete: ->
-            next?()
+            next()
 
         auth.notify 'Signing you into the voice portal.'
         auth.$.ajax(ccnq2_options)
@@ -38,6 +38,6 @@ Released under the AGPL3 license
         next?()
 
       if extra_login?
-        extra_login auth, -> ccnq2_login auth, -> kayako_login auth, next
+        ccnq2_login auth, -> kayako_login auth, -> extra_login auth, next
       else
         ccnq2_login auth, -> kayako_login auth, next

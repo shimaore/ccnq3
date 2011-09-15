@@ -21,12 +21,12 @@
             if not data.ok
               auth.notify 'Database sign-in failed.'
               return
-            next?()
+            next()
 
         auth.notify 'Signing you into the database.'
         auth.$.ajax(couchdb_options)
 
       if extra_login?
-        extra_login auth, -> couchdb_login auth, next
+        couchdb_login auth, -> extra_login auth, next
       else
         couchdb_login auth, next

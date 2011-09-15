@@ -25,7 +25,7 @@ Released under the AGPL3 license
             if not data.ok
               auth.notify 'Sign in failed.'
               return
-            next?()
+            next()
 
         auth.notify ''
         auth.$.ajax(ajax_options)
