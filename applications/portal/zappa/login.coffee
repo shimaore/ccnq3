@@ -13,7 +13,7 @@ Released under the AGPL3 license
     $(document).ready ->
 
       # Log into the main portal (this application).
-      main_login = (next) ->
+      main_login = ($,next) ->
         ajax_options =
           type: 'post'
           url: '/u/login.json'
@@ -30,7 +30,7 @@ Released under the AGPL3 license
         $('#login_error').html("")
         $.ajax(ajax_options)
 
-      login_done = ->
+      login_done = ($) ->
         # All done.
         $('#login_error').html('')
         $('#login').dialog('close')
@@ -43,9 +43,9 @@ Released under the AGPL3 license
 
         $('#login').submit ->
           if $.extra_login
-            main_login -> $.extra_login -> login_done()
+            main_login $, -> $.extra_login $, -> login_done $
           else
-            main_login -> login_done()
+            main_login $, -> login_done $
           return false
 
         $('#logout').submit ->

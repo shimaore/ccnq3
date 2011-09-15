@@ -4,10 +4,10 @@
 
     extra_login = $.extra_login
 
-    $.extra_login = (next) ->
+    $.extra_login = ($,next) ->
 
       # Log into CouchDB so that we can access the user's database directly.
-      couchdb_login = (next) ->
+      couchdb_login = ($,next) ->
         couchdb_options =
           type: 'get'
           url: '/_session'
@@ -27,6 +27,6 @@
         $.ajax(couchdb_options)
 
       if extra_login?
-        extra_login -> couchdb_login (next)
+        extra_login $, -> couchdb_login $, next
       else
-        couchdb_login (next)
+        couchdb_login $, next

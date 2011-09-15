@@ -8,9 +8,9 @@ Released under the AGPL3 license
 
     extra_login = $.extra_login
 
-    $.extra_login = (next) ->
+    $.extra_login = ($,next) ->
 
-      ccnq2_login = (next) ->
+      ccnq2_login = ($,next) ->
         ccnq2_options =
           type: 'post'
           url: '/portal/login'
@@ -23,7 +23,7 @@ Released under the AGPL3 license
         $('#login_error').html('Signing you into the voice portal.')
         $.ajax(ccnq2_options)
 
-      kayako_login = (next) ->
+      kayako_login = ($,next) ->
         # kayako_options =
         #   type: 'post'
         #   url: '/portal/login'
@@ -38,6 +38,6 @@ Released under the AGPL3 license
         next()
 
       if extra_login?
-        extra_login -> ccnq2_login -> kayako_login (next)
+        extra_login $, -> ccnq2_login $, -> kayako_login $, next
       else
-        ccnq2_login -> kayako_login (next)
+        ccnq2_login $, -> kayako_login $, next
