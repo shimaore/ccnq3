@@ -13,28 +13,22 @@ Released under the AGPL3 license
     $(document).ready ->
 
       # Log into the main portal (this application).
-      main_login = ($,next) ->
+      main_login = (auth,next) ->
         ajax_options =
           type: 'post'
           url: '/u/login.json'
           data:
-            username: $('#login_username').val()
-            password: $('#login_password').val()
+            username: auth.username
+            password: auth.password
           dataType: 'json'
           success: (data) ->
             if not data.ok
-              $('#login_error').html('Sign in failed')
+              auth.notify 'Sign in failed.'
               return
             next?()
 
-        $('#login_error').html("")
-        $.ajax(ajax_options)
-
-      login_done = ($) ->
-        # All done.
-        $('#login_error').html('')
-        $('#login').dialog('close')
-        window.location.reload()
+        auth.notify ''
+        auth.$.ajax(ajax_options)
 
       $('#login_container').load '/u/login.widget', ->
         $('form.main').addClass('ui-widget-content')
@@ -42,10 +36,23 @@ Released under the AGPL3 license
         $('button,input[type="submit"],input[type="reset"]').button()
 
         $('#login').submit ->
+          auth =
+            username: $('#login_username').val()
+            password: $('#login_password').val()
+            notify: (text)->
+              $('#login_error').html(text)
+            '$': $
+
+          login_done = ->
+            # All done.
+            auth.notify ''
+            $('#login').dialog('close')
+            window.location.reload()
+
           if $.extra_login
-            main_login $, -> $.extra_login $, -> login_done $
+            main_login auth, -> $.extra_login auth, -> login_done
           else
-            main_login $, -> login_done $
+            main_login auth, -> login_done
           return false
 
         $('#logout').submit ->

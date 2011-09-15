@@ -4,29 +4,29 @@
 
     extra_login = $.extra_login
 
-    $.extra_login = ($,next) ->
+    $.extra_login = (auth,next) ->
 
       # Log into CouchDB so that we can access the user's database directly.
-      couchdb_login = ($,next) ->
+      couchdb_login = (auth,next) ->
         couchdb_options =
           type: 'get'
           url: '/_session'
-          username: $('#login_username').val()
-          password: $('#login_password').val()
+          username: auth.username
+          password: auth.password
           # data:
           #   name: $('#login_username').val()
           #   password: $('#login_password').val()
           dataType:'json'
           success: (data) ->
             if not data.ok
-              $('#login_error').html('Database sign-in failed.')
+              auth.notify 'Database sign-in failed.'
               return
             next?()
 
-        $('#login_error').html('Signing you into the database.')
-        $.ajax(couchdb_options)
+        auth.notify 'Signing you into the database.'
+        auth.$.ajax(couchdb_options)
 
       if extra_login?
-        extra_login $, -> couchdb_login $, next
+        extra_login auth, -> couchdb_login auth, next
       else
-        couchdb_login $, next
+        couchdb_login auth, next
