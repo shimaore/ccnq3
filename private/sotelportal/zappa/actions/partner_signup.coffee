@@ -38,6 +38,7 @@
               $('[name="was_validated"]').val was_validated
               $(@).save_couchdb_item ->
                 $('#confirm_invalid').dialog 'close'
+                window.location.reload()
 
           $('form.validate').validate
 
