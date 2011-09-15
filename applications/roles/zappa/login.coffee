@@ -21,6 +21,7 @@
             if not data.ok
               auth.notify 'Database sign-in failed.'
               return
+            auth.notify ''
             next()
 
         auth.notify 'Signing you into the database.'

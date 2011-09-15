@@ -18,6 +18,7 @@ Released under the AGPL3 license
             username: auth.username
             password: auth.password
           complete: ->
+            auth.notify ''
             next()
 
         auth.notify 'Signing you into the voice portal.'
@@ -31,11 +32,11 @@ Released under the AGPL3 license
         #     username: auth.username
         #     password: auth.password
         #   complete: ->
-        #     next?()
+        #     next()
         #
         # auth.notify 'Signing you into support.'
         # auth.$.ajax(kayako_options)
-        next?()
+        next()
 
       if extra_login?
         ccnq2_login auth, -> kayako_login auth, -> extra_login auth, next

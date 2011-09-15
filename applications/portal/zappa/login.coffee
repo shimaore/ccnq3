@@ -25,9 +25,10 @@ Released under the AGPL3 license
             if not data.ok
               auth.notify 'Sign in failed.'
               return
+            auth.notify ''
             next()
 
-        auth.notify ''
+        auth.notify 'Portal sign in.'
         auth.$.ajax(ajax_options)
 
       $('#login_container').load '/u/login.widget', ->
