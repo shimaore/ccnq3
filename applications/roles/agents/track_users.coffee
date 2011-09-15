@@ -58,7 +58,7 @@ cdb_changes.monitor options, (user_doc) ->
         revs_limit =
           method: 'PUT'
           uri: '_revs_limit'
-          body: "1"
+          body: 1
 
         target_db.req revs_limit, (r) ->
           if r.error then return util.log r.error
