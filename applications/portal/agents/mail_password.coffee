@@ -41,16 +41,21 @@ cdb_changes.monitor options, (p) ->
   if not p.name? or not p.domain?
     return util.log("Missing data: #{p.name} #{p.domain}, skipping")
 
-  util.log "Sending new password to #{p.name}"
+  util.log "Assigning new password to #{p.name}"
 
+  # Push the new password into the database.
   delete p.send_password
 
   salt = sha1_hex "a"+Math.random()
   p.salt = salt
   p.password_sha = sha1_hex password+salt
+
   users_cdb.put p, (r) ->
     if r.error
       return util.log("cdb PUT failed: #{r.error}")
+
+    # Notify via email.
+    util.log "Notifying #{p.name} of new password for #{p.domain}"
 
     email_options =
       sender: "#{config.mail_password.sender_local_part}@#{p.domain}"
@@ -74,6 +79,5 @@ cdb_changes.monitor options, (p) ->
             """
 
     mailer.send_mail email_options, (err,status) ->
-      # Do not attempt to update the status if the email was not sent
       if err? or not status
         return util.log("Email failed: #{err}")
