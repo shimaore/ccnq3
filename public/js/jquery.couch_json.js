@@ -41,7 +41,7 @@
         return typeof cb === "function" ? cb() : void 0;
       }
     };
-    return $.fn.save_couchdb_item = function(cb) {
+    $.fn.save_couchdb_item = function(cb) {
       var reg, that;
       reg = $.extend({}, $(this).data('ldoc'), $(this).toDeepJson());
       that = this;

@@ -48,4 +48,6 @@ crud2 = ($) ->
           cb?(reg)
     return false
 
+  return
+
 crud2(jQuery)
