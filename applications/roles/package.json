@@ -1,6 +1,6 @@
 {
   "name": "ccnq3_roles",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "description": "Portal applications for CCNQ3",
   "keywords": "",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
