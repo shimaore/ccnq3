@@ -23,9 +23,6 @@ ddoc.validate_doc_update = (newDoc, oldDoc) ->
 
   provisioning_types = ["number","endpoint","location","host"]
 
-  if newDoc._id is "_design/userapp"
-    throw {forbidden:'The user application should not be replicated here.'}
-
   required = (field, message) ->
     if not newDoc[field]
       throw {forbidden : message || "Document must have a " + field}
@@ -41,9 +38,7 @@ ddoc.validate_doc_update = (newDoc, oldDoc) ->
       throw {forbidden: 'Document is tagged as do_not_delete.'}
 
     # No further processing is required on deleted documents.
-    return true
-  else
-    # Document was not deleted, any tests here?
+    return
 
   # Validate the document's type
   required("type")
@@ -53,15 +48,18 @@ ddoc.validate_doc_update = (newDoc, oldDoc) ->
   # This code only handles provisioning types.
   # if not type in provisioning_types
   if provisioning_types.indexOf(type) < 0
-    return true
+    return
 
   required("account")
 
   # Each document of type T should have a .T record.
   required(type)
   unchanged(type)
-  if newDoc._id isnt type+":"+newDoc[type]
-    throw {forbidden: "Document ID must be #{type}:#{newDoc[type]}."}
+
+  required(newDoc[type])
+  expected_id = type+':'+newDoc[type]
+  if newDoc._id isnt expected_id
+    throw {forbidden: 'Document ID must be '+expected_id}
 
   # Validate updates
   # if oldDoc
@@ -83,7 +81,7 @@ ddoc.validate_doc_update = (newDoc, oldDoc) ->
     if newDoc.account isnt ''
       throw {forbidden: 'Hosts currently can only be added at the root.'}
 
-
+  return
 
 # Attachments are loaded from provisioning-global/*
 # path = require('path')

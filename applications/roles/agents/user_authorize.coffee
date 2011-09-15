@@ -56,3 +56,5 @@ ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
     if newDoc.type is "number"
       if not user_is('_admin')
         throw {forbidden: 'Only admins may create new numbers.'}
+
+  return
