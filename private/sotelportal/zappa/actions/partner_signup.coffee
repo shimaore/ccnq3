@@ -139,7 +139,8 @@
 
       # TODO Yuck. Need to fix crud(2).json.js so that this isn't stored in the DOM.
       input type:'hidden', name:'_id'
-      input type:'hidden', name:'_rev'
+      # _rev cannot be null
+      # input type:'hidden', name:'_rev'
 
       input type:'hidden', name:'type', value:'partner_signup'
       input type:'hidden', name:'was_validated'
