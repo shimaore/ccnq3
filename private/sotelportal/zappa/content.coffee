@@ -28,6 +28,7 @@ Fill-in the "content" div.
             $('#log').html "Could not access your profile"
           else
             $('#log').html "Welcome #{profile.name}."
+            session.profile = profile
             # Load the applications
             $.getScript('/p/partner_signup.js')
 
@@ -47,13 +48,12 @@ Fill-in the "content" div.
 
   view content: ->
     div id:'login_container'
-    div id:'log'
+    h3 id:'log'
 
     # Here goes the main page layout.
     div ->
       div id: 'main', ->
-        'Welcome to the Sotel Portal. Great content expected here soon.'
+        'You are now successfully logged into the SoTel Systems Online Portal. More content and features are expected here soon.'
 
     if not @partner
-      div id:'partner_signup_trigger', ->
-        'Click on this text to sign-up to become a SoTel partner.'
+      div id:'partner_signup_trigger', -> 'Become a SoTel Systems partner!'

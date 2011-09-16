@@ -36,6 +36,8 @@
           ajaxSubmit = (was_validated)->
             console.log "Submitting with was_validated = #{was_validated}"
             $('#wizard_form').each ->
+              # Do not save template DOM content.
+              $('.template').remove()
               $('[name="was_validated"]').val was_validated
               $(@).save_couchdb_item ->
                 $('#confirm_invalid').dialog 'close'
@@ -116,6 +118,7 @@
           $('#wizard').smartWizard({})
           
   get '/p/partner_signup.html': ->
+    @profile = session.profile
     render 'partner_signup', layout:no
 
   view partner_signup: ->
@@ -164,7 +167,7 @@
             span class:'stepDesc', -> 'Step 4<br/><small>Technical Background</small>'
           li -> a href:'#step-5', ->
             label class:'stepNumber', -> 5
-            span class:'stepDesc', -> 'Step 5<br/><small>Sotel On-boarding</small>'
+            span class:'stepDesc', -> 'Step 5<br/><small>Contacts</small>'
           li -> a href:'#step-6', ->
             label class:'stepNumber', -> 6
             span class:'stepDesc', -> 'Step 6<br/><small>Terms and Conditions, Signature</small>'
@@ -177,14 +180,13 @@
 
           p -> 'Thank you for your interest in becoming a SoTel Partner!'
 
-          p -> "What you'll need: ..."
-
+          p -> "What you'll need: You will need your company's information as well as contact details for anyone you want to have immediate access to this portal."
 
           div id:'agent', class:'form', ->
 
             p  class:'normal', -> 'Company Information'
 
-            textbox 'agent.company',        'Agent Company',  'required minlength(2)'
+            textbox 'agent.company',        'Company Name',   'required minlength(2)'
             textbox 'agent.main_number',    'Main Number',    'required phone minlength(2)'
             textbox 'agent.website',        'Website',        'required url minlength(6)'
             textbox 'agent.address_1',      'Address',        'required minlength(2)'
@@ -198,43 +200,35 @@
 
           div id:'products',  class:'form', ->
 
-            checkbox  'products.sotel_sip_service',   'SoTel SIP Service'
-            checkbox  'products.sotel_video_conf',    'SoTel Video Conferencing'
-            checkbox  'products.siemens_mx',          'Siemens OpenScape Office MX'
+            checkbox  'products.sotel_sip_agency',    'SIP Service Agency Program'
+            checkbox  'products.sotel_sip_wholesale', 'SIP Service Wholesale Program'
+            checkbox  'products.sotel_videoconf',     'Video Conferencing'
+            checkbox  'products.siemens_oo',          'Siemens OpenScape Office'
+            checkbox  'products.epygi',               'Epygi'
+            checkbox  'products.snom',                'Snom'
+            checkbox  'products.sangoma',             'Sangoma'
 
         div id:'step-2', ->
           h2 class:'stepTitle', -> 'Contact Information'
 
-          for i in [0..1]
-            p -> if i == 0 then 'Primary Contact' else 'Alternate Contact'
+          label  for:"primary_contact.address_1", class:"normal",  class:"normal", -> "Address"
+          input name:"primary_contact.address_1", class:"required text minlength(2)"
 
-            label  for:"contacts[#{i}].address_1", class:"normal",  class:"normal", -> "Address"
-            input name:"contacts[#{i}].address_1", class:"required text minlength(2)"
+          label  for:"primary_contact.address_2", class:"normal", -> "Address (line 2)"
+          input name:"primary_contact.address_2", class:"text minlength(2)"
 
-            label  for:"contacts[#{i}].address_2", class:"normal", -> "Address (line 2)"
-            input name:"contacts[#{i}].address_2", class:"text minlength(2)"
+          label  for:"primary_contact.city", class:"normal", -> "City"
+          input name:"primary_contact.city", class:"required text minlength(2)"
 
-            label  for:"contacts[#{i}].city", class:"normal", -> "City"
-            input name:"contacts[#{i}].city", class:"required text minlength(2)"
+          label  for:"primary_contact.state", class:"normal", -> "State"
+          input name:"primary_contact.state", class:"required text minlength(2)"
 
-            label  for:"contacts[#{i}].state", class:"normal", -> "State"
-            input name:"contacts[#{i}].state", class:"required text minlength(2)"
+          label  for:"primary_contact.postal_code", class:"normal", -> "ZIP Code"
+          input name:"primary_contact.postal_code", class:"required digits minlength(2)"
 
-            label  for:"contacts[#{i}].postal_code", class:"normal", -> "ZIP Code"
-            input name:"contacts[#{i}].postal_code", class:"required digits minlength(2)"
-
-            div class:"form", ->
-
-              label  for:"contacts[#{i}].contact.name", class:"normal", -> "Contact Name"
-              input name:"contacts[#{i}].contact.name", class:"required name minlength(2)"
-
-              label  for:"contacts[#{i}].contact.phone", class:"normal", -> "Contact Telephone"
-              input name:"contacts[#{i}].contact.phone", class:"required phoneUS minlength(2)"
-
-              label  for:"contacts[#{i}].contact.email", class:"normal", -> "Contact Email"
-              input name:"contacts[#{i}].contact.email", class:"required email minlength(2)"
-
-
+          input type:'hidden', name:'primary_contact.contact.name', value: @profile.name
+          input type:'hidden', name:'primary_contact.contact.phone', value: @profile.phone
+          input type:'hidden', name:'primary_contact.contact.email', value: @profile.email
 
         div id:'step-3', ->
           h2 class:'stepTitle', -> 'Background Information'
@@ -249,25 +243,23 @@
           input name:'business.employees.install_support', class:'required number'
 
           p -> 'Target Market segment by model line size'
-          label  for:'business.line_size.2to24', class:'normal', -> '.. 2 to 24 users'
-          input name:'business.line_size.2to24', class:'required number'
-          label  for:'business.line_size.24to50', class:'normal', -> '.. 25 to 50 users'
-          input name:'business.line_size.24to50', class:'required number'
-          label  for:'business.line_size.51to100', class:'normal', -> '.. 51 to 100 users'
-          input name:'business.line_size.51to100', class:'required number'
-          label  for:'business.line_size.100more', class:'normal', -> '.. 100 users or more'
-          input name:'business.line_size.100more', class:'required number'
+          checkbox 'business.line_size.2to24', '2 to 24 users'
+          checkbox 'business.line_size.24to50', '25 to 50 users'
+          checkbox 'business.line_size.51to100', '51 to 100 users'
+          checkbox 'business.line_size.100more', '100 users or more'
 
           p -> 'Revenue'
 
           label  for:'business.revenue', class:'normal', -> 'Average revenue over the last three years for telecom-related sales'
           input name:'business.revenue', class:'required number'
 
-          p -> 'Please lit the Equipment (by manufacturer) /Services that you Provide to your Current Customer Base.'
+          p -> 'Please list the Equipment (by manufacturer) /Services that you Provide to your Current Customer Base.'
           p -> 'Please list the Current Telecom, Voice, Video and Data Solutions supported.'
 
-          for i in [1..4]
-            text_area "business.solution[#{i}]", i
+          text_area "business.solution.telecom", 'Telecom'
+          text_area "business.solution.voice", 'Voice'
+          text_area "business.solution.video", 'Video'
+          text_area "business.solution.data", 'Data'
 
           p -> 'Current Services Provided by your company'
           
@@ -299,20 +291,12 @@
           checkbox 'technical.knows.routing', 'Knowledge of multiple network connections and routing'
           text_area 'technical.knows.manufacturer_certifications', 'What other manufacture certifications do you presently maintain.'
 
-          text_area 'marketing.how', 'How did you hear about SoTel Systems'
-   
-          div id:'siemens_mx', ->
-            text_area 'siemens_mx.reason', "Reason for partner’s interest in picking up the Siemens OpenScape Solution."
-            checkbox 'siemens_mx.training', "Partner will commit to allocate resources to attend and complete all Siemens OpenScape Office related Sales and maintenance training within 2 months from the becoming a registered Sotel partner and reseller of the Siemens OpenScape Office solution."
-            checkbox 'siemens_mx.demo', "Partner has agreed to purchase a Siemens OpenScape Office MX demonstration system as part of their first stocking order with Sotel."
-
-
         div id:'step-5', ->
-          h2 class:'stepTitle', -> 'Sotel On-boarding'
+          h2 class:'stepTitle', -> 'Contacts'
 
           p -> ' SoTel On-Boarding Documentation and Process'
 
-          p -> "We appreciate you taking the time to fill out the Partnership Form.  We will review your application as soon as possible.  Once the form has been reviewed and accepted, we will be reaching back out to you to provide information on the SoTel partnership.  "
+          p -> "We appreciate you taking the time to fill out the Partnership Form.  We will review your application as soon as possible.  Once the form has been reviewed and accepted, we will be reaching back out to you to provide information on the SoTel Systems partnership.  "
 
           p -> "As part of the on-boarding process your Sotel systems representative will be contacting you to provide you information concerning our processes. "
 
@@ -322,7 +306,7 @@
             li 'Service Support and escalation'
             li 'Web portal navigation'
             li 'Product Education'
-            li "Accessing the Sotel and Manufacturer’s web portals"
+            li "Accessing the Sotel web portals"
 
           p -> "In order to set up your access for product support and the manufacturer web portal(s) we will also need the following information for each of your employees."
 
