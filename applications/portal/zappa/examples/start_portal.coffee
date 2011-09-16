@@ -11,7 +11,7 @@ zappa.run config.portal.port, config.portal.hostname, ->
   # Configuration
   config = require('ccnq3_config').config
   # Session store
-  store = config.session_store
+  store = config.session_store()
 
   use 'logger'
     , 'bodyParser'
