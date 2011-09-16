@@ -22,21 +22,3 @@ exports.config = JSON.parse fs.readFileSync config_location, 'utf8'
 
 exports.update = (content) ->
   fs.writeFileSync config_location, JSON.stringify content
-
-# Which store should we use for express/zappa session management?
-exports.session_store = ->
-  config = exports.config
-  express = require 'express'
-  if config.session?.memcached_store
-    MemcachedStore = require 'connect-memcached'
-    store = new MemcachedStore config.session.memcached_store
-  if config.session?.redis_store
-    RedisStore = require('connect-redis')(express)
-    store = new RedisStore config.session.redis_store
-  if config.session?.couchdb_store
-    CouchDBStore = require('connect-couchdb')(express)
-    store = new CouchDBStore config.sessions.couchdb_store
-  if not store
-    throw error:"No session store is configured in #{config_location}."
-
-  return store

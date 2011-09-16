@@ -1,15 +1,11 @@
 {
   "name": "ccnq3_config",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "CCNQ3 config access",
   "keywords": "ccnq3",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
   "main": "lib/ccnq3_config.js",
   "dependencies": {
-    "express": "*"
-  , "connect-couchdb": "0.2.0"
-  , "connect-memcached": ">=0.0.2"
-  , "connect-redis": ">=1.0.7"
   },
   "scripts": { "install": "coffee -c lib/ccnq3_config.coffee" },
   "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },

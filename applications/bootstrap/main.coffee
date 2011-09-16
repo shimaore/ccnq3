@@ -6,13 +6,12 @@ zappa.run ->
   # Configuration
   ccnq3_config = require 'ccnq3_config'
   config = ccnq3_config.config
-  # Session store
-  store = ccnq3_config.session_store()
+  # FIXME Uses memory session store
 
   use 'logger'
     , 'bodyParser'
     , 'cookieParser'
-    , session: { secret: config.session.secret, store: store }
+    , session: { secret: config.session.secret }
     , 'methodOverride'
 
   # Provide access to "/public"
