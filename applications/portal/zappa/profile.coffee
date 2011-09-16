@@ -20,6 +20,7 @@ Released under the AGPL3 license
         return r.roles.indexOf(role) >= 0
 
       session.user_database = r.user_database
+      session.profile = r.profile
       # Allow the user to know the location of their database.
       r.profile.userdb_base_uri = config.users.public_userdb_base_uri
       r.profile.user_database = r.user_database
