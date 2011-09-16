@@ -10,9 +10,10 @@ zappa = require 'zappa'
 zappa.run config.sotel_portal.port, config.sotel_portal.hostname, ->
 
   # Configuration
-  config = require('ccnq3_config').config
+  ccnq3_config = require 'ccnq3_config'
+  config = ccnq3_config.config
   # Session store
-  store = config.session_store()
+  store = ccnq3_config.session_store()
 
   use 'logger'
   , 'bodyParser'

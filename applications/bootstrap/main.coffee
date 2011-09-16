@@ -4,9 +4,10 @@ zappa = require 'zappa'
 zappa.run ->
 
   # Configuration
-  config = require('ccnq3_config').config
+  ccnq3_config = require 'ccnq3_config'
+  config = ccnq3_config.config
   # Session store
-  store = config.session_store()
+  store = ccnq3_config.session_store()
 
   use 'logger'
     , 'bodyParser'
