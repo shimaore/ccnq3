@@ -28,7 +28,6 @@ Fill-in the "content" div.
             $('#log').html "Could not access your profile"
           else
             $('#log').html "Welcome #{profile.name}."
-            session.profile = profile
             # Load the applications
             $.getScript('/p/partner_signup.js')
 
