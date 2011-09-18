@@ -61,28 +61,3 @@ ddoc.validate_doc_update = (newDoc, oldDoc) ->
   if newDoc._id isnt expected_id
     throw {forbidden: 'Document ID must be '+expected_id}
 
-  # Validate updates
-  # if oldDoc
-
-  # Validate create
-  # if not oldDoc
-
-  # Validate fields
-  if type is "endpoint"
-    if not newDoc.ip and not newDoc.username
-      throw {forbidden: 'IP or Username must be provided.'}
-
-    if newDoc.ip and newDoc.ip.match(/^(192\.168\.|172\.(1[6-9]|2[0-9]|3[12])|10\.|fe80:)/)
-      throw {forbidden: 'Invalid IP address.'}
-    if newDoc.username
-      required("password")
-
-  if type is "host"
-    if newDoc.account isnt ''
-      throw {forbidden: 'Hosts currently can only be added at the root.'}
-
-  return
-
-# Attachments are loaded from provisioning-global/*
-# path = require('path')
-# couchapp.loadAttachments(ddoc, path.join(__dirname, 'provisioning-global'))
