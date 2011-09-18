@@ -27,4 +27,7 @@ provisioning.create ->
     p.readers.roles.push("host")                if p.readers.roles.indexOf("host") < 0
 
   # These couchapps are available to provisioning_admin (and _admin) users.
-  push_script uri, 'replicate'   # Filter replication from source to user's databases.
+  push_script uri, 'main'   # Filter replication from source to user's databases.
+
+uri = config.usercode.couchdb_uri
+push_script uri, 'usercode'

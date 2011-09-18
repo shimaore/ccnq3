@@ -22,12 +22,12 @@ ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
     throw forbidden:'Not authorized to write in this database, roles = #{userCtx.roles?.join(",")}.'
 
 
-ddoc.filters.user_replication = (doc, req) ->
+# Filter replication towards the user database.
+ddoc.filters.user_pull = (doc, req) ->
   provisioning_types = ["number","endpoint","location","host"]
 
-  # Prefix is required
-  if not req.prefix
-    return false
+  # The user context provided to us by the replication agent.
+  ctx = JSON.parse req.ctx
 
   # Only replicate provisioning documents.
   if not(doc.type in provisioning_type)
@@ -37,9 +37,15 @@ ddoc.filters.user_replication = (doc, req) ->
   if not doc.account
     return false
 
-  # Replicate documents for which the account is a subset of the prefix.
-  if doc.account.substr(0,req.prefix.length) is req.prefix
-    return true
+  for role in ctx.roles
+    do (role) ->
+      # We use the "access" filter to know which documents the user might read.
+      prefix = role.match("^access:#{@source}:(.*)$")?[1]
+      if prefix?
+
+        # Replicate documents for which the account is a subset of the prefix.
+        if doc.account.substr(0,req.prefix.length) is req.prefix
+          return true
 
   # Do not otherwise replicate
   return false

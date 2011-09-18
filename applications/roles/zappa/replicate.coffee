@@ -1,20 +1,19 @@
 @include = ->
 
-  # Although the replicator would allow the end-users to start replicating, since the source database is not accessible to them, they will (should) not be able to replicate from it.
-  # However the design rules inside the user's database enforce data consistency (and policies), so we can replicate from it without having to check per-user information in the main database.
-  # Conversely, we can replicate from the source database using a simple filter.
+  using 'json_req'
 
   # Start replication from user's database back to a main database.
-
-  json_req = require 'json_req'
-
   put '/roles/replicate/push/:target': ->
     if not session.logged_in?
       return send error:'Not logged in.'
 
-    # The only database we can push to is 'provisioning'.
-    possible_targets = config.roles?.push_targets or ['provisioning']
-    return send error:'Invalid target' unless @target in possible_targets
+    # Validate the target name format.
+    # Note: this does not allow all the possible names allowed by CouchDB.
+    return send error:'Invalid target' unless @target.match /^[_a-z]+$/
+
+    ctx =
+      name: session.logged_in
+      roles: session.roles
 
     replication_req =
       method: 'POST'
@@ -22,7 +21,13 @@
       body:
         source: session.user_database
         target: @target
+        filter: "#{target}/user_push" # Found in the userdb
+        query_params:
+          ctx: JSON.stringify ctx
 
+    # Note: This will fail if the user database does not contain
+    #       the proper design document for the specified tatget,
+    #       so that restrictions are enforced.
     json_req.request replication_req, (r) ->
       send r
 
@@ -31,23 +36,25 @@
     if not session.logged_in?
       return send error:'Not logged in.'
 
-    possible_sources = config.roles?.pull_sources or ['provisioning','billing']
-    return send error:'Invalid source' unless @source in possible_sources
+    # Validate the source name format.
+    # Note: this does not allow all the possible names allowed by CouchDB.
+    return send error:'Invalid target' unless @source.match /^[_a-z]+$/
 
-    for role in session.roles
-      do (role) ->
-        prefix = role.match("^access:#{@source}:(.*)$")?[1]
-        if prefix?
+    ctx =
+      name: session.logged_in
+      roles: session.roles
 
-          replication_req =
-            method: 'POST'
-            uri: config.users.replicate_uri
-            body:
-              source: @source
-              target: session.user_database
-              filter: 'user_replication'
-              query_params:
-                prefix: prefix
+    replication_req =
+      method: 'POST'
+      uri: config.users.replicate_uri
+      body:
+        source: @source
+        target: session.user_database
+        filter: "replicate/user_pull" # Found in the source db
+        query_params:
+          ctx: JSON.stringify ctx
 
-          json_req.request replication_req, (r) ->
-            send r
+    # Note: The source replicate/user_pull filter is responsible for
+    #       enforcing access restrictions.
+    json_req.request replication_req, (r) ->
+      send r

@@ -19,4 +19,6 @@ users.security (p)->
 
 # Installation
 uri = config.users.couchdb_uri
-couchapp.createApp require("./users"), uri, (app)-> app.push()
+couchapp.createApp require("./main"), uri, (app)-> app.push()
+uri = config.usercode.couchdb_uri
+couchapp.createApp require("./usercode"), uri, (app)-> app.push()
