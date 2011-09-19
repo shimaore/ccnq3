@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "zappa": ">=0.2.0"
-  , "ccnq3_config": ">=0.0.3"
+  , "ccnq3_config": ">=0.1"
   , "cdb": ">=0.0.7"
   , "json_req": ">=0.0.7"
   , "ccnq3_config": "*"

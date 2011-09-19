@@ -5,95 +5,95 @@ zappa.run ->
 
   # Configuration
   ccnq3_config = require 'ccnq3_config'
-  config = ccnq3_config.config
-  # FIXME Uses memory session store
+  ccnq3_config.get (config)->
+    # FIXME Uses memory session store
 
-  use 'logger'
-    , 'bodyParser'
-    , 'cookieParser'
-    , session: { secret: config.session.secret }
-    , 'methodOverride'
+    use 'logger'
+      , 'bodyParser'
+      , 'cookieParser'
+      , session: { secret: config.session.secret }
+      , 'methodOverride'
 
-  # Provide access to "/public"
-  use 'static': __dirname + '/public'
-    , 'staticCache'
+    # Provide access to "/public"
+    use 'static': __dirname + '/public'
+      , 'staticCache'
 
-  def config: config
+    def config: config
 
-  # Let Zappa serve it owns versions.
-  enable 'serve jquery', 'serve sammy'
+    # Let Zappa serve it owns versions.
+    enable 'serve jquery', 'serve sammy'
 
-  # applications/portal
-  portal_modules = ['login','profile','recover','register']
-  include __dirname + "../node_modules/ccnq3_portal/zappa/#{name}.coffee" for name in portal_modules
+    # applications/portal
+    portal_modules = ['login','profile','recover','register']
+    include __dirname + "../node_modules/ccnq3_portal/zappa/#{name}.coffee" for name in portal_modules
 
-  # applications/roles
-  roles_modules = ['login','admin','replicate']
-  include __dirname + "../node_modules/ccnq3_roles/zappa/#{name}.coffee" for name in roles_modules
+    # applications/roles
+    roles_modules = ['login','admin','replicate']
+    include __dirname + "../node_modules/ccnq3_roles/zappa/#{name}.coffee" for name in roles_modules
 
-  # Provide a default index.html (default portal)
-  get '/': ->
-    @title = 'Bootstrap portal'
-    @stylesheet = '/public/css/smoothness/jquery-ui.css'
-    render 'index', layout:no
+    # Provide a default index.html (default portal)
+    get '/': ->
+      @title = 'Bootstrap portal'
+      @stylesheet = '/public/css/smoothness/jquery-ui.css'
+      render 'index', layout:no
 
-  view index: ->
-    doctype 5
-    html ->
-      head ->
-        title @title
-        link rel:'stylesheet', href:@stylesheet
-        # Zappa standard set
-        script src: '/socket.io/socket.io.js'
-        script src: '/zappa/jquery.js'
-        script src: '/zappa/sammy.js'
-        script src: '/zappa/zappa.js'
-        # CCNQ3 standard set
-        script src: '/public/js/jquery-ui.js'
-        script src: '/public/js/jquery.validate.js'
-        # Start the show
-        script src: '/index.js'
+    view index: ->
+      doctype 5
+      html ->
+        head ->
+          title @title
+          link rel:'stylesheet', href:@stylesheet
+          # Zappa standard set
+          script src: '/socket.io/socket.io.js'
+          script src: '/zappa/jquery.js'
+          script src: '/zappa/sammy.js'
+          script src: '/zappa/zappa.js'
+          # CCNQ3 standard set
+          script src: '/public/js/jquery-ui.js'
+          script src: '/public/js/jquery.validate.js'
+          # Start the show
+          script src: '/index.js'
 
-      body ->
+        body ->
 
-        header ->
-          h1 @title or "Bootstrap portal"
+          header ->
+            h1 @title or "Bootstrap portal"
 
-        div id:'content', ->
-          noscript ->
-            div class:'error', -> 'Please enable Javascript in your web browser.'
+          div id:'content', ->
+            noscript ->
+              div class:'error', -> 'Please enable Javascript in your web browser.'
 
-        footer ->
-          p '(c) 2011 Stéphane Alnet'
+          footer ->
+            p '(c) 2011 Stéphane Alnet'
 
-  client '/index.js': ->
+    client '/index.js': ->
 
-    get '#/': ->
+      get '#/': ->
 
-      $('#content').load '/content.html', ->
-        portal_scripts = ['login','recover','register']
-        $.getScript("/u/#{name}.js") for name in portal_scripts
+        $('#content').load '/content.html', ->
+          portal_scripts = ['login','recover','register']
+          $.getScript("/u/#{name}.js") for name in portal_scripts
 
-        $.getScript("/roles/login.js")
+          $.getScript("/roles/login.js")
 
-  get '/content.html': ->
-    if request.session.logged_in?
-      render 'content', layout:no
-    else
-      render 'public', layout:no
+    get '/content.html': ->
+      if request.session.logged_in?
+        render 'content', layout:no
+      else
+        render 'public', layout:no
 
-  view public: ->
-    div id:'login_container'
-    div id:'register_container'
-    div id:'password_recovery_container'
+    view public: ->
+      div id:'login_container'
+      div id:'register_container'
+      div id:'password_recovery_container'
 
-  view content: ->
-    div -> "You are currently signed in, congratulations!"
+    view content: ->
+      div -> "You are currently signed in, congratulations!"
 
-  # Proxy all CouchDB accesses.
-  httpProxy = require 'http-proxy'
-  def proxy: new httpProxy.HttpProxy()
+    # Proxy all CouchDB accesses.
+    httpProxy = require 'http-proxy'
+    def proxy: new httpProxy.HttpProxy()
 
-  get /^\/(_session|_users|provisioning|billing|cdr|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})($|\/)/, ->
-    console.log "Proxying"
-    proxy.proxyRequest request, response, { host:config.proxy.host, port:config.proxy.port }
+    get /^\/(_session|_users|provisioning|billing|cdr|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})($|\/)/, ->
+      console.log "Proxying"
+      proxy.proxyRequest request, response, { host:config.proxy.host, port:config.proxy.port }

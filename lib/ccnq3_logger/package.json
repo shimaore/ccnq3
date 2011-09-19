@@ -5,7 +5,9 @@
   "keywords": "ccnq3",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
   "main": "lib/ccnq3_logger.js",
-  "dependencies": { },
+  "dependencies": {
+    "ccnq3_config": ">=0.1"
+  },
   "scripts": { "install": "coffee -c lib/ccnq3_logger.coffee" },
   "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },
   "ok": true

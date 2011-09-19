@@ -4,68 +4,68 @@
 # Released under the AGPL3 license
 ###
 
-config = require('ccnq3_config').config
+require('ccnq3_config').get (config)->
 
-zappa = require 'zappa'
-zappa.run config.sotel_portal.port, config.sotel_portal.hostname, ->
+  zappa = require 'zappa'
+  zappa.run config.sotel_portal.port, config.sotel_portal.hostname, ->
 
-  # Configuration
-  ccnq3_config = require 'ccnq3_config'
-  config = ccnq3_config.config
+    # Configuration
+    ccnq3_config = require 'ccnq3_config'
+    ccnq3_config.get (config)->
 
-  # Session store
-  express = require 'express'
-  if config.session?.memcached_store
-    MemcachedStore = require 'connect-memcached'
-    store = new MemcachedStore config.session.memcached_store
-  if config.session?.redis_store
-    RedisStore = require('connect-redis')(express)
-    store = new RedisStore config.session.redis_store
-  if config.session?.couchdb_store
-    CouchDBStore = require('connect-couchdb')(express)
-    store = new CouchDBStore config.sessions.couchdb_store
-  if not store
-    throw error:"No session store is configured in #{config_location}."
+      # Session store
+      express = require 'express'
+      if config.session?.memcached_store
+        MemcachedStore = require 'connect-memcached'
+        store = new MemcachedStore config.session.memcached_store
+      if config.session?.redis_store
+        RedisStore = require('connect-redis')(express)
+        store = new RedisStore config.session.redis_store
+      if config.session?.couchdb_store
+        CouchDBStore = require('connect-couchdb')(express)
+        store = new CouchDBStore config.sessions.couchdb_store
+      if not store
+        throw error:"No session store is configured in #{config_location}."
 
-  use 'logger'
-  , 'bodyParser'
-  , 'cookieParser'
-  , session: { secret: config.session.secret, store: store }
-  , 'methodOverride'
+      use 'logger'
+      , 'bodyParser'
+      , 'cookieParser'
+      , session: { secret: config.session.secret, store: store }
+      , 'methodOverride'
 
-  def config: config
+      def config: config
 
-  def cdb: require 'cdb'
+      def cdb: require 'cdb'
 
-  # Let Zappa serve it owns versions.
-  enable 'serve jquery', 'serve sammy'
+      # Let Zappa serve it owns versions.
+      enable 'serve jquery', 'serve sammy'
 
-  # applications/portal
-  portal_modules = ['login','profile','recover','register']
-  include __dirname + "/../node_modules/ccnq3_portal/zappa/#{name}.coffee" for name in portal_modules
+      # applications/portal
+      portal_modules = ['login','profile','recover','register']
+      include __dirname + "/../node_modules/ccnq3_portal/zappa/#{name}.coffee" for name in portal_modules
 
-  # applications/roles
-  roles_modules = ['login','admin','replicate']
-  include __dirname + "/../node_modules/ccnq3_roles/zappa/#{name}.coffee" for name in roles_modules
+      # applications/roles
+      roles_modules = ['login','admin','replicate']
+      include __dirname + "/../node_modules/ccnq3_roles/zappa/#{name}.coffee" for name in roles_modules
 
-  # This gets everything started.
-  coffee '/p/main.js': ->
-    $(document).ready ->
-      default_scripts = [
-          '/public/js/jquery-ui',
-          '/public/js/jquery.validate',
-          '/public/js/jquery.jsonforms',
-          # '/public/js/sammy',
-          # '/public/js/jquery.deserialize',
-          '/public/js/jquery.smartWizard-2.0',
-          '/p/content'
-      ]
-      for s in default_scripts
-        $.getScript s + '.js'
+      # This gets everything started.
+      coffee '/p/main.js': ->
+        $(document).ready ->
+          default_scripts = [
+              '/public/js/jquery-ui',
+              '/public/js/jquery.validate',
+              '/public/js/jquery.jsonforms',
+              # '/public/js/sammy',
+              # '/public/js/jquery.deserialize',
+              '/public/js/jquery.smartWizard-2.0',
+              '/p/content'
+          ]
+          for s in default_scripts
+            $.getScript s + '.js'
 
-  include 'content.coffee'
-  include 'login.coffee'
+      include 'content.coffee'
+      include 'login.coffee'
 
-  include 'actions/default.coffee'
-  include 'actions/sip_signup.coffee'
-  include 'actions/partner_signup.coffee'
+      include 'actions/default.coffee'
+      include 'actions/sip_signup.coffee'
+      include 'actions/partner_signup.coffee'

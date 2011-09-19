@@ -17,7 +17,7 @@
   , "cdb_changes": ">=0.0.3"
   , "couchapp": "*"
   , "zappa": "0.2.0"
-  , "ccnq3_config": "*"
+  , "ccnq3_config": ">=0.1"
   , "json_req": "*"
   },
   "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },

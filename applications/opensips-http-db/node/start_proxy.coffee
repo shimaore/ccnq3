@@ -4,9 +4,9 @@
 Released under the AGPL3 license
 ###
 
-config = require('ccnq3_config').config
+require('ccnq3_config').get (config)->
 
-zappa = require 'stephane-zappa'
-zappa.run_file 'main.coffee',
-  port: [config.opensips_proxy.port]
-  hostname: config.opensips_proxy.hostname
+  zappa = require 'stephane-zappa'
+  zappa.run_file 'main.coffee',
+    port: [config.opensips_proxy.port]
+    hostname: config.opensips_proxy.hostname

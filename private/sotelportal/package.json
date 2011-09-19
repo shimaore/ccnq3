@@ -20,7 +20,7 @@
   , "zappa": "0.2.0"
   , "connect-couchdb": "*"
   , "json_req": "*"
-  , "ccnq3_config": "*"
+  , "ccnq3_config": ">=0.1"
   , "ccnq3_portal": "*"
   , "ccnq3_roles": "*"
 

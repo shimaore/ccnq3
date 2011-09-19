@@ -8,7 +8,12 @@
     "start": "./start.sh",
     "stop":  "./stop.sh"
   },
-  "dependencies": { "coffee-script": ">=1.1.1", "cdb": "*", "cdb_changes": ">=0.0.3", "ccnq3_config": "*" },
+  "dependencies": {
+    "coffee-script": ">=1.1.1"
+  , "cdb": "*"
+  , "cdb_changes": ">=0.0.3"
+  , "ccnq3_config": ">=0.1"
+  },
   "engines": { "node": ">=0.4.7" },
 
   "comment FIXME": "Add scripts to automatically handle database creation/push etc.",

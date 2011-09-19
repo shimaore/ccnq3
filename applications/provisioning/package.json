@@ -10,7 +10,11 @@
   "scripts": {
     "couchapps": "cd couchapps && coffee install.coffee"
   },
-  "dependencies": { "cdb": "*", "couchapp": "*", "ccnq3_config": "*" },
+  "dependencies": {
+    "cdb": "*"
+  , "couchapp": "*"
+  , "ccnq3_config": ">=0.1"
+  },
   "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },
 
   "ok": true

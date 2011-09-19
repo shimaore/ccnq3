@@ -9,12 +9,12 @@ host = require './host.coffee'
 
 # Load Configuration
 ccnq3_config = require 'ccnq3_config'
-config = ccnq3_config.config
+ccnq3_config.get (config) ->
 
-# Install the local (bootstrap) host in the database.
-hostname = config.host
+  # Install the local (bootstrap) host in the database.
+  hostname = config.host
 
-host.record config, hostname, config.users.couchdb_uri, config.provisioning.couchdb_uri, (new_config,cb)->
-    ccnq3_config.update new_config
+  host.record config, hostname, config.users.couchdb_uri, config.provisioning.couchdb_uri, (new_config,cb)->
+      ccnq3_config.update new_config
 
-    cb? new_config
+      cb? new_config

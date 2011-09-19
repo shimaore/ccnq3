@@ -5,8 +5,7 @@ couchapp = require 'couchapp'
 push_script = (uri, script,cb) ->
   couchapp.createApp require("./#{script}"), uri, (app)-> app.push(cb)
 
-# Load Configuration
-config = require('ccnq3_config').config
+require('ccnq3_config').get (config)->
 
-uri = config.users.couchdb_uri
-push_script uri, './main'
+  uri = config.users.couchdb_uri
+  push_script uri, './main'

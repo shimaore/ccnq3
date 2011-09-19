@@ -7,11 +7,12 @@ push_script = (uri,script,cb) ->
   couchapp.createApp require("./#{script}"), uri, (app)-> app.push(cb)
 
 # Load Configuration
-config = require('ccnq3_config').config
+cfg = require 'ccnq3_config'
 
 # ==== Provisioning ====
-uri = config.provisioning.couchdb_uri
-cdb.new(uri).create ->
+cfg.get (config) ->
+  uri = config.provisioning.couchdb_uri
+  cdb.new(uri).create ->
 
-  # These couchapps are available to provisioning_admin (and _admin) users.
-  push_script uri, 'main'
+    # These couchapps are available to provisioning_admin (and _admin) users.
+    push_script uri, 'main'

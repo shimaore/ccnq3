@@ -9,53 +9,52 @@ couchapp = require 'couchapp'
 push_script = (uri,script,cb) ->
   couchapp.createApp require("./#{script}"), uri, (app)-> app.push(cb)
 
-# Local configuration file
-config = require('ccnq3_config').config
-
 util = require 'util'
 qs = require 'querystring'
 child_process = require 'child_process'
 
 cdb = require 'cdb'
-users_cdb     = cdb.new config.users.couchdb_uri
 
-cdb_changes = require 'cdb_changes'
+require('ccnq3_config').get (config)->
+  users_cdb     = cdb.new config.users.couchdb_uri
 
-options =
-  uri: config.users.couchdb_uri
-  filter_name: 'portal/confirmed'
+  cdb_changes = require 'cdb_changes'
 
-cdb_changes.monitor options, (user_doc) ->
-  if user_doc.error?
-    return util.log(user_doc.error)
+  options =
+    uri: config.users.couchdb_uri
+    filter_name: 'portal/confirmed'
 
-  # Typically target_db_name will be a UUID
-  util.log "Processing changes for #{user_doc.name}"
-  target_db_name = user_doc.user_database
-  if not target_db_name
-    return util.log "No user_database provided for #{user_doc.name}"
-  target_db_uri  = config.users.userdb_base_uri + '/' + target_db_name
-  target_db      = cdb.new target_db_uri
+  cdb_changes.monitor options, (user_doc) ->
+    if user_doc.error?
+      return util.log(user_doc.error)
 
-  target_db.exists (it_does_exist) ->
+    # Typically target_db_name will be a UUID
+    util.log "Processing changes for #{user_doc.name}"
+    target_db_name = user_doc.user_database
+    if not target_db_name
+      return util.log "No user_database provided for #{user_doc.name}"
+    target_db_uri  = config.users.userdb_base_uri + '/' + target_db_name
+    target_db      = cdb.new target_db_uri
 
-    # Nothing to do if the database already exists
-    return if it_does_exist
+    target_db.exists (it_does_exist) ->
 
-    # Create the database
-    target_db.create ->
+      # Nothing to do if the database already exists
+      return if it_does_exist
 
-        # Make sure the user can access it.
-        target_db.security (p) ->
+      # Create the database
+      target_db.create ->
 
-          p.readers =
-            names: [ user_doc.name ]
+          # Make sure the user can access it.
+          target_db.security (p) ->
 
-        # Restrict number of available past revisions.
-        revs_limit =
-          method: 'PUT'
-          uri: '_revs_limit'
-          body: 1
+            p.readers =
+              names: [ user_doc.name ]
 
-        target_db.req revs_limit, (r) ->
-          if r.error then return util.log r.error
+          # Restrict number of available past revisions.
+          revs_limit =
+            method: 'PUT'
+            uri: '_revs_limit'
+            body: 1
+
+          target_db.req revs_limit, (r) ->
+            if r.error then return util.log r.error

@@ -37,21 +37,21 @@ run_handler = (code,old_config,new_config) ->
 # Main
 
 util = require 'util'
-config = require('ccnq3_config').config
 cdb_changes = require 'cdb_changes'
 
-options =
-  uri: config.provisioning.couchdb_uri
-  filter_name: "host/hostname"
-  filter_params:
-    hostname: config.host
+require('ccnq3_config').get (config) ->
+  options =
+    uri: config.provisioning.couchdb_uri
+    filter_name: "host/hostname"
+    filter_params:
+      hostname: config.host
 
-new_config = config
+  new_config = config
 
-cdb_changes.monitor options, (p) ->
-  if p.error? then return util.log(p.error)
+  cdb_changes.monitor options, (p) ->
+    if p.error? then return util.log(p.error)
 
-  [old_config,new_config] = [new_config,p]
+    [old_config,new_config] = [new_config,p]
 
-  for handler in new_config.change_handlers
-    run_handler handler, old_config, new_config
+    for handler in new_config.change_handlers
+      run_handler handler, old_config, new_config

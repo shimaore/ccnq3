@@ -6,78 +6,78 @@ Released under the AGPL3 license
 
 # Local configuration file
 
-config = require('ccnq3_config').config
+require('ccnq3_config').get (config)->
 
-util = require 'util'
-querystring = require 'querystring'
-crypto = require 'crypto'
+  util = require 'util'
+  querystring = require 'querystring'
+  crypto = require 'crypto'
 
-cdb = require 'cdb'
-users_cdb = cdb.new (config.users.couchdb_uri)
+  cdb = require 'cdb'
+  users_cdb = cdb.new (config.users.couchdb_uri)
 
-mailer = require 'nodemailer'
+  mailer = require 'nodemailer'
 
-mailer.SMTP     = config.mailer.SMTP
-mailer.sendmail = config.mailer.sendmail
+  mailer.SMTP     = config.mailer.SMTP
+  mailer.sendmail = config.mailer.sendmail
 
-random_password = require 'password'
+  random_password = require 'password'
 
-sha1_hex = (t) ->
-  return crypto.createHash('sha1').update(t).digest('hex')
+  sha1_hex = (t) ->
+    return crypto.createHash('sha1').update(t).digest('hex')
 
 
-cdb_changes = require 'cdb_changes'
-options =
-  uri: config.users.couchdb_uri
-  filter_name: "portal/send_password"
-cdb_changes.monitor options, (p) ->
-  if p.error?
-    return util.log(p.error)
+  cdb_changes = require 'cdb_changes'
+  options =
+    uri: config.users.couchdb_uri
+    filter_name: "portal/send_password"
+  cdb_changes.monitor options, (p) ->
+    if p.error?
+      return util.log(p.error)
 
-  password = random_password(3)
+    password = random_password(3)
 
-  # Assume document's "name" is the email address.
-  # (There's also p.profile.email but might be an array.)
-  if not p.name? or not p.domain?
-    return util.log("Missing data: #{p.name} #{p.domain}, skipping")
+    # Assume document's "name" is the email address.
+    # (There's also p.profile.email but might be an array.)
+    if not p.name? or not p.domain?
+      return util.log("Missing data: #{p.name} #{p.domain}, skipping")
 
-  util.log "Assigning new password to #{p.name}"
+    util.log "Assigning new password to #{p.name}"
 
-  # Push the new password into the database.
-  delete p.send_password
+    # Push the new password into the database.
+    delete p.send_password
 
-  salt = sha1_hex "a"+Math.random()
-  p.salt = salt
-  p.password_sha = sha1_hex password+salt
+    salt = sha1_hex "a"+Math.random()
+    p.salt = salt
+    p.password_sha = sha1_hex password+salt
 
-  users_cdb.put p, (r) ->
-    if r.error
-      return util.log("cdb PUT failed: #{r.error}")
+    users_cdb.put p, (r) ->
+      if r.error
+        return util.log("cdb PUT failed: #{r.error}")
 
-    # Notify via email.
-    util.log "Notifying #{p.name} of new password for #{p.domain}"
+      # Notify via email.
+      util.log "Notifying #{p.name} of new password for #{p.domain}"
 
-    email_options =
-      sender: "#{config.mail_password.sender_local_part}@#{p.domain}"
-      to: p.name
-      subject: "Your password for #{p.domain}"
-      body: """
-                Someone (probably you) requested a new password for #{p.domain}.
+      email_options =
+        sender: "#{config.mail_password.sender_local_part}@#{p.domain}"
+        to: p.name
+        subject: "Your password for #{p.domain}"
+        body: """
+                  Someone (probably you) requested a new password for #{p.domain}.
 
-                Your username is: #{p.name}
-                Your new password is: #{password}
+                  Your username is: #{p.name}
+                  Your new password is: #{password}
 
-                Thank you, and welcome to our exciting new service!
-            """
-      html: """
-                <p>Someone (probably you) requested a new password for <em>#{p.domain}</em>.</p>
-                <p>Your username is <tt>#{p.name}</tt>
-                <p>Your new password is <tt>#{password}</tt>
-                </p>
-                Thank you, and welcome to our exciting new service!
-                </p>
-            """
+                  Thank you, and welcome to our exciting new service!
+              """
+        html: """
+                  <p>Someone (probably you) requested a new password for <em>#{p.domain}</em>.</p>
+                  <p>Your username is <tt>#{p.name}</tt>
+                  <p>Your new password is <tt>#{password}</tt>
+                  </p>
+                  Thank you, and welcome to our exciting new service!
+                  </p>
+              """
 
-    mailer.send_mail email_options, (err,status) ->
-      if err? or not status
-        return util.log("Email failed: #{err}")
+      mailer.send_mail email_options, (err,status) ->
+        if err? or not status
+          return util.log("Email failed: #{err}")

@@ -4,9 +4,9 @@
 Released under the AGPL3 license
 ###
 
-config = require('ccnq3_config').config
+require('ccnq3_config').get (config)->
 
-zappa = require 'zappa'
-zappa.run_file 'prepaid.coffee',
-  port: [config.prepaid.port] # 8756
-  hostname: config.prepaid.hostname # '127.0.0.1'
+  zappa = require 'zappa'
+  zappa.run_file 'prepaid.coffee',
+    port: [config.prepaid.port] # 8756
+    hostname: config.prepaid.hostname # '127.0.0.1'
