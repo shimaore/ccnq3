@@ -27,6 +27,22 @@
         auth.notify 'Signing you into the database.'
         auth.$.ajax(couchdb_options)
 
+      # Create the user database if needed.
+      profile_login = (auth,next) ->
+        auth.notify 'Validating your profile.'
+        auth.$.getJSON '/u/profile.json', (profile) ->
+          if profile.error?
+            auth.notify 'Could not access your profile.'
+            return
+          auth.notify "Welcome #{profile.name}."
+          auth.$.getJSON profile.userdb_base_uri+'/'+profile.user_database, (db_info) ->
+            if db_info.error
+              auth.notify "Waiting for your database."
+              window.setTimeout next, 10*1000
+              return
+            auth.notify ''
+            next()
+
       # Replicate the usercode applications
       usercode_replicate = (auth,next) ->
         auth.notify 'Replicating the applications.'
@@ -62,6 +78,6 @@
         auth.$.ajax(options)
 
       if extra_login?
-        couchdb_login auth, -> usercode_replicate auth, -> user_replicate auth, -> extra_login auth, next
+        couchdb_login auth, -> profile_login auth, -> usercode_replicate auth, -> user_replicate auth, -> extra_login auth, next
       else
-        couchdb_login auth, -> usercode_replicate auth, -> user_replicate auth, next
+        couchdb_login auth, -> profile_login auth, -> usercode_replicate auth, -> user_replicate auth, next

@@ -31,22 +31,6 @@ Released under the AGPL3 license
         auth.notify 'Portal sign in.'
         auth.$.ajax(ajax_options)
 
-      # Create the user database if needed.
-      profile_login = (auth,next) ->
-        auth.notify 'Validating your profile.'
-        auth.$.getJSON '/u/profile.json', (profile) ->
-          if profile.error?
-            auth.notify 'Could not access your profile.'
-            return
-          auth.notify "Welcome #{profile.name}."
-          auth.$.getJSON profile.userdb_base_uri+'/'+profile.user_database, (db_info) ->
-            if db_info.error
-              auth.notify "Waiting for your database."
-              window.setTimeout next, 10*1000
-              return
-            auth.notify ''
-            next()
-
       $('#login_container').load '/u/login.widget', ->
         $('form.main').addClass('ui-widget-content')
         $('form.validate').validate()
@@ -67,9 +51,9 @@ Released under the AGPL3 license
             window.location.reload()
 
           if $.extra_login
-            main_login auth, -> profile_login auth, -> $.extra_login auth, login_done
+            main_login auth, -> $.extra_login auth, login_done
           else
-            main_login auth, -> profile_login auth, login_done
+            main_login auth, login_done
           return false
 
         $('#logout').submit ->
