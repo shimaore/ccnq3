@@ -29,6 +29,7 @@ exports.retrieve = (config,cb) ->
 exports.update = (content) ->
   fs.writeFileSync config_location, JSON.stringify content
 
-# Attempt to retrieve the last configuration from the database,
-# and save it if appropriate.
-exports.retrieve exports.config, exports.update
+# Attempt to retrieve the last configuration from the database.
+# Note: the configuration is not saved automatically since the
+#       current process might not have proper permissions to do so.
+exports.retrieve exports.config
