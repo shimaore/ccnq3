@@ -1,14 +1,14 @@
 {
   "name": "ccnq3_roles",
-  "version": "0.0.22",
-  "description": "Portal applications for CCNQ3",
+  "version": "0.0.23",
+  "description": "User management applications for CCNQ3",
   "keywords": "",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
   "config": {
     "config_file": "/etc/ccnq3/host.json"
   },
   "scripts": {
-    "start": "daemon -n ccnq3_track_users -D \"`pwd`/agents\" -r -o daemon.debug -- ./track_users.coffee",
+    "start": "daemon -n ccnq3_track_users -o daemon.debug -D \"`pwd`/agents\" -r -- ./track_users.coffee",
     "stop":  "daemon -n ccnq3_track_users -o daemon.debug --stop",
     "couchapps": "cd couchapps && ./install.coffee"
   },
