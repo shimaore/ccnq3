@@ -14,4 +14,4 @@ uri = config.provisioning.couchdb_uri
 cdb.new(uri).create ->
 
   # These couchapps are available to provisioning_admin (and _admin) users.
-  push_script uri, 'host'
+  push_script uri, 'main'
