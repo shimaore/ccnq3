@@ -1,7 +1,7 @@
 @include = ->
 
   # Start replication from user's database back to a main database.
-  put '/roles/replicate/push/:target': ->
+  post '/roles/replicate/push/:target': ->
     if not session.logged_in?
       return send error:'Not logged in.'
 
@@ -31,7 +31,7 @@
       send r
 
   # Start replication from a main database to the user's database
-  put '/roles/replicate/pull/:source': ->
+  post '/roles/replicate/pull/:source': ->
     if not session.logged_in?
       return send error:'Not logged in.'
 
