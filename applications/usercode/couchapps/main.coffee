@@ -24,5 +24,9 @@ ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
 # Filter replication towards the user database.
 ddoc.filters.user_pull = (doc, req) ->
 
+  # Do not replicate this design document.
+  if doc._id is '_design/replicate'
+    return false
+
   # Usercode is public and can be freely replicated.
   return true
