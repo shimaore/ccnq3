@@ -1,6 +1,6 @@
 {
   "name": "ccnq3_config",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "CCNQ3 config access",
   "keywords": "ccnq3",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
