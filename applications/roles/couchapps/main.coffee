@@ -23,8 +23,8 @@ ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
   user_was = (role) ->
     oldDoc.roles?.indexOf(role) >= 0
 
-  if not oldDoc or not user_was 'confirmed'
-    for role in newDoc.roles?
+  if not newDoc._deleted and not oldDoc or not user_was 'confirmed'
+    for role in newDoc.roles
       do (role) ->
         if role.match /^(access|update):/
           throw {forbidden : "Only confirmed users might be granted account access."}
@@ -34,7 +34,7 @@ ddoc.filters.user_export = (doc,req) ->
 
   ctx = JSON.parse req.ctx
 
-  # Only allow the own user's document to be replicated.
+  # Only allow the user's own document to be replicated.
   if doc.name is ctx.name
     return true
 
