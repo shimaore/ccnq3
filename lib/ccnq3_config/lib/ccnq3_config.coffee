@@ -14,17 +14,15 @@ util.log "Using #{config_location} as configuration file."
 
 exports.location = config_location
 
-exports.config = JSON.parse fs.readFileSync config_location, 'utf8'
-
 exports.retrieve = (config,cb) ->
   username = "host:#{config.host}"
   provisioning = cdb.new config.provisioning.couchdb_uri
 
   provisioning.get username, (p) ->
     if p.error
-      return util.log "Retrieving live configuration failed: #{p.error}"
-    exports.config = p
-    cb?(p)
+      return util.log "Retrieving live configuration failed: #{p.error}, using file-based configuration."
+      cb config
+    cb p
 
 exports.update = (content) ->
   fs.writeFileSync config_location, JSON.stringify content
@@ -32,4 +30,10 @@ exports.update = (content) ->
 # Attempt to retrieve the last configuration from the database.
 # Note: the configuration is not saved automatically since the
 #       current process might not have proper permissions to do so.
-exports.retrieve exports.config
+exports.get = (cb)->
+  if exports.__config?
+    return exports.__config
+  config = JSON.parse fs.readFileSync config_location, 'utf8'
+  exports.retrieve exports.config, (config) ->
+    exports.__config = config
+    cb config
