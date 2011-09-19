@@ -37,6 +37,9 @@ else
       "couchdb_uri": "${CDB_URI}/_users"
     , "userdb_base_uri": "${CDB_URI}"
     },
+    "usercode": {
+      "couchdb_uri": "${CDB_URI}/usercode"
+    }
     "provisioning": {
       "couchdb_uri": "${CDB_URI}/provisioning"
     }
@@ -55,10 +58,15 @@ fi
 (cd && npm run-script ccnq3_roles stop >/dev/null 2>&1 || echo)
 (cd && npm run-script ccnq3_roles start)
 
+# Initialize the usercode database
+(cd && cd "${SRC}/"applications/usercode \
+    && npm install \
+    && npm run-script couchapps)
+
 # Provisioning couchapp and security
-(cd && npm install "${SRC}/"applications/provisioning)
-(cd && npm run-script ccnq3_provisioning couchapps)
-(cd && npm uninstall  ccnq3_provisioning)
+(cd && cd "${SRC}/"applications/provisioning \
+    && npm install \
+    && npm run-script couchapps)
 
 # Host provisioning couchapp and security
 (cd && npm install "${SRC}/"applications/host)
