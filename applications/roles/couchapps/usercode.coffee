@@ -13,7 +13,7 @@ ddoc =
 
 module.exports = ddoc
 
-ddoc.filters.user_export = (doc,req) ->
+ddoc.filters.user_push = (doc,req) ->
 
   ctx = JSON.parse req.ctx
 

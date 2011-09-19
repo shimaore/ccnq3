@@ -3,10 +3,6 @@
 Released under the Affero GPL3 license or above
 ###
 
-# Install:
-#   coffee -c users.coffee
-#   couchapp push users.js http://127.0.0.1:5984/_users
-
 ddoc =
   _id: '_design/replicate'
   views: {}
@@ -30,7 +26,7 @@ ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
           throw {forbidden : "Only confirmed users might be granted account access."}
 
 # Used by the replicating agent.
-ddoc.filters.user_export = (doc,req) ->
+ddoc.filters.user_pull = (doc,req) ->
 
   ctx = JSON.parse req.ctx
 
