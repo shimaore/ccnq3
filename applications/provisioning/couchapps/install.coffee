@@ -29,10 +29,6 @@ provisioning.create ->
   # These couchapps are available to provisioning_admin (and _admin) users.
   push_script uri, 'main'   # Filter replication from source to user's databases.
 
+# Also push the user-database application into the usercode repository
 uri = config.usercode.couchdb_uri
 push_script uri, 'usercode'
-
-# Attachments (user couchapp)
-couchapp = require('couchapp')
-path     = require('path')
-couchapp.loadAttachments(ddoc, path.join(__dirname, 'usercode'))
