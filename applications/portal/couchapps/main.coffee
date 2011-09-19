@@ -3,12 +3,6 @@
 Released under the Affero GPL3 license or above
 ###
 
-# Install:
-#   coffee -c users.coffee
-#   couchapp push users.js http://127.0.0.1:5984/_users
-
-couchapp = require('couchapp')
-
 ddoc =
   _id: '_design/portal'
   views: {}
@@ -27,7 +21,3 @@ ddoc.filters.confirmed = (doc,req) ->
     doc.roles?.indexOf(role) >= 0
 
   return user_is 'confirmed'
-
-# Attachments are loaded from users/*
-# var path     = require('path');
-# couchapp.loadAttachments(ddoc, path.join(__dirname, 'users'));
