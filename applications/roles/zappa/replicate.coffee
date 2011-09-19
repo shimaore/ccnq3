@@ -1,7 +1,5 @@
 @include = ->
 
-  using 'json_req'
-
   # Start replication from user's database back to a main database.
   put '/roles/replicate/push/:target': ->
     if not session.logged_in?
@@ -28,6 +26,7 @@
     # Note: This will fail if the user database does not contain
     #       the proper design document for the specified tatget,
     #       so that restrictions are enforced.
+    json_req = require 'json_req'
     json_req.request replication_req, (r) ->
       send r
 
@@ -56,5 +55,6 @@
 
     # Note: The source replicate/user_pull filter is responsible for
     #       enforcing access restrictions.
+    json_req = require 'json_req'
     json_req.request replication_req, (r) ->
       send r
