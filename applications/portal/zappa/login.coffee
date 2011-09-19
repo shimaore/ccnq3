@@ -42,7 +42,7 @@ Released under the AGPL3 license
           auth.$.getJSON profile.userdb_base_uri+'/'+profile.user_database, (db_info) ->
             if db_info.error
               auth.notify "Waiting for your database."
-              setTimeout next, 10*1000
+              window.setTimeout next, 10*1000
               return
             auth.notify ''
             next()
