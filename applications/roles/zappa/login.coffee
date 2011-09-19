@@ -37,7 +37,8 @@
           dataType:'json'
           success: (data) ->
             if not data.ok
-              auth.notify 'Replication startup failed.'
+              auth.notify 'Applications replication startup failed.'
+              return
             auth.notify ''
             next()
 
@@ -53,7 +54,8 @@
           dataType:'json'
           success: (data) ->
             if not data.ok
-              auth.notify 'Replication startup failed.'
+              auth.notify 'User replication startup failed.'
+              return
             auth.notify ''
             next()
 
