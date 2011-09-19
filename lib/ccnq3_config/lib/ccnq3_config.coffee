@@ -17,7 +17,7 @@ exports.location = config_location
 exports.config = JSON.parse fs.readFileSync config_location, 'utf8'
 
 exports.retrieve = (config,cb) ->
-  username = "host@#{config.hostname}"
+  username = "host@#{config.host}"
   provisioning = cdb.new config.provisioning.couchdb_uri
 
   provisioning.get username, (p) ->
