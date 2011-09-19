@@ -7,11 +7,7 @@
 require('ccnq3_config').get (config)->
 
   zappa = require 'zappa'
-  zappa.run config.sotel_portal.port, config.sotel_portal.hostname, ->
-
-    # Configuration
-    ccnq3_config = require 'ccnq3_config'
-    ccnq3_config.get (config)->
+  zappa.run config.sotel_portal.port, config.sotel_portal.hostname, {config}, ->
 
       # Session store
       express = require 'express'
