@@ -20,9 +20,11 @@ exports.retrieve = (config,cb) ->
 
   provisioning.get username, (p) ->
     if p.error
-      return util.log "Retrieving live configuration failed: #{p.error}, using file-based configuration."
+      util.log "Retrieving live configuration failed: #{p.error}, using file-based configuration."
       cb config
-    cb p
+    else
+      util.log "Retrieved live configuration."
+      cb p
 
 exports.update = (content) ->
   fs.writeFileSync config_location, JSON.stringify content
