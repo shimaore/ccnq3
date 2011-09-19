@@ -31,3 +31,8 @@ provisioning.create ->
 
 uri = config.usercode.couchdb_uri
 push_script uri, 'usercode'
+
+# Attachments (user couchapp)
+couchapp = require('couchapp')
+path     = require('path')
+couchapp.loadAttachments(ddoc, path.join(__dirname, 'usercode'))

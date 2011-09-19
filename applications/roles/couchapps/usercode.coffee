@@ -28,4 +28,4 @@ ddoc.filters.user_export = (doc,req) ->
 # Attachments (user couchapp)
 couchapp = require('couchapp')
 path     = require('path')
-couchapp.loadAttachments(ddoc, path.join(__dirname, 'usercode'));
+couchapp.loadAttachments(ddoc, path.join(__dirname, 'usercode'))
