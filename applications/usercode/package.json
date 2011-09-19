@@ -1,0 +1,21 @@
+{
+  "name": "ccnq3_usercode",
+  "version": "0.0.23",
+  "description": "User applications store for CCNQ3",
+  "keywords": "",
+  "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
+  "config": {
+    "config_file": "/etc/ccnq3/host.json"
+  },
+  "scripts": {
+    "couchapps": "cd couchapps && ./install.coffee"
+  },
+  "dependencies": {
+    "cdb": "*"
+  , "couchapp": "*"
+  , "ccnq3_config": "*"
+  },
+  "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },
+
+  "ok": true
+}
