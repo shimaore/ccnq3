@@ -26,16 +26,16 @@ ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
 ddoc.filters.user_pull = (doc, req) ->
   provisioning_types = ["number","endpoint","location","host"]
 
-  # The user context provided to us by the replication agent.
-  ctx = JSON.parse req.ctx
-
   # Only replicate provisioning documents.
-  if not(doc.type in provisioning_type)
+  if provisioning_type.indexOf(doc.type) < 0
     return false
 
   # They must have a valid account.
   if not doc.account
     return false
+
+  # The user context provided to us by the replication agent.
+  ctx = JSON.parse req.query.ctx
 
   for role in ctx.roles
     do (role) ->

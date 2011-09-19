@@ -14,18 +14,27 @@ ddoc =
 module.exports = ddoc
 
 ddoc.filters.user_push = (doc, req) ->
+
+  # Do not replicate design documents from the source "provisioning" database.
+  if doc._id.match /^_design/
+    return false
+
+  # Need a type
+  if not doc.type?
+    return false
+
   provisioning_types = ["number","endpoint","location","host"]
 
-  # The user context provided to us by the replication agent.
-  ctx = JSON.parse req.ctx
-
   # Only replicate provisioning documents.
-  if not(doc.type in provisioning_type)
+  if provisioning_type.indexOf(doc.type) < 0
     return false
 
   # They must have a valid account.
   if not doc.account
     return false
+
+  # The user context provided to us by the replication agent.
+  ctx = JSON.parse req.query.ctx
 
   # Ensure we only replicate documents the user actually is authorized to update.
   for role in ctx.roles
@@ -45,4 +54,4 @@ ddoc.filters.user_push = (doc, req) ->
 # Attachments (user couchapp)
 couchapp = require('couchapp')
 path     = require('path')
-couchapp.loadAttachments(ddoc, path.join(__dirname, 'usercode'));
+couchapp.loadAttachments(ddoc, path.join(__dirname, 'usercode'))

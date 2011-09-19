@@ -28,7 +28,7 @@ ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
 # Used by the replicating agent.
 ddoc.filters.user_pull = (doc,req) ->
 
-  ctx = JSON.parse req.ctx
+  ctx = JSON.parse req.query.ctx
 
   # Only allow the user's own document to be replicated.
   if doc.name is ctx.name

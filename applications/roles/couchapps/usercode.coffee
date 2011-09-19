@@ -15,7 +15,15 @@ module.exports = ddoc
 
 ddoc.filters.user_push = (doc,req) ->
 
-  ctx = JSON.parse req.ctx
+  # Do not replicate design documents from the _users database.
+  if doc._id.match /^_design/
+    return false
+
+  # If there is no name field do not bother further.
+  if not doc.name?
+    return false
+
+  ctx = JSON.parse req.query.ctx
 
   # Normally the test would be along the lines of:
   if not doc.name is ctx.name
