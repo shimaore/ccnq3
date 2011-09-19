@@ -37,7 +37,8 @@
 
     # Validate the source name format.
     # Note: this does not allow all the possible names allowed by CouchDB.
-    return send error:'Invalid target' unless @source.match /^[_a-z]+$/
+    if not @source.match /^[_a-z]+$/
+      return send error:'Invalid target'
 
     ctx =
       name: session.logged_in
