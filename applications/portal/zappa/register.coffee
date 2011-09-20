@@ -11,6 +11,16 @@
     $(document).ready ->
       $('#register_container').load '/u/register.widget', ->
 
+        $('#register-message').dialog
+          autoOpen: false
+          modal: true
+          resizable: false
+          buttons:
+            'OK': ->
+              $(@).dialog('close')
+          close: ->
+              window.location.reload()
+
         $('form.main').addClass('ui-widget-content')
         $('form.validate').validate()
         $('button,input[type="submit"],input[type="reset"]').button()
@@ -24,13 +34,17 @@
             dataType: 'json'
             success: (data) ->
               if data.ok
-                window.location.reload()
+                $('#register-message-email').html data.username
+                $('#register-message-domain').html data.domain
+                $('#register-message').dialog 'open'
               else
                 $('#register_error').html("Account creation failed: #{data.error}")
           $.ajax(ajax_options)
           return false
 
-  get '/u/register.widget': -> render 'register_widget', layout:no
+  get '/u/register.widget': ->
+    @local_part = config.mail_password.sender_local_part
+    render 'register_widget', layout:no
 
   requiring 'crypto'
   def uuid: require 'node-uuid'
@@ -68,7 +82,7 @@
           if config.users.logged_in_after_initial_registration
             session.logged_in = username
             session.roles     = []
-          return send ok:true
+          return send ok:true, username:p.username, domain:p.domain
 
   view register_widget: ->
 
@@ -78,6 +92,15 @@
         input name: _id, class: _class
       else
         input name: _id
+
+    div id:"register-message", titler:"Registration complete", ->
+      h2 -> 'Thank you...'
+      p ->
+        'For your security and protection, we need you to validate the email address you entered. Please check your inbox at '
+        span id:'register-message-email'
+        " for a message from #{@local_part}@"
+        span id:'register-message-domain'
+        ' with your automatically created password. Then you will want to return to our portal home page to log in.'
 
     form id: 'register', class: 'main validate', method: 'post', title: 'Account creation', ->
       span id: 'register_error', class: 'error'
