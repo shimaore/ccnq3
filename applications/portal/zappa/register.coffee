@@ -82,7 +82,7 @@
           if config.users.logged_in_after_initial_registration
             session.logged_in = username
             session.roles     = []
-          return send ok:true, username:p.username, domain:p.domain
+          return send ok:true, username:p.name, domain:p.domain
 
   view register_widget: ->
 
@@ -100,8 +100,7 @@
         For your security and protection, we need you to validate the email address you entered.
         Please check your inbox at
         <span id="register-message-email"></span>
-        for a message from #{@local_part}@
-        <span id="register-message-domain"></span>
+        for a message from #{@local_part}@<span id="register-message-domain"></span>
         with your automatically created password.
         Then you will want to return to our portal home page to log in.
         """
