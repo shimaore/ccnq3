@@ -93,14 +93,18 @@
       else
         input name: _id
 
-    div id:"register-message", titler:"Registration complete", ->
+    div id:"register-message", title:"Registration complete", =>
       h2 -> 'Thank you...'
-      p ->
-        'For your security and protection, we need you to validate the email address you entered. Please check your inbox at '
-        span id:'register-message-email'
-        " for a message from #{@local_part}@"
-        span id:'register-message-domain'
-        ' with your automatically created password. Then you will want to return to our portal home page to log in.'
+      p =>
+        """
+        For your security and protection, we need you to validate the email address you entered.
+        Please check your inbox at
+        <span id="register-message-email"></span>
+        for a message from #{@local_part}@
+        <span id="register-message-domain"></span>
+        with your automatically created password.
+        Then you will want to return to our portal home page to log in.
+        """
 
     form id: 'register', class: 'main validate', method: 'post', title: 'Account creation', ->
       span id: 'register_error', class: 'error'
