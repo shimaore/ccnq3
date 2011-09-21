@@ -10,6 +10,7 @@
   "scripts": {
     "start": "daemon -n sotel_portal -o daemon.debug -r -D \"`pwd`/zappa\" -- ./portal.coffee",
     "stop":  "daemon -n sotel_portal -o daemon.debug --stop"
+    "couchapps": "cd couchapps && ./install.coffee"
   },
   "dependencies": {
     "cdb": "*"
