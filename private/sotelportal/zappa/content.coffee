@@ -29,7 +29,13 @@ Fill-in the "content" div.
           else
             $('#log').html "Welcome #{profile.name}."
             # Load the applications
-            $.getScript('/p/partner_signup.js')
+            # TODO: replace by an enumeration of the _design documents in the
+            #       user database;
+            #       each of them offers a "load.js" (or do two-steps with
+            #       something à la "package.json").
+            #       (This would include dependencies like the "Interaction" list
+            #       above.)
+            $.getScript("/#{profile.user_database}/_design/partner/partner_signup.js")
 
 
   get '/p/content.html': ->
