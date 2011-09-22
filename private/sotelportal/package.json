@@ -1,6 +1,6 @@
 {
   "name": "sotel_portal",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "description": "Sotel portal",
   "keywords": "",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
@@ -10,7 +10,7 @@
   "scripts": {
     "start": "daemon -n sotel_portal -o daemon.debug -r -D \"`pwd`/zappa\" -- ./portal.coffee"
   , "stop":  "daemon -n sotel_portal -o daemon.debug --stop"
-  , "build": "coffee -c couchapps/*/*.coffee"
+  , "preinstall": "coffee -c couchapps/*/*.coffee"
   , "couchapps": "cd couchapps && ./install.coffee"
   },
   "dependencies": {
