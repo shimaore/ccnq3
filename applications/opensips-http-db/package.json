@@ -8,9 +8,8 @@
     "config_file": "/etc/ccnq3/host.json"
   },
   "scripts": {
-    "start": "./start.sh",
-    "stop":  "./stop.sh",
-    "couchapps": "cd couchapps && coffee install.coffee"
+    "start": "daemon -n ccnq3_opensips_http_db -o daemon.debug -D "`pwd`/node" -r -- ./start_proxy.coffee"
+  , "stop":  "daemon -n ccnq3_opensips_http_db -o daemon.debug --stop"
   },
   "dependencies": {
     "cdb": "*"
