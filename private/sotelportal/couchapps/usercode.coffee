@@ -4,7 +4,7 @@ Released under the Affero GPL3 license or above
 ###
 
 ddoc =
-  _id: '_design/partner'
+  _id: '_design/sotel_portal'
   filters: {}
 
 module.exports = ddoc

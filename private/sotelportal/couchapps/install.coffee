@@ -8,20 +8,20 @@ push_script = (uri, script,cb) ->
 
 require('ccnq3_config').get (config)->
 
-  # Create the partner database.
+  # Create the sotel_portal database.
   uri = config.sotel_portal.couchdb_uri
-  partner = cdb.new(uri)
-  partner.create ->
+  sotel_portal = cdb.new(uri)
+  sotel_portal.create ->
 
     # Set the security object for the provisioning database.
-    partner.security (p)->
+    sotel_portal.security (p)->
       p.admins ||= {}
       p.admins.roles ||= []
-      p.admins.roles.push("partner_admin") if p.admins.roles.indexOf("partner_admin") < 0
+      p.admins.roles.push("sotel_portal_admin") if p.admins.roles.indexOf("sotel_portal_admin") < 0
       p.readers ||= {}
       p.readers.roles ||= []
-      p.readers.roles.push("partner_writer") if p.readers.roles.indexOf("partner_writer") < 0
-      p.readers.roles.push("partner_reader") if p.readers.roles.indexOf("partner_reader") < 0
+      p.readers.roles.push("sotel_portal_writer") if p.readers.roles.indexOf("sotel_portal_writer") < 0
+      p.readers.roles.push("sotel_portal_reader") if p.readers.roles.indexOf("sotel_portal_reader") < 0
 
     # These couchapps are available to provisioning_admin (and _admin) users.
     push_script uri, 'main'   # Filter replication from source to user's databases.

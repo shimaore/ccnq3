@@ -14,7 +14,7 @@ ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
   user_is = (role) ->
     userCtx.roles?.indexOf(role) >= 0
 
-  if not user_is('partner_writer') and not user_is('_admin')
+  if not user_is('sotel_portal_writer') and not user_is('_admin')
     throw forbidden:'Not authorized to write in this database, roles = #{userCtx.roles?.join(",")}.'
 
 
