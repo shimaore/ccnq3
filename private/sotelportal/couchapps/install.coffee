@@ -27,5 +27,5 @@ require('ccnq3_config').get (config)->
     push_script uri, 'main'   # Filter replication from source to user's databases.
 
   # Also push the user-database application into the usercode repository
-  uri = config.usercode.couchdb_uri
-  push_script uri, 'usercode'
+  usercode_uri = config.usercode.couchdb_uri
+  push_script usercode_uri, 'usercode'

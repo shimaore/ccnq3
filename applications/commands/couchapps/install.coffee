@@ -10,8 +10,8 @@ push_script = (uri,script,cb) ->
 require('ccnq3_config').get (config)->
 
   # ==== Commands ====
-  uri = config.commands.couchdb_uri
-  commands = cdb.new(uri)
+  commands_uri = config.commands.couchdb_uri
+  commands = cdb.new(commands_uri)
   commands.create ->
 
     commands.security (p)->
@@ -24,11 +24,11 @@ require('ccnq3_config').get (config)->
       p.readers.roles("commands_writer")    if p.readers.roles.indexOf("commands_reader") < 0
       p.readers.roles("host")               if p.readers.roles.indexOf("host") < 0
 
-    push_script uri, 'commands'
+    push_script commands_uri, 'commands'
 
   # ==== Logger ====
-  uri = config.logger.couchdb_uri
-  logger = cdb.new(uri)
+  logger_uri = config.logger.couchdb_uri
+  logger = cdb.new(logger_uri)
   logger.create ->
 
     logger.security (p)->
@@ -41,4 +41,4 @@ require('ccnq3_config').get (config)->
       p.readers.roles.push("logger_writer") if p.readers.roles.indexOf("logger_reader") < 0
       p.readers.roles.push("host")          if p.readers.roles.indexOf("host") < 0
 
-    push_script uri, 'logger'
+    push_script logger_uri, 'logger'
