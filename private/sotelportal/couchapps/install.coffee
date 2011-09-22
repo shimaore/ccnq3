@@ -9,7 +9,7 @@ push_script = (uri, script,cb) ->
 require('ccnq3_config').get (config)->
 
   # Create the partner database.
-  uri = config.partner.couchdb_uri
+  uri = config.sotel_portal.couchdb_uri
   partner = cdb.new(uri)
   partner.create ->
 
