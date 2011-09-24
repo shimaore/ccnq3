@@ -11,8 +11,8 @@ cfg = require 'ccnq3_config'
 
 # ==== Provisioning ====
 cfg.get (config) ->
-  uri = config.provisioning.couchdb_uri
-  cdb.new(uri).create ->
+  provisioning_uri = config.provisioning.couchdb_uri
+  cdb.new(provisioning_uri).create ->
 
     # These couchapps are available to provisioning_admin (and _admin) users.
-    push_script uri, 'main'
+    push_script provisioning_uri, 'main'

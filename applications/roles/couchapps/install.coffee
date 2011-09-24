@@ -10,7 +10,8 @@ push_script = (uri, script,cb) ->
 require('ccnq3_config').get (config)->
 
   # Set the security object for the _users source database.
-  users = cdb.new config.users.couchdb_uri
+  users_uri = config.users.couchdb_uri
+  users = cdb.new users_uri
   users.security (p)->
     p.admins ||= {}
     p.admins.roles ||= []
@@ -21,9 +22,8 @@ require('ccnq3_config').get (config)->
     p.readers.roles.push("users_reader") if p.readers.roles.indexOf("users_reader") < 0
 
   # Installation on source ('_users') database
-  uri = config.users.couchdb_uri
-  push_script uri, './main'
+  push_script users_uri, './main'
 
   # Installation into usercode database
-  uri = config.usercode.couchdb_uri
-  push_script uri, './usercode'
+  usercode_uri = config.usercode.couchdb_uri
+  push_script usercode_uri, './usercode'

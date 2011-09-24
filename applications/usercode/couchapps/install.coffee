@@ -10,8 +10,8 @@ push_script = (uri, script,cb) ->
 require('ccnq3_config').get (config)->
 
   # Create the usercode database.
-  uri = config.usercode.couchdb_uri
-  usercode = cdb.new(uri)
+  usercode_uri = config.usercode.couchdb_uri
+  usercode = cdb.new(usercode_uri)
   usercode.create ->
 
     # Set the security object for the usercode database.
@@ -26,6 +26,6 @@ require('ccnq3_config').get (config)->
 
       # (Write access is restricted by the validator.)
 
-    push_script uri, 'main'   # Filter replication from source to user's databases.
+    push_script usercode_uri, 'main'   # Filter replication from source to user's databases.
 
   # There is no "usercode" component for the "usercode" database.

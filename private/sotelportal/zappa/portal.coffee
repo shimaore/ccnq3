@@ -64,4 +64,4 @@ require('ccnq3_config').get (config)->
 
       include 'actions/default.coffee'
       include 'actions/sip_signup.coffee'
-      include 'actions/partner_signup.coffee'
+      # include 'actions/partner_signup.coffee'

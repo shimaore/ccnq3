@@ -6,8 +6,8 @@ cdb = require 'cdb'
 # Load Configuration
 require('ccnq3_config').get (config)->
 
-  uri = config.prepaid.couchdb_uri
+  prepaid_uri = config.prepaid.couchdb_uri
 
-  cdb.new(uri).create ->
+  cdb.new(prepaid_uri).create ->
 
-    couchapp.createApp require("./prepaid"), uri, (app)-> app.push()
+    couchapp.createApp require("./prepaid"), prepaid_uri, (app)-> app.push()
