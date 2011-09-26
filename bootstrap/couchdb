@@ -34,4 +34,7 @@ sudo chown couchdb.couchdb "${COUCHDB_CONFIG}"
 
 sudo /etc/init.d/couchdb start
 
+# curl -X PUT "http://127.0.0.1:5984/_config/admins/admin" -d "${ADMIN_PASSWORD}"
+# curl -X PUT "http://127.0.0.1:5984/_config/couch_httpd_auth/require_valid_user" -d "true"
+
 echo '*** END Install CouchDB Completed OK.'
