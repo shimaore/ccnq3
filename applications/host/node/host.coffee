@@ -85,13 +85,13 @@ exports.record = (config,hostname,users_uri,provisioning_uri,keep_provisioning,c
     if not keep_provisioning
       # Update the provisioning URI to use the host's new username and password.
       url = require 'url'
-      p = url.parse config.provisioning.couchdb_uri
-      delete p.href
-      delete p.host
-      p.auth = "#{username}:#{password}"
+      q = url.parse config.provisioning.couchdb_uri
+      delete q.href
+      delete q.host
+      q.auth = "#{username}:#{password}"
 
-    config.provisioning =
-      couchdb_uri: url.format p
+      config.provisioning =
+        couchdb_uri: url.format q
 
     provisioning.put config, (r)->
       if r.error? then return util.log r.error
