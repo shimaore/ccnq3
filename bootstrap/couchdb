@@ -10,6 +10,7 @@ echo '*** BEGIN Install CouchDB'
 sudo aptitude install -y couchdb/unstable
 
 # Install default config file
+sudo /etc/init.d/couchdb stop
 
 # Apparently using /etc/couchdb/local.d/ccnq3 does not work.
 COUCHDB_CONFIG=/etc/couchdb/local.ini
@@ -31,7 +32,6 @@ admin = ${ADMIN_PASSWORD}
 EOT
 sudo chown couchdb.couchdb "${COUCHDB_CONFIG}"
 
-sudo /etc/init.d/couchdb stop
 sudo /etc/init.d/couchdb start
 
 echo '*** END Install CouchDB Completed OK.'
