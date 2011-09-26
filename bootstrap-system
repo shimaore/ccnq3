@@ -39,7 +39,7 @@ else
     },
     "usercode": {
       "couchdb_uri": "${CDB_URI}/usercode"
-    }
+    },
     "provisioning": {
       "couchdb_uri": "${CDB_URI}/provisioning"
     }
