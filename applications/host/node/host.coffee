@@ -36,7 +36,7 @@ shell_runnable = (script) ->
 # but the bootstrap server, since all other hosts additions should
 # be done by an admin account using the "host" couchapp.)
 
-exports.record = (config,hostname,users_uri,provisioning_uri,keep_provisioning = false,cb)->
+exports.record = (config,hostname,users_uri,provisioning_uri,keep_provisioning,cb)->
   username = "host@#{hostname}"
 
   users = cdb.new users_uri
