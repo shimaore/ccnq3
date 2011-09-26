@@ -11,9 +11,6 @@ sudo aptitude install -y couchdb/unstable
 
 # Install default config file
 
-# Using 128 or higher does not work.
-ADMIN_PASSWORD=`openssl rand 64 -hex`
-
 # Apparently using /etc/couchdb/local.d/ccnq3 does not work.
 COUCHDB_CONFIG=/etc/couchdb/local.ini
 

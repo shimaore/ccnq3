@@ -19,6 +19,11 @@ if [ -e "${CONF}" ]; then
 else
   if [ "x$1" == "x" ]; then
     echo "** Proceeding with installation of CouchDB on local host ${HOSTNAME}."
+
+    # Using 128 or higher does not work.
+    ADMIN_PASSWORD=`openssl rand 64 -hex`
+
+    export ADMIN_PASSWORD
     . bootstrap/couchdb
     CDB_URI="http://admin:${ADMIN_PASSWORD}@${HOSTNAME}:5984"
   else
