@@ -13,8 +13,9 @@ ccnq3_config.get (config) ->
 
   # Install the local (bootstrap) host in the database.
   hostname = config.host
+  keep_provisioning = true # This is a bootstrap-system host.
 
-  host.record config, hostname, config.users.couchdb_uri, config.provisioning.couchdb_uri, (new_config,cb)->
+  host.record config, hostname, config.users.couchdb_uri, config.provisioning.couchdb_uri, keep_provisioning, (new_config,cb)->
       ccnq3_config.update new_config
 
       cb? new_config

@@ -36,7 +36,7 @@ shell_runnable = (script) ->
 # but the bootstrap server, since all other hosts additions should
 # be done by an admin account using the "host" couchapp.)
 
-exports.record = (config,hostname,users_uri,provisioning_uri,cb)->
+exports.record = (config,hostname,users_uri,provisioning_uri,keep_provisioning = false,cb)->
   username = "host@#{hostname}"
 
   users = cdb.new users_uri
@@ -82,12 +82,13 @@ exports.record = (config,hostname,users_uri,provisioning_uri,cb)->
 
       ]
 
-    # Update the provisioning URI to use the host's new username and password.
-    url = require 'url'
-    p = url.parse config.provisioning.couchdb_uri
-    delete p.href
-    delete p.host
-    p.auth = "#{username}:#{password}"
+    if not keep_provisioning
+      # Update the provisioning URI to use the host's new username and password.
+      url = require 'url'
+      p = url.parse config.provisioning.couchdb_uri
+      delete p.href
+      delete p.host
+      p.auth = "#{username}:#{password}"
 
     config.provisioning =
       couchdb_uri: url.format p
