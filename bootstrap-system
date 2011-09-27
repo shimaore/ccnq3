@@ -14,6 +14,7 @@ CONF=${DIR}/host.json
 HOSTNAME=`hostname`
 
 sudo mkdir -p "${DIR}"
+sudo chown `whoami` "${DIR}"
 if [ -e "${CONF}" ]; then
   echo "** WARNING: $CONF already exists"
 else
@@ -50,6 +51,7 @@ else
     }
   }
 JSON
+  sudo chown `whoami` "${CONF}"
 fi
 
 # Cleanup any previous run
