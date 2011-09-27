@@ -63,8 +63,12 @@ fi
     && npm install \
     && npm run-script couchapps)
 
-# Management of the _users database
+# Initialize the _users database.
+(cd && cd "${SRC}/"applications/portal \
+    && npm install \
+    && npm run-script couchapps)
 
+# Management of the _users database
 (cd && npm install "${SRC}/"applications/roles)
 (cd && npm run-script ccnq3_roles couchapps)
 
