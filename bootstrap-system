@@ -54,6 +54,7 @@ fi
 
 # Cleanup any previous run
 (cd && rm -rf node_modules)
+(cd && find "${SRC}" -name node_modules -print0 | xargs -0 rm -rf)
 
 # Initialize the usercode database
 (cd && cd "${SRC}/"applications/usercode \
