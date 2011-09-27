@@ -13,6 +13,13 @@ ddoc =
 
 module.exports = ddoc
 
+# Used by track_users.
+ddoc.filters.confirmed = (doc,req) ->
+  user_is = (role) ->
+    doc.roles?.indexOf(role) >= 0
+
+  return user_is 'confirmed'
+
 # Document validation.
 ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
 

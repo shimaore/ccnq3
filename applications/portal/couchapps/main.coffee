@@ -15,9 +15,3 @@ module.exports = ddoc
 
 ddoc.filters.send_password = (doc,req) ->
   return doc.send_password? and doc.send_password
-
-ddoc.filters.confirmed = (doc,req) ->
-  user_is = (role) ->
-    doc.roles?.indexOf(role) >= 0
-
-  return user_is 'confirmed'

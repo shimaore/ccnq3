@@ -22,7 +22,7 @@ require('ccnq3_config').get (config)->
 
   options =
     uri: config.users.couchdb_uri
-    filter_name: 'portal/confirmed'
+    filter_name: 'replicate/confirmed'
 
   cdb_changes.monitor options, (user_doc) ->
     if user_doc.error?
