@@ -54,7 +54,9 @@ exports.record = (config,hostname,users_uri,provisioning_uri,keep_provisioning,c
     password_sha: sha1_hex password+salt
 
   users.put p, (r)->
-    if r.error? then throw failed: r.error
+    if r.error?
+      util.log util.inspect r
+      throw failed: "Creating user record for #{username}"
 
     # Add the host in the main CDB's provisioning table,
     # with two initialization runnables.
@@ -94,5 +96,7 @@ exports.record = (config,hostname,users_uri,provisioning_uri,keep_provisioning,c
         couchdb_uri: url.format q
 
     provisioning.put config, (r)->
-      if r.error? then throw failed: r.error
+      if r.error?
+        util.log util.inspect r
+        throw failed: "Creating provisioning record for #{username}"
       cb? config
