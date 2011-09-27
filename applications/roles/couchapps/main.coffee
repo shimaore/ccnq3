@@ -32,6 +32,8 @@ ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
         if role.match /^(access|update):/
           throw {forbidden : "Only confirmed users might be granted account access."}
 
+  return
+
 # Used by the replicating agent.
 ddoc.filters.user_pull = (doc,req) ->
 
