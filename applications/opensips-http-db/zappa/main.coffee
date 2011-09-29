@@ -63,11 +63,14 @@ require('ccnq3_config').get (config)->
     get '/subscriber/': -> # auth_table
 
     get '/location/': -> # usrloc_table
+
       if @k is 'username'
         loc_db.get @v, (p) ->
           if p.error
-            return send ""
-          return send first_line('usrloc',@c) + value_line(p,@c)
+            return send first_line('usrloc',@c)
+          else
+            return send first_line('usrloc',@c) + value_line(p,@c)
+
       if not @k?
         # Rewrite-me: will load everything in memory and build the reply in memory.
         # Instead use a CouchDB "list"
