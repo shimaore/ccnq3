@@ -34,6 +34,9 @@ require('ccnq3_config').get (config)->
         user_agent: 'string'
         socket: 'string'
         methods: 'int'
+      version:
+        table_name: 'string'
+        table_version: 'int'
 
     use 'bodyParser', 'logger'
 
@@ -96,4 +99,4 @@ require('ccnq3_config').get (config)->
         location: 1006
         subscriber: 7
 
-      return line(["int"]) + line([versions[@v]])
+      return first_line('version',@c) + value_line({table_version:versions[@v]},@c)
