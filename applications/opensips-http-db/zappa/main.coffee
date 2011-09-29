@@ -4,11 +4,13 @@
 Released under the AGPL3 license
 ###
 
-app 'opensips', (server) ->
-  server.use (require 'express').bodyDecoder()
+require('ccnq3_config').get (config)->
 
-  # Get configuration
-  require('ccnq3_config').get (config)->
+  zappa = require 'zappa'
+  zappa.run config.opensips_proxy.port, config.opensips_proxy.hostname, {config}, ->
+
+
+    use 'bodyParser', 'logger'
 
     def config: config
 
