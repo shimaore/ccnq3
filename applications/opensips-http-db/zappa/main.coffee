@@ -245,15 +245,19 @@ require('ccnq3_config').get (config)->
     get '/dr_gateways/': ->
       if not @k?
         # For now assume the gateways for a given host are stored in that host's configuration record.
+        # TODO: this would need to be queried dynamically..
         from_array 'dr_gateways', config.gateways, @c
 
       return
 
     get '/dr_rules/': ->
+      ""
 
     get '/dr_groups/': ->
+      ""
 
     get '/dr_gw_lists/': ->
+      ""
 
     get '/version/': ->
       return unless @k is 'table_name' and @c is 'table_version'
