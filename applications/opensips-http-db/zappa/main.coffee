@@ -12,11 +12,28 @@ require('ccnq3_config').get (config)->
     cdb = require 'cdb'
     db = cdb.new config.provisioning.couchdb_uri
 
-    # Replace loc_db with e.g. redis-store
-    loc_db = cdb.new config.provisioning.couchdb_uri
+    loc_db = cdb.new config.opensips_proxy.usrloc_uri
 
     def db: db
     def loc_db: loc_db
+
+    def column_types:
+      usrloc:
+        username: 'string'
+        domain: 'string'
+        contact: 'string'
+        received: 'string'
+        path: 'string'
+        expires: 'string' # datetime
+        q: 'float'
+        callid: 'string'
+        cseq: 'int'
+        last_modified: 'string' # datetime
+        flags: 'int'
+        cflags: 'int'
+        user_agent: 'string'
+        socket: 'string'
+        methods: 'int'
 
     use 'bodyParser', 'logger'
 
@@ -24,6 +41,12 @@ require('ccnq3_config').get (config)->
 
     def line: (a) ->
       a.join("\t") + "\n"
+
+    def first_line: (table,c)->
+      return line( column_types[table][col] for col in c.split ',' )
+
+    def value_line: (hash,c)->
+      return line( hash[col] for col in c.split ',' )
 
     # Typical:
     #   GET /domain/?k=domain&v=${requested_domain}&c=domain
@@ -37,11 +60,19 @@ require('ccnq3_config').get (config)->
     get '/subscriber/': -> # auth_table
 
     get '/location/': -> # usrloc_table
-      if @k is 'username' and @c is 'username'
-        loc_db.get "endpoint:#{@v}", (p) ->
+      if @k is 'username'
+        loc_db.get @v, (p) ->
           if p.error
             return send ""
-          return send line(["string"]) + line([@v])
+          return send first_line('usrloc',@c) + value_line(p,@c)
+      if not @k?
+        # Rewrite-me: will load everything in memory and build the reply in memory.
+        # Instead use a CouchDB "list"
+        #   loc_db.req "_design/http_db/_list/usrloc/_all_docs"
+        # and figure out how to stream the response through Zappa.
+        loc_db.req {uri:'_all_docs?include_docs=true'}, (t) ->
+          return first_line('usrloc',@c) +
+                 join( value_line(l,@c) for l in t.docs )
       return
 
     post '/location/': ->
