@@ -2,7 +2,7 @@
 loadmodule "usrloc.so"
 # Use usrloc-cl (DB-based)
 modparam("usrloc", "db_url",          "${db_url}")
-modparam("usrloc", "db_mode",         2)
+modparam("usrloc", "db_mode",         1) # was: 2
 modparam("usrloc", "timer_interval",  60)
 modparam("usrloc", "desc_time_order", 1)
 modparam("usrloc", "nat_bflag",       ${bflag_request_mp_callee})
