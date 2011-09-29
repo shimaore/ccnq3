@@ -127,8 +127,10 @@ require('ccnq3_config').get (config)->
     post '/location': ->
 
       if @query_type is 'insert'
-        doc = {}
-        doc[@k.split ','] = @v.split ','
+        names = @k.split ','
+        values = @v.split ','
+        doc[names[i]] = values[i] for i in [0..names.length]
+
         loc_db.get doc.username, (p) =>
           if p.error then return send ""
           p[k] = v for k,v of doc
