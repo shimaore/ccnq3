@@ -47,7 +47,10 @@ class cdb
     options =
       uri: querystring.escape(id)
       method: 'HEAD'
-    @req options, cb
+    @req options, (args...) ->
+      if args[0]?.headers?.etag?
+        args[0].headers.etag.replace '"', ''
+      cb? args..
 
   get: (id,cb) ->
     options =
