@@ -124,7 +124,7 @@ require('ccnq3_config').get (config)->
 
       return
 
-    post '/location/': ->
+    post '/location': ->
 
       if @query_type is 'insert'
         doc = {}
