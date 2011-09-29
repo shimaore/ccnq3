@@ -302,10 +302,12 @@ require('ccnq3_config').get (config)->
 
     get '/dr_groups/': ->
 
-      if @k is 'username'
-        db.req {uri:"#{config._id}/dr_groups.json"}, (t) =>
+      if @k is 'username,domain'
+        [username,domain] = @v.split ','
+        db.get "number/#{username}@#{domain}"}, (t) =>
           if t.error? then return send ""
-          from_hash 'dr_groups', t[@v], @c
+          from_hash 'dr_groups', t, @c
+        return
 
       throw 'not handled'
 
