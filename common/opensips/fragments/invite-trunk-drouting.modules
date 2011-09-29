@@ -5,7 +5,6 @@ modparam("drouting", "drr_table", "dr_rules")
 modparam("drouting", "drg_table", "dr_groups")
 modparam("drouting", "drl_table", "dr_gw_lists")
 
-modparam("drouting", "attrs_avp",      '$avp(dr_attrs)')
 modparam("drouting", "gw_attrs_avp",   '$avp(dr_gw_attrs)')
 modparam("drouting", "rule_attrs_avp", '$avp(dr_rule_attrs)')
 
