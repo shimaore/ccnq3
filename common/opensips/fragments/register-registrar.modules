@@ -21,7 +21,7 @@ modparam("registrar", "min_expires", 60)
 modparam("registrar", "max_expires", 3600)
 modparam("registrar", "default_expires", 300)
 # Append Branches is the default
-modparam("registrar", "append_branches", 1)
+# modparam("registrar", "append_branches", 1)
 # No more than 10 contacts per AOR
 modparam("registrar", "max_contacts", 10)
 # RFC3261 section 20.33
