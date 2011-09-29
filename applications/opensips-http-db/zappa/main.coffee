@@ -57,7 +57,7 @@ require('ccnq3_config').get (config)->
 
     def from_array: (n,t,c) ->
       if not t? or t.length is 0 then return send ""
-      send first_line (n,c) + [ value_line(l,c) for l in t ].join('')
+      send first_line(n,c) + [ value_line(l,c) for l in t ].join('')
 
     def from_hash: (n,h,c) ->
       send first_line(n,c) + value_line(h,c)
