@@ -258,6 +258,7 @@ require('ccnq3_config').get (config)->
             attribute: attribute
             type: 2
           from_hash 'avpops', avp, @c
+        return
 
       if @k is 'username,domain,attribute'
         [username,domain,attribute] = @v.split ','
