@@ -17,6 +17,7 @@ require('ccnq3_config').get (config)->
     def db: db
     def loc_db: loc_db
 
+    # db_dbase.c lists: int, double, string, str, blob, date; str and blob are equivalent for this interface.
     column_types =
       usrloc:
         username: 'string'
@@ -24,11 +25,11 @@ require('ccnq3_config').get (config)->
         contact: 'string'
         received: 'string'
         path: 'string'
-        expires: 'string' # datetime
-        q: 'float'
+        expires: 'date'
+        q: 'double'
         callid: 'string'
         cseq: 'int'
-        last_modified: 'string' # datetime
+        last_modified: 'date'
         flags: 'int'
         cflags: 'int'
         user_agent: 'string'
