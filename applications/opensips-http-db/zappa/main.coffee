@@ -179,7 +179,7 @@ require('ccnq3_config').get (config)->
     get '/domain/': ->
       # For now assume the list is in the configuration for the host.
       if @k is 'domain'
-        db.req {uri:'#{config._id}/domains.json'}, (t) =>
+        db.req {uri:"#{config._id}/domains.json"}, (t) =>
           from_array 'domain', t, @c
 
     get '/subscriber/': -> # auth_table
@@ -262,28 +262,28 @@ require('ccnq3_config').get (config)->
 
     get '/dr_gateways/': ->
       if not @k?
-        db.req {uri:'#{config._id}/dr_gateways.json'}, (t) =>
+        db.req {uri:"#{config._id}/dr_gateways.json"}, (t) =>
           from_array 'dr_gateways', t, @c
 
       return
 
     get '/dr_rules/': -> # ?c=ruleid,groupid,prefix,timerec,priority,routeid,gwlist,attrs
       if not @k?
-        db.req {uri:'#{config._id}/dr_rules.json'}, (t) =>
+        db.req {uri:"#{config._id}/dr_rules.json"}, (t) =>
           from_array 'dr_rules', t, @c
 
       return
 
     get '/dr_groups/': ->
       if not @k?
-        db.req {uri:'#{config._id}/dr_groups.json'}, (t) =>
+        db.req {uri:"#{config._id}/dr_groups.json"}, (t) =>
           from_array 'dr_groups', t, @c
 
       return
 
     get '/dr_gw_lists/': -> # id,gwlist
       if not @k?
-        db.req {uri:'#{config._id}/dr_gw_lists.json'}, (t) =>
+        db.req {uri:"#{config._id}/dr_gw_lists.json"}, (t) =>
           from_array 'dr_gw_lists', t, @c
 
       return
