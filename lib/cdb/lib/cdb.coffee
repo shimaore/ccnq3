@@ -49,7 +49,8 @@ class cdb
       method: 'HEAD'
     @req options, (args...) ->
       if args[0]?.headers?.etag?
-        args[0].headers.etag.replace '"', ''
+        args[0]._rev = args[0].headers.etag
+        args[0]._rev.replace '"', ''
       cb? args...
 
   get: (id,cb) ->
