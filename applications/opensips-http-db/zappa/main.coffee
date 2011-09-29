@@ -139,7 +139,7 @@ require('ccnq3_config').get (config)->
       send first_line(types,c) + value_line(types,h,c)
 
 
-    unquote_value = (t,x) ->
+    def unquote_value: (t,x) ->
       if not x?
         return x
 
