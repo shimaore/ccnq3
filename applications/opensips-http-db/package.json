@@ -8,7 +8,7 @@
     "config_file": "/etc/ccnq3/host.json"
   },
   "scripts": {
-    "start": "daemon -n ccnq3_opensips_http_db -o daemon.debug -D "`pwd`" -r -- cd zappa && ./main.coffee"
+    "start": "daemon -n ccnq3_opensips_http_db -o daemon.debug -D \"`pwd`\" -r -- cd zappa && ./main.coffee"
   , "stop":  "daemon -n ccnq3_opensips_http_db -o daemon.debug --stop"
   },
   "dependencies": {
