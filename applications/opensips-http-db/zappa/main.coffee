@@ -49,10 +49,12 @@ require('ccnq3_config').get (config)->
         description: 'string'
       dr_rules:
         ruleid: 'int'
+        # keys
         groupid: 'string'
         prefix: 'string'
-        timerec: 'string'
         priority: 'int'
+        # others
+        timerec: 'string'
         routeid: 'string'
         gwlist: 'string'
         attrs: 'string'
@@ -267,6 +269,15 @@ require('ccnq3_config').get (config)->
         db.req {uri:"#{config._id}/dr_gateways.json"}, (t) =>
           if t.error? then return send ""
           from_array 'dr_gateways', t, @c
+      ###
+      my %attrs = ();
+      $attrs{realm}    = $uac_realm if defined($uac_realm) && $uac_realm ne '';
+      $attrs{user}     = $uac_user  if defined($uac_user ) && $uac_user  ne '';
+      $attrs{pass}     = $uac_pass  if defined($uac_pass ) && $uac_pass  ne '';
+      $attrs{force_mp} = $force_mp  if defined($force_mp ) && $force_mp  ne '';
+
+      my $attrs = join(';', map { "$_=$attrs{$_}" } keys(%attrs) );
+      ###
 
       return
 
