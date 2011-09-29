@@ -46,7 +46,7 @@ require('ccnq3_config').get (config)->
       quote_delimiter = '"'
       field_delimiter = "\t"
       row_delimiter = "\n"
-      [ s.replace quote_delimiter, quote_delimiter+quote_delimiter for s in a ].join(field_delimiter) + row_delimiter
+      [ (s+'').replace quote_delimiter, quote_delimiter+quote_delimiter for s in a ].join(field_delimiter) + row_delimiter
 
     def first_line: (table,c)->
       return line [ column_types[table][col] for col in c.split ',' ]
