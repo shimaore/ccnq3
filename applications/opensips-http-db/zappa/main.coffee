@@ -75,7 +75,7 @@ require('ccnq3_config').get (config)->
         # and figure out how to stream the response through Zappa.
         loc_db.req {uri:'_all_docs?include_docs=true'}, (t) =>
           return first_line('usrloc',@c) +
-                 join( value_line(l,@c) for l in t.docs )
+                 join( value_line(l,@c) for l in t.rows )
       return
 
     post '/location/': ->
