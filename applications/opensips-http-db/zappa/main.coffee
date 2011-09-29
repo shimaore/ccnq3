@@ -16,6 +16,7 @@ require('ccnq3_config').get (config)->
     loc_db = cdb.new config.provisioning.couchdb_uri
 
     def db: db
+    def loc_db: loc_db
 
     use 'bodyParser', 'logger'
 
