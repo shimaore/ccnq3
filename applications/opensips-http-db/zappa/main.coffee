@@ -130,6 +130,7 @@ require('ccnq3_config').get (config)->
       names = @k.split ','
       values = @v.split ','
       doc[names[i]] = values[i] for i in [0..names.length]
+      doc._id = "#{doc.username}@#{doc.domain}"
 
       if @query_type is 'insert'
 
@@ -139,7 +140,7 @@ require('ccnq3_config').get (config)->
 
       if @query_type is 'update'
 
-        loc_db.get doc.username, (p) =>
+        loc_db.get doc._id, (p) =>
           if p.error then return send ""
           p[k] = v for k,v of doc
           loc_db.put p, (r) =>
@@ -147,7 +148,7 @@ require('ccnq3_config').get (config)->
             send r._id
 
       if @query_type is 'delete'
-        loc_db.del doc.username, (p) =>
+        loc_db.del doc._id, (p) =>
           if p.error then return send ""
           send ""
 
