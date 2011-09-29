@@ -126,10 +126,18 @@ require('ccnq3_config').get (config)->
 
     post '/location': ->
 
+      doc = {}
+      names = @k.split ','
+      values = @v.split ','
+      doc[names[i]] = values[i] for i in [0..names.length]
+
       if @query_type is 'insert'
-        names = @k.split ','
-        values = @v.split ','
-        doc[names[i]] = values[i] for i in [0..names.length]
+
+        loc_db.put doc, (r) =>
+          if r.error then return send ""
+          send r._id
+
+      if @query_type is 'update'
 
         loc_db.get doc.username, (p) =>
           if p.error then return send ""
@@ -137,6 +145,11 @@ require('ccnq3_config').get (config)->
           loc_db.put p, (r) =>
             if r.error then return send ""
             send r._id
+
+      if @query_type is 'delete'
+        loc_db.del doc.username, (p) =>
+          if p.error then return send ""
+          send ""
 
       return
 
