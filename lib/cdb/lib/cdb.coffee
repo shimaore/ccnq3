@@ -50,7 +50,7 @@ class cdb
     @req options, (args...) ->
       if args[0]?.headers?.etag?
         args[0]._rev = args[0].headers.etag
-        args[0]._rev.replace '"', ''
+        args[0]._rev.replace /"/g, ''
       cb? args...
 
   get: (id,cb) ->
