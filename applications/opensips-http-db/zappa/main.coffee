@@ -148,7 +148,7 @@ require('ccnq3_config').get (config)->
             send r._id
 
       if @query_type is 'delete'
-        loc_db.del doc._id, (p) =>
+        loc_db.erase doc._id, (p) =>
           if p.error then return send ""
           send ""
 
