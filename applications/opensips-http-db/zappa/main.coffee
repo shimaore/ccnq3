@@ -47,6 +47,18 @@ require('ccnq3_config').get (config)->
         attrs: 'string'
         probe_mode: 'int'
         description: 'string'
+      dr_rules:
+        ruleid: 'int'
+        groupid: 'string'
+        prefix: 'string'
+        timerec: 'string'
+        priority: 'int'
+        routeid: 'string'
+        gwlist: 'string'
+        attrs: 'string'
+        description: 'string'
+      domain:
+        domain: 'string'
 
 
     use 'bodyParser', 'logger'
@@ -72,14 +84,10 @@ require('ccnq3_config').get (config)->
     helper from_hash: (n,h,c) ->
       send first_line(n,c) + value_line(h,c)
 
-    # Typical:
-    #   GET /domain/?k=domain&v=${requested_domain}&c=domain
-
     get '/domain/': ->
-      if config.opensips_proxy.domains[@v]?
-        return line(["string"]) + line([@v])
-      else
-        return ""
+      # For now assume the list is in the configuration for the host.
+      if @k is 'domain'
+        from_array 'domain', config.opensips_proxy.domains, @c
 
     get '/subscriber/': -> # auth_table
       send ""
