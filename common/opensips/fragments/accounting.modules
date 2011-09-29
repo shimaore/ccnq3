@@ -17,7 +17,6 @@
 loadmodule "acc.so"
 
 if accounting
-modparam("acc", "log_extra", "${cdr_extra}")
 
 modparam("acc", "report_cancels", 1)
 modparam("acc", "early_media", 1)
@@ -26,13 +25,15 @@ modparam("acc", "failed_transaction_flag", ${flag_failed_transaction})
 end if accounting
 
 if accounting is syslog
-  modparam("acc", "log_flag", ${flag_accounting_syslog}) # Normally not used
+  modparam("acc", "log_extra", "${cdr_extra}")
+  modparam("acc", "log_flag",        ${flag_accounting_syslog_calls})
+  modparam("acc", "log_missed_flag", ${flag_accounting_syslog_missed})
   modparam("acc", "log_level",1)
 end if accounting is syslog
 
 if accounting is flatstore
   modparam("acc", "db_extra", "${cdr_extra}")
-  modparam("acc", "db_flag", ${flag_accounting_flatstore_calls})
+  modparam("acc", "db_flag",        ${flag_accounting_flatstore_calls})
   modparam("acc", "db_missed_flag", ${flag_accounting_flatstore_missed})
   modparam("acc", "db_table_acc", "acc")
   modparam("acc", "db_table_missed_calls", "missed_calls")
@@ -40,9 +41,11 @@ if accounting is flatstore
 end if accounting is flatstore
 
 if accounting is radius
-  modparam("acc", "radius_config", "${radius_config}")
+  # Untested
+  loadmodule "aaa_radius.so"
+  modparam("aaa", "radius_config", "${radius_config}")
   # These attributes need to be defined in a "dictionary" file first.
-  modparam("acc", "radius_extra", "${radius_extra}")
-  modparam("acc", "radius_flag", ${flag_accounting_radius_calls})
-  modparam("acc", "radius_missed_flag", ${flag_accounting_radius_missed})
+  modparam("acc", "aaa_extra", "${radius_extra}")
+  modparam("acc", "aaa_flag",        ${flag_accounting_radius_calls})
+  modparam("acc", "aaa_missed_flag", ${flag_accounting_radius_missed})
 end if accounting is radius

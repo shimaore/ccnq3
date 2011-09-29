@@ -151,10 +151,10 @@ sub configure_opensips {
 
   # Handle special parameters specially
   if(exists($params->{cdr_extra})) {
-    $params->{cdr_extra} = join(';',@{$params->{cdr_extra}});
+    $params->{cdr_extra} = join(';',map { "$_=$params->{cdr_extra}->{$_}" } @{$params->{cdr_extra}});
   }
   if(exists($params->{radius_extra})) {
-    $params->{radius_extra} = join(';',@{$params->{radius_extra}});
+    $params->{radius_extra} = join(';',map { "$_=$params->{radius_extra}->{$_}" } @{$params->{radius_extra}});
   }
   if(exists($params->{listen})) {
     $params->{listen} = join('',map { "listen=$_\n" } @{$params->{listen}});
