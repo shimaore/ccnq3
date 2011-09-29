@@ -63,5 +63,6 @@ require('ccnq3_config').get (config)->
       # Versions for OpenSIPS 1.7.0
       versions =
         location: 1006
+        subscriber: 7
 
       return line(["int"]) + line([versions[@v]])
