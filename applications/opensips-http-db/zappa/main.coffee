@@ -43,13 +43,16 @@ require('ccnq3_config').get (config)->
     def config: config
 
     line = (a) ->
-      a.join("\t") + "\n"
+      quote_delimiter = '"'
+      field_delimiter = "\t"
+      row_delimiter = "\n"
+      [ s.replace quote_delimiter, quote_delimiter+quote_delimiter for s in a ].join(field_delimiter) + row_delimiter
 
     def first_line: (table,c)->
-      return line( column_types[table][col] for col in c.split ',' )
+      return line [ column_types[table][col] for col in c.split ',' ]
 
     def value_line: (hash,c)->
-      return line( hash[col] for col in c.split ',' )
+      return line [ (hash[col] or '') for col in c.split ',' ]
 
     # Typical:
     #   GET /domain/?k=domain&v=${requested_domain}&c=domain
