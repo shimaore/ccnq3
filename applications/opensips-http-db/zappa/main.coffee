@@ -134,7 +134,7 @@ require('ccnq3_config').get (config)->
         #   loc_db.req "_design/http_db/_list/usrloc/_all_docs"
         # and figure out how to stream the response through Zappa.
         loc_db.req {uri:'_all_docs?include_docs=true'}, (t) =>
-          from_array 'usrloc', t.rows, @c
+          from_array 'usrloc', (u.doc for u in t.rows), @c
 
       return
 
