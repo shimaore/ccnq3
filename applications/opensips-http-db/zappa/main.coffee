@@ -185,6 +185,9 @@ require('ccnq3_config').get (config)->
         # XXX Highly inefficient, need to use a real table.
         db.req {uri:"#{config._id}/domains.json"}, (t) =>
           from_hash 'domain', t[@v], @c
+        return
+
+      throw 'not handled'
 
     get '/subscriber/': -> # auth_table
       if @k is 'username,domain'
@@ -193,8 +196,9 @@ require('ccnq3_config').get (config)->
         db.get "endpoint:#{@username}@#{@domain}", (t) =>
           if t.error then return send ""
           from_hash 'subscriber', t, @c
+        return
 
-      return
+      throw 'not handled'
 
     get '/location/': -> # usrloc_table
 
@@ -202,6 +206,7 @@ require('ccnq3_config').get (config)->
         loc_db.get @v, (p) =>
           if p.error then return send ""
           from_hash 'usrloc', p, @c
+        return
 
       if not @k?
         # Rewrite-me: will load everything in memory and build the reply in memory.
@@ -210,8 +215,9 @@ require('ccnq3_config').get (config)->
         # and figure out how to stream the response through Zappa.
         loc_db.req {uri:'_all_docs?include_docs=true'}, (t) =>
           from_array 'usrloc', (u.doc for u in t.rows), @c
+        return
 
-      return
+      throw 'not handled'
 
     post '/location': ->
 
@@ -227,6 +233,7 @@ require('ccnq3_config').get (config)->
           loc_db.put doc, (r) =>
             if r.error then return send ""
             send r._id
+        return
 
       if @query_type is 'delete'
 
@@ -236,8 +243,9 @@ require('ccnq3_config').get (config)->
           loc_db.del doc, (p) =>
             if p.error then return send ""
             send ""
+        return
 
-      return
+      throw 'not handled'
 
     get '/avpops/': ->
 
@@ -260,8 +268,9 @@ require('ccnq3_config').get (config)->
             attribute: attribute
             type: 2
           from_hash 'avpops', avp, @c
+        return
 
-      return
+      throw 'not handled'
 
 
     get '/dr_gateways/': ->
@@ -269,6 +278,7 @@ require('ccnq3_config').get (config)->
         db.req {uri:"#{config._id}/dr_gateways.json"}, (t) =>
           if t.error? then return send ""
           from_array 'dr_gateways', t, @c
+        return
       ###
       my %attrs = ();
       $attrs{realm}    = $uac_realm if defined($uac_realm) && $uac_realm ne '';
@@ -279,15 +289,16 @@ require('ccnq3_config').get (config)->
       my $attrs = join(';', map { "$_=$attrs{$_}" } keys(%attrs) );
       ###
 
-      return
+      throw 'not handled'
 
     get '/dr_rules/': -> # ?c=ruleid,groupid,prefix,timerec,priority,routeid,gwlist,attrs
       if not @k?
         db.req {uri:"#{config._id}/dr_rules.json"}, (t) =>
           if t.error? then return send ""
           from_array 'dr_rules', t, @c
+        return
 
-      return
+      throw 'not handled'
 
     get '/dr_groups/': ->
 
@@ -296,24 +307,27 @@ require('ccnq3_config').get (config)->
           if t.error? then return send ""
           from_hash 'dr_groups', t[@v], @c
 
-      return
+      throw 'not handled'
 
     get '/dr_gw_lists/': -> # id,gwlist
       if not @k?
         db.req {uri:"#{config._id}/dr_gw_lists.json"}, (t) =>
           if t.error? then return send ""
           from_array 'dr_gw_lists', t, @c
+        return
 
-      return
+      throw 'not handled'
 
     get '/version/': ->
-      return unless @k is 'table_name' and @c is 'table_version'
+      if @k is 'table_name' and @c is 'table_version'
 
-      # Versions for OpenSIPS 1.7.0
-      versions =
-        location: 1006
-        subscriber: 7
-        dr_gateways: 4
-        dr_rules: 3
+        # Versions for OpenSIPS 1.7.0
+        versions =
+          location: 1006
+          subscriber: 7
+          dr_gateways: 4
+          dr_rules: 3
 
-      return from_hash 'version', {table_version:versions[@v]}, @c
+        return from_hash 'version', {table_version:versions[@v]}, @c
+
+      throw 'not handled'
