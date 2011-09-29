@@ -38,6 +38,16 @@ require('ccnq3_config').get (config)->
       version:
         table_name: 'string'
         table_version: 'int'
+      dr_gateways:
+        gwid: 'int'
+        type: 'int'
+        address: 'string'
+        strip: 'int'
+        pri_prefix: 'string'
+        attrs: 'string'
+        probe_mode: 'int'
+        description: 'string'
+
 
     use 'bodyParser', 'logger'
 
@@ -101,6 +111,8 @@ require('ccnq3_config').get (config)->
       if not @k?
         # For now assume the gateways for a given host are stored in that host's configuration record.
         from_array 'dr_gateways', config.gateways, @c
+
+      return
 
     get '/dr_rules/': ->
 
