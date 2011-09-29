@@ -151,7 +151,7 @@ require('ccnq3_config').get (config)->
       if t is 'date'
         d = new Date(x)
         # Format expected by db_str2time() in db/db_ut.c
-        return d.toISOString().replace 'T', ''
+        return d.toISOString().replace 'T', ' '
       # string, date, ..
       return x.toString()
 
