@@ -250,13 +250,13 @@ require('ccnq3_config').get (config)->
 
       return
 
-    get '/dr_rules/': ->
+    get '/dr_rules/': -> # ?c=ruleid,groupid,prefix,timerec,priority,routeid,gwlist,attrs
       ""
 
     get '/dr_groups/': ->
       ""
 
-    get '/dr_gw_lists/': ->
+    get '/dr_gw_lists/': -> # id,gwlist
       ""
 
     get '/version/': ->
