@@ -4,8 +4,10 @@
 
   "recipe":[
     "generic",
-    "domain_db",
     "db_http",
+    "domain_db",
+    "usrloc_db"
+    "avpops_db",
     "accounting",
     "toolbox",
     "forwarder",
@@ -20,10 +22,7 @@
     "routing-logic",
     "routing-lineside",
     "routing-trunkside-transparent",
-    "register-colocated",
-    "avpops_db",
-    "usrloc_db"
-
+    "register-colocated"
   ],
 
   "opensips_base_lib": ".",
