@@ -65,7 +65,7 @@ require('ccnq3_config').get (config)->
     get '/location/': -> # usrloc_table
 
       if @k is 'username'
-        loc_db.get @v, (p) ->
+        loc_db.get @v, (p) =>
           if p.error
             return send first_line('usrloc',@c)
           else
