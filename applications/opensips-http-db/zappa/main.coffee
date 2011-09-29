@@ -164,6 +164,12 @@ require('ccnq3_config').get (config)->
           if p.error then return send ""
           from_hash 'avpops', p, @c
 
+      if @k is 'username,domain,attribute'
+        [@username,@domain,@attribute] = @v.split ','
+        db.get "#{@attribute}:#{@username}@#{@domain}", (p) =>
+          if p.error then return send ""
+          from_hash 'avpops', p, @c
+
       return
 
 
