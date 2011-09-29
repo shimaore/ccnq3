@@ -126,6 +126,18 @@ require('ccnq3_config').get (config)->
 
     post '/location/': ->
 
+      if @query_type is 'insert'
+        doc = {}
+        doc[@k.split ','] = @v.split ','
+        loc_db.get doc.username, (p) =>
+          if p.error then return send ""
+          p[k] = v for k,v of doc
+          loc_db.put p, (r) =>
+            if r.error then return send ""
+            send r._id
+
+      return
+
     get '/avpops/': ->
 
 
