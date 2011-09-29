@@ -18,7 +18,7 @@ require('ccnq3_config').get (config)->
     def loc_db: loc_db
 
     # db_dbase.c lists: int, double, string, str, blob, date; str and blob are equivalent for this interface.
-    column_types =
+    def column_types:
       usrloc:
         username: 'string'
         domain: 'string'
@@ -73,14 +73,42 @@ require('ccnq3_config').get (config)->
         attribute: 'string'
         type: 'int'
         value: 'string'
+      location:
+        username:'string'
+        domain:'string'
+        contact:'string'
+        received:'string'
+        path:'string'
+        expires:'date'
+        q:'double'
+        callid:'string'
+        cseq:'int'
+        last_modified:'date'
+        flags:'int'
+        cflags:'int'
+        user_agent:'string'
+        socket:'string'
+        methods:'int'
+
 
     use 'bodyParser', 'logger'
 
     def config: config
 
-    quoted_value = (x) ->
-      if typeof x is 'number'
+    quoted_value = (t,x) ->
+      # No value: no quoting.
+      if not x?
+        return ''
+
+      # Expects numerical types => no quoting.
+      if t is 'int' or t is 'double'
+        # assert(parseInt(x).toString is x) if t is 'int' and typeof x isnt 'number'
+        # assert(parseFloat(x).toString is x) if t is 'double' and typeof x isnt 'number'
         return x
+
+      # assert(t is 'string')
+      if typeof x is 'number'
+        x = x.toString()
       if typeof x isnt 'string'
         x = JSON.stringify x
       # assert typeof x is 'string'
@@ -88,24 +116,51 @@ require('ccnq3_config').get (config)->
       # Assumes quote_delimiter = '"'
       return '"'+x.replace(/"/g, '""')+'"'
 
+
+    field_delimiter = "\t"
+    row_delimiter = "\n"
+
     line = (a) ->
-      field_delimiter = "\t"
-      row_delimiter = "\n"
-      ( quoted_value(s)  for s in a ).join(field_delimiter) + row_delimiter
+      ( quoted_value(type,s)  for s in a ).join(field_delimiter) + row_delimiter
 
-    def first_line: (table,c)->
-      return line( column_types[table][col] for col in c.split ',' )
+    def first_line: (types,c)->
+      return line( types[col] for col in c.split ',' )
 
-    def value_line: (hash,c)->
-      return line( (hash[col] or '') for col in c.split ',' )
+    def value_line: (types,hash,c)->
+      return line( quoted_value(types[col], hash[col]) for col in c.split ',' )
 
     helper from_array: (n,t,c) ->
       if not t? or t.length is 0 then return send ""
-      send first_line(n,c) + ( value_line(l,c) for l in t ).join('')
+      types = column_types[n]
+      send first_line(types,c) + ( value_line(types,l,c) for l in t ).join('')
 
     helper from_hash: (n,h,c) ->
-      send first_line(n,c) + value_line(h,c)
+      types = column_types[n]
+      send first_line(types,c) + value_line(types,h,c)
 
+
+    unquote_value = (t,x) ->
+      if not x?
+        return x
+
+      if t is 'int'
+        return parseInt(x)
+      if t is 'double'
+        return parseFloat(x)
+      # string, date, ..
+      return x.toString()
+
+    helper unquote_params: (table)->
+      doc = {}
+      names = @k.split ','
+      values = @v.split ','
+      types = column_types[table]
+
+      doc[names[i]] = unquote_value(types[names[i]],values[i]) for i in [0..names.length]
+
+      return doc
+
+    # Action!
     get '/domain/': ->
       # For now assume the list is in the configuration for the host.
       if @k is 'domain'
@@ -140,10 +195,7 @@ require('ccnq3_config').get (config)->
 
     post '/location': ->
 
-      doc = {}
-      names = @k.split ','
-      values = @v.split ','
-      doc[names[i]] = values[i] for i in [0..names.length]
+      doc = unquote_params('location')
       doc._id = "#{doc.username}@#{doc.domain}"
 
       if @query_type is 'insert' or @query_type is 'update'
