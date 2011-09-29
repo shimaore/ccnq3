@@ -42,3 +42,12 @@ require('ccnq3_config').get (config)->
     get '/dr_groups/': ->
 
     get '/dr_gw_lists/': ->
+
+    get '/version/': ->
+      return unless @k is 'table_name' and @c is 'table_version'
+
+      # Versions for OpenSIPS 1.7.0
+      versions =
+        location: 1006
+
+      return line(["int"]) + line([versions[@v]])
