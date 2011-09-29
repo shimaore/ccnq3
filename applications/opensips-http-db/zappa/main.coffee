@@ -77,17 +77,17 @@ require('ccnq3_config').get (config)->
       quote_delimiter = '"'
       field_delimiter = "\t"
       row_delimiter = "\n"
-      [ (s+'').replace quote_delimiter, quote_delimiter+quote_delimiter for s in a ].join(field_delimiter) + row_delimiter
+      ( (s+'').replace(quote_delimiter, quote_delimiter+quote_delimiter) for s in a ).join(field_delimiter) + row_delimiter
 
     def first_line: (table,c)->
-      return line [ column_types[table][col] for col in c.split ',' ]
+      return line( column_types[table][col] for col in c.split ',' )
 
     def value_line: (hash,c)->
-      return line [ (hash[col] or '') for col in c.split ',' ]
+      return line( (hash[col] or '') for col in c.split ',' )
 
     helper from_array: (n,t,c) ->
       if not t? or t.length is 0 then return send ""
-      send first_line(n,c) + [ value_line(l,c) for l in t ].join('')
+      send first_line(n,c) + ( value_line(l,c) for l in t ).join('')
 
     helper from_hash: (n,h,c) ->
       send first_line(n,c) + value_line(h,c)
