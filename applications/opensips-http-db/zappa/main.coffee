@@ -138,8 +138,8 @@ require('ccnq3_config').get (config)->
       types = column_types[n]
       send first_line(types,c) + value_line(types,h,c)
 
-
     def unquote_value: (t,x) ->
+
       if not x?
         return x
 
@@ -151,8 +151,11 @@ require('ccnq3_config').get (config)->
       if t is 'date'
         d = new Date(x)
         # Format expected by db_str2time() in db/db_ut.c
+        # TODO: This requires opensips to be started in UTC, assuming
+        #       toISOString() outputs using UTC (which it does in Node.js 0.4.11).
         return d.toISOString().replace 'T', ' '
-      # string, date, ..
+
+      # string, blob, ...
       return x.toString()
 
     helper unquote_params: (table)->
@@ -201,6 +204,8 @@ require('ccnq3_config').get (config)->
     post '/location': ->
 
       doc = unquote_params('location')
+      # Note: this allows for easy retrieval, but only one location can be stored.
+      # Use "callid" as an extra key parameter otherwise.
       doc._id = "#{doc.username}@#{doc.domain}"
 
       if @query_type is 'insert' or @query_type is 'update'
