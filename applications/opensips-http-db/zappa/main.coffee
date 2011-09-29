@@ -57,6 +57,13 @@ require('ccnq3_config').get (config)->
         gwlist: 'string'
         attrs: 'string'
         description: 'string'
+      dr_gw_lists:
+        id:'int'
+        gwlist:'string'
+      dr_groups:
+        username:'string'
+        domain:'string'
+        groupid:'int'
       domain:
         domain: 'string'
       subscriber:
@@ -172,7 +179,8 @@ require('ccnq3_config').get (config)->
     get '/domain/': ->
       # For now assume the list is in the configuration for the host.
       if @k is 'domain'
-        from_array 'domain', config.opensips_proxy.domains, @c
+        db.req {uri:'host:#{config.hostname}/domains.json'}, (t) =>
+          from_array 'domain', t, @c
 
     get '/subscriber/': -> # auth_table
       if @k is 'username,domain'
@@ -254,20 +262,31 @@ require('ccnq3_config').get (config)->
 
     get '/dr_gateways/': ->
       if not @k?
-        # For now assume the gateways for a given host are stored in that host's configuration record.
-        # TODO: this would need to be queried dynamically..
-        from_array 'dr_gateways', config.gateways, @c
+        db.req {uri:'host:#{config.hostname}/dr_gateways.json'}, (t) =>
+          from_array 'dr_gateways', t, @c
 
       return
 
     get '/dr_rules/': -> # ?c=ruleid,groupid,prefix,timerec,priority,routeid,gwlist,attrs
-      ""
+      if not @k?
+        db.req {uri:'host:#{config.hostname}/dr_rules.json'}, (t) =>
+          from_array 'dr_rules', t, @c
+
+      return
 
     get '/dr_groups/': ->
-      ""
+      if not @k?
+        db.req {uri:'host:#{config.hostname}/dr_groups.json'}, (t) =>
+          from_array 'dr_groups', t, @c
+
+      return
 
     get '/dr_gw_lists/': -> # id,gwlist
-      ""
+      if not @k?
+        db.req {uri:'host:#{config.hostname}/dr_gw_lists.json'}, (t) =>
+          from_array 'dr_gw_lists', t, @c
+
+      return
 
     get '/version/': ->
       return unless @k is 'table_name' and @c is 'table_version'
