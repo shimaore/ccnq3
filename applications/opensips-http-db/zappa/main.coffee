@@ -42,7 +42,7 @@ require('ccnq3_config').get (config)->
           if p.error
             return send ""
           return send line(["string"]) + line([@v])
-      return ""
+      return
 
     post '/location/': ->
 
