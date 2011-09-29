@@ -159,16 +159,24 @@ require('ccnq3_config').get (config)->
     get '/avpops/': ->
 
       if @k is 'uuid,attribute'
-        [@uuid,@attribute] = @v.split ','
-        db.get "#{@attribute}:#{@uuid}", (p) =>
+        [uuid,attribute] = @v.split ','
+        db.get "#{attribute}:#{uuid}", (p) =>
           if p.error then return send ""
-          from_hash 'avpops', p, @c
+          avp =
+            value: JSON.stringify p
+            attribute: attribute
+            type: 2
+          from_hash 'avpops', avp, @c
 
       if @k is 'username,domain,attribute'
-        [@username,@domain,@attribute] = @v.split ','
-        db.get "#{@attribute}:#{@username}@#{@domain}", (p) =>
+        [username,domain,attribute] = @v.split ','
+        db.get "#{attribute}:#{username}@#{domain}", (p) =>
           if p.error then return send ""
-          from_hash 'avpops', p, @c
+          avp =
+            value: JSON.stringify p
+            attribute: attribute
+            type: 2
+          from_hash 'avpops', avp, @c
 
       return
 
