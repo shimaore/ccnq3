@@ -17,7 +17,7 @@ require('ccnq3_config').get (config)->
     def db: db
     def loc_db: loc_db
 
-    def column_types:
+    column_types =
       usrloc:
         username: 'string'
         domain: 'string'
