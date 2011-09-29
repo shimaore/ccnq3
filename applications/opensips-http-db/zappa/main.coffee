@@ -132,25 +132,22 @@ require('ccnq3_config').get (config)->
       doc[names[i]] = values[i] for i in [0..names.length]
       doc._id = "#{doc.username}@#{doc.domain}"
 
-      if @query_type is 'insert'
+      if @query_type is 'insert' or @query_type is 'update'
 
-        loc_db.put doc, (r) =>
-          if r.error then return send ""
-          send r._id
-
-      if @query_type is 'update'
-
-        loc_db.get doc._id, (p) =>
-          if p.error then return send ""
-          p[k] = v for k,v of doc
-          loc_db.put p, (r) =>
+        loc_db.head doc._id, (p) =>
+          doc._rev = p._rev if p._rev?
+          loc_db.put doc, (r) =>
             if r.error then return send ""
             send r._id
 
       if @query_type is 'delete'
-        loc_db.erase doc._id, (p) =>
-          if p.error then return send ""
-          send ""
+
+        loc_db.head doc._id, (p) =>
+          if not p._rev? then return send ""
+          doc._rev = p._rev
+          loc_db.del doc, (p) =>
+            if p.error then return send ""
+            send ""
 
       return
 
