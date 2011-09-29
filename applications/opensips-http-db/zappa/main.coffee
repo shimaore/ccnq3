@@ -42,7 +42,7 @@ require('ccnq3_config').get (config)->
 
     def config: config
 
-    def line: (a) ->
+    line = (a) ->
       a.join("\t") + "\n"
 
     def first_line: (table,c)->
