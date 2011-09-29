@@ -142,6 +142,7 @@ require('ccnq3_config').get (config)->
       send first_line(types,c) + ( value_line(types,l,c) for l in t ).join('')
 
     helper from_hash: (n,h,c) ->
+      if not h? then return send ""
       types = column_types[n]
       send first_line(types,c) + value_line(types,h,c)
 
@@ -179,8 +180,9 @@ require('ccnq3_config').get (config)->
     get '/domain/': ->
       # For now assume the list is in the configuration for the host.
       if @k is 'domain'
+        # XXX Highly inefficient, need to use a real table.
         db.req {uri:"#{config._id}/domains.json"}, (t) =>
-          from_array 'domain', t, @c
+          from_hash 'domain', t[@v], @c
 
     get '/subscriber/': -> # auth_table
       if @k is 'username,domain'
