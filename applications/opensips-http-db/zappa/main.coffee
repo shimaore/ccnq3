@@ -279,10 +279,11 @@ require('ccnq3_config').get (config)->
       return
 
     get '/dr_groups/': ->
-      if not @k?
+
+      if @k is 'username'
         db.req {uri:"#{config._id}/dr_groups.json"}, (t) =>
           if t.error? then return send ""
-          from_array 'dr_groups', t, @c
+          from_hash 'dr_groups', t[@v], @c
 
       return
 
