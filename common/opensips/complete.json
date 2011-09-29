@@ -22,7 +22,6 @@
     "routing-trunkside-transparent",
     "register-colocated",
     "avpops_db",
-    "domain_db",
     "usrloc_db"
 
   ],
