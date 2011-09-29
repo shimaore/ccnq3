@@ -49,10 +49,10 @@ require('ccnq3_config').get (config)->
       row_delimiter = "\n"
       [ (s+'').replace quote_delimiter, quote_delimiter+quote_delimiter for s in a ].join(field_delimiter) + row_delimiter
 
-    first_line = (table,c)->
+    def first_line: (table,c)->
       return line [ column_types[table][col] for col in c.split ',' ]
 
-    value_line = (hash,c)->
+    def value_line: (hash,c)->
       return line [ (hash[col] or '') for col in c.split ',' ]
 
     helper from_array: (n,t,c) ->
