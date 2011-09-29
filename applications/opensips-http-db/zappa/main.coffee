@@ -304,7 +304,8 @@ require('ccnq3_config').get (config)->
 
       if @k is 'username,domain'
         [username,domain] = @v.split ','
-        db.get "number/#{username}@#{domain}"}, (t) =>
+        # However we do not currently support "number@domain", so skip that.
+        db.get "number/#{username}", (t) =>
           if t.error? then return send ""
           from_hash 'dr_groups', t, @c
         return
