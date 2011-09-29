@@ -59,6 +59,14 @@ require('ccnq3_config').get (config)->
         description: 'string'
       domain:
         domain: 'string'
+      subscriber:
+        username: 'string'
+        domain: 'string'
+        password: 'string'
+        ha1: 'string'
+        ha1b: 'string'
+        rpid: 'string'
+
 
 
     use 'bodyParser', 'logger'
@@ -90,7 +98,12 @@ require('ccnq3_config').get (config)->
         from_array 'domain', config.opensips_proxy.domains, @c
 
     get '/subscriber/': -> # auth_table
-      send ""
+      if @k is 'username,domain'
+        # Parse @v -- normally should account for escape char as well.
+        [@username,@domain] = @v.split "\t"
+        db.get "endpoint:#{@username}@#{@domain}", (t) =>
+          from_hash 'subscriber', t, @c
+
       return
 
     get '/location/': -> # usrloc_table
