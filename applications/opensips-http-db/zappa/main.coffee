@@ -108,5 +108,7 @@ require('ccnq3_config').get (config)->
       versions =
         location: 1006
         subscriber: 7
+        dr_gateways: 4
+        dr_rules: 3
 
       return first_line('version',@c) + value_line({table_version:versions[@v]},@c)
