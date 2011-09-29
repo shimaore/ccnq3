@@ -12,7 +12,7 @@
   , "stop":  "daemon -n ccnq3_opensips_http_db -o daemon.debug --stop"
   },
   "dependencies": {
-    "cdb": ">=0.0.11"
+    "cdb": ">=0.0.12"
   , "zappa": "0.2"
   , "ccnq3_config": ">=0.1"
   },
