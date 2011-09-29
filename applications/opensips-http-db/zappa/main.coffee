@@ -102,6 +102,7 @@ require('ccnq3_config').get (config)->
         # Parse @v -- normally should account for escape char as well.
         [@username,@domain] = @v.split "\t"
         db.get "endpoint:#{@username}@#{@domain}", (t) =>
+          if t.error then return send ""
           from_hash 'subscriber', t, @c
 
       return
