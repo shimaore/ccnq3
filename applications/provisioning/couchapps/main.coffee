@@ -24,7 +24,7 @@ ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
 
 # Filter replication towards the user database.
 ddoc.filters.user_pull = (doc, req) ->
-  provisioning_types = ["number","endpoint","location","host"]
+  provisioning_types = ["number","endpoint","location","host","domain"]
 
   # Only replicate provisioning documents.
   if provisioning_type.indexOf(doc.type) < 0
