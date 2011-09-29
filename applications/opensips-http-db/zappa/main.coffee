@@ -180,11 +180,10 @@ require('ccnq3_config').get (config)->
 
     # Action!
     get '/domain/': ->
-      # For now assume the list is in the configuration for the host.
       if @k is 'domain'
-        # XXX Highly inefficient, need to use a real table.
-        db.req {uri:"#{config._id}/domains.json"}, (t) =>
-          from_hash 'domain', t[@v], @c
+        db.get "domain:#{@v}", (t) =>
+          if t.error then return send ""
+          from_hash 'domain', t, @c
         return
 
       throw 'not handled'
