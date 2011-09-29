@@ -150,7 +150,8 @@ require('ccnq3_config').get (config)->
       # Not sure what the issue is, but we're getting garbage at the end of dates.
       if t is 'date'
         d = new Date(x)
-        return d.toISOString()
+        # Format expected by db_str2time() in db/db_ut.c
+        return d.toISOString().replace 'T', ''
       # string, date, ..
       return x.toString()
 
