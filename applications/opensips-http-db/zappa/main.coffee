@@ -66,8 +66,13 @@ require('ccnq3_config').get (config)->
         ha1: 'string'
         ha1b: 'string'
         rpid: 'string'
-
-
+      avpops:
+        uuid: 'string'
+        username: 'string'
+        domain: 'string'
+        attribute: 'string'
+        type: 'int'
+        value: 'string'
 
     use 'bodyParser', 'logger'
 
@@ -152,6 +157,14 @@ require('ccnq3_config').get (config)->
       return
 
     get '/avpops/': ->
+
+      if @k is 'uuid,attribute'
+        [@uuid,@attribute] = @v.split ','
+        db.get "#{@attribute}:#{@uuid}", (p) =>
+          if p.error then return send ""
+          from_hash 'avpops', p, @c
+
+      return
 
 
     get '/dr_gateways/': ->
