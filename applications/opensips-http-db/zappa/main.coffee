@@ -49,11 +49,18 @@ require('ccnq3_config').get (config)->
       row_delimiter = "\n"
       [ (s+'').replace quote_delimiter, quote_delimiter+quote_delimiter for s in a ].join(field_delimiter) + row_delimiter
 
-    def first_line: (table,c)->
+    first_line = (table,c)->
       return line [ column_types[table][col] for col in c.split ',' ]
 
-    def value_line: (hash,c)->
+    value_line = (hash,c)->
       return line [ (hash[col] or '') for col in c.split ',' ]
+
+    def from_array: (n,t,c) ->
+      if not t? or t.length is 0 then return send ""
+      send first_line (n,c) + [ value_line(l,c) for l in t ].join('')
+
+    def from_hash: (n,h,c) ->
+      send first_line(n,c) + value_line(h,c)
 
     # Typical:
     #   GET /domain/?k=domain&v=${requested_domain}&c=domain
@@ -65,14 +72,15 @@ require('ccnq3_config').get (config)->
         return ""
 
     get '/subscriber/': -> # auth_table
+      send ""
+      return
 
     get '/location/': -> # usrloc_table
 
       if @k is 'username'
         loc_db.get @v, (p) =>
           if p.error then return send ""
-
-          send first_line('usrloc',@c) + value_line(p,@c)
+          from_hash 'usrloc', p, @c
 
       if not @k?
         # Rewrite-me: will load everything in memory and build the reply in memory.
@@ -80,12 +88,8 @@ require('ccnq3_config').get (config)->
         #   loc_db.req "_design/http_db/_list/usrloc/_all_docs"
         # and figure out how to stream the response through Zappa.
         loc_db.req {uri:'_all_docs?include_docs=true'}, (t) =>
-          if t.error then return send ""
+          from_array 'usrloc', t.rows, @c
 
-          if t.rows.length is 0 then return send ""
-
-          send   first_line('usrloc',@c) +
-                 [ value_line(l,@c) for l in t.rows ].join('')
       return
 
     post '/location/': ->
@@ -94,6 +98,9 @@ require('ccnq3_config').get (config)->
 
 
     get '/dr_gateways/': ->
+      if not @k?
+        # For now assume the gateways for a given host are stored in that host's configuration record.
+        from_array 'dr_gateways', config.gateways, @c
 
     get '/dr_rules/': ->
 
@@ -111,4 +118,4 @@ require('ccnq3_config').get (config)->
         dr_gateways: 4
         dr_rules: 3
 
-      return first_line('version',@c) + value_line({table_version:versions[@v]},@c)
+      return from_hash 'version', {table_version:versions[@v]}, @c
