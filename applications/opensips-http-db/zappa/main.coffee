@@ -78,11 +78,20 @@ require('ccnq3_config').get (config)->
 
     def config: config
 
+    quoted_value = (x) ->
+      if typeof x is 'number'
+        return x
+      if typeof x isnt 'string'
+        x = JSON.stringify x
+      # assert typeof x is 'string'
+
+      # Assumes quote_delimiter = '"'
+      return '"'+x.replace(/"/g, '""')+'"'
+
     line = (a) ->
-      quote_delimiter = '"'
       field_delimiter = "\t"
       row_delimiter = "\n"
-      ( (s+'').replace(quote_delimiter, quote_delimiter+quote_delimiter) for s in a ).join(field_delimiter) + row_delimiter
+      ( quoted_value(s)  for s in a ).join(field_delimiter) + row_delimiter
 
     def first_line: (table,c)->
       return line( column_types[table][col] for col in c.split ',' )
@@ -163,7 +172,7 @@ require('ccnq3_config').get (config)->
         db.get "#{attribute}:#{uuid}", (p) =>
           if p.error then return send ""
           avp =
-            value: JSON.stringify p
+            value: p
             attribute: attribute
             type: 2
           from_hash 'avpops', avp, @c
@@ -173,7 +182,7 @@ require('ccnq3_config').get (config)->
         db.get "#{attribute}:#{username}@#{domain}", (p) =>
           if p.error then return send ""
           avp =
-            value: JSON.stringify p
+            value: p
             attribute: attribute
             type: 2
           from_hash 'avpops', avp, @c
