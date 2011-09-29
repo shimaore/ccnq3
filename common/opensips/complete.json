@@ -6,7 +6,7 @@
     "generic",
     "db_http",
     "domain_db",
-    "usrloc_db"
+    "usrloc_db",
     "avpops_db",
     "accounting",
     "toolbox",
