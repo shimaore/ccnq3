@@ -121,7 +121,7 @@ require('ccnq3_config').get (config)->
     row_delimiter = "\n"
 
     line = (a) ->
-      ( quoted_value(type,s)  for s in a ).join(field_delimiter) + row_delimiter
+      a.join(field_delimiter) + row_delimiter
 
     def first_line: (types,c)->
       return line( types[col] for col in c.split ',' )
