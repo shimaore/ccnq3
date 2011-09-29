@@ -150,7 +150,7 @@ require('ccnq3_config').get (config)->
       # Not sure what the issue is, but we're getting garbage at the end of dates.
       if t is 'date'
         d = new Date(x)
-        return d.toUTCString()
+        return d.toISOString()
       # string, date, ..
       return x.toString()
 
