@@ -147,6 +147,10 @@ require('ccnq3_config').get (config)->
         return parseInt(x)
       if t is 'double'
         return parseFloat(x)
+      # Not sure what the issue is, but we're getting garbage at the end of dates.
+      if t is 'date'
+        d = new Date(x)
+        return d.toUTCString()
       # string, date, ..
       return x.toString()
 
