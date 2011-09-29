@@ -70,10 +70,9 @@ require('ccnq3_config').get (config)->
 
       if @k is 'username'
         loc_db.get @v, (p) =>
-          if p.error
-            return send ""
-          else
-            return send first_line('usrloc',@c) + value_line(p,@c)
+          if p.error then return send ""
+
+          send first_line('usrloc',@c) + value_line(p,@c)
 
       if not @k?
         # Rewrite-me: will load everything in memory and build the reply in memory.
@@ -81,8 +80,10 @@ require('ccnq3_config').get (config)->
         #   loc_db.req "_design/http_db/_list/usrloc/_all_docs"
         # and figure out how to stream the response through Zappa.
         loc_db.req {uri:'_all_docs?include_docs=true'}, (t) =>
-          if t.error
-            return send ""
+          if t.error then return send ""
+
+          if t.rows.length is 0 then return send ""
+
           send   first_line('usrloc',@c) +
                  [ value_line(l,@c) for l in t.rows ].join('')
       return
