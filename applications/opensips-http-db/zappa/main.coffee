@@ -9,6 +9,13 @@ require('ccnq3_config').get (config)->
   zappa = require 'zappa'
   zappa.run config.opensips_proxy.port, config.opensips_proxy.hostname, {config}, ->
 
+    cdb = require 'cdb'
+    db = cdb.new config.provisioning.couchdb_uri
+
+    # Replace loc_db with e.g. redis-store
+    loc_db = cdb.new config.provisioning.couchdb_uri
+
+    def db: db
 
     use 'bodyParser', 'logger'
 
@@ -29,6 +36,12 @@ require('ccnq3_config').get (config)->
     get '/subscriber/': -> # auth_table
 
     get '/location/': -> # usrloc_table
+      if @k is 'username' and @c is 'username'
+        loc_db.get "endpoint:#{@v}", (p) ->
+          if p.error
+            return send ""
+          return send line(["string"]) + line([@v])
+      return ""
 
     post '/location/': ->
 
