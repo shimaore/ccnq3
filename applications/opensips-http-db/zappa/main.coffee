@@ -231,7 +231,7 @@ require('ccnq3_config').get (config)->
             @send r._id
         return
 
-      if @query_type is 'delete'
+      if @body.query_type is 'delete'
 
         loc_db.head doc._id, (p) =>
           if not p._rev? then return @send ""
