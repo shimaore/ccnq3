@@ -163,10 +163,10 @@ require('ccnq3_config').get (config)->
       # string, blob, ...
       return x.toString()
 
-    @helper unquote_params: (table)->
+    unquote_params = (k,v,table)->
       doc = {}
-      names = @params.k.split ','
-      values = @params.v.split ','
+      names = k.split ','
+      values = v.split ','
       types = column_types[table]
 
       doc[names[i]] = unquote_value(types[names[i]],values[i]) for i in [0..names.length]
@@ -175,52 +175,52 @@ require('ccnq3_config').get (config)->
 
     # Action!
     @get '/domain/': ->
-      if @params.k is 'domain'
-        db.get "domain:#{@params.v}", (t) =>
+      if @query.k is 'domain'
+        db.get "domain:#{@query.v}", (t) =>
           if t.error then return send ""
-          from_hash 'domain', t, @params.c
+          from_hash 'domain', t, @query.c
         return
 
       throw 'not handled'
 
     @get '/subscriber/': -> # auth_table
-      if @params.k is 'username,domain'
+      if @query.k is 'username,domain'
         # Parse @v -- what is the actual format?
-        [username,domain] = @params.v.split ","
+        [username,domain] = @query.v.split ","
         db.get "endpoint:#{username}@#{domain}", (t) =>
           if t.error then return send ""
-          from_hash 'subscriber', t, @params.c
+          from_hash 'subscriber', t, @query.c
         return
 
       throw 'not handled'
 
     @get '/location/': -> # usrloc_table
 
-      if @params.k is 'username'
-        loc_db.get @params.v, (p) =>
+      if @query.k is 'username'
+        loc_db.get @query.v, (p) =>
           if p.error then return send ""
-          from_hash 'usrloc', p, @params.c
+          from_hash 'usrloc', p, @query.c
         return
 
-      if not @params.k?
+      if not @query.k?
         # Rewrite-me: will load everything in memory and build the reply in memory.
         # Instead use a CouchDB "list"
         #   loc_db.req "_design/http_db/_list/usrloc/_all_docs"
         # and figure out how to stream the response through Zappa.
         loc_db.req {uri:'_all_docs?include_docs=true'}, (t) =>
-          from_array 'usrloc', (u.doc for u in t.rows), @params.c
+          from_array 'usrloc', (u.doc for u in t.rows), @query.c
         return
 
       throw 'not handled'
 
     @post '/location': ->
 
-      doc = unquote_params('location')
+      doc = unquote_params(@body.k,@body.v,'location')
       # Note: this allows for easy retrieval, but only one location can be stored.
       # Use "callid" as an extra key parameter otherwise.
       doc._id = "#{doc.username}@#{doc.domain}"
 
-      if @params.query_type is 'insert' or @params.query_type is 'update'
+      if @body.query_type is 'insert' or @body.query_type is 'update'
 
         loc_db.head doc._id, (p) =>
           doc._rev = p._rev if p._rev?
@@ -243,36 +243,36 @@ require('ccnq3_config').get (config)->
 
     @get '/avpops/': ->
 
-      if @params.k is 'uuid,attribute'
-        [uuid,attribute] = @params.v.split ','
+      if @query.k is 'uuid,attribute'
+        [uuid,attribute] = @query.v.split ','
         db.get "#{attribute}:#{uuid}", (p) =>
           if p.error then return send ""
           avp =
             value: p
             attribute: attribute
             type: 2
-          from_hash 'avpops', avp, @params.c
+          from_hash 'avpops', avp, @query.c
         return
 
-      if @params.k is 'username,domain,attribute'
-        [username,domain,attribute] = @params.v.split ','
+      if @query.k is 'username,domain,attribute'
+        [username,domain,attribute] = @query.v.split ','
         db.get "#{attribute}:#{username}@#{domain}", (p) =>
           if p.error then return send ""
           avp =
             value: p
             attribute: attribute
             type: 2
-          from_hash 'avpops', avp, @params.c
+          from_hash 'avpops', avp, @query.c
         return
 
       throw 'not handled'
 
 
     @get '/dr_gateways/': ->
-      if not @params.k?
+      if not @query.k?
         db.req {uri:"#{config._id}/dr_gateways.json"}, (t) =>
           if t.error? then return send ""
-          from_array 'dr_gateways', t, @params.c
+          from_array 'dr_gateways', t, @query.c
         return
       ###
       my %attrs = ();
@@ -287,37 +287,37 @@ require('ccnq3_config').get (config)->
       throw 'not handled'
 
     @get '/dr_rules/': -> # ?c=ruleid,groupid,prefix,timerec,priority,routeid,gwlist,attrs
-      if not @params.k?
+      if not @query.k?
         db.req {uri:"#{config._id}/dr_rules.json"}, (t) =>
           if t.error? then return send ""
-          from_array 'dr_rules', t, @params.c
+          from_array 'dr_rules', t, @query.c
         return
 
       throw 'not handled'
 
     @get '/dr_groups/': ->
 
-      if @params.k is 'username,domain'
-        [username,domain] = @params.v.split ','
+      if @query.k is 'username,domain'
+        [username,domain] = @query.v.split ','
         # However we do not currently support "number@domain", so skip that.
         db.get "number/#{username}", (t) =>
           if t.error? then return send ""
-          from_hash 'dr_groups', t, @params.c
+          from_hash 'dr_groups', t, @query.c
         return
 
       throw 'not handled'
 
     @get '/dr_gw_lists/': -> # id,gwlist
-      if not @params.k?
+      if not @query.k?
         db.req {uri:"#{config._id}/dr_gw_lists.json"}, (t) =>
           if t.error? then return send ""
-          from_array 'dr_gw_lists', t, @params.c
+          from_array 'dr_gw_lists', t, @query.c
         return
 
       throw 'not handled'
 
     @get '/version/': ->
-      if @params.k is 'table_name' and @params.c is 'table_version'
+      if @query.k is 'table_name' and @query.c is 'table_version'
 
         # Versions for OpenSIPS 1.7.0
         versions =
@@ -326,6 +326,6 @@ require('ccnq3_config').get (config)->
           dr_gateways: 4
           dr_rules: 3
 
-        return from_hash 'version', {table_version:versions[@params.v]}, @params.c
+        return from_hash 'version', {table_version:versions[@query.v]}, @query.c
 
       throw 'not handled'
