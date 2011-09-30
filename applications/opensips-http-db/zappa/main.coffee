@@ -7,18 +7,15 @@ Released under the AGPL3 license
 require('ccnq3_config').get (config)->
 
   zappa = require 'zappa'
-  zappa.run config.opensips_proxy.port, config.opensips_proxy.hostname, {config}, ->
+  zappa config.opensips_proxy.port, config.opensips_proxy.hostname, {config}, ->
 
     cdb = require 'cdb'
     db = cdb.new config.provisioning.couchdb_uri
 
     loc_db = cdb.new config.opensips_proxy.usrloc_uri
 
-    def db: db
-    def loc_db: loc_db
-
     # db_dbase.c lists: int, double, string, str, blob, date; str and blob are equivalent for this interface.
-    def column_types:
+    column_types =
       usrloc:
         username: 'string'
         domain: 'string'
@@ -100,9 +97,7 @@ require('ccnq3_config').get (config)->
         methods:'int'
 
 
-    use 'bodyParser', 'logger'
-
-    def config: config
+    @use 'bodyParser', 'logger'
 
     quoted_value = (t,x) ->
       # No value: no quoting.
@@ -132,23 +127,23 @@ require('ccnq3_config').get (config)->
     line = (a) ->
       a.join(field_delimiter) + row_delimiter
 
-    def first_line: (types,c)->
+    first_line = (types,c)->
       return line( types[col] for col in c.split ',' )
 
-    def value_line: (types,hash,c)->
+    value_line = (types,hash,c)->
       return line( quoted_value(types[col], hash[col]) for col in c.split ',' )
 
-    helper from_array: (n,t,c) ->
-      if not t? or t.length is 0 then return send ""
+    @helper from_array: (n,t,c) ->
+      if not t? or t.length is 0 then return @send ""
       types = column_types[n]
-      send first_line(types,c) + ( value_line(types,l,c) for l in t ).join('')
+      @send first_line(types,c) + ( value_line(types,l,c) for l in t ).join('')
 
-    helper from_hash: (n,h,c) ->
-      if not h? then return send ""
+    @helper from_hash: (n,h,c) ->
+      if not h? then return @send ""
       types = column_types[n]
-      send first_line(types,c) + value_line(types,h,c)
+      @send first_line(types,c) + value_line(types,h,c)
 
-    def unquote_value: (t,x) ->
+    unquote_value = (t,x) ->
 
       if not x?
         return x
@@ -168,10 +163,10 @@ require('ccnq3_config').get (config)->
       # string, blob, ...
       return x.toString()
 
-    helper unquote_params: (table)->
+    @helper unquote_params: (table)->
       doc = {}
-      names = @k.split ','
-      values = @v.split ','
+      names = @params.k.split ','
+      values = @params.v.split ','
       types = column_types[table]
 
       doc[names[i]] = unquote_value(types[names[i]],values[i]) for i in [0..names.length]
@@ -179,53 +174,53 @@ require('ccnq3_config').get (config)->
       return doc
 
     # Action!
-    get '/domain/': ->
-      if @k is 'domain'
-        db.get "domain:#{@v}", (t) =>
+    @get '/domain/': ->
+      if @params.k is 'domain'
+        db.get "domain:#{@params.v}", (t) =>
           if t.error then return send ""
-          from_hash 'domain', t, @c
+          from_hash 'domain', t, @params.c
         return
 
       throw 'not handled'
 
-    get '/subscriber/': -> # auth_table
-      if @k is 'username,domain'
+    @get '/subscriber/': -> # auth_table
+      if @params.k is 'username,domain'
         # Parse @v -- what is the actual format?
-        [@username,@domain] = @v.split ","
-        db.get "endpoint:#{@username}@#{@domain}", (t) =>
+        [username,domain] = @params.v.split ","
+        db.get "endpoint:#{username}@#{domain}", (t) =>
           if t.error then return send ""
-          from_hash 'subscriber', t, @c
+          from_hash 'subscriber', t, @params.c
         return
 
       throw 'not handled'
 
-    get '/location/': -> # usrloc_table
+    @get '/location/': -> # usrloc_table
 
-      if @k is 'username'
-        loc_db.get @v, (p) =>
+      if @params.k is 'username'
+        loc_db.get @params.v, (p) =>
           if p.error then return send ""
-          from_hash 'usrloc', p, @c
+          from_hash 'usrloc', p, @params.c
         return
 
-      if not @k?
+      if not @params.k?
         # Rewrite-me: will load everything in memory and build the reply in memory.
         # Instead use a CouchDB "list"
         #   loc_db.req "_design/http_db/_list/usrloc/_all_docs"
         # and figure out how to stream the response through Zappa.
         loc_db.req {uri:'_all_docs?include_docs=true'}, (t) =>
-          from_array 'usrloc', (u.doc for u in t.rows), @c
+          from_array 'usrloc', (u.doc for u in t.rows), @params.c
         return
 
       throw 'not handled'
 
-    post '/location': ->
+    @post '/location': ->
 
       doc = unquote_params('location')
       # Note: this allows for easy retrieval, but only one location can be stored.
       # Use "callid" as an extra key parameter otherwise.
       doc._id = "#{doc.username}@#{doc.domain}"
 
-      if @query_type is 'insert' or @query_type is 'update'
+      if @params.query_type is 'insert' or @params.query_type is 'update'
 
         loc_db.head doc._id, (p) =>
           doc._rev = p._rev if p._rev?
@@ -246,38 +241,38 @@ require('ccnq3_config').get (config)->
 
       throw 'not handled'
 
-    get '/avpops/': ->
+    @get '/avpops/': ->
 
-      if @k is 'uuid,attribute'
-        [uuid,attribute] = @v.split ','
+      if @params.k is 'uuid,attribute'
+        [uuid,attribute] = @params.v.split ','
         db.get "#{attribute}:#{uuid}", (p) =>
           if p.error then return send ""
           avp =
             value: p
             attribute: attribute
             type: 2
-          from_hash 'avpops', avp, @c
+          from_hash 'avpops', avp, @params.c
         return
 
-      if @k is 'username,domain,attribute'
-        [username,domain,attribute] = @v.split ','
+      if @params.k is 'username,domain,attribute'
+        [username,domain,attribute] = @params.v.split ','
         db.get "#{attribute}:#{username}@#{domain}", (p) =>
           if p.error then return send ""
           avp =
             value: p
             attribute: attribute
             type: 2
-          from_hash 'avpops', avp, @c
+          from_hash 'avpops', avp, @params.c
         return
 
       throw 'not handled'
 
 
-    get '/dr_gateways/': ->
-      if not @k?
+    @get '/dr_gateways/': ->
+      if not @params.k?
         db.req {uri:"#{config._id}/dr_gateways.json"}, (t) =>
           if t.error? then return send ""
-          from_array 'dr_gateways', t, @c
+          from_array 'dr_gateways', t, @params.c
         return
       ###
       my %attrs = ();
@@ -291,38 +286,38 @@ require('ccnq3_config').get (config)->
 
       throw 'not handled'
 
-    get '/dr_rules/': -> # ?c=ruleid,groupid,prefix,timerec,priority,routeid,gwlist,attrs
-      if not @k?
+    @get '/dr_rules/': -> # ?c=ruleid,groupid,prefix,timerec,priority,routeid,gwlist,attrs
+      if not @params.k?
         db.req {uri:"#{config._id}/dr_rules.json"}, (t) =>
           if t.error? then return send ""
-          from_array 'dr_rules', t, @c
+          from_array 'dr_rules', t, @params.c
         return
 
       throw 'not handled'
 
-    get '/dr_groups/': ->
+    @get '/dr_groups/': ->
 
-      if @k is 'username,domain'
-        [username,domain] = @v.split ','
+      if @params.k is 'username,domain'
+        [username,domain] = @params.v.split ','
         # However we do not currently support "number@domain", so skip that.
         db.get "number/#{username}", (t) =>
           if t.error? then return send ""
-          from_hash 'dr_groups', t, @c
+          from_hash 'dr_groups', t, @params.c
         return
 
       throw 'not handled'
 
-    get '/dr_gw_lists/': -> # id,gwlist
-      if not @k?
+    @get '/dr_gw_lists/': -> # id,gwlist
+      if not @params.k?
         db.req {uri:"#{config._id}/dr_gw_lists.json"}, (t) =>
           if t.error? then return send ""
-          from_array 'dr_gw_lists', t, @c
+          from_array 'dr_gw_lists', t, @params.c
         return
 
       throw 'not handled'
 
-    get '/version/': ->
-      if @k is 'table_name' and @c is 'table_version'
+    @get '/version/': ->
+      if @params.k is 'table_name' and @params.c is 'table_version'
 
         # Versions for OpenSIPS 1.7.0
         versions =
@@ -331,6 +326,6 @@ require('ccnq3_config').get (config)->
           dr_gateways: 4
           dr_rules: 3
 
-        return from_hash 'version', {table_version:versions[@v]}, @c
+        return from_hash 'version', {table_version:versions[@params.v]}, @params.c
 
       throw 'not handled'
