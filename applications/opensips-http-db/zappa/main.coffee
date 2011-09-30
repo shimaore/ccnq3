@@ -4,6 +4,8 @@
 Released under the AGPL3 license
 ###
 
+util = require 'util'
+
 require('ccnq3_config').get (config)->
 
   zappa = require 'zappa'
@@ -239,7 +241,7 @@ require('ccnq3_config').get (config)->
             @send ""
         return
 
-      throw 'not handled'
+      throw "not handled #{util.inspect @}"
 
     @get '/avpops/': ->
 
