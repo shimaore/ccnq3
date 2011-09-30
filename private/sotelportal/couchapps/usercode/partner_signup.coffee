@@ -209,11 +209,11 @@ do (jQuery) ->
               th -> 'EMail'
 
             tr class:'template', ->
-              td -> input name:'onboarding[*].first_name', class:'required minlength(2)'
-              td -> input name:'onboarding[*].last_name', class:'required minlength(2)'
-              td -> input name:'onboarding[*].function', class:'required minlength(2)'
-              td -> input name:'onboarding[*].phone', class:'required minlength(2)'
-              td -> input name:'onboarding[*].email', class:'required minlength(2)'
+              td -> input name:'onboarding.*.first_name', class:'required minlength(2)'
+              td -> input name:'onboarding.*.last_name', class:'required minlength(2)'
+              td -> input name:'onboarding.*.function', class:'required minlength(2)'
+              td -> input name:'onboarding.*.phone', class:'required minlength(2)'
+              td -> input name:'onboarding.*.email', class:'required minlength(2)'
 
         div id:'step-6', ->
           h2 class:'stepTitle', -> 'Terms and Conditions, Signature'
