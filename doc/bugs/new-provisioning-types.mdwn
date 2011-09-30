@@ -1,0 +1,8 @@
+Q: What is the proper data model for application extensions?
+
+Say, I want to add a new module that adds components to provisioning.
+How do I add valid "provisioning_types" (from an external module)?
+
+A: At least inside the deployment project (which could be the plain provisioning app or not) I need to have some registry of applicable types, which then gets included inside the user_push/user_pull functions.
+
+(Alternatively enumerate user_push/user_pull functions in _design documents?)
