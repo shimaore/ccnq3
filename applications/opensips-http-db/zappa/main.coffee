@@ -177,8 +177,8 @@ require('ccnq3_config').get (config)->
     @get '/domain/': ->
       if @query.k is 'domain'
         db.get "domain:#{@query.v}", (t) =>
-          if t.error then return send ""
-          from_hash 'domain', t, @query.c
+          if t.error then return @send ""
+          @from_hash 'domain', t, @query.c
         return
 
       throw 'not handled'
@@ -188,8 +188,8 @@ require('ccnq3_config').get (config)->
         # Parse @v -- what is the actual format?
         [username,domain] = @query.v.split ","
         db.get "endpoint:#{username}@#{domain}", (t) =>
-          if t.error then return send ""
-          from_hash 'subscriber', t, @query.c
+          if t.error then return @send ""
+          @from_hash 'subscriber', t, @query.c
         return
 
       throw 'not handled'
@@ -198,8 +198,8 @@ require('ccnq3_config').get (config)->
 
       if @query.k is 'username'
         loc_db.get @query.v, (p) =>
-          if p.error then return send ""
-          from_hash 'usrloc', p, @query.c
+          if p.error then return @send ""
+          @from_hash 'usrloc', p, @query.c
         return
 
       if not @query.k?
@@ -208,7 +208,7 @@ require('ccnq3_config').get (config)->
         #   loc_db.req "_design/http_db/_list/usrloc/_all_docs"
         # and figure out how to stream the response through Zappa.
         loc_db.req {uri:'_all_docs?include_docs=true'}, (t) =>
-          from_array 'usrloc', (u.doc for u in t.rows), @query.c
+          @from_array 'usrloc', (u.doc for u in t.rows), @query.c
         return
 
       throw 'not handled'
@@ -225,18 +225,18 @@ require('ccnq3_config').get (config)->
         loc_db.head doc._id, (p) =>
           doc._rev = p._rev if p._rev?
           loc_db.put doc, (r) =>
-            if r.error then return send ""
-            send r._id
+            if r.error then return @send ""
+            @send r._id
         return
 
       if @query_type is 'delete'
 
         loc_db.head doc._id, (p) =>
-          if not p._rev? then return send ""
+          if not p._rev? then return @send ""
           doc._rev = p._rev
           loc_db.del doc, (p) =>
-            if p.error then return send ""
-            send ""
+            if p.error then return @send ""
+            @send ""
         return
 
       throw 'not handled'
@@ -246,23 +246,23 @@ require('ccnq3_config').get (config)->
       if @query.k is 'uuid,attribute'
         [uuid,attribute] = @query.v.split ','
         db.get "#{attribute}:#{uuid}", (p) =>
-          if p.error then return send ""
+          if p.error then return @send ""
           avp =
             value: p
             attribute: attribute
             type: 2
-          from_hash 'avpops', avp, @query.c
+          @from_hash 'avpops', avp, @query.c
         return
 
       if @query.k is 'username,domain,attribute'
         [username,domain,attribute] = @query.v.split ','
         db.get "#{attribute}:#{username}@#{domain}", (p) =>
-          if p.error then return send ""
+          if p.error then return @send ""
           avp =
             value: p
             attribute: attribute
             type: 2
-          from_hash 'avpops', avp, @query.c
+          @from_hash 'avpops', avp, @query.c
         return
 
       throw 'not handled'
@@ -271,8 +271,8 @@ require('ccnq3_config').get (config)->
     @get '/dr_gateways/': ->
       if not @query.k?
         db.req {uri:"#{config._id}/dr_gateways.json"}, (t) =>
-          if t.error? then return send ""
-          from_array 'dr_gateways', t, @query.c
+          if t.error? then return @send ""
+          @from_array 'dr_gateways', t, @query.c
         return
       ###
       my %attrs = ();
@@ -289,8 +289,8 @@ require('ccnq3_config').get (config)->
     @get '/dr_rules/': -> # ?c=ruleid,groupid,prefix,timerec,priority,routeid,gwlist,attrs
       if not @query.k?
         db.req {uri:"#{config._id}/dr_rules.json"}, (t) =>
-          if t.error? then return send ""
-          from_array 'dr_rules', t, @query.c
+          if t.error? then return @send ""
+          @from_array 'dr_rules', t, @query.c
         return
 
       throw 'not handled'
@@ -301,8 +301,8 @@ require('ccnq3_config').get (config)->
         [username,domain] = @query.v.split ','
         # However we do not currently support "number@domain", so skip that.
         db.get "number/#{username}", (t) =>
-          if t.error? then return send ""
-          from_hash 'dr_groups', t, @query.c
+          if t.error? then return @send ""
+          @from_hash 'dr_groups', t, @query.c
         return
 
       throw 'not handled'
@@ -310,8 +310,8 @@ require('ccnq3_config').get (config)->
     @get '/dr_gw_lists/': -> # id,gwlist
       if not @query.k?
         db.req {uri:"#{config._id}/dr_gw_lists.json"}, (t) =>
-          if t.error? then return send ""
-          from_array 'dr_gw_lists', t, @query.c
+          if t.error? then return @send ""
+          @from_array 'dr_gw_lists', t, @query.c
         return
 
       throw 'not handled'
@@ -326,6 +326,6 @@ require('ccnq3_config').get (config)->
           dr_gateways: 4
           dr_rules: 3
 
-        return from_hash 'version', {table_version:versions[@query.v]}, @query.c
+        return @from_hash 'version', {table_version:versions[@query.v]}, @query.c
 
       throw 'not handled'
