@@ -36,7 +36,7 @@ shell_runnable = (script) ->
 # but the bootstrap server, since all other hosts additions should
 # be done by an admin account using the "host" couchapp.)
 
-exports.record = (config,hostname,users_uri,provisioning_uri,cb)->
+exports.record = (config,hostname,users_uri,provisioning_uri,keep_provisioning,cb)->
   username = "host@#{hostname}"
 
   users = cdb.new users_uri
@@ -54,7 +54,9 @@ exports.record = (config,hostname,users_uri,provisioning_uri,cb)->
     password_sha: sha1_hex password+salt
 
   users.put p, (r)->
-    if r.error? then return util.log r.error
+    if r.error?
+      util.log util.inspect r
+      throw "Creating user record for #{username}"
 
     # Add the host in the main CDB's provisioning table,
     # with two initialization runnables.
@@ -82,16 +84,19 @@ exports.record = (config,hostname,users_uri,provisioning_uri,cb)->
 
       ]
 
-    # Update the provisioning URI to use the host's new username and password.
-    url = require 'url'
-    p = url.parse config.provisioning.couchdb_uri
-    delete p.href
-    delete p.host
-    p.auth = "#{username}:#{password}"
+    if not keep_provisioning
+      # Update the provisioning URI to use the host's new username and password.
+      url = require 'url'
+      q = url.parse config.provisioning.couchdb_uri
+      delete q.href
+      delete q.host
+      q.auth = "#{username}:#{password}"
 
-    config.provisioning =
-      couchdb_uri: url.format p
+      config.provisioning =
+        couchdb_uri: url.format q
 
     provisioning.put config, (r)->
-      if r.error? then return util.log r.error
+      if r.error?
+        util.log util.inspect r
+        throw "Creating provisioning record for #{username}"
       cb? config

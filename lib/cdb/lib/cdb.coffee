@@ -43,6 +43,17 @@ class cdb
 
   # Record-level operations
 
+  head: (id,cb) ->
+    options =
+      uri: querystring.escape(id)
+      method: 'HEAD'
+    @req options, (args...) ->
+      if args[0]?.headers?.etag?
+        rev = args[0].headers.etag
+        rev = rev.replace /"/g, ''
+        args[0]._rev = rev
+      cb? args...
+
   get: (id,cb) ->
     options =
       uri: querystring.escape(id)
@@ -59,6 +70,12 @@ class cdb
     options =
       method:   'POST'
       body:     p
+    @req options, cb
+
+  del: (p,cb) ->
+    options =
+      uri:      querystring.escape(p._id)+'?rev='+querystring.escape(p._rev)
+      method:   'DELETE'
     @req options, cb
 
 @new = (db_uri) -> new cdb (db_uri)

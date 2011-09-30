@@ -4,8 +4,10 @@
 
   "recipe":[
     "generic",
-    "domain_db",
     "db_http",
+    "domain_db",
+    "usrloc_db",
+    "avpops_db",
     "accounting",
     "toolbox",
     "forwarder",
@@ -20,22 +22,19 @@
     "routing-logic",
     "routing-lineside",
     "routing-trunkside-transparent",
-    "register-colocated",
-    "avpops_db",
-    "domain_db",
-    "usrloc_db"
-
+    "register-colocated"
   ],
 
   "opensips_base_lib": ".",
-  "runtime_opensips_cfg": "/tmp/opensips.cfg",
+  "model": "complete",
+  "runtime_opensips_cfg": "/etc/opensips/opensips.cfg",
+
+  "db_url": "http://127.0.0.1:34340/",
 
   "proxy_ip": "",
   "proxy_port": "5060",
   "internal_ip": "",
   "external_ip": "",
-
-  "db_url": "http://127.0.0.1:34340/",
 
   "accounting": "none",
   "authentication": "database",

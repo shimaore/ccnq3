@@ -14,11 +14,17 @@ CONF=${DIR}/host.json
 HOSTNAME=`hostname`
 
 sudo mkdir -p "${DIR}"
+sudo chown `whoami` "${DIR}"
 if [ -e "${CONF}" ]; then
   echo "** WARNING: $CONF already exists"
 else
   if [ "x$1" == "x" ]; then
     echo "** Proceeding with installation of CouchDB on local host ${HOSTNAME}."
+
+    # Using 128 or higher does not work.
+    ADMIN_PASSWORD=`openssl rand 64 -hex`
+
+    export ADMIN_PASSWORD
     . bootstrap/couchdb
     CDB_URI="http://admin:${ADMIN_PASSWORD}@${HOSTNAME}:5984"
   else
@@ -39,29 +45,35 @@ else
     },
     "usercode": {
       "couchdb_uri": "${CDB_URI}/usercode"
-    }
+    },
     "provisioning": {
       "couchdb_uri": "${CDB_URI}/provisioning"
     }
   }
 JSON
+  sudo chown `whoami` "${CONF}"
 fi
 
 # Cleanup any previous run
 (cd && rm -rf node_modules)
-
-# Management of the _users database
-
-(cd && npm install "${SRC}/"applications/roles)
-(cd && npm run-script ccnq3_roles couchapps)
-
-(cd && npm run-script ccnq3_roles stop >/dev/null 2>&1 || echo)
-(cd && npm run-script ccnq3_roles start)
+(cd && find "${SRC}" -name node_modules -print0 | xargs -0 rm -rf)
 
 # Initialize the usercode database
 (cd && cd "${SRC}/"applications/usercode \
     && npm install \
     && npm run-script couchapps)
+
+# Initialize the _users database.
+(cd && cd "${SRC}/"applications/portal \
+    && npm install \
+    && npm run-script couchapps)
+
+# Management of the _users database
+(cd && npm install "${SRC}/"applications/roles)
+(cd && npm run-script ccnq3_roles couchapps)
+
+(cd && npm run-script ccnq3_roles stop >/dev/null 2>&1 || echo)
+(cd && npm run-script ccnq3_roles start)
 
 # Provisioning couchapp and security
 (cd && cd "${SRC}/"applications/provisioning \

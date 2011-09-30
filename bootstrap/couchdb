@@ -10,9 +10,7 @@ echo '*** BEGIN Install CouchDB'
 sudo aptitude install -y couchdb/unstable
 
 # Install default config file
-
-# Using 128 or higher does not work.
-ADMIN_PASSWORD=`openssl rand 64 -hex`
+sudo /etc/init.d/couchdb stop
 
 # Apparently using /etc/couchdb/local.d/ccnq3 does not work.
 COUCHDB_CONFIG=/etc/couchdb/local.ini
@@ -34,7 +32,9 @@ admin = ${ADMIN_PASSWORD}
 EOT
 sudo chown couchdb.couchdb "${COUCHDB_CONFIG}"
 
-sudo /etc/init.d/couchdb stop
 sudo /etc/init.d/couchdb start
+
+# curl -X PUT "http://127.0.0.1:5984/_config/admins/admin" -d "${ADMIN_PASSWORD}"
+# curl -X PUT "http://127.0.0.1:5984/_config/couch_httpd_auth/require_valid_user" -d "true"
 
 echo '*** END Install CouchDB Completed OK.'

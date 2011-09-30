@@ -5,10 +5,14 @@ modparam("drouting", "drr_table", "dr_rules")
 modparam("drouting", "drg_table", "dr_groups")
 modparam("drouting", "drl_table", "dr_gw_lists")
 
-modparam("drouting", "attrs_avp",      '$avp(dr_attrs)')
 modparam("drouting", "gw_attrs_avp",   '$avp(dr_gw_attrs)')
 modparam("drouting", "rule_attrs_avp", '$avp(dr_rule_attrs)')
 
+modparam("drouting", "gw_id_avp",      '$avp(dr_gw_id)')
+modparam("drouting", "rule_id_avp",    '$avp(dr_rule_id)')
+
 modparam("drouting", "ruri_avp", '$avp(dr_ruri)')
-modparam("drouting", "force_dns", 0)
-modparam("drouting", "use_domain", 0) # default is 1
+modparam("drouting", "force_dns", 0)  # Allows for SRV, etc.
+modparam("drouting", "use_domain", 1) # default
+
+# TODO: consider the probing_* parameters

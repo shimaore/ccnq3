@@ -149,12 +149,22 @@ EOH
 sub configure_opensips {
   my ($params) = @_;
 
+  my $make_extra = sub {
+    my @v = @$_[0];
+    my @r = ();
+    while( my $k = shift @v ) {
+      my $v = shift @v;
+      push @r, "$k=$v";
+    }
+    return join(';',@r);
+  };
+
   # Handle special parameters specially
   if(exists($params->{cdr_extra})) {
-    $params->{cdr_extra} = join(';',@{$params->{cdr_extra}});
+    $params->{cdr_extra} = $make_extra->($params->{cdr_extra});
   }
   if(exists($params->{radius_extra})) {
-    $params->{radius_extra} = join(';',@{$params->{radius_extra}});
+    $params->{radius_extra} = $make_extra->($params->{radius_extra});
   }
   if(exists($params->{listen})) {
     $params->{listen} = join('',map { "listen=$_\n" } @{$params->{listen}});

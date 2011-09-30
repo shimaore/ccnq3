@@ -27,6 +27,7 @@ exports.retrieve = (config,cb) ->
       cb p
 
 exports.update = (content) ->
+  fs = require 'fs'
   fs.writeFileSync config_location, JSON.stringify content
 
 # Attempt to retrieve the last configuration from the database.

@@ -1,5 +1,5 @@
 * No local SQL database; use the HTTP DB module.
 * User information, etc. is available in JSON form.
 
-sudo aptitude install -y opensips opensips-dbhttp-module
+sudo aptitude install -y opensips opensips-dbhttp-module opensips-json-module
 sudo adduser `whoami` opensips # allows access to fifo

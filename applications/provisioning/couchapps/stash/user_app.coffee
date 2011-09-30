@@ -21,7 +21,7 @@ module.exports = ddoc
 # http://wiki.apache.org/couchdb/Document_Update_Validation
 ddoc.validate_doc_update = (newDoc, oldDoc) ->
 
-  provisioning_types = ["number","endpoint","location","host"]
+  provisioning_types = ["number","endpoint","location","host","domain"]
 
   required = (field, message) ->
     if not newDoc[field]

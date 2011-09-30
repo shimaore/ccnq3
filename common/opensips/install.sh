@@ -1,6 +1,7 @@
 #!/bin/bash
 
 sudo sed -i -e 's/RUN_OPENSIPS=no/RUN_OPENSIPS=yes/' /etc/default/opensips
+echo 'TZ=UTC' | sudo tee -a /etc/default/opensips
 
 sudo ./make.pl default.json conference.json local-vars.json
 

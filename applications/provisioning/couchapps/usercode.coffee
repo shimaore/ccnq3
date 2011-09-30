@@ -23,7 +23,7 @@ ddoc.filters.user_push = (doc, req) ->
   if not doc.type?
     return false
 
-  provisioning_types = ["number","endpoint","location","host"]
+  provisioning_types = ["number","endpoint","location","host","domain"]
 
   # Only replicate provisioning documents.
   if provisioning_type.indexOf(doc.type) < 0

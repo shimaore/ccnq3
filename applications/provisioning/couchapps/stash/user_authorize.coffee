@@ -70,7 +70,7 @@ ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
   # Code starting here only handles provisioning types.
   #
 
-  provisioning_types = ["number","endpoint","location","host"]
+  provisioning_types = ["number","endpoint","location","host","domain"]
   if provisioning_types.indexOf(type) < 0
     return
 

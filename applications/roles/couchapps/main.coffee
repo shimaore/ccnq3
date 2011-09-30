@@ -13,17 +13,29 @@ ddoc =
 
 module.exports = ddoc
 
+# Used by track_users.
+ddoc.filters.confirmed = (doc,req) ->
+  user_is = (role) ->
+    doc.roles?.indexOf(role) >= 0
+
+  return user_is 'confirmed'
+
 # Document validation.
 ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
 
   user_was = (role) ->
-    oldDoc.roles?.indexOf(role) >= 0
+    oldDoc?.roles?.indexOf(role) >= 0
 
-  if not newDoc._deleted and not oldDoc or not user_was 'confirmed'
+  if newDoc._deleted
+    return
+
+  if not user_was 'confirmed'
     for role in newDoc.roles
       do (role) ->
         if role.match /^(access|update):/
           throw {forbidden : "Only confirmed users might be granted account access."}
+
+  return
 
 # Used by the replicating agent.
 ddoc.filters.user_pull = (doc,req) ->
