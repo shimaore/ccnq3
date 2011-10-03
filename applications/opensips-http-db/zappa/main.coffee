@@ -152,6 +152,7 @@ require('ccnq3_config').get (config)->
     @get '/dr_gateways/': ->
       if not @query.k?
         pipe_list_key @, 'dr_gateways', 'gateways_by_host', config.hostname
+        return
       ###
       my %attrs = ();
       $attrs{realm}    = $uac_realm if defined($uac_realm) && $uac_realm ne '';
