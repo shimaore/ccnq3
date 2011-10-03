@@ -75,7 +75,7 @@ require('ccnq3_config').get (config)->
         request loc, (err,resp,body)->
           cache[loc] = body
           cache_lru.push loc
-          if cache_lru.lengt > cache_length
+          if cache_lru.length > cache_length
             delete cache[cache_lru.shift()]
           that.send body
 
