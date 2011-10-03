@@ -110,7 +110,7 @@
       a.join(field_delimiter) + row_delimiter
 
     first_line = (types,c)->
-      return line( types[col] for col in c.split ',' )
+      return line( types[col] for col in c )
 
     value_line = (types,n,hash,c)->
       if n is 'avpops'
@@ -120,13 +120,8 @@
           type: 2
       if n is 'dr_gateways'
         hash.type = hash.gwtype
-      return line( quoted_value(types[col], hash[col]) for col in c.split ',' )
+      return line( quoted_value(types[col], hash[col]) for col in c )
 
     exports.column_types = column_types
     exports.first_line = first_line
     exports.value_line = value_line
-
-    exports.from_hash = (n,h,c) ->
-      if not h? then return ''
-      types = column_types[n]
-      first_line(types,c) + value_line(types,n,h,c)

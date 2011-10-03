@@ -22,11 +22,18 @@ ddoc.lib.quote =  coffee.compile fs.readFileSync './quote.coffee'
 
 ddoc.shows.format = (doc,req) ->
   quote = require 'lib/quote'
+  body = ''
+  if doc?
+    t = req.query.t
+    c = req.query.c
+    types = quote.column_types[t]
+    columns = c.split ','
+    body = quote.first_line(types,columns) + quote.value_line(types,t,doc,columns)
   return {
     headers:
       'Content-Type': 'text/plain'
     body:
-      quote.from_hash req.query.t, doc, req.query.c
+      body
   }
 
 ddoc.lists.format = (head,req) ->
@@ -41,10 +48,10 @@ ddoc.lists.format = (head,req) ->
   t = req.query.t
   c = req.query.c
   types = quote.column_types[t]
-  send quote.first_line(types,c)
+  columns = c.split ','
+  send quote.first_line(types,columns)
   while row = getRow()
-    value = quote.value_line types, t, row.value, c
-    send value
+    send quote.value_line types, t, row.value, columns
   return # KeepMe!
 
 ddoc.views.gateways_by_host =
