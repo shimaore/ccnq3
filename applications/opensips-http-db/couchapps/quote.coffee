@@ -115,13 +115,19 @@
     value_line = (types,hash,c)->
       return line( quoted_value(types[col], hash[col]) for col in c.split ',' )
 
-    exports.from_array = (n,t,c) ->
-      if not t? or t.length is 0 then return ''
-      types = column_types[n]
-      first_line(types,c) + ( value_line(types,l,c) for l in t ).join('')
+#    exports.from_array = (n,t,c) ->
+#      if not t? or t.length is 0 then return ''
+#      types = column_types[n]
+#      first_line(types,c) + ( value_line(types,l,c) for l in t ).join('')
 
     exports.from_hash = (n,h,c) ->
       if not h? then return ''
+      if n is 'avpops'
+        h =
+          value: h
+          attribute: h.type
+          type: 2
+
       types = column_types[n]
       first_line(types,c) + value_line(types,h,c)
 

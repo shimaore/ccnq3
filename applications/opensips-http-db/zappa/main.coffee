@@ -13,11 +13,6 @@ require('ccnq3_config').get (config)->
   zappa = require 'zappa'
   zappa config.opensips_proxy.port, config.opensips_proxy.hostname, {config}, ->
 
-    cdb = require 'cdb'
-    db = cdb.new config.provisioning.couchdb_uri
-
-    loc_db = cdb.new config.opensips_proxy.usrloc_uri
-
     @use 'bodyParser', 'logger'
 
     unquote_value = (t,x) ->
@@ -50,15 +45,31 @@ require('ccnq3_config').get (config)->
 
       return doc
 
-    pipe_req = (res,id) ->
-      loc = config.provisioning.couchdb_uri + "/_design/opensips/_show/#{qs.stringify id}"
-      request(loc).pipe(res)
+    _pipe = (@,base,t,id) ->
+      loc = "#{base}/_design/opensips/_show/format/#{qs.stringify id}?t=#{t}&c=#{qs.stringify @req.query.c}"
+      request(loc).pipe(@res)
+
+    pipe_req = (@,t,id) ->
+      _pipe @, config.provisioning.couchdb_uri, t, id
+
+    pipe_loc_req = (@,t,id) ->
+      _pipe @, config.opensips_proxy.usrloc_uri, t, id
+
+    _list = (@,base,t,view) ->
+      loc = "#{base}/_design/opensips/_list/format/#{view}?t=#{t}&c=#{qs.stringify @req.query.c}"
+      request(loc).pipe(@res)
+
+    pipe_list = (@,t,view) ->
+      _list @, config.provisioning.couchdb_uri, t, view
+
+    pipe_loc_list = (@,t,view) ->
+      _list @, config.opensips_proxy.usrloc_uri, t, view
 
 
     # Action!
     @get '/domain/': ->
       if @query.k is 'domain'
-        pipe_req @res, "domain:#{@query.v}"
+        pipe_req @, 'domain', "domain:#{@query.v}"
         return
 
       throw 'not handled'
@@ -67,9 +78,7 @@ require('ccnq3_config').get (config)->
       if @query.k is 'username,domain'
         # Parse @v -- what is the actual format?
         [username,domain] = @query.v.split ","
-        db.get "endpoint:#{username}@#{domain}", (t) =>
-          if t.error then return @send ""
-          @from_hash 'subscriber', t, @query.c
+        pipe_req @, 'subscriber', "endpoint:#{username}@#{domain}"
         return
 
       throw 'not handled'
@@ -77,21 +86,17 @@ require('ccnq3_config').get (config)->
     @get '/location/': -> # usrloc_table
 
       if @query.k is 'username'
-        loc_db.get @query.v, (p) =>
-          if p.error then return @send ""
-          @from_hash 'usrloc', p, @query.c
+        pipe_loc_req @, 'usrloc', @query.v
         return
 
       if not @query.k?
-        # Rewrite-me: will load everything in memory and build the reply in memory.
-        # Instead use a CouchDB "list"
-        #   loc_db.req "_design/http_db/_list/usrloc/_all_docs"
-        # and figure out how to stream the response through Zappa.
-        loc_db.req {uri:'_all_docs?include_docs=true'}, (t) =>
-          @from_array 'usrloc', (u.doc for u in t.rows), @query.c
+        pipe_loc_list @, 'usrloc', '_all_docs'
         return
 
       throw 'not handled'
+
+    cdb = require 'cdb'
+    loc_db = cdb.new config.opensips_proxy.usrloc_uri
 
     @post '/location': ->
 
@@ -180,9 +185,7 @@ require('ccnq3_config').get (config)->
       if @query.k is 'username,domain'
         [username,domain] = @query.v.split ','
         # However we do not currently support "number@domain", so skip that.
-        db.get "number/#{username}", (t) =>
-          if t.error? then return @send ""
-          @from_hash 'dr_groups', t, @query.c
+        pipe_req @, 'dr_groups', "number:#{username}"
         return
 
       throw 'not handled'
