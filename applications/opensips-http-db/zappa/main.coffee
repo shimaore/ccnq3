@@ -46,7 +46,7 @@ require('ccnq3_config').get (config)->
       return doc
 
     _pipe = (that,base,t,id) ->
-      loc = "#{base}/_design/opensips/_show/format/#{qs.stringify id}?t=#{t}&c=#{qs.stringify that.req.query.c}"
+      loc = "#{base}/_design/opensips/_show/format/#{qs.stringify id}?t=#{t}&c=#{qs.stringify that.query.c}"
       request(loc).pipe(that.res)
 
     pipe_req = (that,t,id) ->
@@ -56,7 +56,7 @@ require('ccnq3_config').get (config)->
       _pipe that, config.opensips_proxy.usrloc_uri, t, id
 
     _list = (that,base,t,view) ->
-      loc = "#{base}/_design/opensips/_list/format/#{view}?t=#{t}&c=#{qs.stringify that.req.query.c}"
+      loc = "#{base}/_design/opensips/_list/format/#{view}?t=#{t}&c=#{qs.stringify that.query.c}"
       request(loc).pipe(that.res)
 
     pipe_list = (that,t,view) ->
