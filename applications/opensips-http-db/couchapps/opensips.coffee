@@ -41,17 +41,17 @@ ddoc.lists.format = (head,req) ->
   return # KeepMe!
 
 ddoc.views.gateways_by_host = (doc) ->
-  if doc.type is 'gateway'
+  if doc.type? and doc.type is 'gateway'
     emit doc.host, null
   return
 
 ddoc.views.rules_by_host = (doc) ->
-  if doc.type is 'rule'
+  if doc.type? and doc.type is 'rule'
     emit doc.host, null
   return
 
 # For completeness, not planning to use them at this time.
 ddoc.views.gwlists_by_host = (doc) ->
-  if doc.type is 'gw_list'
+  if doc.type? and doc.type is 'gw_list'
     emit doc.host, null
   return

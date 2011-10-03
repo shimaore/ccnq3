@@ -17,5 +17,5 @@ module.exports = ddoc
 # Too bad we can't use _all_docs with a list.
 ddoc.views.all =
   map: (doc) ->
-    if doc.callid
+    if doc.callid?
       emit null, doc
