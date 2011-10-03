@@ -5,6 +5,8 @@ Released under the AGPL3 license
 ###
 
 util = require 'util'
+qs = require 'querystring'
+request = require 'request'
 
 require('ccnq3_config').get (config)->
 
@@ -16,134 +18,7 @@ require('ccnq3_config').get (config)->
 
     loc_db = cdb.new config.opensips_proxy.usrloc_uri
 
-    # db_dbase.c lists: int, double, string, str, blob, date; str and blob are equivalent for this interface.
-    column_types =
-      usrloc:
-        username: 'string'
-        domain: 'string'
-        contact: 'string'
-        received: 'string'
-        path: 'string'
-        expires: 'date'
-        q: 'double'
-        callid: 'string'
-        cseq: 'int'
-        last_modified: 'date'
-        flags: 'int'
-        cflags: 'int'
-        user_agent: 'string'
-        socket: 'string'
-        methods: 'int'
-      version:
-        table_name: 'string'
-        table_version: 'int'
-      dr_gateways:
-        gwid: 'int'
-        type: 'int'
-        address: 'string'
-        strip: 'int'
-        pri_prefix: 'string'
-        attrs: 'string'
-        probe_mode: 'int'
-        description: 'string'
-      dr_rules:
-        ruleid: 'int'
-        # keys
-        groupid: 'string'
-        prefix: 'string'
-        priority: 'int'
-        # others
-        timerec: 'string'
-        routeid: 'string'
-        gwlist: 'string'
-        attrs: 'string'
-        description: 'string'
-      dr_gw_lists:
-        id:'int'
-        gwlist:'string'
-      dr_groups:
-        username:'string'
-        domain:'string'
-        groupid:'int'
-      domain:
-        domain: 'string'
-      subscriber:
-        username: 'string'
-        domain: 'string'
-        password: 'string'
-        ha1: 'string'
-        ha1b: 'string'
-        rpid: 'string'
-      avpops:
-        uuid: 'string'
-        username: 'string'
-        domain: 'string'
-        attribute: 'string'
-        type: 'int'
-        value: 'string'
-      location:
-        username:'string'
-        domain:'string'
-        contact:'string'
-        received:'string'
-        path:'string'
-        expires:'date'
-        q:'double'
-        callid:'string'
-        cseq:'int'
-        last_modified:'date'
-        flags:'int'
-        cflags:'int'
-        user_agent:'string'
-        socket:'string'
-        methods:'int'
-
-
     @use 'bodyParser', 'logger'
-
-    quoted_value = (t,x) ->
-      # No value: no quoting.
-      if not x?
-        return ''
-
-      # Expects numerical types => no quoting.
-      if t is 'int' or t is 'double'
-        # assert(parseInt(x).toString is x) if t is 'int' and typeof x isnt 'number'
-        # assert(parseFloat(x).toString is x) if t is 'double' and typeof x isnt 'number'
-        return x
-
-      # assert(t is 'string')
-      if typeof x is 'number'
-        x = x.toString()
-      if typeof x isnt 'string'
-        x = JSON.stringify x
-      # assert typeof x is 'string'
-
-      # Assumes quote_delimiter = '"'
-      return '"'+x.replace(/"/g, '""')+'"'
-
-
-    field_delimiter = "\t"
-    row_delimiter = "\n"
-
-    line = (a) ->
-      a.join(field_delimiter) + row_delimiter
-
-    first_line = (types,c)->
-      return line( types[col] for col in c.split ',' )
-
-    value_line = (types,hash,c)->
-      return line( quoted_value(types[col], hash[col]) for col in c.split ',' )
-
-    @helper from_array: (n,t,c) ->
-      if not t? or t.length is 0 then return @send ""
-      types = column_types[n]
-      @send first_line(types,c) + ( value_line(types,l,c) for l in t ).join('')
-
-    @helper from_hash: (n,h,c) ->
-      if not h? then return @send ""
-      types = column_types[n]
-      @send first_line(types,c) + value_line(types,h,c)
 
     unquote_value = (t,x) ->
 
@@ -175,12 +50,15 @@ require('ccnq3_config').get (config)->
 
       return doc
 
+    pipe_req = (res,id) ->
+      loc = config.provisioning.couchdb_uri + "/_design/opensips/_show/#{qs.stringify id}"
+      request(loc).pipe(res)
+
+
     # Action!
     @get '/domain/': ->
       if @query.k is 'domain'
-        db.get "domain:#{@query.v}", (t) =>
-          if t.error then return @send ""
-          @from_hash 'domain', t, @query.c
+        pipe_req @res, "domain:#{@query.v}"
         return
 
       throw 'not handled'
