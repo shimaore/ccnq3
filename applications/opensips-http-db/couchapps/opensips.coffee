@@ -35,8 +35,13 @@ ddoc.lists.format = (head,req) ->
     headers:
       'Content-Type': 'text/plain'
   }
+  if not head.total_rows
+    send ''
+    return
+  types = quote.column_types[req.query.t]
+  send quote.first_line(types,c)
   while row = getRow()
-    value = quote.from_hash req.query.t, row.value, req.query.c
+    value = quote.value_line types, row.value, req.query.c
     send value
   return # KeepMe!
 

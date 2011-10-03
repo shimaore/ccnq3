@@ -115,10 +115,9 @@
     value_line = (types,hash,c)->
       return line( quoted_value(types[col], hash[col]) for col in c.split ',' )
 
-#    exports.from_array = (n,t,c) ->
-#      if not t? or t.length is 0 then return ''
-#      types = column_types[n]
-#      first_line(types,c) + ( value_line(types,l,c) for l in t ).join('')
+    exports.column_types = column_types
+    exports.first_line = first_line
+    exports.value_line = value_line
 
     exports.from_hash = (n,h,c) ->
       if not h? then return ''
