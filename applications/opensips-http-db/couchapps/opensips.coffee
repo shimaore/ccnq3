@@ -27,3 +27,13 @@ ddoc.shows.format = (doc,req) ->
     body:
       quote.from_hash req.query.t, doc, req.query.c
   }
+
+ddoc.lists.format = (head,req) ->
+  quote = require 'lib/quote'
+  start {
+    headers:
+      'Content-Type': 'text/plain'
+  }
+  while row = getRow()
+    value = quote.from_hash req.query.t, row.value, req.query.c
+    send value
