@@ -13,3 +13,4 @@ require('ccnq3_config').get (config)->
 
   location_uri = config.opensips_proxy.usrloc_uri
   push_script location_uri, 'opensips'
+  push_script location_uri, 'location'
