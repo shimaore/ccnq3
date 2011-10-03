@@ -127,8 +127,8 @@
           value: h
           attribute: h.type
           type: 2
+      if n is 'dr_gateways'
+        h.type = h.gwtype
 
       types = column_types[n]
       first_line(types,c) + value_line(types,h,c)
-
-

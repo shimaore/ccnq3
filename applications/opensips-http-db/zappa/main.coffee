@@ -65,6 +65,14 @@ require('ccnq3_config').get (config)->
     pipe_loc_list = (that,t,view) ->
       _list that, config.opensips_proxy.usrloc_uri, t, view
 
+    _list_key = (that,base,t,view,key) ->
+      key = "\"#{key}\""
+      loc = "#{base}/_design/opensips/_list/format/#{view}?t=#{t}&c=#{qs.stringify that.query.c}&key=#{qs.stringify key}"
+      request(loc).pipe(that.response)
+
+    pipe_list_key = (that,t,view,key) ->
+      _list that, config.provisioning.couchdb_uri, t, view, key
+
 
     # Action!
     @get '/domain/': ->
@@ -130,24 +138,12 @@ require('ccnq3_config').get (config)->
 
       if @query.k is 'uuid,attribute'
         [uuid,attribute] = @query.v.split ','
-        db.get "#{attribute}:#{uuid}", (p) =>
-          if p.error then return @send ""
-          avp =
-            value: p
-            attribute: attribute
-            type: 2
-          @from_hash 'avpops', avp, @query.c
+        pipe_req @, 'avpops', "#{attribute}:#{uuid}"
         return
 
       if @query.k is 'username,domain,attribute'
         [username,domain,attribute] = @query.v.split ','
-        db.get "#{attribute}:#{username}@#{domain}", (p) =>
-          if p.error then return @send ""
-          avp =
-            value: p
-            attribute: attribute
-            type: 2
-          @from_hash 'avpops', avp, @query.c
+        pipe_req @, 'avpops', "#{attribute}:#{username}@#{domain}"
         return
 
       throw 'not handled'
@@ -155,10 +151,7 @@ require('ccnq3_config').get (config)->
 
     @get '/dr_gateways/': ->
       if not @query.k?
-        db.req {uri:"#{config._id}/dr_gateways.json"}, (t) =>
-          if t.error? then return @send ""
-          @from_array 'dr_gateways', t, @query.c
-        return
+        pipe_list_key @, 'dr_gateways', 'gateways_by_host', config.hostname
       ###
       my %attrs = ();
       $attrs{realm}    = $uac_realm if defined($uac_realm) && $uac_realm ne '';
@@ -173,9 +166,7 @@ require('ccnq3_config').get (config)->
 
     @get '/dr_rules/': -> # ?c=ruleid,groupid,prefix,timerec,priority,routeid,gwlist,attrs
       if not @query.k?
-        db.req {uri:"#{config._id}/dr_rules.json"}, (t) =>
-          if t.error? then return @send ""
-          @from_array 'dr_rules', t, @query.c
+        pipe_list_key @, 'dr_rules', 'rules_by_host', config.hostname
         return
 
       throw 'not handled'
@@ -192,9 +183,7 @@ require('ccnq3_config').get (config)->
 
     @get '/dr_gw_lists/': -> # id,gwlist
       if not @query.k?
-        db.req {uri:"#{config._id}/dr_gw_lists.json"}, (t) =>
-          if t.error? then return @send ""
-          @from_array 'dr_gw_lists', t, @query.c
+        pipe_list_key @, 'dr_gw_lists', 'gwlists_by_host', config.hostname
         return
 
       throw 'not handled'
