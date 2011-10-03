@@ -50,18 +50,18 @@ ddoc.lists.format = (head,req) ->
 ddoc.views.gateways_by_host =
   map: (doc) ->
     if doc.type? and doc.type is 'gateway'
-      emit doc.host, null
+      emit doc.host, doc
     return
 
 ddoc.views.rules_by_host =
   map: (doc) ->
     if doc.type? and doc.type is 'rule'
-      emit doc.host, null
+      emit doc.host, doc
     return
 
 # For completeness, not planning to use them at this time.
 ddoc.views.gwlists_by_host =
   map: (doc) ->
     if doc.type? and doc.type is 'gw_list'
-      emit doc.host, null
+      emit doc.host, doc
     return
