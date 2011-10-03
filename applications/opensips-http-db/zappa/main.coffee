@@ -13,7 +13,7 @@ require('ccnq3_config').get (config)->
   zappa = require 'zappa'
   zappa config.opensips_proxy.port, config.opensips_proxy.hostname, {config}, ->
 
-    @use 'bodyParser', @app.Cache(100)
+    @use 'bodyParser'
 
     column_types =
       location:
