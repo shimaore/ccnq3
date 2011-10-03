@@ -38,10 +38,12 @@ ddoc.lists.format = (head,req) ->
   if not head.total_rows
     send ''
     return
-  types = quote.column_types[req.query.t]
+  t = req.query.t
+  c = req.query.c
+  types = quote.column_types[t]
   send quote.first_line(types,c)
   while row = getRow()
-    value = quote.value_line types, row.value, req.query.c
+    value = quote.value_line types, row.value, c
     send value
   return # KeepMe!
 
