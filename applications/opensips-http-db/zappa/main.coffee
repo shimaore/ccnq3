@@ -67,8 +67,8 @@ require('ccnq3_config').get (config)->
     cache_lru = []
     cache_length = 256
 
-    _pipe = (that,base,t,id) ->
-      loc = "#{base}/_design/opensips/_show/format/#{qs.escape id}?t=#{t}&c=#{qs.escape that.query.c}"
+
+    _request = (that,loc) ->
       if cache[loc]
         that.send cache[loc]
       else
@@ -80,6 +80,10 @@ require('ccnq3_config').get (config)->
           that.send body
 
       # request(loc).pipe(that.response)
+
+    _pipe = (that,base,t,id) ->
+      loc = "#{base}/_design/opensips/_show/format/#{qs.escape id}?t=#{t}&c=#{qs.escape that.query.c}"
+      _request that, loc
 
     pipe_req = (that,t,id) ->
       _pipe that, config.provisioning.couchdb_uri, t, id
