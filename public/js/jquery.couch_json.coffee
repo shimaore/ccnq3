@@ -3,11 +3,11 @@
 #
 
 crud2 = ($) ->
-  $.fn.set_couchdb_name = (name) ->
+  $.fn.couch_name = (name) ->
     $(@).data 'cdb', $.couch.db name
     return @
 
-  $.fn.load_couchdb_item = (id,cb) ->
+  $.fn.couch_load = (id,cb) ->
     # load data from couchdb and display it in the form
     # @reset()
     that = @
@@ -24,19 +24,19 @@ crud2 = ($) ->
               $(':checkbox[name='+name+']', that).attr('checked',fdoc[name])
           cb?(doc)
 
-  $.fn.new_couchdb_item = ->
+  $.fn.couch_new = ->
     # activate form for new items
     # @reset()
     doc = {}
     $(@).data 'ldoc', doc
 
-  $.fn.remove_couchdb_item = (cb) ->
+  $.fn.couch_remove = (cb) ->
     # Delete doc from couchdb
     if confirm("Are you sure?")
       $(@).data('cdb').removeDoc($(@).data('ldoc'))
       cb?()
 
-  $.fn.save_couchdb_item = (cb) ->
+  $.fn.couch_save = (cb) ->
     # encode the data in form and save it to couchdb
     reg = $.extend({},$(@).data('ldoc'), $(@).toDeepJson())
     that = @

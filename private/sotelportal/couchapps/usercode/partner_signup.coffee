@@ -267,11 +267,11 @@ do (jQuery) ->
 
           $.getJSON '/u/profile.json', (profile) ->
             $.couch.urlPrefix = profile.userdb_base_uri
-            $('#wizard_form').set_couchdb_name(profile.user_database)
+            $('#wizard_form').couch_name(profile.user_database)
             $('[name="_id"]').val "partner_signup:#{profile.user_name}"
 
-          # Clear the form (alternatively, could use load_couchdb_item()
-          $('#wizard_form').new_couchdb_item()
+          # Clear the form (alternatively, could use couch_load()
+          $('#wizard_form').couch_new()
 
           console.log 'Configuring form'
 
@@ -281,7 +281,7 @@ do (jQuery) ->
               # Do not save template DOM content.
               $('.template').remove()
               $('[name="was_validated"]').val was_validated
-              $(@).save_couchdb_item ->
+              $(@).couch_save ->
                 $('#confirm_invalid').dialog 'close'
                 window.location.reload()
 

@@ -1,11 +1,11 @@
 (function() {
   var crud2;
   crud2 = function($) {
-    $.fn.set_couchdb_name = function(name) {
+    $.fn.couch_name = function(name) {
       $(this).data('cdb', $.couch.db(name));
       return this;
     };
-    $.fn.load_couchdb_item = function(id, cb) {
+    $.fn.couch_load = function(id, cb) {
       var that;
       that = this;
       return $(this).data('cdb').openDoc(id, {
@@ -30,18 +30,18 @@
         }
       });
     };
-    $.fn.new_couchdb_item = function() {
+    $.fn.couch_new = function() {
       var doc;
       doc = {};
       return $(this).data('ldoc', doc);
     };
-    $.fn.remove_couchdb_item = function(cb) {
+    $.fn.couch_remove = function(cb) {
       if (confirm("Are you sure?")) {
         $(this).data('cdb').removeDoc($(this).data('ldoc'));
         return typeof cb === "function" ? cb() : void 0;
       }
     };
-    $.fn.save_couchdb_item = function(cb) {
+    $.fn.couch_save = function(cb) {
       var reg, that;
       reg = $.extend({}, $(this).data('ldoc'), $(this).toDeepJson());
       that = this;
