@@ -45,25 +45,25 @@ require('ccnq3_config').get (config)->
 
       return doc
 
-    _pipe = (@,base,t,id) ->
-      loc = "#{base}/_design/opensips/_show/format/#{qs.stringify id}?t=#{t}&c=#{qs.stringify @req.query.c}"
-      request(loc).pipe(@res)
+    _pipe = (that,base,t,id) ->
+      loc = "#{base}/_design/opensips/_show/format/#{qs.stringify id}?t=#{t}&c=#{qs.stringify that.req.query.c}"
+      request(loc).pipe(that.res)
 
-    pipe_req = (@,t,id) ->
-      _pipe @, config.provisioning.couchdb_uri, t, id
+    pipe_req = (that,t,id) ->
+      _pipe that, config.provisioning.couchdb_uri, t, id
 
-    pipe_loc_req = (@,t,id) ->
-      _pipe @, config.opensips_proxy.usrloc_uri, t, id
+    pipe_loc_req = (that,t,id) ->
+      _pipe that, config.opensips_proxy.usrloc_uri, t, id
 
-    _list = (@,base,t,view) ->
-      loc = "#{base}/_design/opensips/_list/format/#{view}?t=#{t}&c=#{qs.stringify @req.query.c}"
-      request(loc).pipe(@res)
+    _list = (that,base,t,view) ->
+      loc = "#{base}/_design/opensips/_list/format/#{view}?t=#{t}&c=#{qs.stringify that.req.query.c}"
+      request(loc).pipe(that.res)
 
-    pipe_list = (@,t,view) ->
-      _list @, config.provisioning.couchdb_uri, t, view
+    pipe_list = (that,t,view) ->
+      _list that, config.provisioning.couchdb_uri, t, view
 
-    pipe_loc_list = (@,t,view) ->
-      _list @, config.opensips_proxy.usrloc_uri, t, view
+    pipe_loc_list = (that,t,view) ->
+      _list that, config.opensips_proxy.usrloc_uri, t, view
 
 
     # Action!
