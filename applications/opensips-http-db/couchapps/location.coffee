@@ -5,6 +5,7 @@ Released under the Affero GPL3 license or above
 
 ddoc =
   _id: '_design/location'
+  language: 'javascript'
   views: {}
   lists: {} # http://guide.couchdb.org/draft/transforming.html
   shows: {} # http://guide.couchdb.org/draft/show.html
