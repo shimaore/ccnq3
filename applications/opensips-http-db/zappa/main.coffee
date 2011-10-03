@@ -16,22 +16,22 @@ require('ccnq3_config').get (config)->
     @use 'bodyParser', 'logger'
 
     column_types =
-      usrloc:
-        username: 'string'
-        domain: 'string'
-        contact: 'string'
-        received: 'string'
-        path: 'string'
-        expires: 'date'
-        q: 'double'
-        callid: 'string'
-        cseq: 'int'
-        last_modified: 'date'
-        flags: 'int'
-        cflags: 'int'
-        user_agent: 'string'
-        socket: 'string'
-        methods: 'int'
+      location:
+        username:'string'
+        domain:'string'
+        contact:'string'
+        received:'string'
+        path:'string'
+        expires:'date'
+        q:'double'
+        callid:'string'
+        cseq:'int'
+        last_modified:'date'
+        flags:'int'
+        cflags:'int'
+        user_agent:'string'
+        socket:'string'
+        methods:'int'
 
     unquote_value = (t,x) ->
 
