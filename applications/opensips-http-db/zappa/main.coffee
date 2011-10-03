@@ -90,7 +90,7 @@ require('ccnq3_config').get (config)->
         return
 
       if not @query.k?
-        pipe_loc_list @, 'usrloc', 'all' # Can't use _all_docs
+        pipe_loc_list @, 'usrloc', 'location/all' # Can't use _all_docs
         return
 
       throw 'not handled'
