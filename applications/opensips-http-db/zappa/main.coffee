@@ -206,6 +206,6 @@ require('ccnq3_config').get (config)->
           dr_gateways: 4
           dr_rules: 3
 
-        return "string\n#{versions[@query.v]}\n"
+        return "int\n#{versions[@query.v]}\n"
 
       throw 'not handled'
