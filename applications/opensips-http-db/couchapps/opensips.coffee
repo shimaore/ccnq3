@@ -37,3 +37,4 @@ ddoc.lists.format = (head,req) ->
   while row = getRow()
     value = quote.from_hash req.query.t, row.value, req.query.c
     send value
+  return # KeepMe!
