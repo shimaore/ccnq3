@@ -112,7 +112,14 @@
     first_line = (types,c)->
       return line( types[col] for col in c.split ',' )
 
-    value_line = (types,hash,c)->
+    value_line = (types,n,hash,c)->
+      if n is 'avpops'
+        hash =
+          value: hash
+          attribute: hash.type
+          type: 2
+      if n is 'dr_gateways'
+        hash.type = hash.gwtype
       return line( quoted_value(types[col], hash[col]) for col in c.split ',' )
 
     exports.column_types = column_types
@@ -121,13 +128,5 @@
 
     exports.from_hash = (n,h,c) ->
       if not h? then return ''
-      if n is 'avpops'
-        h =
-          value: h
-          attribute: h.type
-          type: 2
-      if n is 'dr_gateways'
-        h.type = h.gwtype
-
       types = column_types[n]
-      first_line(types,c) + value_line(types,h,c)
+      first_line(types,c) + value_line(types,n,h,c)

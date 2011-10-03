@@ -43,7 +43,7 @@ ddoc.lists.format = (head,req) ->
   types = quote.column_types[t]
   send quote.first_line(types,c)
   while row = getRow()
-    value = quote.value_line types, row.value, c
+    value = quote.value_line types, t, row.value, c
     send value
   return # KeepMe!
 
