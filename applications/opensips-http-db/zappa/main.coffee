@@ -71,7 +71,7 @@ require('ccnq3_config').get (config)->
       request(loc).pipe(that.response)
 
     pipe_list_key = (that,t,view,key) ->
-      _list that, config.provisioning.couchdb_uri, t, view, key
+      _list_key that, config.provisioning.couchdb_uri, t, view, key
 
 
     # Action!
