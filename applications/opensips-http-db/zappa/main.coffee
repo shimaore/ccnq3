@@ -151,7 +151,7 @@ require('ccnq3_config').get (config)->
 
     @get '/dr_gateways/': ->
       if not @query.k?
-        pipe_list_key @, 'dr_gateways', 'gateways_by_host', config.hostname
+        pipe_list_key @, 'dr_gateways', 'gateways_by_host', config.host
         return
       ###
       my %attrs = ();
@@ -167,7 +167,7 @@ require('ccnq3_config').get (config)->
 
     @get '/dr_rules/': -> # ?c=ruleid,groupid,prefix,timerec,priority,routeid,gwlist,attrs
       if not @query.k?
-        pipe_list_key @, 'dr_rules', 'rules_by_host', config.hostname
+        pipe_list_key @, 'dr_rules', 'rules_by_host', config.host
         return
 
       throw 'not handled'
@@ -184,7 +184,7 @@ require('ccnq3_config').get (config)->
 
     @get '/dr_gw_lists/': -> # id,gwlist
       if not @query.k?
-        pipe_list_key @, 'dr_gw_lists', 'gwlists_by_host', config.hostname
+        pipe_list_key @, 'dr_gw_lists', 'gwlists_by_host', config.host
         return
 
       throw 'not handled'
