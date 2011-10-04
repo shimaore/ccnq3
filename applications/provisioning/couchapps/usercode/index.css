@@ -1,0 +1,9 @@
+
+label {
+  display: block;
+}
+
+label>span {
+  width: 200px;
+  float: left;
+}
