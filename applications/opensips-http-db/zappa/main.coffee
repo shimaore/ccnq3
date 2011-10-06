@@ -63,23 +63,8 @@ require('ccnq3_config').get (config)->
 
       return doc
 
-    cache = {}
-    cache_lru = []
-    cache_length = 256
-
-
     _request = (that,loc) ->
-      if cache[loc]
-        that.send cache[loc]
-      else
-        request loc, (err,resp,body)->
-          cache[loc] = body
-          cache_lru.push loc
-          if cache_lru.length > cache_length
-            delete cache[cache_lru.shift()]
-          that.send body
-
-      # request(loc).pipe(that.response)
+      request(loc).pipe(that.response)
 
     _pipe = (that,base,t,id) ->
       loc = "#{base}/_design/opensips/_show/format/#{qs.escape id}?t=#{t}&c=#{qs.escape that.query.c}"
