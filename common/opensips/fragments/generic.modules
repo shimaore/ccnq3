@@ -17,6 +17,8 @@
 
 ## ------- Modules ---------- ##
 
+loadmodule "localcache.so"
+
 # -- JSON --
 loadmodule "json.so"
 
