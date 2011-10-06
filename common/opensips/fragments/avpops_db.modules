@@ -3,4 +3,4 @@ loadmodule "avpops.so"
 modparam("avpops", "db_url",          "${db_url}")
 modparam("avpops", "avp_table",       "avpops")
 modparam("avpops", "use_domain",      1)
-
+modparam("avpops", "buf_size",        4096) # 4096 bytes to store JSON data
