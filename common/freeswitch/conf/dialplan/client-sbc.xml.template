@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <include>
   <!-- egress  -->
-  <context name="egress-$${profile_name}-$${profile_type}">
+  <context name="egress-$${profile_name}">
 
     <extension name="unloop">
       <condition field="${unroll_loops}" expression="^true$"/>
@@ -28,7 +28,7 @@
    <!-- <action application="set" data="effective_caller_id_name=_undef_"/> -->
         <action application="set" data="sip_contact_user=${ccnq_from_e164}"/>
         <action application="set" data="sip_cid_type=pid"/>
-        <action application="transfer" data="${ccnq_to_e164} XML egress-$${profile_name}-$${profile_type}-send-call"/>
+        <action application="transfer" data="${ccnq_to_e164} XML egress-$${profile_name}-send-call"/>
       </condition>
     </extension>
 
@@ -42,7 +42,7 @@
   </context>
 
   <!-- ingress  -->
-  <context name="ingress-$${profile_name}-$${profile_type}">
+  <context name="ingress-$${profile_name}">
 
     <extension name="unloop">
       <condition field="${unroll_loops}" expression="^true$"/>
@@ -70,17 +70,17 @@
         <action application="set" data="progress_timeout=12"/>
         <action application="set" data="call_timeout=300"/>
         <action application="export" data="t38_passthru=true"/>
-        <action application="set" data="force_transfer_context=refer-$${profile_name}-$${profile_type}"/>
+        <action application="set" data="force_transfer_context=refer-$${profile_name}"/>
         <action application="set" data="sip_contact_user=${ccnq_from_e164}"/>
         <action application="set" data="sip_cid_type=pid"/>
-        <action application="transfer" data="${ccnq_to_e164} XML ingress-$${profile_name}-$${profile_type}-send-call"/>
+        <action application="transfer" data="${ccnq_to_e164} XML ingress-$${profile_name}-send-call"/>
       </condition>
     </extension>
 
   </context>
 
   <!-- ingress + REFER -->
-  <context name="refer-$${profile_name}-$${profile_type}">
+  <context name="refer-$${profile_name}">
 
     <extension name="unloop">
       <condition field="${unroll_loops}" expression="^true$"/>

@@ -27,7 +27,7 @@
     <load module="mod_native_file"/>
     <load module="mod_tone_stream"/>
 
-    <load module="mod_curl"/>
-    <load module="mod_lua"/>
+    <!-- <load module="mod_curl"/> -->
+    <!-- <load module="mod_lua"/> -->
   </modules>
 </configuration>
