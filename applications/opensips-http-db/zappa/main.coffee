@@ -96,13 +96,6 @@ require('ccnq3_config').get (config)->
 
 
     # Action!
-    @get '/domain/': ->
-      if @query.k is 'domain'
-        pipe_req @, 'domain', "domain:#{@query.v}"
-        return
-
-      throw 'not handled'
-
     @get '/subscriber/': -> # auth_table
       if @query.k is 'username,domain'
         # Parse @v -- what is the actual format?
