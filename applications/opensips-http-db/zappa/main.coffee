@@ -8,6 +8,8 @@ util = require 'util'
 qs = require 'querystring'
 request = require 'request'
 
+make_id = (t,n) -> [t,n].join ' '
+
 require('ccnq3_config').get (config)->
 
   zappa = require 'zappa'
@@ -100,7 +102,7 @@ require('ccnq3_config').get (config)->
       if @query.k is 'username,domain'
         # Parse @v -- what is the actual format?
         [username,domain] = @query.v.split ","
-        pipe_req @, 'subscriber', "endpoint:#{username}@#{domain}"
+        pipe_req @, 'subscriber', make_id('endpoint',"#{username}@#{domain}")
         return
 
       throw 'not handled'
@@ -157,7 +159,7 @@ require('ccnq3_config').get (config)->
 
       if @query.k is 'username,domain,attribute'
         [username,domain,attribute] = @query.v.split ','
-        pipe_req @, 'avpops', "#{attribute}:#{username}@#{domain}"
+        pipe_req @, 'avpops', make_id(attribute,"#{username}@#{domain}")
         return
 
       throw 'not handled'
@@ -191,7 +193,7 @@ require('ccnq3_config').get (config)->
       if @query.k is 'username,domain'
         [username,domain] = @query.v.split ','
         # However we do not currently support "number@domain", so skip that.
-        pipe_req @, 'dr_groups', "number:#{username}"
+        pipe_req @, 'dr_groups', make_id('number',username)
         return
 
       throw 'not handled'
