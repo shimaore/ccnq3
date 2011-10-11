@@ -47,7 +47,7 @@ Fill-in the "content" div.
       render 'public', layout:no
 
   view public: ->
-    div id:'login_container', class:'grid_6'
+    div id:'login_container', class:'grid_6', ->
       div id:'register_container'
     div id:'password_recovery_container', class:'grid_6'
 
