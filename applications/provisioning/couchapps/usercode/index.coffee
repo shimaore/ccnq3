@@ -3,6 +3,8 @@ do(jQuery,Sammy) ->
 
   $ = jQuery
 
+  make_id = (t,n) -> [t,n].join ' '
+
   $.fn.disable = () ->
     $(@).attr('disabled','true')
 
@@ -84,7 +86,7 @@ do(jQuery,Sammy) ->
       @get '#/endpoint', ->
         if @params.endpoints?
           # Get the data record, then render it and display the result.
-          @send endpoints.get "endpoint:#{endpoint}", (data)->
+          @send endpoints.get make_id('endpoint',endpoint), (data)->
             @swap endpoint_tpl data
         else
           @swap endpoint_tpl()
@@ -93,6 +95,6 @@ do(jQuery,Sammy) ->
         # Do something
         @doc = $('#endpoint_form').toDeepJson()
         @doc.endpoint = if @doc.ip? then @doc.ip else @doc.username then
-        @doc._id = "endpoint:#{@doc.endpoint}"
+        @doc._id = make_id('endpoint',@doc.endpoint)
 
     app.run '#/'
