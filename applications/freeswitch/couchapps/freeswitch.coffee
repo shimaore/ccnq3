@@ -88,6 +88,7 @@ ddoc.shows.freeswitch_local_profiles = (doc,req) ->
       <X-PRE-PROCESS cmd="include" data="sip_profiles/#{profile.template}.xml.template"/>
       """
   send "</include>"
+  return {}
 
 ddoc.shows.freeswitch_local_acl = (doc,req) ->
   start
@@ -104,6 +105,7 @@ ddoc.shows.freeswitch_local_acl = (doc,req) ->
       </list>
       """
   send "</include>"
+  return {}
 
 ###
 The configuration file "vars.xml" contains more defaults.
@@ -130,6 +132,7 @@ ddoc.shows.freeswitch_local_vars = (doc,req) ->
 
     </include>
     """
+  return {}
 
 ddoc.shows.freeswitch_local_conf = (doc,req) ->
   start
@@ -156,4 +159,5 @@ ddoc.shows.freeswitch_local_conf = (doc,req) ->
       </section>
     </include>
     """
+  return {}
 
