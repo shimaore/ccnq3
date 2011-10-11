@@ -52,6 +52,8 @@ do(jQuery,Sammy) ->
       textbox id:'username', title:'Username',   value:@username # in the form username@domain
       textbox id:'password', title:'Password',   value:@password
 
+      input type:'submit'
+
     coffeescript ->
       $('#endpoint_form').delegate '#ip', 'change', ->
         if $(@).val()?
@@ -82,19 +84,32 @@ do(jQuery,Sammy) ->
 
       @get '#/', ->
         @swap main_tpl()
-  
+
       @get '#/endpoint', ->
-        if @params.endpoints?
+        if @params.endpoint?
           # Get the data record, then render it and display the result.
-          @send endpoints.get make_id('endpoint',endpoint), (data)->
-            @swap endpoint_tpl data
+          @send endpoints.get make_id('endpoint',@params.endpoint), (doc)->
+            $('#endpoint_form').data 'doc', doc
+            @swap endpoint_tpl doc
         else
           @swap endpoint_tpl()
-  
+
       @post '#/endpoint', ->
         # Do something
-        @doc = $('#endpoint_form').toDeepJson()
-        @doc.endpoint = if @doc.ip? then @doc.ip else @doc.username then
+        doc = $('#endpoint_form').data 'doc'
+        doc ?= {}
+        former_doc = doc
+        $.extend doc, $('#endpoint_form').toDeepJson()
         @doc._id = make_id('endpoint',@doc.endpoint)
+
+        doc.endpoint = if @doc.ip? then doc.ip else doc.username
+        doc._id = "endpoint:#{@doc.endpoint}"
+
+        if doc._id is former_doc._id
+          @send endpoints.update doc._id, doc
+        else
+          delete doc._rev
+          @send endpoints.remove former_doc, ->
+            @send endpoints.save doc
 
     app.run '#/'
