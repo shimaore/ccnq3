@@ -68,6 +68,10 @@ Additionally the following fields might be specified:
 ###
 
 ddoc.shows.freeswitch_local_profiles = (doc,req) ->
+  start
+    headers:
+      'Content-Type': 'text/xml'
+
   send "<include>"
   for profile_name, profile of doc.sip_profiles
     egress_sip_port = profile.egress_sip_port ? profile.ingress_sip_port + 10000
@@ -86,6 +90,10 @@ ddoc.shows.freeswitch_local_profiles = (doc,req) ->
   send "</include>"
 
 ddoc.shows.freeswitch_local_acl = (doc,req) ->
+  start
+    headers:
+      'Content-Type': 'text/xml'
+
   send "<include>"
   for profile_name, profile of doc.sip_profiles
     send """
@@ -104,6 +112,11 @@ The configuration file "vars.xml" contains more defaults.
 ddoc.shows.freeswitch_local_vars = (doc,req) ->
   sip_voice = doc.sip_voice ? 'en/us/callie'
   rtp_ip = doc.rtp_ip ? 'auto'
+
+  start
+    headers:
+      'Content-Type': 'text/xml'
+
   send """
     <include>
       <!-- Common variables -->
@@ -119,6 +132,10 @@ ddoc.shows.freeswitch_local_vars = (doc,req) ->
     """
 
 ddoc.shows.freeswitch_local_conf = (doc,req) ->
+  start
+    headers:
+      'Content-Type': 'text/xml'
+
   send """
     <include>
       <section name="dialplan" description="Regex/XML Dialplan">
