@@ -3,6 +3,7 @@
 # Install
 sudo aptitude -y install freeswitch freeswitch-lua
 sudo adduser `whoami` daemon # allows access to configuration directory
+sudo chmod g+w /opt/freeswitch/conf # allow access to configuration directory
 
 # FIXME -- this should be replaced with some kind of in-memory system.
 grep '/opt/freeswitch/db' /etc/fstab || sudo tee -a /etc/fstab >/dev/null <<'CONF'
