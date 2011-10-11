@@ -5,6 +5,7 @@ Released under the Affero GPL3 license or above
 
 ddoc =
   _id: '_design/freeswitch'
+  shows: {}
   filters: {}
 
 module.exports = ddoc
