@@ -4,8 +4,8 @@ util = require 'util'
 config_location = process.env.npm_package_config_config_file
 
 if not config_location?
-  util.log "NPM did not provide a config_file parameter, process.env = #{ util.inspect process.env }"
   config_location = '/etc/ccnq3/host.json'
+  util.log "NPM did not provide a config_file parameter, using #{config_location}."
 
 exports.location = config_location
 
