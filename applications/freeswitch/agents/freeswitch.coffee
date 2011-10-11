@@ -72,7 +72,7 @@ require('ccnq3_config').get (config) ->
     host_uri = qs.escape "host:#{config.host}"
     for show, file of files
       do (show,file)->
-        save_uri_as "#{config.provisioning.couchdb_uri}/_design/freeswitch/_show/#{show}/#{host_uri}",
+        save_uri_as "#{config.provisioning.couchdb_uri}/_design/freeswitch/_show/#{show}/#{host_uri}", file
 
     # 2. Process any command
     if p.sip_commands?
