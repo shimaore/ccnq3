@@ -38,7 +38,7 @@
                 $('#register-message-domain').html data.domain
                 $('#register-message').dialog 'open'
               else
-                if data.error is '409'
+                if data.error is 409
                   $('#register_error').html("You have already registered with this email address. Would you like to Sign In or do you need your password Recovered?")
                 else
                   $('#register_error').html("Account creation failed: #{data.error}")
