@@ -1,0 +1,26 @@
+{
+  "name": "ccnq3_freeswitch",
+  "version": "0.0.2",
+  "description": "FreeSwitch for CCNQ3",
+  "keywords": "",
+  "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
+  "config": {
+    "config_file": "/etc/ccnq3/host.json"
+  },
+  "scripts": {
+    "start": "daemon -n ccnq3_freeswitch -o daemon.debug -D \"`pwd`/agents\" -r -- ./freeswitch.coffee"
+  , "stop":  "daemon -n ccnq3_freeswitch -o daemon.debug --stop"
+  },
+  "dependencies": {
+    "cdb": ">=0.0.12"
+    "cdb_changes": "*"
+  , "ccnq3_config": ">=0.1"
+  , "ccnq3_logger": "*"
+  , "couchapp": "*"
+  , "request": "*"
+  , "esl": "*"
+  },
+  "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },
+
+  "ok": true
+}
