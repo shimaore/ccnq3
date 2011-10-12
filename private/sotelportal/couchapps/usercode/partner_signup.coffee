@@ -244,7 +244,12 @@ do (jQuery) ->
       # Retrieve the user profile
       $.getJSON "/#{profile.user_database}/org.couchdb.user:#{profile.user_name}", (data) ->
 
-        data.effective_date = (new Date()).toLocaleDateString()
+        today = new Date()
+        months = [
+          'January','February','March','April','May','June',
+          'July','August','September','October','November','December'
+        ]
+        data.effective_date = "#{months[today.getMonth()]} #{today.getDate()}, #{today.getFullYear()}"
         $('#content').html CoffeeKup.render view, data
         cb()
 
