@@ -231,6 +231,9 @@ do (jQuery) ->
             label  for:'signature.title', class:'normal', -> 'Title'
             input name:'signature.title', class:'required minlength(2)'
 
+            label  for:'effective_date', class:'normal', -> "Today's date"
+            input name:'effective_date', readonly:true, value:@effective_date
+
         div id:'done', ->
           h2 class:'stepTitle', -> 'Confirmation'
 
@@ -241,6 +244,7 @@ do (jQuery) ->
       # Retrieve the user profile
       $.getJSON "/#{profile.user_database}/org.couchdb.user:#{profile.user_name}", (data) ->
 
+        data.effective_date = (new Date()).toLocaleDateString()
         $('#content').html CoffeeKup.render view, data
         cb()
 
