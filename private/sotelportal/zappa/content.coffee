@@ -35,7 +35,8 @@ Fill-in the "content" div.
             #       something à la "package.json").
             #       (This would include dependencies like the "Interaction" list
             #       above.)
-            $.getScript("/#{profile.user_database}/_design/sotel_portal/partner_signup.js")
+            $.getScript "/#{profile.user_database}/_design/sotel_portal/partner_signup.js", ->
+              $('#partner_signup_trigger').click()
 
 
   get '/p/content.html': ->
