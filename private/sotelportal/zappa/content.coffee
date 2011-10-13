@@ -15,7 +15,7 @@ Fill-in the "content" div.
       # Mark the user record as complete / get user info.
       $.getJSON '/u/profile.json', (profile) =>
         if profile.user_database?
-          $(container).load "/#{profile.user_database}/_design/sotel_portal/index.js"
+          $(container).getScript "/#{profile.user_database}/_design/sotel_portal/index.js"
         else
           $(container).load '/p/content.html', ->
 
