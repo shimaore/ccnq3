@@ -49,11 +49,15 @@ require('ccnq3_config').get (config)->
         $(document).ready ->
           default_scripts = [
               '/public/js/jquery-ui',
-              '/public/js/jquery.validate',
-              '/public/js/jquery.jsonforms',
-              # '/public/js/sammy',
-              # '/public/js/jquery.deserialize',
-              '/public/js/jquery.smartWizard-2.0',
+              '/public/js/jquery.validate'
+              '/public/js/jquery.couch'
+              '/public/js/jquery.deepjson'
+              '/public/js/sammy'
+              '/public/js/sammy.title'
+              '/public/js/sammy.couch'
+              '/public/js/coffeekup'
+              '/public/js/forms'
+              '/public/js/jquery.smartWizard-2.0'
               '/p/content'
           ]
           for s in default_scripts
