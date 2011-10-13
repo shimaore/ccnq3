@@ -2,6 +2,9 @@ $(document).ready ->
 
   container = '#content'
 
+  # Only present if within portal (not in pure couchapp)
+  profile = $(container).data 'profile'
+
   default_tpl = $.compile_template ->
 
     div id:'login_container'
@@ -17,8 +20,6 @@ $(document).ready ->
 
   app = $.sammy container, ->
     @template_engine = 'coffeekup'
-
-    profile = $(container).data 'profile'
 
     @use 'Couch', profile.user_database
 
