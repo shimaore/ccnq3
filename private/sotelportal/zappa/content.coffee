@@ -50,6 +50,8 @@ Fill-in the "content" div.
                 $.getScript "/#{profile.user_database}/_design/sotel_portal/partner_signup.js", =>
                   @runRoute 'get', '#/partner_signup'
 
+        app.run '#/'
+
 
   get '/p/content.html': ->
     @confirmed = 'confirmed' in session.roles
