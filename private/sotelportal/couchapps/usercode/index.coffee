@@ -12,7 +12,7 @@ $(document).ready ->
       div id: 'main', ->
         'You are now successfully logged into the SoTel Systems Online Portal.'
 
-    if @partner
+    if @roles.indexOf('partner') >= 0
       a href:'#/partner_signup', -> 'Become a SoTel Systems partner!'
 
   app = $.sammy container, ->
@@ -23,7 +23,6 @@ $(document).ready ->
       $.getJSON "_view/user", (view) =>
         profile = view.rows[0].value ? {}
         $(container).data 'profile', profile
-        profile.partner = @roles.indexOf('partner') >= 0
         @swap default_tpl profile
 
         $.getScript '/u/login.js'
