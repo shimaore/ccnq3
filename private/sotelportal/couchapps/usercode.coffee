@@ -5,6 +5,7 @@ Released under the Affero GPL3 license or above
 
 ddoc =
   _id: '_design/sotel_portal'
+  views: {}
   filters: {}
 
 module.exports = ddoc
@@ -28,7 +29,7 @@ ddoc.filters.user_push = (doc, req) ->
   # Do not otherwise replicate
   return false
 
-ddoc.view.user = (doc) ->
+ddoc.views.user = (doc) ->
   if doc.type is 'user'
     emit null, doc
 
