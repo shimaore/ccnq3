@@ -9,7 +9,10 @@ Fill-in the "content" div.
 @include = ->
   coffee '/p/content.js': ->
     $(document).ready ->
-      $('#content').load '/p/content.html', ->
+
+      container = '#content'
+
+      $(container).load '/p/content.html', ->
         $.getScript '/u/login.js'
         $.getScript '/u/register.js'
         $.getScript '/u/recover.js'
