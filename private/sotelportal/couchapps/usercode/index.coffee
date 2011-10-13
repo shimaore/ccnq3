@@ -25,9 +25,10 @@ $(document).ready ->
         $(container).data 'profile', profile
         @swap default_tpl profile
 
-        $.getScript '/u/login.js'
+        #-# Put back to get the Logout button
+        # $.getScript '/u/login.js'
 
-        $('#log').html "Welcome #{profile.name}."
+        $('#log').html "Welcome #{profile.profile.name}."
         # Load the applications
         # TODO: replace by an enumeration of the _design documents in the
         #       user database;
