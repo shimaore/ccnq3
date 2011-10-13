@@ -12,7 +12,7 @@ $(document).ready ->
       div id: 'main', ->
         'You are now successfully logged into the SoTel Systems Online Portal.'
 
-    if not ('partner' in @roles)
+    if @partner
       a href:'#/partner_signup', -> 'Become a SoTel Systems partner!'
 
   app = $.sammy container, ->
@@ -22,6 +22,7 @@ $(document).ready ->
 
       $.getJSON "../../org.couchdb.user:#{profile.user_name}", (profile) =>
         $(container).data 'profile', profile
+        profile.partner = 'partner' in @roles
         @swap default_tpl profile
 
         $.getScript '/u/login.js'
