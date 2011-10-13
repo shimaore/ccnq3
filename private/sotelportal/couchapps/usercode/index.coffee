@@ -22,7 +22,7 @@ $(document).ready ->
 
       $.getJSON "../../org.couchdb.user:#{profile.user_name}", (profile) =>
         $(container).data 'profile', profile
-        profile.partner = 'partner' in @roles
+        profile.partner = @roles.indexOf('partner') >= 0
         @swap default_tpl profile
 
         $.getScript '/u/login.js'
