@@ -408,8 +408,6 @@ do (jQuery) ->
 
     $.sammy container, ->
 
-      @use 'Couch' # , dbname
-
       partner_signup = @createModel 'partner_signup'
 
       @bind 'error.partner_signup', (notice) ->

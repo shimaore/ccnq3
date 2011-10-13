@@ -18,6 +18,10 @@ $(document).ready ->
   app = $.sammy container, ->
     @template_engine = 'coffeekup'
 
+    profile = $(container).data 'profile'
+
+    @use 'Couch', profile.user_database
+
     @get '#/', ->
 
       $.getJSON "_view/user", (view) =>

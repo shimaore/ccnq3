@@ -15,10 +15,7 @@ Fill-in the "content" div.
       # Mark the user record as complete / get user info.
       $.getJSON '/u/profile.json', (profile) =>
         if profile.user_database?
-          $(container).html """
-            <iframe src="/#{profile.user_database}/_design/sotel_portal/index.html" border="0" style="width:100%;">
-            </iframe>
-            """
+          $(container).load "/#{profile.user_database}/_design/sotel_portal/index.html"
         else
           $(container).load '/p/content.html', ->
 
