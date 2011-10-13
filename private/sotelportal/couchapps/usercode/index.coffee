@@ -12,7 +12,7 @@ $(document).ready ->
       div id: 'main', ->
         'You are now successfully logged into the SoTel Systems Online Portal.'
 
-    if not 'partner' in @roles
+    if not ('partner' in @roles)
       a href:'#/partner_signup', -> 'Become a SoTel Systems partner!'
 
   app = $.sammy container, ->
