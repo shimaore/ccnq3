@@ -20,7 +20,8 @@ $(document).ready ->
 
     @get '#/', ->
 
-      $.getJSON "../../org.couchdb.user:#{profile.user_name}", (profile) =>
+      $.getJSON "_view/user", (view) =>
+        profile = view.rows[0].value ? {}
         $(container).data 'profile', profile
         profile.partner = @roles.indexOf('partner') >= 0
         @swap default_tpl profile
