@@ -1,4 +1,12 @@
-(function($) {
+/* source: https://raw.github.com/quirkey/action/master/js/sammy.couch.js
+   identical to sammy.couch-0.1.0 from https://github.com/quirkey/soca/blob/master/lib/soca/templates/js/vendor/sammy.couch-0.1.0.js
+   with modifications:
+     Added "remove"
+*/
+
+(function($, Sammy) {
+
+  Sammy = Sammy || {};
 
   Sammy.Couch = function(app, dbname) {
 
@@ -83,6 +91,10 @@
           });
         },
 
+        remove: function(id, doc, callback) {
+          app.db.removeDoc(doc, mergeCallbacks(callback));
+        },
+
         view: function(name, options, callback) {
           if ($.isFunction(options)) {
             callback = options;
@@ -117,4 +129,4 @@
     });
   };
 
-})(jQuery);
+})(jQuery, window.Sammy);

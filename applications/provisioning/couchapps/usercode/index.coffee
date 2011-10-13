@@ -5,54 +5,18 @@ do(jQuery,Sammy) ->
 
   make_id = (t,n) -> [t,n].join ' '
 
-  $.fn.disable = () ->
-    $(@).attr('disabled','true')
-
-  $.fn.enable = () ->
-    $(@).removeAttr('disabled')
-
   container = 'body'
 
-  $.getScript 'public/js/jquery.validate.js'
-
-  coffeekup_helpers =
-
-    checkbox: (attrs) ->
-      attrs.type = 'checkbox'
-      attrs.name = attrs.id
-      attrs.value ?= 'true'
-      attrs.class ?= 'normal'
-      label  for:attrs.name, class:attrs.class, ->
-        span attrs.title
-        input attrs
-
-    textbox: (attrs) ->
-      attrs.type = 'text'
-      attrs.name = attrs.id
-      attrs.class ?= 'normal'
-      label  for:attrs.name, class:attrs.class, ->
-        span attrs.title
-        input attrs
-
-    text_area: (attrs) ->
-      attrs.name = attrs.id
-      attrs.rows ?= 3
-      attrs.cols ?= 3
-      attrs.class ?= 'normal'
-      label  for:attrs.name, class:attrs.class, ->
-        span attrs.title
-        textarea attrs
-
-  compile_template = (template) ->
-    CoffeeKup.compile template, hardcode: coffeekup_helpers
-
-  endpoint_tpl = compile_template ->
+  endpoint_tpl = $.compile_template ->
     form id:'endpoint_form', method:'post', action:'#/endpoint', ->
       textbox id:'ip',       title:'IP Address', value:@ip
       textbox id:'username', title:'Username',   value:@username # in the form username@domain
       textbox id:'password', title:'Password',   value:@password
 
       input type:'submit'
+
+    form method:'delete', action:'#/endpoint', ->
+      input type:'submit', value:'Delete'
 
     coffeescript ->
       $('#endpoint_form').delegate '#ip', 'change', ->
@@ -63,24 +27,29 @@ do(jQuery,Sammy) ->
           $('#username').enable()
           $('#password').enable()
 
-  main_tpl = compile_template ->
+  main_tpl = $.compile_template ->
     div id:'main', ->
 
       a href:'#/endpoint', 'Endpoints'
 
-  ## endpoints = Sammy(container).createModel 'endpoints'
-  # endpoints.extend
-  #   beforeSave: (doc) -> ...
-
   $(document).ready ->
+
     app = $.sammy container, ->
 
       @use 'Title'
-      @use 'Couch', 'endpoints'
+      @use 'Couch' #, dbname
+
+      endpoints = @createModel('endpoints')
+
+      # endpoints.extend
+      #   beforeSave: (doc) -> ...
 
       @template_engine = 'coffeekup'
 
       @setTitle 'Provisioning'
+
+      @bind 'error.endpoints', (notice) ->
+        alert "An error occurred: #{notice.error}"
 
       @get '#/', ->
         @swap main_tpl()
@@ -88,7 +57,7 @@ do(jQuery,Sammy) ->
       @get '#/endpoint', ->
         if @params.endpoint?
           # Get the data record, then render it and display the result.
-          @send endpoints.get make_id('endpoint',@params.endpoint), (doc)->
+          @send endpoints.get, make_id('endpoint',@params.endpoint), (doc)=>
             $('#endpoint_form').data 'doc', doc
             @swap endpoint_tpl doc
         else
@@ -100,16 +69,22 @@ do(jQuery,Sammy) ->
         doc ?= {}
         former_doc = doc
         $.extend doc, $('#endpoint_form').toDeepJson()
-        @doc._id = make_id('endpoint',@doc.endpoint)
 
-        doc.endpoint = if @doc.ip? then doc.ip else doc.username
-        doc._id = "endpoint:#{@doc.endpoint}"
+        doc.endpoint = if doc.ip? then doc.ip else doc.username
+        doc._id = make_id('endpoint',doc.endpoint)
 
         if doc._id is former_doc._id
-          @send endpoints.update doc._id, doc
+          @send endpoints.update, doc._id, doc, ->
+            $('#endpoint_form').data 'doc', doc
         else
           delete doc._rev
-          @send endpoints.remove former_doc, ->
-            @send endpoints.save doc
+          @send endpoints.remove, former_doc, (doc)=>
+            @send endpoints.save,  doc, ->
+              $('#endpoint_form').data 'doc', doc
+
+      @del '#/endpoint', ->
+        former_doc = $('#endpoint_form').data 'doc'
+        @send endpoints.remove, former_doc, ->
+          $('#endpoint_form').data 'doc', {}
 
     app.run '#/'
