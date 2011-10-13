@@ -60,7 +60,7 @@ require('ccnq3_config').get (config)->
               '/public/js/jquery.smartWizard-2.0'
               '/p/content'
           ]
-          for s in default_scripts
+          for s in default_scripts.reverse()
             cb = -> $.getScript s + '.js', cb
           cb()
 
