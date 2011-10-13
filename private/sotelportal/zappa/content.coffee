@@ -20,23 +20,35 @@ Fill-in the "content" div.
         # Interaction
         $.getScript('/public/js/jquery.couch.js')
         $.getScript('/public/js/jquery.deepjson.js')
-        $.getScript('/public/js/jquery.couch_json.js')
+        $.getScript('/public/js/jquery.validate.js')
 
-        # Mark the user record as complete / get user info.
-        $.getJSON '/u/profile.json', (profile) ->
-          if profile.error?
-            $('#log').html "Could not access your profile"
-          else
-            $('#log').html "Welcome #{profile.name}."
-            # Load the applications
-            # TODO: replace by an enumeration of the _design documents in the
-            #       user database;
-            #       each of them offers a "load.js" (or do two-steps with
-            #       something à la "package.json").
-            #       (This would include dependencies like the "Interaction" list
-            #       above.)
-            $.getScript "/#{profile.user_database}/_design/sotel_portal/partner_signup.js", ->
-              $('#partner_signup_trigger').click()
+        $.getScript('/public/js/sammy.js')
+        $.getScript('/public/js/sammy.title.js')
+        $.getScript('/public/js/sammy.couch.js')
+
+        $.getScript('/public/js/coffeekup.js')
+        $.getScript('/public/js/forms.js')
+
+        app = $.sammy container, ->
+          @template_engine = 'coffeekup'
+
+          @get '#/', ->
+
+            # Mark the user record as complete / get user info.
+            $.getJSON '/u/profile.json', (profile) =>
+              if profile.error?
+                $('#log').html "Could not access your profile"
+              else
+                $('#log').html "Welcome #{profile.name}."
+                # Load the applications
+                # TODO: replace by an enumeration of the _design documents in the
+                #       user database;
+                #       each of them offers a "load.js" (or do two-steps with
+                #       something à la "package.json").
+                #       (This would include dependencies like the "Interaction" list
+                #       above.)
+                $.getScript "/#{profile.user_database}/_design/sotel_portal/partner_signup.js", =>
+                  @runRoute 'get', '#/partner_signup'
 
 
   get '/p/content.html': ->
@@ -63,4 +75,4 @@ Fill-in the "content" div.
         'You are now successfully logged into the SoTel Systems Online Portal. More content and features are expected here soon.'
 
     if not @partner
-      div id:'partner_signup_trigger', -> 'Become a SoTel Systems partner!'
+      a href:'#/partner_signup', -> 'Become a SoTel Systems partner!'
