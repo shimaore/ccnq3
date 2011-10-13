@@ -63,7 +63,7 @@ require('ccnq3_config').get (config)->
           cb = -> console.log 'done'
           for s in default_scripts.reverse()
             do (s) ->
-              cb = $.getScript "#{s}.js", cb
+              cb = -> $.getScript "#{s}.js", cb
           cb()
 
       include 'content.coffee'
