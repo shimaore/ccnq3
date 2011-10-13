@@ -61,7 +61,8 @@ require('ccnq3_config').get (config)->
               '/p/content'
           ]
           for s in default_scripts
-            $.getScript s + '.js'
+            cb = $.getScript s + '.js', cb
+          cb()
 
       include 'content.coffee'
       include 'login.coffee'
