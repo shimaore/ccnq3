@@ -60,10 +60,10 @@ require('ccnq3_config').get (config)->
               '/public/js/jquery.smartWizard-2.0'
               '/p/content'
           ]
-          cb = ->
+          cb = -> console.log 'done'
           for s in default_scripts.reverse()
-            do(s)->
-              cb = -> $.getScript s + '.js', cb
+            do (s) ->
+              cb = $.getScript "#{s}.js", cb
           cb()
 
       include 'content.coffee'
