@@ -9,8 +9,8 @@ do (jQuery) ->
   $.fn.enable = () ->
     $(@).removeAttr('disabled')
 
-  $.getScript '/public/js/coffeekup.js'
-  
+  # require 'coffeekup'
+
   coffeekup_helpers =
   
     checkbox: (attrs) ->
@@ -85,3 +85,4 @@ do (jQuery) ->
     # Start by inserting one row.
     add_line()
 
+  return

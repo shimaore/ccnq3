@@ -8,7 +8,6 @@
     $.fn.enable = function() {
       return $(this).removeAttr('disabled');
     };
-    $.getScript('/public/js/coffeekup.js');
     coffeekup_helpers = {
       checkbox: function(attrs) {
         var _ref, _ref2;
@@ -64,10 +63,37 @@
         });
       }
     };
-    return $.compile_template = function(template) {
+    $.compile_template = function(template) {
       return CoffeeKup.compile(template, {
         hardcode: coffeekup_helpers
       });
+    };
+    $.fn.auto_add = function() {
+      var add_line, table;
+      table = this;
+      $('.template', table).hide().append('<td><div class="del ui-icon ui-icon-closethick">remove</div></td>');
+      add_line = function() {
+        var rank, row;
+        rank = 0;
+        $('tr.data', table).each(function() {
+          return rank++;
+        });
+        row = $('.template', table).clone().removeClass('template').addClass('data').show().appendTo(table);
+        $('input,select', row).each(function() {
+          return $(this).attr('name', function(index, name) {
+            return name.replace('*', rank);
+          });
+        });
+        $('.del', row).click(function() {
+          row.remove();
+          return false;
+        });
+      };
+      $('tr:first', table).append('<th><div class="add ui-icon ui-icon-plusthick">add line</div></th>');
+      $('.add', table).click(function() {
+        return add_line();
+      });
+      return add_line();
     };
   })(jQuery);
 }).call(this);

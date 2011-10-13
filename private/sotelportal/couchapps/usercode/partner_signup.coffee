@@ -8,8 +8,6 @@ do (jQuery) ->
 
   container = '#content'
 
-  $.getScript '/public/js/forms.js'
-
   partner_signup_tpl = $.compile_template ->
 
     div id:'confirm_invalid', ->
