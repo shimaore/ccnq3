@@ -12,25 +12,26 @@ Fill-in the "content" div.
 
       container = '#content'
 
+      # Interaction
+      $.getScript('/public/js/jquery.couch.js')
+      $.getScript('/public/js/jquery.deepjson.js')
+      $.getScript('/public/js/jquery.validate.js')
+
+      $.getScript('/public/js/sammy.js')
+      $.getScript('/public/js/sammy.title.js')
+      $.getScript('/public/js/sammy.couch.js')
+
+      $.getScript('/public/js/coffeekup.js')
+      $.getScript('/public/js/forms.js')
+
       $(container).load '/p/content.html', ->
+
         $.getScript '/u/login.js'
         $.getScript '/u/register.js'
         $.getScript '/u/recover.js'
         # Application-specific code here.
         $.getScript('/roles/login.js')
         $.getScript('/p/login.js')
-
-        # Interaction
-        $.getScript('/public/js/jquery.couch.js')
-        $.getScript('/public/js/jquery.deepjson.js')
-        $.getScript('/public/js/jquery.validate.js')
-
-        $.getScript('/public/js/sammy.js')
-        $.getScript('/public/js/sammy.title.js')
-        $.getScript('/public/js/sammy.couch.js')
-
-        $.getScript('/public/js/coffeekup.js')
-        $.getScript('/public/js/forms.js')
 
         app = $.sammy container, ->
           @template_engine = 'coffeekup'
