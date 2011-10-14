@@ -2,6 +2,7 @@
    identical to sammy.couch-0.1.0 from https://github.com/quirkey/soca/blob/master/lib/soca/templates/js/vendor/sammy.couch-0.1.0.js
    with modifications:
      Added "remove"
+     viewDocs should not expect the dbname to be the same as the design document
 */
 
 (function($, Sammy) {
@@ -118,7 +119,7 @@
           options = $.extend({
             include_docs: true
           }, mergeCallbacks(wrapped_callback), options);
-          return app.db.view([dbname, name].join('/'), options);
+          return app.db.view(name, options);
         }
       };
       return model;
