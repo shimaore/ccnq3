@@ -44,28 +44,6 @@ require('ccnq3_config').get (config)->
       roles_modules = ['login','admin','replicate']
       include __dirname + "/../node_modules/ccnq3_roles/zappa/#{name}.coffee" for name in roles_modules
 
-      # This gets everything started.
-      coffee '/p/main.js': ->
-        $(document).ready ->
-          default_scripts = [
-              '/public/js/jquery-ui',
-              '/public/js/jquery.validate'
-              '/public/js/jquery.couch'
-              '/public/js/jquery.deepjson'
-              '/public/js/sammy'
-              '/public/js/sammy.title'
-              '/public/js/sammy.couch'
-              '/public/js/coffeekup'
-              '/public/js/forms'
-              '/public/js/jquery.smartWizard-2.0'
-              '/p/content'
-          ]
-          cb = -> console.log 'done'
-          for s in default_scripts.reverse()
-            do (s) ->
-              cb = -> $.getScript "#{s}.js", cb
-          cb()
-
       include 'content.coffee'
       include 'login.coffee'
 
