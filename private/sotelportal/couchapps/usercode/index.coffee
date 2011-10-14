@@ -39,9 +39,7 @@ $(document).ready ->
     $('#log').ajaxError ->
       $(@).append arguments[3]
 
-    app = @
-
-    @get '#/', ->
+    @get '#/', (app) ->
 
       @send model.viewDocs, "sotel_portal/user", (docs) =>
         profile = docs[0] ? {}
