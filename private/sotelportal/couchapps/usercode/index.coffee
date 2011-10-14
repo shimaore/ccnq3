@@ -29,7 +29,7 @@ $(document).ready ->
 
     model.extend
       require: (name,cb) ->
-        $.getScript model.db.uri + "_design/sotel_portal/#{name}", cb
+        $.getScript @db.uri + "_design/sotel_portal/#{name}", cb
 
     $(container).data 'model', model
 
