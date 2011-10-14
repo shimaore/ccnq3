@@ -54,7 +54,7 @@ $(document).ready ->
         #       something à la "package.json").
         #       (This would include dependencies like the "Interaction" list
         #       above.)
-        model.require 'partner_signup.js', =>
+        @send model.require, 'partner_signup.js', =>
           @runRoute 'get', '#/partner_signup'
 
   app.run '#/'
