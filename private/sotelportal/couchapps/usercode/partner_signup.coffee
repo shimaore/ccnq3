@@ -421,7 +421,7 @@ do (jQuery) ->
 
     $.sammy container, ->
 
-      model = $(container).data 'model'
+      model = @createModel 'partner_signup'
 
       @get '#/partner_signup', (app)->
 
