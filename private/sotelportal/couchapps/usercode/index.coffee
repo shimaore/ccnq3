@@ -34,10 +34,10 @@ $(document).ready ->
     $(container).data 'model', model
 
     @bind 'error.sotel_portal', (notice) ->
-      alert "An error occurred: #{notice.error}"
+      $('#log').append "An error occurred: #{notice.error}"
 
     $('#log').ajaxError ->
-      $(this).append arguments[3]
+      $(@).append arguments[3]
 
     app = @
 
