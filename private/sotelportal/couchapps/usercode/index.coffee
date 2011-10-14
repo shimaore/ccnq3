@@ -26,6 +26,11 @@ $(document).ready ->
     @use 'Couch', profile?.user_database
 
     model = @createModel 'sotel_portal'
+
+    model.extend
+      require: (name,cb) ->
+        $.getScript model.db.uri + "_design/sotel_portal/#{name}", cb
+
     $(container).data 'model', model
 
     @bind 'error.sotel_portal', (notice) ->
@@ -49,7 +54,7 @@ $(document).ready ->
         #       something à la "package.json").
         #       (This would include dependencies like the "Interaction" list
         #       above.)
-        $.getScript 'partner_signup.js', =>
+        model.require 'partner_signup.js', =>
           @runRoute 'get', '#/partner_signup'
 
   app.run '#/'
