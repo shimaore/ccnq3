@@ -39,6 +39,8 @@ $(document).ready ->
     $('#log').ajaxError ->
       $(this).append arguments[3]
 
+    app = @
+
     @get '#/', ->
 
       @send model.viewDocs, "sotel_portal/user", (docs) =>
@@ -58,6 +60,6 @@ $(document).ready ->
         #       (This would include dependencies like the "Interaction" list
         #       above.)
         @send model.require, 'partner_signup.js', =>
-          @runRoute 'get', '#/partner_signup'
+          app.runRoute 'get', '#/partner_signup'
 
   app.run '#/'
