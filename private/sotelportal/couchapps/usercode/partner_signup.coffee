@@ -414,7 +414,7 @@ do (jQuery) ->
 
       @get '#/partner_signup', (app)->
 
-            data = $.extend {}, profile
+            data = $.extend {}, profile.profile
 
             today = new Date()
             months = [
@@ -422,7 +422,7 @@ do (jQuery) ->
               'July','August','September','October','November','December'
             ]
             data.effective_date = "#{months[today.getMonth()]} #{today.getDate()}, #{today.getFullYear()}"
-            @send model.get, make_id('partner_signup',profile.user_name), (doc) =>
+            @send model.get, make_id('partner_signup',profile.name), (doc) =>
               $('#wizard_form').data 'doc', doc
               @swap partner_signup_tpl $.extend data, doc
 
@@ -446,7 +446,7 @@ do (jQuery) ->
           $.extend doc, $('#endpoint_form').toDeepJson()
           delete doc['onboarding.*']
 
-          doc._id = make_id('partner_signup',profile.user_name)
+          doc._id = make_id('partner_signup',profile.name)
 
           if doc._id is former_doc._id
             @send model.update, doc._id, doc, =>
