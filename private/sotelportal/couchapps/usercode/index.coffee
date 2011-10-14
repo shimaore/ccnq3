@@ -28,7 +28,7 @@ $(document).ready ->
     model = @createModel 'sotel_portal'
 
     model.extend
-      require: (name,cb) ->
+      require: (name,cb) =>
         $.getScript @db.uri + "_design/sotel_portal/#{name}", cb
 
     $(container).data 'model', model
