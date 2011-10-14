@@ -403,6 +403,17 @@ do (jQuery) ->
           a id:'tc', href:'#', -> 'Review and accept the Terms and Conditions'
 
     coffeescript ->
+      $('form.validate').validate
+        submitHandler: (form)->
+          console.log 'Form content is validated'
+          $('#was_validated').val(true)
+          $('.template').remove()
+          form.submit()
+        invalidHandler: (form)->
+          console.log 'Form content is not validated'
+          $('#was_validated').val(false)
+          $('#confirm_invalid').dialog('open')
+
       console.log 'Starting wizard'
       $('#wizard').smartWizard({})
 
@@ -422,21 +433,14 @@ do (jQuery) ->
               'July','August','September','October','November','December'
             ]
             data.effective_date = "#{months[today.getMonth()]} #{today.getDate()}, #{today.getFullYear()}"
-            @send model.get, make_id('partner_signup',profile.name), (doc) =>
-              $('#wizard_form').data 'doc', doc
-              @swap partner_signup_tpl $.extend data, doc
 
-              $('form.validate').validate
-                submitHandler: (form)->
-                  console.log 'Form content is validated'
-                  $('#was_validated').val(true)
-                  $('.template').remove()
-                  form.submit()
-                invalidHandler: (form)->
-                  console.log 'Form content is not validated'
-                  $('#was_validated').val(false)
-                  $('#confirm_invalid').dialog('open')
-
+            @send model.get, make_id('partner_signup',profile.name),
+              success: (doc) =>
+                $('#wizard_form').data 'doc', doc
+                @swap partner_signup_tpl $.extend data, doc
+              error: =>
+                $('#wizard_form').data 'doc', {}
+                @swap partner_signup_tpl data
 
       @post '#/partner_signup', ->
 
