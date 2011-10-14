@@ -32,7 +32,7 @@ ddoc.filters.user_push = (doc, req) ->
 ddoc.views.user =
   map: (doc) ->
     if doc.type is 'user'
-      emit null, doc
+      emit null, null
 
 # Attachments (user couchapp)
 couchapp = require('couchapp')

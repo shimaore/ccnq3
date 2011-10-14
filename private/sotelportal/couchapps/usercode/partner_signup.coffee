@@ -8,6 +8,8 @@ do (jQuery) ->
 
   container = '#content'
 
+  profile = $(container).data 'profile'
+
   partner_signup_tpl = $.compile_template ->
 
     div id:'confirm_invalid', ->
@@ -408,18 +410,11 @@ do (jQuery) ->
 
     $.sammy container, ->
 
-      partner_signup = @createModel 'partner_signup'
-
-      @bind 'error.partner_signup', (notice) ->
-        alert "An error occurred: #{notice.error}"
+      model = $(container).data 'model'
 
       @get '#/partner_signup', (app)->
 
-        # Get user_db and username
-        $.getJSON '/u/profile.json', (profile) =>
-
-          # Retrieve the user profile
-          $.getJSON "/#{profile.user_database}/org.couchdb.user:#{profile.user_name}", (data) ->
+            data = $.extend {}, profile
 
             today = new Date()
             months = [
@@ -427,7 +422,7 @@ do (jQuery) ->
               'July','August','September','October','November','December'
             ]
             data.effective_date = "#{months[today.getMonth()]} #{today.getDate()}, #{today.getFullYear()}"
-            @send partner_signup.get, make_id('partner_signup',profile.user_name), (doc) =>
+            @send model.get, make_id('partner_signup',profile.user_name), (doc) =>
               $('#wizard_form').data 'doc', doc
               @swap partner_signup_tpl $.extend data, doc
 
@@ -445,7 +440,6 @@ do (jQuery) ->
 
       @post '#/partner_signup', ->
 
-        $.getJSON '/u/profile.json', (profile) =>
           doc = $('#endpoint_form').data 'doc'
           doc ?= {}
           former_doc = doc
@@ -455,11 +449,11 @@ do (jQuery) ->
           doc._id = make_id('partner_signup',profile.user_name)
 
           if doc._id is former_doc._id
-            @send partner_signup.update, doc._id, doc, =>
+            @send model.update, doc._id, doc, =>
               $('#wizard_form').data 'doc', doc
           else
             delete doc._rev
-            @send partner_signup.remove, former_doc, (doc)=>
-              @send partner_signup.save,  doc, (doc)=>
+            @send model.remove, former_doc, (doc)=>
+              @send model.save,  doc, (doc)=>
                 $('#wizard_form').data 'doc', doc
                 alert "Your application has been submitted."

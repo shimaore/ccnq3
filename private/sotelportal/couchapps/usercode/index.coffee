@@ -21,12 +21,20 @@ $(document).ready ->
   app = $.sammy container, ->
     @template_engine = 'coffeekup'
 
-    @use 'Couch', profile.user_database
+    # Should use the proper database when used on a local replica, where
+    # profile is empty.
+    @use 'Couch', profile?.user_database
+
+    model = @createModel 'sotel_portal'
+    $(container).data 'model', model
+
+    @bind 'error.sotel_portal', (notice) ->
+      alert "An error occurred: #{notice.error}"
 
     @get '#/', ->
 
-      $.getJSON "_view/user", (view) =>
-        profile = view.rows[0].value ? {}
+      @send model.viewDocs, "sotel_portal/user", (docs) =>
+        profile = docs[0] ? {}
         $(container).data 'profile', profile
         @swap default_tpl profile
 
