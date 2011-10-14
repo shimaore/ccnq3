@@ -23,6 +23,7 @@ else
     shift
   fi
 
+  # make_id
   sudo tee "${CONF}" <<JSON >/dev/null
   {
     "_id": "host:${HOSTNAME}",

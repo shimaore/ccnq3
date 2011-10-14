@@ -11,6 +11,8 @@ Released under the AGPL3 license
 
 ccnq3_logger  = require 'ccnq3_logger'
 
+make_id = (t,n) -> [t,n].join ':'
+
 esl = require 'esl'
 fs_command = (cmd,cb) ->
   client = esl.createClient()
@@ -69,7 +71,7 @@ require('ccnq3_config').get (config) ->
       freeswitch_local_vars:      "#{conf_dir}/local-vars.xml"
       freeswitch_local_conf:      "#{conf_dir}/local-conf.xml"
   
-    host_uri = qs.escape "host:#{config.host}"
+    host_uri = qs.escape make_id 'host', config.host
     for show, file of files
       do (show,file)->
         save_uri_as "#{config.provisioning.couchdb_uri}/_design/freeswitch/_show/#{show}/#{host_uri}", file

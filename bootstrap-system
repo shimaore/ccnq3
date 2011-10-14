@@ -33,6 +33,7 @@ else
   fi
 
   echo "Bootstrapping database using ${CDB_URI}"
+  # make_id
   sudo tee "${CONF}" <<JSON >/dev/null
   {
     "_id": "host:${HOSTNAME}",

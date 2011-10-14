@@ -8,7 +8,7 @@ util = require 'util'
 qs = require 'querystring'
 request = require 'request'
 
-make_id = (t,n) -> [t,n].join ' '
+make_id = (t,n) -> [t,n].join ':'
 
 require('ccnq3_config').get (config)->
 
@@ -154,7 +154,7 @@ require('ccnq3_config').get (config)->
 
       if @query.k is 'uuid,attribute'
         [uuid,attribute] = @query.v.split ','
-        pipe_req @, 'avpops', "#{attribute}:#{uuid}"
+        pipe_req @, 'avpops', make_id attribute, uuid
         return
 
       if @query.k is 'username,domain,attribute'

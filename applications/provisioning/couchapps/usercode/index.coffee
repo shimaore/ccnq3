@@ -3,7 +3,7 @@ do(jQuery,Sammy) ->
 
   $ = jQuery
 
-  make_id = (t,n) -> [t,n].join ' '
+  make_id = (t,n) -> [t,n].join ':'
 
   container = 'body'
 

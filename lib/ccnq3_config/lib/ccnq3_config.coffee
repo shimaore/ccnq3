@@ -3,6 +3,8 @@ util = require 'util'
 # Use a package-provided configuration file, if any.
 config_location = process.env.npm_package_config_config_file
 
+make_id = (t,n) -> [t,n].join ':'
+
 if not config_location?
   config_location = '/etc/ccnq3/host.json'
   util.log "NPM did not provide a config_file parameter, using #{config_location}."
@@ -14,7 +16,7 @@ exports.retrieve = (config,cb) ->
     util.log "Information to retrieve remote configuration is not available."
     return cb p
 
-  username = "host:#{config.host}"
+  username = make_id 'host', config.host
   cdb = require 'cdb'
   provisioning = cdb.new config.provisioning.couchdb_uri
 

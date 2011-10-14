@@ -9,6 +9,8 @@ cdb = require 'cdb'
 util = require 'util'
 crypto = require 'crypto'
 
+make_id = (t,n) -> [t,n].join ':'
+
 sha1_hex = (t) ->
   return crypto.createHash('sha1').update(t).digest('hex')
 
@@ -63,7 +65,7 @@ exports.record = (config,hostname,users_uri,provisioning_uri,keep_provisioning,c
 
     config.type = "host"
     config.host = hostname
-    config._id  = "host:#{hostname}"
+    config._id  = make_id 'host', hostname
     config.change_handlers = [
 
         # TODO Storing change_handlers this way does not work.
