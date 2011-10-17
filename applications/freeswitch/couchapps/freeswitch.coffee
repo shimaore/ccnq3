@@ -84,11 +84,11 @@ ddoc.shows.freeswitch_local_profiles = (doc,req) ->
       <X-PRE-PROCESS cmd="include" data="sip_profiles/#{profile.template}.xml.template"/>
       """
   body += "</include>"
-  return
+  return {
     headers:
       'Content-Type': 'text/xml'
     body: body
-
+  }
 
 ddoc.shows.freeswitch_local_acl = (doc,req) ->
   start
