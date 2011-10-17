@@ -406,8 +406,7 @@ do (jQuery) ->
     coffeescript ->
 
       $('form.validate').validate
-        invalidHandler: (form) ->
-          form.submit()
+        onsubmit: false
 
       console.log 'Starting wizard'
       $('#wizard').smartWizard({})
