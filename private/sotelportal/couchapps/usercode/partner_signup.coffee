@@ -435,9 +435,6 @@ do (jQuery) ->
                 $('#wizard_form').data 'doc', {}
                 @swap partner_signup_tpl data
 
-      @before '#/partner_signup', ->
-
-
       @post '#/partner_signup', ->
 
         save_doc = ->
