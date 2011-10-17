@@ -405,7 +405,10 @@ do (jQuery) ->
 
     coffeescript ->
 
-      $('form.validate').validate()
+      $('form.validate').validate
+        invalidHandler: (form) ->
+          form.submit()
+
       console.log 'Starting wizard'
       $('#wizard').smartWizard({})
 
