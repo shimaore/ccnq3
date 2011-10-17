@@ -435,9 +435,8 @@ do (jQuery) ->
                 $('#wizard_form').data 'doc', {}
                 @swap partner_signup_tpl data
 
-      @post '#/partner_signup', ->
+      @bind 'save-doc', ->
 
-        save_doc = ->
           $('.template').remove()
 
           doc = $('#wizard_form').data 'doc'
@@ -458,11 +457,14 @@ do (jQuery) ->
                 $('#wizard_form').data 'doc', doc
                 alert "Your application has been submitted."
 
+      @post '#/partner_signup', ->
+        console.log 'Partner form submission'
+
         if $('#wizard_form').data('bypass_validation') is true
           console.log 'Form validation bypassed'
           # Reset it in case the form gets saved again.
           $('#wizard_form').data('bypass_validation',false)
-          save_doc()
+          @trigger 'save-doc'
           return
 
         $('form.validate').validate
@@ -470,9 +472,11 @@ do (jQuery) ->
             console.log 'Form content is validated'
             $('#was_validated').val(true)
             save_doc()
+            @trigger 'save-doc'
             return
           invalidHandler: ->
             console.log 'Form content is not validated'
             $('#was_validated').val(false)
             $('#confirm_invalid').dialog('open')
+            @trigger 'save-doc'
             return
