@@ -7,14 +7,14 @@
   <macro name="say-iterated">
 
     <!-- iterated -->
-    <input pattern="^([0-9.#,*])(.*)$"/>
+    <input pattern="^([0-9.#,*])(.*)$">
       <match>
         <action function="phrase" data="say,$1"/>
         <action function="phrase" data="say-iterated,$2"/>
       </match>
     </input>
 
-    <input pattern="^([0-9.#,*])$"/>
+    <input pattern="^([0-9.#,*])$">
       <match>
         <action function="phrase" data="say,$1"/>
       </match>
