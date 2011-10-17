@@ -41,7 +41,7 @@ do (jQuery) ->
           'Print': ->
             # CONTINUE HERE    XXX
 
-    form id:'wizard_form', method:'post', action:'#/partner_signup', class:'validate', ->
+    form id:'wizard_form', method:'post', class:'validate', ->
 
       input type:'hidden', name:'type', value:'partner_signup'
       input type:'hidden', name:'was_validated'
