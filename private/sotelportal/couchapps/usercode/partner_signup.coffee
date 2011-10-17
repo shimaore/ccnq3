@@ -405,6 +405,7 @@ do (jQuery) ->
 
     coffeescript ->
 
+      $('form.validate').validate()
       console.log 'Starting wizard'
       $('#wizard').smartWizard({})
 
@@ -460,6 +461,12 @@ do (jQuery) ->
       @post '#/partner_signup', ->
         console.log 'Partner form submission'
 
+        if $('form.validate').valid()
+          console.log 'Form content is validated'
+          $('#was_validated').val(true)
+          @trigger 'save-doc'
+          return
+
         if $('#wizard_form').data('bypass_validation') is true
           console.log 'Form validation bypassed'
           # Reset it in case the form gets saved again.
@@ -467,16 +474,7 @@ do (jQuery) ->
           @trigger 'save-doc'
           return
 
-        $('form.validate').validate
-          submitHandler: ->
-            console.log 'Form content is validated'
-            $('#was_validated').val(true)
-            save_doc()
-            @trigger 'save-doc'
-            return
-          invalidHandler: ->
-            console.log 'Form content is not validated'
-            $('#was_validated').val(false)
-            $('#confirm_invalid').dialog('open')
-            @trigger 'save-doc'
-            return
+        console.log 'Form content is not validated'
+        $('#was_validated').val(false)
+        $('#confirm_invalid').dialog('open')
+        return
