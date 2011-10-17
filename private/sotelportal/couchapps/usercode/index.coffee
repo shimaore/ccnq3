@@ -16,7 +16,7 @@ $(document).ready ->
         'You are now successfully logged into the SoTel Systems Online Portal.'
 
     if @roles.indexOf('partner') < 0
-      a id:'to_partner_signup', href:'#/partner_signup', -> 'Become a SoTel Systems partner!'
+      a href:'#/partner_signup', -> 'Become a SoTel Systems partner!'
 
   app = $.sammy container, ->
     @template_engine = 'coffeekup'
@@ -43,7 +43,6 @@ $(document).ready ->
 
         @swap default_tpl profile
         $('#log').html "Welcome #{profile.profile.name}."
-        $('#to_partner_signup').submit()
 
         #-# Put back to get the Logout button
         # $.getScript '/u/login.js'
@@ -66,4 +65,5 @@ $(document).ready ->
 
     # Do all "require" before starting the application.
     model.require 'partner_signup.js', ->
-      app.run '#/'
+      # app.run '#/'
+      app.run '#/partner_signup'
