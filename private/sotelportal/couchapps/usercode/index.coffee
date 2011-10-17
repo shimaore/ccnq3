@@ -42,9 +42,8 @@ $(document).ready ->
     @get '#/', (app) ->
 
         @swap default_tpl profile
-        .then ->
-          $('#log').html "Welcome #{profile.profile.name}."
-          $('#to_partner_signup').click()
+        $('#log').html "Welcome #{profile.profile.name}."
+        $('#to_partner_signup').submit()
 
         #-# Put back to get the Logout button
         # $.getScript '/u/login.js'
