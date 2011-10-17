@@ -42,11 +42,13 @@ $(document).ready ->
     @get '#/', (app) ->
 
         @swap default_tpl profile
+        .then ->
+          $('#log').html "Welcome #{profile.profile.name}."
+          $('#to_partner_signup').click()
 
         #-# Put back to get the Logout button
         # $.getScript '/u/login.js'
 
-        $('#log').html "Welcome #{profile.profile.name}."
         # Load the applications
         # TODO: replace by an enumeration of the _design documents in the
         #       user database;
@@ -55,7 +57,6 @@ $(document).ready ->
         #       (This would include dependencies like the "Interaction" list
         #       above.)
 
-        $('#to_partner_signup').click()
 
   model = $(container).data 'model'
   # Retrieve the proper profile before starting the application.
