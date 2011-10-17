@@ -15,8 +15,8 @@ $(document).ready ->
       div id: 'main', ->
         'You are now successfully logged into the SoTel Systems Online Portal.'
 
-    if @roles.indexOf('partner') >= 0
-      a href:'#/partner_signup', -> 'Become a SoTel Systems partner!'
+    if @roles.indexOf('partner') < 0
+      a id:'to_partner_signup', href:'#/partner_signup', -> 'Become a SoTel Systems partner!'
 
   app = $.sammy container, ->
     @template_engine = 'coffeekup'
@@ -41,9 +41,6 @@ $(document).ready ->
 
     @get '#/', (app) ->
 
-      @send model.viewDocs, "sotel_portal/user", (docs) =>
-        profile = docs[0] ? {}
-        $(container).data 'profile', profile
         @swap default_tpl profile
 
         #-# Put back to get the Logout button
@@ -57,7 +54,16 @@ $(document).ready ->
         #       something à la "package.json").
         #       (This would include dependencies like the "Interaction" list
         #       above.)
-        @send model.require, 'partner_signup.js', =>
-          app.runRoute 'get', '#/partner_signup'
 
-  app.run '#/'
+        $('#to_partner_signup').click()
+
+  model = $(container).data 'model'
+  # Retrieve the proper profile before starting the application.
+  # (This allows for the profile to be available in other modules.)
+  model.viewDocs "sotel_portal/user", (docs) =>
+    profile = docs[0] ? {}
+    $(container).data 'profile', profile
+
+    # Do all "require" before starting the application.
+    model.require 'partner_signup.js', ->
+      app.run '#/'

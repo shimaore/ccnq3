@@ -21,7 +21,8 @@ do (jQuery) ->
           'Correct': ->
             $(@).dialog 'close'
           'Submit anyway': ->
-            $('.template').remove()
+            $(@).dialog('close')
+            $('#wizard_form').data 'bypass_validation', true
             $('#wizard_form').submit()
         closeOnEscape: true
         draggable: true
@@ -40,7 +41,7 @@ do (jQuery) ->
           'Print': ->
             # CONTINUE HERE    XXX
 
-    form id:'wizard_form', method:'post', class:'validate', ->
+    form id:'wizard_form', method:'post', action:'#/partner_signup', class:'validate', ->
 
       input type:'hidden', name:'type', value:'partner_signup'
       input type:'hidden', name:'was_validated'
@@ -403,16 +404,6 @@ do (jQuery) ->
           a id:'tc', href:'#', -> 'Review and accept the Terms and Conditions'
 
     coffeescript ->
-      $('form.validate').validate
-        submitHandler: (form)->
-          console.log 'Form content is validated'
-          $('#was_validated').val(true)
-          $('.template').remove()
-          form.submit()
-        invalidHandler: (form)->
-          console.log 'Form content is not validated'
-          $('#was_validated').val(false)
-          $('#confirm_invalid').dialog('open')
 
       console.log 'Starting wizard'
       $('#wizard').smartWizard({})
@@ -423,7 +414,7 @@ do (jQuery) ->
 
       model = @createModel 'partner_signup'
 
-      @get '#/partner_signup', (app)->
+      @get '#/partner_signup', ->
 
             data = $.extend {}, profile.profile
 
@@ -436,18 +427,26 @@ do (jQuery) ->
 
             @send model.get, make_id('partner_signup',profile.name),
               success: (doc) =>
+                console.log "Success"
                 $('#wizard_form').data 'doc', doc
                 @swap partner_signup_tpl $.extend data, doc
               error: =>
+                console.log "Error"
                 $('#wizard_form').data 'doc', {}
                 @swap partner_signup_tpl data
 
+      @before '#/partner_signup', ->
+
+
       @post '#/partner_signup', ->
 
-          doc = $('#endpoint_form').data 'doc'
+        save_doc = ->
+          $('.template').remove()
+
+          doc = $('#wizard_form').data 'doc'
           doc ?= {}
           former_doc = doc
-          $.extend doc, $('#endpoint_form').toDeepJson()
+          $.extend doc, $('#wizard_form').toDeepJson()
           delete doc['onboarding.*']
 
           doc._id = make_id('partner_signup',profile.name)
@@ -461,3 +460,22 @@ do (jQuery) ->
               @send model.save,  doc, (doc)=>
                 $('#wizard_form').data 'doc', doc
                 alert "Your application has been submitted."
+
+        if $('#wizard_form').data('bypass_validation') is true
+          console.log 'Form validation bypassed'
+          # Reset it in case the form gets saved again.
+          $('#wizard_form').data('bypass_validation',false)
+          save_doc()
+          return
+
+        $('form.validate').validate
+          submitHandler: ->
+            console.log 'Form content is validated'
+            $('#was_validated').val(true)
+            save_doc()
+            return
+          invalidHandler: ->
+            console.log 'Form content is not validated'
+            $('#was_validated').val(false)
+            $('#confirm_invalid').dialog('open')
+            return
