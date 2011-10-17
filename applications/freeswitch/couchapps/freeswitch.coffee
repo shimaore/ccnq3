@@ -68,14 +68,10 @@ Additionally the following fields might be specified:
 ###
 
 ddoc.shows.freeswitch_local_profiles = (doc,req) ->
-  start
-    headers:
-      'Content-Type': 'text/xml'
-
-  send "<include>"
+  body = "<include>"
   for profile_name, profile of doc.sip_profiles
     egress_sip_port = profile.egress_sip_port ? profile.ingress_sip_port + 10000
-    send """
+    body += """
       <!-- Prepaid profile -->
       <X-PRE-PROCESS cmd="set" data="profile_name=#{profile_name}"/>
 
@@ -87,8 +83,12 @@ ddoc.shows.freeswitch_local_profiles = (doc,req) ->
 
       <X-PRE-PROCESS cmd="include" data="sip_profiles/#{profile.template}.xml.template"/>
       """
-  send "</include>"
-  return {}
+  body += "</include>"
+  return
+    headers:
+      'Content-Type': 'text/xml'
+    body: body
+
 
 ddoc.shows.freeswitch_local_acl = (doc,req) ->
   start
