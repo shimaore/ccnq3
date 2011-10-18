@@ -47,7 +47,7 @@ do (jQuery) ->
 
       coffeescript ->
         $('.agreement').each ->
-          $(@).load "/docs/#{@id}"
+          $(@).load "/docs/#{@id}.html"
 
         $('#tc_dialog').dialog
           autoOpen:false
