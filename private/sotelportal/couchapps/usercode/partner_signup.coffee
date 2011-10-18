@@ -31,20 +31,34 @@ do (jQuery) ->
 
       $('#confirm_invalid').dialog(options).dialog('close')
 
-    div id:'tc_dialog', ->
-
-    coffeescript ->
-      $('#tc_dialog').dialog
-        autoOpen:false
-        modal:true
-        buttons:
-          'Print': ->
-            # CONTINUE HERE    XXX
-
     form id:'wizard_form', method:'post', action:'#/partner_signup', class:'validate', ->
 
       input type:'hidden', name:'type', value:'partner_signup'
       input type:'hidden', name:'was_validated'
+
+      input type:'hidden', name:'accept_agreements', id:'accept_agreements'
+
+      div id:'tc_dialog', ->
+        div id:'agent-agreement', class:'agreement'
+        div id:'mutual-non-disclosure-agreement', class:'agreement'
+        div id:'partner-usage-agreement', class:'agreement'
+        div id:'technical-services', class:'agreement'
+        div id:'wholesale-services-agreement', class:'agreement'
+
+      coffeescript ->
+        $('.agreement').each ->
+          $(@).load "/docs/#{@id}"
+
+        $('#tc_dialog').dialog
+          autoOpen:false
+          modal:true
+          buttons:
+            'Print': ->
+              window.print()
+            'Accept': ->
+              $('#accept_agreements').val(true)
+              $('#tc_dialog').dialog('close')
+
 
       div id:"wizard", class:"swMain", ->
         ul ->
