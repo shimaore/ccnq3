@@ -419,6 +419,7 @@ do (jQuery) ->
         coffeescript ->
           $('#open_tc_dialog').click ->
             $('#tc_dialog').dialog 'open'
+            return false
 
         div id:'done', ->
           h2 class:'stepTitle', -> 'Confirmation'
