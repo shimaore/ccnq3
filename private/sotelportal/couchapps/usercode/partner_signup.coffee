@@ -52,6 +52,8 @@ do (jQuery) ->
         $('#tc_dialog').dialog
           autoOpen:false
           modal:true
+          closeOnEscape: true
+          width: '80%'
           buttons:
             'Print': ->
               window.print()
@@ -393,6 +395,8 @@ do (jQuery) ->
 
             p  class:'normal', -> 'Signature Card'
 
+            button id:'open_tc_dialog', 'View Terms and Conditions'
+
             textbox
               id:'signature.name'
               title:'Name of Authorized / Responsible Officer'
@@ -411,6 +415,10 @@ do (jQuery) ->
               class:'required minlength(2)'
               readonly:true
               value:@signature.date or @effective_date
+
+        coffeescript ->
+          $('#open_tc_dialog').click ->
+            $('#tc_dialog').dialog 'open'
 
         div id:'done', ->
           h2 class:'stepTitle', -> 'Confirmation'
