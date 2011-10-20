@@ -46,9 +46,6 @@ do (jQuery) ->
         div id:'wholesale-services-agreement', class:'agreement'
 
       coffeescript ->
-        $('.agreement').each ->
-          $(@).load "/docs/#{@id}.html"
-
         $('#tc_dialog').dialog
           autoOpen:false
           modal:true
@@ -418,6 +415,15 @@ do (jQuery) ->
 
         coffeescript ->
           $('#open_tc_dialog').click ->
+            doc = $('#wizard_form').data 'doc'
+            doc ?= {}
+            $.extend doc, $('#wizard_form').toDeepJson()
+
+            $('.agreement').each ->
+              $.get "/docs/#{@id}.html",
+                (template) => $(@).html Milk.render template, doc
+                'text'
+
             $('#tc_dialog').dialog 'open'
             return false
 
