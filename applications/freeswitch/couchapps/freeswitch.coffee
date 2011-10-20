@@ -105,14 +105,16 @@ ddoc.shows.freeswitch_local_acl = stringFun (doc,req) ->
     send """
       <list name="ingress-#{profile_name}" default="deny">
     """
-    send '<node type="allow" cidr="' + host + '"/>' for host in profile.ingress_acl
+    if profile.ingress_acl?
+      send '<node type="allow" cidr="' + host + '"/>' for host in profile.ingress_acl
 
     send "</list>\n"
 
     send """
       <list name="egress-#{profile_name}" default="deny">
     """
-    send '<node type="allow" cidr="' + host + '"/>' for host in profile.egress_acl
+    if profile.egress_acl?
+      send '<node type="allow" cidr="' + host + '"/>' for host in profile.egress_acl
     send "</list>\n"
 
   send "\n</include>"
