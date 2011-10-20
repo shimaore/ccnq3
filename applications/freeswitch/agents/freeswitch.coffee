@@ -23,7 +23,7 @@ fs_command = (cmd,cb) ->
 
 process_changes = (commands) ->
 
-  for profile_name, command in commands
+  for profile_name, command of commands
     switch command
       when 'start'
         fs_command "sofia profile #{profile_name} start"
