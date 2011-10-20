@@ -88,7 +88,7 @@ ddoc.shows.freeswitch_local_profiles = stringFun (doc,req) ->
       <X-PRE-PROCESS cmd="set" data="ingress_sip_port=#{profile.ingress_sip_port}"/>
 
       <X-PRE-PROCESS cmd="set" data="egress_sip_ip=#{profile.egress_sip_ip}"/>
-      <X-PRE-PROCESS cmd="set" data="egress_sip_port=#{egress_sip_port}"/>
+      <X-PRE-PROCESS cmd="set" data="egress_sip_port=#{profile.egress_sip_port}"/>
 
       <X-PRE-PROCESS cmd="include" data="sip_profiles/#{profile.template}.xml.template"/>
       """
@@ -146,14 +146,14 @@ ddoc.shows.freeswitch_local_conf = stringFun (doc,req) ->
       <section name="dialplan" description="Regex/XML Dialplan">
     """
   for profile_name, profile of doc.sip_profiles
-    send_call_to = doc.send_call_to ? 'socket'
+    send_call_to = profile.send_call_to ? 'socket'
     send """
       <X-PRE-PROCESS cmd="set" data="profile_name=#{profile_name}"/>
       <X-PRE-PROCESS cmd="set" data="profile_type=#{profile.type}"/>
       <X-PRE-PROCESS cmd="set" data="ingress_target=#{profile.ingress_target}"/>
       <X-PRE-PROCESS cmd="set" data="egress_target=#{profile.egress_target}"/>
 
-      <X-PRE-PROCESS cmd="include" data="dialplan/#{doc.handler}.xml.template"/>
+      <X-PRE-PROCESS cmd="include" data="dialplan/#{profile.handler}.xml.template"/>
       <X-PRE-PROCESS cmd="include" data="dialplan/send-call-to-#{send_call_to}.xml.template"/>
       """
 
