@@ -81,7 +81,6 @@ ddoc.shows.freeswitch_local_profiles = stringFun (doc,req) ->
   for profile_name, profile of doc.sip_profiles
     egress_sip_port = profile.egress_sip_port ? profile.ingress_sip_port + 10000
     send """
-      <!-- Prepaid profile -->
       <X-PRE-PROCESS cmd="set" data="profile_name=#{profile_name}"/>
 
       <X-PRE-PROCESS cmd="set" data="ingress_sip_ip=#{profile.ingress_sip_ip}"/>
