@@ -29,13 +29,17 @@ process_changes = (commands) ->
         fs_command "sofia profile #{profile_name} start"
       when 'reload'
         fs_command "sofia profile #{profile_name} rescan reloadxml"
-      when 'restart'
-        fs_command "sofia profile #{profile_name} killgw", ->
-          fs_command "sofia profile #{profile_name} rescan reloadxml"
       when 'force_restart'
         fs_command "sofia profile #{profile_name} restart reloadxml"
       when 'stop'
+        fs_command "sofia profile #{profile_name} stop"
+###
+      when 'restart'
+        fs_command "sofia profile #{profile_name} killgw", ->
+          fs_command "sofia profile #{profile_name} rescan reloadxml"
+      when 'stop'
         fs_command "sofia profile #{profile_name} killgw"
+###
 
 request = require 'request'
 fs = require 'fs'
