@@ -145,7 +145,7 @@ ddoc.shows.freeswitch_local_conf = stringFun (doc,req) ->
     <include>
       <section name="dialplan" description="Regex/XML Dialplan">
     """
-  for profile_name, profile in doc.sip_profiles
+  for profile_name, profile of doc.sip_profiles
     send_call_to = doc.send_call_to ? 'socket'
     send """
       <X-PRE-PROCESS cmd="set" data="profile_name=#{profile_name}"/>
