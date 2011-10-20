@@ -100,14 +100,21 @@ ddoc.shows.freeswitch_local_acl = stringFun (doc,req) ->
     'Content-Type': 'text/xml'
 
   send "<include>\n"
+
   for profile_name, profile of doc.sip_profiles
     send """
       <list name="ingress-#{profile_name}" default="deny">
-      </list>
+    """
+    send '<node type="allow" cidr="' + host + '"/>' for host in profile.ingress_acl
 
+    send "</list>\n"
+
+    send """
       <list name="egress-#{profile_name}" default="deny">
-      </list>
-      """
+    """
+    send '<node type="allow" cidr="' + host + '"/>' for host in profile.egress_acl
+    send "</list>\n"
+
   send "\n</include>"
   return {}
 
