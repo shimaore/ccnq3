@@ -77,7 +77,7 @@ ddoc.shows.freeswitch_local_profiles = stringFun (doc,req) ->
   start
     'Content-Type': 'text/xml'
 
-  send "<include>"
+  send "<include>\n"
   for profile_name, profile of doc.sip_profiles
     egress_sip_port = profile.egress_sip_port ? profile.ingress_sip_port + 10000
     send """
@@ -91,6 +91,7 @@ ddoc.shows.freeswitch_local_profiles = stringFun (doc,req) ->
       <X-PRE-PROCESS cmd="set" data="egress_sip_port=#{profile.egress_sip_port}"/>
 
       <X-PRE-PROCESS cmd="include" data="sip_profiles/#{profile.template}.xml.template"/>
+
       """
   send "</include>"
   return {}
@@ -99,7 +100,7 @@ ddoc.shows.freeswitch_local_acl = stringFun (doc,req) ->
   start
     'Content-Type': 'text/xml'
 
-  send "<include>"
+  send "<include>\n"
   for profile_name, profile of doc.sip_profiles
     send """
       <list name="ingress-#{profile_name}" default="deny">
@@ -144,7 +145,9 @@ ddoc.shows.freeswitch_local_conf = stringFun (doc,req) ->
   send """
     <include>
       <section name="dialplan" description="Regex/XML Dialplan">
+
     """
+
   for profile_name, profile of doc.sip_profiles
     send_call_to = profile.send_call_to ? 'socket'
     send """
@@ -155,6 +158,7 @@ ddoc.shows.freeswitch_local_conf = stringFun (doc,req) ->
 
       <X-PRE-PROCESS cmd="include" data="dialplan/#{profile.handler}.xml.template"/>
       <X-PRE-PROCESS cmd="include" data="dialplan/send-call-to-#{send_call_to}.xml.template"/>
+
       """
 
   send """
