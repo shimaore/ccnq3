@@ -68,7 +68,12 @@ Additionally the following fields might be specified:
 
 ###
 
-ddoc.shows.freeswitch_local_profiles = (doc,req) ->
+# There is a bug(?) in CouchDB _show in that the functions have to be
+# put inside parentheses.
+stringFun = (fun) ->
+  fun.toSource ? fun.toSource() : "(" + fun.toString() + ")"
+
+ddoc.shows.freeswitch_local_profiles = stringFun (doc,req) ->
   start
     headers:
       'Content-Type': 'text/xml'
@@ -112,7 +117,7 @@ ddoc.shows.freeswitch_local_acl = (doc,req) ->
 The configuration file "vars.xml" contains more defaults.
 ###
 
-ddoc.shows.freeswitch_local_vars = (doc,req) ->
+ddoc.shows.freeswitch_local_vars = stringFun (doc,req) ->
   sip_voice = doc.sip_voice ? 'en/us/callie'
   rtp_ip = doc.rtp_ip ? 'auto'
 
@@ -135,7 +140,7 @@ ddoc.shows.freeswitch_local_vars = (doc,req) ->
     """
   return {}
 
-ddoc.shows.freeswitch_local_conf = (doc,req) ->
+ddoc.shows.freeswitch_local_conf = stringFun (doc,req) ->
   start
     headers:
       'Content-Type': 'text/xml'
