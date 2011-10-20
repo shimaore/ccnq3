@@ -90,9 +90,8 @@ ddoc.shows.freeswitch_local_profiles = stringFun (doc,req) ->
       <X-PRE-PROCESS cmd="set" data="egress_sip_port=#{profile.egress_sip_port}"/>
 
       <X-PRE-PROCESS cmd="include" data="sip_profiles/#{profile.template}.xml.template"/>
-
       """
-  send "</include>"
+  send "\n</include>"
   return {}
 
 ddoc.shows.freeswitch_local_acl = stringFun (doc,req) ->
@@ -108,7 +107,7 @@ ddoc.shows.freeswitch_local_acl = stringFun (doc,req) ->
       <list name="egress-#{profile_name}" default="deny">
       </list>
       """
-  send "</include>"
+  send "\n</include>"
   return {}
 
 ###
@@ -122,8 +121,8 @@ ddoc.shows.freeswitch_local_vars = stringFun (doc,req) ->
   start
     'Content-Type': 'text/xml'
 
+  send "<include>\n"
   send """
-    <include>
       <!-- Common variables -->
       <X-PRE-PROCESS cmd="set" data="sound_prefix=$${base_dir}/sounds/#{sip_voice}"/>
 
@@ -132,19 +131,17 @@ ddoc.shows.freeswitch_local_vars = stringFun (doc,req) ->
       <X-PRE-PROCESS cmd="set" data="domain_name=$${domain}"/>
 
       <X-PRE-PROCESS cmd="set" data="rtp_ip=#{rtp_ip}"/>
-
-    </include>
     """
+  send "\n</include>"
   return {}
 
 ddoc.shows.freeswitch_local_conf = stringFun (doc,req) ->
   start
     'Content-Type': 'text/xml'
 
+  send "<include>\n"
   send """
-    <include>
       <section name="dialplan" description="Regex/XML Dialplan">
-
     """
 
   for profile_name, profile of doc.sip_profiles
@@ -157,12 +154,9 @@ ddoc.shows.freeswitch_local_conf = stringFun (doc,req) ->
 
       <X-PRE-PROCESS cmd="include" data="dialplan/#{profile.handler}.xml.template"/>
       <X-PRE-PROCESS cmd="include" data="dialplan/send-call-to-#{send_call_to}.xml.template"/>
-
       """
 
-  send """
-      </section>
-    </include>
-    """
+  send "</section>"
+  send "\n</include>"
   return {}
 
