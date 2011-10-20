@@ -71,7 +71,7 @@ Additionally the following fields might be specified:
 # There is a bug(?) in CouchDB _show in that the functions have to be
 # put inside parentheses.
 stringFun = (fun) ->
-  if fun.toSource then fun.toSource() else "(" + fun.toString() + ")"
+  "(" + fun.toString() + ")"
 
 ddoc.shows.freeswitch_local_profiles = stringFun (doc,req) ->
   start
