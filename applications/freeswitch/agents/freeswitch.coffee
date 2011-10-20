@@ -27,9 +27,7 @@ process_changes = (commands) ->
     switch command
       when 'start'
         fs_command "sofia profile #{profile_name} start"
-      when 'reload'
-        fs_command "sofia profile #{profile_name} rescan reloadxml"
-      when 'force_restart'
+      when 'restart'
         fs_command "sofia profile #{profile_name} restart reloadxml"
       when 'stop'
         fs_command "sofia profile #{profile_name} stop"
