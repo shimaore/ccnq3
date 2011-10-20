@@ -75,8 +75,7 @@ stringFun = (fun) ->
 
 ddoc.shows.freeswitch_local_profiles = stringFun (doc,req) ->
   start
-    headers:
-      'Content-Type': 'text/xml'
+    'Content-Type': 'text/xml'
 
   send "<include>"
   for profile_name, profile of doc.sip_profiles
@@ -98,8 +97,7 @@ ddoc.shows.freeswitch_local_profiles = stringFun (doc,req) ->
 
 ddoc.shows.freeswitch_local_acl = (doc,req) ->
   start
-    headers:
-      'Content-Type': 'text/xml'
+    'Content-Type': 'text/xml'
 
   send "<include>"
   for profile_name, profile of doc.sip_profiles
@@ -122,8 +120,7 @@ ddoc.shows.freeswitch_local_vars = stringFun (doc,req) ->
   rtp_ip = doc.rtp_ip ? 'auto'
 
   start
-    headers:
-      'Content-Type': 'text/xml'
+    'Content-Type': 'text/xml'
 
   send """
     <include>
@@ -142,8 +139,7 @@ ddoc.shows.freeswitch_local_vars = stringFun (doc,req) ->
 
 ddoc.shows.freeswitch_local_conf = stringFun (doc,req) ->
   start
-    headers:
-      'Content-Type': 'text/xml'
+    'Content-Type': 'text/xml'
 
   send """
     <include>
