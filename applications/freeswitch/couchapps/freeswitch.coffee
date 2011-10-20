@@ -5,6 +5,7 @@ Released under the Affero GPL3 license or above
 
 ddoc =
   _id: '_design/freeswitch'
+  language: 'javascript'
   shows: {}
   filters: {}
 
@@ -68,10 +69,14 @@ Additionally the following fields might be specified:
 ###
 
 ddoc.shows.freeswitch_local_profiles = (doc,req) ->
-  body = "<include>"
+  start
+    headers:
+      'Content-Type': 'text/xml'
+
+  send "<include>"
   for profile_name, profile of doc.sip_profiles
     egress_sip_port = profile.egress_sip_port ? profile.ingress_sip_port + 10000
-    body += """
+    send """
       <!-- Prepaid profile -->
       <X-PRE-PROCESS cmd="set" data="profile_name=#{profile_name}"/>
 
@@ -83,12 +88,8 @@ ddoc.shows.freeswitch_local_profiles = (doc,req) ->
 
       <X-PRE-PROCESS cmd="include" data="sip_profiles/#{profile.template}.xml.template"/>
       """
-  body += "</include>"
-  return {
-    headers:
-      'Content-Type': 'text/xml'
-    body: body
-  }
+  send "</include>"
+  return {}
 
 ddoc.shows.freeswitch_local_acl = (doc,req) ->
   start
