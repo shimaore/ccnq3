@@ -33,7 +33,7 @@ The sip_profiles records contain:
     # For the "sbc*" types, we need:
     ingress_sip_ip: which IP (v4,v6) to bind for ingress processing
     ingress_sip_port: which port to bind for ingress processing
-    egress_sip_ip: which IP (v4,v6) to bind for egress processing 
+    egress_sip_ip: which IP (v4,v6) to bind for egress processing [default: ingress_sip_ip]
     egress_sip_port: which port to bind for egress processing [default: 10000+ingress_sip_port]
 
     # Dialplan data
@@ -79,6 +79,7 @@ ddoc.shows.freeswitch_local_profiles = stringFun (doc,req) ->
 
   send "<include>\n"
   for profile_name, profile of doc.sip_profiles
+    egress_sip_ip   = profile.egress_sip_ip   ? profile.ingress_sip_ip
     egress_sip_port = profile.egress_sip_port ? profile.ingress_sip_port + 10000
     send """
       <X-PRE-PROCESS cmd="set" data="profile_name=#{profile_name}"/>
@@ -86,8 +87,8 @@ ddoc.shows.freeswitch_local_profiles = stringFun (doc,req) ->
       <X-PRE-PROCESS cmd="set" data="ingress_sip_ip=#{profile.ingress_sip_ip}"/>
       <X-PRE-PROCESS cmd="set" data="ingress_sip_port=#{profile.ingress_sip_port}"/>
 
-      <X-PRE-PROCESS cmd="set" data="egress_sip_ip=#{profile.egress_sip_ip}"/>
-      <X-PRE-PROCESS cmd="set" data="egress_sip_port=#{profile.egress_sip_port}"/>
+      <X-PRE-PROCESS cmd="set" data="egress_sip_ip=#{egress_sip_ip}"/>
+      <X-PRE-PROCESS cmd="set" data="egress_sip_port=#{egress_sip_port}"/>
 
       <X-PRE-PROCESS cmd="include" data="sip_profiles/#{profile.template}.xml.template"/>
       """
