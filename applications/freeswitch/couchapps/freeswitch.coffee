@@ -107,7 +107,6 @@ ddoc.shows.freeswitch_local_acl = stringFun (doc,req) ->
     """
     if profile.ingress_acl?
       send '<node type="allow" cidr="' + host + '"/>' for host in profile.ingress_acl
-
     send "</list>\n"
 
     send """
@@ -151,7 +150,7 @@ ddoc.shows.freeswitch_local_conf = stringFun (doc,req) ->
 
   send "<include>\n"
   send """
-      <section name="dialplan" description="Regex/XML Dialplan">
+      <section name="dialplan" description="Regex/XML Dialplan">\n
     """
 
   for profile_name, profile of doc.sip_profiles
@@ -166,7 +165,7 @@ ddoc.shows.freeswitch_local_conf = stringFun (doc,req) ->
       <X-PRE-PROCESS cmd="include" data="dialplan/send-call-to-#{send_call_to}.xml.template"/>
       """
 
-  send "</section>"
+  send "\n</section>"
   send "\n</include>"
   return {}
 
