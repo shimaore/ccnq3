@@ -13,7 +13,7 @@ sudo mount /opt/freeswitch/db
 
 # Startup parameters
 sudo sed -i -e 's/^FREESWITCH_ENABLED="false"/FREESWITCH_ENABLED="true"/' /etc/default/freeswitch
-sudo sed -i -e 's/^FREESWITCH_PARAMS="-nc"/FREESWITCH_PARAMS="-nc -nonat"/' /etc/default/freeswitch
+sudo sed -i -e 's/^FREESWITCH_PARAMS="-nc"/FREESWITCH_PARAMS="-nc -nonat -nonatmap"/' /etc/default/freeswitch
 
 # Default configuration
 sudo mv /opt/freeswitch/conf /opt/freeswitch/conf."`date --rfc-3339=seconds`"
