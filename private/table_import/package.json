@@ -1,0 +1,13 @@
+{
+  "name": "couchdb-bulk-import-tables"
+, "version": "0.0.1"
+, "description": "Bulk upload rating tables into CCNQ2"
+, "author": {"name":"Stéphane Alnet","email":"stephane@shimaore.net"}
+, "bin": "import.coffee"
+, "dependencies": {
+    "request": ">=2.1.1"
+  }
+, "engines": {
+    "coffee": ">=1.1.2"
+  }
+}
