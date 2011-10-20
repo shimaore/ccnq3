@@ -55,14 +55,14 @@ Note: any field not marked with a [default] tag MUST be specified.
 
 Additionally the following fields might be specified:
 
-  sip_commands[profile_name] =
+  sip_commands[sofia_profile] =
     One of:
       start             sofia profile <profile_name> start
-      rescan            sofia profile <profile_name> rescan reloadxml
-      restart           sofia profile <profile_name> killgw  (followed by)
-                        sofia profile <profile_name> rescan reloadxml
-      force_restart     sofia profile <profile_name> restart reloadxml  [required to change IP or port, will drop calls]
+      restart           sofia profile <profile_name> restart reloadxml  [required to change IP or port, will drop calls]
       stop              sofia profile <profile_name> killgw
+
+  Note that "sofia_profile" here is either "egress-#{profile_name}" or "ingress-#{profile_name}" so that each direction
+  can be restart independently.
 
   Each command is only executed once (the agent tracks the last _rev processed to not process the same one twice).
 
