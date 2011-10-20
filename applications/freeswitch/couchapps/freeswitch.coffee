@@ -95,7 +95,7 @@ ddoc.shows.freeswitch_local_profiles = stringFun (doc,req) ->
   send "</include>"
   return {}
 
-ddoc.shows.freeswitch_local_acl = (doc,req) ->
+ddoc.shows.freeswitch_local_acl = stringFun (doc,req) ->
   start
     'Content-Type': 'text/xml'
 
