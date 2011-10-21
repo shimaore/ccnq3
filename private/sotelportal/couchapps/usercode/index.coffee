@@ -64,6 +64,7 @@ $(document).ready ->
     $(container).data 'profile', profile
 
     # Do all "require" before starting the application.
+    $.getScript '/_users/_design/portal/user_management.js' # only accessible to some users
     model.require 'partner_signup.js', ->
       # app.run '#/'
       app.run '#/partner_signup'
