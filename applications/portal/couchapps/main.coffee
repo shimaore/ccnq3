@@ -20,7 +20,7 @@ ddoc.lists.datatable = (head,req) ->
   start
     headers:
       'Content-Type': 'application/json'
-  fields = req.params.fields.split ' '
+  fields = req.fields.split ' '
   send '{ "aaData": ['
   while row = getRow()
     send row.value[field] for field in fields
