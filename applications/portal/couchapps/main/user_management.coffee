@@ -14,7 +14,7 @@ do (jQuery) ->
 
     coffeescript ->
 
-      table id:'user_table', cellpadding:0, cellspacing:0, border:0, class="display", ->
+      table id:'user_table', cellpadding:0, cellspacing:0, border:0, class:"display", ->
         thead ->
           tr ->
             th 'Name'
