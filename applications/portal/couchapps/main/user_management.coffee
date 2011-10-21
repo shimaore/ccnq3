@@ -20,16 +20,16 @@ do (jQuery) ->
             th 'Email'
             th 'Phone'
 
+    coffeescript ->
+      $('#user_table').dataTable
+        # jQuery-UI styling
+        bJQueryUI: true
+        sPaginationType: 'full_numbers'
+        # Ajax source
+        bProcessing: true
+        sAjaxSource: '_design/portal/_list/datatable/users?fields=name+email+phone'
 
   $(document).ready ->
-
-    $('#user_table').dataTable
-      # jQuery-UI styling
-      bJQueryUI: true
-      sPaginationType: 'full_numbers'
-      # Ajax source
-      bProcessing: true
-      sAjaxSource: '_design/portal/_list/datatable/users?fields=name+email+phone'
 
     $.sammy container, ->
 
