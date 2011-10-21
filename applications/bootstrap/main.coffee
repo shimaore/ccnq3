@@ -34,7 +34,7 @@ zappa.run ->
     # Provide a default index.html (default portal)
     get '/': ->
       @title = 'Bootstrap portal'
-      @stylesheet = '/public/css/smoothness/jquery-ui.css'
+      @stylesheet = '/public/css/default'
       render 'index', layout:no
 
     view index: ->
@@ -49,8 +49,7 @@ zappa.run ->
           script src: '/zappa/sammy.js'
           script src: '/zappa/zappa.js'
           # CCNQ3 standard set
-          script src: '/public/js/jquery-ui.js'
-          script src: '/public/js/jquery.validate.js'
+          script src: '/public/js/default.js'
           # Start the show
           script src: '/index.js'
 

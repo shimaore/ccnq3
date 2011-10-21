@@ -9,6 +9,7 @@
   },
   "scripts": {
     "couchapps": "cd couchapps && coffee install.coffee"
+  , "preinstall": "coffee -c couchapps/*/*.coffee"
   },
   "dependencies": {
     "cdb": "*"

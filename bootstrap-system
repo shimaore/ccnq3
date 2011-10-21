@@ -93,7 +93,8 @@ fi
 (cd && npm run-script ccnq3_host stop >/dev/null 2>&1 || echo)
 (cd && npm run-script ccnq3_host start)
 
-
+# Build files
+(cd "${$SRC}/public/" && . build-default.sh)
 
 # Other services are started using the "host" framework.
 

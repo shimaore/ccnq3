@@ -15,3 +15,9 @@ cat js/jquery.js          \
     js/jquery.smartWizard-2.0.js \
     js/milk.js            \
   > js/default.js
+
+cat css/smart_wizard.css  \
+    css/style.css         \
+    css/smoothness/jquery-ui.css \
+    css/datatables.css    \
+  > css/default.css

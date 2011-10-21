@@ -13,6 +13,18 @@ form.main label {
   width: 100px;
   display: inline-block;
 }
+/* Alternative */
+/*
+label {
+  display: block;
+}
+
+label>span {
+  width: 200px;
+  float: left;
+}
+*/
+
 #login_container {
   display: inline;
 }

@@ -347,12 +347,10 @@ client ->
 view 'error': ->
   @title = 'Error'
   @scripts = [
-    '/public/js/jquery',
-    '/public/js/jquery-ui',
+    '/public/js/default'
   ]
   @stylesheets = [
-    '/public/css/style',
-    '/public/css/smoothness/jquery-ui',
+    '/public/css/default'
   ]
 
   h1 @title
@@ -363,18 +361,13 @@ view 'error': ->
 view ->
   @title = 'Portal'
   @scripts = [
-    '/public/js/jquery',
-    '/public/js/jquery-ui',
-    '/public/js/jquery.validate',
-    '/public/js/jquery.datatables',
+    '/public/js/default'
     '/public/js/jquery.deserialize',
     'default',
     'search', 'account', 'validate'
   ]
   @stylesheets = [
-    '/public/css/style',
-    '/public/css/jquery-ui',
-    '/public/css/datatables'
+    '/public/css/default'
   ]
 
   lr = (_id,_label,_class) ->
