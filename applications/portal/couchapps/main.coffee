@@ -25,7 +25,7 @@ ddoc.lists.datatable = (head,req) ->
   first_row = true
   while row = getRow()
     do (row) ->
-      send ',' if first_row
+      send ',' if not first_row
       send JSON.stringify (row.value[field] for field in fields)
       first_row = false
   send '] }'
