@@ -12,7 +12,7 @@
           type: 'post'
           url: '/_session'
           contentType: 'application/json'
-          data:
+          data: JSON.stringify
             name:     auth.username
             password: auth.password
           dataType:'json'
