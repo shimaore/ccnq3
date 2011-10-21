@@ -22,10 +22,12 @@ ddoc.lists.datatable = (head,req) ->
       'Content-Type': 'application/json'
   fields = req.query.fields.split ' '
   send '{ "aaData": ['
+  first_row = true
   while row = getRow()
     do (row) ->
+      send ',' if first_row
       send JSON.stringify (row.value[field] for field in fields)
-      send ','
+      first_row = false
   send '] }'
 
 ddoc.views.user_profiles =
