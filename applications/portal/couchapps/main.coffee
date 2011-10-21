@@ -26,3 +26,8 @@ ddoc.lists.datatable = (head,req) ->
     send row.value[field] for field in fields
     send ','
   send '] }'
+
+ddoc.views.user_profiles =
+  map: (doc) ->
+    if doc.type? and doc.type is 'user'
+      emit null, doc.profile
