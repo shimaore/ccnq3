@@ -5,7 +5,6 @@ Released under the Affero GPL3 license or above
 
 
 couchapp = require('couchapp')
-path     = require('path')
 
 ddoc = {
     _id: '_design/host'
@@ -22,4 +21,5 @@ ddoc.filters.hostname = (doc,req) ->
   return doc.type is 'host' and doc.host is req.query.hostname
 
 # Attachments are loaded from host/*
-couchapp.loadAttachments(ddoc, path.join(__dirname, 'main'))
+# path     = require('path')
+# couchapp.loadAttachments(ddoc, path.join(__dirname, 'main'))
