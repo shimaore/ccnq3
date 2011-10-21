@@ -12,8 +12,7 @@ do (jQuery) ->
 
   user_management_tpl = $.compile_template ->
 
-    coffeescript ->
-
+    div ->
       table id:'user_table', cellpadding:0, cellspacing:0, border:0, class:"display", ->
         thead ->
           tr ->
@@ -21,9 +20,6 @@ do (jQuery) ->
             th 'Email'
             th 'Phone'
 
-
-      $('form.validate').validate
-        onsubmit: false
 
   $(document).ready ->
 
