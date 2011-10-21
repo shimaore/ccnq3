@@ -23,8 +23,9 @@ ddoc.lists.datatable = (head,req) ->
   fields = req.query.fields.split ' '
   send '{ "aaData": ['
   while row = getRow()
-    send row.value[field] for field in fields
-    send ','
+    do (row) ->
+      send JSON.stringify row.value[field] for field in fields
+      send ','
   send '] }'
 
 ddoc.views.user_profiles =
