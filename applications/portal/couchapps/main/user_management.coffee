@@ -27,7 +27,7 @@ do (jQuery) ->
         sPaginationType: 'full_numbers'
         # Ajax source
         bProcessing: true
-        sAjaxSource: '/_users/_design/portal/_list/datatable/users?fields=name+email+phone'
+        sAjaxSource: '/_users/_design/portal/_list/datatable/user_profiles?fields=name+email+phone'
 
   $(document).ready ->
 
