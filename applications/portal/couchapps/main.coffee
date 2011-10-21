@@ -24,11 +24,11 @@ ddoc.lists.datatable = (head,req) ->
   send '{ "aaData": ['
   while row = getRow()
     do (row) ->
-      send JSON.stringify row.value[field] for field in fields
+      send JSON.stringify (row.value[field] for field in fields)
       send ','
   send '] }'
 
 ddoc.views.user_profiles =
   map: (doc) ->
-    if doc.type? and doc.type is 'user'
+    if doc.type? and doc.type is 'user' and doc.profile
       emit null, doc.profile
