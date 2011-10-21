@@ -34,3 +34,8 @@ ddoc.views.user_profiles =
   map: (doc) ->
     if doc.type? and doc.type is 'user' and doc.profile
       emit null, doc.profile
+
+# Attachments (main couchapp)
+couchapp = require('couchapp')
+path     = require('path')
+couchapp.loadAttachments(ddoc, path.join(__dirname, 'main'))
