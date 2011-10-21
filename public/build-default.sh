@@ -4,6 +4,7 @@ coffee -c js/*.coffee
 cat js/jquery.js          \
     js/jquery-ui.js       \
     js/jquery.validate.js \
+    js/jquery.datatables.js \
     js/jquery.couch.js    \
     js/jquery.deepjson.js \
     js/sammy.js           \
