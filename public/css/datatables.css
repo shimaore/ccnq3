@@ -360,10 +360,10 @@ tr.even td.sorting_3 {
 /*
  * Row highlighting example
  */
-tbody tr.even:hover, tbody tr.even td.highlighted {
+tbody tr.even:hover {
 	background-color: #efefef;
 }
 
-tbody tr.odd:hover, tbody tr.odd td.highlighted {
-	background-color: #fefefe;
+tbody tr.odd:hover {
+	background-color: #efefef;
 }
