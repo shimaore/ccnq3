@@ -8,9 +8,10 @@
     "config_file": "/etc/ccnq3/host.json"
   },
   "scripts": {
-    "start": "daemon -n ccnq3_mail_password -o daemon.debug -r -D \"`pwd`/agents\" -- ./mail_password.coffee",
-    "stop":  "daemon -n ccnq3_mail_password -o daemon.debug --stop",
-    "couchapps": "cd couchapps && ./install.coffee"
+    "start": "daemon -n ccnq3_mail_password -o daemon.debug -r -D \"`pwd`/agents\" -- ./mail_password.coffee"
+  , "stop":  "daemon -n ccnq3_mail_password -o daemon.debug --stop"
+  , "preinstall": "coffee -c couchapps/*/*.coffee"
+  , "couchapps": "cd couchapps && ./install.coffee"
   },
   "dependencies": {
     "cdb": "*"
