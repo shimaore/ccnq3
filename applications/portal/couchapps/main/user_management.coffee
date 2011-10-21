@@ -41,4 +41,4 @@ do (jQuery) ->
 
       @get '#/user_management', ->
 
-        @swap partner_signup_tpl
+        @swap user_management_tpl
