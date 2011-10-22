@@ -7,7 +7,8 @@
 
     # Validate the target name format.
     # Note: this does not allow all the possible names allowed by CouchDB.
-    return send error:'Invalid target' unless @target.match /^[_a-z]+$/
+    if not @target.match /^[_a-z]+$/
+      return send error:'Invalid target'
 
     ctx =
       name: session.logged_in
@@ -24,7 +25,7 @@
           ctx: JSON.stringify ctx
 
     # Note: This will fail if the user database does not contain
-    #       the proper design document for the specified tatget,
+    #       the proper design document for the specified target,
     #       so that restrictions are enforced.
     json_req = require 'json_req'
     json_req.request replication_req, (r) ->
@@ -38,7 +39,7 @@
     # Validate the source name format.
     # Note: this does not allow all the possible names allowed by CouchDB.
     if not @source.match /^[_a-z]+$/
-      return send error:'Invalid target'
+      return send error:'Invalid source'
 
     ctx =
       name: session.logged_in
