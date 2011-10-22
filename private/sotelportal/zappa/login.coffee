@@ -38,7 +38,25 @@ Released under the AGPL3 license
         # auth.$.ajax(kayako_options)
         next()
 
+      # Replicate any sotel_portal record
+      sotel_replicate = (auth,next) ->
+        auth.notify 'Replicating your portal data.'
+
+        options =
+          type: 'post'
+          url: '/roles/replicate/pull/sotel_portal'
+          dataType:'json'
+          success: (data) ->
+            if not data.ok
+              auth.notify 'Portal replication failed.'
+              return
+            auth.notify ''
+            next()
+
+        auth.$.ajax(options)
+
+
       if extra_login?
-        ccnq2_login auth, -> kayako_login auth, -> extra_login auth, next
+        ccnq2_login auth, -> kayako_login auth, -> sotel_replicate auth, -> extra_login auth, next
       else
-        ccnq2_login auth, -> kayako_login auth, next
+        ccnq2_login auth, -> kayako_login auth, -> sotel_replicate auth, next
