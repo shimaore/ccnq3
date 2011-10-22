@@ -19,7 +19,7 @@
       body:
         source: session.user_database
         target: @target
-        filter: "#{target}/user_push" # Found in the userdb
+        filter: "#{@target}/user_push" # Found in the userdb
         query_params:
           ctx: JSON.stringify ctx
 
