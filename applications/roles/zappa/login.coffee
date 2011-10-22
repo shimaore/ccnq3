@@ -11,11 +11,12 @@
         couchdb_options =
           type: 'post'
           url: '/_session'
-          contentType: 'application/json'
-          data: JSON.stringify
+          data:
             name:     auth.username
             password: auth.password
           dataType:'json'
+          beforeSend: (xhr) ->
+            xhr.setRequestHeader 'Accept', 'application/json'
           success: (data) ->
             if not data.ok
               auth.notify 'Database sign-in failed.'
