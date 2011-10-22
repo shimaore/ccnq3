@@ -9,8 +9,15 @@
       # Log into CouchDB so that we can access the user's database directly.
       couchdb_login = (auth,next) ->
         options =
-          name:     auth.username
+          type: 'post'
+          url: '/_session'
+          username: auth.username
           password: auth.password
+          data:
+            name:     auth.username
+            password: auth.password
+          dataType: 'json' # should set the Accept header
+          cache: false
           success: ->
             auth.notify ''
             next()
@@ -18,7 +25,7 @@
             auth.notify 'Database sign-in failed.'
 
         auth.notify 'Signing you into the database.'
-        auth.$.couch.login options
+        auth.$.ajax options
 
       # Create the user database if needed.
       profile_login = (auth,next) ->
