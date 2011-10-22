@@ -487,7 +487,12 @@ do (jQuery) ->
             @send model.remove, former_doc, (doc)=>
               @send model.save,  doc, (doc)=>
                 $('#wizard_form').data 'doc', doc
-                alert "Your application has been submitted."
+                $.post '/roles/replicate/push/sotel_portal', (data)->
+                  if data.ok
+                    alert "Your application has been submitted."
+                  else
+                    alert "Your application was not submitted, please try again."
+                , "json"
 
       @post '#/partner_signup', ->
         console.log 'Partner form submission'
