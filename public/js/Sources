@@ -1,1 +1,2 @@
-curl -o milk.js https://raw.github.com/pvande/Milk/master/dist/v1.2.0/milk.min.js
+curl -o milk.js 'https://raw.github.com/pvande/Milk/master/dist/v1.2.0/milk.min.js'
+curl -o jquery.couch.js 'http://git-wip-us.apache.org/repos/asf?p=couchdb.git;a=blob_plain;f=share/www/script/jquery.couch.js;hb=HEAD'
