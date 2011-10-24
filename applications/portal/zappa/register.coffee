@@ -3,9 +3,13 @@
 # Released under the AGPL3 license
 ###
 
-@include = require('ccnq3_config').get (config)=>
+@include = ->
 
   cdb = require 'cdb'
+
+  config = null
+  require('ccnq3_config').get(c) ->
+    config = c
 
   @coffee '/u/register.js': ->
     $(document).ready ->
