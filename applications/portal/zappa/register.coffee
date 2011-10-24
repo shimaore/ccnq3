@@ -5,9 +5,9 @@
 
 @include = ->
 
-  requiring 'cdb'
+  cdb = require 'cdb'
 
-  coffee '/u/register.js': ->
+  @coffee '/u/register.js': ->
     $(document).ready ->
       $('#register_container').load '/u/register.widget', ->
 
@@ -45,27 +45,29 @@
           $.ajax(ajax_options)
           return false
 
-  get '/u/register.widget': ->
-    @local_part = config.mail_password.sender_local_part
-    render 'register_widget', layout:no
+  @get '/u/register.widget': ->
+    local_part = config.mail_password.sender_local_part
+    @render register_widget: { local_part: local_part }
 
-  requiring 'crypto'
-  def uuid: require 'node-uuid'
+  crypto = require 'crypto'
+  uuid = require 'node-uuid'
 
-  put '/u/register.json': ->
+  @put '/u/register.json': ->
 
-    if not @name or not @email
-      return send error:'Invalid parameters, try again'
+    name = @req.param 'name'
+    email = @req.param 'email'
+    if not name or not email
+      return @send error:'Invalid parameters, try again'
 
-    for k,v of params when k.match /^_/
+    for k,v of @params when k.match /^_/
       delete params[k]
 
     # Currently assumes username = email
-    username = @email
+    username = email
     db = cdb.new config.users.couchdb_uri
     db.exists (it_does) =>
       if not it_does
-        return send error:'Not connected to the database'
+        return @send error:'Not connected to the database'
 
       p =
         _id: 'org.couchdb.user:'+username
@@ -78,16 +80,16 @@
         send_password: true # send them their new password
 
       # PUT without _rev can only happen once
-      db.put p, (r) ->
+      db.put p, (r) =>
         if r.error?
-          return send r
+          return @send r
         else
           if config.users.logged_in_after_initial_registration
-            session.logged_in = username
-            session.roles     = []
-          return send ok:true, username:p.name, domain:p.domain
+            @session.logged_in = username
+            @session.roles     = []
+          return @send ok:true, username:p.name, domain:p.domain
 
-  view register_widget: ->
+  @view register_widget: ->
 
     l = (_id,_label,_class) ->
       label for: _id, -> _label

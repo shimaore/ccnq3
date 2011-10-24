@@ -4,11 +4,11 @@
 ###
 
 @include = ->
-  requiring 'cdb'
-  requiring 'url'
-  requiring 'querystring'
+  cdb = require 'cdb'
+  url = require 'url'
+  querystring = require 'querystring'
 
-  coffee '/u/recover.js': ->
+  @coffee '/u/recover.js': ->
     $(document).ready ->
 
       $('#password_recovery_container').load '/u/recover.widget', ->
@@ -48,9 +48,9 @@
           return false
 
 
-  get '/u/recover.widget': -> render 'recover_widget', layout:no
+  @get '/u/recover.widget': -> @render 'recover_widget'
 
-  view recover_widget: ->
+  @view recover_widget: ->
 
     div id: 'recover_buttons', ->
       form id: 'recover_window', ->
@@ -65,19 +65,20 @@
       div ->
         input type: 'submit', value: 'Confirm'
 
-  post '/u/recover.json': ->
-    if not @email?
-      return send {error:'Missing username'}
+  @post '/u/recover.json': ->
+    email = @req.param 'email'
+    if not email?
+      return @send {error:'Missing username'}
 
     users_cdb = cdb.new config.users.couchdb_uri
-    users_cdb.get "org.couchdb.user:#{@email}", (p) =>
+    users_cdb.get "org.couchdb.user:#{email}", (p) =>
       if p.error?
-        return send error: 'Please make sure you register first.'
+        return @send error: 'Please make sure you register first.'
 
       # Everything is OK
       p.send_password = true
       users_cdb.put p, (r) ->
         if r.error?
-          return send r
+          return @send r
         else
-          return send ok:true
+          return @send ok:true

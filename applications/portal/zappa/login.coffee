@@ -5,11 +5,11 @@ Released under the AGPL3 license
 
 @include = ->
 
-  requiring 'cdb'
-  requiring 'url'
-  requiring 'querystring'
+  cdb = require 'cdb'
+  url = require 'url'
+  querystring = require 'querystring'
 
-  coffee '/u/login.js': ->
+  @coffee '/u/login.js': ->
     $(document).ready ->
 
       # Log into the main portal (this application).
@@ -65,18 +65,18 @@ Released under the AGPL3 license
           $.ajax(ajax_options)
           return false
 
-  get '/u/login.widget': ->
-    if session.logged_in?
-      render 'logout_widget', layout:no
+  @get '/u/login.widget': ->
+    if @session.logged_in?
+      @render 'logout_widget'
     else
-      render 'login_widget', layout:no
+      @render 'login_widget'
 
-  view logout_widget: ->
+  @view logout_widget: ->
 
         form id: 'logout', ->
           input type: 'submit', value: 'Logout'
 
-  view login_widget: ->
+  @view login_widget: ->
 
         form id: 'login', class: 'main validate', title: 'Sign in', ->
           span id: 'login_error', class: 'error'
@@ -89,24 +89,26 @@ Released under the AGPL3 license
           div ->
           input type: 'submit', value: 'Sign in'
 
-  post '/u/login.json': ->
-    if not @username?
-      return send {error:'Missing username'}
-    if not @password?
-      return send {error:'Missing password'}
+  @post '/u/login.json': ->
+    username = @req.param 'username'
+    if not username?
+      return @send {error:'Missing username'}
+    password = @req.param 'password'
+    if not password?
+      return @send {error:'Missing password'}
 
     uri = url.parse config.session.couchdb_uri
-    uri.auth = "#{querystring.escape @username}:#{querystring.escape @password}"
+    uri.auth = "#{querystring.escape username}:#{querystring.escape password}"
     delete uri.href
     delete uri.host
     session_cdb = cdb.new url.format uri
     session_cdb.get '', (p) =>
       if p.error?
         return send p
-      session.logged_in = p.userCtx.name
-      session.roles     = p.userCtx.roles
-      return send ok:true
+      @session.logged_in = p.userCtx.name
+      @session.roles     = p.userCtx.roles
+      return @send ok:true
 
-  get '/u/logout.json': ->
-    delete session.logged_in
-    return send ok:true
+  @get '/u/logout.json': ->
+    delete @session.logged_in
+    return @send ok:true
