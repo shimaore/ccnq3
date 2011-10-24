@@ -3,7 +3,7 @@
 # Released under the AGPL3 license
 ###
 
-@include = ->
+@include = require('ccnq3_config').get (config)->
 
   cdb = require 'cdb'
 
