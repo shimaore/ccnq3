@@ -67,9 +67,9 @@ Released under the AGPL3 license
 
   @get '/u/login.widget': ->
     if @session.logged_in?
-      @render 'logout_widget'
+      @render 'logout_widget', layout:no
     else
-      @render 'login_widget'
+      @render 'login_widget', layout:no
 
   @view logout_widget: ->
 

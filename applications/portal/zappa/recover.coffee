@@ -48,7 +48,7 @@
           return false
 
 
-  @get '/u/recover.widget': -> @render 'recover_widget'
+  @get '/u/recover.widget': -> @render 'recover_widget', layout:no
 
   @view recover_widget: ->
 

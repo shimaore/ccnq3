@@ -29,7 +29,7 @@ Fill-in the "content" div.
 
 
   @get '/p/content.html': ->
-    @render 'public'
+    @render 'public', layout:no
 
   @view public: ->
     div class:'grid_6', ->
