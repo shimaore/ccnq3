@@ -9,6 +9,10 @@ Released under the AGPL3 license
   url = require 'url'
   querystring = require 'querystring'
 
+  config = null
+  require('ccnq3_config').get (c) ->
+    config = c
+
   @coffee '/u/login.js': ->
     $(document).ready ->
 

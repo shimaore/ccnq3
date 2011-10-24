@@ -7,6 +7,10 @@ Released under the AGPL3 license
 
   cdb = require 'cdb'
 
+  config = null
+  require('ccnq3_config').get (c) ->
+    config = c
+
   @get '/u/profile.json': ->
     if not @session.logged_in?
       return @send error:'Not logged in.'

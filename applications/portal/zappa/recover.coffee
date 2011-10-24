@@ -8,6 +8,10 @@
   url = require 'url'
   querystring = require 'querystring'
 
+  config = null
+  require('ccnq3_config').get (c) ->
+    config = c
+
   @coffee '/u/recover.js': ->
     $(document).ready ->
 
