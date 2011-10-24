@@ -78,6 +78,6 @@
         auth.$.ajax(options)
 
       if extra_login?
-        profile_login auth, -> couchdb_login auth, -> usercode_replicate auth, -> user_replicate auth, -> extra_login auth, next
+        couchdb_login auth, -> profile_login auth, -> usercode_replicate auth, -> user_replicate auth, -> extra_login auth, next
       else
-        profile_login auth, -> couchdb_login auth, -> usercode_replicate auth, -> user_replicate auth, next
+        couchdb_login auth, -> profile_login auth, -> usercode_replicate auth, -> user_replicate auth, next
