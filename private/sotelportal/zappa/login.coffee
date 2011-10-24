@@ -4,7 +4,7 @@ Released under the AGPL3 license
 ###
 
 @include = ->
-  coffee '/p/login.js': ->
+  @coffee '/p/login.js': ->
 
     extra_login = $.extra_login
 

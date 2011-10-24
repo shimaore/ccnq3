@@ -7,7 +7,7 @@ Fill-in the "content" div.
 ###
 
 @include = ->
-  coffee '/p/content.js': ->
+  @coffee '/p/content.js': ->
     $(document).ready ->
 
       container = '#content'
@@ -28,10 +28,10 @@ Fill-in the "content" div.
             $.getScript('/p/login.js')
 
 
-  get '/p/content.html': ->
-    render 'public', layout:no
+  @get '/p/content.html': ->
+    @render 'public'
 
-  view public: ->
+  @view public: ->
     div class:'grid_6', ->
       div id:'login_container'
       div id:'password_recovery_container'

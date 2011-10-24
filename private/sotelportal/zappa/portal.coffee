@@ -7,7 +7,7 @@
 require('ccnq3_config').get (config)->
 
   zappa = require 'zappa'
-  zappa.run config.sotel_portal.port, config.sotel_portal.hostname, {config}, ->
+  zappa.run config.sotel_portal.port, config.sotel_portal.hostname, ->
 
       # Session store
       express = require 'express'
@@ -23,30 +23,19 @@ require('ccnq3_config').get (config)->
       if not store
         throw error:"No session store is configured in #{config_location}."
 
-      use 'logger'
+      @use 'logger'
       , 'bodyParser'
       , 'cookieParser'
       , session: { secret: config.session.secret, store: store }
       , 'methodOverride'
 
-      def config: config
-
-      def cdb: require 'cdb'
-
-      # Let Zappa serve it owns versions.
-      enable 'serve jquery', 'serve sammy'
-
       # applications/portal
       portal_modules = ['login','profile','recover','register']
-      include __dirname + "/../node_modules/ccnq3_portal/zappa/#{name}.coffee" for name in portal_modules
+      @include __dirname + "/../node_modules/ccnq3_portal/zappa/#{name}.coffee" for name in portal_modules
 
       # applications/roles
       roles_modules = ['login','admin','replicate']
-      include __dirname + "/../node_modules/ccnq3_roles/zappa/#{name}.coffee" for name in roles_modules
+      @include __dirname + "/../node_modules/ccnq3_roles/zappa/#{name}.coffee" for name in roles_modules
 
-      include 'content.coffee'
-      include 'login.coffee'
-
-      include 'actions/default.coffee'
-      include 'actions/sip_signup.coffee'
-      # include 'actions/partner_signup.coffee'
+      @include 'content.coffee'
+      @include 'login.coffee'
