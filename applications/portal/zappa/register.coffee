@@ -51,7 +51,7 @@
 
   @get '/u/register.widget': ->
     local_part = config.mail_password.sender_local_part
-    @render register_widget: { local_part: local_part }, layout:no
+    @render 'register_widget', local_part: local_part, layout:no
 
   crypto = require 'crypto'
   uuid = require 'node-uuid'
