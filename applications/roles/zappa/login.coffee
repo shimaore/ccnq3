@@ -1,6 +1,6 @@
 @include = ->
 
-  coffee '/roles/login.js': ->
+  @coffee '/roles/login.js': ->
 
     extra_login = $.extra_login
 
