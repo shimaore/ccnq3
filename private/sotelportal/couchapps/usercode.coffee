@@ -12,6 +12,9 @@ module.exports = ddoc
 
 ddoc.filters.user_push = (doc, req) ->
 
+  user_is = (role) ->
+    userCtx.roles?.indexOf(role) >= 0
+
   # Do not replicate design documents from the source "partner" database.
   if doc._id.match /^_design/
     return false
@@ -24,6 +27,9 @@ ddoc.filters.user_push = (doc, req) ->
   # For partner signup documents, ensure only the user's documents are sent.
   if m = doc._id.match /^partner_signup:(.*)$/
     if m[1] is ctx.name
+      return true
+    # However partner admin may update any document.
+    if user_is 'sotel_partner_admin'
       return true
 
   # Do not otherwise replicate

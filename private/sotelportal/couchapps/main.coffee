@@ -21,12 +21,18 @@ ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
 # Filter replication towards the user database.
 ddoc.filters.user_pull = (doc, req) ->
 
+  user_is = (role) ->
+    userCtx.roles?.indexOf(role) >= 0
+
   # The user context provided to us by the replication agent.
   ctx = JSON.parse req.query.ctx
 
   # For partner signup documents, ensure only the user's documents are sent.
   if m = doc._id.match /^partner_signup:(.*)$/
     if m[1] is ctx.name
+      return true
+    # However partner administrators will get copies of all documents.
+    if user_is 'sotel_partner_admin'
       return true
 
   # Do not otherwise replicate
