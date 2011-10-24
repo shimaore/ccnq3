@@ -5,26 +5,26 @@ Released under the AGPL3 license
 
 @include = ->
 
-  requiring 'cdb'
+  cdb = require 'cdb'
 
   # Verify whether a given role is present in the user account.
-  def user_is: (roles,role) ->
+  user_is = (roles,role) ->
     return roles?.indexOf(role) >= 0
 
-  helper this_user_is: (role) ->
+  this_user_is = (role) ->
     return user_is session.roles, role
 
-  helper _ready: ()->
+  @helper _ready: ()->
     # User must be logged in.
-    if not session.logged_in?
-      send forbidden: "Not logged in"
+    if not @session.logged_in?
+      @send forbidden: "Not logged in"
       return false
     # CouchDB _admin users are always granted access.
     if this_user_is '_admin'
       return true
     # Make sure the user is confirmed.
     if not this_user_is 'confirmed'
-      send forbidden: "Not a confirmed user."
+      @send forbidden: "Not a confirmed user."
       return false
     # Everything OK
     return true
@@ -32,33 +32,33 @@ Released under the AGPL3 license
   # --- Operations ---
 
   # REST: Verify we can start an admin session
-  get '/roles/admin': ->
-    if _ready()
-      send ok:true
+  @get '/roles/admin': ->
+    if @_ready()
+      @send ok:true
 
   # operation is either "update" or "access"
-  def user_may: (roles,operation,source,prefix) ->
+  user_may = (roles,operation,source,prefix) ->
     matching = "#{operation}:#{source}:#{prefix}"
     return roles.some (v) ->
       (v).substring(0,matching.length) is matching
 
-  helper this_user_may: (operation,source,prefix) ->
-    user_may session.roles,operation,source,prefix
+  @helper this_user_may: (operation,source,prefix) ->
+    user_may @session.roles,operation,source,prefix
 
 
   # REST: Grant another user access to one of the accounts (or sub account)
   #       you have access to.
 
-  helper _admin_handle: (operation,cb)->
+  @helper _admin_handle: (operation,source,prefix,cb)->
 
     if not _ready()
       return
 
-    if not this_user_may @operation,@source,@prefix
-      return send forbidden: "You cannot grant access you do not have."
+    if not @this_user_may operation,@source,@prefix
+      return @send forbidden: "You cannot grant access you do not have."
 
-    if not this_user_may('update','_users',@prefix) and not this_user_is('_admin')
-      return send forbidden: "You do not have administrative access."
+    if not @this_user_may('update','_users',@prefix) and not @this_user_is('_admin')
+      return @send forbidden: "You do not have administrative access."
 
     users_cdb = cdb.new config.users.couchdb_uri
     users_cdb.get "org.couchdb.user:#{@user}", (p) =>
