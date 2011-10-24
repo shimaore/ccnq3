@@ -108,7 +108,7 @@ Released under the AGPL3 license
     session_cdb = cdb.new url.format uri
     session_cdb.get '', (p) =>
       if p.error?
-        return send p
+        return @send p
       @session.logged_in = p.userCtx.name
       @session.roles     = p.userCtx.roles
       return @send ok:true
