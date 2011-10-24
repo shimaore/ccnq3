@@ -8,7 +8,7 @@
   cdb = require 'cdb'
 
   config = null
-  require('ccnq3_config').get(c) ->
+  require('ccnq3_config').get (c) ->
     config = c
 
   @coffee '/u/register.js': ->
