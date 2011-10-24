@@ -57,6 +57,6 @@ Released under the AGPL3 license
 
 
       if extra_login?
-        ccnq2_login auth, -> kayako_login auth, -> sotel_replicate auth, -> extra_login auth, next
+        extra_login auth, -> ccnq2_login auth, -> kayako_login auth, -> sotel_replicate auth, next
       else
         ccnq2_login auth, -> kayako_login auth, -> sotel_replicate auth, next

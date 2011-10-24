@@ -24,8 +24,8 @@ Fill-in the "content" div.
             $.getScript '/u/register.js'
             $.getScript '/u/recover.js'
             # Application-specific code here.
-            $.getScript('/roles/login.js')
-            $.getScript('/p/login.js')
+            $.getScript('/roles/login.js'), ->
+              $.getScript('/p/login.js')
 
 
   @get '/p/content.html': ->
