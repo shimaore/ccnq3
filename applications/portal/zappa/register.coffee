@@ -58,8 +58,8 @@
 
   @put '/u/register.json': ->
 
-    name = @req.param 'name'
-    email = @req.param 'email'
+    name = @request.param 'name'
+    email = @request.param 'email'
     if not name or not email
       return @send error:'Invalid parameters, try again'
 

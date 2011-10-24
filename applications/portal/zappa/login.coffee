@@ -90,10 +90,10 @@ Released under the AGPL3 license
           input type: 'submit', value: 'Sign in'
 
   @post '/u/login.json': ->
-    username = @req.param 'username'
+    username = @request.param 'username'
     if not username?
       return @send {error:'Missing username'}
-    password = @req.param 'password'
+    password = @request.param 'password'
     if not password?
       return @send {error:'Missing password'}
 
