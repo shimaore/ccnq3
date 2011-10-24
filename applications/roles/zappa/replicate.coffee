@@ -1,5 +1,9 @@
 @include = ->
 
+  config = null
+  require('ccnq3_config').get (c) ->
+    config = c
+
   # Start replication from user's database back to a main database.
   @post '/roles/replicate/push/:target': ->
     if not @session.logged_in?
