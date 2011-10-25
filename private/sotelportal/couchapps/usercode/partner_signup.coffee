@@ -467,7 +467,11 @@ do (jQuery) ->
                 console.log "Error"
                 doc = {}
                 $('#wizard_form').data 'doc', doc
-                @swap partner_signup_tpl $.extend data, doc
+                try
+                  content = partner_signup_tpl $.extend data, doc
+                catch error
+                  console.log error
+                @swap content
 
       @bind 'save-doc', ->
 
