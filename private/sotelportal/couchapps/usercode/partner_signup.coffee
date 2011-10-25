@@ -420,6 +420,7 @@ do (jQuery) ->
             $.extend doc, $('#wizard_form').toDeepJson()
 
             $('.agreement').each ->
+              $(@).html '<img src="public/images/indicator.white.gif" />'
               $.get "/docs/#{@id}.html",
                 (template) => $(@).html Milk.render template, doc
                 'text'
