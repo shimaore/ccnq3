@@ -10,15 +10,14 @@ require('ccnq3_config').get (config)->
   zappa.run config.sotel_portal.port, config.sotel_portal.hostname, ->
 
       # Session store
-      express = require 'express'
       if config.session?.memcached_store
         MemcachedStore = require 'connect-memcached'
         store = new MemcachedStore config.session.memcached_store
       if config.session?.redis_store
-        RedisStore = require('connect-redis')(express)
+        RedisStore = require('connect-redis')(@express)
         store = new RedisStore config.session.redis_store
       if config.session?.couchdb_store
-        CouchDBStore = require('connect-couchdb')(express)
+        CouchDBStore = require('connect-couchdb')(@express)
         store = new CouchDBStore config.sessions.couchdb_store
       if not store
         throw error:"No session store is configured in #{config_location}."
