@@ -37,5 +37,5 @@ require('ccnq3_config').get (config)->
       roles_modules = ['login','replicate'] # 'admin', -- not ready
       @include "../node_modules/ccnq3_roles/zappa/#{name}.coffee" for name in roles_modules
 
-      @include 'content.coffee'
-      @include 'login.coffee'
+      @include './content.coffee'
+      @include './login.coffee'
