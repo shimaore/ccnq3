@@ -67,7 +67,8 @@ $(document).ready ->
       profile.roles?.indexOf(role) >= 0
 
     # Do all "require" before starting the application.
-    $.getScript '/_users/_design/portal/user_management.js' # only accessible to some users
+    if user_is 'users_reader'
+      $.getScript '/_users/_design/portal/user_management.js'
     if user_is 'sotel_partner_admin'
       model.require 'partner_management.js', ->
         app.run '#/partner_admin'
