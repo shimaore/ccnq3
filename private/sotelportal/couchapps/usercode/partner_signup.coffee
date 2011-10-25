@@ -449,7 +449,7 @@ do (jQuery) ->
 
       @get '#/partner_signup', ->
 
-            data = $.extend {}, profile.profile
+            data = $.extend {}, profile: profile.profile
 
             today = new Date()
             months = [
