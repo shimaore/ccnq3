@@ -106,37 +106,37 @@ do (jQuery) ->
               id:'agent.main_number'
               title:'Main Number'
               class:'required phone minlength(2)'
-              value:@agent?.main_number or null
+              value:@agent?.main_number
             textbox
               id:'agent.website'
               title:'Website'
               class:'required url minlength(6)'
-              value:@agent?.website or null
+              value:@agent?.website
             textbox
               id:'agent.address_1'
               title:'Address'
               class:'required minlength(2)'
-              value:@agent?.address_1 or null
+              value:@agent?.address_1
             textbox
               id:'agent.address_2'
               title:'Address (line 2)'
               class:'minlength(2)'
-              value:@agent?.address_2 or null
+              value:@agent?.address_2
             textbox
               id:'agent.city'
               title:'City'
               class:'required minlength(2)'
-              value:@agent?.city or null
+              value:@agent?.city
             textbox
               id:'agent.state'
               title:'State'
               class:'required minlength(2)'
-              value:@agent?.state or null
+              value:@agent?.state
             textbox
               id:'agent.postal_code'
               title:'ZIP Code'
               class:'required minlength(2)'
-              value:@agent?.postal_code or null
+              value:@agent?.postal_code
 
         div id:'step-1', ->
           h2 class:'stepTitle', -> 'Partner Category'
@@ -146,31 +146,31 @@ do (jQuery) ->
             checkbox
               id:'products.sotel_sip_agency'
               title:'SIP Service Agency Program'
-              value:@products?.sotel_sip_agency or null
+              value:@products?.sotel_sip_agency
             checkbox
               id:'products.sotel_sip_wholesale'
               title:'SIP Service Wholesale Program'
-              value:@products?.sotel_sip_wholesale or null
+              value:@products?.sotel_sip_wholesale
             checkbox
               id:'products.sotel_videoconf'
               title:'Video Conferencing'
-              value:@products?.sotel_videoconf or null
+              value:@products?.sotel_videoconf
             checkbox
               id:'products.siemens_oo'
               title:'Siemens OpenScape Office'
-              value:@products?.siemens_oo or null
+              value:@products?.siemens_oo
             checkbox
               id:'products.epygi'
               title:'Epygi'
-              value:@products?.epygi or null
+              value:@products?.epygi
             checkbox
               id:'products.snom'
               title:'snom'
-              value:@products?.snom or null
+              value:@products?.snom
             checkbox
               id:'products.sangoma'
               title:'Sangoma'
-              value:@products?.sangoma or null
+              value:@products?.sangoma
 
         coffeescript ->
           $('#products').delegate '#products.sotel_sip_agency', 'change', ->
@@ -207,40 +207,40 @@ do (jQuery) ->
             id:'business.employees.total'
             title:'Total Employees'
             class:'required number'
-            value:@business?.employees?.total or null
+            value:@business?.employees?.total
           textbox
             id:'business.employees.sales'
             title:'.. Allocated to Sales'
             class:'required number'
-            value:@business?.employees?.sales or null
+            value:@business?.employees?.sales
           textbox
             id:'business.employees.operations'
             title:'.. Allocated to Operations'
             class:'required number'
-            value:@business?.employees?.operations or null
+            value:@business?.employees?.operations
           textbox
             id:'business.employees.install_support'
             title:'.. Allocated to Service and Installation Support'
             class:'required number'
-            value:@business?.employees?.install_support or null
+            value:@business?.employees?.install_support
 
           p -> 'Target Market segment by model line size'
           checkbox
             id:'business.line_size.from2to24'
             title:'2 to 24 users'
-            value:@business?.line_size?.from2to24 or null
+            value:@business?.line_size?.from2to24
           checkbox
             id:'business.line_size.from24to50'
             title:'25 to 50 users'
-            value:@business?.line_size?.from24to50 or null
+            value:@business?.line_size?.from24to50
           checkbox
             id:'business.line_size.from51to100'
             title:'51 to 100 users'
-            value:@business?.line_size?.from51to100 or null
+            value:@business?.line_size?.from51to100
           checkbox
             id:'business.line_size.from100'
             title:'100 users or more'
-            value:@business?.line_size?.from100 or null
+            value:@business?.line_size?.from100
 
           p -> 'Revenue'
 
@@ -248,7 +248,7 @@ do (jQuery) ->
             id:'business.revenue'
             title:'Average revenue over the last three years for telecom-related sales'
             class:'required number'
-            value:@business?.revenue or null
+            value:@business?.revenue
 
           p -> 'Please list the Equipment (by manufacturer) /Services that you Provide to your Current Customer Base.'
           p -> 'Please list the Current Telecom, Voice, Video and Data Solutions supported.'
@@ -256,52 +256,52 @@ do (jQuery) ->
           text_area
             id:'business.solution.telecom'
             title:'Telecom'
-            value:@business?.solution?.telecom or null
+            value:@business?.solution?.telecom
           text_area
             id:'business.solution.voice'
             title:'Voice'
-            value:@business?.solution?.voice or null
+            value:@business?.solution?.voice
           text_area
             id:'business.solution.video'
             title:'Video'
-            value:@business?.solution?.video or null
+            value:@business?.solution?.video
           text_area
             id:'business.solution.data'
             title:'Data'
-            value:@business?.solution?.data or null
+            value:@business?.solution?.data
 
           p -> 'Current Services Provided by your company'
 
           checkbox
             id:'business.services.voice_sales_design'
             title:'Voice Sales/Design'
-            value:@business?.services?.voice_sales_design or null
+            value:@business?.services?.voice_sales_design
           checkbox
             id:'business.services.voice_mgmt'
             title:'Voice Project Management, Training, and Implementation'
-            value:@business?.services?.voice_mgmt or null
+            value:@business?.services?.voice_mgmt
           checkbox
             id:'business.services.voice_support'
             title:'Onsite and Remote Level 1 Support'
-            value:@business?.services?.voice_support or null
+            value:@business?.services?.voice_support
           checkbox
             id:'business.services.network_sales_design'
             title:'Network Sales/Design'
-            value:@business?.services?.network_sales_design or null
+            value:@business?.services?.network_sales_design
           checkbox
             id:'business.services.network_mgmt'
             title:'Network Project Management, and LAN/WAN Implementation'
-            value:@business?.services?.network_mgmt or null
+            value:@business?.services?.network_mgmt
           checkbox
             id:'business.services.network_support'
             title:'Network Onsite and Remote Support'
-            value:@business?.services?.network_support or null
+            value:@business?.services?.network_support
 
           p -> 'Target Vertical Markets. Does your company concentrate on any particular Telecom / UC vertical market segments? Please Describe.'
           text_area
             id:'business.verticals'
             title:'Target Vertical Markets'
-            value:@business?.verticals or null
+            value:@business?.verticals
 
         div id:'step-4', ->
           h2 class:'stepTitle', -> 'Technical Background'
@@ -310,42 +310,42 @@ do (jQuery) ->
           checkbox
             id:'technical.network.certified'
             title:'Partner is certified to design, implement and support LAN/WAN infrastructures'
-            value:@technical?.network?.certified or null
+            value:@technical?.network?.certified
           text_area
             id:'technical.network.certifications'
             title:'Please list any current Network Design / Architecture certifications.'
-            value:@technical?.network?.certifications or null
+            value:@technical?.network?.certifications
 
           p -> 'Technical Background Detail'
 
           checkbox
             id:'technical.knows.network'
             title:'Base knowledge of networking principles'
-            value:@technical?.knows?.network or null
+            value:@technical?.knows?.network
           checkbox
             id:'technical.knows.ips'
             title:'Proficiency of IP address assignments'
-            value:@technical?.knows?.ips or null
+            value:@technical?.knows?.ips
           checkbox
             id:'technical.knows.vlans'
             title:'Proficiency of VLAN differentials'
-            value:@technical?.knows?.vlans or null
+            value:@technical?.knows?.vlans
           checkbox
             id:'technical.knows.fw'
             title:'Proficiency of firewall configuration, port forwarding and static routing'
-            value:@technical?.knows?.fw or null
+            value:@technical?.knows?.fw
           checkbox
             id:'technical.knows.dns'
             title:'Proficiency of DNS name assignment'
-            value:@technical?.knows?.dns or null
+            value:@technical?.knows?.dns
           checkbox
             id:'technical.knows.routing'
             title:'Proficiency of multiple network connections and routing'
-            value:@technical?.knows?.routing or null
+            value:@technical?.knows?.routing
           text_area
             id:'technical.knows.manufacturer_certifications'
             title:'What other manufacture certifications do you presently maintain?'
-            value:@technical?.knows?.manufacturer_certifications or null
+            value:@technical?.knows?.manufacturer_certifications
 
         div id:'step-5', ->
           h2 class:'stepTitle', -> 'Contacts'
@@ -398,13 +398,13 @@ do (jQuery) ->
               id:'signature.name'
               title:'Name of Authorized / Responsible Officer'
               class:'required minlength(2)'
-              value:@signature?.name or null
+              value:@signature?.name
 
             textbox
               id:'signature.title'
               title:'Title'
               class:'required minlength(2)'
-              value:@signature?.title or null
+              value:@signature?.title
 
             textbox
               id:'signature.date'
