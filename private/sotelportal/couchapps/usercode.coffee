@@ -12,15 +12,15 @@ module.exports = ddoc
 
 ddoc.filters.user_push = (doc, req) ->
 
-  user_is = (role) ->
-    userCtx.roles?.indexOf(role) >= 0
-
   # Do not replicate design documents from the source "partner" database.
   if doc._id.match /^_design/
     return false
 
   # The user context provided to us by the replication agent.
   ctx = JSON.parse req.query.ctx
+
+  user_is = (role) ->
+    ctx.roles?.indexOf(role) >= 0
 
   # Ensure we only replicate documents the user actually is authorized to update.
 
