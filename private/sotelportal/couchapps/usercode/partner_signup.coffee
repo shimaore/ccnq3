@@ -465,8 +465,9 @@ do (jQuery) ->
                 @swap partner_signup_tpl $.extend data, doc
               error: =>
                 console.log "Error"
-                $('#wizard_form').data 'doc', {}
-                @swap partner_signup_tpl data
+                doc = {}
+                $('#wizard_form').data 'doc', doc
+                @swap partner_signup_tpl $.extend data, doc
 
       @bind 'save-doc', ->
 
