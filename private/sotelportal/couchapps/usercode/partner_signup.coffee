@@ -520,3 +520,5 @@ do (jQuery) ->
           @trigger 'save-doc', 'submitted'
         else
           $('#confirm_invalid').dialog('open')
+
+        return
