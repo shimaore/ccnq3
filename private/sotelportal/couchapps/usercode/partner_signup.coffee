@@ -474,14 +474,16 @@ do (jQuery) ->
           if former_doc._rev?
             console.log 'Modify existing document'
             @send model.update, doc._id, doc,
-              success: ->
+              success: (resp) ->
+                doc._rev = resp.rev
                 $('#wizard_form').data 'doc', doc
                 push_document()
           else
             console.log 'Save new document'
             delete doc._rev
             @send model.save,  doc,
-              success: ->
+              success: (resp) ->
+                doc._rev = resp.rev # not really needed, done for symmetry
                 $('#wizard_form').data 'doc', doc
                 push_document()
 
