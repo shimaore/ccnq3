@@ -33,7 +33,6 @@ do (jQuery) ->
 
     form id:'wizard_form', method:'post', action:'#/partner_signup', class:'validate', ->
 
-      input type:'hidden', name:'type', value:'partner_signup'
       input type:'hidden', name:'was_validated'
 
       input type:'hidden', name:'accept_agreements', id:'accept_agreements'
@@ -483,7 +482,8 @@ do (jQuery) ->
           $.extend doc, $('#wizard_form').toDeepJson()
           delete doc['onboarding.*']
 
-          doc._id = make_id('partner_signup',profile.name)
+          doc.type = 'partner_signup'
+          doc._id = make_id(doc.type,profile.name)
 
           if doc._id is former_doc._id
             @send model.update, doc._id, doc, =>
