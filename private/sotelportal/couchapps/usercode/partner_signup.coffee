@@ -471,7 +471,7 @@ do (jQuery) ->
                 alert "Your application was not submitted, please try again."
             , "json"
 
-          if former_doc._id?
+          if former_doc._rev?
             console.log 'Modify existing document'
             @send model.update, doc._id, doc,
               success: ->
