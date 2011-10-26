@@ -487,20 +487,27 @@ do (jQuery) ->
           doc.type = 'partner_signup'
           doc._id = make_id(doc.type,profile.name)
 
+          push_document = ->
+            $.post '/roles/replicate/push/sotel_portal', (data)->
+              if data.ok
+                alert "Your application has been submitted."
+              else
+                alert "Your application was not submitted, please try again."
+            , "json"
+
           if doc._id is former_doc._id
-            @send model.update, doc._id, doc, =>
-              $('#wizard_form').data 'doc', doc
-          else
-            delete doc._rev
-            @send model.remove, former_doc, (doc)=>
-              @send model.save,  doc, (doc)=>
+            console.log 'Modify existing document'
+            @send model.update, doc._id, doc,
+              success: ->
                 $('#wizard_form').data 'doc', doc
-                $.post '/roles/replicate/push/sotel_portal', (data)->
-                  if data.ok
-                    alert "Your application has been submitted."
-                  else
-                    alert "Your application was not submitted, please try again."
-                , "json"
+                push_document()
+          else
+            console.log 'Save new document'
+            delete doc._rev
+            @send model.save,  doc,
+              success: ->
+                $('#wizard_form').data 'doc', doc
+                push_document()
 
       @post '#/partner_signup', ->
         console.log 'Partner form submission'
