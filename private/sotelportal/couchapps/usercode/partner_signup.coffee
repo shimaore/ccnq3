@@ -474,7 +474,7 @@ do (jQuery) ->
                   console.log error
                 @swap content
 
-      @bind 'save-doc', ->
+      @bind 'save-doc', (new_state) ->
 
           $('.template').remove()
 
@@ -486,6 +486,7 @@ do (jQuery) ->
 
           doc.type = 'partner_signup'
           doc._id = make_id(doc.type,profile.name)
+          doc.state = new_state
 
           push_document = ->
             $.post '/roles/replicate/push/sotel_portal', (data)->
@@ -512,20 +513,10 @@ do (jQuery) ->
       @post '#/partner_signup', ->
         console.log 'Partner form submission'
 
-        if $('form.validate').valid()
-          console.log 'Form content is validated'
-          $('#was_validated').val(true)
-          @trigger 'save-doc'
-          return
+        form_is_valid = $('form.validate').valid()
+        $('#was_validated').val form_is_valid
 
-        if $('#wizard_form').data('bypass_validation') is true
-          console.log 'Form validation bypassed'
-          # Reset it in case the form gets saved again.
-          $('#wizard_form').data('bypass_validation',false)
-          @trigger 'save-doc'
-          return
-
-        console.log 'Form content is not validated'
-        $('#was_validated').val(false)
-        $('#confirm_invalid').dialog('open')
-        return
+        if form_is_valid
+          @trigger 'save-doc', 'submitted'
+        else
+          $('#confirm_invalid').dialog('open')
