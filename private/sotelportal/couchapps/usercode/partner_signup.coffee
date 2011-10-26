@@ -449,7 +449,7 @@ do (jQuery) ->
                 $('#wizard_form').data 'doc', doc
                 @swap partner_signup_tpl $.extend data, doc
 
-      @bind 'save-doc', (event) ->
+      @bind 'save-doc', (event,new_state) ->
 
           $('.template').remove()
 
@@ -461,7 +461,7 @@ do (jQuery) ->
 
           doc.type = 'partner_signup'
           doc._id = make_id(doc.type,profile.name)
-          doc.state = event.new_state
+          doc.state = new_state
 
           push_document = ->
             $.post '/roles/replicate/push/sotel_portal', (data)->
@@ -492,7 +492,7 @@ do (jQuery) ->
         $('#was_validated').val form_is_valid
 
         if form_is_valid
-          @trigger type:'save-doc', new_state:'submitted'
+          @trigger 'save-doc', 'submitted'
         else
           $('#confirm_invalid').empty()
           $(container).append '<div id="confirm_invalid"><p>The form contains errors.</p></div>'
@@ -503,10 +503,10 @@ do (jQuery) ->
               'Correct now': ->
                 $(@).dialog 'close'
               'Save for later': ->
-                app.trigger type:'save-doc', new_state:'saved'
+                app.trigger 'save-doc', 'saved'
                 $(@).dialog 'close'
               'Submit anyway': ->
-                app.trigger type:'save-doc', new_state:'submitted'
+                app.trigger 'save-doc', 'submitted'
                 $(@).dialog('close')
             closeOnEscape: true
             draggable: true
