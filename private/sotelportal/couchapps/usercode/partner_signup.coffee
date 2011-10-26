@@ -12,25 +12,6 @@ do (jQuery) ->
 
   partner_signup_tpl = $.compile_template ->
 
-    div id:'confirm_invalid', ->
-      p -> 'The form contains errors.'
-
-    coffeescript ->
-      options =
-        buttons:
-          'Correct': ->
-            $(@).dialog 'close'
-          'Submit anyway': ->
-            $(@).dialog('close')
-            $('#wizard_form').data 'bypass_validation', true
-            $('#wizard_form').submit()
-        closeOnEscape: true
-        draggable: true
-        modal: true
-        title: 'Errors in form'
-
-      $('#confirm_invalid').dialog(options).dialog('close')
-
     form id:'wizard_form', method:'post', action:'#/partner_signup', class:'validate', ->
 
       input type:'hidden', name:'was_validated'
@@ -391,8 +372,6 @@ do (jQuery) ->
 
             p  class:'normal', -> 'Signature Card'
 
-            button id:'open_tc_dialog', 'View Terms and Conditions'
-
             textbox
               id:'signature.name'
               title:'Name of Authorized / Responsible Officer'
@@ -412,6 +391,11 @@ do (jQuery) ->
               readonly:true
               value:@signature?.date or @effective_date
 
+        div id:'done', ->
+          h2 class:'stepTitle', -> 'Confirmation'
+
+          button id:'open_tc_dialog', 'Review and accept the Terms and Conditions'
+
         coffeescript ->
           $('#open_tc_dialog').click ->
             doc = $('#wizard_form').data 'doc'
@@ -427,11 +411,6 @@ do (jQuery) ->
             $('#tc_dialog').dialog 'open'
             return false
 
-        div id:'done', ->
-          h2 class:'stepTitle', -> 'Confirmation'
-
-          a id:'tc', href:'#', -> 'Review and accept the Terms and Conditions'
-
     coffeescript ->
 
       $('form.validate').validate
@@ -439,6 +418,29 @@ do (jQuery) ->
 
       console.log 'Starting wizard'
       $('#wizard').smartWizard({})
+
+
+    div id:'confirm_invalid', ->
+      p -> 'The form contains errors.'
+
+    coffeescript ->
+      options =
+        buttons:
+          'Correct now': ->
+            $(@).dialog 'close'
+          'Save for later': ->
+            @trigger 'save-doc', 'saved'
+            $(@).dialog 'close'
+          'Submit anyway': ->
+            @trigger 'save-doc', 'submitted'
+            $(@).dialog('close')
+        closeOnEscape: true
+        draggable: true
+        modal: true
+        title: 'Errors in form'
+
+      $('#confirm_invalid').dialog(options).dialog('close')
+
 
   $(document).ready ->
 
