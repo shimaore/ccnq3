@@ -441,13 +441,13 @@ do (jQuery) ->
             @send model.get, make_id('partner_signup',profile.name),
               success: (doc) =>
                 console.log "Success"
-                $('#wizard_form').data 'doc', doc
                 @swap partner_signup_tpl $.extend data, doc
+                $('#wizard_form').data 'doc', doc
               error: =>
                 console.log "Error"
                 doc = {}
-                $('#wizard_form').data 'doc', doc
                 @swap partner_signup_tpl $.extend data, doc
+                $('#wizard_form').data 'doc', doc
 
       @bind 'save-doc', (event,new_state) ->
 
