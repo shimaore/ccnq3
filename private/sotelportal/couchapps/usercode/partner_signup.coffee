@@ -466,9 +466,9 @@ do (jQuery) ->
           push_document = ->
             $.post '/roles/replicate/push/sotel_portal', (data)->
               if data.ok
-                alert "Your application has been submitted."
+                alert "Your application has been #{new_state}."
               else
-                alert "Your application was not submitted, please try again."
+                alert "Your application was not #{new_state}, please try again."
             , "json"
 
           if former_doc._rev?
