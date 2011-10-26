@@ -420,27 +420,6 @@ do (jQuery) ->
       $('#wizard').smartWizard({})
 
 
-    div id:'confirm_invalid', ->
-      p -> 'The form contains errors.'
-
-    coffeescript ->
-      options =
-        buttons:
-          'Correct now': ->
-            $(@).dialog 'close'
-          'Save for later': ->
-            @trigger 'save-doc', 'saved'
-            $(@).dialog 'close'
-          'Submit anyway': ->
-            @trigger 'save-doc', 'submitted'
-            $(@).dialog('close')
-        closeOnEscape: true
-        draggable: true
-        modal: true
-        title: 'Errors in form'
-
-      $('#confirm_invalid').dialog(options).dialog('close')
-
 
   $(document).ready ->
 
@@ -519,6 +498,25 @@ do (jQuery) ->
         if form_is_valid
           @trigger 'save-doc', 'submitted'
         else
-          $('#confirm_invalid').dialog('open')
+          $('#confirm_invalid').empty()
+          $(container).append '<div id="confirm_invalid"><p>The form contains errors.</p></div>'
+          app = @
+
+          options =
+            buttons:
+              'Correct now': ->
+                $(@).dialog 'close'
+              'Save for later': ->
+                app.trigger 'save-doc', 'saved'
+                $(@).dialog 'close'
+              'Submit anyway': ->
+                app.trigger 'save-doc', 'submitted'
+                $(@).dialog('close')
+            closeOnEscape: true
+            draggable: true
+            modal: true
+            title: 'Errors in form'
+
+          $('#confirm_invalid').dialog(options)
 
         return
