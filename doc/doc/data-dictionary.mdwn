@@ -1,31 +1,32 @@
+This document is up-to-date as of 2011-10-27.
+
 Notes:
-- URI of databases = URI of CouchDB databases (always a string)
+- URI of databases = URI of CouchDB databases (always a string).
+  These URIs might contain authentication usernames and passwords.
 
 
 * provisioning records
 
-  * host
+  * host (aka config)
 
     _id: type+host
 
     type:"host"
     host: string; hostname, preferably FQDN (must match what the "hostname" command returns)
+
     bootstrap: boolean; set by the installation scripts
-    change_handlers: [] of Node.js fragments which are ran on the target host every time a host record is modified.
+
     provisioning:
-      couchdb_uri: URI of the provisioning database (used by various functions, read-only OK)
-    usercode:
-      couchdb_uri: URI of the usercode database
-    users:
-      couchdb_uri: URI of the _users database
-      userdb_base_uri: base URI of the various users' databases
+      couchdb_uri: URI of the provisioning database (with authentication)
+
+    change_handlers: [] of Node.js fragments which are ran on the target host every time a host record is modified.
 
     # Specific to hosts running the opensips-http-db application.
     # (Normally any host running OpenSIPS.)
     opensips_proxy:
       port:34340   integer, required, do not change
       hostname:"127.0.0.1"   string, required, do not change
-      usrloc_uri: URI of the location database (used to save registration data)
+      usrloc_uri: URI of the location database (used to save registration data); for example "http://127.0.0.1:5984/location"
 
     # FIXME: The application using these is not written yet.
     opensips:
@@ -71,6 +72,33 @@ Notes:
               can be restart independently.
         Note: Add a command then remove it from the hash to prevent accidental misfiring of commands.
 
+
+    # Specific to hosts running the portal (or its back-end).
+    portal:
+      port: integer (8765)
+      hostname:  string ("127.0.0.1")
+    session:
+      secret:  string; must be a random string
+      couchdb_uri:  URI used to create CouchDB sessions (must end with "/_session"; no authentication in the URI)
+    users:
+      couchdb_uri: URI of the _users database (with admin authentication)
+      replicate_uri: URI for "/_replicate" (with admin authentication)
+      userdb_base_uri: base URI of the various users' databases (with admin authentication, used to create the databases)
+      public_userdb_base_uri: base URI of the various users' databases (no authentication! given out to the users)
+    usercode:
+      couchdb_uri: URI of the usercode database (with admin authentication)
+    mailer:     Used as the configuration for the node-mailer package.
+      sendmail: "/usr/sbin/sendmail"
+      SMTP: null
+    mail_password:
+      sender_local_part: "support"; The mail_password agent will send emails from  sender_local_part+"@"+domain (where domain is the user's record's "domain" field).
+
+    # Others
+    logger:
+      couchdb_uri: optional URI for the logger database
+
+    Note: "host" records are referred to as the "config" record inside most applications.
+    Note: Deprecated features (applications/commands, applications/common, ..) are not documented.
 
   * domain
 
