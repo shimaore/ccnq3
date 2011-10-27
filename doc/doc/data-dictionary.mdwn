@@ -2,7 +2,7 @@ Notes:
 - URI of databases = URI of CouchDB databases (always a string)
 
 
-* provisioning
+* provisioning records
 
   * host
 
@@ -11,7 +11,7 @@ Notes:
     type:"host"
     host: string; hostname, preferably FQDN (must match what the "hostname" command returns)
     bootstrap: boolean; set by the installation scripts
-    change_handlers: [] of javascript fragments (used by the host agent)
+    change_handlers: [] of Node.js fragments which are ran on the target host every time a host record is modified.
     provisioning:
       couchdb_uri: URI of the provisioning database (used by various functions, read-only OK)
     usercode:
@@ -19,13 +19,58 @@ Notes:
     users:
       couchdb_uri: URI of the _users database
       userdb_base_uri: base URI of the various users' databases
+
+    # Specific to hosts running the opensips-http-db application.
+    # (Normally any host running OpenSIPS.)
     opensips_proxy:
-      port:34340   integer; port number used by the opensips-http-db application
-      hostname:"127.0.0.1"
+      port:34340   integer, required, do not change
+      hostname:"127.0.0.1"   string, required, do not change
       usrloc_uri: URI of the location database (used to save registration data)
 
+    # FIXME: The application using these is not written yet.
+    opensips:
+      listen: [] of "ip:port" strings to bind to; defaults to ["127.0.0.1"]
+      local_ipv4:  string; if using the 'invite-router-local.cfg' module, IP address where to send all INVITE messages; otherwise unused
 
-    Note: which fields are needed depends on the applications running on the host.
+    # Specific to hosts running FreeSwitch.
+    sip_domain_name:  string (required); FQDN accepted by the server
+    rtp_ip: local IP to bind to for RTP [default: "auto"]
+    sip_profiles: {} of profiles descriptions:
+
+        sip_profiles[profile_name]:
+
+          # Sofia data
+          template: sofia template name (e.g. "sbc-media", "sbc-nomedia")
+          # For the "sbc*" types, we need:
+          ingress_sip_ip: which IP (v4,v6) to bind for ingress processing
+          ingress_sip_port: which port to bind for ingress processing
+          ingress_acl: [] of CIDR records "ip/masklen" source IPs allowed for ingress processing
+          egress_sip_ip: which IP (v4,v6) to bind for egress processing [default: ingress_sip_ip]
+          egress_sip_port: which port to bind for egress processing [default: 10000+ingress_sip_port]
+          egress_acl: [] of CIDR records "ip/masklen" source IPs allowed for the egress processing
+
+          # Dialplan data
+          handler: dialplan template name (e.g. "client-sbc", "carrier-sbc")
+          type: dialplan profile type (e.g. "usa", "usa-cnam", "fr" for processing="client-sbc")
+          send_call_to: where to send the calls ("socket", "bridge") [default: "socket"]
+          ingress_target: domain where to send ingress calls
+          egress_target: domain where to send egress calls
+
+      Notes: changes (except for *_sip_ip and *_sip_port) are automatically applied.
+
+    sip_commands: {} of profiles commands:
+
+        sip_commands[sofia_profile]: string
+          One of:
+            "start"       sofia profile <profile_name> start
+            "restart"     sofia profile <profile_name> restart reloadxml  [required to change IP or port]
+            "stop"        sofia profile <profile_name> killgw
+
+        Note: All these commands will cause calls to drop if any is present on that profile.
+        Note: The "sofia_profile" key is either "egress-#{profile_name}" or "ingress-#{profile_name}" so that each direction
+              can be restart independently.
+        Note: Add a command then remove it from the hash to prevent accidental misfiring of commands.
+
 
   * domain
 
@@ -154,3 +199,58 @@ Notes:
     type:"location"
     location:  string; a unique identifier for this location
     routing_data:  string; specific to the emergency routing system used
+
+
+* _users records
+
+  * user record
+
+    _id:"org.couchdb.user:"+name
+    type:"user"
+    name:  string; the username
+    password_sha:  string; sha1_hex(password+salt)
+    salt:  string; a random string
+    user_database:  string; the name of the user's own CouchDB instance
+    roles: [] of string
+    domain:  string; name of the domain used at registration time
+    profile:
+      name:  string; user's full name
+      email:  string or array of strings; email or email addresses for this user
+      phone:  string; phone number for this user
+      userdb_base_uri:  base URI (to which the user_database is concatenated)
+      user_name: name
+      user_database: user_database
+
+  Notes: This is a standard CouchDB _users record with some additions.
+  Notes: The "profile" hash is returned by a GET /u/profile.json once logged-in.
+  Notes: The "name" field is normally the user's main email address (at least that's what the registration code assumes); servers and applications will also have _users records so that they can remotely access the main database.
+  Notes: Servers should have the "host" role assigned.
+
+* usercode records
+
+  This database should only contain design documents which are replicated into each user's private database when the user logs in.
+
+* endpoint location records
+
+  These record are read-only.
+
+  * endpoint location
+
+    _id: username+"@"+domain (registration username)
+    username: string; username part of the registration username@domain
+    domain: string; domain part of the registration username@domain
+    # Information received from the client
+    callid: string
+    contact: string
+    cseq: integer
+    q: integer (-1 if none is provided by the endpoint)
+    user_agent: string
+    # Information stored by the server to manage the registration
+    last_modified: string (datetime, UTC)
+    expires: string (datetime, UTC)
+    received: string (IP:port from which the registration packet originated)
+    socket: string (IP:port on which we received the registration packet)
+    methods: integer
+    path: string
+    cflags: integer
+    flags: 0
