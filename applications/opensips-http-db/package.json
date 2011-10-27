@@ -10,6 +10,7 @@
   "scripts": {
     "start": "daemon -n ccnq3_opensips_http_db -o daemon.debug -D \"`pwd`/zappa\" -r -- ./main.coffee"
   , "stop":  "daemon -n ccnq3_opensips_http_db -o daemon.debug --stop"
+  , "couchapps": "cd couchapps && ./install.coffee"
   },
   "dependencies": {
     "cdb": ">=0.0.12"
