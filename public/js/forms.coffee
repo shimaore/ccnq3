@@ -38,6 +38,12 @@ do (jQuery) ->
       label  for:attrs.name, class:attrs.class, ->
         span attrs.title
         textarea attrs
+
+    hidden: (attrs) ->
+      attrs.type = 'hidden'
+      attrs.name = attrs.id
+      attrs.class ?= 'normal'
+      input attrs
         
   $.compile_template = (template) ->
     CoffeeKup.compile template, hardcode: coffeekup_helpers
