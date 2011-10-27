@@ -114,6 +114,12 @@
 
     value_line = (types,n,hash,c)->
       if n is 'avpops'
+        # Shorten output a little since these are not used
+        # (avpops has a limited input buffer size).
+        delete hash._id
+        delete hash._rev
+        delete hash._revisions
+        # Build a proper "avpops" response.
         hash =
           value: hash
           attribute: hash.type
