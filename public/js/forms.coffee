@@ -33,7 +33,7 @@ do (jQuery) ->
     text_area: (attrs) ->
       attrs.name = attrs.id
       attrs.rows ?= 3
-      attrs.cols ?= 3
+      attrs.cols ?= 30
       attrs.class ?= 'normal'
       label  for:attrs.name, class:attrs.class, ->
         span attrs.title
