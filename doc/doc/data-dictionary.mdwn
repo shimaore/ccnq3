@@ -1,0 +1,156 @@
+Notes:
+- URI of databases = URI of CouchDB databases (always a string)
+
+
+* provisioning
+
+  * host
+
+    _id: type+host
+
+    type:"host"
+    host: string; hostname, preferably FQDN (must match what the "hostname" command returns)
+    bootstrap: boolean; set by the installation scripts
+    change_handlers: [] of javascript fragments (used by the host agent)
+    provisioning:
+      couchdb_uri: URI of the provisioning database (used by various functions, read-only OK)
+    usercode:
+      couchdb_uri: URI of the usercode database
+    users:
+      couchdb_uri: URI of the _users database
+      userdb_base_uri: base URI of the various users' databases
+    opensips_proxy:
+      port:34340   integer; port number used by the opensips-http-db application
+      hostname:"127.0.0.1"
+      usrloc_uri: URI of the location database (used to save registration data)
+
+
+    Note: which fields are needed depends on the applications running on the host.
+
+  * domain
+
+    _id: type+domain
+
+    type:"domain"
+    domain: string; name of a SIP domain accepted by the system
+
+    FIXME: these probably need to be indexed by host
+
+  * endpoint
+
+    _id: type+endpoint
+
+    type:"endpoint"
+    endpoint: string; either a static IP, or a user@domain registration username
+    password: string; password used for authentication, or null if authentication not used
+    ha1: authentication string; md5_hex([endpoint,challenge,password].join(":"))
+    ha1b: authentication string; md5_hex([endpoint+'@'+challenge,challenge,password].join(":"))
+
+    # Inbound call routing
+    dst_endpoint/account
+    dst_endpoint/dest_domain
+    dst_endpoint/dst_disabled
+    dst_endpoint/endpoint
+    dst_endpoint/strip_digit
+    dst_endpoint/user_force_mp
+    dst_endpoint/user_ip
+    dst_endpoint/user_port
+    dst_endpoint/user_srv
+    dst_endpoint/user_via
+
+    # Outbound call routing
+    dialog_timer: integer; maximum call (dialog) duration
+    outbound_route: integer; route to use for outbound calls from this endpoint; if null, per-number outbound_route is used
+
+    src_endpoint/allow_onnet
+    src_endpoint/check_from
+    src_endpoint/dest_domain
+    src_endpoint/dialog_timer
+    src_endpoint/disabled
+    src_endpoint/endpoint
+    src_endpoint/forwarding_sbc
+    src_endpoint/location
+    src_endpoint/outbound_route
+    src_endpoint/src_disabled
+    src_endpoint/trusted
+    src_endpoint/user_force_mp
+
+
+
+  * number
+
+    _id: type+number
+
+    type:"number"
+    number: string; the number as routed inside the system; note that this must be consistent end-to-end; normally the inbound- and outbound-proxies rely on "E.164-without-plus"; while the client-side servers might rely on locally-formatted numbers.
+
+    # Outbound call routing
+    outbound_route: integer; the outbound_route used if the endpoint has no outbound_route assigned
+    location:  string; the location identifier for this specific number (used for emergency location services)
+
+    # Inbound call routing
+    dst_number/account
+    dst_number/cfa
+    dst_number/cfb
+    dst_number/cfda
+    dst_number/cfnr
+    dst_number/dialog_timer
+    dst_number/dst_domain
+    dst_number/inv_timer
+    dst_number/number
+
+    
+
+  * rule (aka outbound_route)
+
+    _id: type+rule
+
+    type:"rule"
+    rule: host+ruleid
+    host: the host on which OpenSIPS is running and using this rule/outbound_route
+    ruleid: integer; a unique ID for this rule
+    groupid: integer; the "outbound_route" identifier found in "endpoint" and "number" records
+    prefix: string; the routing (number) prefix (might be ""), longest-prefix match
+    timerec: string; a time specification
+    priority: integer; ruleset ordering criteria (within the groupid and prefix, for matching timerecs, the rule with the highest priority is chosen)
+    gwlist: string; a comma- and semicolon-separated list of gateways
+
+    # The following fields are required even though they are not currently used.
+    routeid: 0   (the integer 0)
+    attrs: ""   (the empty string)
+
+    Note: For the complete specification, see http://www.opensips.org/html/docs/modules/1.7.x/drouting.html#id293582
+    Note: We use sort_order = 1, meaning that inside gwlist each semicolon delimits a group of gateways; each group contains a comma-delimited list of gateways. For each call, two gateways are selected at random in each group (groups are kept in the order they appear), and the call is then sequantially forked to each gateway.
+
+
+  * gateway
+
+    _id: type+gateway
+
+    type:"gateway"
+    gateway: host+gwid
+    host: the host on which OpenSIPS is running and using this gateway
+    gwid: a unique identifier for the gateway on this host; used in the "gwlist" field of the "rule" record
+    
+    # The following fields are required even though they are not currently used.
+    gwtype: 0   (the integer 0)
+
+    # The following fields are required, and might be used at your convenience, although we only test the values shown here.
+    probe_mode: 0
+    strip: 0
+
+    # The following fields are optional
+    pri_prefix:  string
+    description:  string
+
+    Note: for probe_mode, the following modes are available:
+      0: no probing
+      1: probing only when disabled (however our scripts do not use dr_disable())
+      2: probing at all times
+
+  * location
+
+    _id: type+location
+    type:"location"
+    location:  string; a unique identifier for this location
+    routing_data:  string; specific to the emergency routing system used
