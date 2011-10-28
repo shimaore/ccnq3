@@ -16,7 +16,7 @@ Fill-in the "content" div.
       $.getJSON '/u/profile.json', (profile) =>
         if profile.user_database?
           $(container).data 'profile', profile
-          $.getScript "/#{profile.user_database}/_design/portal/index.js"
+          $(container).load "/#{profile.user_database}/_design/portal/index.html"
         else
           $.getScript '/u/login.js'
           $.getScript '/u/register.js'
