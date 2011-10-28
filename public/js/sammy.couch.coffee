@@ -104,7 +104,7 @@ sammy_couch = ($, Sammy) ->
           if $.isFunction options
             callback = options
             options  = {}
-          changes = db.changes()
+          changes = app.db.changes()
           buffer = ''
           changes.onChange = (chunk) ->
             buffer += chunk
