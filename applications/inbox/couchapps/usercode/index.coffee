@@ -2,7 +2,7 @@
 Registry of types (so that we can dynamically add types to the inbox).
 ###
 
-class Inbox
+class InboxRegistry
 
   types: {}
 
@@ -55,6 +55,9 @@ class InboxHandler
 
 ###
 
+# Create a new global Inbox registry
+Inbox = window.Inbox = new InboxRegistry()
+
 do (jQuery) ->
   defaults =
     limit: 10
@@ -77,7 +80,7 @@ do (jQuery) ->
       div class:'inbox_item_form', ->
         @form
 
-  Inbox.item = (doc) ->
+  inbox_item = (doc) ->
     type = doc.type
     if type? and Inbox.registered(type)
       default_list_tpl
@@ -85,9 +88,9 @@ do (jQuery) ->
         list: Inbox.list type,doc
         form: Inbox.form type,doc
 
-  Inbox.lists = (docs) ->
+  inbox_lists = (docs) ->
     html = ''
-    html += Inbox.item(doc) for doc in docs
+    html += inbox_item(doc) for doc in docs
     return html
 
   $.fn.inbox = (app) ->
@@ -100,10 +103,10 @@ do (jQuery) ->
       inbox_model.all
         limit: @.children('.inbox_limit').val() ? defaults.limit
         success: (data) =>
-          @.children('.inbox_content').html Inbox.lists data.rows
+          @.children('.inbox_content').html inbox_lists data.rows
 
     inbox_model.changes (doc) =>
-      @.children('.inbox_content').prepend Inbox.item doc
+      @.children('.inbox_content').prepend inbox_item doc
     @.children('.inbox_limit').change ->
       refill()
     refill()
@@ -123,5 +126,3 @@ do (jQuery) ->
 
       @get '#/inbox', =>
         $(container).inbox(@)
-
-window.Inbox = Inbox
