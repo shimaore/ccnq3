@@ -49,7 +49,7 @@ $(document).ready ->
       $.getScript '/_users/_design/portal/user_management.js'
 
     app.db.allApps
-      success: (appName, appPath, ddoc) ->
+      eachApp: (appName, appPath, ddoc) ->
         # Do not load ourselves twice.
         if appName is 'portal' then return
         # Load all other applications.
