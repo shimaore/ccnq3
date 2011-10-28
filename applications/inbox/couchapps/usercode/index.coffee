@@ -91,7 +91,7 @@ do (jQuery) ->
   $.fn.inbox = (name) ->
 
     @app ?= name
-    @inbox_model ?= app.createModel 'inbox'
+    @inbox_model ?= @app.createModel 'inbox'
 
     refill = =>
       @inbox_model.all
