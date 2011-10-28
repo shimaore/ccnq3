@@ -123,3 +123,5 @@ do (jQuery) ->
 
       @get '#/inbox', =>
         $(container).inbox(@)
+
+window.Inbox = Inbox
