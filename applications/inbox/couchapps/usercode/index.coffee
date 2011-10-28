@@ -43,8 +43,8 @@ class InboxHandler
 
 ###
 
-  $(dom).inbox()
-    Creates an inbox inside the DOM element.
+  $(dom).inbox(Sammy-app)
+    Creates an inbox inside the DOM element using the provided Sammy app.
 
   $(dom).inbox('refill')
     Updates the inbox content. (The DOM element must previously
@@ -90,10 +90,10 @@ do (jQuery) ->
 
   $.fn.inbox = (name) ->
 
-    inbox_model ?= $.sammy().createModel 'inbox'
+    @inbox_model ?= name.createModel 'inbox'
 
     refill = =>
-      inbox_model.all
+      @inbox_model.all
         limit: @.children('.inbox_limit').val() ? defaults.limit
         success: (data) =>
           @.children('.inbox_content').html Inbox.lists data.rows
@@ -104,7 +104,7 @@ do (jQuery) ->
       else
         @swap do inbox_tpl
         refill()
-        inbox_model.changes (doc) =>
+        @inbox_model.changes (doc) =>
           $(@).children('.inbox_content').prepend Inbox.list doc
 
 
@@ -120,5 +120,5 @@ do (jQuery) ->
   $(document).ready ->
     $.sammy container, ->
 
-      @get '#/inbox', ->
-        $(container).inbox()
+      @get '#/inbox', =>
+        $(container).inbox(@)
