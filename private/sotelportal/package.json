@@ -8,7 +8,7 @@
     "config_file": "/etc/ccnq3/host.json"
   },
   "scripts": {
-  , "preinstall": "coffee -c couchapps/*/*.coffee"
+    "preinstall": "coffee -c couchapps/*/*.coffee"
   , "couchapps": "cd couchapps && ./install.coffee"
   },
   "dependencies": {
