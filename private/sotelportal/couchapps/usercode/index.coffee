@@ -36,7 +36,9 @@ $(document).ready ->
       profile.roles?.indexOf(role) >= 0
 
     if user_is 'sotel_partner_admin'
-      app.run '#/partner_admin'
+      # model.require 'sotel_portal/partner_admin.js', ->
+      #   app.run '#/partner_admin'
       return
 
-    app.run '#/partner_signup'
+    model.require 'sotel_portal/partner_signup.js', ->
+      app.run '#/partner_signup'
