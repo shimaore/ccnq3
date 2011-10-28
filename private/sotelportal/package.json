@@ -16,18 +16,8 @@
   , "cdb_changes": ">=0.0.3"
   , "couchapp": "*"
   , "nodemailer": "*"
-  , "zappa": "0.3.1"
-  , "connect-couchdb": "*"
   , "json_req": "*"
   , "ccnq3_config": ">=0.1"
-  , "ccnq3_portal": "*"
-  , "ccnq3_roles": "*"
-
-  , "express": "*"
-  , "connect-couchdb": "0.2.0"
-  , "connect-memcached": ">=0.0.2"
-  , "connect-redis": ">=1.0.7"
-
   },
   "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },
 
