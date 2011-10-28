@@ -9,16 +9,19 @@ class Inbox
   register: (type,handler) ->
     @types[type] = handler
 
+  registered: (type) ->
+    @types[type]?
+
   """
     List a single document.
   """
-  list: (type,doc) -> @types[type].list doc
+  list: (type,doc) -> @types[type]?.list doc
 
   """
    Generates form content usable to update a single
    document.
   """
-  form: (type,doc) -> @types[type].form doc
+  form: (type,doc) -> @types[type]?.form doc
 
 ###
 Base class for all type handlers.
@@ -67,9 +70,6 @@ do (jQuery) ->
           option value:50, -> 50
       div class:'inbox_content'
 
-    coffeescript ->
-      $('.inbox_limit').change ->
-        $('.inbox').parent().inbox('refill')
 
   default_list_tpl = $.compile_template ->
     div class:'inbox_item', type:@type, ->
@@ -77,27 +77,24 @@ do (jQuery) ->
       div class:'inbox_item_form', ->
         @form
 
-  inbox_item = (doc) ->
-    default_list_tpl
-      type: doc.type
-      list: Inbox.list doc.type,doc
-      form: Inbox.form doc.type,doc
+  Inbox.item = (doc) ->
+    type = doc.type
+    if type? and Inbox.registered(type)
+      default_list_tpl
+        type: type
+        list: Inbox.list type,doc
+        form: Inbox.form type,doc
 
   Inbox.lists = (docs) ->
     html = ''
-    html += inbox_item(doc) for doc in docs
+    html += Inbox.item(doc) for doc in docs
     return html
 
-  $.fn.inbox = (name) ->
+  $.fn.inbox = (app) ->
 
-    if typeof name isnt 'string'
-      app = name
-      inbox_model = app.createModel 'inbox'
-      @.data 'inbox_app', app
-      @.data 'inbox_model', inbox_model
-    else
-      app = @.data 'inbox_app'
-      inbox_model = @.data 'inbox_model'
+    app.swap do inbox_tpl
+
+    inbox_model = app.createModel 'inbox'
 
     refill = =>
       inbox_model.all
@@ -105,14 +102,11 @@ do (jQuery) ->
         success: (data) =>
           @.children('.inbox_content').html Inbox.lists data.rows
 
-    switch name
-      when 'refill' then refill()
-
-      else
-        app.swap do inbox_tpl
-        refill()
-        inbox_model.changes (doc) =>
-          $(@).children('.inbox_content').prepend Inbox.list doc
+    inbox_model.changes (doc) =>
+      @.children('.inbox_content').prepend Inbox.item doc
+    @.children('.inbox_limit').change ->
+      refill()
+    refill()
 
 
 ###
