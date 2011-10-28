@@ -48,7 +48,7 @@ $(document).ready ->
     if user_is 'users_reader'
       $.getScript '/_users/_design/portal/user_management.js'
 
-    model.db.allApps (appName, appPath, ddoc) ->
+    app.db.allApps (appName, appPath, ddoc) ->
       # Do not load ourselves twice.
       if appName is 'portal' then return
       # Load all other applications.
