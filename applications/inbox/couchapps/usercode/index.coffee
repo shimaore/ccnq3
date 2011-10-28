@@ -68,9 +68,9 @@ do (jQuery) ->
     div class:'inbox', ->
       div class:'inbox_header', ->
         select class:'inbox_limit', ->
-          option value:10, -> 10
-          option value:25, -> 25
-          option value:50, -> 50
+          option value:10, -> '10'
+          option value:25, -> '25'
+          option value:50, -> '50'
       div class:'inbox_content'
 
 
