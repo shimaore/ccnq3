@@ -90,7 +90,8 @@ do (jQuery) ->
 
   $.fn.inbox = (name) ->
 
-    @inbox_model ?= name.createModel 'inbox'
+    @app ?= name
+    @inbox_model ?= app.createModel 'inbox'
 
     refill = =>
       @inbox_model.all
@@ -102,7 +103,7 @@ do (jQuery) ->
       when 'refill' then refill()
 
       else
-        @swap do inbox_tpl
+        app.swap do inbox_tpl
         refill()
         @inbox_model.changes (doc) =>
           $(@).children('.inbox_content').prepend Inbox.list doc
