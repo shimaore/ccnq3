@@ -7,7 +7,7 @@
 require('ccnq3_config').get (config)->
 
   zappa = require 'zappa'
-  zappa.run config.sotel_portal.port, config.sotel_portal.hostname, ->
+  zappa.run config.portal.port, config.portal.hostname, ->
 
       # Session store
       if config.session?.memcached_store
