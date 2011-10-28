@@ -13,6 +13,11 @@ ddoc =
 
 module.exports = ddoc
 
+ddoc.views.user =
+  map: (doc) ->
+    if doc.type is 'user'
+      emit null, null
+
 # Attachments (main couchapp)
 couchapp = require('couchapp')
 path     = require('path')
