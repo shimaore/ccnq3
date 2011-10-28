@@ -30,11 +30,10 @@ require('ccnq3_config').get (config)->
 
       # applications/portal
       portal_modules = ['login','profile','recover','register']
-      @include "../node_modules/ccnq3_portal/zappa/#{name}.coffee" for name in portal_modules
+      @include "./#{name}.coffee" for name in portal_modules
 
       # applications/roles
       roles_modules = ['login','replicate'] # 'admin', -- not ready
       @include "../node_modules/ccnq3_roles/zappa/#{name}.coffee" for name in roles_modules
 
       @include './content.coffee'
-      @include './login.coffee'

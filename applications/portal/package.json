@@ -1,6 +1,6 @@
 {
   "name": "ccnq3_portal",
-  "version": "0.0.78",
+  "version": "0.0.79",
   "description": "Portal applications for CCNQ3",
   "keywords": "",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
@@ -8,8 +8,8 @@
     "config_file": "/etc/ccnq3/host.json"
   },
   "scripts": {
-    "start": "daemon -n ccnq3_mail_password -o daemon.debug -r -D \"`pwd`/agents\" -- ./mail_password.coffee"
-  , "stop":  "daemon -n ccnq3_mail_password -o daemon.debug --stop"
+    "start": "daemon -n ccnq3_mail_password -o daemon.debug -r -D \"`pwd`/agents\" -- ./mail_password.coffee; daemon -n ccnq3_portal -o daemon.debug -r -D \"`pwd`/zappa\" -- ./portal.coffee"
+  , "stop":  "daemon -n ccnq3_portal -o daemon.debug --stop; daemon -n ccnq3_mail_password -o daemon.debug --stop"
   , "preinstall": "coffee -c couchapps/*/*.coffee"
   , "couchapps": "cd couchapps && ./install.coffee"
   },

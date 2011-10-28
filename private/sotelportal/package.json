@@ -8,8 +8,6 @@
     "config_file": "/etc/ccnq3/host.json"
   },
   "scripts": {
-    "start": "daemon -n sotel_portal -o daemon.debug -r -D \"`pwd`/zappa\" -- ./portal.coffee"
-  , "stop":  "daemon -n sotel_portal -o daemon.debug --stop"
   , "preinstall": "coffee -c couchapps/*/*.coffee"
   , "couchapps": "cd couchapps && ./install.coffee"
   },

@@ -35,11 +35,6 @@ ddoc.filters.user_push = (doc, req) ->
   # Do not otherwise replicate
   return false
 
-ddoc.views.user =
-  map: (doc) ->
-    if doc.type is 'user'
-      emit null, null
-
 # Attachments (user couchapp)
 couchapp = require('couchapp')
 path     = require('path')

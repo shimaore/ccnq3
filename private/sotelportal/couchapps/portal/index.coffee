@@ -25,15 +25,15 @@ $(document).ready ->
     # profile is empty.
     @use 'Couch', profile?.user_database
 
-    model = @createModel 'sotel_portal'
+    model = @createModel 'portal'
 
     model.extend
       require: (name,cb) =>
-        $.getScript @db.uri + "_design/sotel_portal/#{name}", cb
+        $.getScript @db.uri + "_design/#{name}", cb
 
     $(container).data 'model', model
 
-    @bind 'error.sotel_portal', (notice) ->
+    @bind 'error.portal', (notice) ->
       $('#log').append "An error occurred: #{notice.error}"
 
     $('#log').ajaxError ->
@@ -59,7 +59,7 @@ $(document).ready ->
   model = $(container).data 'model'
   # Retrieve the proper profile before starting the application.
   # (This allows for the profile to be available in other modules.)
-  model.viewDocs "sotel_portal/user", (docs) =>
+  model.viewDocs "portal/user", (docs) =>
     profile = docs[0] ? {}
     $(container).data 'profile', profile
 
@@ -70,10 +70,10 @@ $(document).ready ->
     if user_is 'users_reader'
       $.getScript '/_users/_design/portal/user_management.js'
     if user_is 'sotel_partner_admin'
-      model.require 'partner_management.js', ->
+      model.require 'sotel_portal/partner_management.js', ->
         app.run '#/partner_admin'
       return
 
-    model.require 'partner_signup.js', ->
+    model.require 'sotel_portal/partner_signup.js', ->
       # app.run '#/'
       app.run '#/partner_signup'
