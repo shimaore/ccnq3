@@ -103,7 +103,7 @@ do (jQuery) ->
       when 'refill' then refill()
 
       else
-        app.swap do inbox_tpl
+        @app.swap do inbox_tpl
         refill()
         @inbox_model.changes (doc) =>
           $(@).children('.inbox_content').prepend Inbox.list doc
