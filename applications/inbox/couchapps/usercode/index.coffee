@@ -90,13 +90,13 @@ do (jQuery) ->
 
   $.fn.inbox = (name) ->
 
-    inbox_model ?= Sammy(@).createModel 'inbox'
+    inbox_model ?= $.sammy().createModel 'inbox'
 
     refill = =>
       inbox_model.all
-        limit: $(@).children('.inbox_limit').val() ? defaults.limit
+        limit: @.children('.inbox_limit').val() ? defaults.limit
         success: (data) =>
-          $(@).children('.inbox_content').html Inbox.lists data.rows
+          @.children('.inbox_content').html Inbox.lists data.rows
 
     switch name
       when 'refill' then refill()
