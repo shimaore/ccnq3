@@ -90,11 +90,17 @@ do (jQuery) ->
 
   $.fn.inbox = (name) ->
 
-    @app ?= name
-    @inbox_model ?= @app.createModel 'inbox'
+    if typeof name isnt 'string'
+      app = name
+      inbox_model = app.createModel 'inbox'
+      @.data 'inbox_app', app
+      @.data 'inbox_model', inbox_model
+    else
+      app = @.data 'inbox_app'
+      inbox_model = @.data 'inbox_model'
 
     refill = =>
-      @inbox_model.all
+      inbox_model.all
         limit: @.children('.inbox_limit').val() ? defaults.limit
         success: (data) =>
           @.children('.inbox_content').html Inbox.lists data.rows
@@ -103,9 +109,9 @@ do (jQuery) ->
       when 'refill' then refill()
 
       else
-        @app.swap do inbox_tpl
+        app.swap do inbox_tpl
         refill()
-        @inbox_model.changes (doc) =>
+        inbox_model.changes (doc) =>
           $(@).children('.inbox_content').prepend Inbox.list doc
 
 
