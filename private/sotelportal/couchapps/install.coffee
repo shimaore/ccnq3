@@ -29,4 +29,3 @@ require('ccnq3_config').get (config)->
   # Also push the user-database application into the usercode repository
   usercode_uri = config.usercode.couchdb_uri
   push_script usercode_uri, 'usercode'
-  push_script usercode_uri, 'portal'
