@@ -46,14 +46,10 @@ $(document).ready ->
       profile.roles?.indexOf(role) >= 0
 
     if user_is 'users_reader'
-      div = $ '<div id="user_management"/>'
-      $(container).append div
-      div.hide().load '/_users/_design/portal/index.html'
+      $.getScript '/_users/_design/portal/user_management.js'
 
     model.db.allApps (appName, appPath, ddoc) ->
       # Do not load ourselves twice.
       if appName is 'portal' then return
       # Load all other applications.
-      div = $ '<div id="'+appName+'"/>'
-      $(container).append div
-      div.hide().load appPath
+      model.require "#{appName}/index.js"
