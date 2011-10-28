@@ -32,8 +32,3 @@ ddoc.filters.user_push = (doc,req) ->
   # However since we do not currently have anything to check changes in the _users
   # database, simply refuse the transfer.
   return false
-
-# Attachments (user couchapp)
-couchapp = require('couchapp')
-path     = require('path')
-couchapp.loadAttachments(ddoc, path.join(__dirname, 'usercode'))
