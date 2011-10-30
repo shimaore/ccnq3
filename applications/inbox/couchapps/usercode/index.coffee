@@ -33,7 +33,12 @@ do (jQuery) ->
       catch error
         console.log "Rendering #{type} failed: #{error}"
       element.data 'doc', doc
-      console.log element
+      # Hide the body at startup
+      element.children('.inbox_item_body').hide()
+      # Clicking on the header will show/hide the body.
+      element.children('.inbox_item_header').click ->
+        element.children('.inbox_item_body').toggle()
+      # (This is one interaction model. Clicking on the header could e.g. open a dialog.)
       return element
 
   $.fn.inbox_items = (docs) ->
@@ -64,10 +69,6 @@ do (jQuery) ->
 
     @children('.inbox_limit').change ->
       refill()
-
-    @children('.inbox_item_header').click ->
-      $(@).siblings('.inbox_item_body').toggle()
-    @children('.inbox_item_body').hide()
 
     refill()
     return @
