@@ -529,14 +529,14 @@ do (jQuery) ->
         list: (doc) ->
           if user_is 'sotel_partner_admin'
             switch doc.state
-              when 'submitted' then
+              when 'submitted'
                 if doc.was_validated
                   return "Complete application submitted by #{doc.signature.name} from #{doc.agent.company}"
                 else
                   return "Incomplete application submitted by #{doc.partner_signup}"
-              when 'accepted' then
+              when 'accepted'
                 return "Accepted application for #{doc.agent.company}"
-              when 'rejected' then
+              when 'rejected'
                 return "Rejected application for #{doc.agent.comapny}"
               else
                 return "Application in unknown state #{doc.state}"
@@ -548,14 +548,14 @@ do (jQuery) ->
             return "We need a ``Review'' button here."
           else
             switch doc.state
-              when 'saved' then
+              when 'saved'
                 # Show comments if any!
                 return "Your application is saved but has not been submitted yet."
-              when 'submitted' then
+              when 'submitted'
                 return "Your application has been submitted and is pending review."
-              when 'accepted' then
+              when 'accepted'
                 return "Your application has been accepted."
-              when 'rejected' then
+              when 'rejected'
                 return "Your application has been rejected."
               else
                 return "No additional information is available."
