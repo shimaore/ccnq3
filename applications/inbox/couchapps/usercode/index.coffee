@@ -24,6 +24,7 @@ do (jQuery) ->
   inbox_item = (doc) ->
     type = doc.type
     if type? and Inbox.registered(type)
+      console.log "Rendering #{type}"
       element = $ default_list_tpl
         type: type
         list: Inbox.list type,doc
