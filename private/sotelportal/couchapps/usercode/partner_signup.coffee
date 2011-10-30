@@ -524,7 +524,7 @@ do (jQuery) ->
       user_is = (role) ->
         profile.roles?.indexOf(role) >= 0
 
-      Inbox.register 'partner_signup', class PartnerSignupHandler extends InboxHandler
+      Inbox.register 'partner_signup', class PartnerSignupHandler
 
         list: (doc) ->
           if user_is 'sotel_partner_admin'
