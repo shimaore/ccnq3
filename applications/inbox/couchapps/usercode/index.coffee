@@ -17,8 +17,9 @@ do (jQuery) ->
 
   default_list_tpl = $.compile_template ->
     div class:"inbox_item #{@type}", type:@type, ->
-      @list
-      div class:'inbox_item_form', ->
+      div class:'inbox_item_header', ->
+        @list
+      div class:'inbox_item_body', ->
         @form
 
   inbox_item = (doc) ->
@@ -36,8 +37,11 @@ do (jQuery) ->
       return element
 
   $.fn.inbox_items = (docs) ->
-    console.log @
-    (@append inbox_item(doc)) for doc in docs
+    try
+      @empty()
+      (@append inbox_item(doc)) for doc in docs
+    catch error
+      console.log "Rendering #{docs} failed: #{error}"
     return @
 
   $.fn.inbox = (app,inbox_model) ->
@@ -51,7 +55,6 @@ do (jQuery) ->
         limit: @children('.inbox_limit').val() ? defaults.limit
       , (docs) =>
           @children('.inbox_content')
-          .empty()
           .inbox_items docs
 
     inbox_model.changes (doc) =>
@@ -59,6 +62,10 @@ do (jQuery) ->
 
     @children('.inbox_limit').change ->
       refill()
+
+    @children('.inbox_item_header').click ->
+      $(@).siblings('.inbox_item_body').toggle()
+    @children('.inbox_item_body').hide()
 
     refill()
     return @
