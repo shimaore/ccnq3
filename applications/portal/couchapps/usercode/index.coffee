@@ -33,7 +33,7 @@ $(document).ready ->
       console.log "Ajax error: #{arguments[3]}"
       $(@).append arguments[3]
 
-    @get '#/logout': ->
+    @get '#/logout', ->
       $.getJSON '/u/logout.json', (data) ->
         if data.ok
           window.location.reload()
