@@ -13,7 +13,7 @@ ddoc =
 
 module.exports = ddoc
 
-modules.views.by_date =
+ddoc.views.by_date =
   map: (doc) ->
     if doc.type? and doc.updated_at?
       emit doc.updated_at, null
