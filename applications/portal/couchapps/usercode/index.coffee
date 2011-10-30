@@ -33,6 +33,11 @@ $(document).ready ->
       console.log "Ajax error: #{arguments[3]}"
       $(@).append arguments[3]
 
+    @get '#/logout':
+      $.getJSON '/u/logout.json', (data) ->
+        if data.ok
+          window.location.reload()
+
   # Load all the applications present in the _design documents.
   model = $(container).data 'model'
 
