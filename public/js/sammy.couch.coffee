@@ -86,7 +86,7 @@ sammy_couch = ($, Sammy) ->
           if $.isFunction options
             callback = options
             options  = {}
-          app.db.view [dbname, name].join('/'), $.extend(mergeCallbacks(callback), options)
+          app.db.view name, $.extend(mergeCallbacks(callback), options)
 
         viewDocs: (name, options, callback) ->
           if $.isFunction options
