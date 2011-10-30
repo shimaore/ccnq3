@@ -519,3 +519,43 @@ do (jQuery) ->
           $('#confirm_invalid').dialog(options)
 
         return
+
+      # Registers this application for the inbox.
+      user_is = (role) ->
+        profile.roles?.indexOf(role) >= 0
+
+      Inbox.register 'partner_signup', class PartnerSignupHandler extends InboxHandler
+
+        list: (doc) ->
+          if user_is 'sotel_partner_admin'
+            switch doc.state
+              when 'submitted' then
+                if doc.was_validated
+                  return "Complete application submitted by #{doc.signature.name} from #{doc.agent.company}"
+                else
+                  return "Incomplete application submitted by #{doc.partner_signup}"
+              when 'accepted' then
+                return "Accepted application for #{doc.agent.company}"
+              when 'rejected' then
+                return "Rejected application for #{doc.agent.comapny}"
+              else
+                return "Application in unknown state #{doc.state}"
+          else
+            return "Your SoTel Partner application"
+
+        form: (doc) ->
+          if user_is 'sotel_partner_admin'
+            return "We need a ``Review'' button here."
+          else
+            switch doc.state
+              when 'saved' then
+                # Show comments if any!
+                return "Your application is saved but has not been submitted yet."
+              when 'submitted' then
+                return "Your application has been submitted and is pending review."
+              when 'accepted' then
+                return "Your application has been accepted."
+              when 'rejected' then
+                return "Your application has been rejected."
+              else
+                return "No additional information is available."
