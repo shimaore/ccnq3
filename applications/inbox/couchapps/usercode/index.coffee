@@ -36,7 +36,7 @@ do (jQuery) ->
       return element
 
   $.fn.inbox_items = (docs) ->
-    @append inbox_item(doc) for doc in docs
+    (@append inbox_item(doc)) for doc in docs
     return @
 
   $.fn.inbox = (app,inbox_model) ->
