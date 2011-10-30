@@ -425,6 +425,8 @@ do (jQuery) ->
 
     $.sammy container, ->
 
+      app = @
+
       model = @createModel 'partner_signup'
 
       @get '#/partner_signup', ->
@@ -441,6 +443,8 @@ do (jQuery) ->
             @send model.get, make_id('partner_signup',profile.name),
               success: (doc) =>
                 console.log "Success"
+                if doc.state isnt 'saved'
+                  app.run '#/inbox'
                 @swap partner_signup_tpl $.extend data, doc
                 $('#wizard_form').data 'doc', doc
               error: =>
