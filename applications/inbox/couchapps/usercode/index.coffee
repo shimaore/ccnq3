@@ -32,6 +32,7 @@ do (jQuery) ->
       catch error
         console.log "Rendering #{type} failed: #{error}"
       element.data 'doc', doc
+      console.log element
       return element
 
   $.fn.inbox_items = (docs) ->
