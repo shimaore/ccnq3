@@ -3,9 +3,7 @@
 Released under the AGPL3 license
 ###
 
-@include = ->
-  @coffee '/p/login.js': ->
-
+$(document).ready ->
     extra_login = $.extra_login
 
     $.extra_login = (auth,next) ->
