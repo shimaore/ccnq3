@@ -51,11 +51,11 @@ do (jQuery) ->
         descending: true
         limit: @children('.inbox_limit').val() ? defaults.limit
       , (docs) =>
-          console.log docs
-          @children('.inbox_content').empty()
+          content = @find('.inbox_content')
+          content.empty()
           for doc in docs
             do (doc) ->
-              @children('.inbox_content').append inbox_item doc
+              content.append inbox_item doc
 
     inbox_model.changes (doc) =>
       @children('.inbox_content').prepend inbox_item doc
