@@ -459,7 +459,7 @@ do (jQuery) ->
           $.extend doc, $('#wizard_form').toDeepJson()
           delete doc['onboarding.*']
 
-          doc.type = 'partner_signup'
+          # doc.type = 'partner_signup'  # set by Sammy.Couch.model.create()
           doc._id = make_id(doc.type,profile.name)
           doc.state = new_state
 
