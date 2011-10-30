@@ -91,10 +91,9 @@ do (jQuery) ->
       element.data 'doc', doc
       return element
 
-  inbox_lists = (docs) ->
-    html = ''
-    html += inbox_item(doc) for doc in docs
-    return html
+  $.fn.inbox_items = (docs) ->
+    @append inbox_item(doc) for doc in docs
+    return @
 
   $.fn.inbox = (app) ->
 
@@ -106,7 +105,9 @@ do (jQuery) ->
       inbox_model.all
         limit: @.children('.inbox_limit').val() ? defaults.limit
         success: (data) =>
-          @.children('.inbox_content').html inbox_lists data.rows
+          @children('.inbox_content')
+          .empty()
+          .inbox_items data.rows
 
     inbox_model.changes (doc) =>
       @.children('.inbox_content').prepend inbox_item doc
