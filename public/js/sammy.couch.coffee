@@ -118,7 +118,10 @@ sammy_couch = ($, Sammy) ->
           buffer = ''
           changes.onChange (p) ->
             if p.results?
-              callback p.results
+              try
+                callback p.results
+              catch error
+                console.log "callback failed: #{error}"
           return changes
 
     this.helpers
