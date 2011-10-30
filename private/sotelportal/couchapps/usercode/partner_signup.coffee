@@ -481,7 +481,7 @@ do (jQuery) ->
           else
             console.log 'Save new document'
             delete doc._rev
-            @send model.save,  doc,
+            @send model.create,  doc,
               success: (resp) ->
                 doc._rev = resp.rev # not really needed, done for symmetry
                 $('#wizard_form').data 'doc', doc

@@ -67,6 +67,7 @@ sammy_couch = ($, Sammy) ->
         create: (doc, callback) ->
           model.save mergeDefaultDocument(doc), callback
 
+        # An application really should only use "create" or "update", never "save".
         save: (doc, callback) ->
           if $.isFunction model.beforeSave
             doc = model.beforeSave doc
