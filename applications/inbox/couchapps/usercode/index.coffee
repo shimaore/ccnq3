@@ -18,7 +18,9 @@ do (jQuery) ->
   default_list_tpl = $.compile_template ->
     div class:"inbox_item #{@type}", type:@type, ->
       div class:'inbox_item_header', ->
-        @list
+        span class:'date', -> @date
+        span class:'time', -> @time
+        span class:'subject', -> @list
       div class:'inbox_item_body', ->
         @form
 
@@ -26,8 +28,11 @@ do (jQuery) ->
     type = doc.type
     if type? and Inbox.registered(type)
       try
+        d = new Date(@updated_at)
         element = $ default_list_tpl
           type: type
+          date: d.toLocaleDateString()
+          time: d.toLocaleTimeString()
           list: Inbox.list type,doc
           form: Inbox.form type,doc
       catch error
