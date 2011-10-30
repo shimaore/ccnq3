@@ -461,7 +461,7 @@ do (jQuery) ->
 
           doc.type = 'partner_signup'  # set by Sammy.Couch.model.create()
           doc._id = make_id(doc.type,profile.name)
-          doc[type] = profile.name
+          doc[doc.type] = profile.name
           doc.state = new_state
 
           push_document = ->
