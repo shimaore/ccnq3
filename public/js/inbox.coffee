@@ -7,6 +7,7 @@ class InboxRegistry
   types: {}
 
   register: (type,handler) ->
+    console.log "Registering type #{type}"
     @types[type] = handler
 
   registered: (type) ->
