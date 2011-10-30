@@ -41,17 +41,6 @@ do (jQuery) ->
       # (This is one interaction model. Clicking on the header could e.g. open a dialog.)
       return element
 
-  $.fn.inbox_items = (docs) ->
-    console.log @
-    try
-      @empty()
-      for doc in docs
-        do (doc) =>
-          @append inbox_item(doc)
-    catch error
-      console.log "Rendering #{docs} failed: #{error}"
-    return @
-
   $.fn.inbox = (app,inbox_model) ->
 
     app.swap do inbox_tpl
@@ -63,7 +52,10 @@ do (jQuery) ->
         limit: @children('.inbox_limit').val() ? defaults.limit
       , (docs) =>
           console.log docs
-          @children('.inbox_content').inbox_items docs
+          @children('.inbox_content').empty()
+          for doc in docs
+            do (doc) ->
+              @children('.inbox_content').append inbox_item doc
 
     inbox_model.changes (doc) =>
       @children('.inbox_content').prepend inbox_item doc
