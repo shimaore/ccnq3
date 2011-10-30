@@ -119,6 +119,7 @@ sammy_couch = ($, Sammy) ->
                 callback p.doc
             buffer = d[0]
             return true
+          return changes
 
     this.helpers
       db: db()

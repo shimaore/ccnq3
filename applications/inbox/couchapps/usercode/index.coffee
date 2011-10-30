@@ -57,7 +57,7 @@ do (jQuery) ->
             do (doc) ->
               content.append inbox_item doc
 
-    inbox_model.changes (doc) =>
+    @data 'changes', inbox_model.changes (doc) =>
       # FIXME Remove potentially existing document from the displayed list.
       @children('.inbox_content').prepend inbox_item doc
 
