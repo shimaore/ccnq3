@@ -39,7 +39,9 @@ do (jQuery) ->
   $.fn.inbox_items = (docs) ->
     try
       @empty()
-      (@append inbox_item(doc)) for doc in docs
+      for doc in docs
+        do (doc) =>
+          @append inbox_item(doc)
     catch error
       console.log "Rendering #{docs} failed: #{error}"
     return @
