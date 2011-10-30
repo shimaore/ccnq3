@@ -552,7 +552,7 @@ do (jQuery) ->
             switch doc.state
               when 'saved'
                 # Show comments if any!
-                return "Your application is saved but has not been submitted yet."
+                return "Your application is saved but has not been submitted yet. <a href=\"#/partner_signup\">Review and submit your application.</a>"
               when 'submitted'
                 return "Your application has been submitted and is pending review."
               when 'accepted'
