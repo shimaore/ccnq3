@@ -63,3 +63,15 @@ div.form {
   padding: 4px;
   margin-left: 8px;
 }
+span.date {
+  font-size: small;
+  padding-right: 2px;
+}
+span.time {
+  font-size: small;
+  padding-right: 2px;
+}
+span.subject {
+  font-weight: bold;
+  padding-left: 4px;
+}
