@@ -63,7 +63,7 @@ do (jQuery) ->
         do (r) ->
           # FIXME Remove potentially existing document from the displayed list.
           return if r.deleted
-          content.prepend inbox_item r.doc
+          content.prepend inbox_item r.doc  if r.doc?
 
     @children('.inbox_limit').change ->
       refill()
