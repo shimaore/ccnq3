@@ -16,7 +16,7 @@ do (jQuery) ->
 
 
   default_list_tpl = $.compile_template ->
-    div class:'inbox_item', type:@type, ->
+    div class:"inbox_item #{@type}", type:@type, ->
       @list
       div class:'inbox_item_form', ->
         @form
