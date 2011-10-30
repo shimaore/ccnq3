@@ -36,11 +36,9 @@ do (jQuery) ->
     @append inbox_item(doc) for doc in docs
     return @
 
-  $.fn.inbox = (app) ->
+  $.fn.inbox = (app,inbox_model) ->
 
     app.swap do inbox_tpl
-
-    inbox_model = app.createModel 'inbox'
 
     refill = =>
       inbox_model.viewDocs 'inbox/by_date',
@@ -74,5 +72,7 @@ do (jQuery) ->
   $(document).ready ->
     $.sammy container, ->
 
+      inbox_model = @createModel 'inbox'
+
       @get '#/inbox', =>
-        $(container).inbox(@)
+        $(container).inbox(@,inbox_model)
