@@ -102,23 +102,30 @@ sammy_couch = ($, Sammy) ->
           , options
           app.db.view(name, options)
 
+        ###
+          The record passed to the callback may contain:
+            seq: sequence number
+            id: record ID
+            changes: [{rev:..},..]
+            deleted:  true if record was deleted
+            doc: document content otherwise
+        ###
         changes: (options, callback) ->
           if $.isFunction options
             callback = options
             options  = {}
           changes = app.db.changes()
           buffer = ''
-          changes.onChange = (chunk) ->
-            buffer += chunk
-            d = buffer.split("\n")
-            while d.length >= 1
-              line = d.shift()
-              try
-                p = JSON.parse(line)
-              if p?.doc?
-                callback p.doc
-            buffer = d[0]
-            return true
+          changes.onChange = (p) ->
+            if p.results?
+              for r in p.results
+                do (r) ->
+                  if r.deleted
+                    callback r
+                  else
+                    model.get r.id, (doc)->
+                      r.doc = doc
+                      callback r
           return changes
 
     this.helpers
