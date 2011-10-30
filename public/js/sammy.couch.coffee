@@ -65,10 +65,10 @@ sammy_couch = ($, Sammy) ->
           app.db.openDoc id, $.extend(mergeCallbacks(callback), options)
 
         create: (doc, callback) ->
-          model.save mergeDefaultDocument(doc), callback
+          model._save mergeDefaultDocument(doc), callback
 
         # An application really should only use "create" or "update", never "save".
-        save: (doc, callback) ->
+        _save: (doc, callback) ->
           if $.isFunction model.beforeSave
             doc = model.beforeSave doc
           app.db.saveDoc doc, mergeCallbacks(callback)
@@ -76,7 +76,8 @@ sammy_couch = ($, Sammy) ->
         update: (id, doc, callback) ->
           model.get id, (original_doc) ->
             doc = $.extend original_doc, doc
-            model.save doc, callback
+            doc.updated_at = timestamp()
+            model._save doc, callback
 
         remove: (id, doc, callback) ->
           app.db.removeDoc doc, mergeCallbacks(callback)
