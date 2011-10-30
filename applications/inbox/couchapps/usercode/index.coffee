@@ -42,6 +42,7 @@ do (jQuery) ->
       return element
 
   $.fn.inbox_items = (docs) ->
+    console.log @
     try
       @empty()
       for doc in docs
@@ -61,8 +62,8 @@ do (jQuery) ->
         descending: true
         limit: @children('.inbox_limit').val() ? defaults.limit
       , (docs) =>
-          @children('.inbox_content')
-          .inbox_items docs
+          console.log docs
+          @children('.inbox_content').inbox_items docs
 
     inbox_model.changes (doc) =>
       @children('.inbox_content').prepend inbox_item doc
