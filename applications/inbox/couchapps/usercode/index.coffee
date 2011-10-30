@@ -102,18 +102,23 @@ do (jQuery) ->
     inbox_model = app.createModel 'inbox'
 
     refill = =>
-      inbox_model.all
-        limit: @.children('.inbox_limit').val() ? defaults.limit
+      inbox_model.view 'inbox/by_date',
+        include_docs: true
+        descending: true
+        limit: @children('.inbox_limit').val() ? defaults.limit
         success: (data) =>
           @children('.inbox_content')
           .empty()
           .inbox_items data.rows
 
     inbox_model.changes (doc) =>
-      @.children('.inbox_content').prepend inbox_item doc
-    @.children('.inbox_limit').change ->
+      @children('.inbox_content').prepend inbox_item doc
+
+    @children('.inbox_limit').change ->
       refill()
+
     refill()
+    return @
 
 
 ###
