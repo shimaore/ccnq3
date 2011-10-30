@@ -8,9 +8,12 @@ $(document).ready ->
   user_is = (role) ->
     profile.roles?.indexOf(role) >= 0
 
-  model.require 'sotel_portal/partner_signup.js', ->
-    if user_is 'sotel_partner_admin'
-      app.run '#/inbox'
-      return
+  $.sammy container, ->
+    app = @
 
-    app.run '#/partner_signup'
+    model.require 'sotel_portal/partner_signup.js', ->
+      if user_is 'sotel_partner_admin'
+        app.run '#/inbox'
+        return
+
+      app.run '#/partner_signup'
