@@ -103,7 +103,7 @@ sammy_couch = ($, Sammy) ->
           app.db.view(name, options)
 
         ###
-          The record passed to the callback may contain:
+          The array of records passed to the callback may contain:
             seq: sequence number
             id: record ID
             changes: [{rev:..},..]
@@ -116,16 +116,9 @@ sammy_couch = ($, Sammy) ->
             options  = {}
           changes = app.db.changes()
           buffer = ''
-          changes.onChange = (p) ->
+          changes.onChange (p) ->
             if p.results?
-              for r in p.results
-                do (r) ->
-                  if r.deleted
-                    callback r
-                  else
-                    model.get r.id, (doc)->
-                      r.doc = doc
-                      callback r
+              callback p.results
           return changes
 
     this.helpers
