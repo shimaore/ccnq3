@@ -54,3 +54,12 @@ div.form {
 #login_container {
   display: inline;
 }
+
+.inbox_item_header {
+  padding: 4px;
+  margin-top: 4px;
+}
+.inbox_item_body {
+  padding: 4px;
+  margin-left: 8px;
+}
