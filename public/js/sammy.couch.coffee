@@ -108,7 +108,6 @@ sammy_couch = ($, Sammy) ->
             id: record ID
             changes: [{rev:..},..]
             deleted:  true if record was deleted
-            doc: document content if modified
         ###
         changes: (options, callback) ->
           if $.isFunction options
