@@ -57,4 +57,5 @@ class InboxHandler
 ###
 
 # Create a new global Inbox registry
-Inbox = window.Inbox = new InboxRegistry()
+@InboxHandler = window.InboxHandler = InboxHandler
+@Inbox = window.Inbox = new InboxRegistry()
