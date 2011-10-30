@@ -529,6 +529,8 @@ do (jQuery) ->
         list: (doc) ->
           if user_is 'sotel_partner_admin'
             switch doc.state
+              when 'saved'
+                return "Application has been sent back to partner for more information"
               when 'submitted'
                 if doc.was_validated
                   return "Complete application submitted by #{doc.signature.name} from #{doc.agent.company}"
