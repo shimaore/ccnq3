@@ -36,6 +36,7 @@ do (jQuery) ->
       return element
 
   $.fn.inbox_items = (docs) ->
+    console.log @
     (@append inbox_item(doc)) for doc in docs
     return @
 
