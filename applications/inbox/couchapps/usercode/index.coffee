@@ -28,7 +28,7 @@ do (jQuery) ->
     type = doc.type
     if type? and Inbox.registered(type)
       try
-        d = new Date(@updated_at)
+        d = new Date(doc.updated_at)
         element = $ default_list_tpl
           type: type
           date: d.toLocaleDateString()
