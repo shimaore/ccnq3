@@ -67,6 +67,7 @@ do (jQuery) ->
   inbox_tpl = $.compile_template ->
     div class:'inbox', ->
       div class:'inbox_header', ->
+        span 'Show '
         select class:'inbox_limit', ->
           option value:10, -> '10'
           option value:25, -> '25'
@@ -83,10 +84,12 @@ do (jQuery) ->
   inbox_item = (doc) ->
     type = doc.type
     if type? and Inbox.registered(type)
-      default_list_tpl
+      element = $ default_list_tpl
         type: type
         list: Inbox.list type,doc
         form: Inbox.form type,doc
+      element.data 'doc', doc
+      return element
 
   inbox_lists = (docs) ->
     html = ''
