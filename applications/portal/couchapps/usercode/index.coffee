@@ -6,8 +6,7 @@ $(document).ready ->
 
   container = '#content'
 
-  # Only present if within portal (not in pure couchapp)
-  profile = $(container).data('profile') ? {}
+  login_profile = $(container).data('login_profile') ? {}
 
   app = $.sammy container, ->
 
@@ -15,7 +14,7 @@ $(document).ready ->
 
     # Should use the proper database when used on a local replica, where
     # profile is empty.
-    @use 'Couch', profile.user_database
+    @use 'Couch', login_profile.user_database
 
     model = @createModel 'portal'
 

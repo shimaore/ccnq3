@@ -15,7 +15,7 @@ Fill-in the "content" div.
       # Mark the user record as complete / get user info.
       $.getJSON '/u/profile.json', (profile) =>
         if profile.user_database?
-          $(container).data 'profile', profile
+          $(container).data 'login_profile', profile
           $.getScript "/#{profile.user_database}/_design/portal/index.js"
         else
           $.getScript '/u/login.js'
