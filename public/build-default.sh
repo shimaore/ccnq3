@@ -12,6 +12,7 @@ cat js/jquery.js          \
     js/sammy.couch.js     \
     js/coffeekup.js       \
     js/forms.js           \
+    js/inbox.js           \
     js/jquery.smartWizard-2.0.js \
     js/milk.js            \
   > js/default.js
