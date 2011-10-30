@@ -57,7 +57,7 @@ do (jQuery) ->
         limit: @children('.inbox_limit').val() ? defaults.limit
       , (docs) =>
           content = @find('.inbox_content')
-          content.empty()
+          content.html 'Your inbox is currently empty.'
           for doc in docs
             do (doc) ->
               content.append inbox_item doc
