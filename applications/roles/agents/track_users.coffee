@@ -54,7 +54,7 @@ require('ccnq3_config').get (config)->
           revs_limit =
             method: 'PUT'
             uri: '_revs_limit'
-            body: 1
+            body: 10
 
           target_db.req revs_limit, (r) ->
             if r.error then return util.log r.error
