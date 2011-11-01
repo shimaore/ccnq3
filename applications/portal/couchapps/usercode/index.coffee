@@ -35,7 +35,7 @@ $(document).ready ->
     @get '#/logout', ->
       $.getJSON '/u/logout.json', (data) ->
         if data.ok
-          @redirect ''
+          window.location = '/'
 
   # Load all the applications present in the _design documents.
   model = $(container).data 'model'
