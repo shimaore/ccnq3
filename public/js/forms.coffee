@@ -18,7 +18,7 @@ do (jQuery) ->
       attrs.name = attrs.id
       attrs.value ?= 'true'
       attrs.class ?= 'normal'
-      label  for:attrs.name, class:attrs.class, ->
+      label for:attrs.id, class:attrs.class, ->
         span attrs.title
         input attrs
         
@@ -26,7 +26,7 @@ do (jQuery) ->
       attrs.type = 'text'
       attrs.name = attrs.id
       attrs.class ?= 'normal'
-      label  for:attrs.name, class:attrs.class, ->
+      label for:attrs.id, class:attrs.class, ->
         span attrs.title
         input attrs
         
@@ -35,7 +35,7 @@ do (jQuery) ->
       attrs.rows ?= 3
       attrs.cols ?= 30
       attrs.class ?= 'normal'
-      label  for:attrs.name, class:attrs.class, ->
+      label for:attrs.id, class:attrs.class, ->
         span attrs.title
         textarea attrs
 
