@@ -70,7 +70,7 @@
         input type: 'submit', value: 'Confirm'
 
   @post '/u/recover.json': ->
-    email = @request.param 'email'
+    email = @body 'email'
     if not email?
       return @send {error:'Missing username'}
 
