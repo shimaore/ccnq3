@@ -548,8 +548,16 @@ do (jQuery) ->
         profile.roles?.indexOf(role) >= 0
 
       partner_review_tpl = $.compile_template ->
-        ul ->
-          li -> "#{k}: #{v}" for k,v of @
+
+        show = (name, t) ->
+            span class:'name', -> "#{name}:"
+            if typeof t is 'object'
+              ul class:'value', ->
+                (li -> show(k,v)) for k,v of t
+            else
+              span class:'value', -> t
+        show 'Application content', @
+
         if @state is 'submitted'
           form method:'post', action:"#/partner_signup/update", ->
             hidden:
