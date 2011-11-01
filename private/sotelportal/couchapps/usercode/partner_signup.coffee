@@ -582,6 +582,9 @@ do (jQuery) ->
                 id:'comment'
                 type:textarea
                 value:''
+            input
+              type:'submit'
+              value:'Submit'
             coffeescript ->
               $('.comment').hide()
               $('.state-saved').click -> $(@).sibligs('.comment').show()
