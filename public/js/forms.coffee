@@ -22,6 +22,14 @@ do (jQuery) ->
         span attrs.title
         input attrs
         
+    radio: (attrs) ->
+      attrs.type = 'radio'
+      attrs.name = attrs.id
+      attrs.class ?= 'normal'
+      input attrs, ->
+        label for:attrs.id, class:attrs.class, ->
+          span attrs.title
+
     textbox: (attrs) ->
       attrs.type = 'text'
       attrs.name = attrs.id
