@@ -64,7 +64,7 @@
       return @send error:'Invalid parameters, try again'
 
     for k,v of @params when k.match /^_/
-      delete params[k]
+      delete @params[k]
 
     # Currently assumes username = email
     username = email
@@ -79,7 +79,7 @@
         name: username
         roles: []
         domain: @request.header('Host')
-        profile: params
+        profile: @params
         user_database: 'u'+uuid() # User's database UUID (or UUID prefix)
         send_password: true # send them their new password
 
