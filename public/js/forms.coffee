@@ -25,7 +25,7 @@ do (jQuery) ->
     radio: (attrs) ->
       attrs.type = 'radio'
       attrs.name = attrs.id
-      attrs.id = attrs.name + attrs.value
+      attrs.id = attrs.name + '-' + attrs.value
       attrs.class ?= 'normal'
       input attrs, ->
         label for:attrs.id, class:attrs.class, ->
