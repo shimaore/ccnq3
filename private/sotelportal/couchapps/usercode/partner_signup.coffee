@@ -550,7 +550,7 @@ do (jQuery) ->
       partner_review_tpl = $.compile_template ->
         ul ->
           li -> "#{k}: #{v}" for k,v of @
-        if doc.state is 'submitted'
+        if @state is 'submitted'
           form method:'post', action:"#/partner_signup/update", ->
             hidden:
               id:'id'
