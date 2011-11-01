@@ -547,6 +547,46 @@ do (jQuery) ->
       user_is = (role) ->
         profile.roles?.indexOf(role) >= 0
 
+      partner_review_tpl = $.compile_template ->
+        ul ->
+          li -> "#{k}: #{v}" for k,v of @
+        if doc.state is 'submitted'
+          form method:'post', action:"#/partner_signup/update", ->
+            hidden:
+              id:'id'
+              value:@_id
+            radio
+              id:'state'
+              value:'accepted'
+              title:'Accepted'
+            radio
+              id:'state'
+              value:'reject'
+              title:'Rejected'
+            radio
+              id:'state'
+              value:'saved'
+              class:'state-saved'
+              title:'Send back...'
+            div class:'comment', ->
+              span 'Add a comment:'
+              input
+                id:'comment'
+                type:textarea
+                value:''
+            coffeescript ->
+              $('.comment').hide()
+              $('.state-saved').click -> $(@).sibligs('.comment').show()
+
+      @post '#/partner_signup/update', ->
+        console.log "Updating #{@params.id} with state=#{@params.state} and comment=#{@params.comment}."
+        @send model.get, @params.id,
+          success: (doc) =>
+            doc.state = @params.state
+            doc.comment = @params.comment
+            @send model.update, doc._id, doc
+        return false
+
       Inbox.register 'partner_signup',
 
         list: (doc) ->
@@ -570,7 +610,7 @@ do (jQuery) ->
 
         form: (doc) ->
           if user_is 'sotel_partner_admin'
-            return "We need a ``Review'' button here."
+            partner_review_tpl doc
           else
             switch doc.state
               when 'saved'
