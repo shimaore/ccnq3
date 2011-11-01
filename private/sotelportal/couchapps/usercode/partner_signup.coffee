@@ -362,27 +362,27 @@ do (jQuery) ->
                     input
                       name:"onboarding.#{i}.first_name"
                       class:'required minlength(2)'
-                      value: @onboarding[i].first_name
+                      value: @onboarding?[i]?.first_name
                   td ->
                     input
                       name:"onboarding.#{i}.last_name"
                       class:'required minlength(2)'
-                      value: @onboarding[i].last_name
+                      value: @onboarding?[i]?.last_name
                   td ->
                     input
                       name:"onboarding.#{i}.function"
                       class:'required minlength(2)'
-                      value: @onboarding[i].function
+                      value: @onboarding?[i]?.function
                   td ->
                     input
                       name:"onboarding.#{i}.phone"
                       class:'required minlength(2)'
-                      value: @onboarding[i].phone
+                      value: @onboarding?[i]?.phone
                   td ->
                     input
                       name:"onboarding.#{i}.email"
                       class:'required minlength(2)'
-                      value: @onboarding[i].email
+                      value: @onboarding?[i]?.email
 
         div id:'step-6', ->
           h2 class:'stepTitle', -> 'Terms and Conditions, Signature'
