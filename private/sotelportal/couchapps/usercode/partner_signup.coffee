@@ -587,7 +587,7 @@ do (jQuery) ->
               value:'Submit'
             coffeescript ->
               $('.comment').hide()
-              $('.state-saved').click -> $(@).sibligs('.comment').show()
+              $('.state-saved').click -> $(@).siblings('.comment').show()
 
       @post '#/partner_signup/update', ->
         console.log "Updating #{@params.id} with state=#{@params.state} and comment=#{@params.comment}."
