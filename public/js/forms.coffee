@@ -27,9 +27,9 @@ do (jQuery) ->
       attrs.name = attrs.id
       attrs.id = attrs.name + '-' + attrs.value
       attrs.class ?= 'normal'
-      input attrs, ->
-        label for:attrs.id, class:attrs.class, ->
-          span attrs.title
+      input attrs
+      label for:attrs.id, class:attrs.class, ->
+        span attrs.title
 
     textbox: (attrs) ->
       attrs.type = 'text'
