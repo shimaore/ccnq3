@@ -560,7 +560,7 @@ do (jQuery) ->
 
         if @state is 'submitted'
           form method:'post', action:"#/partner_signup/update", ->
-            hidden:
+            hidden
               id:'id'
               value:@_id
             radio
@@ -579,8 +579,8 @@ do (jQuery) ->
             div class:'comment', ->
               span 'Add a comment:'
               input
-                id:'comment'
-                type:textarea
+                name:'comment'
+                type:'textarea'
                 value:''
             input
               type:'submit'
