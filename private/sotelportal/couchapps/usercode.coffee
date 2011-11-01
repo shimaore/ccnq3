@@ -26,6 +26,8 @@ ddoc.filters.user_push = (doc, req) ->
 
   # For partner signup documents, ensure only the user's documents are sent.
   if m = doc._id.match /^partner_signup:(.*)$/
+    if doc.state isnt 'submitted'
+      return false
     if m[1] is ctx.name
       return true
     # However partner admin may update any document.
