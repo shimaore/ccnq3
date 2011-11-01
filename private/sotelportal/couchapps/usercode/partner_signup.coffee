@@ -346,7 +346,7 @@ do (jQuery) ->
 
           p -> "In order to set up your access for product support and the manufacturer web portal(s) we will also need the following information for each of your employees."
 
-          table id:'onboarding',  class:'form auto_add', ->
+          table id:'onboarding',  class:'form', ->
 
             tr ->
               th -> 'First Name'
@@ -355,15 +355,34 @@ do (jQuery) ->
               th -> 'Phone'
               th -> 'EMail'
 
-            tr class:'template', ->
-              td -> input name:'onboarding.*.first_name', class:'required minlength(2)'
-              td -> input name:'onboarding.*.last_name', class:'required minlength(2)'
-              td -> input name:'onboarding.*.function', class:'required minlength(2)'
-              td -> input name:'onboarding.*.phone', class:'required minlength(2)'
-              td -> input name:'onboarding.*.email', class:'required minlength(2)'
-
-        coffeescript ->
-          $('.auto_add').auto_add()
+            for i in [0..4]
+              do (i) ->
+                tr class:'template', ->
+                  td ->
+                    input
+                      name:"onboarding.#{i}.first_name"
+                      class:'required minlength(2)'
+                      value: @onboarding[i].first_name
+                  td ->
+                    input
+                      name:"onboarding.#{i}.last_name"
+                      class:'required minlength(2)'
+                      value: @onboarding[i].last_name
+                  td ->
+                    input
+                      name:"onboarding.#{i}.function"
+                      class:'required minlength(2)'
+                      value: @onboarding[i].function
+                  td ->
+                    input
+                      name:"onboarding.#{i}.phone"
+                      class:'required minlength(2)'
+                      value: @onboarding[i].phone
+                  td ->
+                    input
+                      name:"onboarding.#{i}.email"
+                      class:'required minlength(2)'
+                      value: @onboarding[i].email
 
         div id:'step-6', ->
           h2 class:'stepTitle', -> 'Terms and Conditions, Signature'
