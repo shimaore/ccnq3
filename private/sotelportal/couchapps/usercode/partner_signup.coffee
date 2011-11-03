@@ -576,25 +576,15 @@ do (jQuery) ->
               value:'saved'
               class:'state-saved'
               title:'Send back...'
-            div class:'comment', ->
-              span 'Add a comment:'
-              input
-                name:'comment'
-                type:'textarea'
-                value:''
             input
               type:'submit'
               value:'Submit'
-            coffeescript ->
-              $('.comment').hide()
-              $('.state-saved').click -> $(@).siblings('.comment').show()
 
       @post '#/partner_signup/update', ->
-        console.log "Updating #{@params.id} with state=#{@params.state} and comment=#{@params.comment}."
+        console.log "Updating #{@params.id} with state=#{@params.state}."
         @send model.get, @params.id,
           success: (doc) =>
             doc.state = @params.state
-            doc.comment = @params.comment
             @send model.update, doc._id, doc
         return false
 
@@ -625,7 +615,6 @@ do (jQuery) ->
           else
             switch doc.state
               when 'saved'
-                # Show comments if any!
                 return "Your application is saved but has not been submitted yet. <a href=\"#/partner_signup\">Review and submit your application.</a>"
               when 'submitted'
                 return "Your application has been submitted and is pending review."
