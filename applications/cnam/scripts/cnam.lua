@@ -6,6 +6,19 @@
 -- This script expects the following variables:
 --   cnam_uri           -- URI for the CNAM API
 
+-- On Debian,
+--    aptitude install freeswitch-lua liblua5.1-cgi0
+-- with lua.conf.xml
+--   <configuration name="lua.conf" description="LUA Configuration">
+--     <settings>
+--       <param name="script-directory" value="/usr/share/lua/5.1/?.lua"/>
+--     </settings>
+--   </configuration>
+-- and add
+--    <load module="mod_lua"/> <!-- For CNAM query -->
+--    <load module="mod_curl"/> <!-- For CNAM query -->
+-- to autoload/modules.conf.xml
+
 require("cgilua.urlcode")
 
 cnam_uri = session:getVariable("cnam_uri")
