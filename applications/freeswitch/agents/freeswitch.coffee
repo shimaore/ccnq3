@@ -42,6 +42,7 @@ process_changes = (commands) ->
 request = require 'request'
 fs = require 'fs'
 save_uri_as = (uri,file)->
+  fs.unlink file # According to default installation scheme, we can write to the directory but not necessarily to the files
   request(uri).pipe(fs.createWriteStream(file))
 
 # Main
