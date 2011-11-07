@@ -491,6 +491,7 @@ do (jQuery) ->
             $.post '/roles/replicate/push/sotel_portal', (data)->
               if data.ok
                 alert "Your application has been #{new_state}."
+                window.location = '#/inbox'
               else
                 alert "Your application was not #{new_state}, please try again."
             , "json"
