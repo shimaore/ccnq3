@@ -421,21 +421,17 @@ do (jQuery) ->
 
             $('div.optional').hide()
 
-            agent_agreement = ->
+            $('input.agent-agreement').each ->
               if $(@).val()
                 $('#agent-agreement').show()
               else
                 $('#agent-agreement').hide()
 
-            $('input.agent-agreement').each   -> agent_agreement
-
-            ws_agreement = ->
+            $('input.wholesale-services-agreement').each ->
               if $(@).val()
                 $('#wholesale-services-agreement').show()
               else
                 $('#wholesale-services-agreement').hide()
-
-            $('input.wholesale-services-agreement').each   -> ws_agreement
 
             $('.agreement').each ->
               $(@).html '<img src="public/images/indicator.white.gif" />'
