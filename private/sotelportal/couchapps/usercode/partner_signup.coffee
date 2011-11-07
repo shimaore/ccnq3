@@ -161,13 +161,17 @@ do (jQuery) ->
               value:@products?.sangoma
 
         coffeescript ->
-          # .delegate is (FIXME) deprecated in jQuery 1.7; however we are currently using 1.6
-          $('.agent-agreement').change ->
+          if @products?.sotel_sip_agency
+            $('#agent-agreement').show()
+          if @products?.sotel_sip_wholesale
+            $('#wholesale-services-agreement').show()
+
+          $('input.agent-agreement').change ->
             if $(@).val()
               $('#agent-agreement').show()
             else
               $('#agent-agreement').hide()
-          $('.wholesale-services-agreement').change ->
+          $('input.wholesale-services-agreement').change ->
             if $(@).val()
               $('#wholesale-services-agreement').show()
             else
