@@ -131,10 +131,12 @@ do (jQuery) ->
 
             checkbox
               id:'products.sotel_sip_agency'
+              class:'agent-agreement'
               title:'SIP Service Agency Program'
               value:@products?.sotel_sip_agency
             checkbox
               id:'products.sotel_sip_wholesale'
+              class:'wholesale-services-agreement'
               title:'SIP Service Wholesale Program'
               value:@products?.sotel_sip_wholesale
             checkbox
@@ -160,12 +162,12 @@ do (jQuery) ->
 
         coffeescript ->
           # .delegate is (FIXME) deprecated in jQuery 1.7; however we are currently using 1.6
-          $('#products').delegate '#products.sotel_sip_agency', 'change', ->
+          $('.agent-agreement').change ->
             if $(@).val()
               $('#agent-agreement').show()
             else
               $('#agent-agreement').hide()
-          $('#products').delegate '#products.sotel_sip_wholesale', 'change', ->
+          $('.wholesale-services-agreement').change ->
             if $(@).val()
               $('#wholesale-services-agreement').show()
             else
