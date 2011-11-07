@@ -19,13 +19,19 @@ do (jQuery) ->
       input type:'hidden', name:'accept_agreements', id:'accept_agreements'
 
       div id:'tc_dialog', ->
-        div id:'agent-agreement', class:'agreement'
+        # Mandatory
         div id:'mutual-non-disclosure-agreement', class:'agreement'
         div id:'partner-usage-agreement', class:'agreement'
+        # 'partner-usage-addendum'
         div id:'technical-services', class:'agreement'
-        div id:'wholesale-services-agreement', class:'agreement'
+
+        # Optional
+        div id:'agent-agreement', class:'agreement optional'
+        div id:'wholesale-services-agreement', class:'agreement optional'
 
       coffeescript ->
+        $('.optional').hide()
+
         $('#tc_dialog').dialog
           autoOpen:false
           modal:true
@@ -153,11 +159,17 @@ do (jQuery) ->
               value:@products?.sangoma
 
         coffeescript ->
+          # .delegate is (FIXME) deprecated in jQuery 1.7; however we are currently using 1.6
           $('#products').delegate '#products.sotel_sip_agency', 'change', ->
-            if $(@).val()?
-              $('#forms.sotel_sip_agency').enable()
+            if $(@).val()
+              $('#agent-agreement').show()
             else
-              $('#forms.sotel_sip_agency').disable()
+              $('#agent-agreement').hide()
+          $('#products').delegate '#products.sotel_sip_wholesale', 'change', ->
+            if $(@).val()
+              $('#wholesale-services-agreement').show()
+            else
+              $('#wholesale-services-agreement').hide()
           # etc.
 
         div id:'step-2', ->
