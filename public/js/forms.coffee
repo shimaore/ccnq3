@@ -16,7 +16,8 @@ do (jQuery) ->
     checkbox: (attrs) ->
       attrs.type = 'checkbox'
       attrs.name = attrs.id
-      attrs.value ?= 'true'
+      attrs.checked = 'checked' if attrs.value
+      attrs.value = 'true'
       attrs.class ?= 'normal'
       label for:attrs.id, class:attrs.class, ->
         span attrs.title
