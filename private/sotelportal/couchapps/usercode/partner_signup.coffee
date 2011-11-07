@@ -158,29 +158,6 @@ do (jQuery) ->
               title:'Sangoma'
               value:@products?.sangoma
 
-        coffeescript ->
-          $(document).ready ->
-            $('div.optional').hide()
-
-            agent_agreement = ->
-              if $(@).val()
-                $('#agent-agreement').show()
-              else
-                $('#agent-agreement').hide()
-
-            $('input.agent-agreement').each   -> agent_agreement
-            $('input.agent-agreement').change -> agent_agreement
-
-            ws_agreement = ->
-              if $(@).val()
-                $('#wholesale-services-agreement').show()
-              else
-                $('#wholesale-services-agreement').hide()
-
-            $('input.wholesale-services-agreement').each   -> ws_agreement
-            $('input.wholesale-services-agreement').change -> ws_agreement
-            # etc.
-
         div id:'step-2', ->
           h2 class:'stepTitle', -> 'Primary Contact Information'
 
@@ -441,6 +418,24 @@ do (jQuery) ->
             doc = $('#wizard_form').data 'doc'
             doc ?= {}
             $.extend doc, $('#wizard_form').toDeepJson()
+
+            $('div.optional').hide()
+
+            agent_agreement = ->
+              if $(@).val()
+                $('#agent-agreement').show()
+              else
+                $('#agent-agreement').hide()
+
+            $('input.agent-agreement').each   -> agent_agreement
+
+            ws_agreement = ->
+              if $(@).val()
+                $('#wholesale-services-agreement').show()
+              else
+                $('#wholesale-services-agreement').hide()
+
+            $('input.wholesale-services-agreement').each   -> ws_agreement
 
             $('.agreement').each ->
               $(@).html '<img src="public/images/indicator.white.gif" />'
