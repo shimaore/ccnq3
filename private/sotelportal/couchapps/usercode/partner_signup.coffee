@@ -30,8 +30,6 @@ do (jQuery) ->
         div id:'wholesale-services-agreement', class:'agreement optional'
 
       coffeescript ->
-        $('.optional').hide()
-
         $('#tc_dialog').dialog
           autoOpen:false
           modal:true
@@ -161,22 +159,27 @@ do (jQuery) ->
               value:@products?.sangoma
 
         coffeescript ->
-          if @products?.sotel_sip_agency
-            $('#agent-agreement').show()
-          if @products?.sotel_sip_wholesale
-            $('#wholesale-services-agreement').show()
+          $(document).ready ->
+            $('div.optional').hide()
 
-          $('input.agent-agreement').change ->
-            if $(@).val()
-              $('#agent-agreement').show()
-            else
-              $('#agent-agreement').hide()
-          $('input.wholesale-services-agreement').change ->
-            if $(@).val()
-              $('#wholesale-services-agreement').show()
-            else
-              $('#wholesale-services-agreement').hide()
-          # etc.
+            agent_agreement = ->
+              if $(@).val()
+                $('#agent-agreement').show()
+              else
+                $('#agent-agreement').hide()
+
+            $('input.agent-agreement').each   -> agent_agreement
+            $('input.agent-agreement').change -> agent_agreement
+
+            ws_agreement = ->
+              if $(@).val()
+                $('#wholesale-services-agreement').show()
+              else
+                $('#wholesale-services-agreement').hide()
+
+            $('input.wholesale-services-agreement').each   -> ws_agreement
+            $('input.wholesale-services-agreement').change -> ws_agreement
+            # etc.
 
         div id:'step-2', ->
           h2 class:'stepTitle', -> 'Primary Contact Information'
