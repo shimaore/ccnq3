@@ -37,3 +37,6 @@ ddoc.filters.user_pull = (doc, req) ->
 
   # Do not otherwise replicate
   return false
+
+ddoc.filters.partner_signup = (doc) ->
+  return doc.type is 'partner_signup'

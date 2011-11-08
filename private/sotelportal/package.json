@@ -10,6 +10,8 @@
   "scripts": {
     "preinstall": "coffee -c couchapps/*/*.coffee"
   , "couchapps": "cd couchapps && ./install.coffee"
+  , "start": "daemon -n sotel_portal_mail -o daemon.debug -r -D \"`pwd`/agents\" -- ./partner_signup.coffee"
+  , "stop":  "daemon -n sotel_portal_mail -o daemon.debug --stop"
   },
   "dependencies": {
     "cdb": "*"
