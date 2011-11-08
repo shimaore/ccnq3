@@ -55,6 +55,7 @@
   "flag_register_authenticated":     20,
   "flag_tcp_persistent":             21,
   "flag_trunk_routing":              22,
+  "flag_has_forwarding":             23,
 
   "comment dflag": "Dialog flags",
   "dflag_mediaproxy":                 8,
