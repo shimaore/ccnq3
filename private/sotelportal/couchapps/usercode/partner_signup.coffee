@@ -425,7 +425,7 @@ do (jQuery) ->
                 (template) => $(@).html Milk.render template, doc
                 'text'
 
-            $('.optional.).hide()
+            $('.optional').hide()
 
             $('#tc_dialog').dialog 'open'
             return false
