@@ -129,12 +129,10 @@ do (jQuery) ->
 
             checkbox
               id:'products.sotel_sip_agency'
-              class:'agent-agreement'
               title:'SIP Service Agency Program'
               value:@products?.sotel_sip_agency
             checkbox
               id:'products.sotel_sip_wholesale'
-              class:'wholesale-services-agreement'
               title:'SIP Service Wholesale Program'
               value:@products?.sotel_sip_wholesale
             checkbox
@@ -419,25 +417,17 @@ do (jQuery) ->
             doc ?= {}
             $.extend doc, $('#wizard_form').toDeepJson()
 
-            $('div.optional').hide()
-
-            $('input.agent-agreement').each ->
-              if $(@).val()
-                $('#agent-agreement').show()
-              else
-                $('#agent-agreement').hide()
-
-            $('input.wholesale-services-agreement').each ->
-              if $(@).val()
-                $('#wholesale-services-agreement').show()
-              else
-                $('#wholesale-services-agreement').hide()
-
             $('.agreement').each ->
               $(@).html '<img src="public/images/indicator.white.gif" />'
               $.get "/docs/#{@id}.html",
                 (template) => $(@).html Milk.render template, doc
                 'text'
+
+            $('.optional').hide()
+            if doc.products.sotel_sip_agency
+              $('div#agent-agreement').show()
+            if doc.products.sotel_sip_wholesale
+              $('div#wholesale-services-agreement').show()
 
             $('#tc_dialog').dialog 'open'
             return false
