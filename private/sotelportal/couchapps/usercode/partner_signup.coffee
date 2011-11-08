@@ -419,20 +419,6 @@ do (jQuery) ->
             doc ?= {}
             $.extend doc, $('#wizard_form').toDeepJson()
 
-            $('div.optional').hide()
-
-            $('input.agent-agreement').each ->
-              if $(@).val()
-                $('#agent-agreement').show()
-              else
-                $('#agent-agreement').hide()
-
-            $('input.wholesale-services-agreement').each ->
-              if $(@).val()
-                $('#wholesale-services-agreement').show()
-              else
-                $('#wholesale-services-agreement').hide()
-
             $('.agreement').each ->
               $(@).html '<img src="public/images/indicator.white.gif" />'
               $.get "/docs/#{@id}.html",
