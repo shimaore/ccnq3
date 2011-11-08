@@ -129,12 +129,10 @@ do (jQuery) ->
 
             checkbox
               id:'products.sotel_sip_agency'
-              class:'agent-agreement'
               title:'SIP Service Agency Program'
               value:@products?.sotel_sip_agency
             checkbox
               id:'products.sotel_sip_wholesale'
-              class:'wholesale-services-agreement'
               title:'SIP Service Wholesale Program'
               value:@products?.sotel_sip_wholesale
             checkbox
@@ -426,6 +424,10 @@ do (jQuery) ->
                 'text'
 
             $('.optional').hide()
+            if doc.products.sotel_sip_agency
+              $('div#agent-agreement').show()
+            if doc.products.sotel_sip_wholesale
+              $('div#wholesale-services-agreement').show()
 
             $('#tc_dialog').dialog 'open'
             return false
