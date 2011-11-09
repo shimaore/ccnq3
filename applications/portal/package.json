@@ -1,6 +1,6 @@
 {
   "name": "ccnq3_portal",
-  "version": "0.0.79",
+  "version": "0.0.80",
   "description": "Portal applications for CCNQ3",
   "keywords": "",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
@@ -22,6 +22,7 @@
   , "password": "*"
   , "ccnq3_config": ">=0.1"
   , "node-uuid": ">=1.2.0"
+  , "milk": "*"
 
   , "ccnq3_roles": "*"
   , "express": "*"

@@ -12,6 +12,10 @@ require('ccnq3_config').get (config)->
   querystring = require 'querystring'
   crypto = require 'crypto'
 
+  # For templates
+  fs = require 'fs'
+  Milk = require 'milk'
+
   cdb = require 'cdb'
   users_cdb = cdb.new (config.users.couchdb_uri)
 
@@ -25,6 +29,8 @@ require('ccnq3_config').get (config)->
   sha1_hex = (t) ->
     return crypto.createHash('sha1').update(t).digest('hex')
 
+  file_base = config.users.file_base
+  file_name = 'portal_password'
 
   cdb_changes = require 'cdb_changes'
   options =
@@ -57,26 +63,40 @@ require('ccnq3_config').get (config)->
       # Notify via email.
       util.log "Notifying #{p.name} of new password for #{p.domain}"
 
+      template =
+        subject: 'Your password for {{domain}}'
+        body: '''
+                  Someone (probably you) requested a new password for {{domain}}.
+
+                  Your username is: {{name}}
+                  Your new password is: {{password}}
+
+                  Thank you, and welcome to our exciting new service!
+              '''
+        html: '''
+                  <p>Someone (probably you) requested a new password for <em>{{domain}}</em>.</p>
+                  <p>Your username is <tt>{{name}}</tt>
+                  <p>Your new password is <tt>{{password}}</tt>
+                  </p>
+                  Thank you, and welcome to our exciting new service!
+                  </p>
+              '''
+
+      if file_base?
+        for content in ['subject','body','html']
+          try
+            template[content] = fs.readFileSync file_base + file_name + '.' + content, 'utf8'
+
+      # Extend the document with the new password so that the templates
+      # may use it.
+      p.password = password
+
       email_options =
         sender: "#{config.mail_password.sender_local_part}@#{p.domain}"
         to: p.name
-        subject: "Your password for #{p.domain}"
-        body: """
-                  Someone (probably you) requested a new password for #{p.domain}.
-
-                  Your username is: #{p.name}
-                  Your new password is: #{password}
-
-                  Thank you, and welcome to our exciting new service!
-              """
-        html: """
-                  <p>Someone (probably you) requested a new password for <em>#{p.domain}</em>.</p>
-                  <p>Your username is <tt>#{p.name}</tt>
-                  <p>Your new password is <tt>#{password}</tt>
-                  </p>
-                  Thank you, and welcome to our exciting new service!
-                  </p>
-              """
+        subject: Milk.render template.subject, p
+        body: Milk.render template.body, p
+        html: Milk.render template.html, p
 
       mailer.send_mail email_options, (err,status) ->
         if err? or not status
