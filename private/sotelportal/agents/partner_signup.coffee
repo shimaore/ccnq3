@@ -10,7 +10,7 @@ require('ccnq3_config').get (config)->
 
   util = require 'util'
   fs = require 'fs'
-  Milk = require 'Milk'
+  Milk = require 'milk'
 
   # Reference for Nodemailer:  https://github.com/andris9/Nodemailer
 
