@@ -588,7 +588,10 @@ do (jQuery) ->
         @send model.get, @params.id,
           success: (doc) =>
             doc.state = @params.state
-            @send model.update, doc._id, doc
+            @send model.update, doc._id, doc,
+              success: ->
+                $.post '/roles/replicate/push/sotel_portal', 'json'
+
         return false
 
       Inbox.register 'partner_signup',
