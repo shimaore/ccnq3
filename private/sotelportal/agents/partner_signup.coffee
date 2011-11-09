@@ -33,6 +33,7 @@ require('ccnq3_config').get (config)->
     file_base = config.sotel_portal.file_base
 
     for mode, recipient of recipients
+      template = {}
       do (mode,recipient) ->
         try
           for content in ['subject','body','html']
