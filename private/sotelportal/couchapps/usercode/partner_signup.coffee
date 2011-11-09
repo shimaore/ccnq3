@@ -609,7 +609,7 @@ do (jQuery) ->
               when 'accepted'
                 return "Accepted application for #{doc.agent.company}"
               when 'rejected'
-                return "Rejected application for #{doc.agent.comapny}"
+                return "Rejected application for #{doc.agent.company}"
               else
                 return "Application in unknown state #{doc.state}"
           else
