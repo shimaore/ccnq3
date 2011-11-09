@@ -51,6 +51,6 @@ require('ccnq3_config').get (config)->
           body: Milk.render template.body, p
           html: Milk.render template.html, p
 
-        mailer.send_mail p, (err,status) ->
+        mailer.send_mail email_options, (err,status) ->
           if err?
             return util.log(err)
