@@ -38,7 +38,7 @@ require('ccnq3_config').get (config)->
       do (mode,recipient) ->
         try
           for content in ['subject','body','html']
-            template[content] = fs.readFileSync file_base + p.state + '-' + mode + '.' + content
+            template[content] = fs.readFileSync file_base + p.state + '-' + mode + '.' + content, 'utf8'
         catch error
           console.log "Skipping #{p.state} #{mode} for #{p.primary_contact.contact.email}"
           return
