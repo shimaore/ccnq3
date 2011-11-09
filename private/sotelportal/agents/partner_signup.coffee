@@ -39,8 +39,10 @@ require('ccnq3_config').get (config)->
           for content in ['subject','body','html']
             template[content] = fs.readFileSync file_base + p.state + '-' + mode + '.' + content
         catch error
+          console.log "Skipping #{p.state} #{mode} for #{p.primary_contact.contact.email}"
           return
 
+        console.log "Sending #{p.state} #{mode} for #{p.primary_contact.contact.email}"
         email_options =
           sender: config.sotel_portal.partner_signup_from
           to: p.primary_contact.contact.email
