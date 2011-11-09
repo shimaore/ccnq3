@@ -1,6 +1,6 @@
 {
   "name": "sotel_portal",
-  "version": "0.0.22",
+  "version": "0.0.23",
   "description": "Sotel portal",
   "keywords": "",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
@@ -20,7 +20,7 @@
   , "nodemailer": "*"
   , "json_req": "*"
   , "ccnq3_config": ">=0.1"
-  , "Milk": "*"
+  , "milk": "*"
   },
   "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },
 
