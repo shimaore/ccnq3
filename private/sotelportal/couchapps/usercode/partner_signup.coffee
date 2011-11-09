@@ -572,7 +572,7 @@ do (jQuery) ->
               title:'Accepted'
             radio
               id:'state'
-              value:'reject'
+              value:'rejected'
               title:'Rejected'
             radio
               id:'state'
