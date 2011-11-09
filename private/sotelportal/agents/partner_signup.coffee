@@ -36,7 +36,7 @@ require('ccnq3_config').get (config)->
       do (mode,recipient) ->
         try
           for content in ['subject','body','html']
-            template[content] = fs.readFileSync file_base + mode + '.' + content
+            template[content] = fs.readFileSync file_base + p.state + '-' + mode + '.' + content
         catch error
           return
 
