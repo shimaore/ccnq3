@@ -26,12 +26,13 @@ ddoc.filters.user_push = (doc, req) ->
 
   # For partner signup documents, ensure only the user's documents are sent.
   if m = doc._id.match /^partner_signup:(.*)$/
+    # partner admin may update any document.
+    if user_is 'sotel_partner_admin'
+      return true
+    # a regular user may only submit documents.
     if doc.state isnt 'submitted'
       return false
     if m[1] is ctx.name
-      return true
-    # However partner admin may update any document.
-    if user_is 'sotel_partner_admin'
       return true
 
   # Do not otherwise replicate
