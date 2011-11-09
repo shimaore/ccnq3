@@ -43,10 +43,10 @@ require('ccnq3_config').get (config)->
           console.log "Skipping #{p.state} #{mode} for #{p.primary_contact.contact.email}"
           return
 
-        console.log "Sending #{p.state} #{mode} for #{p.primary_contact.contact.email}"
+        console.log "Sending #{p.state} #{mode} to #{recipient}"
         email_options =
           sender: config.sotel_portal.partner_signup_from
-          to: p.primary_contact.contact.email
+          to: recipient
           subject: Milk.render template.subject, p
           body: Milk.render template.body, p
           html: Milk.render template.html, p
