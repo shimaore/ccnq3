@@ -22,7 +22,7 @@ fs_command = (cmd,cb) ->
         res.exit ->
           client.end()
   if cb?
-    client.on 'close' cb
+    client.on 'close', cb
   client.connect(8021, '127.0.0.1')
 
 process_changes = (commands) ->
