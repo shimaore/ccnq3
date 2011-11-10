@@ -141,6 +141,11 @@ ddoc.shows.freeswitch_local_vars = stringFun (doc,req) ->
 
       <X-PRE-PROCESS cmd="set" data="rtp_ip=#{rtp_ip}"/>
     """
+  if doc.sip_variables?
+    for name, value of doc.sip_variables
+      send """
+        <X-PRE-PROCESS cmd="set" data="#{name}=#{value}"/>
+        """
   send "\n</include>"
   return {}
 

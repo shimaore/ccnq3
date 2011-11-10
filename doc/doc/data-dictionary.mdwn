@@ -72,6 +72,8 @@ Notes:
               can be restart independently.
         Note: Add a command then remove it from the hash to prevent accidental misfiring of commands.
 
+    sip_variables: {} of global (FreeSwitch) variables; defaults to {}
+        Note: The idea is that these can be used on a per-host basis by additional dialplans, profiles, etc.
 
     # Specific to hosts running the portal (or its back-end).
     portal:
