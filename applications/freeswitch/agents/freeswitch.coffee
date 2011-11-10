@@ -18,7 +18,8 @@ fs_command = (cmd,cb) ->
   client = esl.createClient()
   client.on 'esl_auth_request', (req,res) ->
     res.auth 'CCNQ', () ->
-      res.api cmd, cb
+      res.api cmd, (req,res) ->
+        res.exit, cb
   client.connect(8021, '127.0.0.1')
 
 process_changes = (commands) ->
