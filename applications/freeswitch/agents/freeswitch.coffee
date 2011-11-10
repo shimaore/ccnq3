@@ -17,9 +17,9 @@ esl = require 'esl'
 fs_command = (cmd,cb) ->
   client = esl.createClient()
   client.on 'esl_auth_request', (req,res) ->
-    res.auth 'CCNQ', () ->
+    res.auth 'CCNQ', (req,res) ->
       res.api cmd, (req,res) ->
-        res.exit ->
+        res.exit (req,res) ->
           client.end()
   if cb?
     client.on 'close', cb
