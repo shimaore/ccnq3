@@ -412,13 +412,19 @@ do (jQuery) ->
             span 'Mutual Non Disclose Agreement'
             button class:'show_agreement'
             div class:'agreement'
-            input type:'checkbox', name:'accepted.mutual-non-disclosure-agreement', class:'accept', value:true
+            checkbox
+              id:'accepted.mutual-non-disclosure-agreement'
+              class:'accept'
+              title:'By clicking this button I indicate my legal agreement'
 
           div id:'partner-usage-agreement', ->
             span 'Partner Usage Agreement'
             button class:'show_agreement'
             div class:'agreement'
-            input type: 'checkbox', name:'accepted.partner-usage-agreement', class:'accept', value:true
+            checkbox
+              id:'accepted.partner-usage-agreement'
+              class:'accept'
+              title:'By clicking this button I indicate my legal agreement'
 
           # 'partner-usage-addendum'
 
@@ -426,30 +432,37 @@ do (jQuery) ->
             span 'Technical Services'
             button class:'show_agreement'
             div class:'agreement'
-            input type:'checkbox', name:'accepted.technical-services', class:'accept', value:true
+            checkbox
+              id:'accepted.technical-services'
+              class:'accept'
+              title:'By clicking this button I indicate my legal agreement'
 
           # Optional
           div id:'agent-agreement', class:'optional', ->
             span 'Agent Agreement'
             button class:'show_agreement'
             div class:'agreement'
-            input type:'checkbox', name:'accepted.agent-agreement', class:'accept', value:true
+            checkbox
+              id:'accepted.agent-agreement'
+              class:'accept'
+              title:'By clicking this button I indicate my legal agreement'
 
           div id:'wholesale-services-agreement', class:'optional', ->
             span 'Wholesale Services Agreement'
             button class:'show_agreement'
             div class:'agreement'
-            input type:'checkbox', name:'accepted.wholesale-services-agreement', class:'accept', value:true
+            checkbox
+              id:'accepted.wholesale-services-agreement'
+              class:'accept'
+              title:'By clicking this button I indicate my legal agreement'
 
         coffeescript ->
 
-          $('.accept').button
-            disabled: true
-            label: 'Accept'
+          $('.accept').disable()
 
           $('.accept').click ->
             $(@).siblings('.agreement').hide 'slow'
-            $(@).button 'disable'
+            $(@).disable()
             return false
 
           $('.show_agreement').button
@@ -472,7 +485,7 @@ do (jQuery) ->
                 'text'
 
             # Enable the "Accept" button
-            $(@).siblings('.accept').button 'enable'
+            $(@).siblings('.accept').enable()
 
             return false
 
