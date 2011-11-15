@@ -585,10 +585,7 @@ do (jQuery) ->
 
       @post '#/partner_signup/update', ->
         console.log "Updating #{@params.id} with state=#{@params.state}."
-        @send model.get, @params.id,
-          success: (doc) =>
-            doc.state = @params.state
-            @send model.update, doc._id, doc,
+        @send model.update, @params.id, { state: @params.state },
               success: ->
                 $.post '/roles/replicate/push/sotel_portal', 'json'
 
