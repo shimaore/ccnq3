@@ -457,6 +457,7 @@ do (jQuery) ->
               title:'By clicking this button I indicate my legal agreement'
 
         coffeescript ->
+          # Warning: the way forms.checkbox is implemented makes things a little difficult.
 
           $('.accept').disable()
 
@@ -469,7 +470,7 @@ do (jQuery) ->
 
           $('.show_agreement').click ->
             # Enable the "Accept" button
-            $(@).parents('div').children('.accept').enable()
+            $(@).parents('div').find('.accept').enable()
 
             # Retrieve the form's content
             doc = $('#wizard_form').data 'doc'
