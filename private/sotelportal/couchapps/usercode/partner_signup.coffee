@@ -468,6 +468,9 @@ do (jQuery) ->
             label: 'Review'
 
           $('.show_agreement').click ->
+            # Enable the "Accept" button
+            $(@).siblings('.accept').enable()
+
             # Retrieve the form's content
             doc = $('#wizard_form').data 'doc'
             doc ?= {}
@@ -481,9 +484,6 @@ do (jQuery) ->
               $.get "/docs/#{id}.html",
                 (template) => $(@).html Milk.render template, doc
                 'text'
-
-            # Enable the "Accept" button
-            $(@).siblings('.accept').enable()
 
             return false
 
