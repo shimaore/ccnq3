@@ -406,9 +406,6 @@ do (jQuery) ->
               readonly:true
               value:@signature?.date or @effective_date
 
-        div id:'done', ->
-          h2 class:'stepTitle', -> 'Confirmation'
-
           button id:'open_tc_dialog', 'Review and accept the Terms and Conditions'
 
         coffeescript ->
@@ -431,6 +428,9 @@ do (jQuery) ->
 
             $('#tc_dialog').dialog 'open'
             return false
+
+        div id:'done', ->
+          h2 class:'stepTitle', -> 'Confirmation'
 
     coffeescript ->
 
