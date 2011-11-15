@@ -460,9 +460,8 @@ do (jQuery) ->
 
           $('.accept').disable()
 
-          $('.accept').click ->
+          $('.accept').change ->
             $(@).siblings('.agreement').hide()
-            return true
 
           $('.show_agreement').button
             disabled: false
