@@ -458,9 +458,8 @@ do (jQuery) ->
             $.extend doc, $('#wizard_form').toDeepJson()
 
             # Update the agreement's text
-            that = $(@).parent()
-            id = that.attr 'id'
-            $('.agreement',that).each ->
+            id = $(@).parent().attr 'id'
+            $(@).siblings('.agreement').each ->
               $(@).show()
               $(@).html '<img src="public/images/indicator.white.gif" />'
               $.get "/docs/#{id}.html",
@@ -468,17 +467,17 @@ do (jQuery) ->
                 'text'
 
             # Enable the "Accept" button
+            $(@).siblings('.accept_agreement').enable()
 
-            $('.accept_agreement',that).click ->
-              $(@).siblings('.accept').val(true)
-              $('.agreement',that).hide 'fast'
-              $(@).button
-                icons:
-                  primary: 'ui-icon-check'
-              return false
+            return false
 
-            $('.accept_agreement',that).enable()
-
+          $('.accept_agreement').click ->
+            that = $(@).parent()
+            $(@).siblings('.accept').val(true)
+            $(@).siblings('.agreement').hide 'fast'
+            $(@).button
+              icons:
+                primary: 'ui-icon-check'
             return false
 
         div id:'done', ->
