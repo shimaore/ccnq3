@@ -461,8 +461,7 @@ do (jQuery) ->
           $('.accept').disable()
 
           $('.accept').click ->
-            $(@).siblings('.agreement').hide 'slow'
-            $(@).disable()
+            $(@).siblings('.agreement').hide()
             return true
 
           $('.show_agreement').button
