@@ -1,0 +1,23 @@
+{
+  "name": "kayako_loginshare",
+  "version": "0.0.1",
+  "description": "Kayako LoginShare integration",
+  "keywords": "",
+  "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
+  "config": {
+    "config_file": "/etc/ccnq3/host.json"
+  },
+  "scripts": {
+    "start": "daemon -n kayako_loginshare -o daemon.debug -r -D \"`pwd`/zappa\" -- ./kayako_loginshare.coffee"
+  , "stop":  "daemon -n kayako_loginshare -o daemon.debug --stop"
+  },
+  "dependencies": {
+    "cdb": "*"
+  , "zappa": "*"
+  , "json_req": "*"
+  , "ccnq3_config": ">=0.1"
+  },
+  "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },
+
+  "ok": true
+}
