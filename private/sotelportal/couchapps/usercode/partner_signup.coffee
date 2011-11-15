@@ -448,8 +448,8 @@ do (jQuery) ->
 
         coffeescript ->
 
-          $('.accept').button
-            disabled:true
+          $('.accept').button()
+          $('.accept').disable()
 
           $('.accept').click ->
             $(@).siblings('.agreement').hide 'slow'
