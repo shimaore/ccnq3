@@ -461,9 +461,12 @@ do (jQuery) ->
                 'text'
 
             # Enable the "Accept" button
-            $('.accept_agreement',that).enable().click ->
+
+            $('.accept_agreement',that).click ->
               $(@).siblings('.accept').val(true)
               $('.agreement',that).hide 'fast'
+
+            $('.accept_agreement',that).enable()
 
             return false
 
