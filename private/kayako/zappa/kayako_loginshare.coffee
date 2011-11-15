@@ -29,20 +29,20 @@ require('ccnq3_config').get (config)->
           username: @username
           password: @password
 
-      json_req.request q, (p,cookie) ->
+      json_req.request q, (p,cookie) =>
         if p.error?
-          return send kayako_error_msg()
+          return @send kayako_error_msg()
 
         s =
           uri: config.kayako_loginshare.profile_uri
           headers:
             cookie: cookie
 
-        json_req.request s, (r) ->
+        json_req.request s, (r) =>
           if r.error?
-            return send kayako_error_msg()
+            return @send kayako_error_msg("Internal Error")
 
-          send """
+          @send """
                <?xml version="1.0" encoding="UTF-8"?>
                <loginshare>
                  <result>1</result>
