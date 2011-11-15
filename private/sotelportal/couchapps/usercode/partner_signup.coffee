@@ -448,6 +448,8 @@ do (jQuery) ->
 
         coffeescript ->
           $('.accept_agreement').disable()
+          $('.show_agreement').button()
+          $('.accept_agreement').button()
 
           $('.show_agreement').click ->
             # Retrieve the form's content
@@ -470,6 +472,9 @@ do (jQuery) ->
             $('.accept_agreement',that).click ->
               $(@).siblings('.accept').val(true)
               $('.agreement',that).hide 'fast'
+              $(@).button
+                icons:
+                  primary: 'ui-icon-check'
               return false
 
             $('.accept_agreement',that).enable()
