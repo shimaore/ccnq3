@@ -410,46 +410,51 @@ do (jQuery) ->
           # Mandatory
           div id:'mutual-non-disclosure-agreement', ->
             span 'Mutual Non Disclose Agreement'
-            button class:'show_agreement', 'Review'
+            button class:'show_agreement'
             div class:'agreement'
-            button class:'accept_agreement', 'Accept'
-            hidden id:'accepted.mutual-non-disclosure-agreement', class:'accept'
+            input type:'checkbox', id:'accepted.mutual-non-disclosure-agreement', class:'accept'
 
           div id:'partner-usage-agreement', ->
             span 'Partner Usage Agreement'
-            button class:'show_agreement', 'Review'
+            button class:'show_agreement'
             div class:'agreement'
-            button class:'accept_agreement', 'Accept'
-            hidden id:'accepted.partner-usage-agreement', class:'accept'
+            input type: 'checkbox', id:'accepted.partner-usage-agreement', class:'accept'
 
           # 'partner-usage-addendum'
 
           div id:'technical-services', ->
             span 'Technical Services'
-            button class:'show_agreement', 'Review'
+            button class:'show_agreement'
             div class:'agreement'
-            button class:'accept_agreement', 'Accept'
-            hidden id:'accepted.technical-services', class:'accept'
+            input type:'checkbox', id:'accepted.technical-services', class:'accept'
 
           # Optional
           div id:'agent-agreement', class:'optional', ->
             span 'Agent Agreement'
-            button class:'show_agreement', 'Review'
+            button class:'show_agreement'
             div class:'agreement'
-            button class:'accept_agreement', 'Accept'
-            hidden id:'accepted.agent-agreement', class:'accept'
+            input type:'checkbox', id:'accepted.agent-agreement', class:'accept'
 
           div id:'wholesale-services-agreement', class:'optional', ->
             span 'Wholesale Services Agreement'
-            button class:'show_agreement', 'Review'
+            button class:'show_agreement'
             div class:'agreement'
-            button class:'accept_agreement', 'Accept'
-            hidden id:'accepted.wholesale-services-agreement', class:'accept'
+            input type:'checkbox', id:'accepted.wholesale-services-agreement', class:'accept'
 
         coffeescript ->
-          $('.accept_agreement').disable()
-          $('.show_agreement').button()
-          $('.accept_agreement').button()
+
+          $('.accept').button
+            disabled:true
+            label:'Accept'
+
+          $('.accept').click ->
+            $(@).siblings('.agreement').hide 'slow'
+            $(@).disable()
+            return false
+
+          $('.show_agreement').button
+            disabled: false
+            label: 'Review'
 
           $('.show_agreement').click ->
             # Retrieve the form's content
@@ -467,17 +472,8 @@ do (jQuery) ->
                 'text'
 
             # Enable the "Accept" button
-            $(@).siblings('.accept_agreement').enable()
+            $(@).siblings('.accept').enable()
 
-            return false
-
-          $('.accept_agreement').click ->
-            that = $(@).parent()
-            $(@).siblings('.accept').val(true)
-            $(@).siblings('.agreement').hide 'fast'
-            $(@).button
-              icons:
-                primary: 'ui-icon-check'
             return false
 
         div id:'done', ->
