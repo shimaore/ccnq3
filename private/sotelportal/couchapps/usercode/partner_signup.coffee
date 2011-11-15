@@ -18,31 +18,6 @@ do (jQuery) ->
 
       input type:'hidden', name:'accept_agreements', id:'accept_agreements'
 
-      div id:'tc_dialog', ->
-        # Mandatory
-        div id:'mutual-non-disclosure-agreement', class:'agreement'
-        div id:'partner-usage-agreement', class:'agreement'
-        # 'partner-usage-addendum'
-        div id:'technical-services', class:'agreement'
-
-        # Optional
-        div id:'agent-agreement', class:'agreement optional'
-        div id:'wholesale-services-agreement', class:'agreement optional'
-
-      coffeescript ->
-        $('#tc_dialog').dialog
-          autoOpen:false
-          modal:true
-          closeOnEscape: true
-          width: '80%'
-          buttons:
-            'Print': ->
-              window.print()
-            'Accept': ->
-              $('#accept_agreements').val(true)
-              $('#tc_dialog').dialog('close')
-
-
       div id:"wizard", class:"swMain", ->
         ul ->
           li -> a href:'#intro', ->
@@ -131,30 +106,52 @@ do (jQuery) ->
               id:'products.sotel_sip_agency'
               title:'SIP Service Agency Program'
               value:@products?.sotel_sip_agency
+              class:'product'
             checkbox
               id:'products.sotel_sip_wholesale'
               title:'SIP Service Wholesale Program'
               value:@products?.sotel_sip_wholesale
+              class:'product'
             checkbox
               id:'products.sotel_videoconf'
               title:'Video Conferencing'
               value:@products?.sotel_videoconf
+              class:'product'
             checkbox
               id:'products.siemens_oo'
               title:'Siemens OpenScape Office'
               value:@products?.siemens_oo
+              class:'product'
             checkbox
               id:'products.epygi'
               title:'Epygi'
               value:@products?.epygi
+              class:'product'
             checkbox
               id:'products.snom'
               title:'snom'
               value:@products?.snom
+              class:'product'
             checkbox
               id:'products.sangoma'
               title:'Sangoma'
               value:@products?.sangoma
+              class:'product'
+
+        coffeescript ->
+
+          $('.product').click ->
+
+            # Re-evaluate which forms need to be shown
+            doc = $('#wizard_form').data 'doc'
+            doc ?= {}
+            $.extend doc, $('#wizard_form').toDeepJson()
+
+            $('.optional').hide()
+            if doc.products.sotel_sip_agency
+              $('div#agent-agreement').show()
+            if doc.products.sotel_sip_wholesale
+              $('div#wholesale-services-agreement').show()
 
         div id:'step-2', ->
           h2 class:'stepTitle', -> 'Primary Contact Information'
@@ -406,27 +403,68 @@ do (jQuery) ->
               readonly:true
               value:@signature?.date or @effective_date
 
-          button id:'open_tc_dialog', 'Review and accept the Terms and Conditions'
+          # Mandatory
+          div id:'mutual-non-disclosure-agreement', ->
+            span 'Mutual Non Disclose Agreement'
+            button class:'show_agreement', 'Review'
+            div class:'agreement'
+            button class:'accept_agreement', 'Accept'
+            hidden id:'accepted.mutual-non-disclosure-agreement', class:'accept'
+
+          div id:'partner-usage-agreement', ->
+            span 'Partner Usage Agreement'
+            button class:'show_agreement', 'Review'
+            div class:'agreement'
+            button class:'accept_agreement', 'Accept'
+            hidden id:'accepted.partner-usage-agreement', class:'accept'
+
+          # 'partner-usage-addendum'
+
+          div id:'technical-services', ->
+            span 'Technical Services'
+            button class:'show_agreement', 'Review'
+            div class:'agreement'
+            button class:'accept_agreement', 'Accept'
+            hidden id:'accepted.technical-services', class:'accept'
+
+          # Optional
+          div id:'agent-agreement', class:'optional', ->
+            span 'Agent Agreement'
+            button class:'show_agreement', 'Review'
+            div class:'agreement'
+            button class:'accept_agreement', 'Accept'
+            hidden id:'accepted.agent-agreement', class:'accept'
+
+          div id:'wholesale-services-agreement', class:'optional', ->
+            span 'Wholesale Services Agreement'
+            button class:'show_agreement', 'Review'
+            div class:'agreement'
+            button class:'accept_agreement', 'Accept'
+            hidden id:'accepted.wholesale-services-agreement', class:'accept'
 
         coffeescript ->
-          $('#open_tc_dialog').click ->
+          $('.accept_agreement').disable()
+
+          $('.show_agreement').click ->
+            # Retrieve the form's content
             doc = $('#wizard_form').data 'doc'
             doc ?= {}
             $.extend doc, $('#wizard_form').toDeepJson()
 
-            $('.agreement').each ->
+            # Update the agreement's text
+            that = $(@).parent()
+            id = that.attr 'id'
+            $('.agreement',that).each ->
               $(@).html '<img src="public/images/indicator.white.gif" />'
-              $.get "/docs/#{@id}.html",
+              $.get "/docs/#{id}.html",
                 (template) => $(@).html Milk.render template, doc
                 'text'
 
-            $('.optional').hide()
-            if doc.products.sotel_sip_agency
-              $('div#agent-agreement').show()
-            if doc.products.sotel_sip_wholesale
-              $('div#wholesale-services-agreement').show()
+            # Enable the "Accept" button
+            $('.accept_agreement',that).enable().click ->
+              $(@).siblings('.accept').val(true)
+              $('.agreement',that).hide 'fast'
 
-            $('#tc_dialog').dialog 'open'
             return false
 
         div id:'done', ->
