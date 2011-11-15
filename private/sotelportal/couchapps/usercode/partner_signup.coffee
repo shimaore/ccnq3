@@ -140,8 +140,7 @@ do (jQuery) ->
 
         coffeescript ->
 
-          $('.product').click ->
-
+          show_agreements = ->
             # Re-evaluate which forms need to be shown
             doc = $('#wizard_form').data 'doc'
             doc ?= {}
@@ -152,6 +151,11 @@ do (jQuery) ->
               $('div#agent-agreement').show()
             if doc.products.sotel_sip_wholesale
               $('div#wholesale-services-agreement').show()
+
+          # Update on changes
+          $('.product').change show_agreements
+          # Initialize
+          show_agreements()
 
         div id:'step-2', ->
           h2 class:'stepTitle', -> 'Primary Contact Information'
@@ -455,6 +459,7 @@ do (jQuery) ->
             that = $(@).parent()
             id = that.attr 'id'
             $('.agreement',that).each ->
+              $(@).show()
               $(@).html '<img src="public/images/indicator.white.gif" />'
               $.get "/docs/#{id}.html",
                 (template) => $(@).html Milk.render template, doc
@@ -465,6 +470,7 @@ do (jQuery) ->
             $('.accept_agreement',that).click ->
               $(@).siblings('.accept').val(true)
               $('.agreement',that).hide 'fast'
+              return false
 
             $('.accept_agreement',that).enable()
 
