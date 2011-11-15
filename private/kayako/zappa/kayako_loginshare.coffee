@@ -9,6 +9,8 @@ require('ccnq3_config').get (config)->
   zappa = require 'zappa'
   zappa config.kayako_loginshare.port, config.kayako_loginshare.hostname, {config}, ->
 
+    @use 'bodyParser'
+
     json_req = require 'json_req'
 
     kayako_error_msg = (msg) ->
