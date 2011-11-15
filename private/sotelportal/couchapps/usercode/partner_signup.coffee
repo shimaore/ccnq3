@@ -462,7 +462,7 @@ do (jQuery) ->
           $('.accept').disable()
 
           $('.accept').change ->
-            $(@).parents('div').children('.agreement').hide()
+            $(@).parent().siblings('.agreement').hide()
 
           $('.show_agreement').button
             disabled: false
@@ -470,7 +470,7 @@ do (jQuery) ->
 
           $('.show_agreement').click ->
             # Enable the "Accept" button
-            $(@).parents('div').find('.accept').enable()
+            $(@).siblings().find('.accept').enable()
 
             # Retrieve the form's content
             doc = $('#wizard_form').data 'doc'
