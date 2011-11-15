@@ -412,13 +412,13 @@ do (jQuery) ->
             span 'Mutual Non Disclose Agreement'
             button class:'show_agreement'
             div class:'agreement'
-            input type:'checkbox', id:'accepted.mutual-non-disclosure-agreement', class:'accept'
+            input type:'checkbox', name:'accepted.mutual-non-disclosure-agreement', class:'accept'
 
           div id:'partner-usage-agreement', ->
             span 'Partner Usage Agreement'
             button class:'show_agreement'
             div class:'agreement'
-            input type: 'checkbox', id:'accepted.partner-usage-agreement', class:'accept'
+            input type: 'checkbox', name:'accepted.partner-usage-agreement', class:'accept'
 
           # 'partner-usage-addendum'
 
@@ -426,20 +426,20 @@ do (jQuery) ->
             span 'Technical Services'
             button class:'show_agreement'
             div class:'agreement'
-            input type:'checkbox', id:'accepted.technical-services', class:'accept'
+            input type:'checkbox', name:'accepted.technical-services', class:'accept'
 
           # Optional
           div id:'agent-agreement', class:'optional', ->
             span 'Agent Agreement'
             button class:'show_agreement'
             div class:'agreement'
-            input type:'checkbox', id:'accepted.agent-agreement', class:'accept'
+            input type:'checkbox', name:'accepted.agent-agreement', class:'accept'
 
           div id:'wholesale-services-agreement', class:'optional', ->
             span 'Wholesale Services Agreement'
             button class:'show_agreement'
             div class:'agreement'
-            input type:'checkbox', id:'accepted.wholesale-services-agreement', class:'accept'
+            input type:'checkbox', name:'accepted.wholesale-services-agreement', class:'accept'
 
         coffeescript ->
 
