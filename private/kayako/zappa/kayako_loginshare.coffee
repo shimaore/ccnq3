@@ -28,8 +28,8 @@ require('ccnq3_config').get (config)->
         method: 'POST'
         uri: config.kayako_loginshare.login_uri
         body:
-          username: @query.username
-          password: @query.password
+          username: @body.username
+          password: @body.password
 
       json_req.request q, (p,cookie) =>
         if p.error?
