@@ -456,6 +456,8 @@ do (jQuery) ->
               class:'accept'
               title:'By clicking this button I indicate my legal agreement'
 
+          span 'These agreements become valid upon approval by an authorized SoTel Systems, LLC representative.'
+
         coffeescript ->
           # Warning: the way forms.checkbox is implemented makes things a little difficult.
 
