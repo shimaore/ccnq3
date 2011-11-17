@@ -22,7 +22,8 @@ class InboxRegistry
     console.log "Registering type #{type} at priority #{priority}"
     @types[type] ?= []
     @types[type][priority] = handler
-    handlers[type] = (@types[type][p] for p in (p for p of @types[type]).sort())
+    sorted_keys = (p for p of @types[type]).sort()
+    handlers[type] = (@types[type][p] for p in sorted_keys)
 
   registered: (type) ->
     @types[type]?
