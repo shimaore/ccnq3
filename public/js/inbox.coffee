@@ -23,7 +23,7 @@ class InboxRegistry
     @types[type] ?= []
     @types[type][priority] = handler
     sorted_keys = (p for p of @types[type]).sort()
-    handlers[type] = (@types[type][p] for p in sorted_keys)
+    @handlers[type] = (@types[type][p] for p in sorted_keys)
 
   registered: (type) ->
     @types[type]?
