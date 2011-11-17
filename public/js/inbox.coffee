@@ -6,23 +6,45 @@ class InboxRegistry
 
   types: {}
 
-  register: (type,handler) ->
-    console.log "Registering type #{type}"
-    @types[type] = handler
+  """
+    register adds a set of handler functions to the registry.
+    The following handlers may be provided:
+      form
+      list
+  """
+  register: (type,priority,handler) ->
+    if typeof priority is 'object'
+      # No priority provided, assume " default",
+      # and the priority argument is actually the handler.
+      handler = priority
+      priority = ' default' # The space should make it first in the list.
+    console.log "Registering type #{type} at priority #{priority}"
+    @types[type] ?= []
+    @types[type][priority] = handler
 
   registered: (type) ->
     @types[type]?
 
   """
-    List a single document.
+    The list function must provide a short text which is displayed
+    in the inbox as the short text ('subject') for the item.
+
+    All 'list' methods registered for the type are used in their
+    (lexicographical) priority order, although generally you'll want
+    to only offer one such function.
   """
-  list: (type,doc) -> @types[type]?.list doc
+  list: (type,doc) -> (t.list? doc for t in @types[type]?.sort()).join ''
 
   """
-   Generates form content usable to update a single
-   document.
+    The 'form' function may provide any content that is displayed
+    when the specific item is opened.
+    This includes form content usable to update a single
+    document.
+
+    All 'form' methods registered for the type are used in their
+    (lexicographical) priority order.
   """
-  form: (type,doc) -> @types[type]?.form doc
+  form: (type,doc) -> (t.form? doc for t in @types[type]?.sort()).join ''
 
 # Create a new global Inbox registry
 @Inbox = window.Inbox = new InboxRegistry()
