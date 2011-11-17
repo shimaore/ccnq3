@@ -36,7 +36,7 @@ class InboxRegistry
     (lexicographical) priority order, although generally you'll want
     to only offer one such function.
   """
-  list: (type,doc) -> (t.list? doc for t in @sorted_keys(type)).join ''
+  list: (type,doc) -> (@types[t].list? doc for t in @sorted_keys(type)).join ''
 
   """
     The 'form' function may provide any content that is displayed
@@ -47,7 +47,7 @@ class InboxRegistry
     All 'form' methods registered for the type are used in their
     (lexicographical) priority order.
   """
-  form: (type,doc) -> (t.form? doc for t in @sorted_keys(type)).join ''
+  form: (type,doc) -> (@types[t].form? doc for t in @sorted_keys(type)).join ''
 
 # Create a new global Inbox registry
 @Inbox = window.Inbox = new InboxRegistry()
