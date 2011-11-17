@@ -12,7 +12,7 @@ do (jQuery) ->
   # require 'coffeekup'
 
   coffeekup_helpers =
-  
+
     checkbox: (attrs) ->
       attrs.type = 'checkbox'
       attrs.name = attrs.id
@@ -22,7 +22,7 @@ do (jQuery) ->
       label for:attrs.id, class:attrs.class, ->
         span attrs.title
         input attrs
-        
+
     radio: (attrs) ->
       attrs.type = 'radio'
       attrs.name = attrs.id
@@ -39,7 +39,7 @@ do (jQuery) ->
       label for:attrs.id, class:attrs.class, ->
         span attrs.title
         input attrs
-        
+
     text_area: (attrs) ->
       attrs.name = attrs.id
       attrs.rows ?= 3
@@ -54,10 +54,10 @@ do (jQuery) ->
       attrs.name = attrs.id
       attrs.class ?= 'normal'
       input attrs
-        
+
   $.compile_template = (template) ->
     CoffeeKup.compile template, hardcode: coffeekup_helpers
-    
+
   $.fn.auto_add = () ->
 
     table = @
