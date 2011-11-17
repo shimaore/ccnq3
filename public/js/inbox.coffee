@@ -5,6 +5,7 @@ Registry of types (so that we can dynamically add types to the inbox).
 class InboxRegistry
 
   types: {}
+  handlers: {}
 
   """
     register adds a set of handler functions to the registry.
@@ -21,12 +22,10 @@ class InboxRegistry
     console.log "Registering type #{type} at priority #{priority}"
     @types[type] ?= []
     @types[type][priority] = handler
+    handlers[type] = @types[type][p] for p in (p for p of @types[type]).sort()
 
   registered: (type) ->
     @types[type]?
-
-  sorted_keys: (type) ->
-    (k for k of @types[type]).sort()
 
   """
     The list function must provide a short text which is displayed
@@ -36,7 +35,7 @@ class InboxRegistry
     (lexicographical) priority order, although generally you'll want
     to only offer one such function.
   """
-  list: (type,doc) -> (@types[t].list? doc for t in @sorted_keys(type)).join ''
+  list: (type,doc) -> (h.list? doc for h in @handlers[type]).join ''
 
   """
     The 'form' function may provide any content that is displayed
@@ -47,7 +46,7 @@ class InboxRegistry
     All 'form' methods registered for the type are used in their
     (lexicographical) priority order.
   """
-  form: (type,doc) -> (@types[t].form? doc for t in @sorted_keys(type)).join ''
+  form: (type,doc) -> (h.form? doc for t in @handlers[type]).join ''
 
 # Create a new global Inbox registry
 @Inbox = window.Inbox = new InboxRegistry()
