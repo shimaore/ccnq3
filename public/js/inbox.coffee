@@ -47,7 +47,7 @@ class InboxRegistry
     All 'form' methods registered for the type are used in their
     (lexicographical) priority order.
   """
-  form: (type,doc) -> (h.form? doc for t in @handlers[type]).join ''
+  form: (type,doc) -> (h.form? doc for h in @handlers[type]).join ''
 
 # Create a new global Inbox registry
 @Inbox = window.Inbox = new InboxRegistry()
