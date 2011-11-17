@@ -25,6 +25,9 @@ class InboxRegistry
   registered: (type) ->
     @types[type]?
 
+  sorted_keys: (type) ->
+    (k for k of @types[type]).sort()
+
   """
     The list function must provide a short text which is displayed
     in the inbox as the short text ('subject') for the item.
@@ -33,7 +36,7 @@ class InboxRegistry
     (lexicographical) priority order, although generally you'll want
     to only offer one such function.
   """
-  list: (type,doc) -> (t.list? doc for t in @types[type]?.sort()).join ''
+  list: (type,doc) -> (t.list? doc for t in @sorted_keys(type)).join ''
 
   """
     The 'form' function may provide any content that is displayed
@@ -44,7 +47,7 @@ class InboxRegistry
     All 'form' methods registered for the type are used in their
     (lexicographical) priority order.
   """
-  form: (type,doc) -> (t.form? doc for t in @types[type]?.sort()).join ''
+  form: (type,doc) -> (t.form? doc for t in @sorted_keys(type)).join ''
 
 # Create a new global Inbox registry
 @Inbox = window.Inbox = new InboxRegistry()
