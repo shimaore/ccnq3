@@ -1,0 +1,21 @@
+{
+  "name": "sotel_videoportal",
+  "version": "0.0.2",
+  "description": "Sotel Video Portal",
+  "keywords": "",
+  "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
+  "config": {
+    "config_file": "/etc/ccnq3/host.json"
+  },
+  "scripts": {
+    "start": "daemon -n sotel_videoportal -o daemon.debug -r -D \"`pwd`/zappa\" -- ./video_portal.coffee"
+  , "stop":  "daemon -n sotel_videoportal -o daemon.debug --stop"
+  },
+  "dependencies": {
+    "ccnq3_config": ">=0.1"
+  , "request": "*"
+  },
+  "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },
+
+  "ok": true
+}
