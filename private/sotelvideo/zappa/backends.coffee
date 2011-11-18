@@ -3,6 +3,7 @@
 Released under the AGPL3 license
 ###
 req = require 'request'
+querystring = require 'querystring'
 
 exports.sql = (config,_sql,_p,cb) ->
   _uri = config.sql_db_uri
