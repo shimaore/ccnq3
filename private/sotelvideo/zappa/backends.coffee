@@ -2,10 +2,10 @@
 (c) 2010 Stephane Alnet
 Released under the AGPL3 license
 ###
-def req: require 'request'
+req = require 'request'
 
-helper sql: (_sql,_p,cb) ->
-  _uri = config().sql_db_uri
+exports.sql = (config,_sql,_p,cb) ->
+  _uri = config.sql_db_uri
   data =
     sql: _sql
     params: _p
@@ -21,8 +21,8 @@ helper sql: (_sql,_p,cb) ->
     else
       cb({error:error})
 
-helper dancer_session: (cb) ->
-  _uri = config().dancer_session_uri
+exports.dancer_session = (config,cb) ->
+  _uri = config.dancer_session_uri
   if not cookies
     return cb({error:"No cookies"})
   id = cookies["dancer.session"]
@@ -35,8 +35,8 @@ helper dancer_session: (cb) ->
     else
       cb({error:error})
 
-helper user_info: (user_id,cb) ->
-  _uri = config().portal_couchdb_uri
+exports.user_info = (config,user_id,cb) ->
+  _uri = config.portal_couchdb_uri
   options =
     method:   'GET'
     uri:      _uri+'/'+querystring.escape(user_id)
