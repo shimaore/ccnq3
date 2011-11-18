@@ -85,7 +85,7 @@ require('ccnq3_config').get (config)->
         data.not_admin = not_admin?
         @render 'default', postrender: 'restrict', data
 
-    @get '/': ->
+    @get '/conf/': ->
       @check_user undefined, (account,error) =>
         if error?
           @render 'error', error:error
@@ -95,7 +95,7 @@ require('ccnq3_config').get (config)->
     fields = 'username email name address city zip country agent user_type license phone account installation_id activate_date'.split(' ')
     fw_name = config.fw_name # 'ts1.sotelips.net'
 
-    @put '/': ->
+    @put '/conf/': ->
       @check_admin (error) =>
         if(error?)
           @render 'error', error:error
@@ -104,7 +104,7 @@ require('ccnq3_config').get (config)->
 
     milk = require 'milk'
 
-    @get '/user.reg': ->
+    @get '/conf/user.reg': ->
       if not @query.user_id?
         return @render 'error', error:'Missing parameter'
 
@@ -172,7 +172,7 @@ require('ccnq3_config').get (config)->
           sql 'UPDATE sipuser SET '+sip_setters.join(',')+' WHERE user_id = ?', [sip_values...,data.user_id], (r) =>
             if r.error?
               return @render 'error', error:r.error
-            @redirect "user.reg?user_id=#{querystring.escape(data.user_id)}"
+            @redirect "/conf/user.reg?user_id=#{querystring.escape(data.user_id)}"
       else
         # Create
         new_user_id = Math.floor(Math.random()*2000000000)
@@ -192,9 +192,9 @@ require('ccnq3_config').get (config)->
           ], (r) =>
             if r.error?
               return @render 'error', error:r.error
-            @redirect "user.reg?user_id=#{querystring.escape(new_user_id)}"
+            @redirect "/conf/user.reg?user_id=#{querystring.escape(new_user_id)}"
 
-    @del '/': ->
+    @del '/conf/': ->
       @check_admin (error) =>
         if(error?)
           @render 'error', error:error
@@ -216,13 +216,13 @@ require('ccnq3_config').get (config)->
             @render_d 'User account deleted successfully', data
 
 
-    @coffee '/validate.js': ->
+    @coffee '/conf/validate.js': ->
       $(document).ready ->
         $("form.validate").validate()
 
     # Search by user_id
 
-    @coffee '/search.js': ->
+    @coffee '/conf/search.js': ->
       $(document).ready ->
         $('#username').focus()
         $('#username').autocomplete {
@@ -240,7 +240,7 @@ require('ccnq3_config').get (config)->
 
           return false
 
-    @get '/user': ->
+    @get '/conf/user': ->
       # Return a JSON record for the specified username (must exist)
       sql 'SELECT * FROM realuser WHERE username = ?', [@query.username], (data) =>
         try
@@ -250,7 +250,7 @@ require('ccnq3_config').get (config)->
 
     # send { user_id: '5678', username: @username}
 
-    @get '/search': ->
+    @get '/conf/search': ->
       rows = []
       # Return a list of usernames matching the @term parameter
       sql 'SELECT username FROM realuser WHERE username LIKE ?', [@query.term+'%'], (data) =>
@@ -263,7 +263,7 @@ require('ccnq3_config').get (config)->
 
     # List user_id in account
 
-    @coffee '/account.js': ->
+    @coffee '/conf/account.js': ->
       $(document).ready ->
         $('#account_users_container').hide()
 
@@ -284,14 +284,14 @@ require('ccnq3_config').get (config)->
 
           return false
 
-    @get '/account/': ->
+    @get '/conf/account/': ->
       @check_admin (error) =>
         if(error?)
           return @send
         sql 'SELECT username FROM realuser', [], (data) =>
           @send { aaData: data.rows.map (a) -> [a.username] }
 
-    @get '/account/:some_account': ->
+    @get '/conf/account/:some_account': ->
       @check_user @params.some_account, (account,error) =>
         if(error?)
           return @send
@@ -306,7 +306,7 @@ require('ccnq3_config').get (config)->
     #    ]
     #  }
 
-    @coffee '/default.js': ->
+    @coffee '/conf/default.js': ->
       $(document).ready ->
         $('#delete').hide()
         $('#registry').hide()
