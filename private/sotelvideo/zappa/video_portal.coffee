@@ -345,7 +345,6 @@ require('ccnq3_config').get (config)->
       @title = 'Error'
       @scripts = [
         '/public/js/default'
-        'zappa/zappa'
       ]
       @stylesheets = [
         '/public/css/default'
@@ -361,7 +360,6 @@ require('ccnq3_config').get (config)->
       @scripts = [
         '/public/js/default'
         '/public/js/jquery.deserialize',
-        'zappa/zappa'
         'default',
         'search', 'account', 'validate'
       ]
