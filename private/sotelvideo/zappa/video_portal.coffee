@@ -355,7 +355,7 @@ require('ccnq3_config').get (config)->
       div id: 'info', -> @error
 
 
-    @view ->
+    @view 'default': ->
       @title = 'Portal'
       @scripts = [
         '/public/js/default'
