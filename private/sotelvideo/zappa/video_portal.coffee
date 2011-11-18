@@ -199,7 +199,7 @@ require('ccnq3_config').get (config)->
         if(error?)
           @render 'error', error:error
         else
-          @delete_user @query
+          @delete_user @body
 
 
     @helper delete_user: (data) ->
