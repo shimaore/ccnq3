@@ -46,7 +46,7 @@ require('ccnq3_config').get (config)->
     # ALTER TABLE realuser ADD original_password TEXT;
 
     # account parameter might be undefined
-    @helper check_user = (account,cb) ->
+    @helper check_user: (account,cb) ->
       dancer_session @cookies, (s) =>
         if s.error? or not s.user_id?
           return cb null, "Session error (#{s.error})"
@@ -60,7 +60,7 @@ require('ccnq3_config').get (config)->
               return cb null, "You do not have access to this account"
           return cb(s.account)
 
-    @helper check_admin = (cb) ->
+    @helper check_admin: (cb) ->
       dancer_session @cookies, (s) =>
         if s.error? or not s.user_id?
           return cb "Session error (#{s.error})"
