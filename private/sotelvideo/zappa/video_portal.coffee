@@ -294,9 +294,9 @@ require('ccnq3_config').get (config)->
     @get '/account/:some_account': ->
       @check_user @params.some_account, (account,error) =>
         if(error?)
-          return send
+          return @send
         sql 'SELECT username FROM realuser WHERE account = ?', [@params.some_account], (data) ->
-          send { aaData: data.rows.map (a) -> [a.username] }
+          @send { aaData: data.rows.map (a) -> [a.username] }
 
     #  send {
     #    aaData: [
