@@ -18,7 +18,6 @@ require('ccnq3_config').get (config)->
   zappa.run config.port, config.hostname, ->
 
     @enable 'default layout'
-    @enable 'serve zappa'
 
     @use 'logger'
     , 'bodyParser'
@@ -346,7 +345,7 @@ require('ccnq3_config').get (config)->
       @title = 'Error'
       @scripts = [
         '/public/js/default'
-        'zappa/zappa.js'
+        'zappa/zappa'
       ]
       @stylesheets = [
         '/public/css/default'
@@ -362,7 +361,7 @@ require('ccnq3_config').get (config)->
       @scripts = [
         '/public/js/default'
         '/public/js/jquery.deserialize',
-        'zappa/zappa.js'
+        'zappa/zappa'
         'default',
         'search', 'account', 'validate'
       ]
