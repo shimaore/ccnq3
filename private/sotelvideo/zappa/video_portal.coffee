@@ -242,7 +242,7 @@ require('ccnq3_config').get (config)->
 
     @get '/user': ->
       # Return a JSON record for the specified username (must exist)
-      sql 'SELECT * FROM realuser WHERE username = ?', [@query.username], (data) ->
+      sql 'SELECT * FROM realuser WHERE username = ?', [@query.username], (data) =>
         try
           @send data.rows[0]
         catch error
@@ -253,7 +253,7 @@ require('ccnq3_config').get (config)->
     @get '/search': ->
       rows = []
       # Return a list of usernames matching the @term parameter
-      sql 'SELECT username FROM realuser WHERE username LIKE ?', [@query.term+'%'], (data) ->
+      sql 'SELECT username FROM realuser WHERE username LIKE ?', [@query.term+'%'], (data) =>
         try
           @send data.rows.map (a) -> a.username
         catch error
@@ -288,14 +288,14 @@ require('ccnq3_config').get (config)->
       @check_admin (error) =>
         if(error?)
           return @send
-        sql 'SELECT username FROM realuser', [], (data) ->
+        sql 'SELECT username FROM realuser', [], (data) =>
           @send { aaData: data.rows.map (a) -> [a.username] }
 
     @get '/account/:some_account': ->
       @check_user @params.some_account, (account,error) =>
         if(error?)
           return @send
-        sql 'SELECT username FROM realuser WHERE account = ?', [@params.some_account], (data) ->
+        sql 'SELECT username FROM realuser WHERE account = ?', [@params.some_account], (data) =>
           @send { aaData: data.rows.map (a) -> [a.username] }
 
     #  send {
