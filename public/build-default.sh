@@ -20,6 +20,6 @@ cat js/jquery.js          \
 
 cat css/smart_wizard.css  \
     css/style.css         \
-    css/smoothness/jquery-ui.css \
+    css/jquery-ui.css     \
     css/datatables.css    \
   > css/default.css
