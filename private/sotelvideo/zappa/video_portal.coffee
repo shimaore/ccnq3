@@ -49,7 +49,7 @@ require('ccnq3_config').get (config)->
 
     # account parameter might be undefined
     @helper check_user: (account,cb) ->
-      dancer_session @cookies, (s) =>
+      dancer_session @request.cookies, (s) =>
         if s.error? or not s.user_id?
           return cb null, "Session error (#{s.error})"
 
@@ -63,7 +63,7 @@ require('ccnq3_config').get (config)->
           return cb(s.account)
 
     @helper check_admin: (cb) ->
-      dancer_session @cookies, (s) =>
+      dancer_session @request.cookies, (s) =>
         if s.error? or not s.user_id?
           return cb "Session error (#{s.error})"
 
