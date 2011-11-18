@@ -20,7 +20,7 @@ require('ccnq3_config').get (config)->
     @use 'logger'
     , 'bodyParser'
     , 'cookieParser'
-    , session:{secret:Math.random()}
+    , session:{secret:'a'+Math.random()}
     , 'methodOverride'
 
     querystring = require 'querystring'
