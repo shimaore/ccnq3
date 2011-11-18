@@ -100,7 +100,7 @@ require('ccnq3_config').get (config)->
         if(error?)
           @render 'error', error:error
         else
-          create_user(@body)
+          @create_user(@body)
 
     milk = require 'milk'
 
@@ -199,7 +199,7 @@ require('ccnq3_config').get (config)->
         if(error?)
           @render 'error', error:error
         else
-          delete_user @query
+          @delete_user @query
 
 
     @helper delete_user: (data) ->
