@@ -216,13 +216,13 @@ require('ccnq3_config').get (config)->
             @render_d 'User account deleted successfully', data
 
 
-    @client '/validate.js': ->
+    @coffee '/validate.js': ->
       $(document).ready ->
         $("form.validate").validate()
 
     # Search by user_id
 
-    @client '/search.js': ->
+    @coffee '/search.js': ->
       $(document).ready ->
         $('#username').focus()
         $('#username').autocomplete {
@@ -263,7 +263,7 @@ require('ccnq3_config').get (config)->
 
     # List user_id in account
 
-    @client '/account.js': ->
+    @coffee '/account.js': ->
       $(document).ready ->
         $('#account_users_container').hide()
 
@@ -306,7 +306,7 @@ require('ccnq3_config').get (config)->
     #    ]
     #  }
 
-    @client '/default.js': ->
+    @coffee '/default.js': ->
       $(document).ready ->
         $('#delete').hide()
         $('#registry').hide()
