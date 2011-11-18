@@ -147,7 +147,7 @@ require('ccnq3_config').get (config)->
         user_password = md5_hex([data.username,'realtunnel.com',data.password].join(':'))
         sip_password  = md5_hex([sip_name,fw_name,data.password].join(':'))
 
-      values = (params[f] for f in fields)
+      values = (data[f] for f in fields)
 
       if(data.user_id)
         # Update
