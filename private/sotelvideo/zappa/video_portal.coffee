@@ -1,4 +1,4 @@
-#!/usr/bin/env zappa
+#!/usr/bin/env coffee
 # Copyright (c) 2010  Stephane Alnet
 # License: Affero GPL 3+
 
