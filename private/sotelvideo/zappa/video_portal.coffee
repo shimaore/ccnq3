@@ -18,6 +18,7 @@ require('ccnq3_config').get (config)->
   zappa.run config.port, config.hostname, ->
 
     @enable 'default layout'
+    @enable 'server zappa'
 
     @use 'logger'
     , 'bodyParser'
