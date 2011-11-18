@@ -130,8 +130,8 @@ require('ccnq3_config').get (config)->
           password_base64 = password_buffer.toString('base64')
           name =  r.rows[0].name
 
-          response.contentType 'application/binary'
-          response.send milk.render registry_template(),
+          @response.contentType 'application/binary'
+          @response.send milk.render registry_template(),
             username: username
             name: name
             password_base64: password_base64
