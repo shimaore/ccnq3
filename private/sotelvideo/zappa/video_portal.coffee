@@ -46,8 +46,8 @@ require('ccnq3_config').get (config)->
     # ALTER TABLE realuser ADD original_password TEXT;
 
     # account parameter might be undefined
-    check_user = (account,cb) ->
-      dancer_session (s) =>
+    @helper check_user = (account,cb) ->
+      dancer_session @cookies, (s) =>
         if s.error? or not s.user_id?
           return cb null, "Session error (#{s.error})"
 
@@ -60,8 +60,8 @@ require('ccnq3_config').get (config)->
               return cb null, "You do not have access to this account"
           return cb(s.account)
 
-    check_admin = (cb) ->
-      dancer_session (s) =>
+    @helper check_admin = (cb) ->
+      dancer_session @cookies, (s) =>
         if s.error? or not s.user_id?
           return cb "Session error (#{s.error})"
 
@@ -79,12 +79,12 @@ require('ccnq3_config').get (config)->
 
     @helper render_d: (log,data) ->
       data.log = log if log?
-      check_admin (not_admin) =>
+      @check_admin (not_admin) =>
         data.not_admin = not_admin?
         @render 'default', postrender: 'restrict', data
 
     @get '/': ->
-      check_user undefined, (account,error) =>
+      @check_user undefined, (account,error) =>
         if error?
           @render 'error', error:error
         else
@@ -94,7 +94,7 @@ require('ccnq3_config').get (config)->
     fw_name = config.fw_name # 'ts1.sotelips.net'
 
     @put '/': ->
-      check_admin (error) =>
+      @check_admin (error) =>
         if(error?)
           @render 'error', error:error
         else
@@ -106,7 +106,7 @@ require('ccnq3_config').get (config)->
       if not @query.user_id?
         return @render 'error', error:'Missing parameter'
 
-      check_admin (error) =>
+      @check_admin (error) =>
         if error?
           return @render 'error', error:error
 
@@ -193,7 +193,7 @@ require('ccnq3_config').get (config)->
             @redirect "user.reg?user_id=#{querystring.escape(new_user_id)}"
 
     @del '/': ->
-      check_admin (error) =>
+      @check_admin (error) =>
         if(error?)
           @render 'error', error:error
         else
@@ -283,14 +283,14 @@ require('ccnq3_config').get (config)->
           return false
 
     @get '/account/': ->
-      check_admin (error) =>
+      @check_admin (error) =>
         if(error?)
           return @send
         sql 'SELECT username FROM realuser', [], (data) ->
           @send { aaData: data.rows.map (a) -> [a.username] }
 
     @get '/account/:some_account': ->
-      check_user @params.some_account, (account,error) =>
+      @check_user @params.some_account, (account,error) =>
         if(error?)
           return send
         sql 'SELECT username FROM realuser WHERE account = ?', [@params.some_account], (data) ->

@@ -21,7 +21,7 @@ exports.sql = (config,_sql,_p,cb) ->
     else
       cb({error:error})
 
-exports.dancer_session = (config,cb) ->
+exports.dancer_session = (config,cookies,cb) ->
   _uri = config.dancer_session_uri
   if not cookies
     return cb({error:"No cookies"})
