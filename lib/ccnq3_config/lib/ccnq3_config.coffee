@@ -14,7 +14,7 @@ exports.location = config_location
 exports.retrieve = (config,cb) ->
   if not config.host? or not config.provisioning?
     util.log "Information to retrieve remote configuration is not available."
-    return cb p
+    return cb config
 
   username = make_id 'host', config.host
   cdb = require 'cdb'
