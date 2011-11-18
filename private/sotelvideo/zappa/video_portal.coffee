@@ -17,7 +17,11 @@ require('ccnq3_config').get (config)->
   zappa = require 'zappa'
   zappa.run config.port, config.hostname, ->
 
-    @use 'logger', 'bodyParser', 'cookies', session:{secret:Math.random()}, 'methodOverride'
+    @use 'logger'
+    , 'bodyParser'
+    , 'cookieParser'
+    , session:{secret:Math.random()}
+    , 'methodOverride'
 
     querystring = require 'querystring'
     fs = require 'fs'
