@@ -500,8 +500,8 @@ do (jQuery) ->
 
       console.log 'Starting wizard'
       $('#wizard').smartWizard
-        transitionEffect: 'slide'
-
+        transitionEffect: 'none'
+        onShowStep: -> window.scroll 0,0
 
 
   $(document).ready ->
