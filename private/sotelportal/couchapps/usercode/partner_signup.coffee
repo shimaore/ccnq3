@@ -499,7 +499,8 @@ do (jQuery) ->
         onsubmit: false
 
       console.log 'Starting wizard'
-      $('#wizard').smartWizard({})
+      $('#wizard').smartWizard
+        transitionEffect: 'slide'
 
 
 
