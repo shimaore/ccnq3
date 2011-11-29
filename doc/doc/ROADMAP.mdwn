@@ -7,15 +7,15 @@
       * component configuration (generate FS config, configure routes) -- should always be feasible from API/GUI
       * day-to-day config changes (high-volume, realtime)
   + compare with what http://www.2600hz.org/ is doing
-- Replace API server with direct access to a CouchDB instance
+- [DONE] Replace API server with direct access to a CouchDB instance
   -> This means the manager will drop.
-- Replace AnyEvent with Node.js
-- Upgrade to recent OpenSIPS
+- [DONE] Replace AnyEvent with Node.js
+- [DONE] Upgrade to recent OpenSIPS
   -> issues with drouting (dr_reload, semi-colon in routes)
 
 # Portal
 - View layout handled by CouchDB
-- Portal needs to do authorization (intermediate admin level -- FDN federation; Sotel "sales" profile)
+- [DONE] Portal needs to do authorization (intermediate admin level -- FDN federation; Sotel "sales" profile)
 
 
 
@@ -34,9 +34,9 @@
   - use sharding for updating (one operation: incr) -- add record in CouchDB, update view, propagate
 
 # Core
-* OpenSIPS 1.6.3+
-  - Use memcache? http://www.opensips.org/Resources/DocsTutMemcache
-  - Use 302 (instead of new INVITE) for CFA, CFB, etc ?
+* [DONE] OpenSIPS 1.6.3+
+  - [DONE] Use memcache? http://www.opensips.org/Resources/DocsTutMemcache
+  - [DONE] Use 302 (instead of new INVITE) for CFA, CFB, etc ?
 
 * FreeSwitch latest
   + CouchDB 1.0.1+ with sharding and replication for multi-master
@@ -49,14 +49,14 @@
   - How well does CouchDB handle, say, 100's of _changes clients?
 * Node.js for async event handling
 
-* System configuration (currently in DNS) must be explicited
+* [DONE] System configuration (currently in DNS) must be explicited
   - can change it from within (with proper reconfig & restarts)
     + investigate proper multi-machine management systems
 
 * System monitoring
 
-* Get rid of the "request" system -- each module gets _changes and implements accordingly (this can be implemented with "filter" in nginx)
-* New routing system -- use JS code snippets where RequestManager db was used ? Or can these be abstracted and put in a UI ?
+* [DONE] Get rid of the "request" system -- each module gets _changes and implements accordingly (this can be implemented with "filter" in nginx)
+* [DONE] New routing system -- use JS code snippets where RequestManager db was used ? Or can these be abstracted and put in a UI ?
     -> why? the servers will monitor _changes, so it's up to them to implement these. Therefor need a generic way of defining these.
 
 # Portal
@@ -68,7 +68,7 @@
 # Rating
 
 * Postpaid:
-    raw-CDR-files --(upload)--> CDR-CouchDB --(rate)--> RatedCDR-CouchDB
+    FS mod_json_cdr -> CDR-CouchDB --(rate)--> RatedCDR-CouchDB
 
 
 
@@ -94,4 +94,4 @@
     * Debian hosting
   * IPv6
 
-* multi-level account management (some/path/to/account:sub:account:info)
+* [DONE] multi-level account management (some/path/to/account:sub:account:info)

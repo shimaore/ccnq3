@@ -8,7 +8,7 @@ In ccnq3 the system architecture is different:
   (In other words it accesses the provisioning record for the number.)
       (Hmmm... does FS actually do SRV failover?)
   If needed it will perform CNAM query (and update both From and PID information).
-  Data query, call routing.. are done inside a Lua script.
+  Data query, call routing.. are done inside a Node.js ESL server.
   It might route the call directly to a customer domain, or to this operator's call-handling machines.
 
 - An egress carrier SBC will use the account number (reject the call otherwise) and create the CDR.
