@@ -6,8 +6,6 @@
     <load module="mod_sofia"/>
     <load module="mod_loopback"/>
 
-    <load module="mod_cdr_csv"/>
-
     <load module="mod_commands"/>
     <load module="mod_db"/>
     <load module="mod_hash"/> <!-- See http://wiki.freeswitch.org/wiki/Limit#Rate_Limiting_calls_.2F_Anti_SPIT -->
@@ -26,8 +24,5 @@
     <load module="mod_sndfile"/> <!-- required to read the wav files -->
     <load module="mod_native_file"/>
     <load module="mod_tone_stream"/>
-
-    <!-- <load module="mod_curl"/> -->
-    <!-- <load module="mod_lua"/> -->
   </modules>
 </configuration>
