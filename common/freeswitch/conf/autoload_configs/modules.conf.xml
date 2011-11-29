@@ -6,6 +6,8 @@
     <load module="mod_sofia"/>
     <load module="mod_loopback"/>
 
+    <load module="mod_json_cdr"/>
+
     <load module="mod_commands"/>
     <load module="mod_db"/>
     <load module="mod_hash"/> <!-- See http://wiki.freeswitch.org/wiki/Limit#Rate_Limiting_calls_.2F_Anti_SPIT -->

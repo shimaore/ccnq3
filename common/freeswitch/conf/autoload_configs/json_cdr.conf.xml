@@ -1,0 +1,12 @@
+<configuration name="json_cdr.conf" description="JSON CDR">
+  <settings>
+    <!-- FIXME Currently only log locally. -->
+    <param name="url" value="http://127.0.0.1:5984/cdr" />
+    <!-- FIXME Needs one or more servers. -->
+    <!-- FIXME Needs proper authentication. -->
+    <!-- <param name="cred" value="username:password" /> -->
+    <param name="auth-scheme" value="basic" />
+    <param name="encode-values" value="false" />
+    <!-- <param name="log-dir" value="/var/log/freeswitch" /> -->
+  </settings>
+</configuration>
