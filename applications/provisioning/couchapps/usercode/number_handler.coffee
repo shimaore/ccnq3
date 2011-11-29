@@ -20,7 +20,7 @@ Inbox.register 'number', class NumberHandler
       title:'Endpoint'
       value:@endpoint
       class:'required endpoint' # Please make me into a http://jqueryui.com/demos/autocomplete !
- 
+
     # etc.
 
     # Outbound call routing
@@ -36,7 +36,7 @@ Inbox.register 'number', class NumberHandler
 Inbox.register 'endpoint', class EndpointHandler
 
   list_tpl: $.compile_template ->
-    div class:'endpoint'
+    div class:'endpoint', ->
       "Endpoint: #{@endpoint}"
 
   form_tpl: $.compile_template ->
