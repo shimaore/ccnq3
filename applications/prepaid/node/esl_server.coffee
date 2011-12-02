@@ -1,3 +1,4 @@
+#!/usr/bin/env coffee
 ###
 (c) 2010 Stephane Alnet
 Released under the AGPL3 license
