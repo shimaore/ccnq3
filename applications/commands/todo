@@ -1,4 +1,0 @@
-# If requested, run the ssh code if requested to do so
-if $SSH_INSTALL; then
-  ssh $HOST "cd && rm -rf ccnq3 && git clone git://stephane.shimaore.net/git/ccnq3.git && cd ccnq3 && ./bootstrap-localhost ${CDB_URI}"
-fi
