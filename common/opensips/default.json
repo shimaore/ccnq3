@@ -5,35 +5,6 @@
   "uac_vsf": "vsf",
   "max_hops": "10",
 
-  "cdr_extra": [
-    "from_user"       ,  "$fU",
-    "from_domain"     ,  "$fd",
-    "ruri_user"       ,  "$rU",
-    "ruri_domain"     ,  "$rd",
-    "src_ip"          ,  "$avp(host_info)",
-    "src_type"        ,  "$avp(src_type)",
-    "dst_type"        ,  "$avp(dst_type)",
-    "src_subs"        ,  "$avp(src_subs)",
-    "dst_subs"        ,  "$avp(dst_subs)",
-    "account"         ,  "$avp(account)",
-    "to_user"         ,  "$tU",
-    "to_domain"       ,  "$td",
-    "from_display"    ,  "$fn",
-    "to_display"      ,  "$tn",
-    "contact"         ,  "$ct",
-    "src_port"        ,  "$sp",
-    "user_agent"      ,  "$ua",
-    "content_type"    ,  "$cT"
-  ],
-
-  "radius_extra": [
-    "OpenSER-Src-Type"  ,  "$avp(src_type)",
-    "OpenSER-Dst-Type"  ,  "$avp(dst_type)",
-    "OpenSER-Src-Subs"  ,  "$avp(src_subs)",
-    "OpenSER-Dst-Subs"  ,  "$avp(dst_subs)"
-
-  ],
-
   "comment bflag": "Branch flags",
   "bflag_request_mp_callee":          6,
   "bflag_cfb_used":                   9,
