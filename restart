@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -e
+export LANG=
+SRC="`pwd`"
+
+for application in  `egrep -v '^#' ${DIR}/applications`; do
+  echo "==== Restart ${application} ===="
+  (cd && cd "${SRC}/${application}" \
+      && (npm stop >/dev/null 2>&1 || echo) \
+      && npm start)
+done
