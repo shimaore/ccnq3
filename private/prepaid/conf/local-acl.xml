@@ -1,5 +1,0 @@
-<list name="ingress-prepaid" default="deny">
-</list>
-
-<list name="egress-prepaid" default="deny">
-</list>
