@@ -62,7 +62,7 @@ ${SRC}/update-system
 ${SRC}/restart
 
 echo "==== Install the local host ===="
-(cd && cd "${SRC}/${application}" \
+(cd && cd "${SRC}/applications/host" \
     && npm install \
     && npm run-script bootstrap)
 
