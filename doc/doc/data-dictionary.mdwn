@@ -14,10 +14,23 @@ Notes:
     type:"host"
     host: string; hostname, preferably FQDN (must match what the "hostname" command returns)
 
-    bootstrap: boolean; set by the installation scripts
+    admin:
+      couchdb_uri: server admin URI
+
+    usercode:
+      couchdb_uri: URI of the usercode database (with database admin authentication) [used by couchapps to install their applications]
 
     provisioning:
-      couchdb_uri: URI of the provisioning database (with authentication)
+      couchdb_uri: URI of the provisioning database (with database admin authentication)
+
+    install: (normally not defined)
+      # This feature is used to force re-installation of the corresponding databases (for example to change the URI)
+      usercode:
+        couchdb_uri
+      provisioning:
+        couchdb_uri
+      users:
+        couchdb_uri
 
     change_handlers: [] of Node.js fragments which are ran on the target host every time a host record is modified.
 
@@ -28,7 +41,6 @@ Notes:
       hostname:"127.0.0.1"   string, required, do not change
       usrloc_uri: URI of the location database (used to save registration data); for example "http://127.0.0.1:5984/location"
 
-    # FIXME: The application using these is not written yet.
     opensips:
       listen: [] of "ip:port" strings to bind to; defaults to ["127.0.0.1"]
       local_ipv4:  string; if using the 'invite-router-local.cfg' module, IP address where to send all INVITE messages; otherwise unused
@@ -81,23 +93,17 @@ Notes:
       hostname:  string ("127.0.0.1")
     session:
       secret:  string; must be a random string
-      couchdb_uri:  URI used to create CouchDB sessions (must end with "/_session"; no authentication in the URI)
+      couchdb_uri:  public URI used to create CouchDB sessions (must end with "/_session"; no authentication in the URI)
     users:
-      couchdb_uri: URI of the _users database (with admin authentication)
-      replicate_uri: URI for "/_replicate" (with admin authentication)
-      userdb_base_uri: base URI of the various users' databases (with admin authentication, used to create the databases)
-      public_userdb_base_uri: base URI of the various users' databases (no authentication! given out to the users)
-    usercode:
-      couchdb_uri: URI of the usercode database (with admin authentication)
+      couchdb_uri: URI of the _users database (with database admin authentication)
+      replicate_uri: URI for "/_replicate" (with database admin authentication)
+      userdb_base_uri: base URI of the various users' databases (with server admin authentication, used to create the databases)
+      public_userdb_base_uri: public base URI of the various users' databases (no authentication! given out to the users)
     mailer:     Used as the configuration for the node-mailer package.
       sendmail: "/usr/sbin/sendmail"
       SMTP: null
     mail_password:
       sender_local_part: "support"; The mail_password agent will send emails from  sender_local_part+"@"+domain (where domain is the user's record's "domain" field).
-
-    # Others
-    logger:
-      couchdb_uri: optional URI for the logger database
 
     Note: "host" records are referred to as the "config" record inside most applications.
     Note: Deprecated features (applications/commands, applications/common, ..) are not documented.

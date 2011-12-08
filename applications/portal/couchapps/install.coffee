@@ -8,8 +8,7 @@ push_script = (uri, script,cb) ->
 require('ccnq3_config').get (config)->
 
   users_uri = config.users.couchdb_uri
-  push_script users_uri, './main'
+  push_script users_uri, 'main'
 
-  # Also push the user-database application into the usercode repository
   usercode_uri = config.usercode.couchdb_uri
   push_script usercode_uri, 'usercode'

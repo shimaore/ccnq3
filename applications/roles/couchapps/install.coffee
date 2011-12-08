@@ -7,23 +7,36 @@ push_script = (uri, script,cb) ->
   couchapp.createApp require("./#{script}"), uri, (app)-> app.push(cb)
 
 # Load Configuration
-require('ccnq3_config').get (config)->
+cfg = require 'ccnq3_config'
+cfg.get (config) ->
 
-  # Set the security object for the _users source database.
-  users_uri = config.users.couchdb_uri
-  users = cdb.new users_uri
-  users.security (p)->
-    p.admins ||= {}
-    p.admins.roles ||= []
-    p.admins.roles.push("users_admin")   if p.admins.roles.indexOf("users_admin") < 0
-    p.readers ||= {}
-    p.readers.roles ||= []
-    p.readers.roles.push("users_writer") if p.readers.roles.indexOf("users_writer") < 0
-    p.readers.roles.push("users_reader") if p.readers.roles.indexOf("users_reader") < 0
-
-  # Installation on source ('_users') database
-  push_script users_uri, './main'
-
-  # Installation into usercode database
   usercode_uri = config.usercode.couchdb_uri
-  push_script usercode_uri, './usercode'
+  push_script usercode_uri, 'usercode'
+
+  update = (uri) ->
+    # Set the security object for the _users source database.
+    users = cdb.new uri
+    users.security (p)->
+      p.admins ||= {}
+      p.admins.roles ||= []
+      p.admins.roles.push("users_admin")   if p.admins.roles.indexOf("users_admin") < 0
+      p.readers ||= {}
+      p.readers.roles ||= []
+      p.readers.roles.push("users_writer") if p.readers.roles.indexOf("users_writer") < 0
+      p.readers.roles.push("users_reader") if p.readers.roles.indexOf("users_reader") < 0
+
+    push_script uri, 'main'
+
+  users_uri = config.users?.couchdb_uri
+  if users_uri
+    update users_uri
+    return
+
+  # There's no need to create the database, however we must reference it.
+  users_uri = config.install?.users?.couchdb_uri ? config.admin.couchdb_uri + '/_users'
+
+  update users_uri
+
+  config.users =
+    couchdb_uri: users_uri
+  cfg.update config

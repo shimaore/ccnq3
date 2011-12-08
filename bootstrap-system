@@ -41,27 +41,22 @@ else
     "_id": "host:${HOSTNAME}",
     "type": "host",
     "host": "${HOSTNAME}",
-    "bootstrap": true,
-    "users": {
-      "couchdb_uri": "${CDB_URI}/_users"
-    , "userdb_base_uri": "${CDB_URI}"
-    },
-    "usercode": {
-      "couchdb_uri": "${CDB_URI}/usercode"
-    },
-    "provisioning": {
-      "couchdb_uri": "${CDB_URI}/provisioning"
+    "admin": {
+      "couchdb_uri": "${CDB_URI}"
     }
   }
 JSON
   sudo chown `whoami` "${CONF}"
 
   sudo tee "${DIR}/applications" <<TEXT >/dev/null
+# creates the usercode database: must be first since all others depend on it
 applications/usercode
-applications/portal
-applications/roles
+# creates the provisioning database: must be second
 applications/provisioning
 applications/host
+# roles then portal
+applications/roles
+applications/portal
 applications/inbox
 public
 # Add any server-specific applications here.

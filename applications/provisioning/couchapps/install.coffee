@@ -8,10 +8,12 @@ push_script = (uri, script,cb) ->
 
 require('ccnq3_config').get (config)->
 
-  # Create the provisioning database.
-  provisioning_uri = config.provisioning.couchdb_uri
-  provisioning = cdb.new(provisioning_uri)
-  provisioning.create ->
+  usercode_uri = config.usercode.couchdb_uri
+  push_script usercode_uri, 'usercode'
+
+  # Update ACLs and code
+  update = (uri) ->
+    provisioning = cdb.new uri
 
     # Set the security object for the provisioning database.
     provisioning.security (p)->
@@ -26,8 +28,22 @@ require('ccnq3_config').get (config)->
       p.readers.roles.push("host")                if p.readers.roles.indexOf("host") < 0
 
     # These couchapps are available to provisioning_admin (and _admin) users.
-    push_script provisioning_uri, 'main'   # Filter replication from source to user's databases.
+    push_script uri, 'main'   # Filter replication from source to user's databases.
 
-  # Also push the user-database application into the usercode repository
-  usercode_uri = config.usercode.couchdb_uri
-  push_script usercode_uri, 'usercode'
+  # If the database already exists
+  provisioning_uri = config.provisioning?.couchdb_uri
+  if provisioning_uri
+    update provisioning_uri
+    return
+
+  # Otherwise create the database
+  provisioning_uri = config.install?.provisioning?.couchdb_uri ? config.admin.couchdb_uri + '/provisioning'
+  provisioning = cdb.new(provisioning_uri)
+  provisioning.create ->
+
+    update provisioning_uri
+
+    # Save the new URI in the configuration
+    config.provisioning =
+      couchdb_uri: provisioning_uri
+    cfg.update config
