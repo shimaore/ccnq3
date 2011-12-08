@@ -10,10 +10,10 @@ normalized_phone_number = (number) ->
   # etc. (replace the code above with your own functions)
   return number
 
-
+###
     # Example for US and French numbers.
     coffeescript
       $('.phone').change ->
         number = $(@).val()
         $(@).val normalized_phone_numbers number
-
+###
