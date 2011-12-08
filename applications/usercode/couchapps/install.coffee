@@ -39,5 +39,6 @@ cfg.get (config)->
     update usercode_uri
 
     # Save the URI
-    config.usercode.couchdb_uri = usercode_uri
+    config.usercode =
+      couchdb_uri: usercode_uri
     cfg.update config
