@@ -12,7 +12,7 @@ if not config_location?
 exports.location = config_location
 
 exports.retrieve = (config,cb) ->
-  if not config.host? or not config.provisioning?
+  if not config.host? or not config.provisioning? or not config.provisioning.host_couchdb_uri?
     util.log "Information to retrieve remote configuration is not available."
     return cb config
 
