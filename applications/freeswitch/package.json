@@ -16,7 +16,6 @@
     "cdb": ">=0.0.12"
   , "cdb_changes": "*"
   , "ccnq3_config": ">=0.1"
-  , "ccnq3_logger": "*"
   , "couchapp": "*"
   , "request": "*"
   , "esl": ">=0.0.6"

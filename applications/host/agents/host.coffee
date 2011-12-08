@@ -9,7 +9,6 @@ Released under the AGPL3 license
 # invariants inside the given host. ("PUT/POST/DELETE"-type
 # of operations.)
 
-ccnq3_logger  = require 'ccnq3_logger'
 vm            = require 'vm'
 
 run_handler = (code,old_config,new_config) ->
@@ -32,7 +31,6 @@ run_handler = (code,old_config,new_config) ->
     result.freemem = os.freemem()
     result.loadavg = os.loadavg()
 
-    ccnq3_logger.log result
 
 # Main
 

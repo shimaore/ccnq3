@@ -21,7 +21,6 @@
   , "cdb_changes": ">=0.0.3"
   , "couchapp": "*"
   , "ccnq3_config": ">=0.1"
-  , "ccnq3_logger": "*"
   }
 , "engines": {
     "node": ">=0.4.7"

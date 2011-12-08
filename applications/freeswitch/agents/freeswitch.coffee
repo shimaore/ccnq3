@@ -9,8 +9,6 @@ Released under the AGPL3 license
 # invariants inside the given host. ("PUT/POST/DELETE"-type
 # of operations.)
 
-ccnq3_logger  = require 'ccnq3_logger'
-
 make_id = (t,n) -> [t,n].join ':'
 
 esl = require 'esl'
