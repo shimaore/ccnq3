@@ -20,7 +20,7 @@ require('ccnq3_config').get (config)->
         CouchDBStore = require('connect-couchdb')(@express)
         store = new CouchDBStore config.sessions.couchdb_store
       if not store
-        throw error:"No session store is configured in #{config_location}."
+        throw error:"No session store is configured."
 
       @use 'logger'
       , 'bodyParser'
