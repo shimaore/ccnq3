@@ -70,4 +70,4 @@ ${SRC}/restart
 
 echo "==== Done ===="
 echo
-echo "To manage your system, please access ${CDB_URI}/provisioning/_design/host/index.html or a suitable redirection."
+echo "To manage your system, please access http://`./read-json ${CONF} config.portal.hostname`:`./read-json ${CONF} config.portal.port`/ or a suitable redirection."
