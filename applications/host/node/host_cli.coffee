@@ -23,6 +23,6 @@ ccnq3_config.get (config) ->
     provisioning_uri = config.provisioning.couchdb_uri
     provisioning = cdb.new provisioning_uri
 
-    host.update_config provisioning_uri, provisioning, config, (config) ->
+    host.update_config provisioning_uri, provisioning, password, config, (config) ->
 
       ccnq3_config.update config
