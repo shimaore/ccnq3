@@ -5,36 +5,17 @@ Released under the AGPL3 license
 ###
 
 # The host records in the provisioning database may contain
-# so-called "change_handlers", whose job it is to maintain
-# invariants inside the given host. ("PUT/POST/DELETE"-type
-# of operations.)
+# attachment scripts, whose job it is to maintain
+# invariants inside the given host.
 
-vm            = require 'vm'
+util = require 'util'
 
-run_handler = (code,old_config,new_config) ->
-
-  result =
-    hostname: hostname
-    code: code
-    start: Date.now()
-
-  try
-    # Similarly to CouchDB, a runnable must return a function.
-    f = vm.runInNewContext(code)
-    # The function receives three arguments. old_config and new_config
-    # should not be modified; result can be used to report errors, etc.
-    f(result,old_config,new_config)
-  catch error
-    result.error = error
-  finally
-    result.end = Date.now()
-    result.freemem = os.freemem()
-    result.loadavg = os.loadavg()
-
+handler = require './handlers'
 
 # Main
 
-util = require 'util'
+request = require 'request'
+qs = require 'querystring'
 cdb_changes = require 'cdb_changes'
 
 require('ccnq3_config').get (config) ->
@@ -51,5 +32,13 @@ require('ccnq3_config').get (config) ->
 
     [old_config,new_config] = [new_config,p]
 
-    for handler in new_config.change_handlers
-      run_handler handler, old_config, new_config
+    if new_config._attachments?
+
+      base_uri = new_config.provisioning.host_couchdb_uri + '/' + qs.escape "host@#{new_config.host}"
+
+      for attachment_name, info in new_config._attachments
+        request base_uri + '/' + qs.escape attachment_name, (err,code) ->
+          if err
+            return util.log err
+
+          handler[info.content_type]? code, old_config, new_config
