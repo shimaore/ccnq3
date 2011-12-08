@@ -12,7 +12,7 @@ sudo aptitude install -y couchdb
 # Install default config file
 sudo /etc/init.d/couchdb stop
 # Double-enforce (currently having issues with this).
-sudo killall couchdb beam.smp
+sudo killall couchdb beam.smp || echo OK
 
 # Apparently using /etc/couchdb/local.d/ccnq3 does not work.
 COUCHDB_CONFIG=/etc/couchdb/local.ini
