@@ -41,7 +41,7 @@ exports.create_user = (users_db,hostname,cb) ->
 # Regular hosts are readers, but a master-host needs to be db admin.
 # Use this to create a new (blank) host.
 
-exports.update_config = -> (provisioning_uri,provisioning_db,config,cb) ->
+exports.update_config = (provisioning_uri,provisioning_db,config,cb) ->
   # config.type = "host"
   # config.host = hostname
   # config._id  = make_id 'host', hostname
