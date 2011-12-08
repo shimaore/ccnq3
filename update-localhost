@@ -10,7 +10,7 @@ CONF=${DIR}/host.json
 
 # Changes in the update file are idempotent (for the same release).
 
-for application in  `egrep -v '^#' ${DIR}/applications`; do
+for application in  `./read-json ${CONF} applications`; do
   echo "==== Update ${application} ===="
   (cd && cd "${SRC}/${application}" \
       && npm install )

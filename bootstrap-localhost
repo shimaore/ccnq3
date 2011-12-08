@@ -32,15 +32,11 @@ else
     "provisioning": {
       "couchdb_uri": "$URI"
     }
+  , "applications": "applications/host"
   }
 JSON
+  # Add any server-specific applications at the end of the (space-delimited) string.
   sudo chown `whoami` "${CONF}"
-
-  sudo tee "${DIR}/applications" <<TEXT >/dev/null
-applications/host
-# Add any server-specific applications here.
-TEXT
-  sudo chown `whoami` "${DIR}/applications"
 
 fi
 

@@ -44,26 +44,18 @@ else
     "admin": {
       "couchdb_uri": "${CDB_URI}"
     }
+  , "applications": "applications/usercode applications/provisioning applications/roles applications/host applications/portal applications/inbox public"
+    }
   }
 JSON
+  # applications/usercode: creates the usercode database: must be first since all others depend on it
+  # applications/provisioning: creates the provisioning database: must be second
+  # applications/roles: updates the _users databases: must be third
+  # applications/host: master/bootstrap host record in _users database
+  # applications/portal: portal pre-requires host
+  # Add any server-specific applications at the end of the (space-delimited) string.
   sudo chown `whoami` "${CONF}"
 
-  sudo tee "${DIR}/applications" <<TEXT >/dev/null
-# creates the usercode database: must be first since all others depend on it
-applications/usercode
-# creates the provisioning database: must be second
-applications/provisioning
-# updates the _users databases: must be third
-applications/roles
-# master/bootstrap host record in _users database
-applications/host
-# portal pre-requires host
-applications/portal
-applications/inbox
-public
-# Add any server-specific applications here.
-TEXT
-  sudo chown `whoami` "${DIR}/applications"
 fi
 
 ${SRC}/cleanup

@@ -16,6 +16,7 @@ Notes:
 
     admin:
       couchdb_uri: server admin URI
+    applications: (string) list of applications that need to be installed
 
     usercode:
       couchdb_uri: URI of the usercode database (with database admin authentication) [used by couchapps to install their applications]
