@@ -29,7 +29,7 @@ cfg.get (config)->
 
   config.portal ?=
     port: config.install?.portal?.port ? 8765
-    hostname: config.install?.portal?.hostname ? '127.0.0.1' # ? config.host
+    hostname: config.install?.portal?.hostname ? config.host
     # file_base: ..
   config.session ?=
     secret: config.install?.session?.secret ? 'a'+Math.random()
