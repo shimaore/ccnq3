@@ -11,11 +11,16 @@ host = require './host.coffee'
 ccnq3_config = require 'ccnq3_config'
 ccnq3_config.get (config) ->
 
-  # Install the local (bootstrap) host in the database.
+  # Install the local (bootstrap/master) host in the database.
   hostname = config.host
-  keep_provisioning = true # This is a bootstrap-system host.
 
-  host.record config, hostname, config.users.couchdb_uri, config.provisioning.couchdb_uri, keep_provisioning, (new_config,cb)->
-      ccnq3_config.update new_config
+  users = cdb.new config.users.couchdb_uri
 
-      cb? new_config
+  host.create_user users, hostname, (password) ->
+
+    provisioning_uri = config.provisioning.couchdb_uri
+    provisioning = cdb.new provisioning_uri
+
+    host.update_config provisioning_uri, provisioning, config, (config) ->
+
+      ccnq3_config.update config

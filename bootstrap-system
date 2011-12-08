@@ -53,9 +53,11 @@ JSON
 applications/usercode
 # creates the provisioning database: must be second
 applications/provisioning
-applications/host
-# roles then portal
+# updates the _users databases: must be third
 applications/roles
+# master/bootstrap host record in _users database
+applications/host
+# portal pre-requires host
 applications/portal
 applications/inbox
 public
