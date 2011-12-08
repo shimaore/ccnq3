@@ -45,7 +45,6 @@ else
       "couchdb_uri": "${CDB_URI}"
     }
   , "applications": "applications/usercode applications/provisioning applications/roles applications/host applications/portal applications/inbox public"
-    }
   }
 JSON
   # applications/usercode: creates the usercode database: must be first since all others depend on it
