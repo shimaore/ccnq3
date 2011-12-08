@@ -46,7 +46,7 @@ cfg.get (config) ->
   delete q.href
   delete q.host
   delete q.auth
-  public_uri = url.format q
+  public_uri = url.format(q).replace(/\/$/,'')
 
   replicate_uri   = config.install?.users?.replicate_uri   ? config.admin.couchdb_uri + '/_replicate'
   userdb_base_uri = config.install?.users?.userdb_base_uri ? config.admin.couchdb_uri

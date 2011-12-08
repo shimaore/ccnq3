@@ -25,7 +25,7 @@ cfg.get (config)->
   delete q.href
   delete q.host
   delete q.auth
-  public_uri = url.format q
+  public_uri = url.format(q).replace(/\/$/,'')
 
   config.portal ?=
     port: config.install?.portal?.port ? 8765
