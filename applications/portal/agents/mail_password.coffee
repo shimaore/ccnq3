@@ -29,7 +29,7 @@ require('ccnq3_config').get (config)->
   sha1_hex = (t) ->
     return crypto.createHash('sha1').update(t).digest('hex')
 
-  file_base = config.users.file_base
+  file_base = config.portal.file_base
   file_name = 'portal_password'
 
   cdb_changes = require 'cdb_changes'
