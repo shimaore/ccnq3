@@ -4,11 +4,6 @@
 Released under the AGPL3 license
 ###
 
-# The host records in the provisioning database may contain
-# so-called "change_handlers", whose job it is to maintain
-# invariants inside the given host. ("PUT/POST/DELETE"-type
-# of operations.)
-
 util = require 'util'
 
 handler = {}
