@@ -21,7 +21,8 @@ Notes:
       couchdb_uri: URI of the usercode database (with database admin authentication) [used by couchapps to install their applications]
 
     provisioning:
-      couchdb_uri: URI of the provisioning database (with database admin authentication)
+      couchdb_uri: URI of the provisioning database (with database admin authentication) [used by couchapps app]
+      host_couchdb_uri: URI of the provisioning database (read-only) [allows access to the provisioning database from any host]
 
     install: (normally not defined)
       # This feature is used to force re-installation of the corresponding databases (for example to change the URI)
@@ -31,8 +32,6 @@ Notes:
         couchdb_uri
       users:
         couchdb_uri
-
-    change_handlers: [] of Node.js fragments which are ran on the target host every time a host record is modified.
 
     # Specific to hosts running the opensips-http-db application.
     # (Normally any host running OpenSIPS.)
@@ -107,6 +106,8 @@ Notes:
 
     Note: "host" records are referred to as the "config" record inside most applications.
     Note: Deprecated features (applications/commands, applications/common, ..) are not documented.
+
+    Attachments: attachments of type "application/javascript" are executed after each change.
 
   * domain
 

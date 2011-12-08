@@ -39,7 +39,7 @@ cdb_changes = require 'cdb_changes'
 
 require('ccnq3_config').get (config) ->
   options =
-    uri: config.provisioning.couchdb_uri
+    uri: config.provisioning.host_couchdb_uri
     filter_name: "host/hostname"
     filter_params:
       hostname: config.host

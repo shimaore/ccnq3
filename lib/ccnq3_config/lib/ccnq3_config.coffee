@@ -18,7 +18,7 @@ exports.retrieve = (config,cb) ->
 
   username = make_id 'host', config.host
   cdb = require 'cdb'
-  provisioning = cdb.new config.provisioning.couchdb_uri
+  provisioning = cdb.new config.provisioning.host_couchdb_uri
 
   provisioning.get username, (p) ->
     if p.error
