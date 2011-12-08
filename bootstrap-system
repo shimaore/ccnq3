@@ -59,12 +59,14 @@ fi
 
 ${SRC}/cleanup
 ${SRC}/update-system
-${SRC}/restart
+# Do not restart just yet.
 
 echo "==== Install the local host ===="
 (cd && cd "${SRC}/applications/host" \
     && npm install \
     && npm run-script bootstrap)
+
+${SRC}/restart
 
 echo "==== Done ===="
 echo
