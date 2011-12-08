@@ -62,7 +62,9 @@ ${SRC}/update-system
 ${SRC}/restart
 
 echo "==== Install the local host ===="
-(cd && npm run-script ccnq3_host bootstrap)
+(cd && cd "${SRC}/${application}" \
+    && npm install \
+    && npm run-script bootstrap)
 
 echo "==== Done ===="
 echo
