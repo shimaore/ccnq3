@@ -34,7 +34,9 @@ exports.create_user = (users_db,hostname,cb) ->
     if r.error?
       util.log util.inspect r
       throw "Creating user record for #{username}"
-    cb password
+
+    util.log "Created user record for #{username}"
+    cb? password
 
 # This is not suitable for a master-host.
 # Regular hosts are readers, but a master-host needs to be db admin.
@@ -54,11 +56,13 @@ exports.update_config = -> (provisioning_uri,provisioning_db,config,cb) ->
   delete q.host
   q.auth = "#{username}:#{password}"
 
-  config.provisioning =
-    host_couchdb_uri: url.format q
+  config.provisioning ?= {}
+  config.provisioning.host_couchdb_uri = url.format q
 
   provisioning_db.put config, (r)->
     if r.error?
       util.log util.inspect r
       throw "Creating provisioning record for #{username}"
-    cb config
+
+    util.log "Created provisioning record for #{username}"
+    cb? config
