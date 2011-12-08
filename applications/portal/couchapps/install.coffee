@@ -16,6 +16,17 @@ cfg.get (config)->
 
   # Initialize parameters required for the portal.
 
+  # FIXME: public_uri is most probably not the proper base URI
+  # (it should be replaced with a https://example.com/ URI).
+  # This should be requested the first time the admin logs in
+  # after the installation.
+  url = require 'url'
+  q = url.parse config.admin.couchdb_uri
+  delete q.href
+  delete q.host
+  delete q.auth
+  public_uri = url.format q
+
   config.portal ?=
     port: config.install?.portal?.port ? 8765
     hostname: config.install?.portal?.hostname ? '127.0.0.1' # ? config.host
