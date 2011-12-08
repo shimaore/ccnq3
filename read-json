@@ -4,6 +4,6 @@ _ = JSON.parse fs.readFileSync process.argv[2], 'utf8'
 value = eval "_['#{process.argv[3]}']"
 if typeof value is 'string'
   # Do not quote strings so that we can actually use them in shell scripts.
-  console.print value
+  console.log value
 else
   console.dir value
