@@ -3,6 +3,8 @@
 set -e
 export LANG=
 SRC="`pwd`"
+DIR=/etc/ccnq3
+CONF=${DIR}/host.json
 
 for application in  `./read-json ${CONF} applications`; do
   echo "==== Restart ${application} ===="
