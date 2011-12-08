@@ -20,7 +20,7 @@ require('ccnq3_config').get (config)->
         CouchDBStore = require('connect-couchdb')(@express)
         store = new CouchDBStore config.sessions.couchdb_store
       if not store
-        throw error:"No session store is configured."
+        console.dir error:"No session store is configured. Zappa will leak memory."
 
       @use 'logger'
       , 'bodyParser'
