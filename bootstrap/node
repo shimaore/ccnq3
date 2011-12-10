@@ -6,8 +6,8 @@ export LANG=
 # NodeInstall
 echo '** BEGIN Install Node and npm'
 
-sudo aptitude install -y daemon
-sudo aptitude install -y -t unstable nodejs nodejs-dev
+sudo aptitude install -q -y daemon
+sudo aptitude install -q -y -t unstable nodejs nodejs-dev
 
 mkdir -p ~/Node
 cd ~/Node

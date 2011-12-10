@@ -90,11 +90,11 @@ Q13nTfbCPyAYjX8RUfvjCrJOdngi1np5Gy9XzDLx6UPb48u5yq1C3e/TWYSWWA+u
 EOT
 
 echo '*** update'
-sudo aptitude update
+sudo aptitude -q update
 echo '*** dist-upgrade'
-sudo aptitude -y dist-upgrade
+sudo aptitude -q -y dist-upgrade
 echo '*** ccnq-base'
-sudo aptitude -y install ccnq-base
+sudo aptitude -q -y install ccnq-base
 
 sudo mv /etc/rsyslog.conf /etc/rsyslog.conf.bak
 sudo tee /etc/rsyslog.conf >/dev/null <<'EOT'
