@@ -101,13 +101,13 @@ clean_cfg = (t,params) ->
       return ''
 
   keys = []
-  keys.push _ for _ of available when _ is 0
+  keys.push k for k,v of available when v is 0
   unused = keys.sort()
   if unused.length
     throw "Unused routes (replace with macros): " + unused.join(', ')
 
   keys = []
-  keys.push _ for _ of available when _ isnt 0
+  keys.push k for k,v of available when v isnt 0
   used = keys.sort()
 
   route_count = 0
