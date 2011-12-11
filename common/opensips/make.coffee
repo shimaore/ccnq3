@@ -143,10 +143,11 @@ compile_cfg = (base_dir,params) ->
   for extension in ['variables','modules','cfg']
     for building_block in recipe
       file = path.join base_dir, 'fragments', "#{building_block}.#{extension}"
-      if fs.statSync file
-        result += "\n## ---  Start #{file}  --- ##\n\n"
-        result += fs.readFileSync file
-        result += "\n## ---  End #{file}  --- ##\n\n"
+      try
+        fragment  = "\n## ---  Start #{file}  --- ##\n\n"
+        fragment += fs.readFileSync file
+        fragment += "\n## ---  End #{file}  --- ##\n\n"
+        result += fragment
   return clean_cfg result, params
 
 ###
