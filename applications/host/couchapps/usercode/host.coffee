@@ -23,6 +23,19 @@ do (jQuery) ->
         config = $('#config').toDeepJson()
         config.type = 'host'
         config._id  = make_id 'host', config.host
+        ###
+          Host are by default created at the root account.
+          In order to read and modify such records the user must have
+            access:provisioning:
+          and
+            update:provisioning:
+          respectively, listed in their 'roles', effectively allowing them
+          to modify _any_ provisioning records.
+          Otherwise the user might specify any account they'd like, and users
+          with access to that account (or any prefix) will be able to modify the
+          matching host(s).
+        ###
+        config.account ?= ''  # Required for replication to work.
 
         username = "host@#{config.host}"
         password = hex_sha1 "a"+Math.random()
