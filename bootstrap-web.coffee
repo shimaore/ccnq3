@@ -17,6 +17,7 @@ require('zappa').run 8080, ->
         '/public/css/smoothness/jquery-ui'
         '/public/css/datatables'
         '/public/menu/menu'
+        '/public/css/style'
       ]
       scripts: [
         '/public/js/default'
