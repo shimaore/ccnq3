@@ -23,7 +23,7 @@ require('zappa').run 8080, ->
         '/public/menu/menu.js'
       ]
 
-  @view 'default', ->
+  @view 'default': ->
     div id:'content', ->
       noscript 'Please enable JavaScript'
       div id:'login_container'
