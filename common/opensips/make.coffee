@@ -100,10 +100,9 @@ clean_cfg = (t,params) ->
       console.log "Removing unknown route(#{$1})"
       return ''
 
-  keys = k for k,v of available when v is 0
-  unused = keys.sort()
-  if unused.length
-    throw "Unused routes (replace with macros): " + unused.join(', ')
+  unused = k for k,v of available when v is 0
+  if unused? and unused.length
+      throw "Unused routes (replace with macros): " + unused.sort().join(', ')
 
   keys = k for k,v of available when v isnt 0
   used = keys.sort()
