@@ -45,10 +45,14 @@ require('zappa').run 8080, ->
 
   portal_proxy = make_proxy 'http://127.0.0.1:8765'
   portal_urls = /^\/(u|roles)\/.*$/
-  for m in methods
-    m portal_urls, portal_proxy
+  @get  portal_urls, portal_proxy
+  @post portal_urls, portal_proxy
+  @put  portal_urls, portal_proxy
+  @del  portal_urls, portal_proxy
 
   couchdb_proxy = make_proxy 'http://127.0.0.1:5984'
   couchdb_urls = /^\/(_session|_users|provisioning|billing|cdr|u[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})($|\/)/
-  for m in methods
-    m couchdb_urls, couchdb_proxy
+  @get  couchdb_urls, couchdb_proxy
+  @post couchdb_urls, couchdb_proxy
+  @put  couchdb_urls, couchdb_proxy
+  @del  couchdb_urls, couchdb_proxy
