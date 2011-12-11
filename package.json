@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "zappa": "0.3.3"
-  , "url": "*"
+  , "request": "*"
   },
   "engines": { "node": ">=0.4.7", "coffee": ">=1.1.2" },
 
