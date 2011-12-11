@@ -95,9 +95,10 @@ clean_cfg = (t,params) ->
   t = t.replace /// \b route \( ( [^\)]+ ) \) ///g, (str,$1) ->
     if available[$1]?
       available[$1]++
-      "route(#{$1})"
+      return str
     else
       console.log "Removing unknown route(#{$1})"
+      return ''
 
   keys = []
   keys.push _ for _ of available when _ is 0
