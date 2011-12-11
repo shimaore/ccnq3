@@ -117,7 +117,7 @@ clean_cfg = (t,params) ->
 
   t += "\n"
 
-  keys = k for k of route
+  keys = (k for k of route)
   t += "# route(#{route[_]}) => route(#{_})\n" for _ in keys.sort()
 
   return t
