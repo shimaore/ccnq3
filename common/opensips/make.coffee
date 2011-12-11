@@ -75,7 +75,12 @@ macros_cfg = (t,params) ->
     ///g, (str,$1,$2) -> if $1 then $2 else ''
 
   # Substitute parameters
-  t = t.replace /// \$ \{ (\w+) \} ///g, (str,$1) -> if params[$1]? then params[$1] else throw "Undefined #{$1}"
+  t = t.replace /// \$ \{ (\w+) \} ///g, (str,$1) ->
+    if params[$1]?
+      params[$1]
+    else
+      console.log "Undefined #{$1}"
+      "${#{$1}}"
 
   return t
 
