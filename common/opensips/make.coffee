@@ -84,9 +84,9 @@ clean_cfg = (t,params) ->
   t = macros_cfg t, params
 
   available = {}
-  available[_] = 0 for _ in t.match /\broute\[([^\]]+)\]/g
+  available[_] = 0 for _ in t.match /// \b route \[ ( [^\]]+ ) \] ///g
 
-  t = t.replace /\broute\(([^\)]+)\)/g, (str,$1) ->
+  t = t.replace /// \b route \( ( [^\)]+ ) \) ///g, (str,$1) ->
     if available[$1]?
       available[$1]++
       "route(#{$1})"
@@ -97,7 +97,7 @@ clean_cfg = (t,params) ->
   keys.push _ for _ of available when _ is 0
   unused = keys.sort()
   if unused.length
-    throw "Unused routes (replace with macros): ".unused.join(', ')
+    throw "Unused routes (replace with macros): " + unused.join(', ')
 
   keys = []
   keys.push _ for _ of available when _ isnt 0
