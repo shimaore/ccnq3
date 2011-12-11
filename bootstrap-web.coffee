@@ -33,11 +33,16 @@ require('zappa').run 8080, ->
 
   make_proxy = (proxy_base) ->
     return ->
-      the_url = proxy_base + @request.url
-      method = @request.method.toLowerCase()
-      proxy = request[method] the_url
+      console.log "Proxying"
+      proxy = request
+        uri: proxy_base + @request.url
+        headers: @request.headers
+        timeout: 10000
+      console.log "Sending request"
       @request.pipe proxy
+      console.log "Receiving response"
       proxy.pipe @response
+      console.log "OK"
 
   methods = [@get,@put,@post,@del]
 
