@@ -110,7 +110,7 @@ clean_cfg = (t,params) ->
 
   route_count = 0
   route = {}
-  route[_] = ++route for _ in used
+  route[_] = ++route_count for _ in used
 
   console.log "Found #{route_count} routes"
 
