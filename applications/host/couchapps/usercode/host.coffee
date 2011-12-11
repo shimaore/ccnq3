@@ -1,42 +1,50 @@
-make_id = (t,n) -> [t,n].join ':'
+do (jQuery) ->
 
+  $ = jQuery
 
-create host
+  make_id = (t,n) -> [t,n].join ':'
+  host_username = (n) -> "host@#{n}"
 
-  # two steps:
-  #  1. create new user for the host
-  #  2. create new entry in provisioning db
+  container = '#content'
 
-  username = "host@#{hostname}"
+  profile = $(container).data 'profile'
 
-  users = cdb.new users_uri
-  provisioning = cdb.new provisioning_uri
+  host_template = $.compile_template ->
+    # CoffeeKup template here
 
-  salt = sha1_hex "a"+Math.random()
-  password = sha1_hex "a"+Math.random()
+  $(document).ready ->
+    $.sammy container, ->
+      app = @
+      model = @createModel 'host'
 
-  p =
-    _id: "org.couchdb.user:#{username}"
-    type: "user"
-    name: username
-    roles: ["host"]
-    salt: salt
-    password_sha: sha1_hex password+salt
+      # Create new host
+      @put '#/host', ->
 
-  users.put p, (r)->
-    if r.error?
-      util.log util.inspect r
-      throw "Creating user record for #{username}"
+        config = $('#config').toDeepJson()
+        config.type = 'host'
+        config._id  = make_id 'host', config.host
 
-    # Add the host in the main CDB's provisioning table,
-    # with two initialization runnables.
+        username = "host@#{config.host}"
+        password = hex_sha1 "a"+Math.random()
 
-    config.type = "host"
-    config.host = hostname
-    config._id  = make_id 'host', hostname
+        p =
+          name: username
+          roles: ["host"]
 
-    provisioning.put config, (r)->
-      if r.error?
-        util.log util.inspect r
+        # Quite obviously this can only be ran by server-admins or users_writer.
+        $.couch.signup p, password,
 
+          error: (xhr,status,error) ->
+            alert "Host user record created, but save failed: #{error}"
 
+          success: ->
+
+            @send model.create, config,
+              success:
+                $.post '/roles/replicate/push/provisioning', (data)->
+                  if data.ok
+                    alert "Host created OK."
+                    window.location = '#/inbox'
+                  else
+                    alert "Host created, but replication failed."
+                , 'json'
