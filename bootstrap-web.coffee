@@ -39,11 +39,11 @@ require('zappa').run 8080, ->
 
   @get /^\/public\//, ->
     type = @request.url.match(/\.([a-z]+)$/)?[1]
-    if type in types
+    if type of types
       @response.contentType types[type]
       @send fs.createReadStream __dirname + @request.url
     else
-      @send ''
+      @send 'Unknown document type'
 
   make_proxy = (proxy_base) ->
     return ->
