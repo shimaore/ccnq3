@@ -4,6 +4,7 @@
 
 url = require 'url'
 request = require 'request'
+fs = require 'fs'
 
 require('zappa').run 8080, ->
   @use 'logger'
