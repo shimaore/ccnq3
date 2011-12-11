@@ -104,12 +104,11 @@ clean_cfg = (t,params) ->
   if unused? and unused.length
       throw "Unused routes (replace with macros): " + unused.sort().join(', ')
 
-  keys = k for k,v of available when v isnt 0
-  used = keys.sort()
+  used = k for k,v of available when v isnt 0
 
   route_count = 0
   route = {}
-  route[_] = ++route_count for _ in used
+  route[_] = ++route_count for _ in used.sort()
 
   console.log "Found #{route_count} routes"
 
