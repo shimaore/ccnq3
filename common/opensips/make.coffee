@@ -89,7 +89,8 @@ clean_cfg = (t,params) ->
   t = macros_cfg t, params
 
   available = {}
-  available[_] = 0 for _ in t.match /// \b route \[ ( [^\]]+ ) \] ///g
+  t.replace /// \b route \[ ( [^\]]+ ) \] ///g, (str,$1) ->
+    available[$1] = 0
 
   t = t.replace /// \b route \( ( [^\)]+ ) \) ///g, (str,$1) ->
     if available[$1]?
