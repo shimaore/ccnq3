@@ -14,13 +14,13 @@ require('zappa').run 8080, ->
     @render 'default',
       stylesheets: [
         '/public/css/smoothness/jquery-ui'
-        '/public/css/datatables.css'
-        '/public/menu/menu.css'
+        '/public/css/datatables'
+        '/public/menu/menu'
       ]
       scripts: [
-        '/public/js/default.js'
-        '/u/content.js'
-        '/public/menu/menu.js'
+        '/public/js/default'
+        '/u/content'
+        '/public/menu/menu'
       ]
 
   @view 'default': ->
