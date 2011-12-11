@@ -30,6 +30,20 @@ require('zappa').run 8080, ->
       div id:'password_recovery_container'
       div id:'register_container'
 
+  types =
+    js: 'application/javascript'
+    css: 'text/css'
+    png: 'image/png'
+    jpeg: 'image/jpeg'
+    gif: 'image/gif'
+
+  @get /^\/public\//, ->
+    type = @request.url.match(/\.([a-z]+)$/)?[1]
+    if type in types
+      @response.contentType types[type]
+      @send fs.createReadStream __dirname + @request.url
+    else
+      @send ''
 
   make_proxy = (proxy_base) ->
     return ->
@@ -40,8 +54,6 @@ require('zappa').run 8080, ->
         timeout: 1000
       @request.pipe proxy
       proxy.pipe @response
-
-  methods = [@get,@put,@post,@del]
 
   portal_proxy = make_proxy 'http://127.0.0.1:8765'
   portal_urls = /^\/(u|roles)\/.*$/
