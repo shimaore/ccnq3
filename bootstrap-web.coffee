@@ -35,7 +35,7 @@ require('zappa').run 8080, ->
     return ->
       the_url = proxy_base + @request.url
       method = @request.method.toLowerCase()
-      proxy = request[method] final_url
+      proxy = request[method] the_url
       @request.pipe proxy
       proxy.pipe @response
 
