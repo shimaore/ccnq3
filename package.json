@@ -1,0 +1,20 @@
+{
+  "name": "ccnq3_web",
+  "version": "0.0.1",
+  "description": "Web server for CCNQ3",
+  "keywords": "",
+  "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
+  "config": {
+    "config_file": "/etc/ccnq3/host.json"
+  },
+  "scripts": {
+  },
+  "dependencies": {
+    "zappa": "0.3.3"
+  , "url": "*"
+  },
+  "engines": { "node": ">=0.4.7", "coffee": ">=1.1.2" },
+
+  "published": false,
+  "ok": true
+}
