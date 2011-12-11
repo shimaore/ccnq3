@@ -32,7 +32,7 @@ macros_cfg = (t,params) ->
   # Macro pre-processing
   t = t.replace ///
     \b macro \s+ (\w+) \b
-    (.*?)
+    ([\s\S]*?)
     \b end \s+ macro \s+ \1 \b
     ///g, (str,$1,$2) ->
     macros[$1] = $2
@@ -55,22 +55,22 @@ macros_cfg = (t,params) ->
   # Since we don't use a real (LR) parser, these are sorted by match order.
   t = t.replace ///
     \b if \s+ not \s+ (\w+) \b
-    (.*?)
+    ([\s\S]*?)
     \b end \s+ if \s+ not \s+ \1 \b
     ///g, (str,$1,$2) -> if not params[$1] then $2 else ''
   t = t.replace ///
     \b if \s+ (\w+) \s+ is \s+ not \s+ (\w+) \b
-    (.*?)
+    ([\s\S]*?)
     \b end \s+ if \s+ \1 \s+ is \s+ not \s+ \2 \b
     ///g, (str,$1,$2,$3) -> if $1 isnt $2 then $3 else ''
   t = t.replace ///
     \b if \s+ (\w+)\ s+ is \s+ (\w+) \b
-    (.*?)
+    ([\s\S]*?)
     \b end \s+ if \s+ \1 \s+ is \s+ \2 \b
     ///g, (str,$1,$2,$3) -> if $1 is $2 then $3 else ''
   t = t.replace ///
     \b if \s+ (\w+) \b
-    (.*?)
+    ([\s\S]*?)
     \b end \s+ if \s+ \1 \b
     ///g, (str,$1,$2) -> if $1 then $2 else ''
 
