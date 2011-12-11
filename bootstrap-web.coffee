@@ -42,7 +42,7 @@ require('zappa').run 8080, ->
     type = @request.url.match(/\.([a-z]+)$/)?[1]
     if type of types
       @response.contentType types[type]
-      @request.pipe fs.createReadStream __dirname + @request.url
+      @send fs.readFileSync __dirname + @request.url
     else
       @send 'Unknown document type'
 
