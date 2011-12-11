@@ -6,7 +6,7 @@ url = require 'url'
 request = require 'request'
 
 require('zappa').run 8080, ->
-  @use 'logger', static: __dirname
+  @use 'logger'
 
   @enable 'default layout'
 
