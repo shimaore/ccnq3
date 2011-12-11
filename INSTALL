@@ -9,9 +9,11 @@
   Look in etc/lighttpd2/ for a way to do this with lighttpd2.
   The directory "public/" must be available as /public/ in your web site.
 
+  FIXME: Provide a barebone zappa instance that does just that.
+
 - All scripts rely on sudo.
   Make sure sudo is available on every host, and that at least one user is able to use
-  sudo with NOPASSWD.
+  sudo with NOPASSWD. (Run the installation under that username.)
 
 
 - On the bootstrap host (the first host in the system), download the code
