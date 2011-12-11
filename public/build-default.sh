@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 coffee -c js/*.coffee
-cat js/jquery.js          \
+cat js/sha1.js            \
+    js/jquery.js          \
     js/jquery-ui.js       \
     js/jquery.validate.js \
     js/jquery.datatables.js \
