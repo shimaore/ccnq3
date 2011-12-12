@@ -1,22 +1,30 @@
+PREREQUISITES
+
 - You will need a CouchDB database.
   This can be BigCouch, a proxy (look under etc/lighttpd2), or a plain CouchDB instance.
   It must be network-accessible from the local host (which is used to bootstrap installation) and from any other host in the system.
   (Using SSL is OK, and recommended.)
-  Alternatively the bootstrap script can install CouchDB locally for you.
+
+  Alternatively the bootstrap-system script can install CouchDB locally (on the master host) for you.
 
 - You will need a web server.
   This can be any server you'd like.
   Look in etc/lighttpd2/ for a way to do this with lighttpd2.
   The directory "public/" must be available as /public/ in your web site.
 
-  FIXME: Provide a barebone zappa instance that does just that.
+  Alternatively the bootstrap-system script comes with a barebone web server.
 
 - All scripts rely on sudo.
   Make sure sudo is available on every host, and that at least one user is able to use
   sudo with NOPASSWD. (Run the installation under that username.)
 
+- You will need a working /usr/bin/sendmail (for example thanks to a proper
+  installation of nullmailer) for emails to work (for registration, password recovery, ..).
 
-- On the bootstrap host (the first host in the system), download the code
+
+INSTALLING THE MASTER HOST
+
+- On the manager host (the first host in the system), download the code
 
     cd && rm -rf ccnq3 && git clone git://stephane.shimaore.net/git/ccnq3.git
 
@@ -30,11 +38,24 @@
 
     cd ~/ccnq3 && ./bootstrap-system <URI>
 
-  replacing the URI with your CouchDB installation's URI, including a system-level
-  administrative account, such as: https://admin:password@cdb.example.net:5984/
+  replacing <URI> with your CouchDB installation's URI, including a system-level
+  administrative account, for example: https://admin:password@cdb.example.net:5984/
   In that later case, make sure your CouchDB installation has "require_valid_user = true".
 
+NOTES ON THE MASTER INSTALLATION
+
+- The bootstrap-system script will start a small web server (on port 8080) to allow you
+  to log into the system.
+
+- The last line of the bootstrap-system script will show a "Master Interface" URL.
+  This URL gives you system-administrative level access to the CouchDB database.
+  (If you provided a URL on the command line this will be the same URL.)
+
+
+INSTALLING OTHER HOSTS
+
 - To register an additional host in the system, use the web interface.
+  (This is currently under development.)
 
 - On any host you'd like to use in the system, download the code
 
