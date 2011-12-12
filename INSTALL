@@ -51,6 +51,12 @@ NOTES ON THE MASTER INSTALLATION
   This URL gives you system-administrative level access to the CouchDB database.
   (If you provided a URL on the command line this will be the same URL.)
 
+- The installer uses debian.sotelips.net as the repository for installation.
+  This repository is only accessible via IPv6.
+  Use
+    cd ~/ccnq3 && REPOSITORY=debian4.sotelips.net ./bootstrap-system
+  to access it over IPv4.
+
 
 INSTALLING OTHER HOSTS
 
