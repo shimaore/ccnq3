@@ -26,7 +26,6 @@
 
   , "ccnq3_roles": "*"
   , "express": "*"
-  , "connect-couchdb": "0.2.0"
   , "connect-memcached": ">=0.0.2"
   , "connect-redis": ">=1.0.7"
   },

@@ -16,9 +16,6 @@ require('ccnq3_config').get (config)->
       if config.session?.redis_store
         RedisStore = require('connect-redis')(@express)
         store = new RedisStore config.session.redis_store
-      if config.session?.couchdb_store
-        CouchDBStore = require('connect-couchdb')(@express)
-        store = new CouchDBStore config.sessions.couchdb_store
       if not store
         console.dir error:"No session store is configured. Zappa will leak memory."
 
