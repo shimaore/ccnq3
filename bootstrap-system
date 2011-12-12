@@ -16,7 +16,7 @@ HOSTNAME=`hostname`
 sudo mkdir -p "${DIR}"
 sudo chown `whoami` "${DIR}"
 if [ -e "${CONF}" ]; then
-  echo "** WARNING: $CONF already exists"
+  echo "** ERROR: $CONF already exists"
   exit 1
 else
   if [ "x$1" == "x" ]; then
