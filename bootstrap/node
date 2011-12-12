@@ -3,26 +3,11 @@
 set -e
 export LANG=
 
-# NodeInstall
-echo '** BEGIN Install Node and npm'
+echo '** BEGIN Install Node, npm, and coffeescript'
 
 sudo aptitude install -q -y daemon
-sudo aptitude install -q -y -t unstable nodejs nodejs-dev
 
-mkdir -p ~/Node
-cd ~/Node
-if npm -v | egrep -q '^1\.0'; then
-  echo "** WARNING: Using existing npm version `npm -v`"
-else
-(
-  sudo rm -rf npm/
-  git clone http://github.com/isaacs/npm.git
-  cd npm
-  git submodule update --init --recursive
-  sudo make install
-)
-fi
 
 sudo npm -g install coffee-script
 
-echo '** END Install Node and npm Completed OK.'
+echo '** END Install Node, npm and coffeescript Completed OK.'
