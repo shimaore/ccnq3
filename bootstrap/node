@@ -7,6 +7,29 @@ echo '** BEGIN Install Node, npm, and coffeescript'
 
 sudo aptitude install -q -y daemon
 
+# Debian Node.js versions are currently too old, build our owns.
+
+# Pre-requisites for Node.js.
+sudo aptitude install -q -y libssl-dev
+
+# Node.js now contains npm.
+NODE_VERSION=0.6.5
+
+if [ "v`node -v`" == "v$NODE_VERSION" ]; then
+  echo "Using node v$NODE_VERSION";
+else
+  mkdir -p ~/Node
+  cd ~/Node
+  (
+    rm -rf node-v$NODE_VERSION/ node-v$NODE_VERSION.tar.gz
+    curl -O http://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION.tar.gz
+    tar xzvf node-v$NODE_VERSION.tar.gz
+    cd node-v$NODE_VERSION
+    ./configure
+    make -s
+    sudo make -s install
+  )
+fi
 
 sudo npm -g install coffee-script
 
