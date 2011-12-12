@@ -69,5 +69,8 @@ echo "==== Install the local host ===="
 ${SRC}/restart
 
 echo "==== Done ===="
+
+./bootstrap-web.coffee
+
 echo
-echo "To manage your system, please access http://`./read-json ${CONF} portal.hostname`:`./read-json ${CONF} portal.port`/ or a suitable redirection."
+echo "Master interface: ${CDB_URI}"
