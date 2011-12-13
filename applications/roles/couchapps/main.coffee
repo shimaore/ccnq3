@@ -21,7 +21,7 @@ ddoc.filters.confirmed = (doc,req) ->
   return user_is 'confirmed'
 
 # Document validation.
-ddoc.validate_doc_update = ( (newDoc, oldDoc, userCtx) ->
+ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
 
   user_was = (role) ->
     oldDoc?.roles?.indexOf(role) >= 0
@@ -36,7 +36,8 @@ ddoc.validate_doc_update = ( (newDoc, oldDoc, userCtx) ->
           throw forbidden:"Only confirmed users might be granted account access."
 
   return
-)
+
+ddoc.validate_doc_update = '('+ddoc.validate_doc_update+')'
 
 # Used by the replicating agent.
 ddoc.filters.user_pull = (doc,req) ->
