@@ -13,7 +13,6 @@ echo "Using ${REPOSITORY} to download packages."
 
 sudo tee /etc/apt/sources.list > /dev/null <<EOT
 deb http://${REPOSITORY}/debian   testing main
-deb http://${REPOSITORY}/debian   unstable main
 deb http://${REPOSITORY}/shimaore shimaore main
 EOT
 
@@ -24,9 +23,6 @@ Pin-Priority: 500
 Package: *
 Pin: release a=shimaore
 Pin-Priority: 500
-Package: *
-Pin: release a=unstable
-Pin-Priority: -1
 Package: *
 Pin: release a=stable
 Pin-Priority: -1
