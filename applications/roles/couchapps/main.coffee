@@ -33,7 +33,7 @@ ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
     for role in newDoc.roles
       do (role) ->
         if role.match /^(access|update):/
-          throw {forbidden : "Only confirmed users might be granted account access."}
+          throw forbidden:"Only confirmed users might be granted account access."
 
   return
 
