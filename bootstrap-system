@@ -8,6 +8,11 @@ SRC="`pwd`"
 DIR=/etc/ccnq3
 CONF=${DIR}/host.json
 
+if [ -e "${CONF}" ]; then
+  echo "** ERROR: $CONF already exists"
+  exit 1
+fi
+
 ./bootstrap/prepare
 ./bootstrap/node
 
@@ -15,48 +20,45 @@ HOSTNAME=`hostname`
 
 sudo mkdir -p "${DIR}"
 sudo chown `whoami` "${DIR}"
-if [ -e "${CONF}" ]; then
-  echo "** ERROR: $CONF already exists"
-  exit 1
+
+# Configuration
+
+if [ "x$1" == "x" ]; then
+  echo "** Proceeding with installation of CouchDB on local host ${HOSTNAME}."
+
+  # Using 128 or higher does not work.
+  ADMIN_PASSWORD=`openssl rand 64 -hex`
+
+  export ADMIN_PASSWORD
+  . bootstrap/couchdb
+  CDB_URI="http://admin:${ADMIN_PASSWORD}@${HOSTNAME}:5984"
 else
-  if [ "x$1" == "x" ]; then
-    echo "** Proceeding with installation of CouchDB on local host ${HOSTNAME}."
-
-    # Using 128 or higher does not work.
-    ADMIN_PASSWORD=`openssl rand 64 -hex`
-
-    export ADMIN_PASSWORD
-    . bootstrap/couchdb
-    CDB_URI="http://admin:${ADMIN_PASSWORD}@${HOSTNAME}:5984"
-  else
-    # Provide a URI on the command-line for example if you already
-    # have a CouchDB/BigCouch cluster and want to have CCNQ use it.
-    CDB_URI="$1"
-    shift
-  fi
-
-  echo "Bootstrapping database using ${CDB_URI}"
-  # make_id
-  sudo tee "${CONF}" <<JSON >/dev/null
-  {
-    "_id": "host:${HOSTNAME}",
-    "type": "host",
-    "host": "${HOSTNAME}",
-    "admin": {
-      "couchdb_uri": "${CDB_URI}"
-    }
-  , "applications": "applications/usercode applications/provisioning applications/roles applications/host applications/portal applications/inbox public"
-  }
-JSON
-  # applications/usercode: creates the usercode database: must be first since all others depend on it
-  # applications/provisioning: creates the provisioning database: must be second
-  # applications/roles: updates the _users databases: must be third
-  # applications/host: master/bootstrap host record in _users database
-  # applications/portal: portal pre-requires host
-  # Add any server-specific applications at the end of the (space-delimited) string.
-  sudo chown `whoami` "${CONF}"
-
+  # Provide a URI on the command-line for example if you already
+  # have a CouchDB/BigCouch cluster and want to have CCNQ use it.
+  CDB_URI="$1"
+  shift
 fi
+
+echo "Bootstrapping database using ${CDB_URI}"
+# make_id
+sudo tee "${CONF}" <<JSON >/dev/null
+{
+  "_id": "host:${HOSTNAME}",
+  "type": "host",
+  "host": "${HOSTNAME}",
+  "admin": {
+    "couchdb_uri": "${CDB_URI}"
+  }
+, "applications": "applications/usercode applications/provisioning applications/roles applications/host applications/portal applications/inbox public"
+}
+JSON
+# applications/usercode: creates the usercode database: must be first since all others depend on it
+# applications/provisioning: creates the provisioning database: must be second
+# applications/roles: updates the _users databases: must be third
+# applications/host: master/bootstrap host record in _users database
+# applications/portal: portal pre-requires host
+# Add any server-specific applications at the end of the (space-delimited) string.
+sudo chown `whoami` "${CONF}"
 
 ${SRC}/cleanup
 ${SRC}/update-system
