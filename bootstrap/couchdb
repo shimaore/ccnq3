@@ -6,8 +6,7 @@ export LANG=
 # CouchDBInstall
 echo '*** BEGIN Install CouchDB'
 
-# CouchDB 1.1.0 is in testing as of 2011-10-11.
-sudo aptitude install -q -y couchdb
+# Installed as part of ccnq-base.
 
 # Install default config file
 sudo /etc/init.d/couchdb stop
