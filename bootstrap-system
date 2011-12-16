@@ -77,7 +77,8 @@ ${SRC}/restart
 echo "Installation done."
 
 echo "Start bootstrap web server."
-./bootstrap-web.coffee
+(cd && npm install \
+    && ./bootstrap-web.coffee)
 
 echo
 echo "Master interface: ${CDB_URI}/_utils/"
