@@ -3,9 +3,7 @@
 Released under the Affero GPL3 license or above
 ###
 
-# Install:
-#   coffee -c replicate.coffee
-#   couchapp push replcate.js http://127.0.0.1:5984/db
+p_fun = (f) -> '('+f+')'
 
 ddoc =
   _id: '_design/replicate'
@@ -13,7 +11,7 @@ ddoc =
 
 module.exports = ddoc
 
-ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
+ddoc.validate_doc_update = p_fun (newDoc, oldDoc, userCtx) ->
 
   user_is = (role) ->
     userCtx.roles?.indexOf(role) >= 0
@@ -21,10 +19,8 @@ ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
   if not user_is('usercode_writer') and not user_is('_admin')
     throw forbidden:'Not authorized to write in this database, roles = #{userCtx.roles?.join(",")}.'
 
-ddoc.validate_doc_update = '('+ddoc.validate_doc_update+')'
-
 # Filter replication towards the user database.
-ddoc.filters.user_pull = (doc, req) ->
+ddoc.filters.user_pull = p_fun (doc, req) ->
 
   # Do not replicate this design document.
   if doc._id is '_design/replicate'

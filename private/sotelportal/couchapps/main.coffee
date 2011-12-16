@@ -3,13 +3,15 @@
 Released under the Affero GPL3 license or above
 ###
 
+p_fun = (f) -> '('+f+')'
+
 ddoc =
   _id: '_design/replicate'
   filters: {}
 
 module.exports = ddoc
 
-ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
+ddoc.validate_doc_update = p_fun (newDoc, oldDoc, userCtx) ->
 
   user_is = (role) ->
     userCtx.roles?.indexOf(role) >= 0
@@ -17,10 +19,8 @@ ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
   if not user_is('sotel_portal_writer') and not user_is('_admin')
     throw forbidden:'Not authorized to write in this database, roles = #{userCtx.roles?.join(",")}.'
 
-ddoc.validate_doc_update = '('+ddoc.validate_doc_update+')'
-
 # Filter replication towards the user database.
-ddoc.filters.user_pull = (doc, req) ->
+ddoc.filters.user_pull = p_fun (doc, req) ->
 
   # The user context provided to us by the replication agent.
   ctx = JSON.parse req.query.ctx
@@ -39,5 +39,5 @@ ddoc.filters.user_pull = (doc, req) ->
   # Do not otherwise replicate
   return false
 
-ddoc.filters.partner_signup = (doc) ->
+ddoc.filters.partner_signup = p_fun (doc) ->
   return doc.type is 'partner_signup'

@@ -3,8 +3,7 @@
 Released under the Affero GPL3 license or above
 ###
 
-
-couchapp = require('couchapp')
+p_fun = (f) -> '('+f+')'
 
 ddoc = {
     _id: '_design/host'
@@ -17,9 +16,5 @@ ddoc = {
 
 module.exports = ddoc
 
-ddoc.filters.hostname = (doc,req) ->
+ddoc.filters.hostname = p_fun (doc,req) ->
   return doc.type is 'host' and doc.host is req.query.hostname
-
-# Attachments are loaded from host/*
-# path     = require('path')
-# couchapp.loadAttachments(ddoc, path.join(__dirname, 'main'))

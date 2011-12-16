@@ -3,9 +3,7 @@
 Released under the Affero GPL3 license or above
 ###
 
-# Install:
-#   coffee -c replicate.coffee
-#   couchapp push replcate.js http://127.0.0.1:5984/db
+p_fun = (f) -> '('+f+')'
 
 ddoc =
   _id: '_design/provisioning'
@@ -13,7 +11,7 @@ ddoc =
 
 module.exports = ddoc
 
-ddoc.filters.user_push = (doc, req) ->
+ddoc.filters.user_push = p_fun (doc, req) ->
 
   # Do not replicate design documents from the source "provisioning" database.
   if doc._id.match /^_design/

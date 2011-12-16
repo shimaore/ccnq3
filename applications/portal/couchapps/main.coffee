@@ -3,6 +3,8 @@
 Released under the Affero GPL3 license or above
 ###
 
+p_fun = (f) -> '('+f+')'
+
 ddoc =
   _id: '_design/portal'
   views: {}
@@ -13,10 +15,10 @@ ddoc =
 
 module.exports = ddoc
 
-ddoc.filters.send_password = (doc,req) ->
+ddoc.filters.send_password = p_fun (doc,req) ->
   return doc.send_password? and doc.send_password
 
-ddoc.lists.datatable = (head,req) ->
+ddoc.lists.datatable = p_fun (head,req) ->
   start
     headers:
       'Content-Type': 'application/json'
@@ -31,7 +33,7 @@ ddoc.lists.datatable = (head,req) ->
   send '] }'
 
 ddoc.views.user_profiles =
-  map: (doc) ->
+  map: p_fun (doc) ->
     if doc.type? and doc.type is 'user' and doc.profile
       emit null, doc.profile
 

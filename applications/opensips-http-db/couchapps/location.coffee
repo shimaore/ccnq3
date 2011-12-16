@@ -3,6 +3,8 @@
 Released under the Affero GPL3 license or above
 ###
 
+p_fun = (f) -> '('+f+')'
+
 ddoc =
   _id: '_design/location'
   language: 'javascript'
@@ -17,6 +19,6 @@ module.exports = ddoc
 
 # Too bad we can't use _all_docs with a list.
 ddoc.views.all =
-  map: (doc) ->
+  map: p_fun (doc) ->
     if doc.callid?
       emit null, doc

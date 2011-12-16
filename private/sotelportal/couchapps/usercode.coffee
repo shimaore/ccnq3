@@ -3,6 +3,8 @@
 Released under the Affero GPL3 license or above
 ###
 
+p_fun = (f) -> '('+f+')'
+
 ddoc =
   _id: '_design/sotel_portal'
   views: {}
@@ -10,7 +12,7 @@ ddoc =
 
 module.exports = ddoc
 
-ddoc.filters.user_push = (doc, req) ->
+ddoc.filters.user_push = p_fun (doc, req) ->
 
   # Do not replicate design documents from the source "partner" database.
   if doc._id.match /^_design/

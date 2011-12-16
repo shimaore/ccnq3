@@ -7,8 +7,7 @@ Released under the Affero GPL3 license or above
 # from the main database (using their personalized logins), to retrieve their
 # own "host" record.
 
-couchapp = require('couchapp')
-path     = require('path')
+p_fun = (f) -> '('+f+')'
 
 ddoc = {
     _id: '_design/host'
@@ -21,5 +20,5 @@ ddoc = {
 
 module.exports = ddoc
 
-ddoc.filters.hostname = (doc,req) ->
+ddoc.filters.hostname = p_fun (doc,req) ->
   return doc.type is 'host' and doc.host is req.query.hostname

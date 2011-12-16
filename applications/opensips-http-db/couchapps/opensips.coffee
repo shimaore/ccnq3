@@ -3,6 +3,8 @@
 Released under the Affero GPL3 license or above
 ###
 
+p_fun = (f) -> '('+f+')'
+
 ddoc =
   _id: '_design/opensips'
   language: 'javascript'
@@ -20,7 +22,7 @@ module.exports = ddoc
 
 ddoc.lib.quote =  coffee.compile fs.readFileSync './quote.coffee'
 
-ddoc.shows.format = (doc,req) ->
+ddoc.shows.format = p_fun (doc,req) ->
   quote = require 'lib/quote'
   body = ''
   if doc?
@@ -36,7 +38,7 @@ ddoc.shows.format = (doc,req) ->
       body
   }
 
-ddoc.lists.format = (head,req) ->
+ddoc.lists.format = p_fun (head,req) ->
   quote = require 'lib/quote'
   start {
     headers:
@@ -55,20 +57,20 @@ ddoc.lists.format = (head,req) ->
   return # KeepMe!
 
 ddoc.views.gateways_by_host =
-  map: (doc) ->
+  map: p_fun (doc) ->
     if doc.type? and doc.type is 'gateway'
       emit doc.host, doc
     return
 
 ddoc.views.rules_by_host =
-  map: (doc) ->
+  map: p_fun (doc) ->
     if doc.type? and doc.type is 'rule'
       emit doc.host, doc
     return
 
 # For completeness, not planning to use them at this time.
 ddoc.views.gwlists_by_host =
-  map: (doc) ->
+  map: p_fun (doc) ->
     if doc.type? and doc.type is 'gw_list'
       emit doc.host, doc
     return

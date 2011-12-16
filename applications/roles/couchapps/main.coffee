@@ -3,6 +3,8 @@
 Released under the Affero GPL3 license or above
 ###
 
+p_fun = (f) -> '('+f+')'
+
 ddoc =
   _id: '_design/replicate'
   views: {}
@@ -14,14 +16,14 @@ ddoc =
 module.exports = ddoc
 
 # Used by track_users.
-ddoc.filters.confirmed = (doc,req) ->
+ddoc.filters.confirmed = p_fun (doc,req) ->
   user_is = (role) ->
     doc.roles?.indexOf(role) >= 0
 
   return user_is 'confirmed'
 
 # Document validation.
-ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
+ddoc.validate_doc_update = p_fun (newDoc, oldDoc, userCtx) ->
 
   user_was = (role) ->
     oldDoc?.roles?.indexOf(role) >= 0
@@ -38,10 +40,8 @@ ddoc.validate_doc_update = (newDoc, oldDoc, userCtx) ->
 
   return
 
-ddoc.validate_doc_update = '('+ddoc.validate_doc_update+')'
-
 # Used by the replicating agent.
-ddoc.filters.user_pull = (doc,req) ->
+ddoc.filters.user_pull = p_fun (doc,req) ->
 
   ctx = JSON.parse req.query.ctx
 

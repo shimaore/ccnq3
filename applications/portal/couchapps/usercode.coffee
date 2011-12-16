@@ -3,6 +3,8 @@
 Released under the Affero GPL3 license or above
 ###
 
+p_fun = (f) -> '('+f+')'
+
 ddoc =
   _id: '_design/portal'
   views: {}
@@ -14,7 +16,7 @@ ddoc =
 module.exports = ddoc
 
 ddoc.views.user =
-  map: (doc) ->
+  map: p_fun (doc) ->
     if doc.type is 'user'
       emit null, null
 
