@@ -1,7 +1,8 @@
 #!/bin/sh
 
-# Install
-sudo aptitude -y install freeswitch freeswitch-lua
+# These packages are now part of ccnq-base.
+# sudo aptitude -y install freeswitch freeswitch-lua
+
 sudo adduser `whoami` daemon # allows access to configuration directory
 sudo chmod g+w /opt/freeswitch/conf # allow access to configuration directory
 
