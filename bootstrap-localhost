@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# (c) 2011 Stephane Alnet
+# License: APGL3+
 
 set -e
 export LANG=
@@ -6,42 +8,49 @@ SRC="`pwd`"
 DIR=/etc/ccnq3
 CONF=${DIR}/host.json
 
+if [ -e "${CONF}" ]; then
+  echo "** ERROR: $CONF already exists **"
+  exit 1
+fi
+
 ./bootstrap/prepare
 ./bootstrap/node
 
 HOSTNAME=`hostname`
 
+echo "Create ${DIR}"
 sudo mkdir -p "${DIR}"
-if [ -e "${CONF}" ]; then
-  echo "** WARNING: This host has already been bootstrapped. The previous configuration will be used. To start over please remove ${CONF} before using this script."
+sudo chown `whoami` "${DIR}"
+
+if [ "x$1" == "x" ]; then
+  echo "** ERROR: You must provide a reference URI **"
+  exit
 else
-  if [ "x$1" == "x" ]; then
-    echo "** You must provide a reference URI."
-    exit
-  else
-    URI=$1
-    shift
-  fi
-
-  # make_id
-  sudo tee "${CONF}" <<JSON >/dev/null
-  {
-    "_id": "host:${HOSTNAME}",
-    "type": "host",
-    "host": "${HOSTNAME}",
-    "provisioning": {
-      "couchdb_uri": "$URI"
-    }
-  , "applications": "applications/host"
-  }
-JSON
-  # Add any server-specific applications at the end of the (space-delimited) string.
-  sudo chown `whoami` "${CONF}"
-
+  CDB_URI="$1"
+  shift
 fi
 
+echo "Creating ${CONF}"
+sudo tee "${CONF}" <<JSON >/dev/null
+{
+  "_id": "host:${HOSTNAME}",
+  "type": "host",
+  "host": "${HOSTNAME}",
+  "provisioning": {
+    "couchdb_uri": "${CDB_URI}"
+  }
+, "applications": "applications/host"
+}
+JSON
+# Add any server-specific applications at the end of the (space-delimited) string.
+sudo chown `whoami` "${CONF}"
+
+echo "Cleanup"
 ${SRC}/cleanup
+echo "Update"
 ${SRC}/update-localhost
+
+echo "Restart"
 ${SRC}/restart
 
-echo "==== Done ===="
+echo "Installation done."

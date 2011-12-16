@@ -9,7 +9,7 @@ DIR=/etc/ccnq3
 CONF=${DIR}/host.json
 
 if [ -e "${CONF}" ]; then
-  echo "** ERROR: $CONF already exists"
+  echo "** ERROR: $CONF already exists **"
   exit 1
 fi
 
@@ -18,13 +18,12 @@ fi
 
 HOSTNAME=`hostname`
 
+echo "Create ${DIR}"
 sudo mkdir -p "${DIR}"
 sudo chown `whoami` "${DIR}"
 
-# Configuration
-
 if [ "x$1" == "x" ]; then
-  echo "** Proceeding with installation of CouchDB on local host ${HOSTNAME}."
+  echo "Proceeding with installation of CouchDB on local host ${HOSTNAME}"
 
   # Using 128 or higher does not work.
   ADMIN_PASSWORD=`openssl rand 64 -hex`
@@ -40,7 +39,8 @@ else
 fi
 
 echo "Bootstrapping database using ${CDB_URI}"
-# make_id
+
+echo "Creating ${CONF}"
 sudo tee "${CONF}" <<JSON >/dev/null
 {
   "_id": "host:${HOSTNAME}",
@@ -60,19 +60,23 @@ JSON
 # Add any server-specific applications at the end of the (space-delimited) string.
 sudo chown `whoami` "${CONF}"
 
+echo "Cleanup"
 ${SRC}/cleanup
+echo "Update"
 ${SRC}/update-system
 # Do not restart just yet.
 
-echo "==== Install the local host ===="
+echo "Install applications/host"
 (cd && cd "${SRC}/applications/host" \
     && npm install \
     && npm run-script bootstrap)
 
+echo "Restart"
 ${SRC}/restart
 
-echo "==== Done ===="
+echo "Installation done."
 
+echo "Start bootstrap web server."
 ./bootstrap-web.coffee
 
 echo
