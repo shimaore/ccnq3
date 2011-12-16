@@ -77,7 +77,8 @@ ${SRC}/restart
 echo "Installation done."
 
 echo "Start bootstrap web server."
-(cd && npm install \
+(cd && cd "${SRC}" \
+    && npm install \
     && ./bootstrap-web.coffee)
 
 echo
