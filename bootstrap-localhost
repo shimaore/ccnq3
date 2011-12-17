@@ -48,7 +48,7 @@ sudo chown `whoami` "${CONF}"
 echo "Cleanup"
 ${SRC}/cleanup
 echo "Update"
-${SRC}/update-localhost
+${SRC}/update
 
 echo "Restart"
 ${SRC}/restart

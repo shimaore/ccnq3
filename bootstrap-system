@@ -48,6 +48,7 @@ sudo tee "${CONF}" <<JSON >/dev/null
   "host": "${HOSTNAME}",
   "admin": {
     "couchdb_uri": "${CDB_URI}"
+  , "system": true
   }
 , "applications": "applications/usercode applications/provisioning applications/roles applications/host applications/portal applications/inbox public"
 }
@@ -63,7 +64,7 @@ sudo chown `whoami` "${CONF}"
 echo "Cleanup"
 ${SRC}/cleanup
 echo "Update"
-${SRC}/update-system
+${SRC}/update
 # Do not restart just yet.
 
 echo "Install applications/host"

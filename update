@@ -9,10 +9,13 @@ DIR=/etc/ccnq3
 CONF=${DIR}/host.json
 
 # Changes in the update file are idempotent (for the same release).
+IS_SYSTEM=`./read-json /etc/ccnq3/host.json admin.system`
 
 for application in  `./read-json ${CONF} applications`; do
   echo "==== Update ${application} ===="
   (cd && cd "${SRC}/${application}" \
       && npm install \
-      && npm run-script couchapps)
+      && if [ "x${IS_SYSTEM}" == 'xtrue' ]; then
+           npm run-script couchapps;
+         fi)
 done
