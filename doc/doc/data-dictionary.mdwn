@@ -14,8 +14,9 @@ Notes:
     type:"host"
     host: string; hostname, preferably FQDN (must match what the "hostname" command returns)
 
-    admin:
+    admin:   (only present on bootstrap-system hosts normally)
       couchdb_uri: server admin URI
+      system: true   (indicates this host is the one that should do system updates)
     applications: (string) list of applications that need to be installed
 
     usercode:
