@@ -58,7 +58,7 @@ require('zappa').run 8080, ->
       proxy.pipe @response
       return
 
-  portal_proxy = make_proxy 'http://127.0.0.1:8765'
+  portal_proxy = make_proxy "http://#{config.portal.hostname}:#{config.portal.port}"
   portal_urls = /^\/(u|roles)\/.*$/
   @get  portal_urls, portal_proxy
   @post portal_urls, portal_proxy
