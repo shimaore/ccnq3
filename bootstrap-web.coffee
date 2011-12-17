@@ -56,6 +56,7 @@ require('zappa').run 8080, ->
         timeout: 1000
       @request.pipe proxy
       proxy.pipe @response
+      return
 
   portal_proxy = make_proxy 'http://127.0.0.1:8765'
   portal_urls = /^\/(u|roles)\/.*$/
