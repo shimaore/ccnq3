@@ -2,10 +2,7 @@
 
 log = (application,error,stdout,stderr) ->
   console.log """
-    Completed #{application}:
-      stdout: #{stdout}
-      stderr: #{stderr}
-      exec error: #{error ? 'none'}
+    Completed #{application}: #{error ? 'OK'}
     """
 
 operation = process.argv.slice(2).join(' ')
