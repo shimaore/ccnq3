@@ -57,7 +57,7 @@ echo "Install dependencies"
 
 echo "Update"
 (cd && cd "${SRC}" \
-    && npm update)
+    && npm run-script updates)
 
 echo "Restart"
 (cd && cd "${SRC}" \

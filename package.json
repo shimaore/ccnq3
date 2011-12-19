@@ -10,7 +10,7 @@
   "scripts": {
     "start":  "./npm-apps.coffee start"
   , "stop":   "./npm-apps.coffee stop"
-  , "postupdate": "./npm-apps.coffee install; ./npm-apps.coffee couchapps"
+  , "updates": "./npm-apps.coffee install; ./npm-apps.coffee run-script couchapps"
   , "bootstrap": "./npm-apps.coffee run-script bootstrap"
   },
   "dependencies": {
