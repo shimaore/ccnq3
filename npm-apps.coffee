@@ -16,6 +16,7 @@ require('ccnq3_config').get (config) ->
 
   run = (applications) ->
       application = applications.shift()
+      return unless application?
       console.log "Running #{operation} for #{application}"
 
       command = "npm #{operation}"
