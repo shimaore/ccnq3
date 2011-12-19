@@ -9,6 +9,64 @@ do (jQuery) ->
   $.fn.enable = () ->
     $(@).removeAttr('disabled')
 
+  $.ccnq3 = {}
+
+  $.ccnq3.push_document = (db) ->
+    $.post "/roles/replicate/push/#{db}", (data)->
+      if data.ok
+        window.location = '#/inbox'
+      else
+        alert "Replication failed, please try again."
+    , "json"
+
+  $.ccnq3.save_doc = (r) ->
+
+    doc = $('form.validate').data 'doc'
+    doc ?= {}
+    former_doc = doc
+    $.extend doc, $('form.validate').toDeepJson()
+
+    push = ->
+      $.push_document r.push if r.push?
+
+    r.before? doc
+
+    if former_doc._rev?
+      r.app.send r.model.update, doc._id, doc,
+        success: (resp) ->
+          doc._rev = resp.rev
+          $('form.validate').data 'doc', doc
+          if r.update
+            r.update doc, push
+          else
+            do push
+    else
+      delete doc._rev
+      r.app.send r.model.create, doc,
+        success: (resp) ->
+          doc._rev = resp.rev # not really needed, done for symmetry
+          $('form.validate').data 'doc', doc
+          if r.create
+            r.create doc, push
+          else
+            do push
+
+  $.ccnq3.get_doc = (r) ->
+
+    data = r.data ? {}
+
+    r.app.send model.get, r.id,
+      success: (doc) =>
+        r.app.swap r.template $.extend data, doc
+        $('form.validate').data 'doc', doc
+      error: =>
+        doc = {}
+        r.app.swap r.template $.extend data, doc
+        $('form.validate').data 'doc', doc
+
+
+
+
   # require 'coffeekup'
 
   coffeekup_helpers =
