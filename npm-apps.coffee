@@ -13,11 +13,15 @@ operation = process.argv.slice(2).join(' ')
 child_process = require 'child_process'
 
 require('ccnq3_config').get (config) ->
-  for application in config.applications
-    do (application) ->
+
+  run = (applications) ->
+      application = applications.shift()
       console.log "Running #{operation} for #{application}"
 
       command = "npm #{operation}"
       options = cwd: "#{config.source}/#{application}"
       child_process.exec command, options, ->
         log "#{operation} for #{application}", arguments...
+        run applications
+
+  run config.applications
