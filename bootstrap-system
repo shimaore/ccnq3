@@ -59,6 +59,7 @@ sudo tee "${CONF}" <<JSON >/dev/null
   , "applications/web"
   ]
 , "source": "${SRC}"
+, "account": ""
 }
 JSON
 # applications/usercode: creates the usercode database: must be first since all others depend on it
