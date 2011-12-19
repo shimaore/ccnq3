@@ -2,7 +2,7 @@
 
 log = (application,error,stdout,stderr) ->
   console.log """
-    Completed #{application}: #{error ? 'OK'}
+    #{application}: #{error ? 'OK'}
     """
 
 operation = process.argv.slice(2).join(' ')
@@ -14,7 +14,6 @@ require('ccnq3_config').get (config) ->
   run = (applications) ->
       application = applications.shift()
       return unless application?
-      console.log "Running #{operation} for #{application}"
 
       command = "npm #{operation}"
       options = cwd: "#{config.source}/#{application}"
