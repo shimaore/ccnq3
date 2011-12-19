@@ -80,7 +80,7 @@ echo "Installation done."
 echo "Start bootstrap web server."
 (cd && cd "${SRC}" \
     && npm install \
-    && ./bootstrap-web.coffee)
+    && ./bootstrap-web.coffee &)
 
 echo
 echo "Master interface: ${CDB_URI}/_utils/"
