@@ -24,9 +24,11 @@ modparam("localcache", "cache_table_size", 12)
 # -- JSON --
 loadmodule "json.so"
 
-# -- FIFO --
+# -- MI --
 loadmodule "mi_fifo.so"
 modparam("mi_fifo","fifo_name", "/tmp/opensips_fifo")
+loadmodule "mi_datagram.so"
+modparam("mi_datagram", "socket_name", "udp:127.0.0.1:${mi_port}")
 
 # -- Common --
 loadmodule "sl.so"

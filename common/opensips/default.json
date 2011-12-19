@@ -34,5 +34,7 @@
   "auth_table": "subscriber",
   "usrloc_table": "location",
 
+  "mi_port": 30000,
+
   "ok":true
 }
