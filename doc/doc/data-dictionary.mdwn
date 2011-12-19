@@ -84,6 +84,8 @@ Notes:
         Note: The "sofia_profile" key is either "egress-#{profile_name}" or "ingress-#{profile_name}" so that each direction
               can be restart independently.
         Note: Add a command then remove it from the hash to prevent accidental misfiring of commands.
+        Note: A special "sofia_profile" key "opensips" is used to send events to a running OpenSIPS process (rather than a
+              FreeSwitch sofia profile). These events must follow the OpenSIPS "MI" syntax.
 
     sip_variables: {} of global (FreeSwitch) variables; defaults to {}
         Note: The idea is that these can be used on a per-host basis by additional dialplans, profiles, etc.
