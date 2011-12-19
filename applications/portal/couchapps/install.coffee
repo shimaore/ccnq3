@@ -27,14 +27,16 @@ cfg.get (config)->
   delete q.auth
   public_uri = url.format(q).replace(/\/$/,'')
 
-  config.portal ?=
-    port: config.install?.portal?.port ? 8765
-    hostname: config.install?.portal?.hostname ? config.host
-    # file_base: ..
+  if not config.portal?
+    config.portal =
+     port: config.install?.portal?.port ? 8765
+     hostname: config.install?.portal?.hostname ? config.host
+     # file_base: ..
 
-  config.session ?=
-    secret: config.install?.session?.secret ? 'a'+Math.random()
-    couchdb_uri: config.install?.session?.couchdb_uri ? public_uri + '/_session'
+  if not config.session?
+    config.session =
+      secret: config.install?.session?.secret ? 'a'+Math.random()
+      couchdb_uri: config.install?.session?.couchdb_uri ? public_uri + '/_session'
 
   config.mail_password ?=
     sender_local_part: config.install?.mail_password?.sender_local_part ? 'support'
