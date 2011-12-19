@@ -50,7 +50,15 @@ sudo tee "${CONF}" <<JSON >/dev/null
     "couchdb_uri": "${CDB_URI}"
   , "system": true
   }
-, "applications": "applications/usercode applications/provisioning applications/roles applications/host applications/portal applications/inbox public"
+, "applications": [
+    "applications/usercode"
+  , "applications/provisioning"
+  , "applications/roles"
+  , "applications/host"
+  , "applications/portal"
+  , "applications/inbox"
+  , "public"
+]
 , "source": "${SRC}"
 }
 JSON
@@ -65,7 +73,7 @@ sudo chown `whoami` "${CONF}"
 echo "Cleanup"
 ${SRC}/cleanup
 echo "Update"
-${SRC}/update
+${SRC}/update.coffee
 # Do not restart just yet.
 
 echo "Install applications/host"
