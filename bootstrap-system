@@ -70,11 +70,12 @@ JSON
 # Add any server-specific applications at the end of the (space-delimited) string.
 sudo chown `whoami` "${CONF}"
 
+echo "Cleanup"
+${SRC}/cleanup
+
 (cd && cd "${SRC}" \
     && npm install )
 
-echo "Cleanup"
-${SRC}/cleanup
 echo "Update"
 ${SRC}/update.coffee
 # Do not restart just yet.
