@@ -31,11 +31,14 @@ cfg.get (config)->
     port: config.install?.portal?.port ? 8765
     hostname: config.install?.portal?.hostname ? config.host
     # file_base: ..
+
   config.session ?=
     secret: config.install?.session?.secret ? 'a'+Math.random()
     couchdb_uri: config.install?.session?.couchdb_uri ? public_uri + '/_session'
+
   config.mail_password ?=
     sender_local_part: config.install?.mail_password?.sender_local_part ? 'support'
+
   config.mailer ?=
     sendmail: config.install?.mailer?.sendmail ? '/usr/sbin/sendmail'
 
