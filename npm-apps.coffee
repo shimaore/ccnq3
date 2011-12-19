@@ -1,4 +1,4 @@
-#!/usr/bin/env coffe
+#!/usr/bin/env coffee
 
 log = (application,error,stdout,stderr) ->
   console.log "#{application} stdout: #{stdout}"
