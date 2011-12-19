@@ -9,6 +9,8 @@ do (jQuery) ->
 
   profile = $(container).data 'profile'
 
+  # FIXME: Retrieve the default value for host_couchdb_uri (public, no password embedded) from some configuration area.
+
   host_tpl = $.compile_template ->
 
     form id:'host_record', method:'post', action:'#/host', class:'validate', ->
@@ -20,26 +22,21 @@ do (jQuery) ->
         value:@host
 
       textbox
-        id:'provisioning.couchdb_uri'
+        id:'provisioning.host_couchdb_uri'
         title: 'Provisioning database URI'
         class:'required url'
-        value: @provisioning?.couchdb_uri ? (window.location.protocol + '//' + window.location.host + '/provisioning')
+        value: @provisioning?.host_couchdb_uri ? (window.location.protocol + '//' + window.location.host + '/provisioning/')
 
     $('form.validate').validate()
-
 
   $(document).ready ->
     $.sammy container, ->
       app = @
       model = @createModel 'host'
 
-      # Show existing host
+      # Show template (to create new host)
       @get '#/host', ->
-        $.ccnq3.get_doc
-          app: @
-          template: host_tpl
-          data: {}
-          id: @param.id
+        @swap host_tpl {}
 
       # Save
       @post '#/host', ->
@@ -78,30 +75,45 @@ do (jQuery) ->
             doc.mailer ?=
               sendmail: '/usr/sbin/sendmail'
 
-          create: (doc,cb) ->
-
             username = host_username doc.host
             password = hex_sha1 "a"+Math.random()
 
-            u = doc.provisioning.couchdb_uri.matches(/^(https?:\/\/)(?:[^@]+@)?(.*)$/i)
+            u = doc.provisioning.couchdb_uri.matches ///
+                ^
+                (https?://)
+                (?:[^@]*@)?
+                (.*)
+              ///i
 
-            config.provisioning.couchdb_uri = u[0] + encodeURI(username) + ':' + encodeURI(password) + '@' + u[1]
+            unless u
+              alert 'Invalid provisioning URL'
+              return
+
+            doc.provisioning.host_couchdb_uri = u[0] + encodeURI(username) + ':' + encodeURI(password) + '@' + u[1]
+            doc.password = password
+
+          create: (doc,cb) ->
+
+            username = host_username doc.host
 
             p =
               name: username
               roles: ["host"]
 
             # Quite obviously this can only be ran by server-admins or users_writer.
-            $.couch.signup p, password,
+            $.couch.signup p, doc.password,
 
               error: (xhr,status,error) ->
                 alert "Host signup failed: #{error}"
 
               success: cb
 
+      app = @
+
       Inbox.register 'partner_signup',
 
         list: (doc) ->
           return "Server #{doc.host}"
 
-        form: host_tpl
+        form: (doc) ->
+          app.swap host_tpl doc
