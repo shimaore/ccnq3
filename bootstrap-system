@@ -58,7 +58,7 @@ sudo tee "${CONF}" <<JSON >/dev/null
   , "applications/portal"
   , "applications/inbox"
   , "public"
-]
+  ]
 , "source": "${SRC}"
 }
 JSON
@@ -91,8 +91,7 @@ ${SRC}/restart.coffee
 echo "Installation done."
 
 echo "Start bootstrap web server."
-(cd && cd "${SRC}" \
-    && ./bootstrap-web.coffee &)
+${SRC}/bootstrap-web.coffee &
 
 echo
 echo "Master interface: ${CDB_URI}/_utils/"
