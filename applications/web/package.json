@@ -8,10 +8,8 @@
     "config_file": "/etc/ccnq3/host.json"
   },
   "scripts": {
-    "start":  "./npm-apps.coffee start"
-  , "stop":   "./npm-apps.coffee stop"
-  , "update": "./npm-apps.coffee install; ./npm-apps.coffee couchapps"
-  , "bootstrap": "./npm-apps.coffee run-script bootstrap"
+    "start": "daemon -n ccnq3__web -o daemon.debug -r -D \"`pwd`\" -- ./web.coffee"
+  , "stop":  "daemon -n ccnq3__web -o daemon.debug --stop"
   },
   "dependencies": {
     "zappa": "0.3.3"

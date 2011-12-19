@@ -51,13 +51,16 @@ sudo chown `whoami` "${CONF}"
 echo "Cleanup"
 ${SRC}/cleanup
 
+echo "Install dependencies"
 (cd && cd "${SRC}" \
     && npm install )
 
 echo "Update"
-${SRC}/update.coffee
+(cd && cd "${SRC}" \
+    && npm update)
 
 echo "Restart"
-${SRC}/restart.coffee
+(cd && cd "${SRC}" \
+    && npm restart)
 
 echo "Installation done."

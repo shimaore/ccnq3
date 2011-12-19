@@ -7,3 +7,4 @@ SRC="`pwd`"
 echo "==== Cleanup any previous run ===="
 # (cd && rm -rf node_modules)
 (cd && find "${SRC}" -name node_modules -print0 | xargs -0 rm -rf)
+echo "==== End cleanup ===="

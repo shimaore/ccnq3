@@ -38,8 +38,6 @@ else
   shift
 fi
 
-echo "Bootstrapping database using ${CDB_URI}"
-
 echo "Creating ${CONF}"
 sudo tee "${CONF}" <<JSON >/dev/null
 {
@@ -58,6 +56,7 @@ sudo tee "${CONF}" <<JSON >/dev/null
   , "applications/portal"
   , "applications/inbox"
   , "public"
+  , "applications/web"
   ]
 , "source": "${SRC}"
 }
@@ -73,25 +72,23 @@ sudo chown `whoami` "${CONF}"
 echo "Cleanup"
 ${SRC}/cleanup
 
+echo "Install dependencies"
 (cd && cd "${SRC}" \
     && npm install )
 
 echo "Update"
-${SRC}/update.coffee
-# Do not restart just yet.
+(cd && cd "${SRC}" \
+    && npm update)
 
-echo "Install applications/host"
-(cd && cd "${SRC}/applications/host" \
-    && npm install \
+# Do not restart just yet.
+echo "Bootstrap local host"
+(cd && cd "${SRC}" \
     && npm run-script bootstrap)
 
 echo "Restart"
-${SRC}/restart.coffee
+(cd && cd "${SRC}" \
+    && npm restart)
 
 echo "Installation done."
-
-echo "Start bootstrap web server."
-${SRC}/bootstrap-web.coffee &
-
 echo
 echo "Master interface: ${CDB_URI}/_utils/"
