@@ -11,12 +11,14 @@ child_process = require 'child_process'
 
 require('ccnq3_config').get (config) ->
 
+  source = config.source ? __dirname
+
   run = (applications) ->
       application = applications.shift()
       return unless application?
 
       command = "npm #{operation}"
-      options = cwd: "#{config.source}/#{application}"
+      options = cwd: "#{source}/#{application}"
       child_process.exec command, options, ->
         log "#{operation} for #{application}", arguments...
         run applications
