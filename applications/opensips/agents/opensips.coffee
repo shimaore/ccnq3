@@ -36,6 +36,9 @@ require('ccnq3_config').get (config) ->
     if p._rev is last_rev then return util.log "Duplicate revision"
     last_rev = p._rev
 
+    # If the host does not support OpenSIPS then skip this update.
+    return unless p.opensips?.model?
+
     # 1. Generate new configuration files
     base_path = "./opensips"
 
