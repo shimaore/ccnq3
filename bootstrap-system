@@ -51,6 +51,7 @@ sudo tee "${CONF}" <<JSON >/dev/null
   , "system": true
   }
 , "applications": "applications/usercode applications/provisioning applications/roles applications/host applications/portal applications/inbox public"
+, "source": "${SRC}"
 }
 JSON
 # applications/usercode: creates the usercode database: must be first since all others depend on it
@@ -73,7 +74,7 @@ echo "Install applications/host"
     && npm run-script bootstrap)
 
 echo "Restart"
-${SRC}/restart
+${SRC}/restart.coffee
 
 echo "Installation done."
 

@@ -40,6 +40,7 @@ sudo tee "${CONF}" <<JSON >/dev/null
     "couchdb_uri": "${CDB_URI}"
   }
 , "applications": "applications/host"
+, "source": "${SRC}"
 }
 JSON
 # Add any server-specific applications at the end of the (space-delimited) string.
@@ -51,6 +52,6 @@ echo "Update"
 ${SRC}/update
 
 echo "Restart"
-${SRC}/restart
+${SRC}/restart.coffee
 
 echo "Installation done."
