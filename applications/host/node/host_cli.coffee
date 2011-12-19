@@ -13,9 +13,11 @@ cdb = require 'cdb'
 ccnq3_config = require 'ccnq3_config'
 ccnq3_config.get (config) ->
 
-  # Install the local (bootstrap/master) host in the database.
   hostname = config.host
 
+  return unless config.admin?.system
+
+  # Install the local (bootstrap/master) host in the database.
   users = cdb.new config.users.couchdb_uri
 
   host.create_user users, hostname, (password) ->

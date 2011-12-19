@@ -25,26 +25,11 @@ sudo chown `whoami` "${DIR}"
 if [ "x$1" == "x" ]; then
   echo "** ERROR: You must provide a reference URI **"
   exit
-else
-  CDB_URI="$1"
-  shift
 fi
 
 echo "Creating ${CONF}"
-sudo tee "${CONF}" <<JSON >/dev/null
-{
-  "_id": "host:${HOSTNAME}",
-  "type": "host",
-  "host": "${HOSTNAME}",
-  "provisioning": {
-    "couchdb_uri": "${CDB_URI}"
-  }
-, "applications": [
-    "applications/host"
-  ]
-, "source": "${SRC}"
-}
-JSON
+curl -o "${CONF}" "$1"
+
 # Add any server-specific applications at the end of the (space-delimited) string.
 sudo chown `whoami` "${CONF}"
 
