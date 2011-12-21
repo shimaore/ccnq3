@@ -17,14 +17,14 @@ WORKDIR=/opt/$NAME/src
 
 case "$1" in
   start)
-    (cd $WORKDIR && ./npm-apps.coffee start)
+    (cd $WORKDIR && su -c './npm-apps.coffee start' ccnq3)
   ;;
   stop)
-    (cd $WORKDIR && ./npm-apps.coffee stop)
+    (cd $WORKDIR && su -c './npm-apps.coffee stop ' ccnq3)
   ;;
   restart)
-    (cd $WORKDIR && ./npm-apps.coffee stop)
-    (cd $WORKDIR && ./npm-apps.coffee start)
+    (cd $WORKDIR && su -c './npm-apps.coffee stop 2>/dev/null' ccnq3)
+    (cd $WORKDIR && su -c './npm-apps.coffee start' ccnq3)
   ;;
   *)
     echo "Usage: $SCRIPTNAME {start|stop|restart}" >&2
