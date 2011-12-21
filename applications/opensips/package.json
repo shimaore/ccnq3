@@ -8,13 +8,18 @@
     "config_file": "/etc/ccnq3/host.json"
   },
   "scripts": {
-    "start": "daemon -n ccnq3_opensips -o daemon.debug -D \"`pwd`/agents\" -r -- ./opensips.coffee"
-  , "stop":  "daemon -n ccnq3_opensips -o daemon.debug --stop"
+    "start": "daemon -n ccnq3_opensips -o daemon.debug -D \"`pwd`/agents\" -r -- ./opensips.coffee; daemon -n ccnq3_opensips_http_db -o daemon.debug -D \"`pwd`/zappa\" -r -- ./main.coffee"
+  , "stop":  "daemon -n ccnq3_opensips -o daemon.debug --stop; daemon -n ccnq3_opensips_http_db -o daemon.debug --stop"
+  , "couchapps": "cd couchapps && ./install.coffee"
   },
   "dependencies": {
     "cdb": ">=0.0.12"
   , "cdb_changes": "*"
   , "ccnq3_config": ">=0.1"
+  , "zappa": "0.3.3"
+  , "couchapp": "*"
+  , "coffee-script": ">=1.1.2"
+  , "request": "*"
   },
   "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },
 
