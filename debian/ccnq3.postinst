@@ -5,6 +5,7 @@ NAME=ccnq3
 USER=ccnq3
 GROUP=daemon
 WORKDIR=/opt/${NAME}
+ETCDIR=/etc/ccnq3
 SRC=git://stephane.shimaore.net/git/ccnq3.git
 
 case "$1" in
@@ -24,6 +25,7 @@ case "$1" in
         -g $GROUP $USER
     fi
 
+    # Install code in /opt/ccnq3/src
     mkdir -p ${WORKDIR}
 
     if [ -d ${WORKDIR}/src/.git ]; then
@@ -35,8 +37,15 @@ case "$1" in
     chown -R $USER:$GROUP ${WORKDIR}
     chmod -R o-rwx ${WORKDIR}
 
+    # Create configuration directory
+    mkdir -p ${ETCDIR}
+    chown -R $USER:$GROUP ${ETCDIR}
+    chmod -R o-rwx ${ETCDIR}
+
+    # Install other dependencies
     npm -g install coffee-script
-    su -s /bin/sh -c "(cd ${WORKDIR}/src && npm install)"
+    su -s /bin/sh -c "(cd ${WORKDIR}/src && npm install)" ccnq3
+    su -s /bin/sh -c "(cd ${WORKDIR}/src && ./npm-apps.coffee install)" ccnq3
 
   ;;
 
