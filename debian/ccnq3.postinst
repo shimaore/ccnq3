@@ -25,19 +25,22 @@ case "$1" in
     fi
 
     mkdir -p ${WORKDIR}
+
+    if [ -d ${WORKDIR}/src/.git ]; then
+      (cd ${WORKDIR}/src && git pull)
+    else
+      (cd ${WORKDIR} && git clone ${SRC} ./src)
+    fi
+
     chown -R $USER:$GROUP ${WORKDIR}
     chmod -R o-rwx ${WORKDIR}
-    cd ${WORKDIR}
 
-    if [ -d ${SRC}/.git ]; then
-      git pull
-    else
-      git clone ${SRC}
-    fi
+    npm -g install coffee-script
 
   ;;
 
   remove|purge)
+    rm -rf ${WORKDIR}/src
     # deluser $USER
   ;;
 

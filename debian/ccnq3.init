@@ -13,7 +13,7 @@
 
 NAME=ccnq3
 SCRIPTNAME=/etc/init.d/$NAME
-WORKDIR=/opt/$NAME
+WORKDIR=/opt/$NAME/src
 
 case "$1" in
   start)
