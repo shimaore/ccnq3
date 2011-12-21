@@ -90,3 +90,24 @@ sudo aptitude -q -y install ccnq-base ccnq3 ccnq3-traces
 
 # Finally start the installation (as used "ccnq3").
 cd /opt/ccnq3/src && sudo su -c ./bootstrap-system ccnq3
+
+
+# Additionally I recommend modifying the rsyslog configuration
+# to either a centralized syslog server, or a smaller local
+# configuration such as:
+
+sudo tee /etc/rsyslog.conf >/dev/null <<'EOT'
+$ModLoad imuxsock # provides support for local system logging
+$ModLoad imklog   # provides kernel logging support (previously done by rklogd)
+$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
+$FileOwner root
+$FileGroup adm
+$FileCreateMode 0640
+$DirCreateMode 0755
+auth,authpriv.*             /var/log/auth.log
+*.info;auth,authpriv.none  -/var/log/syslog
+# Uncomment the following line to gather debug messages
+# *.debug                  -/var/log/debug
+EOT
+
+sudo /etc/init.d/rsyslog restart
