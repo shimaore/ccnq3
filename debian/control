@@ -4,9 +4,9 @@ Maintainer: Stephane Alnet <stephane@shimaore.net>
 Package: ccnq3
 Architecture: all
 Depends: ccnq-base
-Description: Installs the ccnq3 code in /opt/ccnq3
+Description: Installs the ccnq3 code in /opt/ccnq3/src
 
 Package: ccnq3-traces
 Architecture: all
 Depends: ccnq3, ${perl:Depends}
-Description: Installs the SIP traces in /opt/ccnq3
+Description: Installs the SIP traces in /opt/ccnq3/traces
