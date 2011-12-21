@@ -1,0 +1,12 @@
+Source: ccnq3
+Maintainer: Stephane Alnet <stephane@shimaore.net>
+
+Package: ccnq3
+Architecture: all
+Depends: ccnq-base, ccnq3-traces
+Description: Installs the ccnq3 code in /opt/ccnq3
+
+Package: ccnq3-traces
+Architecture: all
+Depends: ccnq-base
+Description: Installs the SIP traces in /opt/ccnq3

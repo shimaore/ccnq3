@@ -1,0 +1,50 @@
+#!/usr/bin/perl
+use strict; use warnings;
+
+use constant WORKDIR '/opt/ccnq3/traces';
+
+chdir WORKDIR or die "Couldn't enter ".WORKDIR.": $!\n";
+my $DEBUG=0;
+
+my @files = <*.pcap*>;
+my %if;
+for (@files)
+{
+  next unless /^([^_]*)_(\d+)_(\d+).pcap(.gz)?$/;
+  push @{$if{$1}}, [$2,$3,$4];
+}
+
+for my $if (keys %if)
+{
+  my $RING_SIZE = `ps -C dumpcap -f` =~ /-i\s+$if\s+.*\s+-b\s+files:(\d+)\b/m? $1:49;
+  print "RING_SIZE=$RING_SIZE\n" if $DEBUG;
+
+  @files = sort {$a->[1] <=> $b->[1]} @{$if{$if}};
+  while (@files > $RING_SIZE)
+  {
+    $_ = shift @files;
+    my $f = sprintf("%s_%s_%s.pcap%s",$if,@{$_});
+    if ($DEBUG)
+    {
+      print "unlink $f\n";
+    }
+    else
+    {
+      unlink $f;
+    }
+  }
+  pop @files; # remove current file
+  for (@files)
+  {
+    next if $_->[2];
+    my $f = sprintf("%s_%s_%s.pcap%s",$if,@{$_});
+    if ($DEBUG)
+    {
+      print("gzip $f\n");
+    }
+    else
+    {
+      system 'gzip', $f;
+    }
+  }
+}
