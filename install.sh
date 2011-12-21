@@ -1,0 +1,92 @@
+#!/usr/bin/env bash
+
+# This presents some preferred options.
+# Alternatively add
+#    deb http://debian.sotelips.net/shimaore shimaore main
+# to your existing /etc/apt/sources.list
+
+REPOSITORY=${REPOSITORY:-debian.sotelips.net}
+
+sudo tee /etc/apt/sources.list > /dev/null <<EOT
+deb http://${REPOSITORY}/debian   testing main
+deb http://${REPOSITORY}/shimaore shimaore main
+EOT
+
+sudo tee /etc/apt/preferences > /dev/null <<'EOT'
+Package: *
+Pin: release a=testing
+Pin-Priority: 500
+Package: *
+Pin: release a=shimaore
+Pin-Priority: 500
+Package: *
+Pin: release a=stable
+Pin-Priority: -1
+EOT
+
+# Add the GPG key for stephane@shimaore.net, which is used
+# to sign the "shimaore" distribution.
+
+sudo apt-key add - <<'GPG'
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: GnuPG v1.4.11 (GNU/Linux)
+
+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
+2gw6UmM=
+=8bli
+-----END PGP PUBLIC KEY BLOCK-----
+GPG
+
+# Once the above is done, update your system...
+sudo aptitude update
+sudo aptitude -q -y dist-upgrade
+# ... then install the ccnq packages.
+sudo aptitude -q -y install ccnq-base ccnq3 ccnq3-traces
+
+# Finally start the installation (as used "ccnq3").
+cd /opt/ccnq3/src && sudo su -c ./bootstrap-system ccnq3

@@ -13,9 +13,6 @@ if [ -e "${CONF}" ]; then
   exit 1
 fi
 
-./bootstrap/prepare
-./bootstrap/node
-
 HOSTNAME=`hostname`
 
 echo "Create ${DIR}"
@@ -69,13 +66,6 @@ JSON
 # applications/portal: portal pre-requires host
 # Add any server-specific applications at the end of the (space-delimited) string.
 sudo chown `whoami` "${CONF}"
-
-echo "Cleanup"
-${SRC}/cleanup
-
-echo "Install dependencies"
-(cd && cd "${SRC}" \
-    && npm install )
 
 echo "Update"
 (cd && cd "${SRC}" \

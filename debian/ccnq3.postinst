@@ -36,6 +36,7 @@ case "$1" in
     chmod -R o-rwx ${WORKDIR}
 
     npm -g install coffee-script
+    su -s /bin/sh -c "(cd ${WORKDIR}/src && npm install)"
 
   ;;
 
