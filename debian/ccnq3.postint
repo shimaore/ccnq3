@@ -8,7 +8,7 @@ WORKDIR=/opt/${NAME}
 SRC=git://stephane.shimaore.net/git/ccnq3.git
 
 case "$1" in
-  configure)
+  configure|upgrade)
     if ! getent passwd $USER >/dev/null; then
       adduser --disabled-password  --quiet --system \
         --home $WORKDIR \
@@ -35,6 +35,10 @@ case "$1" in
       git clone ${SRC}
     fi
 
+  ;;
+
+  remove|purge)
+    # deluser $USER
   ;;
 
   abort-upgrade|abort-remove|abort-deconfigure)

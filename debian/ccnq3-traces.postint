@@ -8,7 +8,7 @@ CAP_GROUP=wireshark
 CAP_DIR=/opt/$NAME/traces
 
 case "$1" in
-  configure)
+  configure|upgrade)
       groupadd -r $CAP_GROUP
 
       chgrp $CAP_GROUP $CAP
@@ -21,6 +21,10 @@ case "$1" in
       chmod g+s $CAP_DIR
 
       adduser $USER $CAP_GROUP
+  ;;
+
+  remove|purge)
+    # rm -rf $CAP_DIR
   ;;
 
   abort-upgrade|abort-remove|abort-deconfigure)
