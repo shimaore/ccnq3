@@ -20,7 +20,7 @@ fs_command = (cmd,cb) ->
 
 process_changes = (commands) ->
 
-  for profile_name, command of commands
+  for profile_name, command of commands when profile_name isnt 'opensips'
     switch command
       when 'start'
         fs_command "sofia profile #{profile_name} start"
