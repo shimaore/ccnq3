@@ -8,5 +8,5 @@ Description: Installs the ccnq3 code in /opt/ccnq3
 
 Package: ccnq3-traces
 Architecture: all
-Depends: ccnq3
+Depends: ccnq3, ${perl:Depends}
 Description: Installs the SIP traces in /opt/ccnq3
