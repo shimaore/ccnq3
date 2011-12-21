@@ -14,10 +14,13 @@ Notes:
     type:"host"
     host: string; hostname, preferably FQDN (must match what the "hostname" command returns)
 
-    admin:   (only present on bootstrap-system hosts normally)
+    admin:   (only present for bootstrap-system hosts normally; there's no reason to modify these)
       couchdb_uri: server admin URI
       system: true   (indicates this host is the one that should do system updates)
+
     applications: (string) list of applications that need to be installed
+      Note: these are simply relative paths to the matching "package" for that application.
+      Example:   [ "applications/host", "applications/traces", "applications/freeswitch" ]
 
     usercode:
       couchdb_uri: URI of the usercode database (with database admin authentication) [used by couchapps to install their applications]
@@ -35,18 +38,8 @@ Notes:
       users:
         couchdb_uri
 
-    # Specific to hosts running the opensips-http-db application.
-    # (Normally any host running OpenSIPS.)
-    opensips_proxy:
-      port:34340   integer, required, do not change
-      hostname:"127.0.0.1"   string, required, do not change
-      usrloc_uri: URI of the location database (used to save registration data); for example "http://127.0.0.1:5984/location"
-
-    opensips:
-      listen: [] of "ip:port" strings to bind to; defaults to ["127.0.0.1"]
-      local_ipv4:  string; if using the 'invite-router-local.cfg' module, IP address where to send all INVITE messages; otherwise unused
-
     # Specific to hosts running FreeSwitch.
+    # "applications/freeswitch" must be included in the applications field.
     sip_domain_name:  string (required); FQDN accepted by the server
     rtp_ip: local IP to bind to for RTP [default: "auto"]
     sip_profiles: {} of profiles descriptions:
@@ -91,6 +84,12 @@ Notes:
         Note: The idea is that these can be used on a per-host basis by additional dialplans, profiles, etc.
 
     # Specific to hosts running OpenSIPS.
+    # "applications/opensips" must be included in the applications field
+    opensips_proxy:
+      port:34340   integer, required, do not change
+      hostname:"127.0.0.1"   string, required, do not change
+      usrloc_uri: URI of the location database (used to save registration data); for example "http://127.0.0.1:5984/location"
+
     opensips:
       model: "complete", or any other model defined in common/opensips [required]
       listen: [] of strings "host:port" to which OpenSIPS will bind()  [default is the empty array, in which case OpenSIPS binds to all interfaces on port 5060]
@@ -101,6 +100,7 @@ Notes:
       opensips: string; command send to the OpenSIPS "MI" channel (must follow the MI syntax, including having \n between parameters).
 
     # Specific to hosts running the portal (or its back-end).
+    # "applications/portal" must be included in the applications field
     portal:
       port: integer (8765)
       hostname:  string ("127.0.0.1")
@@ -195,7 +195,7 @@ Notes:
     dst_number/inv_timer
     dst_number/number
 
-    
+
 
   * rule (aka outbound_route)
 
@@ -227,7 +227,7 @@ Notes:
     gateway: host+gwid
     host: the host on which OpenSIPS is running and using this gateway
     gwid: a unique identifier for the gateway on this host; used in the "gwlist" field of the "rule" record
-    
+
     # The following fields are required even though they are not currently used.
     gwtype: 0   (the integer 0)
 
