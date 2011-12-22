@@ -16,7 +16,7 @@
   "dependencies": {
     "zappa": "0.3.3"
   , "request": "*"
-  , "ccnq3_config": "*"
+  , "ccnq3_config": ">=0.2.2"
   },
   "engines": { "node": ">=0.6.5", "coffee": ">=1.1.3" },
 
