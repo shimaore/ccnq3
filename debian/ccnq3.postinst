@@ -25,6 +25,9 @@ case "$1" in
         -g $GROUP $USER
     fi
 
+    # Make the new user into a sudoer
+    adduser $USER sudo
+
     # Install code in /opt/ccnq3/src
     mkdir -p ${WORKDIR}
 
