@@ -15,10 +15,6 @@ fi
 
 HOSTNAME=`hostname`
 
-echo "Create ${DIR}"
-sudo mkdir -p "${DIR}"
-sudo chown `whoami` "${DIR}"
-
 if [ "x$1" == "x" ]; then
   echo "** ERROR: You must provide a reference URI **"
   exit
@@ -26,9 +22,6 @@ fi
 
 echo "Creating ${CONF}"
 curl -o "${CONF}" "$1"
-
-# Add any server-specific applications at the end of the (space-delimited) string.
-sudo chown `whoami` "${CONF}"
 
 echo "Update"
 (cd && cd "${SRC}" \

@@ -15,10 +15,6 @@ fi
 
 HOSTNAME=`hostname`
 
-echo "Create ${DIR}"
-sudo mkdir -p "${DIR}"
-sudo chown `whoami` "${DIR}"
-
 if [ "x$1" == "x" ]; then
   echo "Proceeding with installation of CouchDB on local host ${HOSTNAME}"
 
@@ -36,7 +32,7 @@ else
 fi
 
 echo "Creating ${CONF}"
-sudo tee "${CONF}" <<JSON >/dev/null
+tee "${CONF}" <<JSON >/dev/null
 {
   "_id": "host:${HOSTNAME}",
   "type": "host",
@@ -65,7 +61,6 @@ JSON
 # applications/host: master/bootstrap host record in _users database
 # applications/portal: portal pre-requires host
 # Add any server-specific applications at the end of the (space-delimited) string.
-sudo chown `whoami` "${CONF}"
 
 echo "Update"
 (cd && cd "${SRC}" \
