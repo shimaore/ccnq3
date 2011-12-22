@@ -38,7 +38,11 @@ exports.update = (content) ->
 exports.get = (cb)->
   util.log "Using #{config_location} as configuration file."
   fs = require 'fs'
-  fs_config = JSON.parse fs.readFileSync config_location, 'utf8'
+  try
+    fs_config = JSON.parse fs.readFileSync config_location, 'utf8'
+  catch error
+    util.log "Reading #{config_location}: #{error}"
+    return cb {}
   exports.retrieve fs_config, (config) ->
     # Memoize the result
     exports.get = (cb)-> cb config
