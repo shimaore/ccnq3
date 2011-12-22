@@ -88,8 +88,8 @@ sudo aptitude -q -y dist-upgrade
 # ... then install the ccnq packages.
 sudo aptitude -q -y install ccnq-base ccnq3 ccnq3-traces
 
-# Finally start the installation (as used "ccnq3").
-cd /opt/ccnq3/src && sudo su -c ./bootstrap-system ccnq3
+# Finally start the installation (as user "ccnq3").
+sudo -u ccnq3 /bin/sh -c 'cd /opt/ccnq3/src && ./bootstrap-system'
 
 
 # Additionally I recommend modifying the rsyslog configuration
