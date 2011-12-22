@@ -14,6 +14,7 @@ require('ccnq3_config').get (config) ->
   source = config.source ? __dirname
 
   run = (applications) ->
+      return unless applications?.length > 0
       application = applications.shift()
       return unless application?
 
