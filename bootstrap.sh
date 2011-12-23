@@ -14,7 +14,6 @@ COUCHDB_CONFIG=/etc/couchdb/local.ini
 usage () {
   cat - <<USAGE
 Usage:
-  sudo $0         Creates manager host: overwrites local CouchDB configuration
   CDB_URI=uri $0  Creates manager host: uses existing CouchDB database
   $0 URI          Creates non-manager host
 USAGE
@@ -40,44 +39,11 @@ fi
 
 HOSTNAME=`hostname`
 
-configure_couchdb () {
-  echo "Re-configuring CouchDB on local host ${HOSTNAME}"
-
-  # Using 128 or higher does not work.
-  ADMIN_PASSWORD=`openssl rand 64 -hex`
-
-  # Install default config file
-  /etc/init.d/couchdb stop
-  # Double-enforce (currently having issues with this).
-  killall couchdb beam.smp heart || echo OK
-
-  tee "${COUCHDB_CONFIG}" <<EOT >/dev/null
-[httpd]
-port = 5984
-bind_address = ::
-WWW-Authenticate = Basic realm="couchdb"
-
-[couch_httpd_auth]
-require_valid_user = true
-
-[log]
-level = error
-
-[admins]
-admin = ${ADMIN_PASSWORD}
-EOT
-  chown couchdb.couchdb "${COUCHDB_CONFIG}"
-
-  /etc/init.d/couchdb start
-
-  CDB_URI="http://admin:${ADMIN_PASSWORD}@${HOSTNAME}:5984"
-}
-
 if [ "x$1" == "x" ]; then
 
   # Manager installation
   if [ "x$CDB_URI" == "x" ]; then
-    configure_couchdb
+    echo "ERROR: You must provide CDB_URI."
   fi
 
   echo "Creating ${CONF}"
@@ -116,8 +82,6 @@ else
   curl -o "${CONF}" "$1"
 
 fi
-
-chown "$USER" "$CONF"
 
 echo "Update"
 npm run-script updates

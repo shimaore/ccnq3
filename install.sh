@@ -97,15 +97,17 @@ sudo aptitude -y install ccnq-base ccnq3 ccnq3-traces
 # The first host you will install is your "manager" host.
 # (sudo is needed to overwrite your existing CouchDB configuration).
 cd /opt/ccnq3/src
-sudo ./bootstrap.sh
+sudo ./bootstrap-couchdb.sh
 
 # If you have an existing CouchDB/BigCouch installation, use
 #   cd /opt/ccnq3/src
-#   CDB_URI=http://admin:password@host:5984/ ./bootstrap.sh
+#   export CDB_URI=http://admin:password@host:5984/
+#   su -s /bin/bash -c ./bootstrap.sh ccnq3
 # instead.
 
 # On a non-manager host you will use:
-#   cd /opt/ccnq3/src && ./bootstrap.sh http://..../
+#   cd /opt/ccnq3/src
+#   su -s /bin/bash -c './bootstrap.sh http://..../' ccnq3
 # where the URI is provided by the provisioning system.
 
 
