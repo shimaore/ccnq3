@@ -51,7 +51,7 @@ cfg.get (config) ->
   replicate_uri   = config.install?.users?.replicate_uri   ? config.admin.couchdb_uri + '/_replicate'
   userdb_base_uri = config.install?.users?.userdb_base_uri ? config.admin.couchdb_uri
 
-  config.users ?=
+  config.users =
     couchdb_uri: users_uri
     replicate_uri: replicate_uri
     userdb_base_uri: userdb_base_uri
