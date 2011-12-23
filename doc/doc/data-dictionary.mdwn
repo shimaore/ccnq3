@@ -14,6 +14,9 @@ Notes:
     type:"host"
     host: string; hostname, preferably FQDN (must match what the "hostname" command returns)
 
+    # Note: Changing any of these settings would require to restart the matching
+    #       services, since configuration is read (in most cases) once at startup.
+
     admin:   (only present for bootstrap-system hosts normally; there's no reason to modify these)
       couchdb_uri: server admin URI
       system: true   (indicates this host is the one that should do system updates)
