@@ -1,6 +1,6 @@
 {
   "name": "ccnq3_web",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Web server for CCNQ3",
   "keywords": "",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
@@ -8,8 +8,8 @@
     "config_file": "/etc/ccnq3/host.json"
   },
   "scripts": {
-    "start": "daemon -n ccnq3__web -o daemon.debug -r -D \"`pwd`\" -- ./web.coffee"
-  , "stop":  "daemon -n ccnq3__web -o daemon.debug --stop"
+    "start": "daemon -n ccnq3_web -o daemon.debug -r -D \"`pwd`\" -- ./web.coffee"
+  , "stop":  "daemon -n ccnq3_web -o daemon.debug --stop"
   },
   "dependencies": {
     "zappa": "0.3.3"
