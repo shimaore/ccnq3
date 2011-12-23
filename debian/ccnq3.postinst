@@ -38,7 +38,7 @@ case "$1" in
     fi
 
     chown -R $USER:$GROUP ${WORKDIR}
-    chmod -R o-rwx ${WORKDIR}
+    chmod -R og-w ${WORKDIR}
 
     # Create configuration directory
     mkdir -p ${ETCDIR}
