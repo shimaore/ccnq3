@@ -31,11 +31,11 @@ case "$1" in
     # Install code in /opt/ccnq3/src
     mkdir -p ${WORKDIR}
 
-    if [ -d ${WORKDIR}/src/.git ]; then
-      (cd ${WORKDIR}/src && git pull)
-    else
-      (cd ${WORKDIR} && git clone ${SRC} ./src)
-    fi
+    # if [ -d ${WORKDIR}/src/.git ]; then
+    #   (cd ${WORKDIR}/src && git pull)
+    # else
+    #   (cd ${WORKDIR} && git clone ${SRC} ./src)
+    # fi
 
     chown -R $USER:$GROUP ${WORKDIR}
     chmod -R og-w ${WORKDIR}

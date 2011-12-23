@@ -1,3 +1,9 @@
+ccnq3 (0.0.13) unstable; urgency=low
+
+  * Trying to package the code
+
+ -- Stephane Alnet <stephane@shimaore.net>  Fri, 23 Dec 2011 13:55:32 +0100
+
 ccnq3 (0.0.12) unstable; urgency=low
 
   * Initial release
