@@ -79,7 +79,7 @@
         type: 'user'
         name: username
         roles: []
-        domain: @request.header('Host')
+        domain: @request.header('Host').split(/:/)[0]
         profile: profile
         user_database: 'u'+uuid() # User's database UUID (or UUID prefix)
         send_password: true # send them their new password
