@@ -10,6 +10,7 @@ Notes:
   * host (aka config)
 
     _id: type+host
+    account: ''    (the empty string)
 
     type:"host"
     host: string; hostname, preferably FQDN (must match what the "hostname" command returns)
@@ -139,6 +140,7 @@ Notes:
   * domain
 
     _id: type+domain
+    account: ''    (the empty string)
 
     type:"domain"
     domain: string; name of a SIP domain accepted by the system
@@ -148,6 +150,7 @@ Notes:
   * endpoint
 
     _id: type+endpoint
+    account: string
 
     type:"endpoint"
     endpoint: string; either a static IP, or a user@domain registration username
@@ -156,7 +159,6 @@ Notes:
     ha1b: authentication string; md5_hex([endpoint+'@'+challenge,challenge,password].join(":"))
 
     # Inbound call routing
-    dst_endpoint/account
     dst_endpoint/dest_domain
     dst_endpoint/dst_disabled
     dst_endpoint/endpoint
@@ -189,6 +191,7 @@ Notes:
   * number
 
     _id: type+number
+    account: string
 
     type:"number"
     number: string; the number as routed inside the system; note that this must be consistent end-to-end; normally the inbound- and outbound-proxies rely on "E.164-without-plus"; while the client-side servers might rely on locally-formatted numbers.
@@ -198,7 +201,6 @@ Notes:
     location:  string; the location identifier for this specific number (used for emergency location services)
 
     # Inbound call routing
-    dst_number/account
     dst_number/cfa
     dst_number/cfb
     dst_number/cfda
@@ -213,6 +215,7 @@ Notes:
   * rule (aka outbound_route)
 
     _id: type+rule
+    account: ''    (the empty string)
 
     type:"rule"
     rule: host+ruleid
@@ -235,6 +238,7 @@ Notes:
   * gateway
 
     _id: type+gateway
+    account: ''    (the empty string)
 
     type:"gateway"
     gateway: host+gwid
@@ -260,6 +264,8 @@ Notes:
   * location
 
     _id: type+location
+    account: string
+
     type:"location"
     location:  string; a unique identifier for this location
     routing_data:  string; specific to the emergency routing system used
@@ -289,6 +295,7 @@ Notes:
   Notes: The "profile" hash is returned by a GET /u/profile.json once logged-in.
   Notes: The "name" field is normally the user's main email address (at least that's what the registration code assumes); servers and applications will also have _users records so that they can remotely access the main database.
   Notes: Servers should have the "host" role assigned.
+  Notes: The roles hash can also be manipulated using the REST API in applications/roles.
 
 * usercode records
 
