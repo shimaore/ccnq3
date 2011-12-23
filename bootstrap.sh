@@ -11,6 +11,21 @@ USER=ccnq3
 # Apparently using /etc/couchdb/local.d/ccnq3 does not work.
 COUCHDB_CONFIG=/etc/couchdb/local.ini
 
+usage () {
+  cat - <<USAGE
+Usage:
+  sudo $0         Creates manager host: overwrites local CouchDB configuration
+  CDB_URI=uri $0  Creates manager host: uses existing CouchDB database
+  $0 URI          Creates non-manager host
+USAGE
+}
+
+if [ "x$1" == "x-h" ]; then
+  shift
+  usage
+  exit
+fi
+
 if [ ! -d "${SRC}" ]; then
   echo "ERROR: You must install the ccnq3 package before calling this script."
   exit 1
