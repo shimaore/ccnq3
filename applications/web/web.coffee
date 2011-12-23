@@ -57,6 +57,7 @@ require('ccnq3_config').get (config) ->
           uri: proxy_base + @request.url
           method: @request.method
           headers: @request.headers
+          jar: false
           timeout: 1000
         @request.pipe proxy
         proxy.pipe @response
