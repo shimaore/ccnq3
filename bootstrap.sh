@@ -44,6 +44,7 @@ if [ "x$1" == "x" ]; then
   # Manager installation
   if [ "x$CDB_URI" == "x" ]; then
     echo "ERROR: You must provide CDB_URI."
+    exit 1
   fi
 
   echo "Creating ${CONF}"
