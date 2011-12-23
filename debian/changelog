@@ -1,8 +1,9 @@
-ccnq3 (0.0.18) unstable; urgency=low
+ccnq3 (0.0.19) unstable; urgency=low
 
   * New bootstrap (git 5120d4fd11246d1e2b1c1519049eea33186d1c1b)
+  * Fail on errors (git afca34afdd9c83995f2f8605ecc0b844fd4325d4)
 
- -- Stephane Alnet <stephane@shimaore.net>  Fri, 23 Dec 2011 16:25:31 +0100
+ -- Stephane Alnet <stephane@shimaore.net>  Fri, 23 Dec 2011 16:42:32 +0100
 
 ccnq3 (0.0.16) unstable; urgency=low
 
