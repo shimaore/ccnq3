@@ -109,12 +109,12 @@ sudo ./bootstrap-couchdb.sh
 # If you have an existing CouchDB/BigCouch installation, use
 #   cd /opt/ccnq3/src
 #   export CDB_URI=http://admin:password@host:5984/
-#   su -s /bin/bash -c ./bootstrap.sh ccnq3
+#   sudo su -s /bin/bash -c ./bootstrap.sh ccnq3
 # instead.
 
 # On a non-manager host you will use:
 #   cd /opt/ccnq3/src
-#   su -s /bin/bash -c './bootstrap.sh http://..../' ccnq3
+#   sudo su -s /bin/bash -c './bootstrap.sh http://..../' ccnq3
 # where the URI is provided by the provisioning system.
 
 
