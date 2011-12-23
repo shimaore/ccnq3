@@ -8,7 +8,8 @@
     "config_file": "/etc/ccnq3/host.json"
   },
   "scripts": {
-    "start": "daemon -n ccnq3_web -o daemon.debug -r -D \"`pwd`\" -- ./web.coffee"
+    "preinstall": "coffee -c couchapps/*/*.coffee"
+  , "start": "daemon -n ccnq3_web -o daemon.debug -r -D \"`pwd`\" -- ./web.coffee"
   , "stop":  "daemon -n ccnq3_web -o daemon.debug --stop"
   , "couchapps": "cd couchapps && ./install.coffee"
   },
