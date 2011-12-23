@@ -1,6 +1,5 @@
 applications /opt/ccnq3/src
 bootstrap.sh /opt/ccnq3/src
-cleanup /opt/ccnq3/src
 common /opt/ccnq3/src
 npm-apps.coffee /opt/ccnq3/src
 package.json /opt/ccnq3/src
