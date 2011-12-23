@@ -4,6 +4,7 @@ log = (application,error,stdout,stderr) ->
   console.log """
     #{application}: #{error ? 'OK'}
     """
+  throw error if error?
 
 operation = process.argv.slice(2).join(' ')
 

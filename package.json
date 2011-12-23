@@ -1,5 +1,5 @@
 {
-  "name": "ccnq3_web",
+  "name": "ccnq3_main",
   "version": "0.0.1",
   "description": "Web server for CCNQ3",
   "keywords": "",
@@ -10,7 +10,7 @@
   "scripts": {
     "start":  "./npm-apps.coffee start"
   , "stop":   "./npm-apps.coffee stop"
-  , "updates": "./npm-apps.coffee install; ./npm-apps.coffee run-script couchapps"
+  , "updates": "./npm-apps.coffee install && ./npm-apps.coffee run-script couchapps"
   , "bootstrap": "./npm-apps.coffee run-script bootstrap"
   },
   "dependencies": {
