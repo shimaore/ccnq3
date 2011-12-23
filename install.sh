@@ -1,30 +1,23 @@
 #!/usr/bin/env bash
 
-# This presents some preferred options.
-# Alternatively add
+# ----- REQUIREMENTS -----
+# Your base system should be a current Debian/testing system.
+# Other systems might work but are not supported.
+
+# ----- ADD REPOSITORY -----
+# Add
 #    deb http://debian.sotelips.net/shimaore shimaore main
 # to your existing /etc/apt/sources.list
 
 REPOSITORY=${REPOSITORY:-debian.sotelips.net}
-
-sudo tee /etc/apt/sources.list > /dev/null <<EOT
-deb http://${REPOSITORY}/debian   testing main
+sudo tee -a /etc/apt/sources.list > /dev/null <<EOT
 deb http://${REPOSITORY}/shimaore shimaore main
 EOT
 
-# We use dependencies in Debian/testing.
+# Alternatively use
+#   apt-add-repository "deb http://${REPOSITORY}/shimaore shimaore main"
 
-sudo tee /etc/apt/preferences > /dev/null <<'EOT'
-Package: *
-Pin: release a=testing
-Pin-Priority: 500
-Package: *
-Pin: release a=shimaore
-Pin-Priority: 500
-Package: *
-Pin: release a=stable
-Pin-Priority: -1
-EOT
+# ----- ADD KEY -----
 
 # Add the GPG key for stephane@shimaore.net, which is used
 # to sign the "shimaore" distribution.
@@ -84,13 +77,24 @@ Q13nTfbCPyAYjX8RUfvjCrJOdngi1np5Gy9XzDLx6UPb48u5yq1C3e/TWYSWWA+u
 -----END PGP PUBLIC KEY BLOCK-----
 GPG
 
+# Alternatively retrieve the key then add it:
+#   gpg --recv-keys B05B9BC8E33DDBE3
+#   gpg --armor --export B05B9BC8E33DDBE3 | sudo apt-key add -
+
+
+# ----- UPDATE SYSTEM, INSTALL PACKAGES -----
+
 # Once the above is done, update your system...
 sudo aptitude update
 sudo aptitude -y dist-upgrade
 # ... then install the ccnq packages.
 sudo aptitude -y install ccnq-base ccnq3 ccnq3-traces
 
+# ----- START INSTALLATION ----
+
 # Finally start the installation
+
+# The first host you will install is your "manager" host.
 # (sudo is needed to overwrite your existing CouchDB configuration).
 cd /opt/ccnq3/src
 sudo ./bootstrap.sh
@@ -100,10 +104,12 @@ sudo ./bootstrap.sh
 #   CDB_URI=http://admin:password@host:5984/ ./bootstrap.sh
 # instead.
 
-# On a non-manager host use:
+# On a non-manager host you will use:
 #   cd /opt/ccnq3/src && ./bootstrap.sh http://..../
 # where the URI is provided by the provisioning system.
 
+
+# ----- TUNE UP ----
 
 # Additionally I recommend modifying the rsyslog configuration
 # to either a centralized syslog server, or a smaller local
