@@ -46,6 +46,7 @@ cfg.get (config) ->
   delete q.href
   delete q.host
   delete q.auth
+  q.port = 8080 # FIXME Default for applications.web
   public_uri = url.format(q).replace(/\/$/,'')
 
   replicate_uri   = config.install?.users?.replicate_uri   ? config.admin.couchdb_uri + '/_replicate'
