@@ -1,6 +1,6 @@
 {
   "name": "ccnq3_web",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Web server for CCNQ3",
   "keywords": "",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
@@ -10,11 +10,13 @@
   "scripts": {
     "start": "daemon -n ccnq3_web -o daemon.debug -r -D \"`pwd`\" -- ./web.coffee"
   , "stop":  "daemon -n ccnq3_web -o daemon.debug --stop"
+  , "couchapps": "cd couchapps && ./install.coffee"
   },
   "dependencies": {
     "zappa": "0.3.3"
   , "request": "*"
   , "ccnq3_config": "*"
+  , "couchapp": "*"
   },
   "engines": { "node": ">=0.6.5", "coffee": ">=1.1.3" },
 
