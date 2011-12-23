@@ -1,3 +1,9 @@
+ccnq3 (0.0.17) unstable; urgency=low
+
+  * New bootstrap (git 5120d4fd11246d1e2b1c1519049eea33186d1c1b)
+
+ -- Stephane Alnet <stephane@shimaore.net>  Fri, 23 Dec 2011 16:21:29 +0100
+
 ccnq3 (0.0.16) unstable; urgency=low
 
   * Fix cron.hourly for traces
