@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict; use warnings;
 
-use constant WORKDIR '/opt/ccnq3/traces';
+use constant WORKDIR => '/opt/ccnq3/traces';
 
 chdir WORKDIR or die "Couldn't enter ".WORKDIR.": $!\n";
 my $DEBUG=0;

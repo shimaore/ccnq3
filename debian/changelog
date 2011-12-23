@@ -1,3 +1,9 @@
+ccnq3 (0.0.16) unstable; urgency=low
+
+  * Fix cron.hourly for traces
+
+ -- Stephane Alnet <stephane@shimaore.net>  Fri, 23 Dec 2011 15:53:57 +0100
+
 ccnq3 (0.0.15) unstable; urgency=low
 
   * git 92fc0d08df9cd4790d8c547216f5b813ddd032d4
