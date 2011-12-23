@@ -1,3 +1,9 @@
+ccnq3 (0.0.21) unstable; urgency=low
+
+  * Default portal fixes
+
+ -- Stephane Alnet <stephane@shimaore.net>  Fri, 23 Dec 2011 18:55:16 +0100
+
 ccnq3 (0.0.20) unstable; urgency=low
 
   * commit 9988683288c9a7d059b02799a0c7930a70a93c27
