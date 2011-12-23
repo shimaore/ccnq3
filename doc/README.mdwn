@@ -1,0 +1,116 @@
+* License
+
+    CCNQ3 -- carrierclass.net v3
+    Copyright (C) 2011  Stéphane Alnet
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+* Content
+
+etc/
+  lighttpd2/  -- Proxy for main site
+  monit/      -- System monitoring examples
+
+applications/
+  portal/     -- Registration, etc.
+  roles/      -- On-the-fly creation of new (read) replicas from global databases
+  prepaid/    -- Prepaid call handling
+  cnam/       -- CNAM client
+
+  common/     -- Generic applications (replication, sending mail)
+  _users/     -- Bootstrapping
+  host/       -- Host installation
+
+  provisioning/   -- Installation and application for the provisioning database
+
+lib/          -- CoffeeScript libraries
+  cdb         -- CouchDB access helpers
+  cdb_changes -- monitor CouchDB _changes handler
+  esl         -- Access to the FreeSwitch Event System
+  json_req    -- An extension to the "request" module to handle JSON
+  password    -- A memorable password generator
+
+public/       -- Common content that should be installed under the root of the main site
+              -- and made available as (relative URI) /public/...
+  images/
+  js/         -- javascripts
+  css/        -- stylesheets
+
+private/      -- Misc. application under development (might eventually move under applications/)
+
+common/       -- Repository for other applications data
+  freeswitch/
+  mediaproxy/
+  opensips/
+
+slayers/      -- REST interfaces to other protocoles
+  dsmlayer    -- The Dancer Session Manager used in ccnq2.0
+  pgslayer    -- A generic REST-to-DBI interface
+
+* Applications code layout
+
+  agents/     -- Any background agents; most of them monitor CouchDB _changes and
+              -- act upon insertion / modification ..
+  couchapps/  -- CouchApps (in CoffeeScript)
+              -- Normally called "_design/${application}" with ${application} the name
+              -- of the application (to avoid conflicts).
+  node/       -- Zappa REST APIs
+  scripts/    -- FreeSwitch (Lua) scripts
+  conf/       -- FreeSwitch configuration fragments (examples)
+
+  *.config files are actually JSON documents
+
+* APIs
+
+In most cases (except for the core portal) the application is driven from the
+web browser. Therefor most applications will provide REST/JSON APIs only.
+
+Moreover these are only provided for databases updates (where the node/ code
+allows writer access without allowing reader access to the global CouchDB databases).
+For databases read, the application is a couchapp or (equivalently) static client-side
+HTML and Javascript, accessing the "source+prefix"-specific database directly.
+
+* Central databases
+
+The following central databases are available:
+  _users        -- System-wide authentication and authorization
+  usercode      -- System-wide replicatable applications
+  provisioning  -- System-wide provisioning information (host, endpoint, location, number, ..)
+  billing       -- System-wide billing information (account, ..)
+  cdr           -- System-wide CDR repository
+
+* Unified web access
+
+The web access is unified as follows:
+
+  - A unified website, such as https://example.net/ , is used for all applications.
+    The main page should include /public/js/default.js , /public/css/default.css , and
+    contain a "content" ID where the CCNQ3 applications will load.
+
+  - The content in the subdirectories of "public" is available under the root:
+      https://example.net/public/js
+      https://example.net/public/css
+      https://example.net/public/images
+
+  - The "portal" application must be accessible under /u/
+      i.e.  https://example.net/u/path  is a proxy for  /path in the portal application
+
+  - The global couchdb databases (_users,provisioning,..) and all the u${UUID} databases are mapped at the root.
+
+  - CouchDB's _session is mapped at the root.
+    [FIXME This assumes we can use a distributed session scheme in CouchDB which doesn't exist yet.]
+    [For now this doesn't cause any issue as long as the website uses a single CouchDB host for sessions.]
+
+Such a unified URI space can be constructed using standard application mount points / reverse proxy in nginx, etc.
+We present an example configuration for lighttp2 because nginx does currently not support reverse proxying IPv6 hosts, while lighttp2 (or apache2) does.

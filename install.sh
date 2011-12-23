@@ -12,6 +12,8 @@ deb http://${REPOSITORY}/debian   testing main
 deb http://${REPOSITORY}/shimaore shimaore main
 EOT
 
+# We use dependencies in Debian/testing.
+
 sudo tee /etc/apt/preferences > /dev/null <<'EOT'
 Package: *
 Pin: release a=testing
