@@ -1,8 +1,15 @@
 #!/usr/bin/env bash
 
 # ----- REQUIREMENTS -----
+
 # Your base system should be a current Debian/testing system.
 # Other systems might work but are not supported.
+
+# Hostnames for the different servers MUST be:
+#  1. FQDN (e.g. "server.example.com", not "server")
+#  2. Valid DNS names (that resolve using IPv4 and/or IPv6)
+# These are both required to ensure clients can properly access
+# the server.
 
 # ----- ADD REPOSITORY -----
 # Add
