@@ -1,3 +1,9 @@
+ccnq3 (0.0.15) unstable; urgency=low
+
+  * git 8b8303e224a28194ff22414c59f72ddf464e97ad
+
+ -- Stephane Alnet <stephane@shimaore.net>  Fri, 23 Dec 2011 15:46:57 +0100
+
 ccnq3 (0.0.14) unstable; urgency=low
 
   * Trying to package the code
