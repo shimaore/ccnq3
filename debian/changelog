@@ -1,8 +1,8 @@
-ccnq3 (0.0.23) unstable; urgency=low
+ccnq3 (0.0.24) unstable; urgency=low
 
   * Run "updates" when upgrading.
 
- -- Stephane Alnet <stephane@shimaore.net>  Fri, 23 Dec 2011 19:07:34 +0100
+ -- Stephane Alnet <stephane@shimaore.net>  Fri, 23 Dec 2011 19:13:39 +0100
 
 ccnq3 (0.0.21) unstable; urgency=low
 
