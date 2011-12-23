@@ -26,6 +26,9 @@ require('ccnq3_config').get (config) ->
           '/public/menu/menu'
         ]
 
+    # No site-specific login additions.
+    @js '/login.js': ''
+
     @view 'default': ->
       div id:'content', ->
         noscript 'Please enable JavaScript'
