@@ -84,12 +84,23 @@ GPG
 
 # Once the above is done, update your system...
 sudo aptitude update
-sudo aptitude -q -y dist-upgrade
+sudo aptitude -y dist-upgrade
 # ... then install the ccnq packages.
-sudo aptitude -q -y install ccnq-base ccnq3 ccnq3-traces
+sudo aptitude -y install ccnq-base ccnq3 ccnq3-traces
 
-# Finally start the installation (as user "ccnq3").
-sudo -u ccnq3 /bin/sh -c 'cd /opt/ccnq3/src && ./bootstrap-system'
+# Finally start the installation
+# (sudo is needed to overwrite your existing CouchDB configuration).
+cd /opt/ccnq3/src
+sudo ./bootstrap.sh
+
+# If you have an existing CouchDB/BigCouch installation, use
+#   cd /opt/ccnq3/src
+#   CDB_URI=http://admin:password@host:5984/ ./bootstrap.sh
+# instead.
+
+# On a non-manager host use:
+#   cd /opt/ccnq3/src && ./bootstrap.sh http://..../
+# where the URI is provided by the provisioning system.
 
 
 # Additionally I recommend modifying the rsyslog configuration
