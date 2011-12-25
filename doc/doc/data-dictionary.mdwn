@@ -165,6 +165,14 @@ Notes:
 
     FIXME: these probably need to be indexed by host
 
+  * account_forwarder
+
+    _id: type+account+'@'+endpoint
+    account: account
+
+    type:"account_forwarder"
+    endpoint: endpoint
+
   * endpoint
 
     _id: type+endpoint
@@ -198,6 +206,8 @@ Notes:
     src_endpoint/disabled
     src_endpoint/endpoint
     src_endpoint/forwarding_sbc
+      1 SBC provides originator info as Sock-Info or source RURI param [only for trusted SBC]
+      2 SBC provides account info in P-Charge-Info; non-trusted SBCs are checked against account_forwarder
     src_endpoint/location
     src_endpoint/outbound_route
     src_endpoint/src_disabled

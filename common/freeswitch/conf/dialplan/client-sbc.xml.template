@@ -21,7 +21,7 @@
         <action application="set" data="progress_timeout=12"/>
         <action application="set" data="call_timeout=300"/>
         <action application="export" data="t38_passthru=true"/>
-        <action application="set" data="ccnq_account=${regex(${sip_req_params}|account=([^;]*)|%1)}"/>
+        <action application="set" data="ccnq_account=${regex(${sip_h_p-charge-info}|sip:([^@]+)@|%1)}"/>
         <action application="set" data="ccnq_location=${regex(${sip_req_params}|location=([^;]*)|%1)}"/>
         <action application="set" data="effective_caller_id_number=${ccnq_from_e164}"/>
    <!-- <action application="set" data="effective_caller_id_name=_undef_"/> -->
@@ -55,7 +55,7 @@
       <condition field="destination_number" expression="^call">
         <anti-action application="set" data="ccnq_from_e164=${caller_id_number}"/>
         <anti-action application="set" data="ccnq_to_e164=${destination_number}"/>
-        <anti-action application="set" data="ccnq_account=${regex(${sip_req_params}|account=([^;]*)|%1)}"/>
+        <anti-action application="set" data="ccnq_account=${regex(${sip_h_p-charge-info}|sip:([^@]+)@|%1)}"/>
       </condition>
     </extension>
 

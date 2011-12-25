@@ -10,7 +10,8 @@ Research:
 
 - RFC5503 [ http://tools.ietf.org/html/rfc5503#page-14 ] specifies P-DCS-BILLING-INFO, however the header is complex and specific to PacketCable.
 
-- P-Charge-Info is being specified [ http://blogs.voxeo.com/speakingofstandards/2008/05/13/p-charge-info-and-incredible-disconnect-between-pstn-billing-and-the-new-world-of-sip/ ] and [ http://tools.ietf.org/rfcmarkup?doc=draft-york-sipping-p-charge-info ] but the use cases are different (Section 4.1 of draft -11 indicates the possible use of the header for that purpose, but it would interfere with our use of that header with upstream providers for PSTN interop, if we decide to do so).
+- P-Charge-Info is being specified [ http://blogs.voxeo.com/speakingofstandards/2008/05/13/p-charge-info-and-incredible-disconnect-between-pstn-billing-and-the-new-world-of-sip/ ] and [ http://tools.ietf.org/rfcmarkup?doc=draft-york-sipping-p-charge-info ].
+  This is selected as the proper solution. (The P-Charge-Info header must be removed by the UA, not passed along.)
 
 - A 403 response (rather than 407) should be used to indicate that, although the UAC was recognized as a trusted agent by the proxy, the account presented was not authorized for that UAC.
 
