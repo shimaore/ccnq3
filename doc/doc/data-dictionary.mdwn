@@ -97,6 +97,7 @@ Notes:
     # - configure the fields in this section
     # - add "applications/opensips" to the applications field [and restart ccnq3]
     # - run common/mediaproxy/install.sh to install mediaproxy FIXME still requires some work
+    # - install memcached
     # - run common/opensips/install.sh on the host to enable OpenSIPS
     opensips_proxy:
       port:34340   integer, required, do not change
