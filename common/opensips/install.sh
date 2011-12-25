@@ -10,12 +10,13 @@ echo 'TZ=UTC' | sudo tee -a /etc/default/opensips > /dev/null
 # FIXME make sure that:
 #  a) the opensips-http-db server is configured (opensips_proxy field)
 #  b) the opensips configuration server is configured (opensips field)
-#  b) the usrloc database ("location") is created (and accessible to the user specified in opensips_proxy.usrloc_uri)
+#  b) the usrloc database ("location") is created (and accessible r/w to the user specified in opensips_proxy.usrloc_uri)
 #  c) npm install is ran for applications/opensips
 #  c) npm run-script couchapps is ran for applications/opensips
 #  d) npm stop; npm start is ran for applications/opensips
 
-# FIXME: should be done by the opensips agent.
-sudo ./make.coffee default.json conference.json local-vars.json
+# done by the opensips agent.
+# sudo ./make.coffee default.json conference.json local-vars.json
+# However the agent doesn't automatically restart opensips.
 
 sudo /etc/init.d/opensips restart
