@@ -1,0 +1,44 @@
+==== storage ====
+Storage will be in the user's database, using "voicemail"-type record.
+
+- 2600hz.org mentions http://wiki.freeswitch.org/wiki/Mod_shell_stream
+- however this can only be used for playback, not to record
+- can we get FS to play/record from a FIFO?
+  Yes!
+
+ls -l /tmp
+prw-r--r-- 1 automate   automate 0 Dec  2 20:25 fifo-test.PCMU
+prw-r--r-- 1 freeswitch automate 0 Dec  2 20:11 test-fifo.PCMU
+(Careful with the ownership/rights -- it's probably easier to put freeswitch in the group of the process that runs mkfifo.)
+
+<context name="ingress-test">
+  <extension name="test-record">
+    <condition field="destination_number" expression="^22$">
+      <action application="record" data="/tmp/test-fifo" /> <!-- no extension -->
+    </condition>
+  </extension>
+  <extension name="test-playback">
+    <condition field="destination_number" expression="^23$">
+      <action application="answer"/>
+      <action application="playback" data="/tmp/fifo-test.PCMU" />
+    </condition>
+  </extension>
+</context>
+
+So the process is:
+- for recording, create FIFO (owned by FreeSwitch or where FS can write), and do the equivalent of
+curl --data-binary @/tmp/test-fifo.PCMU  -X PUT 'http://admin:...@vm95:5984/cdr/message/vm.PCMU?rev='4-3b5f7d85f3080e57cc2203a6384304df
+
+- for playback, create FIFO (owned by the playing process but readable by FS) and do the equivalent of
+curl 'http://admin:...@192.168.2.195:5984/cdr/message/vm.PCMU'  > /tmp/fifo-test.PCMU
+
+Obviously this can be done from within the ESL Server process (co-hosted). The two FIFOs (or single FIFO if permissions are OK) is created when the call connects and destroyed at the end of the call. Then use 'request' automation to pump to/from the FIFO.
+
+In all cases restrict the available codec on the VM system to _one_ codec (PCMU or PCMA) so that there's as little ambiguity as possible over the filenames.
+
+==== record ====
+interesting variables (see switch_ivr_play_say.c):
+  RECORD_APPEND
+  RECORD_WRITE_OVER
+  record_post_process_exec_api
+  SWITCH_EVENT_RECORD_STOP
