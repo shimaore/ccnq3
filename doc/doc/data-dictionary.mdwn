@@ -22,8 +22,9 @@ Notes:
       couchdb_uri: server admin URI
       system: true   (indicates this host is the one that should do system updates)
 
-    applications: (string) list of applications that need to be installed
+    applications: [] of strings, list of applications that need to be installed
       Note: these are simply relative paths to the matching "package" for that application.
+      Note: to apply these changes you must restart ccnq3 on the host.
       Example:   [ "applications/host", "applications/traces", "applications/freeswitch" ]
 
     usercode:
@@ -43,7 +44,10 @@ Notes:
         couchdb_uri
 
     # Specific to hosts running FreeSwitch.
-    # "applications/freeswitch" must be included in the applications field.
+    # To add a FreeSwitch host:
+    # - configure the fields in this section
+    # - add "applications/freeswitch" to the applications field [and restart ccnq3]
+    # - run common/freeswitch/install.sh on the host to enable FreeSwitch
     sip_domain_name:  string (required); FQDN accepted by the server
     rtp_ip: local IP to bind to for RTP [default: "auto"]
     sip_profiles: {} of profiles descriptions:
@@ -79,16 +83,21 @@ Notes:
 
         Note: All these commands will cause calls to drop if any is present on that profile.
         Note: The "sofia_profile" key is either "egress-#{profile_name}" or "ingress-#{profile_name}" so that each direction
-              can be restart independently.
+              can be restarted independently.
         Note: Add a command then remove it from the hash to prevent accidental misfiring of commands.
         Note: A special "sofia_profile" key "opensips" is used to send events to a running OpenSIPS process (rather than a
               FreeSwitch sofia profile). These events must follow the OpenSIPS "MI" syntax.
 
     sip_variables: {} of global (FreeSwitch) variables; defaults to {}
         Note: The idea is that these can be used on a per-host basis by additional dialplans, profiles, etc.
+        Note: These should also show up in CDRs. FIXME confirm this is the case
 
     # Specific to hosts running OpenSIPS.
-    # "applications/opensips" must be included in the applications field
+    # To add an OpenSIPS host:
+    # - configure the fields in this section
+    # - add "applications/opensips" to the applications field [and restart ccnq3]
+    # - run common/mediaproxy/install.sh to install mediaproxy FIXME still requires some work
+    # - run common/opensips/install.sh on the host to enable OpenSIPS
     opensips_proxy:
       port:34340   integer, required, do not change
       hostname:"127.0.0.1"   string, required, do not change
@@ -104,7 +113,10 @@ Notes:
       opensips: string; command send to the OpenSIPS "MI" channel (must follow the MI syntax, including having \n between parameters).
 
     # Specific to hosts running the portal (or its back-end).
-    # "applications/portal" must be included in the applications field
+    # To enable the portal service:
+    # - configure the fields in this section
+    # - add "applications/portal" to the applications field [and restart ccqn3]
+    # Note: this service is enabled by default on the manager host.
     portal:
       port: integer (8765)
       hostname:  string ("127.0.0.1")
@@ -125,7 +137,11 @@ Notes:
     Note: "host" records are referred to as the "config" record inside most applications.
 
     # Specific to hosts running SIP traces.
-    # "applications/traces" must be included in the applications field
+    # To start traces:
+    # - install the ccnq3-traces package
+    # - configure the fields in this section
+    # - add "applications/traces" to the applications field
+    # (this is not enabled by default)
     traces:
       interfaces: [] of interfaces names
       # There's no reason to modify the following parameters for traces.
@@ -136,6 +152,8 @@ Notes:
 
 
     Attachments: attachments of type "application/javascript" are executed after each change.
+      The attachments might use any core Node.js modules.
+      FIXME test this feature
 
   * domain
 
