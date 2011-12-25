@@ -6,3 +6,5 @@ OpenSIPS/MediaProxy).
 c=IN IP4 4.53.160.1374.53.160.137
 
 The idea is to do away with proxy forwarding and use redirection (30x) instead.
+
+[[bugs/done]]
