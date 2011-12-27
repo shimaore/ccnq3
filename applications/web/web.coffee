@@ -49,10 +49,10 @@ require('ccnq3_config').get (config) ->
                 next()
             auth.$.ajax(options)
 
-        if extra_login?
-          extra_login auth, -> provisioning_replicate auth, next
-        else
-          provisioning_replicate auth, next
+          if extra_login?
+            extra_login auth, -> provisioning_replicate auth, next
+          else
+            provisioning_replicate auth, next
 
     @view 'default': ->
       div id:'content', ->
