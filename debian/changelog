@@ -1,8 +1,14 @@
+ccnq3 (0.0.42) unstable; urgency=low
+
+  * Host app
+
+ -- Stephane Alnet <stephane@shimaore.net>  Tue, 27 Dec 2011 23:52:51 +0100
+
 ccnq3 (0.0.40) unstable; urgency=low
 
   * Provisioning replication
 
- -- Stephane Alnet <stephane@shimaore.net>  Tue, 27 Dec 2011 23:47:00 +0100
+ -- Stephane Alnet <stephane@shimaore.net>  Tue, 27 Dec 2011 23:52:31 +0100
 
 ccnq3 (0.0.33) unstable; urgency=low
 
