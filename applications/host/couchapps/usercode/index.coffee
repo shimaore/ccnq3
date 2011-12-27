@@ -118,4 +118,4 @@ do (jQuery) ->
           return "Server #{doc.host}"
 
         form: (doc) ->
-          app.swap host_tpl doc
+          host_tpl doc
