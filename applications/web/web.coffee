@@ -27,7 +27,32 @@ require('ccnq3_config').get (config) ->
         ]
 
     # No site-specific login additions.
-    @js '/login.js': ''
+    @js '/login.js':
+
+      $(document).ready ->
+        extra_login = $.extra_login
+
+        $.extra_login = (auth,next) ->
+
+          # Replicate any sotel_portal record
+          provisioning_replicate = (auth,next) ->
+            auth.notify 'Replicating provisioning data.'
+            options =
+              type: 'post'
+              url: '/roles/replicate/pull/provisioning'
+              dataType:'json'
+              success: (data) ->
+                if not data.ok
+                  auth.notify 'Provisioning replication failed.'
+                  return
+                auth.notify ''
+                next()
+            auth.$.ajax(options)
+
+        if extra_login?
+          extra_login auth, -> provisioning_replicate auth, next
+        else
+          provisioning_replicate auth, next
 
     @view 'default': ->
       div id:'content', ->
