@@ -28,22 +28,23 @@ ddoc.filters.user_push = p_fun (doc, req) ->
     return false
 
   # They must have a valid account.
-  if not doc.account
+  if not doc.account?
     return false
 
   # The user context provided to us by the replication agent.
   ctx = JSON.parse req.query.ctx
 
   # Ensure we only replicate documents the user actually is authorized to update.
-  for role in ctx.roles
-    do (role) ->
-      # Note how this uses the "update" filter.
-      prefix = role.match(/^update:provisioning:(.*)$/)?[1]
-      if prefix?
+  match_role = (role) ->
+    # Note how this uses the "update" filter.
+    prefix = role.match(/^update:provisioning:(.*)$/)?[1]
+    if prefix?
 
-        # Replicate documents for which the account is a subset of the prefix.
-        if doc.account.substr(0,prefix.length) is prefix
-          return true
+      # Replicate documents for which the account is a subset of the prefix.
+      if doc.account.substr(0,prefix.length) is prefix
+        return true
+
+  return true for role in ctx.roles when match_role role
 
   # Do not otherwise replicate
   return false

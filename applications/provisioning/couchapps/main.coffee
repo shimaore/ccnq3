@@ -42,15 +42,16 @@ ddoc.filters.user_pull = p_fun (doc, req) ->
   # The user context provided to us by the replication agent.
   ctx = JSON.parse req.query.ctx
 
-  for role in ctx.roles
-    do (role) ->
-      # We use the "access" filter to know which documents the user might read.
-      prefix = role.match(/^access:provisioning:(.*)$/)?[1]
-      if prefix?
+  match_role = (role) ->
+    # We use the "access" filter to know which documents the user might read.
+    prefix = role.match(/^access:provisioning:(.*)$/)?[1]
+    if prefix?
 
-        # Replicate documents for which the account is a subset of the prefix.
-        if doc.account.substr(0,prefix.length) is prefix
-          return true
+      # Replicate documents for which the account is a subset of the prefix.
+      if doc.account.substr(0,prefix.length) is prefix
+        return true
+
+  return true for role in ctx.roles when match_role role
 
   # Do not otherwise replicate
   return false
