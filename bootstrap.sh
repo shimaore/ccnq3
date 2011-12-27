@@ -82,11 +82,6 @@ else
   echo "Retrieving ${CONF}"
   curl -o "${CONF}" "$1"
 
-  # FIXME Install CouchDB locally on loopback-only with no authentication
-  #       and set up automatic (_replicator) pull replication of the
-  #       provisioning database.
-  #       provisioning.couchdb_uri then points to the local copy.
-
 fi
 
 echo "Update"

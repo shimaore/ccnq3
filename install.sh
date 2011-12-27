@@ -114,7 +114,7 @@ sudo ./bootstrap-manager.sh
 
 # On a non-manager host you will use:
 #   cd /opt/ccnq3/src
-#   sudo su -s /bin/bash -c './bootstrap.sh http://..../' ccnq3
+#   sudo su -s /bin/bash -c './bootstrap-local.sh http://..../' ccnq3
 # where the URI is provided by the provisioning system.
 
 

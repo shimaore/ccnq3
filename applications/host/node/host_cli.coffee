@@ -29,3 +29,24 @@ ccnq3_config.get (config) ->
       host.update_config provisioning_uri, provisioning, password, config, (config) ->
 
         ccnq3_config.update config
+
+  else
+    # Non-manager host
+
+    # provisioning.couchdb_uri MUST be "http://127.0.0.1:5984/provisioning"
+    expected = "http://127.0.0.1:5984/provisioning"
+    source_uri = config.provisioning.host_couchdb_uri
+    target_uri = config.provisioning.couchdb_uri
+
+    if target_uri isnt expected
+      throw "provisioning.couchdb_uri should be #{expected}"
+    if not source_uri
+      throw "provisioning.host_couchdb_uri is required"
+
+    replicator = "http://127.0.0.1:5984/_replicator"
+    replicant =
+      _id:    'ccnq3_provisioning'
+      source: source_uri
+      target: 'provisioning' # local target
+      create_target: true
+    cdb.new('http://127.0.0.1:5984/_replicator').put replicant
