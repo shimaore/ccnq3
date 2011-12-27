@@ -69,11 +69,13 @@ do (jQuery) ->
               matching host(s).
             ###
             doc.account ?= ''  # Required for replication to work.
+            doc.provisioning ?= {}
+            doc.provisioning.couchdb_uri = 'http://127.0.0.1:5984/provisioning'
             doc.applications ?= [
               "applications/host"
             ]
-            doc.mailer ?=
-              sendmail: '/usr/sbin/sendmail'
+            doc.mailer ?= {}
+            doc.mailer ?= sendmail: '/usr/sbin/sendmail'
 
             username = host_username doc.host
             password = hex_sha1 "a"+Math.random()
