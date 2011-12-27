@@ -1,6 +1,6 @@
 {
   "name": "ccnq3_host"
-, "version": "0.0.10"
+, "version": "0.0.11"
 , "description": "Host-specific applications for CCNQ3"
 , "keywords": ""
 , "author": {
@@ -15,7 +15,8 @@
   , "stop":  "daemon -n ccnq3_host -o daemon.debug --stop"
   , "bootstrap": "./node/host_cli.coffee"
   , "couchapps": "cd couchapps && ./install.coffee"
-  }
+  , "preinstall": "coffee -c couchapps/*/*.coffee"
+}
 , "dependencies": {
     "cdb": "*"
   , "cdb_changes": ">=0.0.3"
