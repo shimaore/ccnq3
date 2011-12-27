@@ -69,6 +69,7 @@ if [ "x$1" == "x" ]; then
   ]
 , "source": "${SRC}"
 , "account": ""
+, "updated_at": 0
 }
 JSON
   # applications/usercode: creates the usercode database: must be first since all others depend on it

@@ -11,6 +11,8 @@ Notes:
 
     _id: type+host
     account: ''    (the empty string)
+    updated_at: integer, update timestamp in ms [required]
+      Note: new Date().getTime()  for example
 
     type:"host"
     host: string; hostname, preferably FQDN (must match what the "hostname" command returns)
