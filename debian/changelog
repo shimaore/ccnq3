@@ -1,8 +1,8 @@
-ccnq3 (0.0.34) unstable; urgency=low
+ccnq3 (0.0.35) unstable; urgency=low
 
   * Provisioning replication
 
- -- Stephane Alnet <stephane@shimaore.net>  Tue, 27 Dec 2011 19:13:29 +0100
+ -- Stephane Alnet <stephane@shimaore.net>  Tue, 27 Dec 2011 19:19:06 +0100
 
 ccnq3 (0.0.33) unstable; urgency=low
 
