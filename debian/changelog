@@ -1,8 +1,8 @@
-ccnq3 (0.0.27) unstable; urgency=low
+ccnq3 (0.0.28) unstable; urgency=low
 
   * Fixed ccnq3.postrm
 
- -- Stephane Alnet <stephane@shimaore.net>  Tue, 27 Dec 2011 16:46:10 +0100
+ -- Stephane Alnet <stephane@shimaore.net>  Tue, 27 Dec 2011 16:50:14 +0100
 
 ccnq3 (0.0.26) unstable; urgency=low
 

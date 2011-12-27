@@ -9,7 +9,7 @@ ETCDIR=/etc/ccnq3
 SRC=git://stephane.shimaore.net/git/ccnq3.git
 
 case "$1" in
-  remove|purge|upgrade)
+  remove|purge|upgrade|failed-upgrade)
     find ${WORKDIR}/src -name node_modules -print0 | xargs -0 rm -rf
     # deluser $USER
   ;;
