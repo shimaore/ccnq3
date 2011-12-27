@@ -112,7 +112,7 @@ do (jQuery) ->
 
       app = @
 
-      Inbox.register 'partner_signup',
+      Inbox.register 'host',
 
         list: (doc) ->
           return "Server #{doc.host}"
