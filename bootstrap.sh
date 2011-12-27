@@ -92,7 +92,7 @@ echo "Bootstrap local host"
 npm run-script bootstrap
 
 echo "Restart"
-npm restart
+npm start
 
 echo "Installation done."
 echo

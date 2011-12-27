@@ -1,8 +1,8 @@
-ccnq3 (0.0.29) unstable; urgency=low
+ccnq3 (0.0.30) unstable; urgency=low
 
-  * Restart should not fail if stop fails.
+  * Only do "start" in bootstrap.
 
- -- Stephane Alnet <stephane@shimaore.net>  Tue, 27 Dec 2011 16:57:18 +0100
+ -- Stephane Alnet <stephane@shimaore.net>  Tue, 27 Dec 2011 17:13:00 +0100
 
 ccnq3 (0.0.28) unstable; urgency=low
 
