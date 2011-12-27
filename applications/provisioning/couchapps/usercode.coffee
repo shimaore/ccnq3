@@ -38,7 +38,7 @@ ddoc.filters.user_push = p_fun (doc, req) ->
   for role in ctx.roles
     do (role) ->
       # Note how this uses the "update" filter.
-      prefix = role.match("^update:#{@source}:(.*)$")?[1]
+      prefix = role.match(/^update:provisioning:(.*)$/)?[1]
       if prefix?
 
         # Replicate documents for which the account is a subset of the prefix.
