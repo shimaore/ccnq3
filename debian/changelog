@@ -1,3 +1,9 @@
+ccnq3 (0.0.26) unstable; urgency=low
+
+  * bootstrap-local
+
+ -- Stephane Alnet <stephane@shimaore.net>  Tue, 27 Dec 2011 14:59:59 +0100
+
 ccnq3 (0.0.25) unstable; urgency=low
 
   * commit 1181e43af90230880fa0187b7242d5286f3a4fc7
