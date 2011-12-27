@@ -32,7 +32,7 @@ ddoc.filters.user_pull = p_fun (doc, req) ->
 
   provisioning_types = ["number","endpoint","location","host","domain"]
 
-  if provisioning_type.indexOf(doc.type) < 0
+  if provisioning_types.indexOf(doc.type) < 0
     return false
 
   # They must have a valid account.
