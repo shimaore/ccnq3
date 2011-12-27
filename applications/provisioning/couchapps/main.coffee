@@ -44,12 +44,11 @@ ddoc.filters.user_pull = p_fun (doc, req) ->
 
   match_role = (role) ->
     # We use the "access" filter to know which documents the user might read.
-    prefix = role.match(/^access:provisioning:(.*)$/)?[1]
-    if prefix?
-
-      # Replicate documents for which the account is a subset of the prefix.
-      if doc.account.substr(0,prefix.length) is prefix
-        return true
+    m = role.match(/^access:provisioning:(.*)$/)
+    return false if not m?
+    prefix = m[1]
+    # Replicate documents for which the account is a subset of the prefix.
+    return doc.account.substr(0,prefix.length) is prefix
 
   return true for role in ctx.roles when match_role role
 

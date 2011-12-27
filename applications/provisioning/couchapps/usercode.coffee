@@ -37,12 +37,11 @@ ddoc.filters.user_push = p_fun (doc, req) ->
   # Ensure we only replicate documents the user actually is authorized to update.
   match_role = (role) ->
     # Note how this uses the "update" filter.
-    prefix = role.match(/^update:provisioning:(.*)$/)?[1]
-    if prefix?
-
-      # Replicate documents for which the account is a subset of the prefix.
-      if doc.account.substr(0,prefix.length) is prefix
-        return true
+    m = role.match(/^update:provisioning:(.*)$/)
+    return false if not m?
+    prefix = m[1]
+    # Replicate documents for which the account is a subset of the prefix.
+    return doc.account.substr(0,prefix.length) is prefix
 
   return true for role in ctx.roles when match_role role
 
