@@ -15,16 +15,17 @@ ccnq3_config.get (config) ->
 
   hostname = config.host
 
-  return unless config.admin?.system
+  if config.admin?.system
+    # Manager host
 
-  # Install the local (bootstrap/master) host in the database.
-  users = cdb.new config.users.couchdb_uri
+    # Install the local (bootstrap/master) host in the database.
+    users = cdb.new config.users.couchdb_uri
 
-  host.create_user users, hostname, (password) ->
+    host.create_user users, hostname, (password) ->
 
-    provisioning_uri = config.provisioning.couchdb_uri
-    provisioning = cdb.new provisioning_uri
+      provisioning_uri = config.provisioning.couchdb_uri
+      provisioning = cdb.new provisioning_uri
 
-    host.update_config provisioning_uri, provisioning, password, config, (config) ->
+      host.update_config provisioning_uri, provisioning, password, config, (config) ->
 
-      ccnq3_config.update config
+        ccnq3_config.update config
