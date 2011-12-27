@@ -22,3 +22,8 @@ module.exports = ddoc
 
 ddoc.filters.hostname = p_fun (doc,req) ->
   return doc.type is 'host' and doc.host is req.query.hostname
+
+# Attachments (user couchapp)
+couchapp = require 'couchapp'
+path     = require 'path'
+couchapp.loadAttachments ddoc, path.join(__dirname, 'usercode')
