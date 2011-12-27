@@ -27,7 +27,7 @@ require('ccnq3_config').get (config) ->
         ]
 
     # No site-specific login additions.
-    @coffee '/login.js':
+    @coffee '/login.js': ->
 
       $(document).ready ->
         extra_login = $.extra_login
