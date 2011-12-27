@@ -25,14 +25,18 @@ ddoc.validate_doc_update = p_fun (newDoc, oldDoc, userCtx) ->
 
 # Filter replication towards the user database.
 ddoc.filters.user_pull = p_fun (doc, req) ->
-  provisioning_types = ["number","endpoint","location","host","domain"]
 
   # Only replicate provisioning documents.
+  if not doc.type?
+    return false
+
+  provisioning_types = ["number","endpoint","location","host","domain"]
+
   if provisioning_type.indexOf(doc.type) < 0
     return false
 
   # They must have a valid account.
-  if not doc.account
+  if not doc.account?
     return false
 
   # The user context provided to us by the replication agent.
