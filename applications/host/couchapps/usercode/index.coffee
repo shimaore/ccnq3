@@ -107,7 +107,7 @@ do (jQuery) ->
             username = host_username doc.host
             password = hex_sha1 "a"+Math.random()
 
-            u = doc.provisioning.couchdb_uri.matches ///
+            u = doc.provisioning.host_couchdb_uri.matches ///
                 ^
                 (https?://)
                 (?:[^@]*@)?
