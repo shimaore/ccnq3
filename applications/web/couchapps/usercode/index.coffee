@@ -11,8 +11,13 @@ $(document).ready ->
   $.sammy container, ->
     $.menu.merge [
       {
-        label:  'New host'
-        href:  '#/host'
+        label:  'Provisioning'
+        menu: [
+          {
+            label:  'New host'
+            href:  '#/host'
+          }
+        ]
       }
       {
         label:  'Main'
