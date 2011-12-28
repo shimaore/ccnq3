@@ -3,7 +3,7 @@ ccnq3 (0.0.45) unstable; urgency=low
   * Re-package ccnq-base
   * Split ccnq3-voice
 
- -- Stephane Alnet <stephane@shimaore.net>  Wed, 28 Dec 2011 13:09:30 +0100
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Wed, 28 Dec 2011 13:09:30 +0100
 
 ccnq3 (0.0.44) unstable; urgency=low
 
