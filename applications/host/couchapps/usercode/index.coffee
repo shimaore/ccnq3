@@ -89,7 +89,7 @@ do (jQuery) ->
           doc.password = password
 
         $('#host_record').save_doc
-          app: app
+          context: @
           model: model
           push: 'provisioning'
           before: (doc) ->

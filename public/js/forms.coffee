@@ -35,7 +35,7 @@ do (jQuery) ->
 
     if former_doc._rev?
       console.log 'Submitting update'
-      r.app.send r.model.update, doc._id, doc,
+      r.context.send r.model.update, doc._id, doc,
         success: (resp) =>
           doc._rev = resp.rev
           $(@).data 'doc', doc
@@ -46,7 +46,7 @@ do (jQuery) ->
     else
       delete doc._rev
       console.log 'Submitting create'
-      r.app.send r.model.create, doc,
+      r.context.send r.model.create, doc,
         success: (resp) =>
           doc._rev = resp.rev
           $(@).data 'doc', doc
@@ -59,13 +59,13 @@ do (jQuery) ->
 
     data = r.data ? {}
 
-    r.app.send model.get, r.id,
+    r.context.send model.get, r.id,
       success: (doc) =>
-        r.app.swap r.template $.extend data, doc
+        r.context.swap r.template $.extend data, doc
         $(@).data 'doc', doc
       error: =>
         doc = {}
-        r.app.swap r.template $.extend data, doc
+        r.context.swap r.template $.extend data, doc
         $(@).data 'doc', doc
 
 
