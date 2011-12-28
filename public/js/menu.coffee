@@ -4,8 +4,6 @@ jQuery ($) ->
 
   selector = '#menu_container'
 
-  current_menu = []
-
   $.menu.render = (menu) ->
     switch typeof menu
 
@@ -42,10 +40,7 @@ jQuery ($) ->
       else
         console.log "Cannot use #{typeof menu} menu."
 
-  $.menu.merge = (new_menu) ->
-    new_menu ?= []
-    $.extend true, current_menu, new_menu
-
-    menu_content = $.menu.render current_menu
+  $.menu.set = (new_menu) ->
+    menu_content = $.menu.render new_menu
     $(selector).empty().append menu_content
     $("#{selector} ul").attr 'id', 'menu'

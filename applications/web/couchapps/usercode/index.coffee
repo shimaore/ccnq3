@@ -9,7 +9,7 @@ $(document).ready ->
     profile.roles?.indexOf(role) >= 0
 
   $.sammy container, ->
-    $.menu.merge [
+    $.menu.set [
       {
         label:  'Provisioning'
         menu: [
