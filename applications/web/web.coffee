@@ -55,6 +55,7 @@ require('ccnq3_config').get (config) ->
             provisioning_replicate auth, next
 
     @view 'default': ->
+      div id:'menu'
       div id:'content', ->
         noscript 'Please enable JavaScript'
         div id:'login_container'
