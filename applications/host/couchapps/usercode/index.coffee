@@ -8,6 +8,7 @@ do (jQuery) ->
   container = '#content'
 
   profile = $(container).data 'profile'
+  # model = $(container).data 'model'
 
   # FIXME: Retrieve the default value for host_couchdb_uri (public, no password embedded) from some configuration area.
 
@@ -37,8 +38,8 @@ do (jQuery) ->
 
   $(document).ready ->
 
-    $.sammy container, ->
-      app = @
+    app = $.sammy container, ->
+
       model = @createModel 'host'
 
       initialize_password = (doc) ->
@@ -68,52 +69,53 @@ do (jQuery) ->
         ###
         doc.password = password
 
-      model.beforeSave = (doc) ->
+      model.extend
+        beforeSave: (doc) ->
 
-        $('#host_log').html 'Preparing data'
+          $('#host_log').html 'Preparing data'
 
-        doc.type = 'host'
-        doc._id = make_id 'host', doc.host
+          doc.type = 'host'
+          doc._id = make_id 'host', doc.host
 
-        ###
-          Host are by default created at the root account.
-          In order to read and modify such records the user must have
-            access:provisioning:
-          and
-            update:provisioning:
-          respectively, listed in their 'roles', effectively allowing them
-          to modify _any_ provisioning records.
-          Otherwise the user might specify any account they'd like, and users
-          with access to that account (or any prefix) will be able to modify the
-          matching host(s).
-        ###
-        doc.account ?= ''  # Required for replication to work.
+          ###
+            Host are by default created at the root account.
+            In order to read and modify such records the user must have
+              access:provisioning:
+            and
+              update:provisioning:
+            respectively, listed in their 'roles', effectively allowing them
+            to modify _any_ provisioning records.
+            Otherwise the user might specify any account they'd like, and users
+            with access to that account (or any prefix) will be able to modify the
+            matching host(s).
+          ###
+          doc.account ?= ''  # Required for replication to work.
 
-        doc.provisioning ?= {}
+          doc.provisioning ?= {}
 
-        ###
-          couchdb_uri is local for any non-manager host.
-          Since manager hosts are bootstrapped using a script, not this interface,
-          assume we are dealing with a non-manager host.
-        ###
-        doc.provisioning.couchdb_uri = 'http://127.0.0.1:5984/provisioning'
+          ###
+            couchdb_uri is local for any non-manager host.
+            Since manager hosts are bootstrapped using a script, not this interface,
+            assume we are dealing with a non-manager host.
+          ###
+          doc.provisioning.couchdb_uri = 'http://127.0.0.1:5984/provisioning'
 
-        ###
-          applications/host is always required.
-          FIXME provide an interface to add more applications, especially:
-            applications/freeswitch
-            applications/opensips
-            applications/traces
-        ###
-        doc.applications ?= [
-          "applications/host"
-        ]
+          ###
+            applications/host is always required.
+            FIXME provide an interface to add more applications, especially:
+              applications/freeswitch
+              applications/opensips
+              applications/traces
+          ###
+          doc.applications ?= [
+            "applications/host"
+          ]
 
-        doc.mailer ?= {}
-        doc.mailer ?= sendmail: '/usr/sbin/sendmail'
+          doc.mailer ?= {}
+          doc.mailer ?= sendmail: '/usr/sbin/sendmail'
 
-        if not doc.password?
-          initialize_password doc
+          if not doc.password?
+            initialize_password doc
 
       create_user = (doc,cb) ->
 
