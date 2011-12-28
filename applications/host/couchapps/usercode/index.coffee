@@ -163,7 +163,7 @@ do (jQuery) ->
 
         return
 
-      @bind 'save-doc', ->
+      @bind 'save-doc', (event) ->
 
         doc = $(selector).data('doc') ? {}
         $.extend doc, $(selector).toDeepJson()
