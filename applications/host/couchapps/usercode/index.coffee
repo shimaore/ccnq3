@@ -27,6 +27,8 @@ do (jQuery) ->
         class:'required url'
         value: @provisioning?.host_couchdb_uri ? (window.location.protocol + '//' + window.location.host + '/provisioning/')
 
+      input type:'submit'
+
     $('form.validate').validate()
 
   $(document).ready ->
@@ -40,7 +42,7 @@ do (jQuery) ->
 
       # Save
       @post '#/host', ->
-        form_is_valid = $('form.validate').valid()
+        form_is_valid = $('#host_record').valid()
 
         if form_is_valid
           @trigger 'save-doc'
@@ -69,14 +71,33 @@ do (jQuery) ->
               matching host(s).
             ###
             doc.account ?= ''  # Required for replication to work.
+
             doc.provisioning ?= {}
+
+            ###
+              couchdb_uri is local for any non-manager host.
+              Since manager hosts are bootstrapped using a script, not this interface,
+              assume we are dealing with a non-manager host.
+            ###
             doc.provisioning.couchdb_uri = 'http://127.0.0.1:5984/provisioning'
+
+            ###
+              applications/host is always required.
+              FIXME provide an interface to add more applications, especially:
+                applications/freeswitch
+                applications/opensips
+                applications/traces
+            ###
             doc.applications ?= [
               "applications/host"
             ]
+
             doc.mailer ?= {}
             doc.mailer ?= sendmail: '/usr/sbin/sendmail'
 
+            ###
+              Account creation for host@#{hostname}
+            ###
             username = host_username doc.host
             password = hex_sha1 "a"+Math.random()
 
@@ -92,17 +113,30 @@ do (jQuery) ->
               return
 
             doc.provisioning.host_couchdb_uri = u[0] + encodeURI(username) + ':' + encodeURI(password) + '@' + u[1]
+
+            ###
+              Save the password so that the "create" method can retrieve it.
+              (This isn't more of a security concern than storing it in the
+              host_couchdb_uri.)
+            ###
             doc.password = password
 
           create: (doc,cb) ->
 
+            ###
+              Create the user account record for this host.
+              (Hosts are given direct, read-only access to the provisioning
+              database so that they can replicate it locally.)
+            ###
             username = host_username doc.host
 
             p =
               name: username
               roles: ["host"]
 
-            # Quite obviously this can only be ran by server-admins or users_writer.
+            ###
+              Quite obviously this can only be ran by server-admins or users_writer.
+            ###
             $.couch.signup p, doc.password,
 
               error: (xhr,status,error) ->
