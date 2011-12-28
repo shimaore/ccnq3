@@ -48,6 +48,8 @@ do (jQuery) ->
         if form_is_valid
           @trigger 'save-doc'
 
+        return
+
       @bind 'save-doc', ->
 
         initialize_password = (doc) ->
