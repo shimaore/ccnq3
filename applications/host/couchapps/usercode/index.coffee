@@ -39,6 +39,10 @@ do (jQuery) ->
       app = @
       model = @createModel 'host'
 
+      @bind 'error.host', (notice) ->
+        console.log "Model error: #{notice.error}"
+        $('#log').append "An error occurred: #{notice.error}"
+
       # Show template (to create new host)
       @get '#/host', ->
         @swap host_tpl {}

@@ -61,6 +61,7 @@ require('ccnq3_config').get (config) ->
         div id:'login_container'
         div id:'password_recovery_container'
         div id:'register_container'
+      div id:'log'
 
     types =
       js: 'application/javascript'
