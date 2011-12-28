@@ -39,6 +39,106 @@ do (jQuery) ->
       app = @
       model = @createModel 'host'
 
+      initialize_password = (doc) ->
+        ###
+          Password creation for host@#{hostname}
+        ###
+        username = host_username doc.host
+        password = hex_sha1 "a"+Math.random()
+
+        u = doc.provisioning.host_couchdb_uri.match ///
+            ^
+            (https?://)
+            (?:[^@]*@)?
+            (.*)
+          ///i
+
+        unless u
+          alert 'Invalid provisioning URL'
+          return
+
+        doc.provisioning.host_couchdb_uri = u[0] + encodeURI(username) + ':' + encodeURI(password) + '@' + u[1]
+
+        ###
+          Save the password so that the "create" method can retrieve it.
+          (This isn't more of a security concern than storing it in the
+          host_couchdb_uri.)
+        ###
+        doc.password = password
+
+      model.beforeSave = (doc) ->
+
+        $('#host_log').html 'Preparing data'
+
+        doc.type = 'host'
+        doc._id = make_id 'host', doc.host
+
+        ###
+          Host are by default created at the root account.
+          In order to read and modify such records the user must have
+            access:provisioning:
+          and
+            update:provisioning:
+          respectively, listed in their 'roles', effectively allowing them
+          to modify _any_ provisioning records.
+          Otherwise the user might specify any account they'd like, and users
+          with access to that account (or any prefix) will be able to modify the
+          matching host(s).
+        ###
+        doc.account ?= ''  # Required for replication to work.
+
+        doc.provisioning ?= {}
+
+        ###
+          couchdb_uri is local for any non-manager host.
+          Since manager hosts are bootstrapped using a script, not this interface,
+          assume we are dealing with a non-manager host.
+        ###
+        doc.provisioning.couchdb_uri = 'http://127.0.0.1:5984/provisioning'
+
+        ###
+          applications/host is always required.
+          FIXME provide an interface to add more applications, especially:
+            applications/freeswitch
+            applications/opensips
+            applications/traces
+        ###
+        doc.applications ?= [
+          "applications/host"
+        ]
+
+        doc.mailer ?= {}
+        doc.mailer ?= sendmail: '/usr/sbin/sendmail'
+
+        if not doc.password?
+          initialize_password doc
+
+      create_user = (doc,cb) ->
+
+        $('#host_log').html 'Creating user record.'
+
+        ###
+          Create the user account record for this host.
+          (Hosts are given direct, read-only access to the provisioning
+          database so that they can replicate it locally.)
+        ###
+        username = host_username doc.host
+
+        p =
+          name: username
+          roles: ["host"]
+
+        ###
+          Quite obviously this can only be ran by server-admins or users_writer.
+        ###
+        $.couch.signup p, doc.password,
+
+          error: (xhr,status,error) ->
+            alert "Host signup failed: #{error}"
+            $('#host_log').html 'User record creation failed.'
+
+          success: cb
+
       @bind 'error.host', (notice) ->
         console.log "Model error: #{notice.error}"
         $('#log').append "An error occurred: #{notice.error}"
@@ -61,109 +161,26 @@ do (jQuery) ->
 
       @bind 'save-doc', ->
 
-        initialize_password = (doc) ->
-          ###
-            Password creation for host@#{hostname}
-          ###
-          username = host_username doc.host
-          password = hex_sha1 "a"+Math.random()
+        doc = $(@).data('doc') ? {}
+        $.extend doc, $(@).toDeepJson()
 
-          u = doc.provisioning.host_couchdb_uri.match ///
-              ^
-              (https?://)
-              (?:[^@]*@)?
-              (.*)
-            ///i
+        push = ->
+          $.ccnq3.push_document 'provisioning'
 
-          unless u
-            alert 'Invalid provisioning URL'
-            return
-
-          doc.provisioning.host_couchdb_uri = u[0] + encodeURI(username) + ':' + encodeURI(password) + '@' + u[1]
-
-          ###
-            Save the password so that the "create" method can retrieve it.
-            (This isn't more of a security concern than storing it in the
-            host_couchdb_uri.)
-          ###
-          doc.password = password
-
-        $('#host_record').save_doc
-          context: @
-          model: model
-          push: 'provisioning'
-          before: (doc) ->
-
-            $('#host_log').html 'Preparing data'
-
-            doc.type = 'host'
-            doc._id = make_id 'host', doc.host
-
-            ###
-              Host are by default created at the root account.
-              In order to read and modify such records the user must have
-                access:provisioning:
-              and
-                update:provisioning:
-              respectively, listed in their 'roles', effectively allowing them
-              to modify _any_ provisioning records.
-              Otherwise the user might specify any account they'd like, and users
-              with access to that account (or any prefix) will be able to modify the
-              matching host(s).
-            ###
-            doc.account ?= ''  # Required for replication to work.
-
-            doc.provisioning ?= {}
-
-            ###
-              couchdb_uri is local for any non-manager host.
-              Since manager hosts are bootstrapped using a script, not this interface,
-              assume we are dealing with a non-manager host.
-            ###
-            doc.provisioning.couchdb_uri = 'http://127.0.0.1:5984/provisioning'
-
-            ###
-              applications/host is always required.
-              FIXME provide an interface to add more applications, especially:
-                applications/freeswitch
-                applications/opensips
-                applications/traces
-            ###
-            doc.applications ?= [
-              "applications/host"
-            ]
-
-            doc.mailer ?= {}
-            doc.mailer ?= sendmail: '/usr/sbin/sendmail'
-
-            if not doc.password?
-              initialize_password doc
-
-          create: (doc,cb) ->
-
-            $('#host_log').html 'Creating user record.'
-
-            ###
-              Create the user account record for this host.
-              (Hosts are given direct, read-only access to the provisioning
-              database so that they can replicate it locally.)
-            ###
-            username = host_username doc.host
-
-            p =
-              name: username
-              roles: ["host"]
-
-            ###
-              Quite obviously this can only be ran by server-admins or users_writer.
-            ###
-            $.couch.signup p, doc.password,
-
-              error: (xhr,status,error) ->
-                alert "Host signup failed: #{error}"
-                $('#host_log').html 'User record creation failed.'
-
-              success: cb
+        if doc._rev?
+          console.log 'Updating host'
+          @send model.update, doc._id, doc,
+            success: (resp) =>
+              doc._rev = resp.rev
+              $(@).data 'doc', doc
+              do push
+        else
+          console.log 'Creating host'
+          @send model.create, doc,
+            success: (resp) =>
+              doc._rev = resp.rev
+              $(@).data 'doc', doc
+              create_user doc, push
 
       Inbox.register 'host',
 

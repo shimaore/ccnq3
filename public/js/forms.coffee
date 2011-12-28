@@ -19,58 +19,6 @@ do (jQuery) ->
         alert "Replication failed, please try again."
     , "json"
 
-  $.fn.save_doc = (r) ->
-
-    doc = $(@).data 'doc'
-    doc ?= {}
-    former_doc = doc
-    $.extend doc, $('form.validate').toDeepJson()
-
-    push = ->
-      console.log 'Push document'
-      $.push_document r.push if r.push?
-
-    if r.before?
-      r.before doc
-
-    if former_doc._rev?
-      console.log 'Submitting update'
-      r.context.send.call r.context, r.model.update, doc._id, doc,
-        success: (resp) =>
-          doc._rev = resp.rev
-          $(@).data 'doc', doc
-          if r.update?
-            r.update doc, push
-          else
-            do push
-    else
-      delete doc._rev
-      console.log 'Submitting create'
-      r.context.send.call r.context, r.model.create, doc,
-        success: (resp) =>
-          doc._rev = resp.rev
-          $(@).data 'doc', doc
-          if r.create?
-            r.create doc, push
-          else
-            do push
-
-  $.fn.get_doc = (r) ->
-
-    data = r.data ? {}
-
-    r.context.send.call r.context, model.get, r.id,
-      success: (doc) =>
-        r.context.swap r.template $.extend data, doc
-        $(@).data 'doc', doc
-      error: =>
-        doc = {}
-        r.context.swap r.template $.extend data, doc
-        $(@).data 'doc', doc
-
-
-
-
   # require 'coffeekup'
 
   coffeekup_helpers =
