@@ -2,8 +2,7 @@ jQuery ($) ->
 
   $.menu ?= {}
 
-  selector = '#menu'
-  data_tag = 'menu'
+  selector = '#menu_container'
 
   current_menu = []
 
@@ -49,3 +48,4 @@ jQuery ($) ->
 
     menu_content = $.menu.render current_menu
     $(selector).empty().append menu_content
+    $("#{selector} ul").attr 'id', 'menu'
