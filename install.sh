@@ -96,6 +96,9 @@ sudo aptitude update
 sudo aptitude -y dist-upgrade
 # ... then install the ccnq packages.
 sudo aptitude -y install ccnq-base ccnq3 ccnq3-traces
+# Normally you should not run voice services on the manager,
+# however if you intend to do so you will need to install
+# the ccnq3-voice package as well.
 
 # ----- START INSTALLATION ----
 
@@ -113,6 +116,7 @@ sudo ./bootstrap-manager.sh
 # instead.
 
 # On a non-manager host you will use:
+#   sudo aptitude install ccnq3-voice
 #   cd /opt/ccnq3/src
 #   sudo su -s /bin/bash -c './bootstrap-local.sh http://..../' ccnq3
 # where the URI is provided by the provisioning system.
