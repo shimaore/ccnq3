@@ -71,6 +71,7 @@ sammy_couch = ($, Sammy) ->
         _save: (doc, callback) ->
           if $.isFunction model.beforeSave
             doc = model.beforeSave doc
+          console.log '_save calling saveDoc'
           app.db.saveDoc doc, mergeCallbacks(callback)
 
         update: (id, doc, callback) ->
