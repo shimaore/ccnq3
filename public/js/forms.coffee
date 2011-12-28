@@ -19,9 +19,9 @@ do (jQuery) ->
         alert "Replication failed, please try again."
     , "json"
 
-  $.ccnq3.save_doc = (r) ->
+  $.fn.save_doc = (r) ->
 
-    doc = $('form.validate').data 'doc'
+    doc = $(@).data 'doc'
     doc ?= {}
     former_doc = doc
     $.extend doc, $('form.validate').toDeepJson()
@@ -33,9 +33,9 @@ do (jQuery) ->
 
     if former_doc._rev?
       r.app.send r.model.update, doc._id, doc,
-        success: (resp) ->
+        success: (resp) =>
           doc._rev = resp.rev
-          $('form.validate').data 'doc', doc
+          $(@).data 'doc', doc
           if r.update
             r.update doc, push
           else
@@ -43,26 +43,26 @@ do (jQuery) ->
     else
       delete doc._rev
       r.app.send r.model.create, doc,
-        success: (resp) ->
+        success: (resp) =>
           doc._rev = resp.rev # not really needed, done for symmetry
-          $('form.validate').data 'doc', doc
+          $(@).data 'doc', doc
           if r.create
             r.create doc, push
           else
             do push
 
-  $.ccnq3.get_doc = (r) ->
+  $.fn.get_doc = (r) ->
 
     data = r.data ? {}
 
     r.app.send model.get, r.id,
       success: (doc) =>
         r.app.swap r.template $.extend data, doc
-        $('form.validate').data 'doc', doc
+        $(@).data 'doc', doc
       error: =>
         doc = {}
         r.app.swap r.template $.extend data, doc
-        $('form.validate').data 'doc', doc
+        $(@).data 'doc', doc
 
 
 

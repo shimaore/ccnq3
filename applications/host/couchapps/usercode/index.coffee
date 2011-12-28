@@ -77,7 +77,7 @@ do (jQuery) ->
           ###
           doc.password = password
 
-        $.ccnq3.save_doc
+        $('#host_record').save_doc
           app: @
           model: model
           push: 'provisioning'
@@ -157,4 +157,5 @@ do (jQuery) ->
           return "Server #{doc.host}"
 
         form: (doc) ->
+          # FIXME $('#host_record').data 'doc', doc
           host_tpl doc
