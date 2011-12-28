@@ -33,11 +33,6 @@ do (jQuery) ->
 
   $(document).ready ->
 
-    $.menu.merge [{
-      label: 'New host'
-      href:  '#/host'
-    }]
-
     $.sammy container, ->
       app = @
       model = @createModel 'host'

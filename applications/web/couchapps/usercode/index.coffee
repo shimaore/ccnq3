@@ -9,6 +9,21 @@ $(document).ready ->
     profile.roles?.indexOf(role) >= 0
 
   $.sammy container, ->
+    $.menu.merge [
+      {
+        label:  'New host'
+        href:  '#/host'
+      }
+      {
+        label:  'Main'
+        href:   '#/inbox'
+      }
+      {
+        label:  'Logout'
+        href:   '#/logout'
+      }
+    ]
+
     app = @
 
     app.run '#/inbox'
