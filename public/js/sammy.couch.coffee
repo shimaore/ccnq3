@@ -65,6 +65,7 @@ sammy_couch = ($, Sammy) ->
           app.db.openDoc id, $.extend(mergeCallbacks(callback), options)
 
         create: (doc, callback) ->
+          console.log 'create'
           model._save mergeDefaultDocument(doc), callback
 
         # An application really should only use "create" or "update", never "save".
