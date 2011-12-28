@@ -15,6 +15,8 @@ do (jQuery) ->
 
     form id:'host_record', method:'post', action:'#/host', class:'validate', ->
 
+      div id:'host_log'
+
       textbox
         id:'host'
         title:'Host'
@@ -46,7 +48,10 @@ do (jQuery) ->
         form_is_valid = $('#host_record').valid()
 
         if form_is_valid
+          $('#host_log').html ''
           @trigger 'save-doc'
+        else
+          $('#host_log').html 'Please check your data.'
 
         return
 
@@ -84,6 +89,8 @@ do (jQuery) ->
           model: model
           push: 'provisioning'
           before: (doc) ->
+
+            $('#host_log').html 'Preparing data'
 
             doc.type = 'host'
             doc._id = make_id 'host', doc.host
@@ -130,6 +137,8 @@ do (jQuery) ->
 
           create: (doc,cb) ->
 
+            $('#host_log').html 'Creating user record.'
+
             ###
               Create the user account record for this host.
               (Hosts are given direct, read-only access to the provisioning
@@ -148,6 +157,7 @@ do (jQuery) ->
 
               error: (xhr,status,error) ->
                 alert "Host signup failed: #{error}"
+                $('#host_log').html 'User record creation failed.'
 
               success: cb
 
