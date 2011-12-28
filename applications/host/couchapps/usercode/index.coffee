@@ -55,6 +55,33 @@ do (jQuery) ->
 
       @bind 'save-doc', ->
 
+        initialize_password = (doc) ->
+          ###
+            Password creation for host@#{hostname}
+          ###
+          username = host_username doc.host
+          password = hex_sha1 "a"+Math.random()
+
+          u = doc.provisioning.host_couchdb_uri.matches ///
+              ^
+              (https?://)
+              (?:[^@]*@)?
+              (.*)
+            ///i
+
+          unless u
+            alert 'Invalid provisioning URL'
+            return
+
+          doc.provisioning.host_couchdb_uri = u[0] + encodeURI(username) + ':' + encodeURI(password) + '@' + u[1]
+
+          ###
+            Save the password so that the "create" method can retrieve it.
+            (This isn't more of a security concern than storing it in the
+            host_couchdb_uri.)
+          ###
+          doc.password = password
+
         $.ccnq3.save_doc
           app: @
           model: model
@@ -101,31 +128,8 @@ do (jQuery) ->
             doc.mailer ?= {}
             doc.mailer ?= sendmail: '/usr/sbin/sendmail'
 
-            ###
-              Account creation for host@#{hostname}
-            ###
-            username = host_username doc.host
-            password = hex_sha1 "a"+Math.random()
-
-            u = doc.provisioning.host_couchdb_uri.matches ///
-                ^
-                (https?://)
-                (?:[^@]*@)?
-                (.*)
-              ///i
-
-            unless u
-              alert 'Invalid provisioning URL'
-              return
-
-            doc.provisioning.host_couchdb_uri = u[0] + encodeURI(username) + ':' + encodeURI(password) + '@' + u[1]
-
-            ###
-              Save the password so that the "create" method can retrieve it.
-              (This isn't more of a security concern than storing it in the
-              host_couchdb_uri.)
-            ###
-            doc.password = password
+            if not doc.password?
+              initialize_password doc
 
           create: (doc,cb) ->
 
