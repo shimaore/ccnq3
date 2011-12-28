@@ -11,6 +11,8 @@ do (jQuery) ->
 
   # FIXME: Retrieve the default value for host_couchdb_uri (public, no password embedded) from some configuration area.
 
+  selector = '#host_record'
+
   host_tpl = $.compile_template ->
 
     form id:'host_record', method:'post', action:'#/host', class:'validate', ->
@@ -149,7 +151,7 @@ do (jQuery) ->
 
       # Save
       @post '#/host', ->
-        form_is_valid = $('#host_record').valid()
+        form_is_valid = $(selector).valid()
 
         if form_is_valid
           $('#host_log').html ''
@@ -161,8 +163,8 @@ do (jQuery) ->
 
       @bind 'save-doc', ->
 
-        doc = $(@).data('doc') ? {}
-        $.extend doc, $(@).toDeepJson()
+        doc = $(selector).data('doc') ? {}
+        $.extend doc, $(selector).toDeepJson()
 
         push = ->
           $.ccnq3.push_document 'provisioning'
@@ -172,14 +174,14 @@ do (jQuery) ->
           @send model.update, doc._id, doc,
             success: (resp) =>
               doc._rev = resp.rev
-              $(@).data 'doc', doc
+              $(selector).data 'doc', doc
               do push
         else
           console.log 'Creating host'
           @send model.create, doc,
             success: (resp) =>
               doc._rev = resp.rev
-              $(@).data 'doc', doc
+              $(selector).data 'doc', doc
               create_user doc, push
 
       Inbox.register 'host',
@@ -188,5 +190,5 @@ do (jQuery) ->
           return "Server #{doc.host}"
 
         form: (doc) ->
-          # FIXME $('#host_record').data 'doc', doc
+          # FIXME $(selector).data 'doc', doc
           host_tpl doc
