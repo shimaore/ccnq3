@@ -1,3 +1,9 @@
+ccnq3 (0.0.46) unstable; urgency=low
+
+  * Host web app
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Wed, 28 Dec 2011 14:08:11 +0100
+
 ccnq3 (0.0.45) unstable; urgency=low
 
   * Re-package ccnq-base
