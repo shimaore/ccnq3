@@ -89,7 +89,7 @@ do (jQuery) ->
           doc.password = password
 
         $('#host_record').save_doc
-          app: @
+          app: app
           model: model
           push: 'provisioning'
           before: (doc) ->
@@ -164,8 +164,6 @@ do (jQuery) ->
                 $('#host_log').html 'User record creation failed.'
 
               success: cb
-
-      app = @
 
       Inbox.register 'host',
 
