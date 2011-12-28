@@ -10,7 +10,7 @@ $(document).ready ->
 
   $.sammy container, ->
 
-    $('#menu_container').html do $.compile_template
+    $('#menu_container').html do $.compile_template ->
       ul id:'menu', ->
         li -> a href:'#/inbox', 'Main'
         li -> a href:'#/logout', 'Logout'
