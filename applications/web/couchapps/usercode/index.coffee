@@ -9,25 +9,15 @@ $(document).ready ->
     profile.roles?.indexOf(role) >= 0
 
   $.sammy container, ->
-    $.menu.set [
-      {
-        label:  'Provisioning'
-        menu: [
-          {
-            label:  'New host'
-            href:  '#/host'
-          }
-        ]
-      }
-      {
-        label:  'Main'
-        href:   '#/inbox'
-      }
-      {
-        label:  'Logout'
-        href:   '#/logout'
-      }
-    ]
+
+    $('#menu_container').html do $.compile_template
+      ul id:'menu', ->
+        li -> a href:'#/inbox', 'Main'
+        li -> a href:'#/logout', 'Logout'
+        li ->
+          span 'Provisioning'
+          ul ->
+            li -> a href:'#/host', 'New host'
 
     app = @
 
