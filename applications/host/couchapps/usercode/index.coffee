@@ -186,17 +186,17 @@ do (jQuery) ->
           # No @send here, apparently
           model.update doc._id, doc,
             success: (resp) ->
-              doc._rev = resp.rev
-              $(selector).data 'doc', doc
-              do push
+              model.get resp._id (doc)->
+                $(selector).data 'doc', doc
+                do push
         else
           console.log 'Creating host'
           # No @send here, apparently
           model.create doc,
             success: (resp) ->
-              doc._rev = resp.rev
-              $(selector).data 'doc', doc
-              create_user doc, push
+              model.get resp._id, (doc) ->
+                $(selector).data 'doc', doc
+                create_user doc, push
 
       @post '#/host', ->
         form_is_valid = $(selector).valid()
