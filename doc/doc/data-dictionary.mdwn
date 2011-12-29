@@ -110,7 +110,8 @@ Notes:
     opensips_proxy:
       port:34340   integer, required, do not change
       hostname:"127.0.0.1"   string, required, do not change
-      usrloc_uri: URI of the location database (used to save registration data); for example "http://127.0.0.1:5984/location"
+      usrloc_uri: URI of the location database (used to save registration data)
+        Note: this should be "http://127.0.0.1:5984/location"
 
     opensips:
       model: "complete", or any other model defined in common/opensips [required]

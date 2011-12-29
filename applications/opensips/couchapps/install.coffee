@@ -1,16 +1,21 @@
 #!/usr/bin/env coffee
 
 couchapp = require 'couchapp'
+cdb = require 'cdb'
 
 push_script = (uri, script,cb) ->
   couchapp.createApp require("./#{script}"), uri, (app)-> app.push(cb)
 
 require('ccnq3_config').get (config)->
 
-  provisioning_uri = config.provisioning.couchdb_uri
+  # These only get installed on host running OpenSIPS.
+
+  # Install the views so that opensips-proxy might work.
+  provisioning_uri = config.provisioning.local_couchdb_uri
   push_script provisioning_uri, 'opensips'
 
-  # FIXME Create this database at some point (but it'll probably be local to the target)
+  # Create this database (local to the host, normally)
   location_uri = config.opensips_proxy.usrloc_uri
-  push_script location_uri, 'opensips'
-  push_script location_uri, 'location'
+  new cdb(location_uri).create ->
+    push_script location_uri, 'opensips' # for CommonJS
+    push_script location_uri, 'location'
