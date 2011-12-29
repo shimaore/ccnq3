@@ -60,7 +60,7 @@ do (jQuery) ->
           alert 'Invalid provisioning URL'
           return
 
-        doc.provisioning.host_couchdb_uri = u[1] + encodeURI(username) + ':' + encodeURI(password) + '@' + u[2]
+        doc.provisioning.host_couchdb_uri = u[1] + encodeURIComponent(username) + ':' + encodeURIComponent(password) + '@' + u[2]
 
         ###
           Save the password so that the "create" method can retrieve it.
