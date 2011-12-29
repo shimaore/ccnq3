@@ -121,14 +121,13 @@ do (jQuery) ->
 
       create_user = (doc,cb) ->
 
-        $('#host_log').html 'Creating user record.'
-
         ###
           Create the user account record for this host.
           (Hosts are given direct, read-only access to the provisioning
           database so that they can replicate it locally.)
         ###
         username = host_username doc.host
+        password = doc.password
 
         p =
           name: username
@@ -136,7 +135,9 @@ do (jQuery) ->
         ###
           Quite obviously this can only be ran by server-admins or users_writer.
         ###
-        $.couch.signup p, doc.password,
+        $('#host_log').html "Creating user record for #{username} with password #{password}."
+
+        $.couch.signup p, password,
 
           error: (xhr,status,error) ->
             alert "Host signup failed: #{error}"
