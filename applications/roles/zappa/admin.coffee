@@ -64,6 +64,8 @@ Released under the AGPL3 license
       if p.error?
         return @send error: p.error
 
+      p.roles ?= []
+
       cb p, (q)=>
 
         users_cdb.put q, (r) =>
@@ -109,7 +111,7 @@ Released under the AGPL3 license
       if not p.name.match /^host@/
         return @send error:'User must be a host'
 
-      if 'host' in p.roles
+      if user_is p.roles, 'host'
         return @send ok:true
 
       p.roles.push 'host'
