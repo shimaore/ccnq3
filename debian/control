@@ -3,7 +3,7 @@ Maintainer: Stephane Alnet (Packaging) <stephane@shimaore.net>
 
 Package: ccnq3
 Architecture: all
-Depends: ccnq-base (=${VERSION}),
+Depends: ccnq-base,
   daemon,
   nodejs (>=0.6.6),
   libmozjs-couchdb, couchdb (>=1.1.1-20111218)
@@ -11,7 +11,7 @@ Description: Installs the ccnq3 code in /opt/ccnq3/src
 
 Package: ccnq3-traces
 Architecture: all
-Depends: ccnq3 (=${VERSION}), tshark (>=1.2), ngrep (>=1.45), ${perl:Depends}
+Depends: ccnq3, tshark (>=1.2), ngrep (>=1.45), ${perl:Depends}
 Description: Installs the SIP traces in /opt/ccnq3/traces
 
 Package: ccnq-base
@@ -28,7 +28,7 @@ Description: Base dependencies for CCNQ
 
 Package: ccnq3-voice
 Architecture: all
-Depends: ccnq3 (=${VERSION}), ccnq3-traces (=${VERSION}),
+Depends: ccnq3, ccnq3-traces,
   opensips (>=1.7.1-2), opensips-dbhttp-module, opensips-json-module,
   memcached,
   mediaproxy-dispatcher,
