@@ -30,7 +30,7 @@ do (jQuery) ->
         id:'provisioning.host_couchdb_uri'
         title: 'Provisioning database URI'
         class:'required url'
-        value: @provisioning?.host_couchdb_uri ? (window.location.protocol + '//' + window.location.host + '/provisioning/')
+        value: @provisioning?.host_couchdb_uri ? (window.location.protocol + '//' + window.location.host + '/provisioning')
 
       input type:'submit'
 
