@@ -7,7 +7,7 @@ do (jQuery) ->
 
   container = '#content'
 
-  profile = $(container).data 'profile'
+  # profile = $(container).data 'profile'
   # model = $(container).data 'model'
 
   # FIXME: Retrieve the default value for host_couchdb_uri (public, no password embedded) from some configuration area.
@@ -152,17 +152,6 @@ do (jQuery) ->
         @swap host_tpl {}
 
       # Save
-      @post '#/host', ->
-        form_is_valid = $(selector).valid()
-
-        if form_is_valid
-          $('#host_log').html ''
-          @trigger 'save-doc'
-        else
-          $('#host_log').html 'Please check your data.'
-
-        return
-
       @bind 'save-doc', (event) ->
 
         doc = $(selector).data('doc') ? {}
@@ -173,18 +162,29 @@ do (jQuery) ->
 
         if doc._rev?
           console.log 'Updating host'
-          @send model.update, doc._id, doc
-            .then (resp) ->
+          @send model.update, doc._id, doc,
+            success: (resp) ->
               doc._rev = resp.rev
               $(selector).data 'doc', doc
               do push
         else
           console.log 'Creating host'
-          @send model.create, doc
-            .then (resp) ->
+          @send model.create, doc,
+            success: (resp) ->
               doc._rev = resp.rev
               $(selector).data 'doc', doc
               create_user doc, push
+
+      @post '#/host', ->
+        form_is_valid = $(selector).valid()
+
+        if form_is_valid
+          $('#host_log').html ''
+          @trigger 'save-doc'
+        else
+          $('#host_log').html 'Please check your data.'
+
+        return
 
       Inbox.register 'host',
 
