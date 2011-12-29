@@ -111,3 +111,15 @@ Released under the AGPL3 license
       p.roles = p.roles.filter (v)->
         not ( (v).substring(0,matching.length) is matching )
       cb(p)
+
+  # Host role
+  put '/roles/admin/grant/:user/host': ->
+    @_admin_handle 'host', (p,cb)=>
+      if not p.name.match /^host@/
+        return @send error:'User must be a host'
+
+      if 'host' in p.roles
+        return @send ok:true
+
+      p.roles.push 'host'
+      cb(p)
