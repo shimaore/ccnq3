@@ -216,4 +216,11 @@ do (jQuery) ->
 
         form: (doc) ->
           # FIXME $(selector).data 'doc', doc
-          host_tpl doc
+          uri = doc.provisioning.host_coucdh_uri + '/' + encodeURIComponent doc.host
+          """
+            <p>Provisioning URI = <a href="#{uri}">#{uri}</a></p>
+            <pre>
+              # Run on host "#{doc.host}"
+              cd /opt/ccnq3/src && sudo ./bootstrap-local.sh '#{uri}'
+            </pre>
+          """ + host_tpl doc
