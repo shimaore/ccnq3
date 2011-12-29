@@ -216,7 +216,7 @@ do (jQuery) ->
 
         form: (doc) ->
           # FIXME $(selector).data 'doc', doc
-          uri = doc.provisioning.host_coucdh_uri + '/' + encodeURIComponent doc.host
+          uri = doc.provisioning.host_couchdb_uri + '/' + encodeURIComponent doc.host
           """
             <p>Provisioning URI = <a href="#{uri}">#{uri}</a></p>
             <pre>
