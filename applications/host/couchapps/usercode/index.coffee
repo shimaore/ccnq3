@@ -162,14 +162,16 @@ do (jQuery) ->
 
         if doc._rev?
           console.log 'Updating host'
-          @send model.update, doc._id, doc,
+          # No @send here, apparently
+          model.update doc._id, doc,
             success: (resp) ->
               doc._rev = resp.rev
               $(selector).data 'doc', doc
               do push
         else
           console.log 'Creating host'
-          @send model.create, doc,
+          # No @send here, apparently
+          model.create doc,
             success: (resp) ->
               doc._rev = resp.rev
               $(selector).data 'doc', doc
