@@ -9,6 +9,7 @@
   },
   "scripts": {
     "start": "./start.coffee"
+  , "stop": "./stop.coffee"
   },
   "dependencies": {
     "ccnq3_config": ">=0.1"
