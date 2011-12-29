@@ -28,10 +28,10 @@ Released under the AGPL3 license
 
   @helper _admin_handle: (operation,source,prefix,cb)->
 
-    this_user_is = (role) ->
+    this_user_is = (role) =>
       user_is @session.roles, role
 
-    this_user_may = (operation,source,prefix) ->
+    this_user_may = (operation,source,prefix) =>
       user_may @session.roles,operation,source,prefix
 
     ready = =>
@@ -64,9 +64,9 @@ Released under the AGPL3 license
       if p.error?
         return @send error: p.error
 
-      cb p, (q)->
+      cb p, (q)=>
 
-        users_cdb.put q, (r) ->
+        users_cdb.put q, (r) =>
           if r.error?
             return @send error: r.error
           return @send ok: true
