@@ -83,7 +83,7 @@ Released under the AGPL3 license
   # TODO GET /admin/grant/:user , using a user's "primary account" (the _users' record "account" field).
 
   # Grant right
-  put '/roles/admin/grant/:user/(update|access)/:source/:prefix': ->
+  @put '/roles/admin/grant/:user/(update|access)/:source/:prefix': ->
     operation = @params[0]
     source = @params.source
     prefix = @params.prefix
@@ -98,7 +98,7 @@ Released under the AGPL3 license
       cb(p)
 
   # Drop right
-  del '/roles/admin/grant/:user/(update|access)/:source/:prefix': ->
+  @del '/roles/admin/grant/:user/(update|access)/:source/:prefix': ->
     operation = params[0]
     source = @params.source
     prefix = @params.prefix
@@ -113,7 +113,7 @@ Released under the AGPL3 license
       cb(p)
 
   # Host role
-  put '/roles/admin/grant/:user/host': ->
+  @put '/roles/admin/grant/:user/host': ->
     @_admin_handle 'host', (p,cb)=>
       if not p.name.match /^host@/
         return @send error:'User must be a host'
