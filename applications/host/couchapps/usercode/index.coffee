@@ -132,7 +132,6 @@ do (jQuery) ->
 
         p =
           name: username
-          roles: ["host"]
 
         ###
           Quite obviously this can only be ran by server-admins or users_writer.
@@ -143,7 +142,26 @@ do (jQuery) ->
             alert "Host signup failed: #{error}"
             $('#host_log').html 'User record creation failed.'
 
-          success: cb
+          ###
+            Only admins may change the "roles" field. So we use
+            applications/roles/zappa/admin.coffe as a proxy for
+            non-admin users.
+            This requires
+              update:host:      # The role to be granted
+              update:_users:    # Authorization to grant a role
+            in "roles" for the requesting user.
+          ###
+          success: ->
+            $.ajax
+              type: 'PUT'
+              url: '/roles/admin/grant/'+encodeURI(username)+'/host'
+              dataType: 'json'
+              success: (data) ->
+                if data.error?
+                  $('#host_log').html data.error
+                  return
+
+                do cb
 
       @bind 'error.host', (notice) ->
         console.log "Model error: #{notice.error}"
