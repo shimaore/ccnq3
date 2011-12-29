@@ -117,6 +117,8 @@ do (jQuery) ->
           if not doc.password?
             initialize_password doc
 
+          return doc
+
       create_user = (doc,cb) ->
 
         $('#host_log').html 'Creating user record.'
