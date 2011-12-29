@@ -12,7 +12,9 @@ require('ccnq3_config').get (config)->
 
   # Install the views so that opensips-proxy might work.
   provisioning_uri = config.provisioning.local_couchdb_uri
-  push_script provisioning_uri, 'opensips'
+  provisioning = cdb.new provisioning_uri
+  provisioning.create ->
+    push_script provisioning_uri, 'opensips'
 
   # Create this database (local to the host, normally)
   location_uri = config.opensips_proxy.usrloc_uri
