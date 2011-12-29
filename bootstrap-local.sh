@@ -33,6 +33,9 @@ echo "Re-configuring CouchDB on local host ${HOSTNAME}"
 killall couchdb beam.smp heart || echo OK
 
 tee "${COUCHDB_CONFIG}" <<EOT >/dev/null
+;
+; A configuration file for a local-only, "party"-mode CouchDB instance.
+;
 [httpd]
 port = 5984
 bind_address = 127.0.0.1
