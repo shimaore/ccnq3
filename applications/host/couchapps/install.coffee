@@ -9,8 +9,10 @@ push_script = (uri,script,cb) ->
 cfg = require 'ccnq3_config'
 cfg.get (config) ->
 
-  usercode_uri = config.usercode.couchdb_uri
-  push_script usercode_uri, 'usercode'
+  usercode_uri = config.usercode?.couchdb_uri
+  if usercode_uri?
+    push_script usercode_uri, 'usercode'
 
-  provisioning_uri = config.provisioning.couchdb_uri
-  push_script provisioning_uri, 'main'
+  provisioning_uri = config.provisioning?.couchdb_uri
+  if provisioning_uri?
+    push_script provisioning_uri, 'main'
