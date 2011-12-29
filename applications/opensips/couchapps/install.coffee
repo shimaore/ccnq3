@@ -16,6 +16,7 @@ require('ccnq3_config').get (config)->
 
   # Create this database (local to the host, normally)
   location_uri = config.opensips_proxy.usrloc_uri
-  new cdb(location_uri).create ->
+  location = new cdb(location_uri)
+  location.create ->
     push_script location_uri, 'opensips' # for CommonJS
     push_script location_uri, 'location'
