@@ -14,31 +14,7 @@ Released under the AGPL3 license
   @helper this_user_is: (role) ->
     return user_is @session.roles, role
 
-  @helper _ready: ()->
-
-    this_user_is = (role) ->
-      user_is @session.roles, role
-
-    # User must be logged in.
-    if not @session.logged_in?
-      @send forbidden: "Not logged in"
-      return false
-    # CouchDB _admin users are always granted access.
-    if this_user_is '_admin'
-      return true
-    # Make sure the user is confirmed.
-    if not this_user_is 'confirmed'
-      @send forbidden: "Not a confirmed user."
-      return false
-    # Everything OK
-    return true
-
   # --- Operations ---
-
-  # REST: Verify we can start an admin session
-  @get '/roles/admin': ->
-    if @_ready()
-      @send ok:true
 
   # operation is either "update" or "access"
   user_may = (roles,operation,source,prefix) ->
@@ -58,7 +34,22 @@ Released under the AGPL3 license
     this_user_may = (operation,source,prefix) ->
       user_may @session.roles,operation,source,prefix
 
-    if not _ready()
+    ready = ->
+      # User must be logged in.
+      if not @session.logged_in?
+        @send forbidden: "Not logged in"
+        return false
+      # CouchDB _admin users are always granted access.
+      if this_user_is '_admin'
+        return true
+      # Make sure the user is confirmed.
+      if not this_user_is 'confirmed'
+        @send forbidden: "Not a confirmed user."
+        return false
+      # Everything OK
+      return true
+
+    if not ready()
       return
 
     if not this_user_may operation,source,prefix
