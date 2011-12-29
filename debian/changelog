@@ -1,8 +1,8 @@
-ccnq3 (0.0.50-6) unstable; urgency=low
+ccnq3 (0.0.50-7) unstable; urgency=low
 
   * Host web app
 
- -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Thu, 29 Dec 2011 22:13:39 +0100
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Thu, 29 Dec 2011 22:32:38 +0100
 
 ccnq3 (0.0.45) unstable; urgency=low
 
