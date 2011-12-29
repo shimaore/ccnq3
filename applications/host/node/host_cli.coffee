@@ -36,10 +36,10 @@ ccnq3_config.get (config) ->
     # provisioning.couchdb_uri MUST be "http://127.0.0.1:5984/provisioning"
     expected = "http://127.0.0.1:5984/provisioning"
     source_uri = config.provisioning.host_couchdb_uri
-    target_uri = config.provisioning.couchdb_uri
+    target_uri = config.provisioning.local_couchdb_uri
 
     if target_uri isnt expected
-      throw "provisioning.couchdb_uri should be #{expected}"
+      throw "provisioning.local_couchdb_uri should be #{expected}"
     if not source_uri
       throw "provisioning.host_couchdb_uri is required"
 

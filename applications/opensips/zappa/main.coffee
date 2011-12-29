@@ -73,7 +73,7 @@ require('ccnq3_config').get (config)->
       _request that, loc
 
     pipe_req = (that,t,id) ->
-      _pipe that, config.provisioning.host_couchdb_uri, t, id
+      _pipe that, config.provisioning.local_couchdb_uri, t, id
 
     pipe_loc_req = (that,t,id) ->
       _pipe that, config.opensips_proxy.usrloc_uri, t, id
@@ -83,7 +83,7 @@ require('ccnq3_config').get (config)->
       request(loc).pipe(that.response)
 
     pipe_list = (that,t,view) ->
-      _list that, config.provisioning.host_couchdb_uri, t, view
+      _list that, config.provisioning.local_couchdb_uri, t, view
 
     pipe_loc_list = (that,t,view) ->
       _list that, config.opensips_proxy.usrloc_uri, t, view
@@ -94,7 +94,7 @@ require('ccnq3_config').get (config)->
       request(loc).pipe(that.response)
 
     pipe_list_key = (that,t,view,key) ->
-      _list_key that, config.provisioning.host_couchdb_uri, t, view, key
+      _list_key that, config.provisioning.local_couchdb_uri, t, view, key
 
 
     # Action!

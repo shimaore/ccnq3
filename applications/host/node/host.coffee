@@ -37,9 +37,6 @@ exports.create_user = (users_db,hostname,cb) ->
     util.log "Created user record for #{username}"
     cb? password
 
-# This is not suitable for a master-host.
-# Regular hosts are readers, but a master-host needs to be db admin.
-# Use this to create a new (blank) host.
 
 exports.update_config = (provisioning_uri,provisioning_db,password,config,cb) ->
   # config.type = "host"
