@@ -186,7 +186,7 @@ do (jQuery) ->
           # No @send here, apparently
           model.update doc._id, doc,
             success: (resp) ->
-              model.get resp._id (doc)->
+              model.get resp.id, (doc)->
                 $(selector).data 'doc', doc
                 do push
         else
@@ -194,7 +194,7 @@ do (jQuery) ->
           # No @send here, apparently
           model.create doc,
             success: (resp) ->
-              model.get resp._id, (doc) ->
+              model.get resp.id, (doc) ->
                 $(selector).data 'doc', doc
                 create_user doc, push
 
