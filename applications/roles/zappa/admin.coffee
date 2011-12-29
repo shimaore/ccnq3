@@ -58,20 +58,22 @@ Released under the AGPL3 license
     if not this_user_may('update','_users',prefix) and not this_user_is('_admin')
       return @send forbidden: "You do not have administrative access."
 
-    users_cdb = cdb.new config.users.couchdb_uri
-    users_cdb.get "org.couchdb.user:#{@params.user}", (p) =>
-      # FIXME: should not allow to list users by brute force.
-      if p.error?
-        return @send error: p.error
+    require('ccnq3_config').get (config)=>
 
-      p.roles ?= []
+      users_cdb = cdb.new config.users.couchdb_uri
+      users_cdb.get "org.couchdb.user:#{@params.user}", (p) =>
+        # FIXME: should not allow to list users by brute force.
+        if p.error?
+          return @send error: p.error
 
-      cb p, (q)=>
+        p.roles ?= []
 
-        users_cdb.put q, (r) =>
-          if r.error?
-            return @send error: r.error
-          return @send ok: true
+        cb p, (q)=>
+
+          users_cdb.put q, (r) =>
+            if r.error?
+              return @send error: r.error
+            return @send ok: true
 
   # TODO GET /admin/grant/:user , using a user's "primary account" (the _users' record "account" field).
 
