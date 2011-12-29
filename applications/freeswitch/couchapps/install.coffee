@@ -9,7 +9,7 @@ push_script = (uri,script,cb) ->
 cfg = require 'ccnq3_config'
 cfg.get (config) ->
 
-  provisioning_uri = config.provisioning.couchdb_uri
+  provisioning_uri = config.provisioning.local_couchdb_uri
   provisioning = cdb.new provisioning_uri
   provisioning.create ->
     push_script provisioning_uri, 'freeswitch'
