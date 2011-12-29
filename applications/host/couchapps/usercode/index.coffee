@@ -173,15 +173,15 @@ do (jQuery) ->
 
         if doc._rev?
           console.log 'Updating host'
-          @send model.update, doc._id, doc,
-            success: (resp) =>
+          @send model.update, doc._id, doc
+            .then (resp) ->
               doc._rev = resp.rev
               $(selector).data 'doc', doc
               do push
         else
           console.log 'Creating host'
-          @send model.create, doc,
-            success: (resp) =>
+          @send model.create, doc
+            .then (resp) ->
               doc._rev = resp.rev
               $(selector).data 'doc', doc
               create_user doc, push
