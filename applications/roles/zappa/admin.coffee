@@ -34,7 +34,7 @@ Released under the AGPL3 license
     this_user_may = (operation,source,prefix) ->
       user_may @session.roles,operation,source,prefix
 
-    ready = ->
+    ready = =>
       # User must be logged in.
       if not @session.logged_in?
         @send forbidden: "Not logged in"
