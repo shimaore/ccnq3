@@ -157,11 +157,10 @@ do (jQuery) ->
               url: '/roles/admin/grant/'+encodeURI(username)+'/host'
               dataType: 'json'
               success: (data) ->
-                if data.error?
-                  $('#host_log').html data.error
-                  return
-
-                do cb
+                if data.ok
+                  do cb
+                else
+                  $('#host_log').html data.error ? data.forbidden
 
       @bind 'error.host', (notice) ->
         console.log "Model error: #{notice.error}"
