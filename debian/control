@@ -28,7 +28,7 @@ Description: Base dependencies for CCNQ
 
 Package: ccnq3-voice
 Architecture: all
-Depends: ccnq3,
+Depends: ccnq3, ccnq3-traces,
   opensips (>=1.7.1-2), opensips-dbhttp-module, opensips-json-module,
   memcached,
   mediaproxy-dispatcher,
