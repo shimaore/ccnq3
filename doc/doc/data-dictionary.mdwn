@@ -9,6 +9,16 @@ Notes:
 
   * host (aka config)
 
+    ###
+    # Common section
+    #
+    # All the fields in this section are pre-populated by the various scripts.
+    # Only the "applications" array will need to be expanded.
+    #
+    # Caveat: provisioning.host_couchdb_uri might need to be fixed if the system cannot guess
+    # your installation.
+    ###
+
     _id: type+host
     account: ''    (the empty string)
     updated_at: integer, update timestamp in ms [required]
@@ -51,11 +61,15 @@ Notes:
       users:
         couchdb_uri
 
+    ###
     # Specific to hosts running FreeSwitch.
     # To add a FreeSwitch host:
     # - configure the fields in this section
+    #   (You'll need to configure at least "sip_domain_name".)
+    #   (You'll need to configure one sip_profiles[] in order to be able to place calls.)
     # - add "applications/freeswitch" to the applications field [and restart ccnq3]
     # - run common/freeswitch/install.sh on the host to enable FreeSwitch
+    ###
     sip_domain_name:  string (required); FQDN accepted by the server
     rtp_ip: local IP to bind to for RTP [default: "auto"]
     sip_profiles: {} of profiles descriptions:
@@ -100,13 +114,14 @@ Notes:
         Note: The idea is that these can be used on a per-host basis by additional dialplans, profiles, etc.
         Note: These should also show up in CDRs. FIXME confirm this is the case
 
+    ###
     # Specific to hosts running OpenSIPS.
     # To add an OpenSIPS host:
     # - configure the fields in this section
     # - add "applications/opensips" to the applications field [and restart ccnq3]
     # - run common/mediaproxy/install.sh to install mediaproxy FIXME still requires some work
-    # - install memcached
     # - run common/opensips/install.sh on the host to enable OpenSIPS
+    ###
     opensips_proxy:
       port:34340   integer, required, do not change
       hostname:"127.0.0.1"   string, required, do not change
@@ -122,11 +137,13 @@ Notes:
     sip_commands:
       opensips: string; command send to the OpenSIPS "MI" channel (must follow the MI syntax, including having \n between parameters).
 
+    ###
     # Specific to hosts running the portal (or its back-end).
     # To enable the portal service:
     # - configure the fields in this section
     # - add "applications/portal" to the applications field [and restart ccqn3]
     # Note: this service is enabled by default on the manager host.
+    ###
     portal:
       port: integer (8765)
       hostname:  string ("127.0.0.1")
@@ -146,12 +163,14 @@ Notes:
 
     Note: "host" records are referred to as the "config" record inside most applications.
 
+    ###
     # Specific to hosts running SIP traces.
     # To start traces:
     # - install the ccnq3-traces package
     # - configure the fields in this section
     # - add "applications/traces" to the applications field
     # (this is not enabled by default)
+    ###
     traces:
       interfaces: [] of interfaces names
       # There's no reason to modify the following parameters for traces.
