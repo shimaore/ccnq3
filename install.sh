@@ -96,7 +96,7 @@ GPG
 sudo aptitude update
 sudo aptitude -y dist-upgrade
 # ... then install the ccnq packages.
-sudo aptitude -y install ccnq-base ccnq3 ccnq3-traces
+sudo aptitude -y install ccnq3
 # Normally you should not run voice services on the manager,
 # however if you intend to do so you will need to install
 # the ccnq3-voice package as well.
