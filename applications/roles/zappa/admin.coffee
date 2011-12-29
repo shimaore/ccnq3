@@ -80,7 +80,7 @@ Released under the AGPL3 license
     operation = @params[0]
     source = @params.source
     prefix = @params.prefix
-    @_admin_handle operation, (p,cb)=>
+    @_admin_handle operation, source, prefix, (p,cb)=>
       # Do nothing if the target user already has access to this account.
       # (Including because it has access to a parent.)
       if user_may p.roles,operation,source,prefix
@@ -95,7 +95,7 @@ Released under the AGPL3 license
     operation = params[0]
     source = @params.source
     prefix = @params.prefix
-    @_admin_handle operation, (p,cb)=>
+    @_admin_handle operation, source, prefix, (p,cb)=>
       if not user_may p.roles,operation,source,prefix
           return @send ok:true
 
@@ -107,7 +107,10 @@ Released under the AGPL3 license
 
   # Host role
   @put '/roles/admin/grant/:user/host': ->
-    @_admin_handle 'host', (p,cb)=>
+    operation = 'update'
+    source = 'host'
+    prefix = ''
+    @_admin_handle operation, source, prefix, (p,cb)=>
       if not p.name.match /^host@/
         return @send error:'User must be a host'
 
