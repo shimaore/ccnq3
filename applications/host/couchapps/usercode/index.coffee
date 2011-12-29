@@ -136,6 +136,7 @@ do (jQuery) ->
           Quite obviously this can only be ran by server-admins or users_writer.
         ###
         $('#host_log').html "Creating user record for #{username} with password #{password}."
+        console.log "Creating user record for #{username} with password #{password}."
 
         $.couch.signup p, password,
 
