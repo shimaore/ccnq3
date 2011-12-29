@@ -98,7 +98,7 @@ require('ccnq3_config').get (config) ->
     @del  portal_urls, portal_proxy
 
     couchdb_proxy = make_proxy 'http://127.0.0.1:5984'
-    couchdb_urls = /^\/(_session|_users|_uuids|provisioning|billing|cdr|u[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})($|\/)/
+    couchdb_urls = /^\/(_session|_users|_uuids|_utils|provisioning|billing|cdr|u[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})($|\/)/
     @get  couchdb_urls, couchdb_proxy
     @post couchdb_urls, couchdb_proxy
     @put  couchdb_urls, couchdb_proxy
