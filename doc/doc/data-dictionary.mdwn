@@ -47,6 +47,7 @@ Notes:
         Note: normally only present on a manager host (and only used by installation scripts)
       host_couchdb_uri: URI of the provisioning database (read-only) [allows access to the main provisioning database from any host]
         Note: this URI is used as the source for replication of the provisioning database onto a non-manager host
+              Replication will work better if this URI points directly to CouchDB (rather than a reverse proxy, for example).
         Note: this URI is also used by ccnq3_config to locate the host's configuration; if it is not present only the local (file-based) configuration will be used.
       local_couchdb_uri: URI of a local replica of the provisioning database [used by local applications such as opensips]
         Note: generally http://127.0.0.1:5984/provisioning [no authentication to keep things faster]
