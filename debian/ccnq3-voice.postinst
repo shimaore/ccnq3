@@ -6,7 +6,6 @@ USER=ccnq3
 GROUP=daemon
 WORKDIR=/opt/${NAME}
 ETCDIR=/etc/ccnq3
-SRC=git://stephane.shimaore.net/git/ccnq3.git
 
 case "$1" in
   configure|upgrade)
@@ -33,8 +32,8 @@ CONF
 
     # Default configuration
     mv $CONF $CONF."`date --rfc-3339=seconds`"
-    cp -r ${WORKDIR}/common/freeswitch/conf /opt/freeswitch/
-    cp -r ${WORKDIR}/common/freeswitch/lang $CONF
+    cp -r ${WORKDIR}/src//common/freeswitch/conf /opt/freeswitch/
+    cp -r ${WORKDIR}/src/common/freeswitch/lang $CONF
     chown -R freeswitch.daemon $CONF
     chmod g+w $CONF # allow access to configuration directory
 
