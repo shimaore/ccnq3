@@ -136,7 +136,16 @@ Notes:
       local_ipv6: reserved
 
     sip_commands:
-      opensips: string; command send to the OpenSIPS "MI" channel (must follow the MI syntax, including having \n between parameters).
+      opensips: string; command send to the OpenSIPS "MI" channel (must follow the MI syntax).
+      #  Quoting from the documentation for OpenSIPS' mi_datagram module:
+      #  The external commands issued via DATAGRAM interface must follow
+      #  the following syntax:
+      #    * request = first_line (argument '\n')*
+      #    * first_line = ':'command_name':''\n'
+      #    * argument = (arg_name '::' (arg_value)? ) | (arg_value)
+      #    * arg_name = not-quoted_string
+      #    * arg_value = not-quoted_string | '"' string '"'
+      #    * not-quoted_string = string - {',",\n,\r}
 
     ###
     # Specific to hosts running the portal (or its back-end).
