@@ -43,7 +43,7 @@ require('ccnq3_config').get (config) ->
     base_path = "./opensips"
 
     params = {}
-    for _ in ['default.json',"#{p.model}.json"]
+    for _ in ['default.json',"#{p.opensips.model}.json"]
       do (_) ->
         data = JSON.parse fs.readFileSync "#{base_path}/#{_}"
         params[k] = data[k] for own k of data
@@ -55,5 +55,5 @@ require('ccnq3_config').get (config) ->
     require("#{base_path}/compiler.coffee") params
 
     # 2. Process any MI commands
-    if p.sip_commands.opensips?
+    if p.sip_commands?.opensips?
       process_changes params.mi_port, p.sip_commands.opensips
