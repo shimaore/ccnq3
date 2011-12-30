@@ -1,6 +1,6 @@
 {
   "name": "cdb_changes",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Minimalist interface for CouchDB _changes",
   "keywords": "couchdb",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
