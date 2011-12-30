@@ -9,7 +9,7 @@ shift
 if [ "x$ACTION" == "x" ]; then
   cat - <<'EOT'
 
-$0 (dispatcher|(relay|both) [dispatcher1 [dispatcher2 [...]]])
+$0 (dispatcher|relay|both) [dispatcher1 [dispatcher2 [...]]])
 
 Creates configuration files for MediaProxy.
 
@@ -49,51 +49,51 @@ fi
 
 
 function do_sysctl {
-  sudo sed -i -e 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/' /etc/sysctl.conf
+  sed -i -e 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/' /etc/sysctl.conf
   egrep -q '^net.ipv4.ip_forward=1$' /etc/sysctl.conf || exit
 
-  sudo sed -i -e 's/#net.ipv6.conf.all.forwarding=1/net.ipv6.conf.all.forwarding=1/' /etc/sysctl.conf
+  sed -i -e 's/#net.ipv6.conf.all.forwarding=1/net.ipv6.conf.all.forwarding=1/' /etc/sysctl.conf
   egrep -q '^net.ipv6.conf.all.forwarding=1$' /etc/sysctl.conf || exit
   # Maybe
   #  net.ipv6.conf.default.forwarding=1
   # also?
 
-  sudo sysctl -p /etc/sysctl.conf
+  sysctl -p /etc/sysctl.conf
 }
 
 if [ "x$ACTION" == "xdispatcher" ]; then
 
-  sudo mkdir -p /etc/mediaproxy/tls
-  sudo cp ./dispatcher.ini   /etc/mediaproxy/config.ini
-  sudo cp ./tls/* /etc/mediaproxy/tls
+  mkdir -p /etc/mediaproxy/tls
+  cp ./dispatcher.ini   /etc/mediaproxy/config.ini
+  cp ./tls/* /etc/mediaproxy/tls
 
-  sudo /etc/init.d/mediaproxy-dispatcher restart
+  /etc/init.d/mediaproxy-dispatcher restart
 
 fi
 
 if [ "x$ACTION" == "xrelay" ]; then
 
-  sudo mkdir -p /etc/mediaproxy/tls
+  mkdir -p /etc/mediaproxy/tls
   sed -e "s/\${dispatcher_names}/$*/" ./relay.ini | \
-    sudo tee /etc/mediaproxy/config.ini >/dev/null
-  sudo cp ./tls/* /etc/mediaproxy/tls
+    tee /etc/mediaproxy/config.ini >/dev/null
+  cp ./tls/* /etc/mediaproxy/tls
 
   do_sysctl
-  sudo /etc/init.d/mediaproxy-relay restart
+  /etc/init.d/mediaproxy-relay restart
 
 fi
 
 if [ "x$ACTION" == "xboth" ]; then
 
-  sudo mkdir -p /etc/mediaproxy/tls
+  mkdir -p /etc/mediaproxy/tls
   cat ./*.ini | \
     sed -e "s/\${dispatcher_names}/$*/" | \
-    sudo tee /etc/mediaproxy/config.ini >/dev/null
-  sudo cp ./tls/* /etc/mediaproxy/tls
+    tee /etc/mediaproxy/config.ini >/dev/null
+  cp ./tls/* /etc/mediaproxy/tls
 
   do_sysctl
-  sudo /etc/init.d/mediaproxy-dispatcher restart
-  sudo /etc/init.d/mediaproxy-relay restart
+  /etc/init.d/mediaproxy-dispatcher restart
+  /etc/init.d/mediaproxy-relay restart
 
 fi
 

@@ -1,4 +1,15 @@
 #!/usr/bin/env bash
+# (c) 2011 Stephane Alnet
+
+# This documentation file is written to look like a shell script.
+#
+# However you should read it and run the interesting bits
+# manually as you go rather than run it directly as a script.
+# Running it as a script will not do what you want.
+
+# Most commands must be ran as root. The only exception
+# would be the gpg commands; in that case make sure you
+# run apt-key as root.
 
 # ----- REQUIREMENTS -----
 
@@ -7,7 +18,7 @@
 
 # Hostnames for the different servers MUST be:
 #  1. FQDN (e.g. "server.example.com", not "server")
-#  2. Valid DNS names (that resolve using IPv4 and/or IPv6)
+#  2. Valid DNS names (that resolve using A and/or AAAA queries)
 # These are both required to ensure clients can properly access
 # the server.
 
@@ -17,7 +28,7 @@
 # to your existing /etc/apt/sources.list
 
 REPOSITORY=${REPOSITORY:-debian.sotelips.net}
-sudo tee -a /etc/apt/sources.list > /dev/null <<EOT
+tee -a /etc/apt/sources.list > /dev/null <<EOT
 deb http://${REPOSITORY}/shimaore shimaore main
 EOT
 
@@ -29,7 +40,7 @@ EOT
 # Add the GPG key for stephane@shimaore.net, which is used
 # to sign the "shimaore" distribution.
 
-sudo apt-key add - <<'GPG'
+apt-key add - <<'GPG'
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v1.4.11 (GNU/Linux)
 
@@ -87,40 +98,49 @@ GPG
 # Alternatively retrieve the key then add it:
 #   MAINTAINER='Stephane Alnet (Packaging) <stephane@shimaore.net>'
 #   gpg --recv-keys "=${MAINTAINER}"
-#   gpg --armor --export "=${MAINTAINER}" | sudo apt-key add -
+#   gpg --armor --export "=${MAINTAINER}" | apt-key add -
 
 
 # ----- UPDATE SYSTEM, INSTALL PACKAGES -----
 
 # Once the above is done, update your system...
-sudo aptitude update
-sudo aptitude -y dist-upgrade
-# ... then install the ccnq packages.
-sudo aptitude -y install ccnq3
-# Normally you should not run voice services on the manager,
-# however if you intend to do so you will need to install
-# the ccnq3-voice package as well.
+aptitude update
+aptitude -y dist-upgrade
 
 # ----- START INSTALLATION ----
 
 # Finally start the installation
 
+### "manager" host ###
+
 # The first host you will install is your "manager" host.
-# (sudo is needed to overwrite your existing CouchDB configuration).
+aptitude -y install ccnq3
 cd /opt/ccnq3/src
-sudo ./bootstrap-manager.sh
+./bootstrap-manager.sh
 
 # If you have an existing CouchDB/BigCouch installation, use
 #   cd /opt/ccnq3/src
 #   export CDB_URI=http://admin:password@host:5984/
-#   sudo su -s /bin/bash -c ./bootstrap.sh ccnq3
+#   su -s /bin/bash -c ./bootstrap.sh ccnq3
 # instead.
 
+# Normally you should not run voice services on the manager,
+# however if you intend to do so you will need to install
+# the ccnq3-voice package as well.
+
+### other (non-manager) hosts ###
+
 # On a non-manager host you will use:
-#   sudo aptitude install ccnq3-voice
-#   cd /opt/ccnq3/src
-#   sudo ./bootstrap-local.sh http://....
+aptitude install ccnq3-voice
+URI=http://...
+cd /opt/ccnq3/src
+./bootstrap-local.sh $URI
 # where the URI is provided by the provisioning system.
+
+# If you need mediaproxy on that host, you must manually run
+#   cd /opt/ccnq3/src/common/mediaproxy
+#   ./install.sh
+# because of some important caveats regarding IPv6.
 
 
 # ----- TUNE UP ----
@@ -129,7 +149,7 @@ sudo ./bootstrap-manager.sh
 # to either a centralized syslog server, or a smaller local
 # configuration such as:
 
-sudo tee /etc/rsyslog.conf >/dev/null <<'EOT'
+tee /etc/rsyslog.conf >/dev/null <<'EOT'
 $ModLoad imuxsock # provides support for local system logging
 $ModLoad imklog   # provides kernel logging support (previously done by rklogd)
 $ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
@@ -143,4 +163,4 @@ auth,authpriv.*             /var/log/auth.log
 # *.debug                  -/var/log/debug
 EOT
 
-sudo /etc/init.d/rsyslog restart
+/etc/init.d/rsyslog restart

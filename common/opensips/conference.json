@@ -1,6 +1,5 @@
 {
   "comment":"Open proxy with media relay (SBC)",
-  "run-as": "sudo ./make.pl default.json conference.json local-vars.json",
 
   "recipe":[
     "generic",

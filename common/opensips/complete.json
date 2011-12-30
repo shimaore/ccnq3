@@ -1,6 +1,5 @@
 {
   "comment":"Model for a complete proxy that does it all (almost).",
-  "run-as": "sudo ./make.pl default.json complete.json local-vars.json",
 
   "recipe":[
     "generic",

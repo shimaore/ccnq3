@@ -220,7 +220,7 @@ do (jQuery) ->
           """
             <p>Provisioning URI = <a href="#{uri}">#{uri}</a></p>
             <pre>
-              # Run on host "#{doc.host}"
-              cd /opt/ccnq3/src && sudo ./bootstrap-local.sh '#{uri}'
+              # Run on host "#{doc.host}" as root:
+              cd /opt/ccnq3/src && ./bootstrap-local.sh '#{uri}'
             </pre>
           """ + host_tpl doc
