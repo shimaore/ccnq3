@@ -29,3 +29,7 @@ ccnq3_config.get (config) ->
       host.update_config provisioning_uri, provisioning, password, config, (config) ->
 
         ccnq3_config.update config
+
+  else
+
+    cdb.new(config.provisioning.local_couchdb_uri).create

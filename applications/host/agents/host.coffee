@@ -40,7 +40,6 @@ require('ccnq3_config').get (config) ->
       # _id:    'ccnq3_provisioning'   # Only when using _replicator
       source: source_uri
       target: 'provisioning' # local target
-      create_target: true
       continuous: true
 
     # Still a bug? CouchDB replication can't authenticate properly, the Base64 contains %40 litteraly...
