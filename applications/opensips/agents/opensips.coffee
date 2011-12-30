@@ -50,6 +50,8 @@ require('ccnq3_config').get (config) ->
 
     params[k] = p.opensips[k] for own k of p.opensips
 
+    params.opensips_base_lib = base_path
+
     require("#{base_path}/compiler.coffee") params
 
     # 2. Process any MI commands
