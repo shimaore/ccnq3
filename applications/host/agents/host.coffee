@@ -67,6 +67,7 @@ require('ccnq3_config').get (config) ->
           "Authorization": "Basic #{basic.toString('base64')}"
     # /CouchDB bug
 
+    cdb = require 'cdb'
     cdb.new(replicator).post replicant
 
   if config.admin?.system
