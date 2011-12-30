@@ -48,5 +48,6 @@ ccnq3_config.get (config) ->
       _id:    'ccnq3_provisioning'
       source: source_uri
       target: 'provisioning' # local target
-      create_target: true
-    cdb.new('http://127.0.0.1:5984/_replicator').put replicant
+
+    cdb.new(target_uri).create ->
+      cdb.new(replicator).put replicant
