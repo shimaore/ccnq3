@@ -1,8 +1,8 @@
-ccnq3 (0.0.51-13) unstable; urgency=low
+ccnq3 (0.0.51-14) unstable; urgency=low
 
   * Voice server installation
 
- -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Fri, 30 Dec 2011 19:10:57 +0100
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Fri, 30 Dec 2011 20:32:34 +0100
 
 ccnq3 (0.0.50-10) unstable; urgency=low
 
