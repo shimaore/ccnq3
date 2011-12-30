@@ -17,13 +17,14 @@ case "$1" in
 
     # allow access to configuration directories
     adduser "$USER" daemon
-    chmod g+w $CONF
 
     # FIXME -- this should be replaced with some kind of in-memory system.
-    grep '/opt/freeswitch/db' /etc/fstab || tee -a /etc/fstab >/dev/null <<'CONF'
-fsdbfs /opt/freeswitch/db tmpfs defaults 0 0
+    DB=/opt/freeswitch/db
+    grep "$DB" /etc/fstab || tee -a /etc/fstab >/dev/null <<CONF
+fsdbfs $DB tmpfs defaults 0 0
 CONF
-    mount /opt/freeswitch/db
+    mount $DB
+    chown freeswitch.daemon $DB
 
     # Startup parameters
     DEFAULTS=/etc/default/freeswitch
@@ -32,7 +33,7 @@ CONF
 
     # Default configuration
     mv $CONF $CONF."`date --rfc-3339=seconds`"
-    cp -r ${WORKDIR}/src//common/freeswitch/conf /opt/freeswitch/
+    cp -r ${WORKDIR}/src/common/freeswitch/conf /opt/freeswitch/
     cp -r ${WORKDIR}/src/common/freeswitch/lang $CONF
     chown -R freeswitch.daemon $CONF
     chmod g+w $CONF # allow access to configuration directory
