@@ -63,8 +63,6 @@ function do_sysctl {
 
 if [ "x$ACTION" == "xdispatcher" ]; then
 
-  sudo aptitude -y install mediaproxy-dispatcher
-
   sudo mkdir -p /etc/mediaproxy/tls
   sudo cp ./dispatcher.ini   /etc/mediaproxy/config.ini
   sudo cp ./tls/* /etc/mediaproxy/tls
@@ -74,8 +72,6 @@ if [ "x$ACTION" == "xdispatcher" ]; then
 fi
 
 if [ "x$ACTION" == "xrelay" ]; then
-
-  sudo aptitude -y install mediaproxy-relay
 
   sudo mkdir -p /etc/mediaproxy/tls
   sed -e "s/\${dispatcher_names}/$*/" ./relay.ini | \
@@ -88,8 +84,6 @@ if [ "x$ACTION" == "xrelay" ]; then
 fi
 
 if [ "x$ACTION" == "xboth" ]; then
-
-  sudo aptitude -y install mediaproxy-dispatcher mediaproxy-relay
 
   sudo mkdir -p /etc/mediaproxy/tls
   cat ./*.ini | \

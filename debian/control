@@ -33,7 +33,7 @@ Depends: ccnq3, ccnq3-traces,
   memcached,
   mediaproxy-dispatcher,
   freeswitch (>=1.0.head~git.master.20111216), freeswitch-lua,
-  mediaproxy-relay
+  mediaproxy-relay, conntrack
 Description: Dependencies for a server running voice traffic
   Install this package on any host that will be running voice traffic
   inside a ccnq3 system.
