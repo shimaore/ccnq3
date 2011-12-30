@@ -72,7 +72,8 @@ cdb_changes.monitor = (options,cb)->
   uri.query.filter = options.filter_name if options.filter_name?
   uri.query.since  = options.since       if options.since?
   uri.query.limit  = options.limit       if options.limit?
-  uri.query[k] = v for k, v of options.filter_params?
+  if options.filter_params?
+    uri.query[k] = v for k, v of options.filter_params
 
   req =
     uri: url.format uri
