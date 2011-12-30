@@ -48,6 +48,7 @@ ccnq3_config.get (config) ->
       _id:    'ccnq3_provisioning'
       source: source_uri
       target: 'provisioning' # local target
+      continuous: true
 
     # Still a bug? CouchDB replication can't authenticate properly, the Base64 contains %40 litteraly...
     url = require 'url'
@@ -67,8 +68,9 @@ ccnq3_config.get (config) ->
       username ?= ''
       password ?= ''
       basic = new Buffer("#{username}:#{password}")
-      replicant.headers =
-        "Authorization": "Basic #{basic.toString('base64')}"
+      replicant.source_options =
+        headers:
+          "Authorization": "Basic #{basic.toString('base64')}"
     # /CouchDB bug
 
     cdb.new(target_uri).create ->
