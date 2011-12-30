@@ -14,11 +14,11 @@ require('ccnq3_config').get (config) ->
   for interface in config.traces.interfaces
     do (interface) ->
       child_process.exec """
-        daemon -n 'ccnq3_traces_#{interface}' -o daemon.debug -r -- \
-        /usr/bin/dumpcap \
-          -p -q -i #{interface} \
-          -b filesize:#{config.traces.filesize ? default_filesize} \
-          -b files:#{config.traces.ringsize ? default_ringsize} \
-          -w #{config.traces.workdir ? default_workdir}/#{interface}.pcap \
-          -f "#{config.traces.filter ? default_filter}" 2>/dev/null
+        daemon -n 'ccnq3_traces_#{interface}' -o daemon.debug -r -- \\
+        /usr/bin/dumpcap \\
+          -p -q -i #{interface} \\
+          -b filesize:#{config.traces.filesize ? default_filesize} \\
+          -b files:#{config.traces.ringsize ? default_ringsize} \\
+          -w #{config.traces.workdir ? default_workdir}/#{interface}.pcap \\
+          -f "#{config.traces.filter ? default_filter}"
       """
