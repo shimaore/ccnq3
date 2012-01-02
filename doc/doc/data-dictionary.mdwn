@@ -1,23 +1,20 @@
-This document is up-to-date as of 2011-10-27.
+This document is up-to-date as of 2012-01-02.
 
 Notes:
-- URI of databases = URI of CouchDB databases (always a string).
+* URI of databases = URI of CouchDB databases (always a string).
   These URIs might contain authentication usernames and passwords.
 
+# provisioning records
 
-* provisioning records
+## host (aka config)
 
-  * host (aka config)
+### Common section
 
-    ###
-    # Common section
-    #
-    # All the fields in this section are pre-populated by the various scripts.
-    # Only the "applications" array will need to be expanded.
-    #
-    # Caveat: provisioning.host_couchdb_uri might need to be fixed if the system cannot guess
-    # your installation.
-    ###
+All the fields in this section are pre-populated by the various scripts.
+Only the "applications" array will need to be expanded.
+
+Caveat: provisioning.host_couchdb_uri might need to be fixed if the system cannot guess
+your installation.
 
     _id: type+host
     account: ''    (the empty string)
@@ -62,15 +59,17 @@ Notes:
       users:
         couchdb_uri
 
-    ###
-    # Specific to hosts running FreeSwitch.
-    # To add a FreeSwitch host:
-    # - configure the fields in this section
-    #   (You'll need to configure at least "sip_domain_name".)
-    #   (You'll need to configure one sip_profiles[] in order to be able to place calls.)
-    # - add "applications/freeswitch" to the applications field [and restart ccnq3]
-    # - run common/freeswitch/install.sh on the host to enable FreeSwitch
-    ###
+### Specific to hosts running FreeSwitch.
+
+To add a FreeSwitch host:
+
+1. configure the fields in this section
+   (You'll need to configure at least "sip_domain_name".)
+   (You'll need to configure one sip_profiles[] in order to be able to place calls.)
+2. add "applications/freeswitch" to the applications field [and restart ccnq3]
+3. run common/freeswitch/install.sh on the host to enable FreeSwitch
+
+
     sip_domain_name:  string (required); FQDN accepted by the server
     rtp_ip: local IP to bind to for RTP [default: "auto"]
     sip_profiles: {} of profiles descriptions:
@@ -115,14 +114,16 @@ Notes:
         Note: The idea is that these can be used on a per-host basis by additional dialplans, profiles, etc.
         Note: These should also show up in CDRs. FIXME confirm this is the case
 
-    ###
-    # Specific to hosts running OpenSIPS.
-    # To add an OpenSIPS host:
-    # - configure the fields in this section
-    # - add "applications/opensips" to the applications field [and restart ccnq3]
-    # - run common/mediaproxy/install.sh to install mediaproxy FIXME still requires some work
-    # - run common/opensips/install.sh on the host to enable OpenSIPS
-    ###
+### Specific to hosts running OpenSIPS.
+
+To add an OpenSIPS host:
+
+1. configure the fields in this section
+2. add "applications/opensips" to the applications field [and restart ccnq3]
+3. run common/mediaproxy/install.sh to install mediaproxy FIXME still requires some work
+4. run common/opensips/install.sh on the host to enable OpenSIPS
+
+
     opensips_proxy:
       port:34340   integer, required, do not change
       hostname:"127.0.0.1"   string, required, do not change
@@ -147,13 +148,17 @@ Notes:
       #    * arg_value = not-quoted_string | '"' string '"'
       #    * not-quoted_string = string - {',",\n,\r}
 
-    ###
-    # Specific to hosts running the portal (or its back-end).
-    # To enable the portal service:
-    # - configure the fields in this section
-    # - add "applications/portal" to the applications field [and restart ccqn3]
-    # Note: this service is enabled by default on the manager host.
-    ###
+### Specific to hosts running the portal (or its back-end).
+
+To enable the portal service:
+
+1. configure the fields in this section
+2. add "applications/portal" to the applications field [and restart ccqn3]
+
+Note: this service is enabled by default on the manager host.
+You should not have to modify these settings.
+
+
     portal:
       port: integer (8765)
       hostname:  string ("127.0.0.1")
@@ -173,14 +178,17 @@ Notes:
 
     Note: "host" records are referred to as the "config" record inside most applications.
 
-    ###
-    # Specific to hosts running SIP traces.
-    # To start traces:
-    # - install the ccnq3-traces package
-    # - configure the fields in this section
-    # - add "applications/traces" to the applications field
-    # (this is not enabled by default)
-    ###
+### Specific to hosts running SIP traces.
+
+To start traces:
+
+1. install the ccnq3-traces package
+2. configure the fields in this section
+3. add "applications/traces" to the applications field
+
+Note: this is not enabled by default even after you install the ccnq3-traces package.
+
+
     traces:
       interfaces: [] of interfaces names
       # There's no reason to modify the following parameters for traces.
@@ -189,12 +197,16 @@ Notes:
       workdir: string, directory used to store the traces, defaults to /opt/ccnq3/traces
       filter: string, pcap filter for traces, defaults to ports used by ccnq3 applications
 
+### Other data in a "host" provisioning record.
 
-    Attachments: attachments of type "application/javascript" are executed after each change.
-      The attachments might use any core Node.js modules.
-      FIXME test this feature
+### Attachments
 
-  * domain
+Attachments of type "application/javascript" are executed after each change.
+The attachments might use any core Node.js modules.
+
+FIXME test this feature
+
+## domain
 
     _id: type+domain
     account: ''    (the empty string)
@@ -204,7 +216,7 @@ Notes:
 
     FIXME: these probably need to be indexed by host
 
-  * account_forwarder
+## account_forwarder
 
     _id: type+account+'@'+endpoint
     account: account
@@ -212,7 +224,7 @@ Notes:
     type:"account_forwarder"
     endpoint: endpoint
 
-  * endpoint
+## endpoint
 
     _id: type+endpoint
     account: string
@@ -255,7 +267,7 @@ Notes:
 
 
 
-  * number
+## number
 
     _id: type+number
     account: string
@@ -279,7 +291,7 @@ Notes:
 
 
 
-  * rule (aka outbound_route)
+## rule (aka outbound_route)
 
     _id: type+rule
     account: ''    (the empty string)
@@ -302,7 +314,7 @@ Notes:
     Note: We use sort_order = 1, meaning that inside gwlist each semicolon delimits a group of gateways; each group contains a comma-delimited list of gateways. For each call, two gateways are selected at random in each group (groups are kept in the order they appear), and the call is then sequantially forked to each gateway.
 
 
-  * gateway
+## gateway
 
     _id: type+gateway
     account: ''    (the empty string)
@@ -328,7 +340,7 @@ Notes:
       1: probing only when disabled (however our scripts do not use dr_disable())
       2: probing at all times
 
-  * location
+## location
 
     _id: type+location
     account: string
@@ -338,9 +350,11 @@ Notes:
     routing_data:  string; specific to the emergency routing system used
 
 
-* _users records
+# _users records
 
-  * user record
+The _users database is CouchDB's standard authentication database.
+
+## user record
 
     _id:"org.couchdb.user:"+name
     type:"user"
@@ -364,15 +378,26 @@ Notes:
   Notes: Servers should have the "host" role assigned.
   Notes: The roles hash can also be manipulated using the REST API in applications/roles.
 
-* usercode records
+## host record
 
-  This database should only contain design documents which are replicated into each user's private database when the user logs in.
+  _id:"org.couchd.user:"+name
+  type:"user"
+  name:"host@" + hostname
+  password_sha
+  salt
+  roles: ["host"]
 
-* endpoint location records
+# usercode records
 
-  These record are read-only.
+This database should only contain design documents which are replicated into each user's private database when the user logs in.
 
-  * endpoint location
+# endpoint location records
+
+These record are read-only.
+(In other words you should not attempt to modify them.)
+They are updated by OpenSIPS.
+
+## endpoint location
 
     _id: username+"@"+domain (registration username)
     username: string; username part of the registration username@domain
