@@ -218,6 +218,8 @@ FIXME test this feature
 
 ## account_forwarder
 
+For non-trusted host that are allowed to submit P-Charge-Info, list of accounts they may submit.
+
     _id: type+account+'@'+endpoint
     account: account
 
@@ -234,11 +236,11 @@ FIXME test this feature
     password: string; password used for authentication, or null if authentication not used
     ha1: authentication string; md5_hex([endpoint,challenge,password].join(":"))
     ha1b: authentication string; md5_hex([endpoint+'@'+challenge,challenge,password].join(":"))
+      Note: if the "challenge" configuration parameter is empty (the default), the domain name of the To: header (for REGISTER) or From: header (for other messages) is used as the challenge. In other words: normally the challenge should be the same as the domain name used for the endpoint.
 
     # Inbound call routing
     dst_endpoint/dest_domain
     dst_endpoint/dst_disabled
-    dst_endpoint/endpoint
     dst_endpoint/strip_digit
     dst_endpoint/user_force_mp
     dst_endpoint/user_ip
@@ -255,7 +257,6 @@ FIXME test this feature
     src_endpoint/dest_domain
     src_endpoint/dialog_timer
     src_endpoint/disabled
-    src_endpoint/endpoint
     src_endpoint/forwarding_sbc
       1 SBC provides originator info as Sock-Info or source RURI param [only for trusted SBC]
       2 SBC provides account info in P-Charge-Info; non-trusted SBCs are checked against account_forwarder
