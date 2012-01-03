@@ -325,9 +325,10 @@ For non-trusted host that are allowed to submit P-Charge-Info, list of accounts 
     account: ""    (the empty string)
 
     type:"gateway"
-    gateway: host+gwid
+    gateway: host+":"+gwid
     host: the host on which OpenSIPS is running and using this gateway
     gwid: integer; a unique identifier for the gateway on this host; used in the "gwlist" field of the "rule" record
+    address: the address of the gateway (IP, IP:port, etc.)
 
     # The following fields are required even though they are not currently used.
     gwtype: 0   (the integer 0)
