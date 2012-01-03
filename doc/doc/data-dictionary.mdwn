@@ -91,7 +91,7 @@ To add a FreeSwitch host:
 
           # Dialplan data
           handler: dialplan template name (e.g. "client-sbc", "carrier-sbc")
-          type: dialplan profile type (e.g. "usa", "usa-cnam", "fr" for processing="client-sbc")
+          type: dialplan profile type (e.g. "usa", "france" for handler="client-sbc")
           send_call_to: where to send the calls ("socket", "bridge") [default: "socket"]
           ingress_target: domain where to send ingress calls
           egress_target: domain where to send egress calls

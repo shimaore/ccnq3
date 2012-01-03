@@ -1,0 +1,55 @@
+<!--
+  Internally we route french numbers like any international number,
+  e.g. 33+national number (without the "0" or "E" prefix)
+  however in France the dialing plan cannot be readily mapped into
+  the international numbering plan because special codes, etc. in the
+  national dialing plan do interfere with national prefixes.
+  (For example, 112 and 3615 are prefixes for geographic numbers.)
+
+  We use the carré / hash (#) sign to mark such special numbers.
+  For example:
+    3615 (french national dialing plan) is mapped to 33#3615 (international numbering plan)
+    112 (french national dialing plan) is mapped to 33#112 (international numbering plan)
+
+  See http://www.arcep.fr/index.php?id=8652
+-->
+
+<!-- Verify that the caller-id follows the proper format -->
+<extension name="cleanup-caller-id" continue="true">
+  <condition field="caller_id_number" expression="^(0|\+33)([12345689].{8})$">
+    <action application="set" data="ccnq_from_e164=33$2"/>
+  </condition>
+</extension>
+
+<!-- from: international number -->
+<extension name="cleanup-caller-id-intl" continue="true">
+  <condition field="caller_id_number" expression="^(00|\+)([2-9][0-9]*)$">
+    <action application="set" data="ccnq_from_e164=$2"/>
+  </condition>
+</extension>
+
+<!-- Verify that the called number follows the proper format -->
+
+<!-- geographic, non-geographic, mobile, or service -->
+<extension name="cleanup-called-1">
+  <condition field="destination_number" expression="^(0|\+33)([12345689][0-9]{8})$">
+    <action application="set" data="ccnq_to_e164=33$2"/>
+    <action application="transfer" data="call"/>
+  </condition>
+</extension>
+
+<!-- special services -->
+<extension name="cleanup-called-2">
+  <condition field="destination_number" expression="^(1[0-9]{1,5}|3[0-9]{3})$">
+    <action application="set" data="ccnq_to_e164=33#$1"/>
+    <action application="transfer" data="call"/>
+  </condition>
+</extension>
+
+<!-- international call -->
+<extension name="cleanup-called-3">
+  <condition field="destination_number" expression="^(00|\+)([0-9]*)$">
+    <action application="set" data="ccnq_to_e164=$2"/>
+    <action application="transfer" data="call"/>
+  </condition>
+</extension>
