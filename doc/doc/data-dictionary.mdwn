@@ -147,17 +147,9 @@ To add an OpenSIPS host:
       local_ipv4: for models using it ("conference"), IP where to send all INVITE messages
       local_ipv6: reserved
 
-    sip_commands:
-      opensips: string; command send to the OpenSIPS "MI" channel (must follow the MI syntax).
-      #  Quoting from the documentation for OpenSIPS' mi_datagram module:
-      #  The external commands issued via DATAGRAM interface must follow
-      #  the following syntax:
-      #    * request = first_line (argument '\n')*
-      #    * first_line = ':'command_name':''\n'
-      #    * argument = (arg_name '::' (arg_value)? ) | (arg_value)
-      #    * arg_name = not-quoted_string
-      #    * arg_value = not-quoted_string | '"' string '"'
-      #    * not-quoted_string = string - {',",\n,\r}
+    sip_commands.opensips: string
+      One of:
+        "reload routes"         [apply "rule" or "gateway" record changes]
 
 ### Specific to hosts running the portal (or its back-end).
 
@@ -324,6 +316,7 @@ For non-trusted host that are allowed to submit P-Charge-Info, list of accounts 
 
     Note: For the complete specification, see http://www.opensips.org/html/docs/modules/1.7.x/drouting.html#id293582
     Note: We use sort_order = 1, meaning that inside gwlist each semicolon delimits a group of gateways; each group contains a comma-delimited list of gateways. For each call, two gateways are selected at random in each group (groups are kept in the order they appear), and the call is then sequantially forked to each gateway.
+    Note: Changes are not applied automatically. Use sip_commands.opensips = "reload routes" to apply the changes.
 
 
 ## gateway
@@ -351,6 +344,7 @@ For non-trusted host that are allowed to submit P-Charge-Info, list of accounts 
       0: no probing
       1: probing only when disabled (however our scripts do not use dr_disable())
       2: probing at all times
+    Note: Changes are not applied automatically. Use sip_commands.opensips = "reload routes" to apply the changes.
 
 ## location
 

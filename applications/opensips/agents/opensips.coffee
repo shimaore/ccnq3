@@ -7,7 +7,7 @@ Released under the AGPL3 license
 fs = require 'fs'
 dgram = require 'dgram'
 
-process_changes = (port,command) ->
+opensips_command = (port,command) ->
   # Connect to the MI datagram port
   # Send command
   message = new Buffer(command)
@@ -18,6 +18,20 @@ process_changes = (port,command) ->
     #       to declare the UDP session over with.
     client.close()
 
+#  Quoting from the documentation for OpenSIPS' mi_datagram module:
+#  The external commands issued via DATAGRAM interface must follow
+#  the following syntax:
+#    * request = first_line (argument '\n')*
+#    * first_line = ':'command_name':''\n'
+#    * argument = (arg_name '::' (arg_value)? ) | (arg_value)
+#    * arg_name = not-quoted_string
+#    * arg_value = not-quoted_string | '"' string '"'
+#    * not-quoted_string = string - {',",\n,\r}
+
+process_changes = (port,command) ->
+  switch command
+    when 'reload routes'
+      openips_command port, ":dr_reload:\n"
 
 # Main
 
