@@ -16,8 +16,8 @@ Only the "applications" array will need to be expanded.
 Caveat: provisioning.host_couchdb_uri might need to be fixed if the system cannot guess
 your installation.
 
-    _id: type+host
-    account: ''    (the empty string)
+    _id: type+":"+host
+    account: ""    (the empty string)
     updated_at: integer, update timestamp in ms [required]
       Note: new Date().getTime()  for example
 
@@ -211,8 +211,8 @@ FIXME test this feature
 
 ## domain
 
-    _id: type+domain
-    account: ''    (the empty string)
+    _id: type+":"+domain
+    account: ""    (the empty string)
 
     type:"domain"
     domain: string; name of a SIP domain accepted by the system
@@ -223,7 +223,7 @@ FIXME test this feature
 
 For non-trusted host that are allowed to submit P-Charge-Info, list of accounts they may submit.
 
-    _id: type+account+'@'+endpoint
+    _id: type+":"+account+'@'+endpoint
     account: account
 
     type:"account_forwarder"
@@ -231,7 +231,7 @@ For non-trusted host that are allowed to submit P-Charge-Info, list of accounts 
 
 ## endpoint
 
-    _id: type+endpoint
+    _id: type+":"+endpoint
     account: string
 
     type:"endpoint"
@@ -273,7 +273,7 @@ For non-trusted host that are allowed to submit P-Charge-Info, list of accounts 
 
 ## number
 
-    _id: type+number
+    _id: type+":"+number
     account: string
 
     type:"number"
@@ -297,11 +297,11 @@ For non-trusted host that are allowed to submit P-Charge-Info, list of accounts 
 
 ## rule (aka outbound_route)
 
-    _id: type+rule
-    account: ''    (the empty string)
+    _id: type+":"+rule
+    account: ""    (the empty string)
 
     type:"rule"
-    rule: host+ruleid
+    rule: host+":"+ruleid
     host: the host on which OpenSIPS is running and using this rule/outbound_route
     ruleid: integer; a unique ID for this rule
     groupid: integer; the "outbound_route" identifier found in "endpoint" and "number" records
@@ -321,13 +321,13 @@ For non-trusted host that are allowed to submit P-Charge-Info, list of accounts 
 
 ## gateway
 
-    _id: type+gateway
-    account: ''    (the empty string)
+    _id: type+":"+gateway
+    account: ""    (the empty string)
 
     type:"gateway"
     gateway: host+gwid
     host: the host on which OpenSIPS is running and using this gateway
-    gwid: a unique identifier for the gateway on this host; used in the "gwlist" field of the "rule" record
+    gwid: integer; a unique identifier for the gateway on this host; used in the "gwlist" field of the "rule" record
 
     # The following fields are required even though they are not currently used.
     gwtype: 0   (the integer 0)
@@ -348,7 +348,7 @@ For non-trusted host that are allowed to submit P-Charge-Info, list of accounts 
 
 ## location
 
-    _id: type+location
+    _id: type+":"+location
     account: string
 
     type:"location"
