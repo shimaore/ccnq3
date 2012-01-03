@@ -75,6 +75,7 @@ ddoc.shows.freeswitch_local_profiles = p_fun (doc,req) ->
     'Content-Type': 'text/xml'
 
   send "<include>\n"
+  send "<!-- #{doc._id} #{doc._rev} -->\n"
   for profile_name, profile of doc.sip_profiles
     egress_sip_ip   = profile.egress_sip_ip   ? profile.ingress_sip_ip
     egress_sip_port = profile.egress_sip_port ? profile.ingress_sip_port + 10000
@@ -97,6 +98,7 @@ ddoc.shows.freeswitch_local_acl = p_fun (doc,req) ->
     'Content-Type': 'text/xml'
 
   send "<include>\n"
+  send "<!-- #{doc._id} #{doc._rev} -->\n"
 
   for profile_name, profile of doc.sip_profiles
     send """
@@ -128,6 +130,7 @@ ddoc.shows.freeswitch_local_vars = p_fun (doc,req) ->
     'Content-Type': 'text/xml'
 
   send "<include>\n"
+  send "<!-- #{doc._id} #{doc._rev} -->\n"
   send """
       <!-- Common variables -->
       <X-PRE-PROCESS cmd="set" data="sound_prefix=$${base_dir}/sounds/#{sip_voice}"/>
@@ -151,6 +154,7 @@ ddoc.shows.freeswitch_local_conf = p_fun (doc,req) ->
     'Content-Type': 'text/xml'
 
   send "<include>\n"
+  send "<!-- #{doc._id} #{doc._rev} -->\n"
   send """
       <section name="dialplan" description="Regex/XML Dialplan">\n
     """
