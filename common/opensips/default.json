@@ -36,5 +36,8 @@
 
   "mi_port": 30000,
 
+  "cache_cleanup": 30,
+  "cache_timeout": 45,
+
   "ok":true
 }

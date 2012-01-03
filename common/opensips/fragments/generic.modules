@@ -18,7 +18,7 @@
 ## ------- Modules ---------- ##
 
 loadmodule "localcache.so"
-modparam("localcache", "cache_clean_period", 30)
+modparam("localcache", "cache_clean_period", ${cache_cleanup})
 modparam("localcache", "cache_table_size", 12)
 
 # -- JSON --
