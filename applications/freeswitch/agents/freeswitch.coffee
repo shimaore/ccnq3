@@ -74,7 +74,7 @@ require('ccnq3_config').get (config) ->
     host_uri = qs.escape make_id 'host', config.host
     for show, file of files
       do (show,file)->
-        save_uri_as "#{config.provisioning.host_couchdb_uri}/_design/freeswitch/_show/#{show}/#{host_uri}", file
+        save_uri_as "#{config.provisioning.local_couchdb_uri}/_design/freeswitch/_show/#{show}/#{host_uri}", file
 
     # 1b. Apply configuration changes
     fs_command 'reloadxml'
