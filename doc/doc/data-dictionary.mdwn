@@ -80,11 +80,14 @@ To add a FreeSwitch host:
           template: sofia template name (e.g. "sbc-media", "sbc-nomedia")
           # For the "sbc*" types, we need:
           ingress_sip_ip: which IP (v4,v6) to bind for ingress processing
-          ingress_sip_port: which port to bind for ingress processing
+          ingress_sip_port: which port to bind for ingress processing [in the range 5060 to 5299]
           ingress_acl: [] of CIDR records "ip/masklen" source IPs allowed for ingress processing
           egress_sip_ip: which IP (v4,v6) to bind for egress processing [default: ingress_sip_ip]
-          egress_sip_port: which port to bind for egress processing [default: 10000+ingress_sip_port]
+          egress_sip_port: which port to bind for egress processing [default: 10000+ingress_sip_port; in the range 15060 to 15299]
           egress_acl: [] of CIDR records "ip/masklen" source IPs allowed for the egress processing
+
+            Note: port numbers must be in the range 5060 to 5299 or 15060 to 15299 to be compatible with the "traces" application.
+            Note: look in doc/doc/port-numbers.mdwn for port numbers conventions.
 
           # Dialplan data
           handler: dialplan template name (e.g. "client-sbc", "carrier-sbc")
@@ -102,6 +105,14 @@ To add a FreeSwitch host:
             "start"       sofia profile <profile_name> start
             "restart"     sofia profile <profile_name> restart reloadxml  [required to change IP or port]
             "stop"        sofia profile <profile_name> killgw
+
+        sip_commands.freeswitch: string
+          One of:
+            "reload sofia"    unload mod_sofia, load mod_sofia            [required to add a new profile]
+            "pause inbound"   fsctl pause inbound
+            "pause outbound"  fsctl pause outbound
+            "resume inbound"  fsctl resume inbound
+            "resume outbound" fsctl resume outbound
 
         Note: All these commands will cause calls to drop if any is present on that profile.
         Note: The "sofia_profile" key is either "egress-#{profile_name}" or "ingress-#{profile_name}" so that each direction

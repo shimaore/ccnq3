@@ -20,7 +20,7 @@ fs_command = (cmd,cb) ->
 
 process_changes = (commands) ->
 
-  for profile_name, command of commands when profile_name isnt 'opensips'
+  for profile_name, command of commands when profile_name isnt 'opensips' and profile_name isnt 'freeswitch'
     switch command
       when 'start'
         fs_command "sofia profile #{profile_name} start"
@@ -35,6 +35,25 @@ process_changes = (commands) ->
       when 'stop'
         fs_command "sofia profile #{profile_name} killgw"
 ###
+
+  # Following commands are not module-specific.
+  if commands.freeswitch?
+    switch commands.freeswitch
+      when 'reload sofia'
+        fs_command "unload mod_sofia", ->
+          fs_command "load mod_sofia"
+      when 'pause inbound'
+        fs_command "fsctl pause inbound"
+      when 'pause outbound'
+        fs_command "fsctl pause outbound"
+      when 'resume inbound'
+        fs_command "fsctl resume inbound"
+      when 'resume outbound'
+        fs_command "fsctl resume outbound"
+      when 'restart elegant'
+        fs_command "fsctl restart elegant"
+      when 'restart asap'
+        fs_command "fsctl restart asap"
 
 request = require 'request'
 fs = require 'fs'

@@ -5,7 +5,7 @@ child_process = require 'child_process'
 default_filesize = 10000
 default_ringsize = 50
 default_workdir = '/opt/ccnq3/traces'
-default_filter = 'udp portrange 5060-5299 or udp portrange 15060-15299 or icmp or tcp portrange 5060-5200 or tcp portrange 15060-15200'
+default_filter = 'udp portrange 5060-5299 or udp portrange 15060-15299 or icmp or tcp portrange 5060-5299 or tcp portrange 15060-15299'
 
 require('ccnq3_config').get (config) ->
 
