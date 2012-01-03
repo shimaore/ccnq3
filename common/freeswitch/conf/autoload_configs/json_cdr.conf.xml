@@ -7,6 +7,7 @@
     <!-- <param name="cred" value="username:password" /> -->
     <param name="auth-scheme" value="basic" />
     <param name="encode-values" value="false" />
-    <!-- <param name="log-dir" value="/var/log/freeswitch" /> -->
+    <!-- FIXME will need upload process -->
+    <param name="log-dir" value="/opt/freeswitch/log" />
   </settings>
 </configuration>
