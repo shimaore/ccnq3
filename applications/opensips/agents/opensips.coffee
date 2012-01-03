@@ -31,7 +31,7 @@ opensips_command = (port,command) ->
 process_changes = (port,command) ->
   switch command
     when 'reload routes'
-      openips_command port, ":dr_reload:\n"
+      opensips_command port, ":dr_reload:\n"
 
 # Main
 
