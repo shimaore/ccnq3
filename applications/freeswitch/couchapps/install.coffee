@@ -17,4 +17,5 @@ cfg.get (config) ->
   # FIXME Need centralized CDR system.
   cdr_uri = 'http://127.0.0.1:5984/cdr'
   cdr = cdb.new cdr_uri
-  cdr.create
+  cdr.create ->
+    # Need the callback to run.
