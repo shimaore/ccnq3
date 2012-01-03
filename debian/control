@@ -32,7 +32,7 @@ Depends: ccnq3, ccnq3-traces,
   opensips (>=1.7.1-2), opensips-dbhttp-module, opensips-json-module,
   memcached,
   mediaproxy-dispatcher,
-  freeswitch (>=1.0.head~git.master.20111216), freeswitch-lua,
+  freeswitch (>=1.0.head~git.master.20120103), freeswitch-lua,
   mediaproxy-relay, conntrack
 Description: Dependencies for a server running voice traffic
   Install this package on any host that will be running voice traffic
