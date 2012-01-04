@@ -257,8 +257,7 @@ For non-trusted host that are allowed to submit P-Charge-Info, list of accounts 
 
     src_endpoint/allow_onnet
       Note: For allow_onnet to work you need to create separate "number" records for the client-side numbers so that the local OpenSIPS knows how to route them.
-            You should create a fake endpoint to send the numbers to (this endpoint can be shared by all such numbers, it is not used in practice).
-            Routing is done via a CFA, pointing e.g. to the ingress side of a client-sbc.
+            Routing can be done via a CFA, pointing e.g. to the ingress side of an open (inbound) carrier-sbc.
 
     src_endpoint/check_from
     src_endpoint/dest_domain
