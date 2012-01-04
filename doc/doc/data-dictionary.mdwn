@@ -256,6 +256,9 @@ For non-trusted host that are allowed to submit P-Charge-Info, list of accounts 
     outbound_route: integer; route to use for outbound calls from this endpoint; if null, per-number outbound_route is used
 
     src_endpoint/allow_onnet
+      Note: For allow_onnet to work you need to create separate "number" records for the client-side numbers so that the local OpenSIPS knows how to route them.
+            In that case you should create a separate endpoint to send the numbers to (this endpoint can be shared by all such numbers).
+
     src_endpoint/check_from
     src_endpoint/dest_domain
     src_endpoint/dialog_timer
