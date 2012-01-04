@@ -97,10 +97,9 @@ require('ccnq3_config').get (config) ->
         save_uri_as "#{config.provisioning.local_couchdb_uri}/_design/freeswitch/_show/#{show}/#{host_uri}", file
 
     # 1b. Apply configuration changes
-    fs_command 'reloadxml'
-    fs_command 'reloadacl'
-
-    fs_command "sofia profile #{profile_name} rescan reloadxml" for profile_name of p.sip_profiles
+    fs_command 'reloadxml', ->
+      fs_command 'reloadacl reloadxml', ->
+        fs_command "sofia profile #{profile_name} rescan reloadxml" for profile_name of p.sip_profiles
 
     # 2. Process any command
     if p.sip_commands?
