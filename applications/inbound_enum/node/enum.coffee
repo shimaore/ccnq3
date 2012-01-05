@@ -43,9 +43,9 @@ require('ccnq3_config').get (config) ->
         res.header.nscount = 0
         res.header.arcount = 0
         # Add RRs
-        res.addRR name, TTL, "IN", "NAPTR", 10, 100, "u", "E2U+sip", "!^.*$!#{r.inbound_uri}!", ""
+        res.addRR name, ttl, "IN", "NAPTR", 10, 100, "u", "E2U+sip", "!^.*$!#{r.inbound_uri}!", ""
         res.header.ancount++
-        res.addRR name, TTL, "IN", "NAPTR", 20, 100, "u", "E2U+account", "!^.*$!#{r.account}!", ""
+        res.addRR name, ttl, "IN", "NAPTR", 20, 100, "u", "E2U+account", "!^.*$!#{r.account}!", ""
         res.header.ancount++
         # In FreeSwitch XML, retrieve the account from enum_route_2.
       res.send()
