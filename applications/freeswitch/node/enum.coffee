@@ -6,37 +6,49 @@
 # for FreeSwitch usage.
 
 ndns = require './ndns'
-server = ndns.createServer 'udp4'
+cdb = require 'cdb'
 
-BIND_PORT = 53053
-TTL = 30
+require('ccnq3_config').get (config) ->
 
-server.on "request", (req, res) ->
-  res.setHeader(req.header)
+  server = ndns.createServer 'udp4'
 
-  res.addQuestion _ for _ in req.q
+  ttl = config.inbound_enum.ttl ? 60
 
-  if req.q.length > 0
+  provisioning = cdb.new config.provisioning.local_couchdb_uri
+
+  server.on "request", (req, res) ->
+    res.setHeader req.header
+
+    res.addQuestion _ for _ in req.q
+
+    unless req.q.length > 0
+      return res.send()
+
     name = req.q[0].name
-    if number = name.match(/^([\d.]+)\./)?[1]
-      number = number.split('.').reverse().join('')
-      console.log "Number = #{number}"
-      loopback_uri = "sip:#{number}@server.example.net"
-      account = "987654678"
-      res.header.qr = 1
-      res.header.ra = 1
-      res.header.rd = 0
-      res.header.ancount = 2 # or 1
-      res.header.nscount = 0
-      res.header.arcount = 0
-      res.addRR name, TTL, "IN", "NAPTR", 10, 100, "u", "E2U+sip", "!^.*$!#{loopback_uri};account=#{account}!", ""
-      res.addRR name, TTL, "IN", "NAPTR", 20, 100, "u", "E2U+account", "!^.*$!#{account}!", ""
-      # In FreeSwitch XML, retrieve the account from enum_route_2, or use
-      #   http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_regex
-      # to parse enum_route_1.
-    res.send()
+    unless number = name.match(/^([\d.]+)\./)?[1]
+      return res.send()
 
-server.bind(BIND_PORT)
+    number = number.split('.').reverse().join('')
+    console.log "Number = #{number}"
+
+    provisioning.get make_id('number',number), (r) ->
+      if r.inbound_uri?
+        # Update headers
+        res.header.qr = 1
+        res.header.ra = 1
+        res.header.rd = 0
+        res.header.ancount = 0 # Will increment later
+        res.header.nscount = 0
+        res.header.arcount = 0
+        # Add RRs
+        res.addRR name, TTL, "IN", "NAPTR", 10, 100, "u", "E2U+sip", "!^.*$!#{r.inbound_uri}!", ""
+        res.header.ancount++
+        res.addRR name, TTL, "IN", "NAPTR", 20, 100, "u", "E2U+account", "!^.*$!#{r.account}!", ""
+        res.header.ancount++
+        # In FreeSwitch XML, retrieve the account from enum_route_2.
+      res.send()
+
+  server.bind config.inbound_enum.port ? 53053
 
 ###
   named.conf:
