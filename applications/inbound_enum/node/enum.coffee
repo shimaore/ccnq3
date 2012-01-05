@@ -28,6 +28,27 @@ require('ccnq3_config').get (config) ->
 
     name = req.q[0].name
     unless number = name.match(/^([\d.]+)\./)?[1]
+      # Update headers
+      res.header.qr = 1
+      res.header.ra = 1
+      res.header.rd = 0
+      # res.header.aa = 1
+      res.header.ancount = 0 # Will increment later
+      res.header.nscount = 0
+      res.header.arcount = 0
+      res.addRR name,ttl,"IN","SOA",
+                config.inbound_enum.soa,
+                config.inbound_enum.soa,
+                1, # Serial
+                10*ttl, # Refresh
+                10*ttl, # Retry
+                3600, # Expire
+                ttl  # Minimum TTL
+      res.header.ancount++
+      for ns in config.inbound_enum.ns
+        do (ns) ->
+          res.addRR name, 60, "IN", "NS", ns
+          res.header.nscount++
       return res.send()
 
     number = number.split('.').reverse().join('')
