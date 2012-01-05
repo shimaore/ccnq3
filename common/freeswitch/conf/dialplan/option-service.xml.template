@@ -17,6 +17,12 @@
       </condition>
     </extension>
 
+    <extension name="get-account" continue="true">
+      <condition field="caller_id_number" expresion="">
+        <action application="set" data="ccnq_account=${regex(${sip_h_p-charge-info}|sip:([^@]+)@|%1)}"/>
+      </condition>
+    </extension>
+
     <extension name="egress-emergency">
       <condition field="destination_number" expression="^33#(112|15|17|18|119|115|116000|19)$">
         <action application="set" data="ccnq_called=$1"/>
@@ -24,7 +30,7 @@
         <action application="set" data="call_timeout=300"/>
         <action application="export" data="t38_passthru=true"/>
         <action application="set" data="ccnq_routing=${sip_h_x-ccnq3-routing}"/>
-        <action application="bridge" data="sofia/sbc-$${profile_name}/9*${ccnq_called}*${ccnq_routing}@$${egress_target}"/>
+        <action application="transfer" data="9*${ccnq_called}*${ccnq_routing} XML egress-$${profile_name}-send-call"/>
       </condition>
     </extension>
 
@@ -34,26 +40,28 @@
         <action application="set" data="progress_timeout=12"/>
         <action application="set" data="call_timeout=300"/>
         <action application="export" data="t38_passthru=true"/>
-        <action application="bridge" data="sofia/sbc-$${profile_name}/${ccnq_called}@$${egress_target}"/>
+        <action application="transfer" data="${ccnq_called} XML egress-$${profile_name}-send-call"/>
       </condition>
     </extension>
 
     <extension name="egress-france">
+      <condition field="${ccnq_account}" expression="^.+$" />
       <condition field="destination_number" expression="^33(.*)$">
         <action application="set" data="progress_timeout=12"/>
         <action application="set" data="call_timeout=300"/>
         <action application="export" data="t38_passthru=true"/>
-        <action application="bridge" data="sofia/sbc-$${profile_name}/0$1@$${egress_target}"/>
+        <action application="transfer" data="0$1 XML egress-$${profile_name}-send-call"/>
       </condition>
     </extension>
 
     <extension name="egress-international">
+      <condition field="${ccnq_account}" expression="^.+$" />
       <condition field="destination_number" expression="^(.*)$">
         <action application="set" data="ccnq_direction=egress"/>
         <action application="set" data="progress_timeout=12"/>
         <action application="set" data="call_timeout=300"/>
         <action application="export" data="t38_passthru=true"/>
-        <action application="bridge" data="sofia/sbc-$${profile_name}/00$1@$${egress_target}"/>
+        <action application="transfer" data="00$1 XML egress-$${profile_name}-send-call"/>
       </condition>
     </extension>
 
@@ -80,7 +88,8 @@
         <action application="set" data="progress_timeout=12"/>
         <action application="set" data="call_timeout=300"/>
         <action application="export" data="t38_passthru=true"/>
-        <action application="bridge" data="sofia/internal-$${profile_name}/33$1@$${ingress_target}"/>
+        <!-- FIXME Insert ENUM code here -->
+        <action application="transfer" data="33$1 XML ingress-$${profile_name}-send-call"/>
       </condition>
     </extension>
 
