@@ -52,7 +52,7 @@ require('ccnq3_config').get (config) ->
       return res.send()
 
     number = number.split('.').reverse().join('')
-    console.log "Number = #{number}"
+    # console.log "Number = #{number}"
 
     provisioning.get make_id('number',number), (r) ->
       if r.inbound_uri?
