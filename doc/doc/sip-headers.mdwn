@@ -1,0 +1,12 @@
+Besides standard SIP headers, the following headers are specific to the system:
+
+P-Charge-Info (per draft-york-sipping-p-charge-info)
+  The username part of the SIP URI is used as the "account".
+
+X-CCNQ3-Location
+  Proprietary header storing a location's identifier.
+  (Received by an outbound-proxy.)
+
+X-CCNQ3-Routing
+  Proprietary header storing emergency routing data.
+  Set by an outbound-proxy, available to an outbound carrier-sbc.
