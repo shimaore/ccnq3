@@ -8,8 +8,8 @@
     "config_file": "/etc/ccnq3/host.json"
   },
   "scripts": {
-    "start": "daemon -n ccnq3_freeswitch -o daemon.debug -D \"`pwd`/agents\" -r -- ./freeswitch.coffee; daemon -n ccnq3_inbound_enum -o daemon.debug -D \"`pwd`/node\" -r -- ./enum.coffee"
-  , "stop":  "daemon -n ccnq3_freeswitch -o daemon.debug --stop; daemon -n ccnq3_inbound_enum -o daemon.debug --stop"
+    "start": "daemon -n ccnq3_freeswitch -o daemon.debug -D \"`pwd`/agents\" -r -- ./freeswitch.coffee"
+  , "stop":  "daemon -n ccnq3_freeswitch -o daemon.debug --stop"
   , "couchapps": "cd couchapps && ./install.coffee"
   },
   "dependencies": {
