@@ -59,6 +59,12 @@ your installation.
       users:
         couchdb_uri
 
+### Specific to hosts running inbound_enum
+
+    inbound_enum: (optional)
+      ttl:  integer     DNS TTL
+      port: integer     DNS server UDPv4 port
+
 ### Specific to hosts running FreeSwitch.
 
 To add a FreeSwitch host:
