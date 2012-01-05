@@ -33,7 +33,9 @@ your installation.
 
     applications: [] of strings, list of applications that need to be installed
       Note: these are simply relative paths to the matching "package" for that application.
-      Note: to apply these changes you must restart ccnq3 on the host.
+      Note: to apply these changes you must reinstall and restart ccnq3 on the host.
+      Note: to manually reinstall the ccnq3 dependencies:
+        cd /opt/ccnq3/src && sudo su -s /bin/bash -c  './npm-apps.coffee install' ccnq3
       Example:   [ "applications/host", "applications/traces", "applications/freeswitch" ]
 
     usercode:
