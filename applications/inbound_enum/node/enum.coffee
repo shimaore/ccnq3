@@ -8,6 +8,8 @@
 ndns = require './ndns'
 cdb = require 'cdb'
 
+make_id = (t,n) -> [t,n].join ':'
+
 require('ccnq3_config').get (config) ->
 
   server = ndns.createServer 'udp4'
