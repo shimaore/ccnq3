@@ -294,7 +294,8 @@ For non-trusted host that are allowed to submit P-Charge-Info, list of accounts 
     dst_number/dialog_timer
     dst_number/dst_domain
     dst_number/inv_timer
-    dst_number/number
+
+    loopback_uri: string (URI)  a URI used by an outbound-proxy to bypass LCR and route a number directly
 
 
 
