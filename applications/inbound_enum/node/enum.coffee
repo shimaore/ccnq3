@@ -12,7 +12,7 @@ require('ccnq3_config').get (config) ->
 
   server = ndns.createServer 'udp4'
 
-  ttl = config.inbound_enum.ttl ? 60
+  ttl = config.inbound_enum?.ttl ? 60
 
   provisioning = cdb.new config.provisioning.local_couchdb_uri
 
@@ -48,7 +48,7 @@ require('ccnq3_config').get (config) ->
         # In FreeSwitch XML, retrieve the account from enum_route_2.
       res.send()
 
-  server.bind config.inbound_enum.port ? 53053
+  server.bind config.inbound_enum?.port ? 53053
 
 ###
   named.conf:
