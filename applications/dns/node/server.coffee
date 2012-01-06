@@ -1,10 +1,32 @@
 #!/usr/bin/env coffee
-#
+
 dns = require "./dns"
 Zone = dns.Zone
 EnumZone = require('./enum').EnumZone
 
+cdb = require 'cdb'
+
 require('ccnq3_config').get (config) ->
+
+  zones = []
+
+  # Enumerate the domains listed in the database with a "records" field.
+  options =
+    uri: "/_design/dns/_view/domains?include_docs=true"
+  cdb.new(config.provisioning.local_couchdb_uri).req options, (r) ->
+    for rec in r.rows
+      do (rec) ->
+        doc = rec.doc
+        return if not doc?
+        if doc.ENUM
+          zones.push new EnumZone doc.domain, config.provisioning.local_couchdb_uri, doc
+        else
+          zones.push new Zone doc.domain, doc
+
+    server = dns.createServer(zones)
+    server.listen(53053)
+
+###
   zones = [
     new EnumZone( 'enum.example.net', config.provisioning.local_couchdb_uri,
       ttl: 60
@@ -34,6 +56,4 @@ require('ccnq3_config').get (config) ->
       ]
     )
   ]
-
-  server = dns.createServer(zones)
-  server.listen(53053)
+###
