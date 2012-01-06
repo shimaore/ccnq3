@@ -13,7 +13,7 @@ exports.Zone = class Zone
     @dot_domain = @dotize(domain)
     @set_options(options)
     @records = (@create_record(record) for record in options.records or [])
-    @select_class "SOA", (d) ->
+    @select_class "SOA", (d) =>
       if d.length == 0
         @add_default_soa()
 
