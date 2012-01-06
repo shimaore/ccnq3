@@ -1,3 +1,5 @@
+#!/usr/bin/env coffee
+#
 dns = require "./dns"
 Zone = dns.Zone
 EnumZone = require './enum'
