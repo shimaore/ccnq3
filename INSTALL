@@ -142,6 +142,15 @@ cd /opt/ccnq3/src
 #   ./install.sh
 # because of some important caveats regarding IPv6.
 
+# FIXME Installation of inbound_enum
+# inbound_enum is a master-only DNS server that must be
+# installed to provide inbound routing for numbers.
+# Since it uses port 53 it cannot be installed on any host
+# which uses a local DNS resolver or proxy. The host(s) that
+# run the inbound_enum service must:
+# - use non-local nameservers (in /etc/resolv.conf)
+# - forward UDP port 53 to UDP port 53053 (a script is provided)
+
 
 # ----- TUNE UP ----
 
