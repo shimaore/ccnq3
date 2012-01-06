@@ -29,8 +29,16 @@ exports.EnumZone = class EnumZone extends Zone
     provisioning.get make_id('number',number), (r) ->
       if r.inbound_uri?
         cb [
-          {class: "NAPTR", value: [10,100,'u','E2U+sip',"!^.*$!#{r.inbound_uri}!", ""]}
-          {class: "NAPTR", value: [20,100,'u','E2U+account', "!^.*$!#{r.account}!", ""]}
+          @create_record
+            name:name
+            ttl: @ttl
+            class: "NAPTR"
+            value: [10,100,'u','E2U+sip',"!^.*$!#{r.inbound_uri}!", ""]}
+          @create_record
+            name:name
+            ttl: @ttl
+            class: "NAPTR"
+            value: [20,100,'u','E2U+account', "!^.*$!#{r.account}!", ""]}
         ]
         # In FreeSwitch XML, retrieve the account from enum_route_2.
       else
