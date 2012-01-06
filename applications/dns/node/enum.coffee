@@ -17,8 +17,8 @@ make_id = (t,n) -> [t,n].join ':'
 exports.EnumZone = class EnumZone extends Zone
 
   select: (type,name,cb) ->
-    return cb() unless type is 'NAPTR'
-    return cb() unless number = name.match(/^([\d.]+)\./)?[1]
+    unless type is 'NAPTR' and number = name.match(/^([\d.]+)\./)?[1]
+      return super type, name, cb
 
     number = number.split('.').reverse().join('')
 
