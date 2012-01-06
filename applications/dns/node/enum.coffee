@@ -14,7 +14,7 @@ make_id = (t,n) -> [t,n].join ':'
 # Options should contain provisioning_uri
 #  provisioning_uri = config.provisioning.local_couchdb_uri
 
-exports = class EnumZone extends Zone
+exports.EnumZone = class EnumZone extends Zone
 
   select: (type,name,cb) ->
     return cb() unless type is 'NAPTR'

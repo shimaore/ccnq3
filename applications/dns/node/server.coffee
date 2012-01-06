@@ -2,7 +2,7 @@
 #
 dns = require "./dns"
 Zone = dns.Zone
-EnumZone = require './enum'
+EnumZone = require('./enum').EnumZone
 
 zones =
   'example.net': new Zone( 'example.net',
