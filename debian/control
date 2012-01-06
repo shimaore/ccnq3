@@ -26,18 +26,18 @@ Description: Base dependencies for CCNQ
   This package contains base dependencies that the maintainer
   finds useful.
 
-Package: ccnq3-inbound-enum
+Package: ccnq3-dns
 Architecture: all
 Depends: ccnq3, iptables
 Conflicts: bind, bind9
-Description: Allows the ccnq3_inbound_enum service to be available on port 53
-  Install this package on a host that will be running ccnq3_inbound_enum,
+Description: Allows the ccnq3_dns service to be available on port 53
+  Install this package on a host that will be running ccnq3_dns,
   so that a redirection from port 53 to port 53053 is provided automatically.
   .
   Alternatively you may choose to implement your own iptables rules (or provide
   a different forwarding solution), for example because you want to run both
   inbound_enum and a caching DNS server (such as bind9) on a server; in that
-  case you should not install this package. The ccnq3_inbound_enum service will
+  case you should not install this package. The ccnq3_dns service will
   still start, since it is part of the ccqn3 package.
 
 Package: ccnq3-voice
