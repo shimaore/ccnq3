@@ -71,7 +71,6 @@ your installation.
     Note: the SOA uses config.host, which is one of the reasons why the hostname must be a valid FQDN.
     Note: You must install the ccnq3-inbound-enum package on hosts running the ccnq3_inbound_enum service.
     Note: You cannot run another DNS server on hosts running the ccnq3_inbound_enum service.
-      FIXME Allow ccnq3_inbound_enum to bind to a specific interface.
 
 ### Specific to hosts running FreeSwitch.
 
