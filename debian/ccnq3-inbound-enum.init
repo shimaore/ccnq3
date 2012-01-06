@@ -1,0 +1,29 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          ccnq3-inbound-enum
+# Required-Start:    $local_fs
+# Required-Stop:     $local_fs
+# X-Start-Before:    ccnq3
+# X-Stop-After:      ccnq3
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+### END INIT INFO
+
+# Author: Stephane Alnet <stephane@shimaore.net>
+
+NAME=ccnq3
+SCRIPTNAME=/etc/init.d/$NAME
+
+case "$1" in
+  start)
+    /sbin/iptables -t nat -I PREROUTING -p udp -m udp --dport 53 -j REDIRECT --to-ports 53053
+  ;;
+  stop)
+  ;;
+  *)
+    echo "Usage: $SCRIPTNAME {start|stop}" >&2
+    exit 1
+  ;;
+esac
+
+exit 0

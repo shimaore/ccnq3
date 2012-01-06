@@ -18,13 +18,21 @@ Package: ccnq-base
 Architecture: all
 Depends:
   git-core, etckeeper,
-  ntp, monit, munin-node, bind9, watchdog, nullmailer,
+  ntp, monit, munin-node, watchdog, nullmailer,
   build-essential, dpkg-dev,
   psmisc, dnsutils, netcat, netcat6, mtr-tiny, tshark, ngrep,
   less, bash-completion, bzip2, curl, rsync
 Description: Base dependencies for CCNQ
   This package contains base dependencies that the maintainer
   finds useful.
+
+Package: ccnq3-inbound-enum
+Architecture: all
+Depends: ccnq3, iptables
+Conflicts: bind, bind9
+Description: Allows the ccnq3_inbound_enum service to be available on port 53
+  Install this package on a host that will be running ccnq3_inbound_enum,
+  so that a redirection from port 53 to port 53053 is provided automatically.
 
 Package: ccnq3-voice
 Architecture: all
