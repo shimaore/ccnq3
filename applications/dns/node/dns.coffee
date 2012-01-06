@@ -168,11 +168,10 @@ class DNS
     @server = ndns.createServer('udp4')
     @server.on 'request', @resolve
     @port or= 53
-    @reload zones or {}
+    @reload zones or []
 
   reload: (zones) ->
     @zones = zones
-    # @zones = (new Zone(key, val) for key, val of zones)
 
   listen: (port) ->
     @server.bind port or @port
