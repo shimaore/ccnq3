@@ -22,6 +22,7 @@ exports.EnumZone = class EnumZone extends Zone
 
     number = number.split('.').reverse().join('')
 
+    provisioning = cdb.new @provisioning_uri
     provisioning.get make_id('number',number), (r) ->
       if r.inbound_uri?
         cb [
