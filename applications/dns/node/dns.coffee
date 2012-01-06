@@ -107,35 +107,39 @@ class Response
     @add(record, @additional)
 
   add_ns_records: (cb) ->
-    @zone.select_class "NS", (d) ->
+    @zone.select_class "NS", (d) =>
       @add_authoritative d
       cb()
 
   add_additionals: (cb) ->
     for record in _.union(@answer, @authoritative)
-      for zone in @zones
-        zone.find "A", record.value, (d) ->
-          @add_additional d
-          cb()
+      do (record) =>
+        for zone in @zones
+          do (zone) =>
+            old_cb = cb
+            cb = => zone.find "A", record.value, (d) =>
+              @add_additional d
+              old_cb()
+    cb()
 
   add_soa_to_authoritative: (cb) ->
-    @zone.find_class "SOA", (d) ->
+    @zone.find_class "SOA", (d) =>
       @add_authoritative d
       cb()
 
   resolve: (cb) ->
-    finalize = ->
+    finalize = =>
       # always add additional records if there are any useful
-      @add_additionals ->
+      @add_additionals =>
         cb @
 
     # If a CNAME answer is available, always provide it.
-    @zone.select "CNAME", @name, (d) ->
+    @zone.select "CNAME", @name, (d) =>
       if @add_answer d
         return finalize()
 
       # No CNAME, lookup record
-      @zone.select @type, @name, (d) ->
+      @zone.select @type, @name, (d) =>
         if @add_answer d
           if @type == "NS"
             finalize()
@@ -182,9 +186,8 @@ class DNS
       name = req.q[0].name
       type = req.q[0].typeName
       if zone = _.find(@zones, ((zone) -> zone.handles name))
-        console.log "zone found", zone.dot_domain
         response = new Response(name, type, zone, @zones)
-        response.resolve().commit(req, res)
+        response.resolve (r) -> r.commit(req, res)
     res.send()
 
   close: ->
