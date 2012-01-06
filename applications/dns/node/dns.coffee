@@ -1,6 +1,6 @@
 #
 # Based on appload/dns
-# with extensions for ccnq3 Carrier-ENUM
+# with async loading
 #
 dgram = require('dgram')
 ndns = require('./ndns')
@@ -13,8 +13,9 @@ exports.Zone = class Zone
     @dot_domain = @dotize(domain)
     @set_options(options)
     @records = (@create_record(record) for record in options.records or [])
-    if @select_class("SOA").length == 0
-      @add_default_soa()
+    @select_class "SOA", (d) ->
+      if d.length == 0
+        @add_default_soa()
 
   add_default_soa: ->
     @records.push @create_soa()
@@ -51,17 +52,17 @@ exports.Zone = class Zone
     r.name = if r.prefix? then @dotize(r.prefix) + @dot_domain else @dot_domain
     r
 
-  select_class: (type) ->
-    _(@records).filter (record) -> record.class == type
+  select_class: (type,cb) ->
+    cb _(@records).filter (record) -> record.class == type
 
-  find_class: (type) ->
-    _(@records).find (record) -> record.class == type
+  find_class: (type,cb) ->
+    cb _(@records).find (record) -> record.class == type
 
   select: (type, name, cb) ->
     cb _(@records).filter (record) -> (record.class == type) and (record.name == name)
 
-  find: (type, name) ->
-    _(@records).find (record) -> (record.class == type) and (record.name == name)
+  find: (type, name, cb) ->
+    cb _(@records).find (record) -> (record.class == type) and (record.name == name)
 
   create_soa: ->
     keys = "dot_domain admin serial refresh retry expire min_ttl"
@@ -105,32 +106,44 @@ class Response
   add_additional: (record) ->
     @add(record, @additional)
 
-  add_ns_records: ->
-    @add_authoritative @zone.select_class "NS"
+  add_ns_records: (cb) ->
+    @zone.select_class "NS", (d) ->
+      @add_authoritative d
+      cb()
 
-  add_additionals: ->
+  add_additionals: (cb) ->
     for record in _.union(@answer, @authoritative)
       for zone in @zones
-        @add_additional zone.find "A", record.value
+        zone.find "A", record.value, (d) ->
+          @add_additional d
+          cb()
 
-  add_soa_to_authoritative: ->
-    @add_authoritative @zone.find_class "SOA"
+  add_soa_to_authoritative: (cb) ->
+    @zone.find_class "SOA", (d) ->
+      @add_authoritative d
+      cb()
 
-  resolve: ->
-    # Request for A or NS or whatever, but CNAME as response
-    if @add_answer @zone.select "CNAME", @name
-    # NS
-    else if @type == "NS" and @zone.select @type, @name, @add_answer
-    # A, TXT, MX
-    else if @add_answer @zone.select @type, @name, ->
-      @add_ns_records()
-    # empty response, SOA in authoritative section
-    else
-      @add_soa_to_authoritative()
+  resolve: (cb) ->
+    finalize = ->
+      # always add additional records if there are any useful
+      @add_additionals ->
+        cb @
 
-    # always add additional records if there are any useful
-    @add_additionals()
-    @
+    # If a CNAME answer is available, always provide it.
+    @zone.select "CNAME", @name, (d) ->
+      if @add_answer d
+        return finalize()
+
+      # No CNAME, lookup record
+      @zone.select @type, @name, (d) ->
+        if @add_answer d
+          if @type == "NS"
+            finalize()
+          else
+            @add_ns_records finalize
+        else
+          # empty response, SOA in authoritative section
+          @add_soa_to_authoritative finalize
 
   commit: (req, res) ->
     ancount = @answer.length

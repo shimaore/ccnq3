@@ -5,7 +5,7 @@
 #   http://wiki.freeswitch.org/wiki/Mod_enum
 # for FreeSwitch usage.
 
-require './dns'
+Zone = require('./dns').Zone
 
 cdb = require 'cdb'
 
@@ -14,30 +14,25 @@ make_id = (t,n) -> [t,n].join ':'
 # Options should contain provisioning_uri
 #  provisioning_uri = config.provisioning.local_couchdb_uri
 
-class EnumZone extends Zone
-require('ccnq3_config').get (config) ->
+exports = class EnumZone extends Zone
 
-  record_defaults: ->
-    ttl: @ttl or 60
-    class: "NAPTR"
-    value: ""
-
-  select: (type,name) ->
-    return unless type is 'NAPTR'
-    return unless number = name.match(/^([\d.]+)\./)?[1]
+  select: (type,name,cb) ->
+    return cb() unless type is 'NAPTR'
+    return cb() unless number = name.match(/^([\d.]+)\./)?[1]
 
     number = number.split('.').reverse().join('')
 
     provisioning.get make_id('number',number), (r) ->
       if r.inbound_uri?
-        # Add RRs
-        res.addRR name, ttl, "IN", "NAPTR", 10, 100, "u", "E2U+sip", "!^.*$!#{r.inbound_uri}!", ""
-        res.header.ancount++
-        res.addRR name, ttl, "IN", "NAPTR", 20, 100, "u", "E2U+account", "!^.*$!#{r.account}!", ""
-        res.header.ancount++
+        cb [
+          {class: "NAPTR", value: [10,100,'u','E2U+sip',"!^.*$!#{r.inbound_uri}!", ""]}
+          {class: "NAPTR", value: [20,100,'u','E2U+account', "!^.*$!#{r.account}!", ""]}
+        ]
         # In FreeSwitch XML, retrieve the account from enum_route_2.
-      res.send()
+      else
+        cb()
 
+  # The regular "handles" should work but is recursive and could be slow for ENUM.
   handles: (domain) ->
     domain = @dotize(domain)
     if domain is @dot_domain
