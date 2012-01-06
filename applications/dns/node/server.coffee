@@ -13,7 +13,7 @@ zones = [
       {class:'NS', value:'ns2.example.net.'}
       {prefix:'ns1',value:'127.0.0.1'}
       {prefix:'ns2',value:'127.0.0.1'}
-      {prefix:'_sip._udp',class:'SRV',value:[20,7,"sip1.example.net."]}
+      {prefix:'_sip._udp',class:'SRV',value:[20,7,5060,"sip1.example.net."]}
     ]
   )
   new EnumZone( 'enum.example.net',
