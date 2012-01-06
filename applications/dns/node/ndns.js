@@ -2164,6 +2164,11 @@ DNSWriter.prototype.writeRR = function (rr) {
       this.writeBuffer(rr.rdata[0]);
   } else if (rr.type == 28) { // aaaa
     this.writeAAAA(rr.rdata[0]);
+  } else if (rr.type == 33) { // srv
+    this.writeUInt16(rr.rdata[0]);
+    this.writeUInt16(rr.rdata[1]);
+    this.writeUInt16(rr.rdata[2]);
+    this.writeName(rr.rdata[3]);
   } else if (rr.type == 35) { // naptr
     this.writeUInt16(rr.rdata[0]);
     this.writeUInt16(rr.rdata[1]);
