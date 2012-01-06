@@ -186,7 +186,10 @@ class DNS
       type = req.q[0].typeName
       if zone = _.find(@zones, ((zone) -> zone.handles name))
         response = new Response(name, type, zone, @zones)
-        response.resolve (r) -> r.commit(req, res)
+        response.resolve (r) ->
+          r.commit(req, res)
+          res.send()
+        return
     res.send()
 
   close: ->
