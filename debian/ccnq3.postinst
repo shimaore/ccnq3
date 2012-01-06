@@ -5,7 +5,7 @@ NAME=ccnq3
 USER=ccnq3
 GROUP=daemon
 WORKDIR=/opt/${NAME}
-ETCDIR=/etc/ccnq3
+ETCDIR=/etc/${NAME}
 SRC=git://stephane.shimaore.net/git/ccnq3.git
 
 case "$1" in
