@@ -18,5 +18,5 @@ ddoc.views.domains =
   map: p_fun (doc) ->
     # Only return documents that will end up as domains that can be served
     if doc.type? and doc.type is 'domain' and doc.records?
-      emit null, null
-
+      # Sort the documents so that the sub-domains are listed first.
+      emit doc.domain.split('').reverse().join('')+'~', null
