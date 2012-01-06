@@ -16,6 +16,9 @@ make_id = (t,n) -> [t,n].join ':'
 
 exports.EnumZone = class EnumZone extends Zone
 
+  constructor: (domain, @provisioning_uri, options) ->
+    super domain, options
+
   select: (type,name,cb) ->
     unless type is 'NAPTR' and number = name.match(/^([\d.]+)\./)?[1]
       return super type, name, cb

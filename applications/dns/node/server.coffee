@@ -6,8 +6,7 @@ EnumZone = require('./enum').EnumZone
 
 require('ccnq3_config').get (config) ->
   zones = [
-    new EnumZone( 'enum.example.net',
-      provisioning_uri: config.provisioning.local_couchdb_uri
+    new EnumZone( 'enum.example.net', config.provisioning.local_couchdb_uri,
       ttl: 60
       admin: 'bob.example.net'
       records: [
