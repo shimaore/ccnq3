@@ -33,7 +33,7 @@ Conflicts: bind, bind9
 Description: Allows the ccnq3_inbound_enum service to be available on port 53
   Install this package on a host that will be running ccnq3_inbound_enum,
   so that a redirection from port 53 to port 53053 is provided automatically.
-
+  .
   Alternatively you may choose to implement your own iptables rules (or provide
   a different forwarding solution), for example because you want to run both
   inbound_enum and a caching DNS server (such as bind9) on a server; in that
