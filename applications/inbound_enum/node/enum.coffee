@@ -38,8 +38,8 @@ require('ccnq3_config').get (config) ->
       res.header.arcount = 0
       if req.q[0].typeName is 'SOA'
         res.addRR name,ttl,"IN","SOA",
-                config.inbound_enum.soa,
-                config.inbound_enum.soa,
+                config.host,
+                config.host,
                 1, # Serial
                 10*ttl, # Refresh
                 10*ttl, # Retry
@@ -53,7 +53,6 @@ require('ccnq3_config').get (config) ->
       return res.send()
 
     number = number.split('.').reverse().join('')
-    # console.log "Number = #{number}"
 
     provisioning.get make_id('number',number), (r) ->
       if r.inbound_uri?
