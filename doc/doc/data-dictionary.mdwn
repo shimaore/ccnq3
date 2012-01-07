@@ -24,6 +24,11 @@ your installation.
     type:"host"
     host: string; hostname, preferably FQDN (must match what the "hostname" command returns)
 
+    interfaces: {} of {}, fields:
+      ipv4: IP (if interface is v4)
+      ipv6: IP (if interface is v6)
+      Note: the name of the records must be unique, so they cannot just be the interface's name (an interface might have multiple v4 or v6 addresses)
+
     # Note: Changing any of these settings would require to restart the matching
     #       services, since configuration is read (in most cases) once at startup.
 
