@@ -71,7 +71,7 @@ exports.Zone = class Zone
 
 
 class Response
-  constructor: (name, @type, @zone, @zones) ->
+  constructor: (name, @type, @zone, @server) ->
     @name = dotize name
     @answer = []
     @authoritative = []
@@ -106,12 +106,14 @@ class Response
   add_additionals: (cb) ->
     for record in _.union(@answer, @authoritative)
       do (record) =>
-        for zone in @zones
-          do (zone) =>
-            old_cb = cb
-            cb = => zone.find "A", record.value, (d) =>
-              @add_additional d
-              old_cb()
+        name = record.value
+        # Only do the resolution for explicit names (e.g. CNAME, NS)
+        return unless typeof name is 'string'
+        zone = @server.find_zone name
+        old_cb = cb
+        cb = => zone.find "A", name, (d) =>
+          @add_additional d
+          old_cb()
     cb()
 
   add_soa_to_authoritative: (cb) ->
@@ -190,7 +192,7 @@ class DNS
       name = req.q[0].name
       type = req.q[0].typeName
       if zone = @find_zone name
-        response = new Response(name, type, zone, @zones)
+        response = new Response(name, type, zone, @)
         response.resolve (r) ->
           r.commit(req, res)
           res.send()
