@@ -4,9 +4,9 @@ Notes:
 * URI of databases = URI of CouchDB databases (always a string).
   These URIs might contain authentication usernames and passwords.
 
-# provisioning records
+# provisioning database
 
-## host (aka config)
+## host (aka config) provisioning records
 
 ### Common section
 
@@ -222,7 +222,7 @@ The attachments might use any core Node.js modules.
 
 FIXME test this feature
 
-## domain
+## domain (provisioning records)
 
     _id: type+":"+domain
     account: ""    (the empty string)
@@ -232,7 +232,7 @@ FIXME test this feature
 
     FIXME: these probably need to be indexed by host
 
-## account_forwarder
+## account_forwarder (provisioning records)
 
 For non-trusted host that are allowed to submit P-Charge-Info, list of accounts they may submit.
 
@@ -242,7 +242,7 @@ For non-trusted host that are allowed to submit P-Charge-Info, list of accounts 
     type:"account_forwarder"
     endpoint: endpoint
 
-## endpoint
+## endpoint (provisioning records)
 
     _id: type+":"+endpoint
     account: string
@@ -286,8 +286,7 @@ For non-trusted host that are allowed to submit P-Charge-Info, list of accounts 
     src_endpoint/user_force_mp
 
 
-
-## number
+## number (provisioning records)
 
     _id: type+":"+number
     account: string
@@ -311,8 +310,7 @@ For non-trusted host that are allowed to submit P-Charge-Info, list of accounts 
     loopback_uri: string (URI)  a URI used by an outbound-proxy to bypass LCR and route a number directly
 
 
-
-## rule (aka outbound_route)
+## rule (aka outbound_route) (provisioning records)
 
     _id: type+":"+rule
     account: ""    (the empty string)
@@ -336,7 +334,7 @@ For non-trusted host that are allowed to submit P-Charge-Info, list of accounts 
     Note: Changes are not applied automatically. Use sip_commands.opensips = "reload routes" to apply the changes.
 
 
-## gateway
+## gateway (provisioning records)
 
     _id: type+":"+gateway
     account: ""    (the empty string)
@@ -364,7 +362,7 @@ For non-trusted host that are allowed to submit P-Charge-Info, list of accounts 
       2: probing at all times
     Note: Changes are not applied automatically. Use sip_commands.opensips = "reload routes" to apply the changes.
 
-## location
+## location (provisioning records)
 
     _id: type+":"+location
     account: string
@@ -374,11 +372,11 @@ For non-trusted host that are allowed to submit P-Charge-Info, list of accounts 
     routing_data:  string; specific to the emergency routing system used
 
 
-# _users records
+# _users database
 
 The _users database is CouchDB's standard authentication database.
 
-## user record
+## user records
 
     _id:"org.couchdb.user:"+name
     type:"user"
@@ -402,7 +400,7 @@ The _users database is CouchDB's standard authentication database.
   Notes: Servers should have the "host" role assigned.
   Notes: The roles hash can also be manipulated using the REST API in applications/roles.
 
-## host record
+## host records
 
   _id:"org.couchd.user:"+name
   type:"user"
@@ -411,17 +409,17 @@ The _users database is CouchDB's standard authentication database.
   salt
   roles: ["host"]
 
-# usercode records
+# usercode database
 
 This database should only contain design documents which are replicated into each user's private database when the user logs in.
 
-# endpoint location records
+# endpoint-location database
 
-These record are read-only.
+The record in this database are read-only.
 (In other words you should not attempt to modify them.)
 They are updated by OpenSIPS.
 
-## endpoint location
+## endpoint-location records
 
     _id: username+"@"+domain (registration username)
     username: string; username part of the registration username@domain
