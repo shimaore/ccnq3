@@ -43,12 +43,3 @@ exports.EnumZone = class EnumZone extends Zone
         # In FreeSwitch XML, retrieve the account from enum_route_2.
       else
         cb()
-
-  # The regular "handles" should work but is recursive and could be slow for ENUM.
-  handles: (domain) ->
-    domain = @dotize(domain)
-    if domain is @dot_domain
-      return true
-    if domain.match(/^[\d.]+\.(.*)+$/)?[1] is @dot_domain
-      return true
-    false

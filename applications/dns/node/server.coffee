@@ -14,7 +14,7 @@ require('ccnq3_config').get (config) ->
 
   cdb.new(config.provisioning.local_couchdb_uri).req options, (r) ->
 
-    server = dns.createServer(zones)
+    server = dns.createServer()
 
     for rec in r.rows
       do (rec) ->
