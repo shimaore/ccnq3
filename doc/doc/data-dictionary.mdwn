@@ -61,17 +61,6 @@ your installation.
       users:
         couchdb_uri
 
-### Specific to hosts running inbound_enum
-
-    inbound_enum: (optional)
-      ttl:  integer     DNS TTL
-      port: integer     DNS server UDPv4 port
-      ns: [] of strings List of name servers for inbound_enum (this host included) [FQDNs]
-
-    Note: the SOA uses config.host, which is one of the reasons why the hostname must be a valid FQDN.
-    Note: You must install the ccnq3-inbound-enum package on hosts running the ccnq3_inbound_enum service.
-    Note: You cannot run another DNS server on hosts running the ccnq3_inbound_enum service.
-
 ### Specific to hosts running FreeSwitch.
 
 To add a FreeSwitch host:
@@ -231,6 +220,37 @@ FIXME test this feature
     domain: string; name of a SIP domain accepted by the system
 
     FIXME: these probably need to be indexed by host
+
+### ccnq3-dns service
+
+  If "applications/dns" is configured on the host, "domain" provisioning records may also be used to populate DNS records.
+  In this case the "account" field is optional (which can only be done on the main provisioning database).
+  The following fields are available:
+
+    ENUM: boolean; true if the domain is to be used to provide "number"-type records as a Carrier ENUM service
+    ttl: integer, time-to-live for the records
+      Note: should be short for an ENUM domain.
+    admin: optional string, the contact value of the domain's SOA [default: "hostmaster."+domain]
+    records: [] of {}; the fields of the records are as follows:
+      name: the full record name [default: domain's name]
+      prefix: alternatively to name, a prefix to the domain (local name)
+        Note: use at most one of "name" or "prefix"
+      ttl: integer, individual record's ttl [overrides domain's default]
+      class: "A", "NS", etc. [default: "A"] (only "IN" classes are supported)
+      value: either a string (if only one value is provided, for example for A, CNAME, NS, etc.), or an array of response values.
+        An array value is used for example for SRV records or NAPTR records.
+
+      Example:
+        records: [
+          {class:'NS', value:'ns1.example.net.'}
+          {class:'NS', value:'ns2.example.net.'}
+          {prefix:'s1',value:'192.168.1.10'}
+          {prefix:'_sip._udp',class:'SRV',value:[20,7,5060,"sip1.example.net."]}
+          {class:"NAPTR",value:[20,10,'u','E2U+sip',"!^.*$!sip:foo@example.net!", ""]
+
+        ]
+
+  Note: "applications/dns" runs on port 53053. To allow remote hosts to access the application on port 53, install the ccnq3-dns package.
 
 ## account_forwarder (provisioning records)
 
