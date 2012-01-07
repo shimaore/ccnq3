@@ -232,9 +232,7 @@ FIXME test this feature
       Note: should be short for an ENUM domain.
     admin: optional string, the contact value of the domain's SOA [default: "hostmaster."+domain]
     records: [] of {}; the fields of the records are as follows:
-      name: the full record name [default: domain's name]
-      prefix: alternatively to name, a prefix to the domain (local name)
-        Note: use at most one of "name" or "prefix"
+      prefix: a prefix to the domain (local name) [optional]
       ttl: integer, individual record's ttl [overrides domain's default]
       class: "A", "NS", etc. [default: "A"] (only "IN" classes are supported)
       value: either a string (if only one value is provided, for example for A, CNAME, NS, etc.), or an array of response values.
