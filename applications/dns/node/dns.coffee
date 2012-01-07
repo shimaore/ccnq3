@@ -110,6 +110,9 @@ class Response
         # Only do the resolution for explicit names (e.g. CNAME, NS)
         return unless typeof name is 'string'
         zone = @server.find_zone name
+        # Nothing to add if we don't know about that zone.
+        return unless zone?
+
         old_cb = cb
         cb = => zone.find "A", name, (d) =>
           @add_additional d
