@@ -8,22 +8,26 @@ cdb = require 'cdb'
 
 require('ccnq3_config').get (config) ->
 
-  zones = []
-
   # Enumerate the domains listed in the database with a "records" field.
   options =
     uri: "/_design/dns/_view/domains?include_docs=true"
+
   cdb.new(config.provisioning.local_couchdb_uri).req options, (r) ->
+
+    server = dns.createServer(zones)
+
     for rec in r.rows
       do (rec) ->
         doc = rec.doc
         return if not doc?
         if doc.ENUM
-          zones.push new EnumZone doc.domain, config.provisioning.local_couchdb_uri, doc
+          zone = new EnumZone doc.domain, config.provisioning.local_couchdb_uri, doc
         else
-          zones.push new Zone doc.domain, doc
+          zone = new Zone doc.domain, doc
+        server.add_zone zone
 
-    server = dns.createServer(zones)
+    # Add any other records (hosts, ..)
+
     server.listen(53053)
 
 ###

@@ -6,11 +6,17 @@ dgram = require('dgram')
 ndns = require('./ndns')
 _ = require("underscore")
 
+dotize = (domain) ->
+  if domain[-1..] == "." then domain else domain + "."
+
+undotize = (domain) ->
+  if domain[-1..] != "." then domain else domain[..-2]
+
 exports.Zone = class Zone
 
   constructor: (domain, options) ->
-    @domain = @undotize(domain)
-    @dot_domain = @dotize(domain)
+    @domain = undotize(domain)
+    @dot_domain = dotize(domain)
     @set_options(options)
     @records = (@create_record(record) for record in options.records or [])
     @select_class "SOA", (d) =>
@@ -34,22 +40,16 @@ exports.Zone = class Zone
     class: "A"
     value: "" 
 
-  dotize: (domain) ->
-    if domain[-1..] == "." then domain else domain + "."
-
-  undotize: (domain) ->
-    if domain[-1..] != "." then domain else domain[..-2]
-
   set_options: (options) ->
     defaults = @defaults()
     for key, val of defaults
       @[key] = options[key] or val
 
-    @admin = @dotize(@admin)
+    @admin = dotize(@admin)
 
   create_record: (record) ->
     r = _.extend(_.clone(@record_defaults()), record)
-    r.name = if r.prefix? then @dotize(r.prefix) + @dot_domain else @dot_domain
+    r.name = if r.prefix? then dotize(r.prefix) + @dot_domain else @dot_domain
     r
 
   select_class: (type,cb) ->
@@ -69,18 +69,10 @@ exports.Zone = class Zone
     value = keys.split(" ").map((param) => @[param]).join(" ")
     {name: @dot_domain, @ttl, class: "SOA", value}
 
-  handles: (domain) ->
-    domain = @dotize(domain)
-    if domain == @dot_domain
-      true
-    else if domain.length > @dot_domain.length
-      @handles(domain.split(".")[1...].join("."))
-    else
-      false
 
 class Response
   constructor: (name, @type, @zone, @zones) ->
-    @name = @zone.dotize name
+    @name = dotize name
     @answer = []
     @authoritative = []
     @additional = []
@@ -168,10 +160,23 @@ class DNS
     @server = ndns.createServer('udp4')
     @server.on 'request', @resolve
     @port or= 53
-    @reload zones or []
+    @reload zones or {}
 
   reload: (zones) ->
     @zones = zones
+
+  add_zone: (zone) ->
+    @zones[zone.dot_domain] = zone
+
+  find_zone: (domain) ->
+    domain = dotize domain
+    if @zones[domain]?
+      return @zones[domain]
+    else
+      if domain is '.'
+        return
+      else
+        return @find_zone domain.split(".")[1...].join(".")
 
   listen: (port) ->
     @server.bind port or @port
@@ -184,7 +189,7 @@ class DNS
     if req.q.length > 0
       name = req.q[0].name
       type = req.q[0].typeName
-      if zone = _.find(@zones, ((zone) -> zone.handles name))
+      if zone = @find_zone name
         response = new Response(name, type, zone, @zones)
         response.resolve (r) ->
           r.commit(req, res)
@@ -197,3 +202,5 @@ class DNS
 
 exports.createServer = (config...) ->
   new DNS(config...)
+exports.dotize = dotize
+exports.undotize = undotize
