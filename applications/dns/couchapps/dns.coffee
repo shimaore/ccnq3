@@ -31,9 +31,6 @@ ddoc.views.names =
   map: p_fun (doc) ->
     return unless doc.type? and doc.type
 
-    name_key = (name) ->
-      name.split('').reverse().join('')+'~'
-
     is_true = (b) -> if b then true else false
 
     v4_loopback = (ip) ->
@@ -66,7 +63,7 @@ ddoc.views.names =
 
       when 'host'
 
-        host_key = name_key doc.host
+        host = doc.host
 
         #-- Host-level records --#
         if doc.interfaces?
@@ -88,7 +85,7 @@ ddoc.views.names =
                     primary_v4 ?= _.ipv4
                   else
                     private_v4 ?= _.ipv4
-                emit host_key,
+                emit host,
                   prefix:name
                   class:'A',
                   value:_.ipv4
@@ -99,7 +96,7 @@ ddoc.views.names =
                 else
                   if not v6_is_private _.ipv6
                     primary_v6 ?= _.ipv6
-                emit host_key,
+                emit host,
                   prefix:name
                   class:'AAAA'
                   value:_.ipv6
@@ -108,13 +105,13 @@ ddoc.views.names =
 
           if primary_v4?
             ip_to_name[primary_v4] = doc.host
-            emit host_key,
+            emit host,
               class:'A'
               value:primary_v4
 
           if primary_v6?
             ip_to_name[primary_v6] = doc.host
-            emit host_key,
+            emit host,
               class:'AAAA'
               value:primary_v6
 
@@ -122,7 +119,6 @@ ddoc.views.names =
         #-- SIP records --#
 
         domain = doc.sip_domain_name
-        domain_key = name_key domain
 
         if doc.sip_profiles?
 
@@ -142,7 +138,7 @@ ddoc.views.names =
 
                 _sip_udp = '_sip._udp.'
 
-                emit domain_key,
+                emit domain,
                   prefix:_sip_udp+'ingress-'+name
                   class:'SRV'
                   value:[
@@ -151,7 +147,7 @@ ddoc.views.names =
                     _.ingress_sip_port
                     ip_to_name[_.ingress_sip_ip] ? doc.host
                   ]
-                emit domain_key,
+                emit domain,
                   prefix: 'ingress-'+name
                   class:'NAPTR'
                   value: [
@@ -163,7 +159,7 @@ ddoc.views.names =
                     _sip_udp+'ingress-'+fqdn
                   ]
 
-                emit domain_key,
+                emit domain,
                   prefix:_sip_udp+'egress-'+name
                   class:'SRV'
                   value:[
@@ -172,7 +168,7 @@ ddoc.views.names =
                     _.egress_sip_port ? _.ingress_sip_port+10000
                     ip_to_name[_.egress_sip_ip ? _.ingress_sip_ip ] ? doc.host
                   ]
-                emit domain_key,
+                emit domain,
                   prefix: 'egress-'+name
                   class:'NAPTR'
                   value: [
@@ -185,7 +181,7 @@ ddoc.views.names =
                   ]
 
         if doc.opensips?
-          emit domain_key,
+          emit domain,
             prefix:'_sip._udp'
             class:'SRV'
             value:[

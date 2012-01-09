@@ -16,7 +16,7 @@ require('ccnq3_config').get (config) ->
 
     server = dns.createServer()
 
-    for rec in r.rows
+    for rec in r.rows ? []
       do (rec) ->
         doc = rec.doc
         return if not doc?
@@ -31,7 +31,7 @@ require('ccnq3_config').get (config) ->
       uri: "/_design/dns/_view/names"
     cdb.new(config.provisioning.local_couchdb_uri).req options, (r) ->
 
-      for rec in r.rows
+      for rec in r.rows ? []
         do (rec) ->
           domain = rec.key
           zone = server.find_zone(domain) ? server.add_zone new Zone domain, {}
