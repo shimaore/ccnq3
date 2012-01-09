@@ -37,7 +37,8 @@ if [ -e "${CONF}" ]; then
   exit 1
 fi
 
-HOSTNAME=`hostname`
+HOSTNAME=`node -e 'console.log(require("os").hostname())'`
+INTERFACES=`./interfaces.coffee`
 
 if [ "x$1" == "x" ]; then
 
@@ -70,6 +71,7 @@ if [ "x$1" == "x" ]; then
 , "source": "${SRC}"
 , "account": ""
 , "updated_at": 0
+, "interfaces": ${INTERFACES}
 }
 JSON
   # applications/usercode: creates the usercode database: must be first since all others depend on it
