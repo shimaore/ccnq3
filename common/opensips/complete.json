@@ -31,7 +31,7 @@
   "db_url": "http://127.0.0.1:34340/",
 
   "proxy_ip": "",
-  "proxy_port": "5060",
+  "proxy_port": 5060,
   "internal_ip": "",
   "external_ip": "",
 

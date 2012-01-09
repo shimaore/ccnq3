@@ -27,7 +27,13 @@ your installation.
     interfaces: {} of {}, fields:
       ipv4: IP (if interface is v4)
       ipv6: IP (if interface is v6)
-      Note: the name of the records must be unique, so they cannot just be the interface's name (an interface might have multiple v4 or v6 addresses)
+      Note: the name of the records must be unique, so they cannot just be the interface's name.
+    interfaces.primary.ipv4
+    interfaces.primary.ipv6
+      If present, these are selected as the addresses for the host itself.
+      Otherwise a random non-private IPv4 address is selected, and a
+      random IPv6 address is selected, from the ones present in the
+      "interfaces" records.
 
     # Note: Changing any of these settings would require to restart the matching
     #       services, since configuration is read (in most cases) once at startup.
@@ -78,6 +84,9 @@ To add a FreeSwitch host:
 
 
     sip_domain_name:  string (required); FQDN accepted by the server
+      Note: this should be the "cluster name" for servers running similar
+        configurations. This is used by applications/dns to create
+        SRV records for these services.
     rtp_ip: local IP to bind to for RTP [default: "auto"]
     sip_profiles: {} of profiles descriptions:
 

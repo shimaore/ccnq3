@@ -27,6 +27,15 @@ require('ccnq3_config').get (config) ->
         server.add_zone zone
 
     # Add any other records (hosts, ..)
+    options =
+      uri: "/_design/dns/_view/names"
+    cdb.new(config.provisioning.local_couchdb_uri).req options, (r) ->
+
+      for rec in r.rows
+        do (rec) ->
+          domain = rec.key
+          zone = server.find_zone(domain) ? server.add_zone new Zone domain
+          zone.add_record rec.value
 
     server.listen(53053)
 

@@ -29,11 +29,11 @@
   "skip_lineside": 1,
 
   "proxy_ip": "",
-  "proxy_port": "5060",
+  "proxy_port": 5060,
   "internal_ip": "",
   "external_ip": "",
 
-  "local_port":"5064",
+  "local_port": 5064,
 
   "accounting": "",
   "authentication": "",

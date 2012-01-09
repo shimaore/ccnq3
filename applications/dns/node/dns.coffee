@@ -1,6 +1,7 @@
 #
 # Based on appload/dns
 # with async loading
+# and other changes for ccnq3
 #
 dgram = require('dgram')
 ndns = require('./ndns')
@@ -26,6 +27,9 @@ exports.Zone = class Zone
   add_default_soa: ->
     @records.push @create_soa()
 
+  add_record: (record) ->
+    @records.push @create_record record
+
   defaults: ->
     ttl: 1200
     serial: 2011072101   # serial (YYYYMMDDrr)
@@ -38,7 +42,7 @@ exports.Zone = class Zone
   record_defaults: ->
     ttl: @ttl or @defaults().ttl
     class: "A"
-    value: "" 
+    value: ""
 
   set_options: (options) ->
     defaults = @defaults()
@@ -170,6 +174,7 @@ class DNS
   reload: (zones) ->
     @zones = zones
 
+  # Explicit: add_zone returns the zone
   add_zone: (zone) ->
     @zones[zone.dot_domain] = zone
 
