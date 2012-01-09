@@ -1,0 +1,11 @@
+label {
+  display: block;
+}
+label>span {
+  width: 200px;
+  float: left;
+}
+input,select {
+  display: inline-block;
+  border: thin solid;
+}

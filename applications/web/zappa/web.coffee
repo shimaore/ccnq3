@@ -19,6 +19,7 @@ require('ccnq3_config').get (config) ->
           '/public/css/datatables'
           '/public/menu/menu'
           '/public/css/style'
+          '/public/css/web'
         ]
         scripts: [
           '/public/js/default'
