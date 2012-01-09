@@ -23,7 +23,7 @@ require('ccnq3_config').get (config) ->
   # Initiate replication (_replicator does not work).
   replicate = ->
 
-    # provisioning.couchdb_uri MUST be "http://127.0.0.1:5984/provisioning"
+    # provisioning.local_couchdb_uri MUST be "http://127.0.0.1:5984/provisioning"
     expected = "http://127.0.0.1:5984/provisioning"
     source_uri = config.provisioning.host_couchdb_uri
     target_uri = config.provisioning.local_couchdb_uri
