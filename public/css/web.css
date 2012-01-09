@@ -1,5 +1,9 @@
+.menu_container {
+  display: inline-block;
+}
 label {
   display: block;
+  padding: 11px;
 }
 label>span {
   width: 200px;
