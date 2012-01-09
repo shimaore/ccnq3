@@ -33,6 +33,12 @@ do (jQuery) ->
         value: @provisioning?.host_couchdb_uri ? (window.location.protocol + '//' + window.location.hostname + ':5984/provisioning')
 
       textbox
+        id:'provisioning.couchdb_uri'
+        title: 'Couchapp Provisioning database URI (CouchDB)'
+        class:'url'
+        value: @provisioning?.couchdb_uri
+
+      textbox
         id:'interfaces.primary.ipv4'
         title:'Primary IPv4'
         class:'ipv4'
