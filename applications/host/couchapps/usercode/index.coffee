@@ -239,6 +239,11 @@ do (jQuery) ->
         @swap host_tpl {}
 
       @get '#/host/:id', ->
+        # Bug in sammy.js? This route gets selected for #/host
+        if not @params.id?
+          @swap host_tpl {}
+          return
+
         @send model.get, @params.id,
           success: (doc) =>
             console.log "Success"
@@ -296,7 +301,7 @@ do (jQuery) ->
           id = encodeURIComponent make_id 'host', doc.host
           uri = doc.provisioning.host_couchdb_uri + '/' + id
           """
-            <p><a href="#/host/#{id}">Edit</a></p>"
+            <p><a href="#/host/#{id}">Edit</a></p>
             <p>Provisioning URI = <a href="#{uri}">#{uri}</a></p>
             <p>Bootstrap: Run on host "#{doc.host}" as root:</p>
             <pre>
