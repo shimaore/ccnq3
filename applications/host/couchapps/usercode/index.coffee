@@ -62,41 +62,42 @@ do (jQuery) ->
         class:'text'
         value:@sip_domain_name
 
-      if 'applications/freeswitch' in @applications
-        radio
-          id:'sip_commands.freeswitch'
-          title:'No FreeSwitch operation'
-          value:''
-        radio
-          id:'sip_commands.freeswitch'
-          title:'Reload Sofia (to add a new profile -- will drop calls)'
-          value:'reload sofia'
-        radio
-          id:'sip_commands.freeswitch'
-          title:'Pause inbound calls'
-          value:'pause inbound'
-        radio
-          id:'sip_commands.freeswitch'
-          title:'Pause outbound calls'
-          value:'pause outbound'
-        radio
-          id:'sip_commands.freeswitch'
-          title:'Resume inbound calls'
-          value:'resume inbound'
-        radio
-          id:'sip_commands.freeswitch'
-          title:'Resume outbound calls'
-          value:'resume outbound'
+      if @applications?
+        if 'applications/freeswitch' in @applications
+          radio
+            id:'sip_commands.freeswitch'
+            title:'No FreeSwitch operation'
+            value:''
+          radio
+            id:'sip_commands.freeswitch'
+            title:'Reload Sofia (to add a new profile -- will drop calls)'
+            value:'reload sofia'
+          radio
+            id:'sip_commands.freeswitch'
+            title:'Pause inbound calls'
+            value:'pause inbound'
+          radio
+            id:'sip_commands.freeswitch'
+            title:'Pause outbound calls'
+            value:'pause outbound'
+          radio
+            id:'sip_commands.freeswitch'
+            title:'Resume inbound calls'
+            value:'resume inbound'
+          radio
+            id:'sip_commands.freeswitch'
+            title:'Resume outbound calls'
+            value:'resume outbound'
 
-      if 'applications/opensips' in @applications
-        radio
-          id:'sip_commands.opensips'
-          title:'No OpenSIPS operation'
-          value:''
-        radio
-          id:'sip_commands.opensips'
-          title:'Reload routes'
-          value:'reload routes'
+        if 'applications/opensips' in @applications
+          radio
+            id:'sip_commands.opensips'
+            title:'No OpenSIPS operation'
+            value:''
+          radio
+            id:'sip_commands.opensips'
+            title:'Reload routes'
+            value:'reload routes'
 
       input type:'submit'
 
