@@ -1,5 +1,6 @@
 .menu_container {
-  display: inline-block;
+  display: block;
+  height:30px;
 }
 label {
   display: block;
