@@ -22,7 +22,7 @@ do (jQuery) ->
 
       textbox
         id:'host'
-        title:'Host'
+        title:'Host (FQDN)'
         class:'required text'
         value:@host
 
@@ -31,6 +31,72 @@ do (jQuery) ->
         title: 'Provisioning database URI (CouchDB)'
         class:'required url'
         value: @provisioning?.host_couchdb_uri ? (window.location.protocol + '//' + window.location.hostname + ':5984/provisioning')
+
+      textbox
+        id:'interfaces.primary.ipv4'
+        title:'Primary IPv4'
+        class:'ipv4'
+        value:@interfaces?.primary?.ipv4
+
+      textbox
+        id:'interfaces.primary.ipv6'
+        title:'Primary IPv6'
+        class:'ipv6'
+        value:@interfaces?.primary?.ipv6
+
+      textbox
+        id:'interfaces.private.ipv4'
+        title:'Secondary/private IPv4'
+        class:'ipv4'
+        value:@interfaces?.private?.ipv4
+
+      textbox
+        id:'interfaces.private.ipv6'
+        title:'Secondary/private IPv6'
+        class:'ipv6'
+        value:@interfaces?.private?.ipv6
+
+      textbox
+        id:'sip_domain_name'
+        title:'SIP domain / cluster'
+        class:'text'
+        value:@sip_domain_name
+
+      if 'applications/freeswitch' in @applications
+        radio
+          id:'sip_commands.freeswitch'
+          title:'No FreeSwitch operation'
+          value:''
+        radio
+          id:'sip_commands.freeswitch'
+          title:'Reload Sofia (to add a new profile -- will drop calls)'
+          value:'reload sofia'
+        radio
+          id:'sip_commands.freeswitch'
+          title:'Pause inbound calls'
+          value:'pause inbound'
+        radio
+          id:'sip_commands.freeswitch'
+          title:'Pause outbound calls'
+          value:'pause outbound'
+        radio
+          id:'sip_commands.freeswitch'
+          title:'Resume inbound calls'
+          value:'resume inbound'
+        radio
+          id:'sip_commands.freeswitch'
+          title:'Resume outbound calls'
+          value:'resume outbound'
+
+      if 'applications/opensips' in @applications
+        radio
+          id:'sip_commands.opensips'
+          title:'No OpenSIPS operation'
+          value:''
+        radio
+          id:'sip_commands.opensips'
+          title:'Reload routes'
+          value:'reload routes'
 
       input type:'submit'
 
