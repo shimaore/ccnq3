@@ -18,7 +18,7 @@ ddoc.views.domains =
   map: p_fun (doc) ->
 
     name_key = (name) ->
-      domain.split('').reverse().join('')+'~'
+      name.split('').reverse().join('')+'~'
 
     # Only return documents that will end up as domains that can be served
     if doc.type? and doc.type is 'domain' and doc.records?
@@ -32,7 +32,7 @@ ddoc.views.names =
     return unless doc.type? and doc.type
 
     name_key = (name) ->
-      domain.split('').reverse().join('')+'~'
+      name.split('').reverse().join('')+'~'
 
     is_true = (b) -> if b then true else false
 
