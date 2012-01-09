@@ -37,7 +37,7 @@ require('ccnq3_config').get (config) ->
           zone = server.find_zone(domain) ? server.add_zone new Zone domain
           zone.add_record rec.value
 
-    server.listen(53053)
+      server.listen(53053)
 
 ###
   zones = [
