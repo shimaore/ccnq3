@@ -6,7 +6,7 @@
       if (val == "false"){ return false; }
       if (val == String(parseInt(val))){ return parseInt(val); }
       if (val == String(parseFloat(val))){ return parseFloat(val); }
-      return val;      
+      return val;
     }
     function toNestedObject(obj, arr){
       var key = arr.shift();
@@ -31,7 +31,7 @@
       })
       .reduce(toNestedObject, {});
     } else {
-      throw({error:"Can work on a single form only"})
+      throw({error:"Can work on a single form only, but "+this.length+" were found."})
     }
   };
 
