@@ -43,7 +43,12 @@ exports.get = (cb)->
   catch error
     util.log "Reading #{config_location}: #{error}"
     return cb {}
+  rev = fs_config?._rev
   exports.retrieve fs_config, (config) ->
     # Memoize the result
     exports.get = (cb)-> cb config
+    # Save any new revision locally
+    if rev isnt config._rev
+      exports.update config
+    # Callback
     cb config
