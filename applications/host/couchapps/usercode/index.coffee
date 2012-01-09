@@ -238,6 +238,18 @@ do (jQuery) ->
       @get '#/host', ->
         @swap host_tpl {}
 
+      @get '#/host/:id', ->
+        @send model.get, @params.id,
+          success: (doc) =>
+            console.log "Success"
+            @swap host_tpl doc
+            $('#host_record').data 'doc', doc
+          error: =>
+            console.log "Error"
+            doc = {}
+            @swap host_tpl doc
+            $('#host_record').data 'doc', doc
+
       # Save
       @bind 'save-doc', (event) ->
 
@@ -281,12 +293,13 @@ do (jQuery) ->
           return "Server #{doc.host}"
 
         form: (doc) ->
-          # FIXME $(selector).data 'doc', doc
-          uri = doc.provisioning.host_couchdb_uri + '/' + encodeURIComponent make_id 'host', doc.host
+          id = encodeURIComponent make_id 'host', doc.host
+          uri = doc.provisioning.host_couchdb_uri + '/' + id
           """
+            <p><a href="#/host/#{id}">Edit</a></p>"
             <p>Provisioning URI = <a href="#{uri}">#{uri}</a></p>
+            <p>Bootstrap: Run on host "#{doc.host}" as root:</p>
             <pre>
-              # Run on host "#{doc.host}" as root:
               cd /opt/ccnq3/src && ./bootstrap-local.sh '#{uri}'
             </pre>
-          """ + host_tpl doc
+          """
