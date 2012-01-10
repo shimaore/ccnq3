@@ -263,7 +263,7 @@ do (jQuery) ->
             $('#host_record').data 'doc', doc
 
       # Save
-      @bind 'save-doc', (event) ->
+      @bind 'save-host', (event) ->
 
         doc = $(selector).data('doc') ? {}
         $.extend doc, $(selector).toDeepJson()
@@ -293,7 +293,7 @@ do (jQuery) ->
 
         if form_is_valid
           $('#host_log').html ''
-          @trigger 'save-doc'
+          @trigger 'save-host'
         else
           $('#host_log').html 'Please check your data.'
 
