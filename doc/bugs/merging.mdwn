@@ -1,0 +1,2 @@
+Should use a proper (recursive) merge in form handling instead of
+$.extend, which only extends the hash at the first level.
