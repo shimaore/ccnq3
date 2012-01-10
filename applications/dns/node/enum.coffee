@@ -39,4 +39,4 @@ exports.EnumZone = class EnumZone extends Zone
         ]
         # In FreeSwitch XML, retrieve the account from enum_route_2.
       else
-        cb()
+        cb []
