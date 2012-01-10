@@ -317,7 +317,6 @@ do (jQuery) ->
           uri = doc.provisioning.host_couchdb_uri + '/' + id
           """
             <p><a href="#/host/#{id}">Edit</a></p>
-            <p>Provisioning URI = <a href="#{uri}">#{uri}</a></p>
             <p>Bootstrap: Run on host "#{doc.host}" as root:</p>
             <pre>
               cd /opt/ccnq3/src && ./bootstrap-local.sh '#{uri}'
