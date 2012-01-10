@@ -150,7 +150,7 @@ do (jQuery) ->
       for app in @_apps
         checkbox
           id:"selected_applications.#{app}"
-          title:all_apps_description[app]
+          title:_apps_description[app]
           value: @applications? and app in @applications
 
       input type:'submit'
