@@ -24,52 +24,6 @@ Typical installation in ccnq3:
   freeswitch_local_vars     (include)       in /opt/freeswitch/conf/local-vars.xml
   freeswitch_local_conf     (dialplan)      in /opt/freeswitch/conf/local-conf.xml
 
-The sip_profiles records contain:
-
-  sip_profiles[profile_name] =
-
-    # Sofia data
-    template: sofia template name (e.g. "sbc-media", "sbc-nomedia")
-    # For the "sbc*" types, we need:
-    ingress_sip_ip: which IP (v4,v6) to bind for ingress processing
-    ingress_sip_port: which port to bind for ingress processing
-    egress_sip_ip: which IP (v4,v6) to bind for egress processing [default: ingress_sip_ip]
-    egress_sip_port: which port to bind for egress processing [default: 10000+ingress_sip_port]
-
-    # Dialplan data
-    handler: dialplan template name (e.g. "client-sbc", "carrier-sbc")
-    send_call_to: where to send the calls ("socket", "bridge") [default: "socket"]
-    ingress_target: domain where to send ingress calls
-    egress_target: domain where to send egress calls
-
-    # For handler="client-sbc"
-    type: string, dialplan profile type (e.g. "usa", "usa-cnam", "fr")
-    # For handler="carrier-sbc"
-    enum_root: string, the DNS root of the ENUM domain
-
-Each host document that contains a "sip_profiles" array is therefor tagged for FreeSwitch.
-
-Other parameters:
-
-  sip_domain_name: domain name for this FreeSwitch instance
-  rtp_ip: local IP to bind to for RTP [default: "auto"]
-
-Note: any field not marked with a [default] tag MUST be specified.
-
-
-Additionally the following fields might be specified:
-
-  sip_commands[sofia_profile] =
-    One of:
-      start             sofia profile <profile_name> start
-      restart           sofia profile <profile_name> restart reloadxml  [required to change IP or port, will drop calls]
-      stop              sofia profile <profile_name> killgw
-
-  Note that "sofia_profile" here is either "egress-#{profile_name}" or "ingress-#{profile_name}" so that each direction
-  can be restart independently.
-
-  Each command is only executed once (the agent tracks the last _rev processed to not process the same one twice).
-
 ###
 
 p_fun = (f) -> '('+f+')'
@@ -170,6 +124,7 @@ ddoc.shows.freeswitch_local_conf = p_fun (doc,req) ->
       <X-PRE-PROCESS cmd="set" data="profile_type=#{profile.type}"/>
       <X-PRE-PROCESS cmd="set" data="ingress_target=#{profile.ingress_target}"/>
       <X-PRE-PROCESS cmd="set" data="egress_target=#{profile.egress_target}"/>
+      <X-PRE-PROCESS cmd="set" data="enum_root=#{profile.enum_root}"/>
 
       <X-PRE-PROCESS cmd="include" data="dialplan/#{profile.handler}.xml.template"/>
       <X-PRE-PROCESS cmd="include" data="dialplan/send-call-to-#{send_call_to}.xml.template"/>
