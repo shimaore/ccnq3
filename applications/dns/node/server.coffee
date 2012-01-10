@@ -6,11 +6,11 @@ EnumZone = require('./enum').EnumZone
 
 cdb = require 'cdb'
 
+debug = true
+
 require('ccnq3_config').get (config) ->
 
   provisioning_uri = config.provisioning.local_couchdb_uri
-  if not provisioning_uri?
-    throw error:"config.provisioning.local_couchdb_uri is required"
   provisioning = cdb.new provisioning_uri
 
   # Enumerate the domains listed in the database with a "records" field.
@@ -25,6 +25,7 @@ require('ccnq3_config').get (config) ->
       do (rec) ->
         doc = rec.doc
         return if not doc?
+        debug and console.log "Adding #{doc.domain}"
         if doc.ENUM
           zone = new EnumZone doc.domain, config.provisioning.local_couchdb_uri, doc
         else
@@ -42,5 +43,8 @@ require('ccnq3_config').get (config) ->
           domain = rec.key
           zone = server.get_zone(domain) ? server.add_zone new Zone domain, {}
           zone.add_record rec.value
+          debug and console.log "Added #{rec.value.prefix ? '@'} IN #{rec.value.class} to #{domain}"
+
+      debug and console.log domain, zone for domain, zone of server.zones
 
       server.listen(53053)
