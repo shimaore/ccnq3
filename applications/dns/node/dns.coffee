@@ -188,6 +188,10 @@ class DNS
       else
         return @find_zone domain.split(".")[1...].join(".")
 
+  get_zone: (domain) ->
+    domain = dotize domain
+    @zones[domain]
+
   listen: (port) ->
     @server.bind port or @port
 
