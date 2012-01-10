@@ -62,6 +62,7 @@ your installation.
       local_couchdb_uri: URI of a local replica of the provisioning database [used by local applications such as opensips]
         Note: generally http://127.0.0.1:5984/provisioning [no authentication to keep things faster]
         Note: realtime (call-handling) applications should only rely on this database as their primary source
+        Note: must have db admin access to the database (so that applications can push their design documents)
 
     install: (normally not defined)
       # This feature is used to force re-installation of the corresponding databases (for example to change the URI)

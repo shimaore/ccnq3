@@ -55,7 +55,7 @@ exports.update_config = (provisioning_uri,provisioning_db,password,config,cb) ->
 
   config.provisioning ?= {}
   config.provisioning.host_couchdb_uri = url.format q
-  config.provisioning.local_couchdb_uri = url.format q
+  config.provisioning.local_couchdb_uri = provisioning_uri
 
   provisioning_db.put config, (r)->
     if r.error?
