@@ -177,6 +177,9 @@ do (jQuery) ->
           ###
           if not doc.admin?.system
             doc.provisioning.local_couchdb_uri = 'http://127.0.0.1:5984/provisioning'
+          else
+            doc.provisioning.local_couchdb_uri ?= doc.provisioning.host_couchdb_uri
+
 
           ###
             applications/host is always required.

@@ -1,5 +1,6 @@
 #!/usr/bin/env coffee
 ###
+A library to install a manager host in a ccnq3 system.
 (c) 2010 Stephane Alnet
 Released under the AGPL3 license
 ###
@@ -54,6 +55,7 @@ exports.update_config = (provisioning_uri,provisioning_db,password,config,cb) ->
 
   config.provisioning ?= {}
   config.provisioning.host_couchdb_uri = url.format q
+  config.provisioning.local_couchdb_uri = url.format q
 
   provisioning_db.put config, (r)->
     if r.error?
