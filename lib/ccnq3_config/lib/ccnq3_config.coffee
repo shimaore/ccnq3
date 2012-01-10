@@ -29,6 +29,7 @@ exports.retrieve = (config,cb) ->
       cb p
 
 exports.update = (content) ->
+  util.log "Updating local configuration file."
   fs = require 'fs'
   fs.writeFileSync config_location, JSON.stringify content
 
