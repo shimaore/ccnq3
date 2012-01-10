@@ -153,10 +153,10 @@ To add an OpenSIPS host:
 
 
     opensips_proxy:
-      port:34340   integer, required, do not change
-      hostname:"127.0.0.1"   string, required, do not change
+      port:34340   integer, required, do not change [default]
+      hostname:"127.0.0.1"   string, required, do not change [default]
       usrloc_uri: URI of the location database (used to save registration data)
-        Note: this should be "http://127.0.0.1:5984/location"
+        Note: this should be "http://127.0.0.1:5984/location" [default]
 
     opensips:
       model: "complete", or any other model defined in common/opensips [required]
