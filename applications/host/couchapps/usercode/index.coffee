@@ -116,6 +116,7 @@ do (jQuery) ->
             id:'sip_commands.freeswitch'
             title:'No FreeSwitch operation'
             value:''
+            checked:true
           radio
             id:'sip_commands.freeswitch'
             title:'Reload Sofia (to add a new profile -- will drop calls)'
@@ -142,6 +143,7 @@ do (jQuery) ->
             id:'sip_commands.opensips'
             title:'No OpenSIPS operation'
             value:''
+            checked:true
           radio
             id:'sip_commands.opensips'
             title:'Reload routes'
