@@ -14,7 +14,43 @@ do (jQuery) ->
 
   selector = '#host_record'
 
+  all_apps = [
+    # Applications for a manager
+    "applications/usercode"
+    "applications/provisioning"
+    "applications/roles"
+    "applications/host"
+    "applications/portal"
+    "applications/inbox"
+    "public"
+    "applications/web"
+    # Applications for a server running ccnq3-dns
+    "applications/dns"
+    # Applications for a server running ccnq3-voice
+    "applications/freeswitch"
+    "applications/opensips"
+    "applications/traces"
+  ]
+
   host_tpl = $.compile_template ->
+
+    _apps_description = {
+      # Applications for a manager
+      "applications/usercode"       : "(Manager) usercode"
+      "applications/provisioning"   : "(Manager) provisioning"
+      "applications/roles"          : "(Manager) roles"
+      "applications/host"           : "Host -- always turn it on"
+      "applications/portal"         : "(Manager) portal"
+      "applications/inbox"          : "(Manager) inbox"
+      "public"                      : "(Manager) public"
+      "applications/web"            : "(Manager) web"
+      # Applications for a server running ccnq3-dns
+      "applications/dns"            : "CCNQ3 DNS (requires ccnq3-dns package)"
+      # Applications for a server running ccnq3-voice
+      "applications/freeswitch"     : "FreeSwitch (requires ccnq3-voice package)"
+      "applications/opensips"       : "OpenSIPS (requires ccqn3-voice package)"
+      "applications/traces"         : "Traces (requires ccnq3-traces package)"
+    }
 
     form id:'host_record', method:'post', action:'#/host', class:'validate', ->
 
@@ -111,6 +147,12 @@ do (jQuery) ->
             title:'Reload routes'
             value:'reload routes'
 
+      for app in @_apps
+        checkbox
+          id:"selected_applications.#{app}"
+          title:all_apps_description[app]
+          value: @applications? and app in @applications
+
       input type:'submit'
 
     $('form.validate').validate()
@@ -191,6 +233,14 @@ do (jQuery) ->
           doc.applications ?= [
             "applications/host"
           ]
+          if doc.selected_applications?
+            previous_apps = doc.applications
+            doc.applications = []
+            # Add any name that was selected
+            doc.applications.push name for name, present of doc.selected_applications when present
+            # Keep any name we do not know about.
+            doc.applications.push name for name in previous_apps when name not in all_apps
+          delete doc.selected_applications
 
           doc.mailer ?= {}
           doc.mailer ?= sendmail: '/usr/sbin/sendmail'
@@ -251,23 +301,25 @@ do (jQuery) ->
 
       # Show template (to create new host)
       @get '#/host', ->
-        @swap host_tpl {}
+        @swap host_tpl {_apps:all_apps}
 
       @get '#/host/:id', ->
         # Bug in sammy.js? This route gets selected for #/host
         if not @params.id?
-          @swap host_tpl {}
+          @swap host_tpl {_apps:all_apps}
           return
 
         @send model.get, @params.id,
           success: (doc) =>
             console.log "Success"
+            doc._apps = all_apps
             @swap host_tpl doc
+            delete doc._apps
             $('#host_record').data 'doc', doc
           error: =>
             console.log "Error"
             doc = {}
-            @swap host_tpl doc
+            @swap host_tpl {_apps:all_apps}
             $('#host_record').data 'doc', doc
 
       # Save
