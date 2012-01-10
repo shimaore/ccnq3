@@ -38,10 +38,14 @@ The sip_profiles records contain:
 
     # Dialplan data
     handler: dialplan template name (e.g. "client-sbc", "carrier-sbc")
-    type: dialplan profile type (e.g. "usa", "usa-cnam", "fr" for processing="client-sbc")
     send_call_to: where to send the calls ("socket", "bridge") [default: "socket"]
     ingress_target: domain where to send ingress calls
     egress_target: domain where to send egress calls
+
+    # For handler="client-sbc"
+    type: string, dialplan profile type (e.g. "usa", "usa-cnam", "fr")
+    # For handler="carrier-sbc"
+    enum_root: string, the DNS root of the ENUM domain
 
 Each host document that contains a "sip_profiles" array is therefor tagged for FreeSwitch.
 

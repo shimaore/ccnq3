@@ -1,0 +1,13 @@
+<configuration name="enum.conf" description="ENUM Module">
+  <settings>
+    <param name="default-root" value=""/>
+    <!-- <param name="default-isn-root" value="freenum.org"/> -->
+    <param name="query-timeout" value="10"/>
+    <param name="auto-reload" value="true"/>
+  </settings>
+
+  <routes>
+    <route service="E2U+SIP" regex="sip:(.*)" replace="$1"/>
+    <route service="E2U+account" regex="^(.*)$" replace="$1"/>
+  </routes>
+</configuration>

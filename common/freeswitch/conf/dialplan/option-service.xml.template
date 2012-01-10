@@ -11,19 +11,22 @@
       </condition>
     </extension>
 
+    <extension name="get-account" continue="true">
+      <condition field="caller_id_number" expresion="">
+        <action application="set" data="ccnq_account=${regex(${sip_h_p-charge-info}|sip:([^@]+)@|%1)}"/>
+        <action application="set" data="ccnq_from_e164=${caller_id_number}"/>
+        <action application="set" data="ccnq_to_e164=${destination_number}"/>
+      </condition>
+    </extension>
+
     <extension name="cleanup-caller-id" continue="true">
       <condition field="caller_id_number" expression="^33([12345689].{8})$">
         <action application="set" data="effective_caller_id_number=0$1"/>
       </condition>
     </extension>
 
-    <extension name="get-account" continue="true">
-      <condition field="caller_id_number" expresion="">
-        <action application="set" data="ccnq_account=${regex(${sip_h_p-charge-info}|sip:([^@]+)@|%1)}"/>
-      </condition>
-    </extension>
-
     <extension name="egress-emergency">
+      <condition field="${ccnq_account}" expression="^.+$" />
       <condition field="destination_number" expression="^33#(112|15|17|18|119|115|116000|19)$">
         <action application="set" data="ccnq_called=$1"/>
         <action application="set" data="progress_timeout=12"/>
@@ -35,6 +38,7 @@
     </extension>
 
     <extension name="egress-special">
+      <condition field="${ccnq_account}" expression="^.+$" />
       <condition field="destination_number" expression="33#(1[0-9]{1,5}|3[0-9]{3})$">
         <action application="set" data="ccnq_called=$1"/>
         <action application="set" data="progress_timeout=12"/>
@@ -77,9 +81,16 @@
       </condition>
     </extension>
 
+    <extension name="set-defaults" continue="true">
+      <condition field="caller_id_number" expresion="">
+        <action application="set" data="ccnq_from_e164=${caller_id_number}"/>
+      </condition>
+    </extension>
+
     <extension name="cleanup-caller-id" continue="true">
       <condition field="caller_id_number" expression="^0([12345689].{8})$">
         <action application="set" data="effective_caller_id_number=33$1"/>
+        <action application="set" data="ccnq_from_e164=33$1"/>
       </condition>
     </extension>
 
@@ -88,11 +99,12 @@
         <action application="set" data="progress_timeout=12"/>
         <action application="set" data="call_timeout=300"/>
         <action application="export" data="t38_passthru=true"/>
-        <!-- FIXME Insert ENUM code here -->
-        <action application="transfer" data="33$1 XML ingress-$${profile_name}-send-call"/>
+        <action application="set" data="ccnq_to_e164=33$1"/>
+        <action application="enum" data="${ccnq_to_e164} $${enum_root}"/>
+        <action application="set" data="ccnq_account=${enum_route_2}"/>
+        <action application="transfer" data="${enum_route_1} XML ingress-$${profile_name}-send-call"/>
       </condition>
     </extension>
-
 
   </context>
 </include>
