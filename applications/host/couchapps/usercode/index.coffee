@@ -39,6 +39,12 @@ do (jQuery) ->
         value: @provisioning?.couchdb_uri
 
       textbox
+        id:'provisioning.local_couchdb_uri'
+        title: 'Local Provisioning database URI (CouchDB)'
+        class:'url'
+        value: @provisioning?.local_couchdb_uri
+
+      textbox
         id:'interfaces.primary.ipv4'
         title:'Primary IPv4'
         class:'ipv4'
@@ -168,10 +174,9 @@ do (jQuery) ->
 
           ###
             local_couchdb_uri is local for any non-manager host.
-            Since manager hosts are bootstrapped using a script, not this interface,
-            assume we are dealing with a non-manager host.
           ###
-          doc.provisioning.local_couchdb_uri = 'http://127.0.0.1:5984/provisioning'
+          if not doc.admin?.system
+            doc.provisioning.local_couchdb_uri = 'http://127.0.0.1:5984/provisioning'
 
           ###
             applications/host is always required.

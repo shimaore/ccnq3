@@ -11,9 +11,6 @@ cdb = require 'cdb'
 
 make_id = (t,n) -> [t,n].join ':'
 
-# Options should contain provisioning_uri
-#  provisioning_uri = config.provisioning.local_couchdb_uri
-
 exports.EnumZone = class EnumZone extends Zone
 
   constructor: (domain, @provisioning_uri, options) ->
