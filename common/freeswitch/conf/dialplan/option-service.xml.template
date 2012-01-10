@@ -96,7 +96,7 @@
         <action application="set" data="ccnq_to_e164=33$1"/>
         <action application="enum" data="${ccnq_to_e164} $${enum_root}"/>
         <action application="set" data="ccnq_account=${enum_route_2}"/>
-        <action application="transfer" data="${enum_route_1} XML ingress-$${profile_name}-send-call"/>
+        <action application="bridge" data="sofia/egress-$${profile_name}/${enum_route_1}"/>
       </condition>
     </extension>
 
