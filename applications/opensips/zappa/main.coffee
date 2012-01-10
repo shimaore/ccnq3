@@ -12,6 +12,11 @@ make_id = (t,n) -> [t,n].join ':'
 
 require('ccnq3_config').get (config)->
 
+  config.opensips_proxy ?= {}
+  config.opensips_proxy.port ?= 34340
+  config.opensips_proxy.hostname ?= "127.0.0.1"
+  config.opensips_proxy.usrloc_uri ?= "http://127.0.0.1:5984/location"
+
   zappa = require 'zappa'
   zappa config.opensips_proxy.port, config.opensips_proxy.hostname, {config}, ->
 
