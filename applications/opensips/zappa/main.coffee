@@ -198,6 +198,7 @@ require('ccnq3_config').get (config)->
       if @query.k is 'username,domain'
         [username,domain] = @query.v.split ','
         # However we do not currently support "number@domain", so skip that.
+        # (Compare to use_domain=0.)
         pipe_req @, 'dr_groups', make_id('number',username)
         return
 

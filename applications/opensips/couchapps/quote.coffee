@@ -127,7 +127,7 @@
       if n is 'dr_gateways'
         hash.type = hash.gwtype
       if n is 'dr_groups'
-        hash.groupid = hash.outbound_route
+        hash.groupid = hash.outbound_route # alternatively set the "drg_grpid_col" parameter to "outbound_route"
       return line( quoted_value(types[col], hash[col]) for col in c )
 
     exports.column_types = column_types
