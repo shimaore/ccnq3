@@ -13,7 +13,7 @@ dotize = (domain) ->
 undotize = (domain) ->
   if domain[-1..] != "." then domain else domain[..-2]
 
-get_serial: ->
+get_serial = ->
   now = new Date()
   date = now.toJSON().replace(/[^\d]/g,'').slice(0,8)
   seq = Math.floor(100*(now.getHours()*60+now.getMinutes())/1440)

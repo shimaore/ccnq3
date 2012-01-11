@@ -7,6 +7,8 @@ EnumZone = require('./enum').EnumZone
 
 configure = (db,uri,server) ->
 
+  console.log "Loading zones"
+
   zones = new Zones()
 
   # Enumerate the domains listed in the database with a "records" field.
