@@ -286,8 +286,8 @@ For non-trusted host that are allowed to submit P-Charge-Info, list of accounts 
     type:"endpoint"
     endpoint: string; either a static IP, or a user@domain registration username
     password: string; password used for authentication, or null if authentication not used
-    ha1: authentication string; md5_hex([endpoint,challenge,password].join(":"))
-    ha1b: authentication string; md5_hex([endpoint+'@'+challenge,challenge,password].join(":"))
+    ha1: authentication string; md5_hex([username,challenge,password].join(":"))
+    ha1b: authentication string; md5_hex([username+'@'+challenge,challenge,password].join(":"))
       Note: if the "challenge" configuration parameter is empty (the default), the domain name of the To: header (for REGISTER) or From: header (for other messages) is used as the challenge. In other words: normally the challenge should be the same as the domain name used for the endpoint.
 
     # Inbound call routing
