@@ -118,6 +118,11 @@ require('ccnq3_config').get (config)->
         pipe_loc_req @, 'usrloc', @query.v
         return
 
+      if @query.k is 'username,domain'
+        [username,domain] = @query.v.split ','
+        pipe_loc_req @, 'usrloc', "#{username}@#{domain}"
+        return
+
       if not @query.k?
         pipe_loc_list @, 'usrloc', 'location/all' # Can't use _all_docs
         return
