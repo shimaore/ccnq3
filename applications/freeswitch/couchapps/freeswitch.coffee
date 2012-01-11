@@ -38,6 +38,7 @@ ddoc.shows.freeswitch_local_profiles = p_fun (doc,req) ->
     egress_sip_ip   = profile.egress_sip_ip   ? profile.ingress_sip_ip
     egress_sip_port = profile.egress_sip_port ? profile.ingress_sip_port + 10000
     send """
+
       <X-PRE-PROCESS cmd="set" data="profile_name=#{profile_name}"/>
 
       <X-PRE-PROCESS cmd="set" data="ingress_sip_ip=#{profile.ingress_sip_ip}"/>
@@ -47,6 +48,7 @@ ddoc.shows.freeswitch_local_profiles = p_fun (doc,req) ->
       <X-PRE-PROCESS cmd="set" data="egress_sip_port=#{egress_sip_port}"/>
 
       <X-PRE-PROCESS cmd="include" data="sip_profiles/#{profile.template}.xml.template"/>
+
       """
   send "\n</include>"
   return {}
@@ -90,6 +92,7 @@ ddoc.shows.freeswitch_local_vars = p_fun (doc,req) ->
   send "<include>\n"
   send "<!-- #{doc._id} #{doc._rev} -->\n"
   send """
+
       <!-- Common variables -->
       <X-PRE-PROCESS cmd="set" data="sound_prefix=$${base_dir}/sounds/#{sip_voice}"/>
 
@@ -98,6 +101,7 @@ ddoc.shows.freeswitch_local_vars = p_fun (doc,req) ->
       <X-PRE-PROCESS cmd="set" data="domain_name=$${domain}"/>
 
       <X-PRE-PROCESS cmd="set" data="rtp_ip=#{rtp_ip}"/>
+
     """
   if doc.sip_variables?
     for name, value of doc.sip_variables
@@ -120,6 +124,7 @@ ddoc.shows.freeswitch_local_conf = p_fun (doc,req) ->
   for profile_name, profile of doc.sip_profiles
     send_call_to = profile.send_call_to ? 'socket'
     send """
+
       <X-PRE-PROCESS cmd="set" data="profile_name=#{profile_name}"/>
       <X-PRE-PROCESS cmd="set" data="profile_type=#{profile.type}"/>
       <X-PRE-PROCESS cmd="set" data="ingress_target=#{profile.ingress_target}"/>
@@ -128,6 +133,7 @@ ddoc.shows.freeswitch_local_conf = p_fun (doc,req) ->
 
       <X-PRE-PROCESS cmd="include" data="dialplan/#{profile.handler}.xml.template"/>
       <X-PRE-PROCESS cmd="include" data="dialplan/send-call-to-#{send_call_to}.xml.template"/>
+
       """
 
   send "\n</section>"
