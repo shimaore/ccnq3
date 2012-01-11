@@ -53,7 +53,8 @@ ddoc.lists.format = p_fun (head,req) ->
   columns = c.split ','
   send quote.first_line(types,columns)
   while row = getRow()
-    send quote.value_line types, t, row.value, columns
+    do (row) ->
+      send quote.value_line types, t, row.value, columns
   return # KeepMe!
 
 ddoc.views.gateways_by_host =
