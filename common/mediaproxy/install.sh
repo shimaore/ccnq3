@@ -9,9 +9,10 @@ shift
 if [ "x$ACTION" == "x" ]; then
   cat - <<'EOT'
 
-$0 (dispatcher|relay|both) [dispatcher1 [dispatcher2 [...]]])
+$0 (dispatcher|relay|both)
 
 Creates configuration files for MediaProxy.
+(You probably want to use the "both" option only.)
 
 This script will also adjust your /etc/sysctl.conf file to allow
 forwarding of IPv4 and IPv6.
@@ -63,9 +64,7 @@ function do_sysctl {
 
 if [ "x$ACTION" == "xdispatcher" ]; then
 
-  mkdir -p /etc/mediaproxy/tls
   cp ./dispatcher.ini   /etc/mediaproxy/config.ini
-  cp ./tls/* /etc/mediaproxy/tls
 
   /etc/init.d/mediaproxy-dispatcher restart
 
@@ -73,10 +72,7 @@ fi
 
 if [ "x$ACTION" == "xrelay" ]; then
 
-  mkdir -p /etc/mediaproxy/tls
-  sed -e "s/\${dispatcher_names}/$*/" ./relay.ini | \
-    tee /etc/mediaproxy/config.ini >/dev/null
-  cp ./tls/* /etc/mediaproxy/tls
+  cp ./relay.ini        /etc/mediaproxy/config.ini
 
   do_sysctl
   /etc/init.d/mediaproxy-relay restart
@@ -85,11 +81,7 @@ fi
 
 if [ "x$ACTION" == "xboth" ]; then
 
-  mkdir -p /etc/mediaproxy/tls
-  cat ./*.ini | \
-    sed -e "s/\${dispatcher_names}/$*/" | \
-    tee /etc/mediaproxy/config.ini >/dev/null
-  cp ./tls/* /etc/mediaproxy/tls
+  cat ./*.ini > /etc/mediaproxy/config.ini
 
   do_sysctl
   /etc/init.d/mediaproxy-dispatcher restart
