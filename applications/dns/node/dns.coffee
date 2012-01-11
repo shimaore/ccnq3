@@ -13,6 +13,13 @@ dotize = (domain) ->
 undotize = (domain) ->
   if domain[-1..] != "." then domain else domain[..-2]
 
+get_serial: ->
+  now = new Date()
+  date = now.toJSON().replace(/[^\d]/g,'').slice(0,8)
+  seq = Math.floor(100*(now.getHours()*60+now.getMinutes())/1440)
+  seq = if seq < 10 then '0'+seq else ''+seq
+  serial = date + seq
+
 exports.Zone = class Zone
 
   constructor: (domain, options) ->
@@ -31,9 +38,9 @@ exports.Zone = class Zone
     @records.push @create_record record
 
   defaults: ->
-    ttl: 1200
-    serial: 2011072101   # serial (YYYYMMDDrr)
-    refresh: 1800        # refresh (30 minutes)
+    ttl: 420
+    serial: get_serial() # serial (YYYYMMDDrr)
+    refresh: 840         # refresh (30 minutes)
     retry: 900           # retry (15 minutes)
     expire: 1209600      # expire (2 weeks)
     min_ttl: 1200        # minimum TTL (20 minutes)
@@ -113,7 +120,7 @@ class Response
         name = record.value
         # Only do the resolution for explicit names (e.g. CNAME, NS)
         return unless typeof name is 'string'
-        zone = @server.find_zone name
+        zone = @server.zones?.find_zone name
         # Nothing to add if we don't know about that zone.
         return unless zone?
 
@@ -163,16 +170,10 @@ class Response
       res.addRR record.name, record.ttl, "IN", record.class, value...
     @
 
-class DNS
+exports.Zones = class Zones
 
-  constructor: (zones) ->
-    @server = ndns.createServer('udp4')
-    @server.on 'request', @resolve
-    @port or= 53
-    @reload zones or {}
-
-  reload: (zones) ->
-    @zones = zones
+  constructor: ->
+    @zones = {}
 
   # Explicit: add_zone returns the zone
   add_zone: (zone) ->
@@ -192,6 +193,18 @@ class DNS
     domain = dotize domain
     @zones[domain]
 
+
+class DNS
+
+  constructor: (zones) ->
+    @server = ndns.createServer('udp4')
+    @server.on 'request', @resolve
+    @port or= 53
+    @reload zones
+
+  reload: (zones) ->
+    @zones = zones
+
   listen: (port) ->
     @server.bind port or @port
 
@@ -203,7 +216,7 @@ class DNS
     if req.q.length > 0
       name = req.q[0].name
       type = req.q[0].typeName
-      if zone = @find_zone name
+      if zone = @zones?.find_zone name
         response = new Response(name, type, zone, @)
         response.resolve (r) ->
           r.commit(req, res)

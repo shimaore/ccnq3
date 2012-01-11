@@ -14,6 +14,11 @@ module.exports = ddoc
 
 p_fun = (f) -> '('+f+')'
 
+# Remember to update this filter if new doc.type's are handled by
+# the views.
+ddoc.filters.changes = p_fun (doc,req) ->
+    return doc.type? and (doc.type is 'domain' or doc.type is 'host')
+
 ddoc.views.domains =
   map: p_fun (doc) ->
 
