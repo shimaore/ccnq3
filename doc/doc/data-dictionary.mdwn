@@ -106,13 +106,14 @@ To add a FreeSwitch host:
 
           # Dialplan data
           handler: dialplan template name (e.g. "client-sbc")
-          send_call_to: where to send the calls ("socket", "bridge") [default: "socket"]
-          ingress_target: domain where to send ingress calls
           egress_target: domain where to send egress calls
 
           # For handler="client-sbc"
           type: dialplan profile type (e.g. "usa", "france")
-          # For handler on of the carrier-sbc's
+          send_call_to: where to send the calls ("socket", "bridge") [default: "socket"]
+          ingress_target: domain where to send ingress calls
+
+          # For handler on one of the carrier-sbc's
           enum_root: Carrier ENUM root for inbound routing
 
       Notes: changes (except for *_sip_ip and *_sip_port) are automatically applied.

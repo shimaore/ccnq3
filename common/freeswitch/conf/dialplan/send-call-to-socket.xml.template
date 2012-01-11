@@ -3,7 +3,6 @@
 
   <context name="egress-$${profile_name}-send-call">
     <extension name="send-call">
-      <condition field="${ccnq_account}" expression="^.+$"/> <!-- Must be present -->
       <condition field="destination_number" expression="^(.*)$">
         <action application="set" data="target=sofia/ingress-$${profile_name}/$1@$${egress_target}"/>
         <action application="socket" data="127.0.0.1:7000 async full"/>
@@ -13,7 +12,6 @@
 
   <context name="ingress-$${profile_name}-send-call">
     <extension name="send-call">
-      <condition field="${ccnq_account}" expression="^.+$"/> <!-- Must be present -->
       <condition field="destination_number" expression="^(.*)$">
         <action application="set" data="target=sofia/egress-$${profile_name}/$1@$${ingress_target}"/>
         <action application="socket" data="127.0.0.1:7000 async full"/>

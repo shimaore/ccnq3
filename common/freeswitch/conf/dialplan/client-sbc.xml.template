@@ -54,7 +54,6 @@
       <condition field="destination_number" expression="^call">
         <anti-action application="set" data="ccnq_from_e164=${caller_id_number}"/>
         <anti-action application="set" data="ccnq_to_e164=${destination_number}"/>
-        <anti-action application="set" data="ccnq_account=${regex(${sip_h_p-charge-info}|sip:([^@]+)@|%1)}"/>
       </condition>
     </extension>
 
