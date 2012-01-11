@@ -114,7 +114,7 @@ do (jQuery) ->
         if 'applications/freeswitch' in @applications
           radio
             id:'sip_commands.freeswitch'
-            title:'No FreeSwitch operation'
+            title:'No FreeSwitch changes'
             value:''
             checked:true
           radio
@@ -141,7 +141,7 @@ do (jQuery) ->
         if 'applications/opensips' in @applications
           radio
             id:'sip_commands.opensips'
-            title:'No OpenSIPS operation'
+            title:'No OpenSIPS changes'
             value:''
             checked:true
           radio
