@@ -163,6 +163,7 @@ To add an OpenSIPS host:
 
     opensips:
       model: "complete", or any other model defined in common/opensips [required]
+      number_domain: string; a domain used to identify local numbers [default: "local"]
       listen: [] of strings "host:port" to which OpenSIPS will bind()  [default is the empty array, in which case OpenSIPS binds to all interfaces on port 5060]
       local_ipv4: for models using it ("conference"), IP where to send all INVITE messages
       local_ipv6: reserved
@@ -325,25 +326,29 @@ For non-trusted host that are allowed to submit P-Charge-Info, list of accounts 
 ## number (provisioning records)
 
     _id: type+":"+number
-    account: string
+    account: string [required]
 
     type:"number"
-    number: string; the number as routed inside the system; note that this must be consistent end-to-end; normally the inbound- and outbound-proxies rely on "E.164-without-plus"; while the client-side servers might rely on locally-formatted numbers.
+    number: string
+      For global numbers (between a carrier-sbc and a client-sbc), formatted as "E.164-without-plus".
+      For client-side local-numbers, a locally-formatted number @ the server's "number_domain".
 
-    # Outbound call routing
-    outbound_route: integer; the outbound_route used if the endpoint has no outbound_route assigned
+    # Global-number properties:
+    inbound_uri: string (URI)  a URI used by an outbound-proxy to bypass LCR and route a number directly, or an inbound Carrier SBC to route the number.
+      Note: these are used to build Carrier ENUM records.
+    outbound_route: integer; allows to select a specific rule based on the rule's groupid
+
+    # Local-number properties:
+    endpoint [required]
     location:  string; the location identifier for this specific number (used for emergency location services)
+    cfa
+    cfb
+    cfda
+    cfnr
+    dialog_timer
+    dst_domain
+    inv_timer
 
-    # Inbound call routing
-    dst_number/cfa
-    dst_number/cfb
-    dst_number/cfda
-    dst_number/cfnr
-    dst_number/dialog_timer
-    dst_number/dst_domain
-    dst_number/inv_timer
-
-    loopback_uri: string (URI)  a URI used by an outbound-proxy to bypass LCR and route a number directly
 
 
 ## rule (aka outbound_route) (provisioning records)
@@ -355,7 +360,7 @@ For non-trusted host that are allowed to submit P-Charge-Info, list of accounts 
     rule: host+":"+ruleid
     host: the host on which OpenSIPS is running and using this rule/outbound_route
     ruleid: integer; a unique ID for this rule
-    groupid: integer; the "outbound_route" identifier found in "endpoint" and "number" records
+    groupid: integer; a matching outbound_route for the number (if the endpoint does not provide an outbound_route)
     prefix: string; the routing (number) prefix (might be ""), longest-prefix match
     timerec: string; a time specification
     priority: integer; ruleset ordering criteria (within the groupid and prefix, for matching timerecs, the rule with the highest priority is chosen)

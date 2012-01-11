@@ -39,5 +39,7 @@
   "cache_cleanup": 30,
   "cache_timeout": 45,
 
+  "number_domain": "local",
+
   "ok":true
 }
