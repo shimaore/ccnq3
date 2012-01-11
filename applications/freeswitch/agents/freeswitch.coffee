@@ -95,6 +95,7 @@ require('ccnq3_config').get (config) ->
     for show, file of files
       do (show,file)->
         save_uri_as "#{config.provisioning.local_couchdb_uri}/_design/freeswitch/_show/#{show}/#{host_uri}", file
+    # FIXME: the changes will be applied (below) before the configurations are retrieved!
 
     # 1b. Apply configuration changes
     fs_command 'reloadxml', ->
