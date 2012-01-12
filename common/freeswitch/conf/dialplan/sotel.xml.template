@@ -30,6 +30,12 @@
       </condition>
     </extension>
 
+    <extension name="cleanup-caller-id-2" continue="true">
+      <condition field="${ccnq_from_e164}" expression="^([2-9].{9})">
+        <action application="set" data="effective_caller_id_number=1$1"/>
+      </condition>
+    </extension>
+
     <extension name="egress-emergency">
       <condition field="${ccnq_account}" expression="^.+$" />
       <condition field="${ccnq_to_e164}" expression="^1?(911)$">
