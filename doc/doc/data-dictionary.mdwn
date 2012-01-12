@@ -87,6 +87,7 @@ To add a FreeSwitch host:
         configurations. This is used by applications/dns to create
         SRV records for these services. This is also used by applications/opensips
         to create gateway entries for the egress_gwid in those domains/clusters.
+        Finally, this is the domain name accepted by OpenSIPS servers in that cluster.
     rtp_ip: local IP to bind to for RTP [default: "auto"]
     sip_profiles: {} of profiles descriptions:
 
@@ -235,17 +236,21 @@ FIXME test this feature
 
 ## domain (provisioning records)
 
+These records are normally used to populate the DNS server ("applications/dns").
+
+Alternatively, if "support_alternate_domains" is enabled in the OpenSIPS configuration,
+an OpenSIPS server will accept any domain listed here.
+(By default only sip_domain_name is accepted.)
+
     _id: type+":"+domain
     account: ""    (the empty string)
 
     type:"domain"
-    domain: string; name of a SIP domain accepted by the system
-
-    FIXME: these probably need to be indexed by host
+    domain: string; the name of the DNS domain
 
 ### ccnq3-dns service
 
-  If "applications/dns" is configured on the host, "domain" provisioning records may also be used to populate DNS records.
+  If "applications/dns" is configured on the host, "domain" provisioning records may be used to populate DNS records.
   In this case the "account" field is optional (which can only be done on the main provisioning database).
   The following fields are available:
 
