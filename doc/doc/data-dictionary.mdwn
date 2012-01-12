@@ -367,20 +367,38 @@ For non-trusted host that are allowed to submit P-Charge-Info, list of accounts 
     type:"rule"
     rule: host+":"+ruleid
     host: the host on which OpenSIPS is running and using this rule/outbound_route
-    ruleid: integer; a unique ID for this rule
-    groupid: integer; a matching outbound_route for the number (if the endpoint does not provide an outbound_route)
-    prefix: string; the routing (number) prefix (might be ""), longest-prefix match
+    ruleid: integer; a unique ID for this rule (a sequential or random number)
+      Note: the ruleid is used rather than a longer, composed key, which should have groupid, prefix, timerec, and priority.
+
+The following four fields are used to select a rule.
+The set of applicable rules is narrowed down as each field is applied in order.
+
+    groupid: integer; this is the "outbound_route" of the endpoint (or of the the number, if the endpoint does not provide an "outbound_route")
+      Note: although it seems OpenSIPS might support having one or more groupid for a given rule we currently do not support this option.
+    prefix: string; the routing (destination number) prefix (might be ""), longest-prefix match
     timerec: string; a time specification
     priority: integer; ruleset ordering criteria (within the groupid and prefix, for matching timerecs, the rule with the highest priority is chosen)
+
+At the end of the selection process, only one rule is selected.
+
+The following fields are the output of the selection process, and
+are used to route the call, once a rule has been selected.
+
+The gateway list indicates which gateways (either "gateway" records or "egress_gwid" sip_profiles)
+are used to route the call.
+
     gwlist: string; a comma- and semicolon-separated list of gateways
 
-    # The following fields are required even though they are not currently used.
+The following two (output) fields are required even though they are not currently used.
+
     routeid: 0   (the integer 0)
     attrs: ""   (the empty string)
 
     Note: For the complete specification, see http://www.opensips.org/html/docs/modules/1.7.x/drouting.html#id293582
+
     Note: We use sort_order = 1, meaning that inside gwlist each semicolon delimits a group of gateways; each group contains a comma-delimited list of gateways. For each call, two gateways are selected at random in each group (groups are kept in the order they appear), and the call is then sequantially forked to each gateway.
-    Note: Changes are not applied automatically. Use sip_commands.opensips = "reload routes" to apply the changes.
+
+Note: Changes to rules and gateways are not applied automatically. Use sip_commands.opensips = "reload routes" (or the equivalent portal action) to apply the changes.
 
 
 ## gateway (provisioning records)
