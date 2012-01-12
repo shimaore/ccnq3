@@ -28,6 +28,11 @@
   "flag_trunk_routing":              22,
   "flag_has_forwarding":             23,
 
+  "sbc_own_originator":               1,
+  "sbc_own_outbound":                 2,
+  "sbc_csr_outbound":                10,
+  "sbc_own_upstream":                20,
+
   "comment dflag": "Dialog flags",
   "dflag_mediaproxy":                 8,
 
