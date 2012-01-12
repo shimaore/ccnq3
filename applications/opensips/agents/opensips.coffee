@@ -68,6 +68,7 @@ require('ccnq3_config').get (config) ->
     params[k] = p.opensips[k] for own k of p.opensips
 
     params.opensips_base_lib = base_path
+    params.sip_domain_name = config.sip_domain_name
 
     require("#{base_path}/compiler.coffee") params
 
