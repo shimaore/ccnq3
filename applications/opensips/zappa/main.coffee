@@ -177,7 +177,7 @@ require('ccnq3_config').get (config)->
 
     @get '/dr_gateways/': ->
       if not @query.k?
-        pipe_list_key @, 'dr_gateways', 'gateways_by_host', config.host
+        pipe_list_key @, 'dr_gateways', 'gateways_by_domain', config.sip_domain_name
         return
       ###
       my %attrs = ();

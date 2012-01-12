@@ -57,11 +57,11 @@ ddoc.lists.format = p_fun (head,req) ->
       send quote.value_line types, t, row.value, columns
   return # KeepMe!
 
-ddoc.views.gateways_by_host =
+ddoc.views.gateways_by_domain =
   map: p_fun (doc) ->
 
     if doc.type? and doc.type is 'gateway'
-      emit doc.host, doc
+      emit doc.sip_domain_name, doc
 
     if doc.type? and doc.type is 'host' and doc.sip_profiles?
       for name, rec of doc.sip_profiles
@@ -70,9 +70,8 @@ ddoc.views.gateways_by_host =
           if rec.egress_gwid?
             ip = rec.egress_sip_ip ? rec.ingress_sip_ip
             port = rec.egress_sip_port ? rec.ingress_sip_port+10000
-            emit doc.host,
+            emit doc.sip_domain_name,
               account: ""
-              host: doc.host
               gwid: rec.egress_gwid
               address: ip+':'+port
               gwtype: 0

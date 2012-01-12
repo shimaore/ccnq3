@@ -85,7 +85,8 @@ To add a FreeSwitch host:
     sip_domain_name:  string (required); FQDN accepted by the server
       Note: this should be the "cluster name" for servers running similar
         configurations. This is used by applications/dns to create
-        SRV records for these services.
+        SRV records for these services. This is also used by applications/opensips
+        to create gateway entries for the egress_gwid in those domains/clusters.
     rtp_ip: local IP to bind to for RTP [default: "auto"]
     sip_profiles: {} of profiles descriptions:
 
@@ -407,9 +408,10 @@ Note: Changes to rules and gateways are not applied automatically. Use sip_comma
     account: ""    (the empty string)
 
     type:"gateway"
-    gateway: host+":"+gwid
-    host: the host on which OpenSIPS is running and using this gateway
-    gwid: integer; a unique identifier for the gateway on this host; used in the "gwlist" field of the "rule" record
+    gateway: sip_domain_name+":"+gwid
+    sip_domain_name: the sip_domain_name of the hosts on which OpenSIPS is running and using this gateway
+    gwid: integer; a unique identifier for the gateway inside this sip_domain_name; used in the "gwlist" field of the "rule" record
+
     address: the address of the gateway (IP, IP:port, etc.)
 
     # The following fields are required even though they are not currently used.
@@ -428,6 +430,8 @@ Note: Changes to rules and gateways are not applied automatically. Use sip_comma
       1: probing only when disabled (however our scripts do not use dr_disable())
       2: probing at all times
     Note: Changes are not applied automatically. Use sip_commands.opensips = "reload routes" to apply the changes.
+
+Note: You do not need to create gateway records for sip_profiles which have an "egress_gwid" field, these are created automatically using the host's sip_domain_name and the egress_gwid. (They will not show up in the database but will be accessible to all the OpenSIPS hosts within that sip_domain_name.)
 
 ## location (provisioning records)
 
