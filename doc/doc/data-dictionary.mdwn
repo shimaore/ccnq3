@@ -100,9 +100,11 @@ To add a FreeSwitch host:
           egress_sip_ip: which IP (v4,v6) to bind for egress processing [default: ingress_sip_ip]
           egress_sip_port: which port to bind for egress processing [default: 10000+ingress_sip_port; in the range 15060 to 15299]
           egress_acl: [] of CIDR records "ip/masklen" source IPs allowed for the egress processing
+          egress_gwid: integer, optional; a (unique) gateway id to be used in routing rules
 
             Note: port numbers must be in the range 5060 to 5299 or 15060 to 15299 to be compatible with the "traces" application.
             Note: look in doc/doc/port-numbers.mdwn for port numbers conventions.
+            Note: egress_gwid must be unique amongst all gateway IDs, including the ones in "gateway"-type records.
 
           # Dialplan data
           handler: dialplan template name (e.g. "client-sbc")

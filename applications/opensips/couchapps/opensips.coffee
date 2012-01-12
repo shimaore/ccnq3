@@ -59,8 +59,26 @@ ddoc.lists.format = p_fun (head,req) ->
 
 ddoc.views.gateways_by_host =
   map: p_fun (doc) ->
+
     if doc.type? and doc.type is 'gateway'
       emit doc.host, doc
+
+    if doc.type? and doc.type is 'host' and doc.sip_profiles?
+      for name, rec of doc.sip_profiles
+        do (rec) ->
+          # for now we only generate for egress gateways
+          if rec.egress_gwid?
+            ip = rec.egress_sip_ip ? rec.ingress_sip_ip
+            port = rec.egress_sip_port ? rec.ingress_sip_port+10000
+            emit doc.host,
+              account: ""
+              host: doc.host
+              gwid: rec.egress_gwid
+              address: ip+':'+port
+              gwtype: 0
+              probe_mode: 0
+              strip: 0
+
     return
 
 ddoc.views.rules_by_host =
