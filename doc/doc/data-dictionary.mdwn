@@ -432,6 +432,7 @@ Note: Changes to rules and gateways are not applied automatically. Use sip_comma
     Note: Changes are not applied automatically. Use sip_commands.opensips = "reload routes" to apply the changes.
 
 Note: You do not need to create gateway records for sip_profiles which have an "egress_gwid" field, these are created automatically using the host's sip_domain_name and the egress_gwid. (They will not show up in the database but will be accessible to all the OpenSIPS hosts within that sip_domain_name.)
+This feature means that you normally should not have to manually create "gateway"-type records, since all the interesting records should be created automatically.
 
 ## location (provisioning records)
 
