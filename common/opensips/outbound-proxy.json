@@ -10,6 +10,7 @@
     "toolbox",
     "forwarder",
     "authenticate",
+    "nonat",
     "lookup-src",
     "invite-outbound-proxy",
     "invite",
