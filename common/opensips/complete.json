@@ -13,7 +13,7 @@
     "authenticate",
     "nat",
     "mediaproxy",
-    "loopkup-src",
+    "lookup-src",
     "invite-router",
     "invite",
     "invite-trunk-drouting",
