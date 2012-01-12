@@ -168,6 +168,7 @@ To add an OpenSIPS host:
     opensips:
       model: "complete", or any other model defined in common/opensips [required]
       number_domain: string; a domain used to identify local numbers [default: "local"]
+        Note: you might think of it as a dialplan name, as well.
       listen: [] of strings "host:port" to which OpenSIPS will bind()  [default is the empty array, in which case OpenSIPS binds to all interfaces on port 5060]
       local_ipv4: for models using it ("conference"), IP where to send all INVITE messages
       local_ipv6: reserved
