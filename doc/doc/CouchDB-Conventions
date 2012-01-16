@@ -12,7 +12,7 @@ View as a single system (using potential scaling arch., replication).
 
 Common definitions:
 - Source databases are global databases containing the entire system information.
-  Examples: "provisioning", "billing", "_users", "usercode", and other applications.
+  Examples: "provisioning", "billing", "_users", "usercode"
 
   They are only accessible by system accounts.
 
@@ -22,7 +22,7 @@ Common definitions:
   The main provisioning database is never accessed directly, it is always replicated
   (to/from user databases, or to servers copies).
 
-  The main billing database is accessed by system scripts that insert CDRs, provide
+  The main billing database is accessed by system scripts that rate CDRs, provide
   summarization/invoicing, etc.
 
   The security records are built so that only specific reader and writer accounts might
@@ -53,6 +53,7 @@ Common definitions:
   The list of available applications is established by listing the design documents and
   querying a record or attachment in each of them which describes the application
   (à la package.json / commonjs).
+  (FIXME Currently we use jquery.couch's method, which relies on the presence of an "index.html" attachment to identify applications.)
 
   Applications are replicated from the source database "usercode" which contains all the
   available applications.
@@ -71,9 +72,6 @@ Common definitions:
   operation:database:account_prefix; for example:
 
     [ 'access:provisioning:ProviderA/ResellerB/', 'update:provisioning:ProviderA/ResellerB/CustomerC' ]
-
-- Some databases ("commands", "logger") are used by the hosts in the system to run realtime
-  information-retrieval ("GET"-type) activities.
 
 - Replication of data from the source databases into the user databases:
 

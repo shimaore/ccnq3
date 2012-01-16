@@ -4,11 +4,7 @@ In ccnq3 the system architecture is different:
 
 - The inbound-proxy is gone.
 
-- An ingress carrier SBC will locate the number and retrieve the account number (for CDR), the routing information, ...
-  (In other words it accesses the provisioning record for the number.)
-      (Hmmm... does FS actually do SRV failover?)
-  If needed it will perform CNAM query (and update both From and PID information).
-  Data query, call routing.. are done inside a Node.js ESL server.
+- An ingress carrier SBC will locate the number and retrieve the account number (for CDR).
   It might route the call directly to a customer domain, or to this operator's call-handling machines.
 
 - An egress carrier SBC will use the account number (reject the call otherwise) and create the CDR.
@@ -24,6 +20,7 @@ In ccnq3 the system architecture is different:
 
 
 - The customer-side system is independent and can provide SIP virtual hosting (i.e. accepts other domains than the operator's internal customer domain).
+  If needed it will perform CNAM query (and update both From and PID information).
   No CDRs are collected there.
   Therefor it accepts ingress calls from an ingress SBC just like it would accept ingress calls from any Internet host.
   Conversely, it "authenticates" with an egress SBC (via IP address) and forwards appropriate call settlement information.

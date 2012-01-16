@@ -3,9 +3,9 @@
   - Note: needs either CouchDB to support automatic replication startup, or do our own
   - RabbitMQ could also be a solution
   + also need to differentiate between:
-      * OS-level issues (apt-get) -- should be seldom necessary
-      * component configuration (generate FS config, configure routes) -- should always be feasible from API/GUI
-      * day-to-day config changes (high-volume, realtime)
+  [DONE]    * OS-level issues (apt-get) -- should be seldom necessary
+  [DONE]    * component configuration (generate FS config, configure routes) -- should always be feasible from API/GUI
+  [DONE]    * day-to-day config changes (high-volume, realtime)
   + compare with what http://www.2600hz.org/ is doing
 - [DONE] Replace API server with direct access to a CouchDB instance
   -> This means the manager will drop.
@@ -38,8 +38,8 @@
   - [DONE] Use memcache? http://www.opensips.org/Resources/DocsTutMemcache
   - [DONE] Use 302 (instead of new INVITE) for CFA, CFB, etc ?
 
-* FreeSwitch latest
-  + CouchDB 1.0.1+ with sharding and replication for multi-master
+* [DONE] FreeSwitch latest
+  [BIGCOUCH] + CouchDB 1.0.1+ with sharding and replication for multi-master
     + automate the allocation of shards
     + need sharding client
 
@@ -50,7 +50,7 @@
 * Node.js for async event handling
 
 * [DONE] System configuration (currently in DNS) must be explicited
-  - can change it from within (with proper reconfig & restarts)
+  [DONE] - can change it from within (with proper reconfig & restarts)
     + investigate proper multi-machine management systems
 
 * System monitoring
@@ -83,7 +83,7 @@
 
 * new features:
   *  use limit to restrict number of concurrent calls on a DID
-  *  add code to enable "soft shutdown" (refuse new calls when a flag is set in the db) + add API
+  [DONE] *  add code to enable "soft shutdown" (refuse new calls when a flag is set in the db) + add API
   *  RPID testing
 
 * test environment

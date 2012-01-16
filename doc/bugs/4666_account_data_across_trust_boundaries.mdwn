@@ -1,5 +1,7 @@
 = Account transport accross trust boundaries =
 
+[[bugs/done]]
+
 Implement transport of account identification across trust boundaries.
 
 The feature is being implemented as part of CCNQ3's outbound-proxy. This needs to be expedited so that Jim Gorman can work with faxback to deploy their multi-tenant solution while still using Sotel as the billing provider.

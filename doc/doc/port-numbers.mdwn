@@ -9,8 +9,8 @@ RTP ports:
   SBC+media:     43000:43998 (500 sessions, up to 250 calls)
 
 SIP ports (Sofia profiles):
-  The ports indicated are the external ports for SBC profiles.
-  The internal profiles use port N+10000.
+  The ports indicated are the external ports for SBC "ingress" profiles.
+  The internal "egress" profiles use port N+10000.
 
   Normally use ports 5060, 5062, etc. for the carrier-SBCs.
 
