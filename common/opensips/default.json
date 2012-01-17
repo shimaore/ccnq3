@@ -39,6 +39,7 @@
   "auth_table": "subscriber",
   "usrloc_table": "location",
 
+  "fifo_path": "/tmp/opensips_fifo",
   "mi_port": 30000,
 
   "cache_cleanup": 30,
