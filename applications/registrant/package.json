@@ -1,0 +1,25 @@
+{
+  "name": "ccnq3_registrant",
+  "version": "0.0.1",
+  "description": "Registrant for CCNQ3",
+  "keywords": "",
+  "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
+  "config": {
+    "config_file": "/etc/ccnq3/host.json"
+  },
+  "scripts": {
+    "start": "daemon -n ccnq3_registrant -o daemon.debug -D \"`pwd`/agents\" -r -- ./registrant.coffee"
+  , "stop":  "daemon -n ccnq3_registrant -o daemon.debug --stop"
+  , "couchapps": "cd couchapps && ./install.coffee"
+  },
+  "dependencies": {
+    "cdb": ">=0.0.12"
+  , "cdb_changes": "*"
+  , "ccnq3_config": ">=0.1"
+  , "couchapp": "*"
+  , "request": "*"
+  },
+  "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },
+
+  "ok": true
+}
