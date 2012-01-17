@@ -187,6 +187,9 @@ ddoc.views.names =
 
         if doc.opensips?
           emit domain,
+            class:'A'
+            value: ip_to_name[doc.opensips.proxy_ip] ? doc.host
+          emit domain,
             prefix:'_sip._udp'
             class:'SRV'
             value:[
