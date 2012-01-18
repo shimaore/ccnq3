@@ -49,7 +49,7 @@
   "runtime_opensips_cfg": "/tmp/registrant.cfg",
   "uac_hash_size": 3,
   "uac_timer_interval": 10,
-  "proxy_port": 5070
+  "proxy_port": 5070,
   "fifo_path": "/tmp/registrant_fifo",
   "mi_port": 30010,
 
