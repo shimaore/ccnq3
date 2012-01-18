@@ -15,6 +15,8 @@ require('ccnq3_config').get (config) ->
     if p._rev is last_rev then return util.log "Duplicate revision"
     last_rev = p._rev
 
+    if not p.registrant? then return
+
     base_path = "./opensips"
     model = 'registrant'
 
