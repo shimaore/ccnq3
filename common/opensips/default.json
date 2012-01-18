@@ -31,7 +31,8 @@
   "sbc_own_originator":               1,
   "sbc_own_outbound":                 2,
   "sbc_csr_outbound":                10,
-  "sbc_own_upstream":                20,
+
+  "sbc_own_upstream":                 1,
 
   "comment dflag": "Dialog flags",
   "dflag_mediaproxy":                 8,

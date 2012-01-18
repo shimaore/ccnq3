@@ -323,13 +323,14 @@ For non-trusted host that are allowed to submit P-Charge-Info, list of accounts 
     src_endpoint/dialog_timer
     src_endpoint/disabled
     src_endpoint/sbc
-     # Our own outbound SBCs
-      1 SBC provides originator endpoint information as Sock-Info or source RURI param [outbound]
-      2 SBC provides account info in P-Charge-Info (no checks) [outbound] (for example, a client-sbc)
-     # Customer (outbound) SBCs
-     10 SBC provides account info in P-Charge-Info, account is checked against account_forwarder [outbound]
-     # Inbound SBCs
-     20 upstream SBC [inbound]
+      # Our own outbound SBCs
+       1 SBC provides originator endpoint information as Sock-Info or source RURI param [outbound]
+       2 SBC provides account info in P-Charge-Info (no checks) [outbound] (for example, a client-sbc)
+      # Customer (outbound) SBCs
+      10 SBC provides account info in P-Charge-Info, account is checked against account_forwarder [outbound]
+    src_endpoint/inbound_sbc
+      # Inbound SBCs
+       1 upstream SBC [inbound]
 
     src_endpoint/location
     src_endpoint/outbound_route
