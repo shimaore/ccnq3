@@ -39,7 +39,7 @@ require('ccnq3_config').get (config) ->
 
     provisioning.req uri:'/_design/registrant/_view/registrant', (r) ->
       params.uac_entries = ("""
-        modparam("uac_registrant","uac","sip:#{p.registrant.local_ipv4},,sip:00#{row.key}@#{p.registrant.local_ipv4},,00#{row.key},#{row.value},sip:00#{row.key}@#{p.interfaces.primary.ipv4 ? p.host}:5070,,,")\n
+        modparam("uac_registrant","uac","sip:#{p.registrant.remote_ipv4},,sip:00#{row.key}@#{p.registrant.remote_ipv4},,00#{row.key},#{row.value},sip:00#{row.key}@#{p.interfaces.primary.ipv4 ? p.host}:5070,,,")\n
       """ for row in r.rows).join ''
 
       require("#{base_path}/compiler.coffee") params
