@@ -2,13 +2,18 @@
 
 fs = require 'fs'
 util = require 'util'
+cdb = require 'cdb'
 cdb_changes = require 'cdb_changes'
 
 last_rev = ''
 
 require('ccnq3_config').get (config) ->
+
+  provisioning = cdb.new config.provisioning.host_couchdb_uri
+
   options =
     uri: config.provisioning.host_couchdb_uri
+    # FIXME: filter, only host records for local host
 
   cdb_changes.monitor options, (p) ->
     if p.error? then return util.log(p.error)
@@ -32,4 +37,9 @@ require('ccnq3_config').get (config) ->
     params.local_ipv4 = p.registrant.local_ipv4
     params.local_port = p.registrant.local_port
 
-    require("#{base_path}/compiler.coffee") params
+    provisioning.get '/_design/registrant/_view/registrant', (r) ->
+      params.uac_entries = ("""
+        modparam("uac_registrant","uac","sip:#{p.registrant.local_ipv4},,sip:00#{row.key}@#{p.registrant.local_ipv4},,00#{row.key},#{row.value},sip:00#{row.key}@#{p.interfaces.primary.ipv4 ? p.host}:5070,,,")\n
+      """ for row in r.rows).join ''
+
+      require("#{base_path}/compiler.coffee") params
