@@ -2,6 +2,7 @@
 
 fs = require 'fs'
 util = require 'util'
+cdb_changes = require 'cdb_changes'
 
 last_rev = ''
 
