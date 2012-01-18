@@ -85,6 +85,13 @@
     </extension>
 
     <extension name="cleanup-caller-id" continue="true">
+      <condition field="caller_id_number" expression="^0([12345689].{8})$">
+        <action application="set" data="effective_caller_id_number=33$1"/>
+        <action application="set" data="ccnq_from_e164=33$1"/>
+      </condition>
+    </extension>
+
+    <extension name="cleanup-caller-id" continue="true">
       <condition field="caller_id_number" expression="^0033([12345689].{8})$">
         <action application="set" data="effective_caller_id_number=33$1"/>
         <action application="set" data="ccnq_from_e164=33$1"/>
