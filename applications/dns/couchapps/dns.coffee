@@ -186,9 +186,15 @@ ddoc.views.names =
                   ]
 
         if doc.opensips?
-          emit domain,
-            class:'A'
-            value: doc.opensips.proxy_ip
+          # FIXME detect whether proxy_ip is v4 or v6
+          # and use A or AAAA accordingly
+          # Note: if proxy_ip is not specified, opensips will be
+          #       available on all interfaces. Pick the primary
+          #       one for the public A record, in that case.
+          if doc.opensips.proxy_ip? or primary_v4?
+            emit domain,
+              class:'A'
+              value: doc.opensips.proxy_ip ? primary_v4
           emit domain,
             prefix:'_sip._udp'
             class:'SRV'
