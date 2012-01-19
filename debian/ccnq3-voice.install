@@ -1,2 +1,4 @@
 bootstrap-local.sh /opt/ccnq3/src
 common /opt/ccnq3/src
+common/freeswitch/conf/* /opt/ccnq3/freeswitch/conf
+common/freeswitch/lang /opt/freeswitch/ccnq3/conf

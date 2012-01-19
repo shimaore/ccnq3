@@ -13,7 +13,8 @@ case "$1" in
     ###
     # This used to be in common/freeswitch/install.sh
     ###
-    CONF=/opt/freeswitch/conf
+    CONF=$WORKDIR/freeswitch/conf
+    LOG=/opt/freeswitch/log
 
     # allow access to configuration directories
     adduser "$USER" daemon
@@ -28,13 +29,11 @@ CONF
 
     # Startup parameters
     DEFAULTS=/etc/default/freeswitch
-    sed -i -e 's/^FREESWITCH_ENABLED="false"/FREESWITCH_ENABLED="true"/'              $DEFAULTS
-    sed -i -e 's/^FREESWITCH_PARAMS="-nc"/FREESWITCH_PARAMS="-nc -nonat -nonatmap"/'  $DEFAULTS
+    sed -i -e 's/^FREESWITCH_ENABLED=.*$/FREESWITCH_ENABLED="true"/'              $DEFAULTS
+    sed -i -e "s/^FREESWITCH_PARAMS=.*$/FREESWITCH_PARAMS=\"-nc -nonat -nonatmap -conf $CONF -log $LOG -db $DB\"/"  $DEFAULTS
 
     # Default configuration
-    mv $CONF $CONF."`date --rfc-3339=seconds`"
-    cp -r ${WORKDIR}/src/common/freeswitch/conf /opt/freeswitch/
-    cp -r ${WORKDIR}/src/common/freeswitch/lang $CONF
+    mkdir -p $CONF
     chown -R freeswitch.daemon $CONF
     chmod g+w $CONF # allow access to configuration directory
 
