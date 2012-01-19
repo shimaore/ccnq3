@@ -30,7 +30,7 @@ CONF
     # Startup parameters
     DEFAULTS=/etc/default/freeswitch
     sed -i -e 's/^FREESWITCH_ENABLED=.*$/FREESWITCH_ENABLED="true"/'              $DEFAULTS
-    sed -i -e "s/^FREESWITCH_PARAMS=.*$/FREESWITCH_PARAMS=\"-nc -nonat -nonatmap -conf $CONF -log $LOG -db $DB\"/"  $DEFAULTS
+    sed -i -e "s/^FREESWITCH_PARAMS=.*\$/FREESWITCH_PARAMS=\"-nc -nonat -nonatmap -conf $CONF -log $LOG -db $DB\"/"  $DEFAULTS
 
     # Default configuration
     mkdir -p $CONF
