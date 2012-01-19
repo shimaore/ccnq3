@@ -18,6 +18,7 @@
       <condition field="${ccnq_from_e164}" expression="."/> <!-- Must be non-empty -->
       <condition field="${ccnq_to_e164}" expression="."> <!-- Must be non-empty -->
         <action application="set" data="ccnq_direction=egress"/>
+        <action application="set" data="ccnq_profile=$${profile_name}"/>
         <action application="set" data="progress_timeout=12"/>
         <action application="set" data="call_timeout=300"/>
         <action application="export" data="t38_passthru=true"/>
@@ -63,6 +64,7 @@
     <extension name="default-ingress">
       <condition field="destination_number" expression="^call-(.*)$">
         <action application="set" data="ccnq_direction=ingress"/>
+        <action application="set" data="ccnq_profile=$${profile_name}"/>
         <action application="set" data="progress_timeout=12"/>
         <action application="set" data="call_timeout=300"/>
         <action application="export" data="t38_passthru=true"/>

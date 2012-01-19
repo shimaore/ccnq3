@@ -226,6 +226,15 @@ Note: this is not enabled by default even after you install the ccnq3-traces pac
       workdir: string, directory used to store the traces, defaults to /opt/ccnq3/traces
       filter: string, pcap filter for traces, defaults to ports used by ccnq3 applications
 
+### Specific to hosts running as registrants.
+
+Related: applications/registrant
+
+    registrant:
+      local_ipv4: string, IP where to send incoming calls
+      local_port: integer, port where to send incoming calls
+      remote_ipv4: string, upstream registrar
+
 ### Other data in a "host" provisioning record.
 
 ### Attachments
@@ -354,6 +363,8 @@ For non-trusted host that are allowed to submit P-Charge-Info, list of accounts 
       Note: these are used to build Carrier ENUM records.
     outbound_route: integer; allows to select a specific rule based on the rule's groupid
 
+    registrant_password: password for applications/registrant
+
     # Local-number properties:
     endpoint [required]
     location:  string; the location identifier for this specific number (used for emergency location services)
@@ -364,8 +375,6 @@ For non-trusted host that are allowed to submit P-Charge-Info, list of accounts 
     dialog_timer
     dst_domain
     inv_timer
-
-
 
 ## rule (aka outbound_route) (provisioning records)
 
