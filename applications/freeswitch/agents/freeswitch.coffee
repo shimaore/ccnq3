@@ -58,9 +58,9 @@ process_changes = (commands) ->
 
 request = require 'request'
 fs = require 'fs'
-save_uri_as = (uri,file)->
+save_uri_as = (uri,file,cb)->
   fs.unlink file # According to default installation scheme, we can write to the directory but not necessarily to the files
-  request(uri).pipe(fs.createWriteStream(file))
+  request(uri,cb).pipe(fs.createWriteStream(file))
 
 # Main
 
@@ -92,16 +92,29 @@ require('ccnq3_config').get (config) ->
       freeswitch_local_conf:      "#{conf_dir}/local-conf.xml"
 
     host_uri = qs.escape make_id 'host', config.host
-    for show, file of files
-      do (show,file)->
-        save_uri_as "#{config.provisioning.local_couchdb_uri}/_design/freeswitch/_show/#{show}/#{host_uri}", file
-    # FIXME: the changes will be applied (below) before the configurations are retrieved!
+
+    write_config_files = (cb) ->
+      expected = 0
+      for show, file of files
+        do (show,file)->
+          expected++
+          save_uri_as "#{config.provisioning.local_couchdb_uri}/_design/freeswitch/_show/#{show}/#{host_uri}", file,  ->
+            if --expected is 0 then cb?()
 
     # 1b. Apply configuration changes
-    fs_command 'reloadxml', ->
-      fs_command 'reloadacl reloadxml', ->
-        fs_command "sofia profile #{profile_name} rescan reloadxml" for profile_name of p.sip_profiles
+    apply_configuration_changes = (cb) ->
+      fs_command 'reloadxml', ->
+        fs_command 'reloadacl reloadxml', ->
+          expected = 0
+          for profile_name of p.sip_profiles
+            do (profile_name) ->
+              expected++
+              fs_command "sofia profile #{profile_name} rescan reloadxml", ->
+                if --expected is 0 then cb?()
 
     # 2. Process any command
-    if p.sip_commands?
-      process_changes p.sip_commands
+    process_commands = ->
+      if p.sip_commands?
+        process_changes p.sip_commands
+
+    write_config_files -> apply_configuration_changes -> process_commands()
