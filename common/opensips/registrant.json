@@ -56,5 +56,7 @@
   "sip_domain_name": "bypassed",
   "skip_domain_check": 1,
 
+  "children": 20,
+
   "ok":true
 }

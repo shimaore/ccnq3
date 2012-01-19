@@ -43,7 +43,7 @@ fork=yes
 log_stderror=no
 
 # Children=4 or higher (in production)
-children=40
+children=${children}
 
 # Suppress any warnings about our IP not being in the DNS server
 dns=no

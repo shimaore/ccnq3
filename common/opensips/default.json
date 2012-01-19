@@ -4,6 +4,7 @@
   "mpath": "/usr/lib/opensips/modules/",
   "uac_vsf": "vsf",
   "max_hops": "10",
+  "children": 30,
 
   "comment bflag": "Branch flags",
   "bflag_request_mp_callee":          6,
