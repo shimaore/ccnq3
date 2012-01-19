@@ -18,11 +18,11 @@ Translate a host document into valid FreeSwitch configuration files.
 
 Typical installation in ccnq3:
 
-  freeswitch_local_profiles (sofia profile) in /opt/freeswitch/conf/local-profiles.xml
-  freeswitch_local_acl      (acl)           in /opt/freeswitch/conf/local-acl.xml
+  freeswitch_local_profiles (sofia profile) in /opt/ccnq3/freeswitch/conf/local-profiles.xml
+  freeswitch_local_acl      (acl)           in /opt/ccnq3/freeswitch/conf/local-acl.xml
     (ACLs in /opt/freeswitch/conf/*.acl.xml are also loaded)
-  freeswitch_local_vars     (include)       in /opt/freeswitch/conf/local-vars.xml
-  freeswitch_local_conf     (dialplan)      in /opt/freeswitch/conf/local-conf.xml
+  freeswitch_local_vars     (include)       in /opt/ccnq3/freeswitch/conf/local-vars.xml
+  freeswitch_local_conf     (dialplan)      in /opt/ccnq3/freeswitch/conf/local-conf.xml
 
 ###
 

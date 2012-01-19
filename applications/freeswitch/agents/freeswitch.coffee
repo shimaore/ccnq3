@@ -84,7 +84,7 @@ require('ccnq3_config').get (config) ->
     last_rev = p._rev
 
     # 1. Generate new configuration files
-    conf_dir = '/opt/freeswitch/conf/'
+    conf_dir = '/opt/ccnq3/freeswitch/conf/'
     files =
       freeswitch_local_profiles:  "#{conf_dir}/local-profiles.xml"
       freeswitch_local_acl:       "#{conf_dir}/local-acl.xml"
