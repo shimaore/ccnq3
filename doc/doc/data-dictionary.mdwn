@@ -414,7 +414,8 @@ are used to route the call.
 The following two (output) fields are required even though they are not currently used.
 
     routeid: 0   (the integer 0)
-    attrs: ""   (the empty string)
+    attrs: ""
+      The "attrs" field is present in the call CDR as "ccnq_attrs" on outbound calls.
 
     Note: For the complete specification, see http://www.opensips.org/html/docs/modules/1.7.x/drouting.html#id293582
 

@@ -15,6 +15,7 @@
       <condition field="caller_id_number" expression="">
         <action application="set" data="ccnq_direction=egress"/>
         <action application="set" data="ccnq_profile=$${profile_name}"/>
+        <action application="set" data="ccnq_attrs=${sip_h_ccnq_attrs}" />
         <action application="set" data="ccnq_account=${url_decode(${regex(${sip_h_p-charge-info}|sip:([^@]+)@|%1)})}" inline="true" />
         <action application="set" data="ccnq_from_e164=${caller_id_number}" inline="true" />
         <action application="set" data="ccnq_to_e164=${destination_number}" inline="true" />
