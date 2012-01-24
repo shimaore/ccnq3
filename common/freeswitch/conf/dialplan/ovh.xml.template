@@ -2,67 +2,8 @@
 <include>
 
   <!-- egress towards carrier -->
-  <context name="egress-$${profile_name}">
 
-    <extension name="unloop">
-      <condition field="${unroll_loops}" expression="^true$"/>
-      <condition field="${sip_looped_call}" expression="^true$">
-        <action application="deflect" data="${destination_number}"/>
-      </condition>
-    </extension>
-
-    <extension name="set-defaults" continue="true">
-      <condition field="caller_id_number" expression="">
-        <action application="set" data="ccnq_direction=egress"/>
-        <action application="set" data="ccnq_profile=$${profile_name}"/>
-        <action application="set" data="ccnq_account=${url_decode(${regex(${sip_h_p-charge-info}|sip:([^@]+)@|%1)})}" inline="true" />
-        <action application="set" data="ccnq_from_e164=${caller_id_number}" inline="true" />
-        <action application="set" data="ccnq_to_e164=${destination_number}" inline="true" />
-
-        <action application="set" data="progress_timeout=12"/>
-        <action application="set" data="call_timeout=300"/>
-        <action application="export" data="t38_passthru=true"/>
-      </condition>
-    </extension>
-
-    <extension name="cleanup-caller-id" continue="true">
-      <condition field="${ccnq_from_e164}" expression="^33([12345689].{8})$">
-        <action application="set" data="effective_caller_id_number=0$1"/>
-      </condition>
-    </extension>
-
-    <extension name="egress-emergency">
-      <condition field="${ccnq_account}" expression="^.+$" />
-      <condition field="${ccnq_to_e164}" expression="^33#(112|15|17|18|119|115|116000|19)$">
-        <action application="set" data="ccnq_called=$1"/>
-        <action application="set" data="ccnq_routing=${sip_h_x-ccnq3-routing}"/>
-        <action application="transfer" data="${ccnq_called} XML egress-$${profile_name}-send-call"/>
-      </condition>
-    </extension>
-
-    <extension name="egress-special">
-      <condition field="${ccnq_account}" expression="^.+$" />
-      <condition field="${ccnq_to_e164}" expression="33#(1[0-9]{1,5}|3[0-9]{3})$">
-        <action application="set" data="ccnq_called=$1"/>
-        <action application="transfer" data="${ccnq_called} XML egress-$${profile_name}-send-call"/>
-      </condition>
-    </extension>
-
-    <extension name="egress-france">
-      <condition field="${ccnq_account}" expression="^.+$" />
-      <condition field="${ccnq_to_e164}" expression="^33(.*)$">
-        <action application="transfer" data="0$1 XML egress-$${profile_name}-send-call"/>
-      </condition>
-    </extension>
-
-    <extension name="egress-international">
-      <condition field="${ccnq_account}" expression="^.+$" />
-      <condition field="${ccnq_to_e164}" expression="^(.*)$">
-        <action application="transfer" data="00$1 XML egress-$${profile_name}-send-call"/>
-      </condition>
-    </extension>
-
-  </context>
+  <!-- NOT SUPPORTED -->
 
   <!-- ingress from carrier -->
   <context name="ingress-$${profile_name}">
