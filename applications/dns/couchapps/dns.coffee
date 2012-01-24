@@ -205,4 +205,6 @@ ddoc.views.names =
               ip_to_name[doc.opensips.proxy_ip] ? doc.host
             ]
 
+        # if 'applications/dns' in doc.applications
+
         # if doc.portal?
