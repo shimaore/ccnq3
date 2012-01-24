@@ -35,7 +35,7 @@ require('ccnq3_config').get (config) ->
 
         $.extra_login = (auth,next) ->
 
-          # Replicate any sotel_portal record
+          # Replicate any provisioning record
           provisioning_replicate = (auth,next) ->
             auth.notify 'Replicating provisioning data.'
             options =
