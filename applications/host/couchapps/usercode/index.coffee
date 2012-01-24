@@ -149,6 +149,17 @@ do (jQuery) ->
             title:'Reload routes'
             value:'reload routes'
 
+        if 'applications/registrant' in @applications
+          radio
+            id:'sip_commands.registrant'
+            title:'No Registrant changes'
+            value:''
+            checked:true
+          radio
+            id:'sip_commands.registrant'
+            title:'Restart Registrant'
+            value:'restart'
+
       for app in @_apps
         checkbox
           id:"selected_applications.#{app}"
