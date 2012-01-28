@@ -9,7 +9,7 @@ Released under the AGPL3 license
 
   This script accepts an incoming call,
   creates a FIFO for bi-directional audio,
-  and proceeds with handling the call.
+  and proceeds with redirecting the call.
 
   FIFO relays are created as needed to record or play
   files to/from remote CouchDB. (This avoids having to download
@@ -55,61 +55,23 @@ util = require 'util'
 querystring = require 'querystring'
 cdb = require 'cdb'
 
+###
+  The call is managed by a regular XML application.
+  This code simply creates a FIFO for recording since mod_httapi means we can play directly from the server.
+###
+
 require('ccnq3_config').get (config)->
 
   # esl.debug = true
 
-  Unique_ID = 'Unique-ID'
+  server = new esl.CallServer()
 
-  server = esl.createServer (res) ->
+  server.on 'CONNECT', (req,res) ->
 
-    res.connect (req,res) ->
+    vm_box     = req.channel_data.variable_vmbox
 
-      # Retrieve channel parameters
-      channel_data = req.body
+    util.log "Answering call for #{vm_box}"
+    res.execute 'answer', (req,res) ->
+      util.log "Call answered"
 
-      unique_id             = channel_data[Unique_ID]
-      util.log "Incoming call UUID = #{unique_id}"
-
-      vm_box     = channel_data.variable_sip_req_uri # or sip_to_uri
-
-      # Common values
-
-      on_disconnect = (req,res) ->
-        util.log "Receiving disconnection"
-        switch req.headers['Content-Disposition']
-          when 'linger'      then res.exit()
-          when 'disconnect'  then res.end()
-
-      res.on 'esl_disconnect_notice', on_disconnect
-
-      force_disconnect = (res) ->
-        util.log 'Hangup call'
-        res.bgapi "uuid_kill #{unique_id}"
-
-      # Code handling
-
-          res.on 'esl_event', (req,res) ->
-            switch req.body['Event-Name']
-
-              when 'CHANNEL_HANGUP_COMPLETE'
-                util.log 'Channel hangup complete'
-
-              else
-                util.log "Unhandled event #{req.body['Event-Name']}"
-
-          on_connect = (req,res) ->
-
-              # Check whether the call can proceed
-              check_time () ->
-
-                util.log 'Bridging call'
-                res.execute 'answer', (req,res) ->
-                  util.log "Call answered"
-
-          # Handle the incoming connection
-          res.linger (req,res) ->
-            res.filter Unique_ID, unique_id, (req,res) ->
-              res.event_json 'ALL', on_connect
-
-  server.listen(config.voicemail.port)
+  server.listen(config.voicemail.public_port)
