@@ -19,14 +19,6 @@ case "$1" in
     # allow access to configuration directories
     adduser "$USER" daemon
 
-    # FIXME -- this should be replaced with some kind of in-memory system.
-    DB=/opt/freeswitch/db
-    grep "$DB" /etc/fstab || tee -a /etc/fstab >/dev/null <<CONF
-fsdbfs $DB tmpfs defaults 0 0
-CONF
-    mount $DB
-    chown freeswitch.daemon $DB
-
     # Startup parameters
     DEFAULTS=/etc/default/freeswitch
     sed -i -e 's/^FREESWITCH_ENABLED=.*$/FREESWITCH_ENABLED="true"/'              $DEFAULTS

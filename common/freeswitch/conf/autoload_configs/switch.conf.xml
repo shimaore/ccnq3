@@ -27,6 +27,8 @@
     <param name="mailer-app-args" value="-t"/>
     <param name="dump-cores" value="no"/>
 
+    <param name="core-db-name" value="/dev/shm/core.db" />
+
     <param name="rtp-start-port" value="42000"/>
     <param name="rtp-end-port" value="42998"/>
   </settings>
