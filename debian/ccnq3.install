@@ -5,3 +5,5 @@ npm-apps.coffee /opt/ccnq3/src
 interfaces.coffee /opt/ccnq3/src
 package.json /opt/ccnq3/src
 public /opt/ccnq3/src
+common/monit/conf.d/* /etc/monit/conf.d
+common/munin/plugins/* /usr/share/munin/plugins
