@@ -1,0 +1,88 @@
+#!/bin/bash
+# (c) 2011 Stephane Alnet
+# License: AGPL3+
+
+if [[ $# -eq 1 ]] && [[ $1 == 'autoconf' ]]; then
+        echo "yes"
+        exit
+fi
+
+declare -A colors
+colors[200]=00ff0f
+colors[203]=00ff1f
+colors[204]=00ff2f
+colors[205]=00ff3f
+colors[206]=00ff4f
+colors[209]=00ff5f
+colors[235]=00ff6f
+colors[236]=00ff7f
+colors[260]=00ff8f
+colors[288]=00ff9f
+colors[302]=007f0f
+colors[370]=007f1f
+colors[400]=ff1000
+colors[403]=ff2000
+colors[404]=ff3000
+colors[407]=ff4000
+colors[408]=ff4000
+colors[410]=ff5000
+colors[415]=ff6000
+colors[450]=ff7000
+colors[455]=ff8000
+colors[480]=ff9070
+colors[481]=ffa070
+colors[484]=ffb000
+colors[485]=ffc000
+colors[486]=7f1030
+colors[487]=7f2070
+colors[488]=ffd000
+colors[491]=ffe000
+colors[500]=0000f0
+colors[502]=0010f0
+colors[503]=0020f0
+colors[504]=0030f0
+colors[603]=ff10ff
+colors[604]=ff20ff
+colors[606]=ff30ff
+
+if [[ $# -eq 1 ]] && [[ $1 == 'config' ]]; then
+  CODE=200
+  cat <<EOT ;
+graph_title Reasons codes (%)
+graph_args -l 0
+graph_vlabel reason codes (%)
+graph_category voice
+EOT
+  for CODE in ${!colors[@]}; do
+    cat <<EOT ;
+dumpcap_reason_$CODE.label SIP $CODE
+dumpcap_reason_$CODE.info Percentage of INVITE messages with $CODE final code
+dumpcap_reason_$CODE.colour ${colors[$CODE]}
+dumpcap_reason_$CODE.draw AREASTACK
+dumpcap_reason_$CODE.type GAUGE
+EOT
+  done
+
+  exit
+fi
+
+( find /var/log/traces -type f -name 'eth0*' -newermt '5 minutes ago' -print0 | \
+  xargs -0 -I 'FILE' -r -P 4 -n 1 \
+    ngrep -I FILE -n -l -q -t -W single -P '|' '^SIP/2.0 [2-6].*CSeq: [0-9]+ INVITE' ) \
+| perl -e '
+  use DateTime;
+  my $scale = 5;
+  my $w = DateTime->from_epoch( epoch => time()-$scale*60, time_zone => "local" );
+  my $d = $w->ymd("/");
+  my $h = sprintf("%02d",$w->hour);
+  my $m = $w->minute;
+
+  while(<>){
+    next unless m{^U $d $h:(\d\d):\S+ \S+ -> \S+ SIP/2\.0 (\d{3})}o;
+    next unless $m <= $1 && $1 < $m+$scale;
+    $o{$2}++; $t++;
+  }
+  foreach my $k (sort keys %o) {
+    printf "dumpcap_reason_%s.value %.2f\n", $k, $o{$k}/$t*100.0;
+  }
+'

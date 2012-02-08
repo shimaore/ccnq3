@@ -10,14 +10,7 @@ check process freeswitch with pidfile /opt/freeswitch/run/freeswitch.pid
 check file freeswitch_bin with path /opt/freeswitch/bin/freeswitch
    group voice
    if failed checksum then alert
-   if failed permission 750 then unmonitor
-   if failed uid freeswitch then unmonitor
-#   if failed gid daemon then unmonitor
 
 check file freeswitch_rc with path /etc/init.d/freeswitch
    group voice
    if failed checksum then alert
-   if failed permission 755 then unmonitor
-   if failed uid root then unmonitor
-   if failed gid root then unmonitor
-

@@ -1,0 +1,14 @@
+check process couchdb with pidfile /var/run/couchdb/couchdb.pid
+   group couchdb
+   start program = "/etc/init.d/couchdb start" with timeout 60 seconds
+   stop  program = "/etc/init.d/couchdb stop"
+   if failed port 5984 type TCP then restart
+   if 5 restarts within 5 cycles then timeout
+   depends on csbc1.couchdb_bin
+   depends on csbc1.couchdb_rc
+
+check file csbc1.couchdb_bin with path /usr/bin/couchdb
+   group couchdb
+
+check file csbc1.couchdb_rc with path /etc/init.d/couchdb
+   group couchdb

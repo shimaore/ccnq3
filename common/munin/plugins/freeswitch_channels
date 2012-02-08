@@ -1,0 +1,52 @@
+#!/bin/bash
+# (c) 2011 Stephane Alnet
+# License: AGPL3+
+
+FS_DB=/dev/shm/core.db
+
+if [[ $# -eq 1 ]] && [[ $1 == 'autoconf' ]]; then
+        echo "yes"
+        exit
+fi
+
+if [[ $# -eq 1 ]] && [[ $1 == 'config' ]]; then
+  cat <<EOT ;
+graph_title Channels used
+graph_args -l 0
+graph_vlabel active channels
+graph_category voice
+sofia_channels_ACTIVE.label SIP active
+sofia_channels_ACTIVE.max 50000
+sofia_channels_ACTIVE.min 0
+sofia_channels_ACTIVE.draw AREA
+sofia_channels_DOWN.label SIP down
+sofia_channels_DOWN.max 50000
+sofia_channels_DOWN.min 0
+sofia_channels_DOWN.draw STACK
+sofia_channels_EARLY.label SIP early
+sofia_channels_EARLY.max 50000
+sofia_channels_EARLY.min 0
+sofia_channels_EARLY.draw STACK
+sofia_channels_HELD.label SIP held
+sofia_channels_HELD.max 50000
+sofia_channels_HELD.min 0
+sofia_channels_HELD.draw STACK
+sofia_channels_RINGING.label SIP ringing
+sofia_channels_RINGING.max 50000
+sofia_channels_RINGING.min 0
+sofia_channels_RINGING.draw AREA
+sofia_calls_in.label SIP incoming calls
+sofia_calls_in.max 25000
+sofia_calls_in.min 0
+sofia_calls_in.draw LINE2
+sofia_calls_out.label SIP outgoing calls
+sofia_calls_out.max 25000
+sofia_calls_out.min 0
+sofia_calls_out.draw LINE2
+EOT
+  exit
+fi
+
+sqlite3 "$FS_DB" "SELECT 'sofia_channels_'||callstate||'.value '||COUNT(1) FROM channels WHERE name LIKE 'sofia%' GROUP BY callstate"
+# sqlite3 "$FS_DB" "SELECT 'sofia_calls_in.value '||COUNT(1) FROM calls WHERE caller_chan_name LIKE 'sofia%'"
+# sqlite3 "$FS_DB" "SELECT 'sofia_calls_out.value '||COUNT(1) FROM calls WHERE callee_chan_name LIKE 'sofia%'"
