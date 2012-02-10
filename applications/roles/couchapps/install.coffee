@@ -22,8 +22,8 @@ cfg.get (config) ->
       p.admins.roles.push("users_admin")   if p.admins.roles.indexOf("users_admin") < 0
       p.readers ||= {}
       p.readers.roles ||= []
-      p.readers.roles.push("users_writer") if p.readers.roles.indexOf("users_writer") < 0
-      p.readers.roles.push("users_reader") if p.readers.roles.indexOf("users_reader") < 0
+      p.readers.roles.push("update:_users:") if p.readers.roles.indexOf("update:_users:") < 0
+      p.readers.roles.push("access:_users:") if p.readers.roles.indexOf("access:_users:") < 0
 
     push_script uri, 'main'
 

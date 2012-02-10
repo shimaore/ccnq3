@@ -277,7 +277,7 @@ do (jQuery) ->
           name: username
 
         ###
-          Quite obviously this can only be ran by server-admins or users_writer.
+          Quite obviously this can only be ran by server-admins or update:_users: roles.
         ###
         $('#host_log').html "Creating user record for #{username} with password #{password}."
         console.log "Creating user record for #{username} with password #{password}."

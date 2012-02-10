@@ -49,7 +49,7 @@ $(document).ready ->
     user_is = (role) ->
       profile.roles?.indexOf(role) >= 0
 
-    if user_is 'users_reader'
+    if user_is 'access:_users:'
       $.getScript '/_users/_design/portal/user_management.js'
 
     app.db.allApps

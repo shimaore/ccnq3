@@ -72,7 +72,7 @@ and host vm3 will be a carrier-side server.
 
     access:provisioning:  # Pull provisioning database
     update:provisioning:  # Push provisioning database
-    users_writer          # Allows to create the user record
+    update:_users:        # Allows to create the user record
     update:_users:        # Allows to grant the role (via applications/roles/zappa/admin.coffee)
     update:host:          # Role to add
 
@@ -83,7 +83,6 @@ and host vm3 will be a carrier-side server.
       "confirmed",
       "access:provisioning:",
       "update:provisioning:",
-      "users_writer",
       "update:_users:",
       "update:host:"
     ]
