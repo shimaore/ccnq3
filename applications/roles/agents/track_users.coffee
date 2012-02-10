@@ -49,6 +49,7 @@ require('ccnq3_config').get (config)->
 
             p.readers =
               names: [ user_doc.name ]
+              roles: [ 'update:user_db:' ] # e.g. voicemail
 
           # Restrict number of available past revisions.
           revs_limit =
