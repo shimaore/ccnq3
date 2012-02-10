@@ -85,6 +85,7 @@ The configuration file "vars.xml" contains more defaults.
 ddoc.shows.freeswitch_local_vars = p_fun (doc,req) ->
   sip_voice = doc.sip_voice ? 'en/us/callie'
   rtp_ip = doc.rtp_ip ? 'auto'
+  voicemail_port = doc.voicemail?.port ? 7123 # FIXME default_voicemail_port
 
   start
     'Content-Type': 'text/xml'
@@ -101,6 +102,8 @@ ddoc.shows.freeswitch_local_vars = p_fun (doc,req) ->
       <X-PRE-PROCESS cmd="set" data="domain_name=$${domain}"/>
 
       <X-PRE-PROCESS cmd="set" data="rtp_ip=#{rtp_ip}"/>
+
+      <X-PRE-PROCESS cmd="set" data="voicemail_port=#{voicemail_port}"/>
 
     """
   if doc.sip_variables?

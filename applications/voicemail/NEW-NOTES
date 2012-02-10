@@ -1,0 +1,43 @@
+With mod_httapi it seems we can both record and playback from a URL.
+
+Need first to identify which operations are needed.
+
+"leave voicemail":
+  - DID/username is known (was dialed)
+  - need to map it to user database (data is in _users DB) [ESL]
+  - use generic "voicemail" db user to access the _users db and the user's db [ESL]
+  - create new voicemail record in the user's database with call information (JSON metadata; _id is "voicemail:#{timestamp}-#{from}" or timestamp+UUID) [ESL]
+  - playback user prompt [Attachment from user DB "voicemail-prompt" record.] [httapi() or playback()]
+  - record() attachment (may have multiple attachments: part1, part2, etc. play them in order) [httapi() or record()] [get the variable record_ms to get duration]
+
+"access voicemail box":
+  - identify with DID or ask for username [XML]
+  - ask for password [XML]
+  - authenticate using username + password, retrieve the user's db URL [ESL]
+  - enumerate voicemails, etc. (different functionalities) [httapi()?]
+
+
+Many ways to write it:
+- as an ESL app (complicated, not really needed anymore if mod_httapi can record() )
+- as a standard XML app (would need to mod_curl() a little bit with some CouchDB help)
+- as a mod_httapi app (new, can we write all the code that's required server-wise in CouchDB? -- probably some static code can just be XML attachments, dynamic code can use list/show? -- what information does FS provide about the call??)
+
+Is it worth investing time in mod_httapi for other applications? Does it provide enough to be a more generic, database-driven tool?
+(In which case it could be more flexible than upgrading the FS XML code on all servers to add a feature or update the voicemail code -- pushing a new version of the "voicemail app design document" in _users and usercode [+replicate on login] would be sufficient.)
+(How is this different from mod_xml_curl? mod_xml_curl runs everything, it's not an application you can call and then get back out of.)
+
+Think about the mod_httapi model. There is some kind of intelligent client (similar to a Javascript client in the browser, except this one groks XML and has FS commands) which GETs the commands and can be redirected. Things like replication could be trigerred by executing mod_curl commands. Most of the logic can be written as static XML.
+
+Can we PUT with mod_curl? I guess we'd have to write an "_update" handler in CouchDB. [Yes. However the method would be either PUT (with ID) or POST. But mod_curl only supports GET|HEAD|POST. mod_http_cache offers PUT of a file only. This isn't a limitation of mod_httapi though. It just means FS doesn't know how to PUT/DELETE/... dynamically.]
+
+
+So essentially we'll probably still be missing some important CouchDB interfaces if we simply rely on applications (whether the dialplan is plain XML or mod_httapi's mini-dialplan).
+So the best option still seems to be to use ESL in server mode to handle the CDB interfacing. Might be worth to then spend some time writing some neat JS API for event ordering etc.
+Or combine ESL (for CouchDB operations) with mod_httapi's application ("httapi()") to get "dialplan within ESL" more easily. The call logic can mostly be handled by httapi.
+However at some points we need to drop back to ESL so that (e.g.) we can store the recording duration, etc.
+Instead of httpapi() maybe simply use "execute_extension" from within the socket to have XML handle segments of the call?
+
+
+Also look at uuid_fileman etc. for during-playback options
+
+(Also look into mod_redis)

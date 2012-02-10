@@ -7,11 +7,7 @@ Released under the AGPL3 license
 ###
   This is the ccnq3 ESL voicemail server.
 
-  This script accepts an incoming call,
-  creates a FIFO for bi-directional audio,
-  and proceeds with redirecting the call.
-
-  FIFO relays are created as needed to record or play
+  mod_httapi is used to record or play
   files to/from remote CouchDB. (This avoids having to download
   audio prompts, or store then upload recorded messages.)
 
@@ -55,10 +51,7 @@ util = require 'util'
 querystring = require 'querystring'
 cdb = require 'cdb'
 
-###
-  The call is managed by a regular XML application.
-  This code simply creates a FIFO for recording since mod_httapi means we can play directly from the server.
-###
+messaging = require './messaging'
 
 require('ccnq3_config').get (config)->
 
@@ -68,10 +61,26 @@ require('ccnq3_config').get (config)->
 
   server.on 'CONNECT', (req,res) ->
 
-    vm_box     = req.channel_data.variable_vmbox
+    # The XML dialplan provides us with the username
+    # and already answer()ed the call.
+    user  = req.channel_data.variable_vm_user
+    mode  = req.channel_data.variable_vm_mode
 
-    util.log "Answering call for #{vm_box}"
-    res.execute 'answer', (req,res) ->
-      util.log "Call answered"
+    switch mode
+      when 'record'
+        util.log "Record for #{vm_user}"
+        messaging.record config, res, vm_user
 
-  server.listen(config.voicemail.public_port)
+      when 'inbox'
+        util.log "Inbox for #{vm_user}"
+        messaging.inbox config, res, vm_user
+
+      when 'main'
+        util.log "Main for #{vm_user}"
+        messaging.main config, res, vm_user
+
+      else
+        # FIXME say something
+        server.force_disconnect()
+
+  server.listen config.voicemail?.port ? 7123  # FIXME default_voicemail_port

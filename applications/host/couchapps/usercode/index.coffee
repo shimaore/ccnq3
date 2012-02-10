@@ -4,10 +4,11 @@ do (jQuery) ->
 
   make_id = (t,n) -> [t,n].join ':'
   host_username = (n) -> "host@#{n}"
+  voicemail_username = (n) -> "voicemail@#{n}"
 
   container = '#content'
 
-  # profile = $(container).data 'profile'
+  profile = $(container).data 'profile'
   # model = $(container).data 'model'
 
   # FIXME: Retrieve the default value for host_couchdb_uri (public, no password embedded) from some configuration area.
@@ -50,6 +51,8 @@ do (jQuery) ->
       "applications/freeswitch"     : "FreeSwitch (requires ccnq3-voice package)"
       "applications/opensips"       : "OpenSIPS (requires ccqn3-voice package)"
       "applications/traces"         : "Traces (requires ccnq3-traces package)"
+      # Applications for a server running FreeSwitch
+      "applications/voicemail"      : "Voicemail (requires FreeSwitch)"
     }
 
     form id:'host_record', method:'post', action:'#/host', class:'validate', ->
@@ -66,7 +69,7 @@ do (jQuery) ->
         id:'provisioning.host_couchdb_uri'
         title: 'Provisioning database URI (CouchDB)'
         class:'required url'
-        value: @provisioning?.host_couchdb_uri ? (window.location.protocol + '//' + window.location.hostname + ':5984/provisioning')
+        value: @provisioning?.host_couchdb_uri ? (window.location.protocol + '//' + window.location.hostname + ':5984/provisioning') # FIXME
 
       textbox
         id:'provisioning.couchdb_uri'
@@ -160,6 +163,18 @@ do (jQuery) ->
             title:'Restart Registrant'
             value:'restart'
 
+        if 'applications/voicemail' in @applications
+          textbox
+            id:'voicemail.users_couchdb_uri'
+            title: 'Couchapp Users database URI (Voicemail)'
+            class:'url'
+            value: @voicemail?.users_couchdb_uri
+          textbox
+            id:'voicemail.userdb_base_uri'
+            title: 'Base URI for user databases (Voicemail)'
+            class:'url'
+            value: @voicemail?.userdb_base_uri
+
       for app in @_apps
         checkbox
           id:"selected_applications.#{app}"
@@ -235,6 +250,9 @@ do (jQuery) ->
           else
             doc.provisioning.local_couchdb_uri ?= doc.provisioning.couchdb_uri
 
+          if doc.selected_applications?["applications/voicemail"]
+
+            add_voicemail doc
 
           ###
             applications/host is always required.
@@ -262,6 +280,53 @@ do (jQuery) ->
             initialize_password doc
 
           return doc
+
+      add_voicemail = (doc) ->
+
+        # Only attempt if it does not exist
+        if doc.voicemail?.password
+          return
+
+        # Username/password for the voicemail application
+        username: voicemail_username doc.host
+        password: hex_sha1 "a"+Math.random()
+
+        # Update the host record accordingly
+        doc.voicemail =
+          users_couchdb_uri: window.location.protocol + '//' + encodeURI(username) + ':' + encodeURI(password) + '@' + window.location.hostname + ':5984/_users' # FIXME
+          userdb_base_uri: profile.userdb_base_uri
+
+        # Create the user for the voicemail application
+        p =
+          name: username
+
+        $.couch.signup p, password,
+
+          error: (xhr,status,error) ->
+            alert "Voicemail signup failed: #{error}"
+            $('#host_log').html 'Voicemail user record creation failed.'
+
+          success: ->
+            # Grant the user update:user_db: rights
+            $.ajax
+              type: 'PUT'
+              url: '/roles/admin/grant/'+encodeURI(username)+'/update/user_db/'
+              dataType: 'json'
+              success: (data) ->
+                if not data.ok
+                  $('#host_log').html data.error ? data.forbidden
+                  return
+
+              # Grant the user access:_users: rights
+              $.ajax
+                type: 'PUT'
+                url: '/roles/admin/grant/'+encodeURI(username)+'/access/_users/'
+                dataType: 'json'
+                success: (data) ->
+                  if not data.ok
+                    $('#host_log').html data.error ? data.forbidden
+                    return
+
 
       create_user = (doc,cb) ->
 

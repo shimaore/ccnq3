@@ -1,0 +1,23 @@
+{
+  "name": "ccnq3_voicemail"
+, "version": "0.0.1"
+, "description": "Voicemail application for CCNQ3"
+, "keywords": ""
+, "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
+, "config": {
+    "config_file": "/etc/ccnq3/host.json"
+  }
+, "scripts": {
+    "start": "daemon -n ccnq3_voicemail -o daemon.debug -r -D \"`pwd`/node\" -- ./voicemail.coffee"
+  , "stop":  "daemon -n ccnq3_voicemail -o daemon.debug --stop"
+  , "preinstall": "coffee -c couchapps/*/*.coffee"
+  , "couchapps": "cd couchapps && ./install.coffee"
+  }
+, "dependencies": {
+    "nano": "*"
+    "request": ">=2.9.100"
+  , "esl": "*"
+  }
+, "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" }
+, "private": true
+}
