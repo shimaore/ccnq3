@@ -18,6 +18,8 @@
 
 * Content
 
+FIXME This document needs to be updated (2012-02-10).
+
 etc/
   lighttpd2/  -- Proxy for main site
   monit/      -- System monitoring examples
