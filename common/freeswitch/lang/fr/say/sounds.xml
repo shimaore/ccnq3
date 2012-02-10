@@ -387,7 +387,7 @@
 
     <!-- single digit -->
 
-    <input pattern="^1 +feminine">
+    <input pattern="^1 +feminine?">
       <match>
         <action function="play-file" data="digits/$1f.wav"/>
       </match>
