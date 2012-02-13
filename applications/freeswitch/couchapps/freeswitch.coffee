@@ -11,7 +11,7 @@ ddoc =
 
 module.exports = ddoc
 
-# This is a _usercode_ document, to be used by hosts.
+# This is a local document, to be used by hosts.
 
 ###
 Translate a host document into valid FreeSwitch configuration files.
