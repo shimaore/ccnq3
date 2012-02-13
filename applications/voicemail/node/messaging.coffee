@@ -15,7 +15,16 @@ the_first_part = 1
 
 class Message
 
-  constructor: (@db_uri,@id) ->
+  ##
+  # new Message db_uri, _id
+  # new Message db_uri, timestamp, caller_id
+  constructor: (@db_uri,timestamp,caller_id) ->
+    if not @caller_id?
+      @id = timestamp
+    else
+      @timestamp = timestamp
+      @caller_id = caller_id
+      @id = 'voicemail:' + timestamp + caller_id
     @msg_uri = @db_uri + '/' + qs.escape(@id)
     @db = nano @db_uri
     @part = the_first_part
@@ -99,8 +108,9 @@ class Message
     msg =
       type: "voicemail"
       _id: @id
-      timestamp: timestamp()
+      timestamp: @timestamp ? timestamp()
       box: 'new' # In which box is this message?
+      caller_id: @caller_id
       # FIXME Add more VM metadata such as caller-id, ..
 
     # Create new CDB record to hold the voicemail metadata
@@ -133,7 +143,7 @@ class User
   play_prompt: (req,res,cb) ->
     @voicemail_settings req, res, (vm_settings) ->
       if vm_settings._attachments["prompt.wav"]
-        res.execute 'playback', @db_uri + '/voicemail_setting/prompt.wav', cb
+        res.execute 'playback', @db_uri + '/voicemail_settings/prompt.wav', cb
 
       else if vm_settings._attachments["name.wav"]
         res.execute 'phrase', "please leave a message for,#{@db_uri}/voicemail_settings/name.wav", cb
@@ -211,7 +221,7 @@ exports.record = (config,res,username) ->
 
   locate_user arguments..., (db_uri,user) ->
 
-    msg = new Message db_uri, timestamp() + caller_id
+    msg = new Message db_uri, timestamp(), caller_id
     msg.create null, res, ->
       user.play_prompt res, -> msg.start_recording null, res
 

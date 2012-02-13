@@ -554,3 +554,35 @@ They are updated by OpenSIPS.
     path: string
     cflags: integer
     flags: 0
+
+# user database
+
+The user database may contain other records replicated from the user database,
+the usercode database, the provisioning database.
+
+The following records however are specific to an individual user database and
+are not replicated.
+
+## voicemail_settings record
+
+    _id: 'voicemail_settings'
+    no_pin:  boolean; if true, the user has no PIN
+    pin: string of digits; the user's voicemail PIN
+
+
+    _attachments:
+      prompt.wav  voicemail prompt
+      name.wav    name prompt
+
+## voicemail records
+
+    _id: type + timestamp + caller_id
+    type: 'voicemail'
+    timestamp: string; JSON timestamp e.g. "2012-02-13T14:05:21.247Z"
+    caller_id: string; caller_id
+    box: string; 'new' or 'archive'
+
+    _attachments:
+      part1.wav
+      part2.wav
+      ...       The fragments of the message, in the order they were recorded.

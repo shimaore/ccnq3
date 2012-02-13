@@ -12,6 +12,11 @@ cfg.get (config)->
   usercode_uri = config.usercode.couchdb_uri
   push_script usercode_uri, 'usercode'
 
+  # Do the installation for applications/voicemail (since it will run on the
+  # FreeSwitch host but won't have access to the usercode database).
+  usercode_uri = config.usercode.couchdb_uri
+  push_script usercode_uri, '../../voicemail/couchapps/usercode'
+
   # Update ACLs and code
   update = (uri) ->
     provisioning = cdb.new uri

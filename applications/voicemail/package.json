@@ -10,8 +10,6 @@
 , "scripts": {
     "start": "daemon -n ccnq3_voicemail -o daemon.debug -r -D \"`pwd`/node\" -- ./voicemail.coffee"
   , "stop":  "daemon -n ccnq3_voicemail -o daemon.debug --stop"
-  , "preinstall": "coffee -c couchapps/*/*.coffee"
-  , "couchapps": "cd couchapps && ./install.coffee"
   }
 , "dependencies": {
     "nano": "*"
