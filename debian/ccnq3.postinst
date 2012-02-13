@@ -47,11 +47,6 @@ case "$1" in
     su -s /bin/sh -c "(cd ${WORKDIR}/src && npm install)" ccnq3
     su -s /bin/sh -c "(cd ${WORKDIR}/src && npm run-script updates)" ccnq3
 
-    # Configure monit
-    for SCRIPT in couchdb cron freeswitch local named ntp root-fs ssh; do
-      ln -s /etc/monit/$SCRIPT /etc/monit/conf.d/$SCRIPT
-    done
-
   ;;
 
   remove|purge)
