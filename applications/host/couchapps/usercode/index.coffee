@@ -35,6 +35,12 @@ do (jQuery) ->
     "applications/voicemail"
   ]
 
+  log = (text,clear) ->
+    if clear
+      $('#host_log').html text+"\n"
+    else
+      $('#host_log').append text+"\n"
+
   host_tpl = $.compile_template ->
 
     _apps_description = {
@@ -223,7 +229,7 @@ do (jQuery) ->
       model.extend
         beforeSave: (doc) ->
 
-          $('#host_log').html 'Preparing data'
+          log 'Preparing data'
 
           doc.type = 'host'
           doc._id = make_id 'host', doc.host
@@ -306,7 +312,7 @@ do (jQuery) ->
               do grant_rights
             else
               alert "Voicemail signup failed: #{error}"
-              $('#host_log').html 'Voicemail user record creation failed.'
+              log 'Voicemail user record creation failed.'
 
           success: grant_rights
 
@@ -318,7 +324,7 @@ do (jQuery) ->
               dataType: 'json'
               success: (data) ->
                 if not data.ok
-                  $('#host_log').html data.error ? data.forbidden
+                  log data.error ? data.forbidden
                   return
 
               # Grant the user access:_users: rights
@@ -328,7 +334,7 @@ do (jQuery) ->
                 dataType: 'json'
                 success: (data) ->
                   if not data.ok
-                    $('#host_log').html data.error ? data.forbidden
+                    log data.error ? data.forbidden
                     return
 
 
@@ -348,14 +354,14 @@ do (jQuery) ->
         ###
           Quite obviously this can only be ran by server-admins or update:_users: roles.
         ###
-        $('#host_log').html "Creating user record for #{username} with password #{password}."
+        log "Creating user record for #{username} with password #{password}."
         console.log "Creating user record for #{username} with password #{password}."
 
         $.couch.signup p, password,
 
           error: (xhr,status,error) ->
             alert "Host signup failed: #{error}"
-            $('#host_log').html 'User record creation failed.'
+            log 'User record creation failed.'
 
           ###
             Only admins may change the "roles" field. So we use
@@ -375,7 +381,7 @@ do (jQuery) ->
                 if data.ok
                   do cb
                 else
-                  $('#host_log').html data.error ? data.forbidden
+                  log data.error ? data.forbidden
 
       @bind 'error.host', (notice) ->
         console.log "Model error: #{notice.error}"
@@ -434,10 +440,10 @@ do (jQuery) ->
         form_is_valid = $(selector).valid()
 
         if form_is_valid
-          $('#host_log').html ''
+          log '', true
           @trigger 'save-host'
         else
-          $('#host_log').html 'Please check your data.'
+          log 'Please check your data.', true
 
         return
 
