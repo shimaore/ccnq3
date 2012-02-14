@@ -295,7 +295,7 @@ do (jQuery) ->
 
         # Update the host record accordingly
         doc.voicemail =
-          users_couchdb_uri: window.location.protocol + '//' + encodeURI(username) + ':' + encodeURI(password) + '@' + window.location.hostname + ':5984/_users' # FIXME
+          users_couchdb_uri: window.location.protocol + '//' + encodeURIComponent(username) + ':' + encodeURIComponent(password) + '@' + window.location.hostname + ':5984/_users' # FIXME
           userdb_base_uri: profile.userdb_base_uri
 
         # Create the user for the voicemail application
@@ -312,7 +312,7 @@ do (jQuery) ->
             # Grant the user update:user_db: rights
             $.ajax
               type: 'PUT'
-              url: '/roles/admin/grant/'+encodeURI(username)+'/update/user_db/'
+              url: '/roles/admin/grant/'+encodeURIComponent(username)+'/update/user_db/'
               dataType: 'json'
               success: (data) ->
                 if not data.ok
@@ -322,7 +322,7 @@ do (jQuery) ->
               # Grant the user access:_users: rights
               $.ajax
                 type: 'PUT'
-                url: '/roles/admin/grant/'+encodeURI(username)+'/access/_users/'
+                url: '/roles/admin/grant/'+encodeURIComponent(username)+'/access/_users/'
                 dataType: 'json'
                 success: (data) ->
                   if not data.ok
@@ -367,7 +367,7 @@ do (jQuery) ->
           success: ->
             $.ajax
               type: 'PUT'
-              url: '/roles/admin/grant/'+encodeURI(username)+'/host'
+              url: '/roles/admin/grant/'+encodeURIComponent(username)+'/host'
               dataType: 'json'
               success: (data) ->
                 if data.ok
