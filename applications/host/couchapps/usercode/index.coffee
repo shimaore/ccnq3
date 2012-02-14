@@ -301,12 +301,16 @@ do (jQuery) ->
 
         $.couch.signup p, password,
 
-          error: (xhr,status,error) ->
-            if xhr.status isnt 409 # Conflict = user already created
+          error: (status) -> # This isn't what the documentation says, but that's what works.
+            if status is 409 # Conflict = user already created
+              do grant_rights
+            else
               alert "Voicemail signup failed: #{error}"
               $('#host_log').html 'Voicemail user record creation failed.'
 
-          success: ->
+          success: grant_rights
+
+        grant_rights = ->
             # Grant the user update:user_db: rights
             $.ajax
               type: 'PUT'
