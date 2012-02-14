@@ -76,6 +76,7 @@ and host vm3 will be a carrier-side server.
     update:_users:        # Allows to grant the role (via applications/roles/zappa/admin.coffee)
     update:host:          # Role to add
     update:user_db:       # Allows to grant this role to new "voicemail@" accounts. (Not required if not using voicemail.)
+    access:_users:        # Allows to grant this role to new "voicemail@" accounts. (Not required if not using voicemail.)
 
   to the "roles" array of your user's record (in the _users database).
   It should look something like this:
