@@ -327,25 +327,25 @@ do (jQuery) ->
                 log data.error ? data.forbidden
                 return
 
-            # Grant the user update:user_db: rights
-            $.ajax
-              type: 'PUT'
-              url: '/roles/admin/grant/'+encodeURIComponent(username)+'/update/user_db' # No prefix
-              dataType: 'json'
-              success: (data) ->
-                if not data.ok
-                  log data.error ? data.forbidden
-                  return
-
-              # Grant the user access:_users: rights
+              # Grant the user update:user_db: rights
               $.ajax
                 type: 'PUT'
-                url: '/roles/admin/grant/'+encodeURIComponent(username)+'/access/_users' # No prefix
+                url: '/roles/admin/grant/'+encodeURIComponent(username)+'/update/user_db' # No prefix
                 dataType: 'json'
                 success: (data) ->
                   if not data.ok
                     log data.error ? data.forbidden
                     return
+
+                  # Grant the user access:_users: rights
+                  $.ajax
+                    type: 'PUT'
+                    url: '/roles/admin/grant/'+encodeURIComponent(username)+'/access/_users' # No prefix
+                    dataType: 'json'
+                    success: (data) ->
+                      if not data.ok
+                        log data.error ? data.forbidden
+                        return
 
 
       create_user = (doc,cb) ->
