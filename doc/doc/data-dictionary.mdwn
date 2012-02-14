@@ -323,49 +323,61 @@ For non-trusted host that are allowed to submit P-Charge-Info, list of accounts 
     account: string
 
     type:"endpoint"
-    endpoint: string; either a static IP, or a user@domain registration username
+    endpoint: string, required; either a static IP, or a user@domain registration username
+      Note: If a static IP, it must be identical to the user_ip field.
+      Note: If a registration endpoint, password, ha1, and ha1b are required.
+
+    ### Registration endpoint:
     password: string; password used for authentication, or null if authentication not used
     ha1: authentication string; md5_hex([username,challenge,password].join(":"))
     ha1b: authentication string; md5_hex([username+'@'+challenge,challenge,password].join(":"))
       Note: if the "challenge" configuration parameter is empty (the default), the domain name of the To: header (for REGISTER) or From: header (for other messages) is used as the challenge. In other words: normally the challenge should be the same as the domain name used for the endpoint.
 
-    # Inbound call routing
-    dst_endpoint/dest_domain
-    dst_endpoint/dst_disabled
-    dst_endpoint/strip_digit
-    dst_endpoint/user_force_mp
-    dst_endpoint/user_ip
-    dst_endpoint/user_port
-    dst_endpoint/user_srv
-    dst_endpoint/user_via
+    ### Static endpoint:
+    user_ip         string  Static endpoint's IP address [required for static endpoints]
+      Note: must be identical to the endpoint field if used.
+    user_port       integer Static endpoint's port number [optional]
+    disabled        boolean If true, this IP is prevented from talking to the switch.
+      Note: used to build a black-list of IP addresses.
 
-    # Outbound call routing
-    dialog_timer: integer; maximum call (dialog) duration
+    ### Inbound call routing (dst_endpoint)
+    dest_domain     string  Override the destination domain with this value
+      Note: overrides user_srv and user_via
+      Note: probably obsolete
+    dst_disabled    boolean If true, calls towards this endpoint are blocked
+    strip_digit     boolean If true, remove the first digit of the destination username
+    user_force_mp   boolean If true, attempt to force media_proxy insertion
+    user_srv        string  Final user's domain (compatible with user_via)
+    user_via        string  If present, calls are routed via this SBC
+      Note: this requires a type of SBC which has not yet been ported to ccnq3.
+
+    ### Outbound call routing (src_endpoint)
+    dialog_timer: integer; maximum call (dialog) duration (in seconds)
     outbound_route: integer; route to use for outbound calls from this endpoint; if null, per-number outbound_route is used
 
-    src_endpoint/allow_onnet
-      Note: For allow_onnet to work you need to create separate "number" records for the client-side numbers so that the local OpenSIPS knows how to route them.
-            Routing can be done via a CFA, pointing e.g. to the ingress side of an open (inbound) carrier-sbc.
-
-    src_endpoint/check_from
-    src_endpoint/dest_domain
-    src_endpoint/dialog_timer
-    src_endpoint/disabled
-    src_endpoint/sbc
+    check_from      boolean If true, the call can only be placed if the endpoint for the number is the same as this endpoint. (Allows to restrict which caller_id is presented by an endpoint.)
+    dest_domain     string  Override the destination domain
+    sbc             integer This endpoint is an outbound SBC that sends calls to us towards a carrier.
       # Our own outbound SBCs
        1 SBC provides originator endpoint information as Sock-Info or source RURI param [outbound]
        2 SBC provides account info in P-Charge-Info (no checks) [outbound] (for example, a client-sbc)
       # Customer (outbound) SBCs
       10 SBC provides account info in P-Charge-Info, account is checked against account_forwarder [outbound]
-    src_endpoint/inbound_sbc
+    inbound_sbc     integer This endpoint is an inbound SBC that sends calls to us from a carrier.
       # Inbound SBCs
        1 upstream SBC [inbound]
 
-    src_endpoint/location
-    src_endpoint/outbound_route
-    src_endpoint/src_disabled
-    src_endpoint/trusted
-    src_endpoint/user_force_mp
+    location        string  An identifier for a location record
+      Note: might be overriden by the calling number's location.
+    outbound_route  integer An identifier for a rule record's group_id
+    src_disabled    boolean All outbound calls are disabled.
+      Note: Use outbound_route to allow some calls (e.g. emergency) and reject others.
+    user_force_mp   boolean If true, attempt to force media_proxy insertion
+
+    allow_onnet     boolean Obsolete; ccnq3 is not designed for allow_onnet.
+      Note: For allow_onnet to work you need to create separate "number" records for the client-side numbers so that the local OpenSIPS knows how to route them.
+            Routing can be done via a CFA, pointing e.g. to the ingress side of an open (inbound) carrier-sbc.
+      Note: Support for this feature might be removed at any time, do not depend on it.
 
 
 ## number (provisioning records)
@@ -389,13 +401,13 @@ For non-trusted host that are allowed to submit P-Charge-Info, list of accounts 
     # Local-number properties:
     endpoint [required]
     location:  string; the location identifier for this specific number (used for emergency location services)
-    cfa
-    cfb
-    cfda
-    cfnr
-    dialog_timer
-    dst_domain
-    inv_timer
+      Note: if present, overrides the endpoint's location.
+    cfa:  string, URI; if present, all calls are forwarded to this URI
+    cfb:  string, URI; if present, busy calls are forwarded to this URI
+    cfda: string, URI; if present, unanswered calls are forwarded to this URI
+    cfnr: string, URI; if present, non-registered endpoints are forwarded to this URI
+    dialog_timer: integer; maximum call duration
+    inv_timer: integer; maximum ringback duration
 
     privacy: boolean
       if true, a Privacy: id (mask calling number) header is added
