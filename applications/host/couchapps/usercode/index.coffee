@@ -312,7 +312,7 @@ do (jQuery) ->
             # Grant the user update:user_db: rights
             $.ajax
               type: 'PUT'
-              url: '/roles/admin/grant/'+encodeURIComponent(username)+'/update/user_db/'
+              url: '/roles/admin/grant/'+encodeURIComponent(username)+'/update/user_db' # No prefix
               dataType: 'json'
               success: (data) ->
                 if not data.ok
@@ -322,7 +322,7 @@ do (jQuery) ->
               # Grant the user access:_users: rights
               $.ajax
                 type: 'PUT'
-                url: '/roles/admin/grant/'+encodeURIComponent(username)+'/access/_users/'
+                url: '/roles/admin/grant/'+encodeURIComponent(username)+'/access/_users' # No prefix
                 dataType: 'json'
                 success: (data) ->
                   if not data.ok
