@@ -450,22 +450,13 @@ require('ccnq3_config').get (config)->
 
 
     request = require 'request'
-    make_proxy = (proxy_base) ->
-      return ->
-        proxy = request
-          uri: proxy_base + @request.url
-          method: @request.method
-          headers: @request.headers
-          jar: false
-          timeout: 1000
-        @request.pipe proxy
-        proxy.pipe @response
-        return
 
-    couchdb_proxy = make_proxy 'http://127.0.0.1:5984'
-    @get '/provisioning/': ->
+    proxy_base = 'http://127.0.0.1:5984'
+    @get /^\/provisioning\//, ->
       @check_admin (error) =>
         if(error?)
-          @render 'error', error:error
+          @send error:error
+          return
         else
-          do couchdb_proxy
+          request.get(proxy_base + @request.url).pipe(@response)
+          return
