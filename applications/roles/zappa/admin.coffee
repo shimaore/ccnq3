@@ -78,10 +78,13 @@ Released under the AGPL3 license
   # TODO GET /admin/grant/:user , using a user's "primary account" (the _users' record "account" field).
 
   # Grant right
-  @put '/roles/admin/grant/:user/(update|access)/:source/:prefix': ->
+  @put '/roles/admin/grant/:user/(update|access)/:source/': grant_right
+  @put '/roles/admin/grant/:user/(update|access)/:source/:prefix': grant_right
+
+  grant_right = ->
     operation = @params[0]
     source = @params.source
-    prefix = @params.prefix
+    prefix = @params.prefix ? ''
     @_admin_handle operation, source, prefix, (p,cb)=>
       # Do nothing if the target user already has access to this account.
       # (Including because it has access to a parent.)
@@ -93,10 +96,13 @@ Released under the AGPL3 license
       cb(p)
 
   # Drop right
-  @del '/roles/admin/grant/:user/(update|access)/:source/:prefix': ->
+  @del '/roles/admin/grant/:user/(update|access)/:source/': drop_right
+  @del '/roles/admin/grant/:user/(update|access)/:source/:prefix': drop_right
+
+  drop_right = ->
     operation = params[0]
     source = @params.source
-    prefix = @params.prefix
+    prefix = @params.prefix ? ''
     @_admin_handle operation, source, prefix, (p,cb)=>
       if not user_may p.roles,operation,source,prefix
           return @send ok:true
