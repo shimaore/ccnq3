@@ -121,3 +121,15 @@ Released under the AGPL3 license
 
       p.roles.push 'host'
       cb(p)
+
+  # Confirmed (necessary since system users cannot confirm).
+  @put '/roles/admin/grant/:user/confirmed': ->
+    operation = 'update'
+    source = '_users'
+    prefix = ''
+    @_admin_handle operation, source, prefix, (p,cb)=>
+      if user_is p.roles, 'confirmed'
+        return @send ok:true
+
+      p.roles.push 'confirmed'
+      cb(p)

@@ -317,6 +317,16 @@ do (jQuery) ->
           success: grant_rights
 
         grant_rights = ->
+          # Mark the user confirmed.
+          $.ajax
+            type: 'PUT'
+            url: '/roles/admin/grant/'+encodeURIComponent(username)+'/confirmed'
+            dataType: 'json'
+            success: (data) ->
+              if not data.ok
+                log data.error ? data.forbidden
+                return
+
             # Grant the user update:user_db: rights
             $.ajax
               type: 'PUT'
