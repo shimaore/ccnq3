@@ -447,3 +447,25 @@ require('ccnq3_config').get (config)->
         form id: 'registry', class: 'admin_only', method: 'get', action: 'user.reg', ->
           input type: 'hidden', name: 'user_id'
           input type: 'submit', value: 'Download Registry'
+
+
+    request = require 'request'
+    make_proxy = (proxy_base) ->
+      return ->
+        proxy = request
+          uri: proxy_base + @request.url
+          method: @request.method
+          headers: @request.headers
+          jar: false
+          timeout: 1000
+        @request.pipe proxy
+        proxy.pipe @response
+        return
+
+    couchdb_proxy = make_proxy 'http://127.0.0.1:5984'
+    @get '/provisioning/': ->
+      @check_admin (error) =>
+        if(error?)
+          @render 'error', error:error
+        else
+          do couchdb_proxy

@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "ccnq3_config": ">=0.1"
-  , "request": "*"
+  , "request": ">=2.9.100"
   , "milk": "*"
   , "zappa": "0.3.3"
   , "jsdom": "*"
