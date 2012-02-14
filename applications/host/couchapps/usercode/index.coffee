@@ -302,7 +302,7 @@ do (jQuery) ->
         $.couch.signup p, password,
 
           error: (xhr,status,error) ->
-            if status isnt 409 # Conflict = user already created
+            if xhr.status isnt 409 # Conflict = user already created
               alert "Voicemail signup failed: #{error}"
               $('#host_log').html 'Voicemail user record creation failed.'
 
