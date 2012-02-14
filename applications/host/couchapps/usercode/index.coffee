@@ -31,6 +31,8 @@ do (jQuery) ->
     "applications/freeswitch"
     "applications/opensips"
     "applications/traces"
+    # Applications for a server running FreeSwitch
+    "applications/voicemail"
   ]
 
   host_tpl = $.compile_template ->
