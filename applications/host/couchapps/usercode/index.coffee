@@ -285,10 +285,6 @@ do (jQuery) ->
 
       add_voicemail = (doc) ->
 
-        # Only attempt if it does not exist
-        if doc.voicemail?.password
-          return
-
         # Username/password for the voicemail application
         username = voicemail_username doc.host
         password = hex_sha1 "a"+Math.random()
@@ -296,7 +292,8 @@ do (jQuery) ->
         # Update the host record accordingly
         doc.voicemail =
           users_couchdb_uri: window.location.protocol + '//' + encodeURIComponent(username) + ':' + encodeURIComponent(password) + '@' + window.location.hostname + ':5984/_users' # FIXME
-          userdb_base_uri: profile.userdb_base_uri
+          # When logged in the profile is normally the user record.
+          userdb_base_uri: profile.profile?.userdb_base_uri
 
         # Create the user for the voicemail application
         p =
@@ -305,8 +302,9 @@ do (jQuery) ->
         $.couch.signup p, password,
 
           error: (xhr,status,error) ->
-            alert "Voicemail signup failed: #{error}"
-            $('#host_log').html 'Voicemail user record creation failed.'
+            if status isnt 409 # Conflict = user already created
+              alert "Voicemail signup failed: #{error}"
+              $('#host_log').html 'Voicemail user record creation failed.'
 
           success: ->
             # Grant the user update:user_db: rights
