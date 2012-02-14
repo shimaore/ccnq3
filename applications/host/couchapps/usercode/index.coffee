@@ -290,8 +290,8 @@ do (jQuery) ->
           return
 
         # Username/password for the voicemail application
-        username: voicemail_username doc.host
-        password: hex_sha1 "a"+Math.random()
+        username = voicemail_username doc.host
+        password = hex_sha1 "a"+Math.random()
 
         # Update the host record accordingly
         doc.voicemail =
