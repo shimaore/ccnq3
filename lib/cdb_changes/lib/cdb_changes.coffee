@@ -5,7 +5,7 @@
 
 util = require 'util'
 url = require 'url'
-json_req = require 'json_req'
+request = require('request').defaults json:true, jar:false
 
 # Reference for request: https://github.com/mikeal/node-utils/tree/master/request
 
@@ -24,6 +24,9 @@ cdb_changes = exports
 #    cookie
 
 cdb_changes.monitor = (options,cb)->
+
+  if options.cookie?
+    throw "options.cookie is obsolete"
 
   # Stream to receive the data from CouchDB
   parser = new process.EventEmitter()
@@ -77,11 +80,11 @@ cdb_changes.monitor = (options,cb)->
 
   req =
     uri: url.format uri
-    header:
-      cookie: options.cookie
+  # header:
+  #   cookie: options.cookie
 
-  cdb_stream = json_req.request req, (r) ->
-    if r.error?
-      util.log(r.error)
+  cdb_stream = request req, (e,r,json) ->
+    if e?
+      util.log(e)
 
   cdb_stream.pipe(parser)
