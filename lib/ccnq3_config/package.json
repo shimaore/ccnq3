@@ -10,5 +10,6 @@
   },
   "scripts": { "install": "coffee -c lib/ccnq3_config.coffee" },
   "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },
+  "private": false,
   "ok": true
 }

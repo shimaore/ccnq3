@@ -8,5 +8,6 @@
   "dependencies": { "json_req": ">=0.0.4" },
   "scripts": { "install": "coffee -c lib/cdb_changes.coffee" },
   "engines": { "node": ">=0.4.7" },
+  "private": false,
   "ok": true
 }

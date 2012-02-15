@@ -8,6 +8,7 @@
   "dependencies": { "request": ">=1.9.5" },
   "scripts": { "install": "coffee -c lib/json_req.coffee" },
   "engines": { "node": ">=0.4.7" },
-  "comment": "This package is now obsolete since mikeal/request now supports cookies and json."
+  "comment": "This package is now obsolete since mikeal/request now supports cookies and json.",
+  "private": true,
   "ok": true
 }

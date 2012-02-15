@@ -7,5 +7,6 @@
   "main": "lib/password.js",
   "scripts": { "install": "coffee -c lib/password.coffee" },
   "engines": { "node": ">=0.4.7" },
+  "private": false,
   "ok": true
 }
