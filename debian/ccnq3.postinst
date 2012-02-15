@@ -21,18 +21,12 @@ case "$1" in
         echo "Error: pre-existing $USER user with non-standard home directory." >&2
         exit 1
       fi
-      usermod -d $WORKDIR -c "CCNQ3 System,,," \
+      usermod -d $WORKDIR -c "CCNQ3 System" \
         -g $GROUP $USER
     fi
 
     # Install code in /opt/ccnq3/src
     mkdir -p ${WORKDIR}
-
-    # if [ -d ${WORKDIR}/src/.git ]; then
-    #   (cd ${WORKDIR}/src && git pull)
-    # else
-    #   (cd ${WORKDIR} && git clone ${SRC} ./src)
-    # fi
 
     chown -R $USER:$GROUP ${WORKDIR}
     chmod -R og-w ${WORKDIR}
@@ -44,8 +38,8 @@ case "$1" in
 
     # Install other dependencies
     npm -g install coffee-script
-    su -s /bin/sh -c "(cd ${WORKDIR}/src && npm install)" ccnq3
-    su -s /bin/sh -c "(cd ${WORKDIR}/src && npm run-script updates)" ccnq3
+    su -s /bin/sh -c "(cd ${WORKDIR}/src && npm install)" $USER
+    su -s /bin/sh -c "(cd ${WORKDIR}/src && npm run-script updates)" $USER
 
   ;;
 
