@@ -17,7 +17,8 @@
     <param name="ext-sip-ip" value="$${sip_ip}"/>
 
     <param name="inbound-use-callid-as-uuid"  value="true"/>
-    <param name="outbound-use-uuid-as-callid" value="true"/>
+    <!-- This is very useful for troubleshooting but FS blocks the calls looped back from the outbount-proxy with "Duplicate UUID!" and a SIP 503 error. Removing the oubtound mapping since I suspect the inbound one is most useful. -->
+    <param name="outbound-use-uuid-as-callid" value="false"/>
 
     <!--<param name="disable-srv"   value="false" />-->
     <!--<param name="disable-naptr" value="false" />-->
