@@ -16,5 +16,6 @@
   },
   "engines": { "node": ">=0.6.6", "coffee": ">=1.1.2" },
 
+  "private": true,
   "ok": true
 }

@@ -21,5 +21,6 @@
   },
   "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },
 
+  "private": true,
   "ok": true
 }

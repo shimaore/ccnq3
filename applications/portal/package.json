@@ -31,6 +31,6 @@
   },
   "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },
 
-  "published": true,
+  "private": true,
   "ok": true
 }
