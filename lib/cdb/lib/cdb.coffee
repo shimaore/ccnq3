@@ -11,6 +11,7 @@ class cdb
   constructor: (@db_uri) ->
 
   req: (options,cb) ->
+    options.json ?= true
     if options.uri?
       options.uri = @db_uri + '/' + options.uri
     else
