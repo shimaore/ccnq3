@@ -4,9 +4,8 @@
 ###
 
 querystring = require 'querystring'
-json_req = require 'json_req'
 util = require 'util'
-request = require 'request'
+request = require('request').defaults jar:false
 
 class cdb
   constructor: (@db_uri) ->
@@ -16,7 +15,8 @@ class cdb
       options.uri = @db_uri + '/' + options.uri
     else
       options.uri = @db_uri
-    json_req.request options, cb
+    request options, (e,r,json) ->
+      cb? json ? error:r.statusCode
 
   # Database-level operations
 
@@ -37,10 +37,9 @@ class cdb
       options =
         method: 'PUT'
         uri: '_security'
-        body: p
+        json: p
       @req options, (r)->
         if r.error? then return util.log r.error
-
 
   # Record-level operations
 
@@ -49,7 +48,9 @@ class cdb
       if r?.headers?.etag?
         rev = r.headers.etag
         rev = rev.replace /"/g, ''
-      cb? {_rev:rev}
+        cb? {_rev:rev}
+      else
+        cb? {error:r.statusCode}
 
   get: (id,cb) ->
     options =
@@ -60,13 +61,13 @@ class cdb
     options =
       uri:      querystring.escape(p._id)
       method:   'PUT'
-      body:     p
+      json:     p
     @req options, cb
 
   post: (p,cb) ->
     options =
       method:   'POST'
-      body:     p
+      json:     p
     @req options, cb
 
   del: (p,cb) ->
