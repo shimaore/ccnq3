@@ -4,6 +4,7 @@ fs = require 'fs'
 util = require 'util'
 cdb = require 'cdb'
 cdb_changes = require 'cdb_changes'
+spawn = require('child_process').spawn
 
 last_rev = ''
 
@@ -21,8 +22,10 @@ opensips_command = (port,command) ->
 
 process_changes = (port,command) ->
   switch command
-    when 'restart'
+    when 'stop'
       opensips_command port, ":kill:\n"
+    when 'start'
+      spawn '/usr/sbin/opensips', [ '-f', '/tmp/registrant.cfg' ]
 
 
 require('ccnq3_config').get (config) ->

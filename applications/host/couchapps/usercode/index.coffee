@@ -168,8 +168,12 @@ do (jQuery) ->
             checked:true
           radio
             id:'sip_commands.registrant'
-            title:'Restart Registrant'
-            value:'restart'
+            title:'Start Registrant'
+            value:'start'
+          radio
+            id:'sip_commands.registrant'
+            title:'Stop Registrant'
+            value:'stop'
 
         if 'applications/voicemail' in @applications
           textbox
