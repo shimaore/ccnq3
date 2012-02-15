@@ -21,7 +21,7 @@ case "$1" in
 
     # Startup parameters
     DEFAULTS=/etc/default/freeswitch
-    DB=/dev/shm/freeswitch-core.db
+    DB=/dev/shm/freeswitch
     sed -i -e 's/^FREESWITCH_ENABLED=.*$/FREESWITCH_ENABLED="true"/'              $DEFAULTS
     sed -i -e '/^FREESWITCH_PARAMS=/ d' $DEFAULTS
     echo "FREESWITCH_PARAMS=\"-nc -nonat -nonatmap -conf $CONF -log $LOG -db $DB\"" >> $DEFAULTS
