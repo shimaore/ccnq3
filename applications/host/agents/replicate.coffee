@@ -47,7 +47,7 @@ replicate = (config) ->
   cdb = require 'cdb'
   cdb.new(replicator).post replicant
 
-exports = (config) ->
+exports.replicate = (config) ->
   if config.admin?.system
     console.log "Not replicating from manager"
   else
