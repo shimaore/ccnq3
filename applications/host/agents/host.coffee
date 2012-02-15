@@ -18,7 +18,7 @@ request = require 'request'
 qs = require 'querystring'
 cdb_changes = require 'cdb_changes'
 
-replicate = require 'replicate'
+replicate = require './replicate'
 
 require('ccnq3_config').get (config) ->
 
