@@ -4,6 +4,8 @@
   require('ccnq3_config').get (c) ->
     config = c
 
+  request = require('request').defaults jar:false
+
   # Start replication from user's database back to a main database.
   @post '/roles/replicate/push/:target': ->
     if not @session.logged_in?
@@ -22,7 +24,7 @@
     replication_req =
       method: 'POST'
       uri: config.users.replicate_uri
-      body:
+      json:
         source: @session.user_database
         target: target
         filter: "#{target}/user_push" # Found in the userdb
@@ -32,9 +34,8 @@
     # Note: This will fail if the user database does not contain
     #       the proper design document for the specified target,
     #       so that restrictions are enforced.
-    json_req = require 'json_req'
-    json_req.request replication_req, (r) =>
-      @send r
+    request replication_req, (e,r,json) =>
+      @send json ? error:r.statusCode
 
   # Start replication from a main database to the user's database
   @post '/roles/replicate/pull/:source': ->
@@ -54,7 +55,7 @@
     replication_req =
       method: 'POST'
       uri: config.users.replicate_uri
-      body:
+      json:
         source: source
         target: @session.user_database
         filter: "replicate/user_pull" # Found in the source db
@@ -63,6 +64,5 @@
 
     # Note: The source replicate/user_pull filter is responsible for
     #       enforcing access restrictions.
-    json_req = require 'json_req'
-    json_req.request replication_req, (r) =>
-      @send r
+    request replication_req, (e,r,json) =>
+      @send json ? error:r.statusCode
