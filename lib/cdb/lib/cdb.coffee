@@ -44,7 +44,7 @@ class cdb
   # Record-level operations
 
   head: (id,cb) ->
-    request.head @db_uri + querystring.escape(id), (e,r) ->
+    request.head @db_uri + '/' + querystring.escape(id), (e,r) ->
       if r?.headers?.etag?
         rev = r.headers.etag
         rev = rev.replace /"/g, ''
