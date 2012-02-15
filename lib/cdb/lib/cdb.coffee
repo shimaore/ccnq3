@@ -17,7 +17,7 @@ class cdb
     else
       options.uri = @db_uri
     request options, (e,r,json) ->
-      cb? json ? error:r.statusCode
+      cb? json ? if r then error:r.statusCode else error:e
 
   # Database-level operations
 
