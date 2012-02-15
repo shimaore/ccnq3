@@ -40,7 +40,6 @@ lib/          -- CoffeeScript libraries
   cdb         -- CouchDB access helpers
   cdb_changes -- monitor CouchDB _changes handler
   esl         -- Access to the FreeSwitch Event System
-  json_req    -- An extension to the "request" module to handle JSON
   password    -- A memorable password generator
 
 public/       -- Common content that should be installed under the root of the main site
