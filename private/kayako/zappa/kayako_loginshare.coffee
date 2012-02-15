@@ -11,7 +11,7 @@ require('ccnq3_config').get (config)->
 
     @use 'bodyParser'
 
-    json_req = require 'json_req'
+    request = require 'request'
 
     kayako_error_msg = (msg) ->
       msg ?= 'Invalid Username or Password'
@@ -27,21 +27,18 @@ require('ccnq3_config').get (config)->
       q =
         method: 'POST'
         uri: config.kayako_loginshare.login_uri
-        body:
+        json:
           username: @body.username
           password: @body.password
 
-      json_req.request q, (p,cookie) =>
-        if p.error?
+      j = request.jar()
+      request = request.defaults jar:j, json:true
+      request q, (e,r,body) =>
+        if e?
           return @send kayako_error_msg()
 
-        s =
-          uri: config.kayako_loginshare.profile_uri
-          headers:
-            cookie: cookie
-
-        json_req.request s, (r) =>
-          if r.error?
+        request config.kayako_loginshare.profile_uri, (e,r,json) =>
+          if e?
             return @send kayako_error_msg("Internal Error")
 
           @send """
@@ -50,11 +47,11 @@ require('ccnq3_config').get (config)->
                  <result>1</result>
                  <user>
                    <usergroup>Registered</usergroup>
-                   <fullname>#{r.name}</fullname>
+                   <fullname>#{json.name}</fullname>
                    <emails>
-                     <email>#{r.email}</email>
+                     <email>#{json.email}</email>
                    </emails>
-                   <phone>#{r.phone}</phone>
+                   <phone>#{json.phone}</phone>
                  </user>
                </loginshare>
                """

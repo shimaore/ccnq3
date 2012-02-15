@@ -6,6 +6,7 @@
 querystring = require 'querystring'
 json_req = require 'json_req'
 util = require 'util'
+request = require 'request'
 
 class cdb
   constructor: (@db_uri) ->
@@ -44,15 +45,11 @@ class cdb
   # Record-level operations
 
   head: (id,cb) ->
-    options =
-      uri: querystring.escape(id)
-      method: 'HEAD'
-    @req options, (args...) ->
-      if args[0]?.headers?.etag?
-        rev = args[0].headers.etag
+    request.head @db_uri + querystring.escape(id), (e,r) ->
+      if r?.headers?.etag?
+        rev = r.headers.etag
         rev = rev.replace /"/g, ''
-        args[0]._rev = rev
-      cb? args...
+      cb? {_rev:rev}
 
   get: (id,cb) ->
     options =
