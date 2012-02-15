@@ -49,7 +49,6 @@ Released under the AGPL3 license
 esl = require 'esl'
 util = require 'util'
 querystring = require 'querystring'
-cdb = require 'cdb'
 
 messaging = require './messaging'
 
