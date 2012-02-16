@@ -60,7 +60,7 @@ do(jQuery,Sammy) ->
       input type:'submit', value:'Delete'
 
     coffeescript ->
-      $('#endpoint_form').delegate '#ip', 'change', ->
+      $('#endpoint_record').delegate '#ip', 'change', ->
         if $(@).val()?
           $('#username').disable()
           $('#password').disable()
