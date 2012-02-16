@@ -13,17 +13,22 @@ do(jQuery,Sammy) ->
   endpoint_tpl = $.compile_template ->
     form id:'endpoint_record', method:'post', action:'#/endpoint', class:'validate', ->
 
+      if @password
+        @username = @endpoint
+      else
+        @ip = @endpoint
+
       textbox
         id:'ip'
         title:'IP Address'
         class:'ip'
-        value: if not @password then @ip
+        value: @ip
 
       textbox
         id:'username'
         title:'Username'
-        class:'email'   # in the form username@domain
-        value: if @password then @username
+        class:'email'   # in the form user@domain
+        value: @username
 
       textbox
         id:'password'
