@@ -112,11 +112,11 @@ do(jQuery,Sammy) ->
         @send endpoint.get, @params.id,
           success: (doc) =>
             @swap endpoint_tpl doc
-            $('#endpoint_record').data 'doc', doc
+            $(selector).data 'doc', doc
           error: =>
             doc = {}
             @swap endpoint_tpl
-            $('#endpoint_record').data 'doc', doc
+            $(selector).data 'doc', doc
 
       @bind 'save-endpoint', (event) ->
 
