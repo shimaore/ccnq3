@@ -18,6 +18,7 @@ $(document).ready ->
           span 'Provisioning'
           ul ->
             li -> a href:'#/host', 'New host'
+            li -> a href:'#/endpoint', 'New endpoint'
 
     app = @
 
