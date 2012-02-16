@@ -133,9 +133,9 @@ do(jQuery,Sammy) ->
                 $(selector).data 'doc', doc
                 do push
         else
-          model.create doc,
+          endpoint.create doc,
             success: (resp) ->
-              model.get resp.id, (doc)->
+              endpoint.get resp.id, (doc)->
                 $(selector).data 'doc', doc
                 do push
 
