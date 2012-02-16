@@ -15,6 +15,7 @@ do(jQuery,Sammy) ->
       if not @user_ip
         @username = @endpoint
 
+      # Static
       textbox
         id:'user_ip'
         title:'Static IP Address'
@@ -22,14 +23,21 @@ do(jQuery,Sammy) ->
         value: @user_ip
 
       textbox
+        id:'user_port'
+        title:'Static Port'
+        class:'integer'
+        value:@user_port
+
+      # Register
+      textbox
         id:'username'
-        title:'Username'
+        title:'Register Username'
         class:'email'   # in the form user@domain
         value: @username
 
       textbox
         id:'password'
-        title:'Password'
+        title:'Register Password'
         class:'text'
         value:@password
 
@@ -51,6 +59,68 @@ do(jQuery,Sammy) ->
         class:'integer'
         value:@outbound_route
 
+      checkbox
+        id:'disabled'
+        title:'Blacklist IP'
+        value:@disabled
+
+      checkbox
+        id:'dst_disabled'
+        title:'Block inbound calls'
+        value:@dst_disabled
+
+      checkbox
+        id:'src_disabled'
+        title:'Block outbound calls'
+        value:@src_disabled
+
+      checkbox
+        id:'strip_digit'
+        title:'Remove first digit'
+        value:@strip_digit
+
+      checkbox
+        id:'user_force_mp'
+        title:'Attempt to force media_proxy insertion'
+        value:@user_force_mp
+
+      textbox
+        id:'user_srv'
+        title:'Final user domain (compatible with via SBC)'
+        class:'domain'
+        value:@user_srv
+
+      textbox
+        id:'user_via'
+        title:'Route via this SBC'
+        class:'domain'
+        value:@user_via
+
+      textbox
+        id:'dialog_timer'
+        title:'Maximum outbound call duration (sec)'
+        class:'integer'
+        value:@dialog_timer
+
+      checkbox
+        id:'check_from'
+        title:'Verify calling number'
+        value:@check_from
+
+      textbox
+        id:'sbc'
+        title:'Outbound SBC type'
+        class:'integer'
+        value:@sbc
+
+      textbox
+        id:'inbound_sbc'
+        title:'Inbound SBC type'
+        class:'integer'
+        value:@inbound_sbc
+
+      # Exclude obsolete "dest_domain" and "allow_onnet"
+
       input type:'submit'
 
     form method:'delete', action:'#/endpoint', ->
@@ -61,9 +131,11 @@ do(jQuery,Sammy) ->
         if $(@).val()?
           $('#username').disable()
           $('#password').disable()
+          $('#user_port').enable()
         else
           $('#username').enable()
           $('#password').enable()
+          $('#user_port').disable()
 
     $('form.validate').validate()
 
