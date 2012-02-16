@@ -12,16 +12,14 @@ do(jQuery,Sammy) ->
   endpoint_tpl = $.compile_template ->
     form id:'endpoint_record', method:'post', action:'#/endpoint', class:'validate', ->
 
-      if @password
+      if not @user_ip
         @username = @endpoint
-      else
-        @ip = @endpoint
 
       textbox
-        id:'ip'
-        title:'IP Address'
+        id:'user_ip'
+        title:'Static IP Address'
         class:'ip'
-        value: @ip
+        value: @user_ip
 
       textbox
         id:'username'
@@ -59,7 +57,7 @@ do(jQuery,Sammy) ->
       input type:'submit', value:'Delete'
 
     coffeescript ->
-      $('#endpoint_record').delegate '#ip', 'change', ->
+      $('#endpoint_record').delegate '#user_ip', 'change', ->
         if $(@).val()?
           $('#username').disable()
           $('#password').disable()
@@ -78,12 +76,11 @@ do(jQuery,Sammy) ->
       endpoint.extend
         beforeSave: (doc) ->
 
-          if doc.ip?
-            doc.endpoint = doc.ip
+          if doc.user_ip?
+            doc.endpoint = doc.user_ip
           else
             doc.endpoint = doc.username
 
-          delete doc.ip
           delete doc.username
           doc._id = make_id 'endpoint', doc.endpoint
 
