@@ -417,12 +417,12 @@ do (jQuery) ->
             doc._apps = all_apps
             @swap host_tpl doc
             delete doc._apps
-            $('#host_record').data 'doc', doc
+            $(selector).data 'doc', doc
           error: =>
             console.log "Error"
             doc = {}
             @swap host_tpl {_apps:all_apps}
-            $('#host_record').data 'doc', doc
+            $(selector).data 'doc', doc
 
       # Save
       @bind 'save-host', (event) ->
