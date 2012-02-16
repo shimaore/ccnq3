@@ -4,7 +4,6 @@ do(jQuery,Sammy) ->
   $ = jQuery
 
   make_id = (t,n) -> [t,n].join ':'
-  endpoint_username = (n) -> "endpoint@#{n}"
 
   container = '#content'
 
@@ -86,7 +85,7 @@ do(jQuery,Sammy) ->
 
           delete doc.ip
           delete doc.username
-          doc._id = doc.endpoint
+          doc._id = make_id 'endpoint', doc.endpoint
 
           if doc.password?
             [user,domain] = doc.endpoint.split /@/
@@ -97,6 +96,7 @@ do(jQuery,Sammy) ->
             delete doc.ha1
             delete doc.ha1b
 
+          return doc
 
       @bind 'error.endpoint', (notice) ->
         console.log "Endpoint error: #{notice.error}"
@@ -145,12 +145,16 @@ do(jQuery,Sammy) ->
         if form_is_valid
           @trigger 'save-endpoint'
 
+        return
+
       @del '#/endpoint', ->
 
         doc = $(selector).data('doc') ? {}
 
         @send endpoint.remove, doc, ->
           $('#endpoint_form').data 'doc', {}
+
+        return
 
       Inbox.register 'endpoint',
 
