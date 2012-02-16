@@ -20,9 +20,15 @@ cdb_changes = require 'cdb_changes'
 
 replicate = require('./replicate').replicate
 
+minutes = 60 * 1000
+default_replicate_interval = 5 * minutes
+
 require('ccnq3_config').get (config) ->
 
   replicate config
+
+  # The replicator tends to die randomly, so restart it at regular intervals.
+  setInterval replicate, config.replicate_interval ? default_replicate_interval
 
   # Main agent code
 
