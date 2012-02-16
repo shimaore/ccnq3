@@ -4,14 +4,50 @@ do(jQuery,Sammy) ->
   $ = jQuery
 
   make_id = (t,n) -> [t,n].join ':'
+  endpoint_username = (n) -> "endpoint@#{n}"
 
-  container = 'body'
+  container = '#content'
+
+  selector = '#endpoint_record'
 
   endpoint_tpl = $.compile_template ->
-    form id:'endpoint_form', method:'post', action:'#/endpoint', ->
-      textbox id:'ip',       title:'IP Address', value:@ip
-      textbox id:'username', title:'Username',   value:@username # in the form username@domain
-      textbox id:'password', title:'Password',   value:@password
+    form id:'endpoint_record', method:'post', action:'#/endpoint', class:'validate', ->
+
+      textbox
+        id:'ip'
+        title:'IP Address'
+        class:'ip'
+        value: if not @password then @ip
+
+      textbox
+        id:'username'
+        title:'Username'
+        class:'email'   # in the form username@domain
+        value: if @password then @username
+
+      textbox
+        id:'password'
+        title:'Password'
+        class:'text'
+        value:@password
+
+      textbox
+        id:'account'
+        title:'Account'
+        class:'required text'
+        value:@account
+
+      textbox
+        id:'location'
+        title:'Location'
+        class:'text'
+        value:@location
+
+      textbox
+        id:'outbound_route'
+        title:'Outbound Route'
+        class:'integer'
+        value:@outbound_route
 
       input type:'submit'
 
@@ -27,64 +63,97 @@ do(jQuery,Sammy) ->
           $('#username').enable()
           $('#password').enable()
 
-  main_tpl = $.compile_template ->
-    div id:'main', ->
-
-      a href:'#/endpoint', 'Endpoints'
+    $('form.validate').validate()
 
   $(document).ready ->
 
     app = $.sammy container, ->
 
-      @use 'Title'
-      @use 'Couch' #, dbname
+      endpoint = @createModel 'endpoint'
 
-      endpoints = @createModel('endpoints')
+      endpoint.extend
+        beforeSave: (doc) ->
 
-      # endpoints.extend
-      #   beforeSave: (doc) -> ...
+          if doc.ip?
+            doc.endpoint = doc.ip
+          else
+            doc.endpoint = doc.username
 
-      @template_engine = 'coffeekup'
+          delete doc.ip
+          delete doc.username
+          doc._id = doc.endpoint
 
-      @setTitle 'Provisioning'
+          if doc.password?
+            [user,domain] = doc.endpoint.split /@/
+            challenge = domain
+            doc.ha1 = md5_hex [user,challenge,doc.password].join ':'
+            doc.ha1b = md5_hex [doc.endpoint,challenge,doc.password].join(':')
+          else
+            delete doc.ha1
+            delete doc.ha1b
 
-      @bind 'error.endpoints', (notice) ->
-        alert "An error occurred: #{notice.error}"
 
-      @get '#/', ->
-        @swap main_tpl()
+      @bind 'error.endpoint', (notice) ->
+        console.log "Endpoint error: #{notice.error}"
 
       @get '#/endpoint', ->
-        if @params.endpoint?
-          # Get the data record, then render it and display the result.
-          @send endpoints.get, make_id('endpoint',@params.endpoint), (doc)=>
-            $('#endpoint_form').data 'doc', doc
+        @swap endpoint_tpl
+
+      @get '#/endpoint/:id', ->
+        if not @params.id?
+          @swap host_tpl
+          return
+
+        @send endpoint.get, @params.id,
+          success: (doc) =>
             @swap endpoint_tpl doc
+            $('#endpoint_record').data 'doc', doc
+          error: =>
+            doc = {}
+            @swap endpoint_tpl
+            $('#endpoint_record').data 'doc', doc
+
+      @bind 'save-endpoint', (event) ->
+
+        doc = $(selector).data('doc') ? {}
+        $.extend doc, $(selector).toDeepJson()
+
+        push = ->
+          $.ccnq3.push_document 'provisioning'
+
+        if doc.rev?
+          endpoint.update doc._id, doc,
+            success: (resp) ->
+              endpoint.get resp.id, (doc)->
+                $(selector).data 'doc', doc
+                do push
         else
-          @swap endpoint_tpl()
+          model.create doc,
+            success: (resp) ->
+              model.get resp.id, (doc)->
+                $(selector).data 'doc', doc
+                do push
 
       @post '#/endpoint', ->
-        # Do something
-        doc = $('#endpoint_form').data 'doc'
-        doc ?= {}
-        former_doc = doc
-        $.extend doc, $('#endpoint_form').toDeepJson()
+        form_is_valid = $(selector).valid()
 
-        doc.endpoint = if doc.ip? then doc.ip else doc.username
-        doc._id = make_id('endpoint',doc.endpoint)
-
-        if doc._id is former_doc._id
-          @send endpoints.update, doc._id, doc, ->
-            $('#endpoint_form').data 'doc', doc
-        else
-          delete doc._rev
-          @send endpoints.remove, former_doc, (doc)=>
-            @send endpoints.save,  doc, ->
-              $('#endpoint_form').data 'doc', doc
+        if form_is_valid
+          @trigger 'save-endpoint'
 
       @del '#/endpoint', ->
-        former_doc = $('#endpoint_form').data 'doc'
-        @send endpoints.remove, former_doc, ->
+
+        doc = $(selector).data('doc') ? {}
+
+        @send endpoint.remove, doc, ->
           $('#endpoint_form').data 'doc', {}
 
-    app.run '#/'
+      Inbox.register 'endpoint',
+
+        list: (doc) ->
+          return "Endpoint #{doc.endpoint}"
+
+        form: (doc) ->
+          id = encodeURIComponent doc._id
+          """
+            <p><a href="#/endpoint/#{id}">Edit</a></p>
+          """
