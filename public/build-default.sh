@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 coffee -c js/*.coffee
-cat js/sha1.js            \
+cat js/jshash-2.2/sha1-min.js \
+    js/jshash-2.2/md5-min.js  \
     js/jquery.js          \
     js/jquery-ui.js       \
     js/jquery.validate.js \
