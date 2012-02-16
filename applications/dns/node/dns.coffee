@@ -117,7 +117,7 @@ class Response
   add_additionals: (cb) ->
     for record in _.union(@answer, @authoritative)
       do (record) =>
-        name = record.value
+        name = dotize record.value
         # Only do the resolution for explicit names (e.g. CNAME, NS)
         return unless typeof name is 'string'
         zone = @server.zones?.find_zone name
