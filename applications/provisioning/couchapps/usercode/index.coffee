@@ -126,7 +126,7 @@ do(jQuery,Sammy) ->
         push = ->
           $.ccnq3.push_document 'provisioning'
 
-        if doc.rev?
+        if doc._rev?
           endpoint.update doc._id, doc,
             success: (resp) ->
               endpoint.get resp.id, (doc)->
