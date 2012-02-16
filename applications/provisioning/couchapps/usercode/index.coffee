@@ -86,8 +86,8 @@ do(jQuery,Sammy) ->
           if doc.password?
             [user,domain] = doc.endpoint.split /@/
             challenge = domain
-            doc.ha1 = md5_hex [user,challenge,doc.password].join ':'
-            doc.ha1b = md5_hex [doc.endpoint,challenge,doc.password].join(':')
+            doc.ha1 = hex_md5 [user,challenge,doc.password].join ':'
+            doc.ha1b = hex_md5 [doc.endpoint,challenge,doc.password].join(':')
           else
             delete doc.ha1
             delete doc.ha1b
