@@ -27,8 +27,10 @@ require('ccnq3_config').get (config) ->
 
   replicate config
 
+  replication = -> replicate config
+
   # The replicator tends to die randomly, so restart it at regular intervals.
-  setInterval replicate, config.replicate_interval ? default_replicate_interval
+  setInterval replication, config.replicate_interval ? default_replicate_interval
 
   # Main agent code
 
