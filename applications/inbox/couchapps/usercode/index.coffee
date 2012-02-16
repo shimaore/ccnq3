@@ -1,6 +1,6 @@
 do (jQuery) ->
   defaults =
-    limit: 10
+    limit: 100
 
   $ = jQuery
 
@@ -8,10 +8,10 @@ do (jQuery) ->
     div class:'inbox', ->
       div class:'inbox_header', ->
         span 'Show '
-        select class:'inbox_limit', ->
-          option value:10, -> '10'
-          option value:25, -> '25'
-          option value:50, -> '50'
+        select name:'inbox_limit', class:'inbox_limit', ->
+          option value:100, -> '100'
+          option value:200, -> '200'
+          option value:500, -> '500'
       div class:'inbox_content'
 
 
@@ -54,7 +54,7 @@ do (jQuery) ->
       inbox_model.viewDocs 'inbox/by_date',
         include_docs: true
         descending: true
-        limit: @children('.inbox_limit').val() ? defaults.limit
+        limit: @find('.inbox_limit').val() ? defaults.limit
       , (docs) =>
           content = @find('.inbox_content')
           content.html ''
@@ -71,7 +71,7 @@ do (jQuery) ->
           inbox_model.get r.id, (doc) ->
             content.prepend inbox_item doc
 
-    @children('.inbox_limit').change ->
+    @find('.inbox_limit').change ->
       refill()
 
     refill()
