@@ -7,6 +7,8 @@ do(jQuery,Sammy) ->
 
   container = '#content'
 
+  ## Endpoint
+
   selector = '#endpoint_record'
 
   endpoint_tpl = $.compile_template ->
@@ -225,13 +227,13 @@ do(jQuery,Sammy) ->
 
         return
 
-      Inbox.register 'endpoint',
+  Inbox.register 'endpoint',
 
-        list: (doc) ->
-          return "Endpoint #{doc.endpoint}"
+    list: (doc) ->
+      return "Endpoint #{doc.endpoint}"
 
-        form: (doc) ->
-          id = encodeURIComponent doc._id
-          """
-            <p><a href="#/endpoint/#{id}">Edit</a></p>
-          """
+    form: (doc) ->
+      id = encodeURIComponent doc._id
+      """
+        <p><a href="#/endpoint/#{id}">Edit</a></p>
+      """
