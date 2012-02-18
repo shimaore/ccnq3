@@ -56,7 +56,7 @@ class Message
           @start_recording req, res
         return
 
-      res.execute 'play_and_get_digits', "1 1 1 3000 phrase:'to-start-over to-listen to-append to-finish,1234' phrase:'invalid choice' choice \\d 3000", (req,res) ->
+      res.execute 'play_and_get_digits', "1 1 1 3000 phrase:'to-start-over to-listen to-append to-finish:1234' phrase:'invalid choice' choice \\d 3000", (req,res) ->
         switch req.body.variable_choice
           when "1"
             @delete_parts ->
@@ -84,7 +84,7 @@ class Message
   # Play the message enveloppe
   play_envelope: (req,res,cb) ->
     @db.get @id, (e,b,h) ->
-      res.execute 'play_and_get_digits', "1 1 1 1000 phrase:'message received,#{b.timestamp}' silence_stream://250 choice \\d 1000", (req,res) ->
+      res.execute 'play_and_get_digits', "1 1 1 1000 phrase:'message received:#{b.timestamp}' silence_stream://250 choice \\d 1000", (req,res) ->
         if req.body.variable_choice
           cb req, res, req.body.variable_choice
         else
@@ -169,7 +169,7 @@ class User
         do wrap_cb
 
       if vm_settings.pin?
-        res.execute 'play_and_get_digits', "4 10 1 3000 phrase:'voicemail_enter_pass,#' phrase:'voicemail_fail_auth' pin \\d+ 3000", (req,res) ->
+        res.execute 'play_and_get_digits', "4 10 1 3000 phrase:'voicemail_enter_pass:#' phrase:'voicemail_fail_auth' pin \\d+ 3000", (req,res) ->
           if req.body.variable_pin is vm_settings.pin
             do wrap_cb
           else
@@ -215,7 +215,7 @@ locate_user = (config,req,res,username,cb) ->
   users_db.get org_couchdb_user+username, (r) ->
     if r.error?
       util.log "User #{username} not found, trying again."
-      res.execute 'play_and_get_digits', "1 16 1 3000 # phrase:'voicemail_enter_id,#' phrase:'voicemail_fail_auth' destination \\d+ 3000", (req,res) ->
+      res.execute 'play_and_get_digits', "1 16 1 3000 # phrase:'voicemail_enter_id:#' phrase:'voicemail_fail_auth' destination \\d+ 3000", (req,res) ->
         # FIXME restrict the number of attempts in a single call
         return locate_user config, res, req.body.variable_destination, cb
 
