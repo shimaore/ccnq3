@@ -13,12 +13,21 @@
 
 NAME=ccnq3
 SCRIPTNAME=/etc/init.d/$NAME
+IPTABLES=/sbin/iptables
+TABLE=CCNQ3_DNS_PREROUTING
 
 case "$1" in
   start)
-    /sbin/iptables -t nat -I PREROUTING -p udp -m udp --dport 53 -j REDIRECT --to-ports 53053
+    $IPTABLES -t nat -S | grep $TABLE || (
+      $IPTABLES -t nat -I PREROUTING -j $TABLE
+    )
+    $IPTABLES -t nat -N $TABLE || $IPTABLES -t nat -F $TABLE
+    $IPTABLES -t nat -I $TABLE -p udp -m udp --dport 53 -j REDIRECT --to-ports 53053
   ;;
   stop)
+    $IPTABLES -t nat -F $TABLE
+    $IPTABLES -t nat -X $TABLE
+    $IPTABLES -t nat -D PREROUTING -j $TABLE
   ;;
   *)
     echo "Usage: $SCRIPTNAME {start|stop}" >&2
