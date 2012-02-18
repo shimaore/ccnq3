@@ -4,10 +4,12 @@
 Released under the AGPL3 license
 ###
 
+util = require 'util'
 make_id = (t,n) -> [t,n].join ':'
 
 esl = require 'esl'
 fs_command = (cmd,cb) ->
+  util.log "Executing #{cmd}"
   client = esl.createClient()
   client.on 'esl_auth_request', (req,res) ->
     res.auth 'CCNQ', (req,res) ->
@@ -20,7 +22,8 @@ fs_command = (cmd,cb) ->
 
 process_changes = (commands) ->
 
-  for profile_name, command of commands when profile_name isnt 'opensips' and profile_name isnt 'freeswitch'
+  # FIXME really we should only execute commands for ingress-* and egress-*
+  for profile_name, command of commands when profile_name isnt 'opensips' and profile_name isnt 'freeswitch' and profile_name isnt 'registrant'
     switch command
       when 'start'
         fs_command "sofia profile #{profile_name} start"
@@ -64,7 +67,6 @@ save_uri_as = (uri,file,cb)->
 
 # Main
 
-util = require 'util'
 cdb_changes = require 'cdb_changes'
 qs = require 'querystring'
 
@@ -99,6 +101,7 @@ require('ccnq3_config').get (config) ->
         do (show,file)->
           expected++
           save_uri_as "#{config.provisioning.local_couchdb_uri}/_design/freeswitch/_show/#{show}/#{host_uri}", file,  ->
+            util.log "Updated #{file}"
             if --expected is 0 then cb?()
 
     # 1b. Apply configuration changes
@@ -110,6 +113,7 @@ require('ccnq3_config').get (config) ->
             do (profile_name) ->
               expected++
               fs_command "sofia profile #{profile_name} rescan reloadxml", ->
+                util.log "Update sofia profile #{profile_name}"
                 if --expected is 0 then cb?()
 
     # 2. Process any command
