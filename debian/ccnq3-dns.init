@@ -18,16 +18,20 @@ TABLE=CCNQ3_DNS_PREROUTING
 
 case "$1" in
   start)
+    # Create the new table.
+    $IPTABLES -t nat -N $TABLE 2>/dev/null || $IPTABLES -t nat -F $TABLE
+    $IPTABLES -t nat -I $TABLE -p udp -m udp --dport 53 -j REDIRECT --to-ports 53053
+    # Call it from the main PREROUTING table.
     $IPTABLES -t nat -S 2>/dev/null | egrep -e "^-A PREROUTING -j $TABLE\$" >/dev/null || (
       $IPTABLES -t nat -I PREROUTING -j $TABLE
     )
-    $IPTABLES -t nat -N $TABLE 2>/dev/null || $IPTABLES -t nat -F $TABLE
-    $IPTABLES -t nat -I $TABLE -p udp -m udp --dport 53 -j REDIRECT --to-ports 53053
   ;;
   stop)
+    # Remove the rule from PREROUTING.
+    $IPTABLES -t nat -D PREROUTING -j $TABLE
+    # Remove the table.
     $IPTABLES -t nat -F $TABLE
     $IPTABLES -t nat -X $TABLE
-    $IPTABLES -t nat -D PREROUTING -j $TABLE
   ;;
   *)
     echo "Usage: $SCRIPTNAME {start|stop}" >&2
