@@ -37,6 +37,7 @@
 
   "comment dflag": "Dialog flags",
   "dflag_mediaproxy":                 8,
+  "dflag_mediaproxy_engaged":         9,
 
   "auth_table": "subscriber",
   "usrloc_table": "location",
