@@ -43,7 +43,7 @@ last_rev = ''
 
 require('ccnq3_config').get (config) ->
   options =
-    uri: config.provisioning.host_couchdb_uri
+    uri: config.provisioning.local_couchdb_uri
     filter_name: "host/hostname"
     filter_params:
       hostname: config.host
