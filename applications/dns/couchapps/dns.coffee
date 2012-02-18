@@ -152,14 +152,15 @@ ddoc.views.names =
                     _.ingress_sip_port
                     ip_to_name[_.ingress_sip_ip] ? doc.host
                   ]
+                # UDP NAPTR
                 emit domain,
                   prefix: 'ingress-'+name
                   class:'NAPTR'
                   value: [
                     10
                     10
-                    'u'
-                    'E2U+sip'
+                    's' # output is domain-name with SRV records (see rfc3404)
+                    'SIP+D2U' # SIP over UDP (rfc3263)
                     ''
                     _sip_udp+'ingress-'+fqdn
                   ]
@@ -179,8 +180,8 @@ ddoc.views.names =
                   value: [
                     10
                     10
-                    'u'
-                    'E2U+sip'
+                    's' # output is domain-name with SRV records (see rfc3404)
+                    'SIP+D2U' # SIP over UDP (rfc3263)
                     ''
                     _sip_udp+'egress-'+fqdn
                   ]
