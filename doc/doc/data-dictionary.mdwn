@@ -120,6 +120,9 @@ To add a FreeSwitch host:
           # For handler on one of the carrier-sbc's
           enum_root: Carrier ENUM root for inbound routing
 
+          # For handler="voicemail"
+          default_language: string; default voicemail language [default: this host's voicemail.default_language, see below]
+
       Notes: changes (except for *_sip_ip and *_sip_port) are automatically applied.
 
     sip_commands: {} of profiles commands:
@@ -253,6 +256,7 @@ Voicemail is stored inside a user's own CouchDB database.
       port: integer, optional; the (local) port for the voicemail ESL server [default: 7123]
       min_duration: integer, optional; the minimal duration for a voicemail fragment [default: 5]
       max_duration: integer, optional; the maximal duration for a voicemail fragment [default: 300]
+      default_language: language used if none is specified in the sip_profile [default: 'en']
 
 
 ### Other data in a "host" provisioning record.
@@ -580,6 +584,7 @@ are not replicated.
     _id: 'voicemail_settings'
     no_pin:  boolean; if true, the user has no PIN
     pin: string of digits; the user's voicemail PIN
+    language: language string for this user's voicemail
 
 
     _attachments:

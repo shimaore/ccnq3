@@ -159,13 +159,19 @@ class User
       return
 
     @voicemail_settings req, res, (vm_settings) ->
+      wrap_cb = ->
+        if vm_settings.language?
+          res.execute 'set',  "default_language=#{vm_settings.language}", cb
+        else
+          do cb
+
       if vm_settings.no_pin
-        return do cb
+        do wrap_cb
 
       if vm_settings.pin?
         res.execute 'play_and_get_digits', "4 10 1 3000 phrase:'please enter your pin' phrase:'invalid entry' pin \\d+ 3000", (req,res) ->
           if req.body.variable_pin is vm_settings.pin
-            do cb
+            do wrap_cb
           else
             @authenticate req, res,cb, attempts-1
 
