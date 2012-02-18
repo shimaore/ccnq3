@@ -1,11 +1,11 @@
 <include>
-  <language name="fr" sound-path="$${sounds_dir}/fr/fr/sibylle" tts-engine="cepstral" tts-voice="david">
+  <language name="fr" sound-path="$${sounds_dir}/fr/fr/sibylle">
     <X-PRE-PROCESS cmd="include" data="say/sounds.xml"/>
     <X-PRE-PROCESS cmd="include" data="vm/sounds.xml"/>
     <!-- <X-PRE-PROCESS cmd="include" data="dir/sounds.xml"/> -->
  </language>
   <!-- see http://en.wikipedia.org/wiki/IETF_language_tag -->
-  <language name="fr-FR" module="fr" sound-path="$${sounds_dir}/fr/fr/sibylle" tts-engine="cepstral" tts-voice="david">
+  <language name="fr-FR" sound-path="$${sounds_dir}/fr/fr/sibylle">
     <X-PRE-PROCESS cmd="include" data="say/sounds.xml"/>
     <X-PRE-PROCESS cmd="include" data="vm/sounds.xml"/>
     <!-- <X-PRE-PROCESS cmd="include" data="dir/sounds.xml"/> -->
