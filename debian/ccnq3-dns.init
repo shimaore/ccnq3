@@ -18,10 +18,10 @@ TABLE=CCNQ3_DNS_PREROUTING
 
 case "$1" in
   start)
-    $IPTABLES -t nat -S | grep $TABLE || (
+    $IPTABLES -t nat -S 2>/dev/null | egrep -e "^-A PREROUTING -j $TABLE\$" >/dev/null || (
       $IPTABLES -t nat -I PREROUTING -j $TABLE
     )
-    $IPTABLES -t nat -N $TABLE || $IPTABLES -t nat -F $TABLE
+    $IPTABLES -t nat -N $TABLE 2>/dev/null || $IPTABLES -t nat -F $TABLE
     $IPTABLES -t nat -I $TABLE -p udp -m udp --dport 53 -j REDIRECT --to-ports 53053
   ;;
   stop)
