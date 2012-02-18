@@ -2,6 +2,7 @@
 # (c) 2012 Stephane Alnet
 # License: AGPL3+
 
+util = require 'util'
 request = require 'request'
 nano = require 'nano'
 
