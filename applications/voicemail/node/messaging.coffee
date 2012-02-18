@@ -167,12 +167,12 @@ class User
           if req.body.variable_pin is vm_settings.pin
             do cb
           else
-            @authenticate res,cb, attempts-1
+            @authenticate req, res,cb, attempts-1
 
-  new_messages: (res,cb) ->
+  new_messages: (req, res,cb) ->
     @user_db.view 'voicemail', 'new_messages', (e,b,h) ->
       if e
-        cb null, res
+        cb req, res
       res.execute 'phrase', "you have new messages,#{b.total_rows}", (req,res) -> cb req, res, r.rows
 
   navigate_messages: (req,res,rows,current,cb) ->
@@ -203,7 +203,7 @@ class User
 #
 org_couchdb_user = 'org.couchdb.user:'
 
-locate_user = (config,res,username,cb) ->
+locate_user = (config,req,res,username,cb) ->
 
   users_db = nano config.voicemail.users_couchdb_uri
   users_db.get org_couchdb_user+username, (r) ->
@@ -218,27 +218,27 @@ locate_user = (config,res,username,cb) ->
     db_uri = config.voicemail.userdb_base_uri + r.user_database
     cb db_uri, new User db_uri, username
 
-exports.record = (config,res,username) ->
+exports.record = (config,req,res,username) ->
 
   locate_user arguments..., (db_uri,user) ->
 
     msg = new Message db_uri, timestamp(), caller_id
-    msg.create null, res, ->
-      user.play_prompt res, -> msg.start_recording null, res
+    msg.create req, res, (req,res) ->
+      user.play_prompt req, res, (req,res)-> msg.start_recording req, res
 
-exports.inbox = (config,res,username) ->
+exports.inbox = (config,req,res,username) ->
 
   locate_user arguments..., (db_uri,user) ->
-    user.authenticate res, (req,res) ->
+    user.authenticate req, res, (req,res) ->
       # Enumerate messages
-      user.new_messages res, (req,res,rows) ->
+      user.new_messages req, res, (req,res,rows) ->
         user.navigate_messages req, res, rows, 0, (req,res) ->
           # Go to the main menu after message navigation
           user.main_menu req, res
 
-exports.main = (config,res,username) ->
+exports.main = (config,req,res,username) ->
 
   locate_user arguments..., (db_uri,user) ->
-    user.authenticate res, (req,res) ->
+    user.authenticate req, res, (req,res) ->
       # Present the main menu
       user.main_menu req, res

@@ -68,15 +68,15 @@ require('ccnq3_config').get (config)->
     switch mode
       when 'record'
         util.log "Record for #{user}"
-        messaging.record config, res, user
+        messaging.record config, req, res, user
 
       when 'inbox'
         util.log "Inbox for #{user}"
-        messaging.inbox config, res, user
+        messaging.inbox config, req, res, user
 
       when 'main'
         util.log "Main for #{user}"
-        messaging.main config, res, user
+        messaging.main config, req, res, user
 
       else
         # FIXME say something
