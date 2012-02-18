@@ -205,9 +205,9 @@ org_couchdb_user = 'org.couchdb.user:'
 locate_user = (config,res,username,cb) ->
 
   users_db = nano config.voicemail.users_couchdb_uri
-  users_db.get org_couchdb_user+user, (r) ->
+  users_db.get org_couchdb_user+username, (r) ->
     if r.error?
-      util.log "User #{user} not found, trying again."
+      util.log "User #{username} not found, trying again."
       res.execute 'play_and_get_digits', "1 16 1 3000 # phrase:'destination please' phrase:'invalid number' destination \\d+ 3000", (req,res) ->
         # FIXME restrict the number of attempts in a single call
         return locate_user config, res, req.body.variable_destination, cb
