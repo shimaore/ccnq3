@@ -161,7 +161,7 @@ class User
     @voicemail_settings req, res, (vm_settings) ->
       wrap_cb = ->
         if vm_settings.language?
-          res.execute 'set',  "default_language=#{vm_settings.language}", cb
+          res.execute 'set',  "language=#{vm_settings.language}", cb
         else
           do cb
 
