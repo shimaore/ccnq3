@@ -169,7 +169,7 @@ class User
         do wrap_cb
 
       if vm_settings.pin?
-        res.execute 'play_and_get_digits', "4 10 1 3000 phrase:'please enter your pin' phrase:'invalid entry' pin \\d+ 3000", (req,res) ->
+        res.execute 'play_and_get_digits', "4 10 1 3000 phrase:'voicemail_enter_pass' phrase:'voicemail_fail_auth' pin \\d+ 3000", (req,res) ->
           if req.body.variable_pin is vm_settings.pin
             do wrap_cb
           else
@@ -179,7 +179,7 @@ class User
     @user_db.view 'voicemail', 'new_messages', (e,b,h) ->
       if e
         cb req, res
-      res.execute 'phrase', "you have new messages,#{b.total_rows}", (req,res) -> cb req, res, r.rows
+      res.execute 'phrase', "voicemail_message_count,#{b.total_rows}:new", (req,res) -> cb req, res, r.rows
 
   navigate_messages: (req,res,rows,current,cb) ->
     # Exit once we reach the end or there are no messages, etc.
@@ -215,7 +215,7 @@ locate_user = (config,req,res,username,cb) ->
   users_db.get org_couchdb_user+username, (r) ->
     if r.error?
       util.log "User #{username} not found, trying again."
-      res.execute 'play_and_get_digits', "1 16 1 3000 # phrase:'destination please' phrase:'invalid number' destination \\d+ 3000", (req,res) ->
+      res.execute 'play_and_get_digits', "1 16 1 3000 # phrase:'voicemail_enter_id' phrase:'voicemail_fail_auth' destination \\d+ 3000", (req,res) ->
         # FIXME restrict the number of attempts in a single call
         return locate_user config, res, req.body.variable_destination, cb
 
