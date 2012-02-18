@@ -35,4 +35,18 @@
     </extension>
 
   </context>
+
+  <context name="egress-$${profile_name}">
+
+    <extension name="voicemail-direct">
+      <condition field="caller_id_number" expression="^(.+)$" >
+        <action application="answer"/>
+        <action application="set" data="vm_user=$1"/>
+        <action application="set" data="vm_mode=inbox" />
+        <action application="set" data="playback_terminator=#"/>
+        <action application="socket" data="127.0.0.1:$${voicemail_port} async full"/>
+      </condition>
+    </extension>
+
+  </context>
 </include>
