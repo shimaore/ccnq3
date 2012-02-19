@@ -217,7 +217,7 @@ locate_user = (config,req,res,username,cb) ->
       util.log "User #{username} not found, trying again."
       res.execute 'play_and_get_digits', "1 16 1 3000 # phrase:'voicemail_enter_id:#' phrase:'voicemail_fail_auth' destination \\d+ 3000", (req,res) ->
         # FIXME restrict the number of attempts in a single call
-        return locate_user config, res, req.body.variable_destination, cb
+        return locate_user config, req, res, req.body.variable_destination, cb
 
     # So we got a user document. Let's locate their user database.
     # userdb_base_uri should contain authentication elements (e.g. "voicemail" user+pass)
