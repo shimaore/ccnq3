@@ -135,8 +135,8 @@ class User
 
     @user_db.get 'voicemail_settings', (e,vm_settings,h) =>
       if e
-        util.log "VM Box for #{@user} is not available: #{e}"
-        res.execute 'phrase', 'vmbox is not available', hangup
+        util.log "VM Box for #{@user} is not available from #{@db_uri}: #{e}"
+        res.execute 'phrase', 'sorry', hangup
       else
         @vm_settings = vm_settings # Memoize
         cb vm_settings

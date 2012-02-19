@@ -1,4 +1,13 @@
 <include><!--This line will be ignored it's here to validate the xml and is optional -->
+
+  <macro name="sorry">
+    <input pattern="^sorry$">
+      <match>
+        <action function="play-file" data="misc/sorry.wav"/>
+      </match>
+    </input>
+  </macro>
+
   <macro name="voicemail_enter_id">
     <input pattern="(.*)">
       <match>
