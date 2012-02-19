@@ -56,7 +56,7 @@ require('ccnq3_config').get (config)->
 
   # esl.debug = true
 
-  server = esl.createCallServer()
+  server = esl.createCallServer true
 
   server.on 'CONNECT', (req,res) ->
 
