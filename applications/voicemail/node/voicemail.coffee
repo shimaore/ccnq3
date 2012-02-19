@@ -17,22 +17,20 @@ Released under the AGPL3 license
 
   The authentication is done using our standard CouchDB access.
 
-  Individual voicemail accounts (for example phone-number@domain) are registered
-  as CouchDB users, and given access to a userDB.
-  (A priori that userDB might be the same as some existing web-based user's,
+  Individual voicemail accounts (number@number_domain) are gathered from
+  the provisioning database, and given access to a userDB.
+  (A priori that userDB should be the same as some existing web-based user's,
   allowing for web voicemail, etc.).
-  [In other words a given "userDB" can be shared by multiple user accounts.]
 
-  The password for these voicemail accounts is the voicemail PIN.
+  The password for these voicemail accounts is the voicemail PIN
+  stored in the "voicemail_settings" record in that user's database.
 
-  (Retrieval of voicemail messages from a TV-box might be done similarly by
+  (Retrieval of voicemail messages from a TV-box will be done by
   authenticating the box and giving it access to a userDB.)
 
-  For leaving (inbound) voicemails, "system" accounts (for example 
-  voicemail@host or @domain) are used which can create and update
+  For leaving (inbound) voicemails, "system" accounts (in the form
+  voicemail@host) are used which can create and update
   "voicemail" type records in the target's user database.
-  (They also need to be able to read user accounts so that they know
-  what the URI for a given userDB is.)
 
   The receiving user record (a priori the voicemail account's) must contain:
 

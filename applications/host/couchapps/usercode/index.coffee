@@ -177,20 +177,20 @@ do (jQuery) ->
 
         if 'applications/voicemail' in @applications
           textbox
-            id:'voicemail.users_couchdb_uri'
-            title: 'Couchapp Users database URI (Voicemail)'
-            class:'url'
-            value: @voicemail?.users_couchdb_uri
-          textbox
             id:'voicemail.userdb_base_uri'
-            title: 'Base URI for user databases (Voicemail)'
+            title: 'Voicemail: Base URI for user databases'
             class:'url'
             value: @voicemail?.userdb_base_uri
           textbox
             id:'voicemail.default_language'
-            title: 'Default language'
+            title: 'Voicemail: Default language'
             class:'text'
             value: @voicemail?.default_language
+          textbox
+            id:'voicemail.number_domain'
+            title: 'Voicemail: Number domain (default: "local")'
+            class:'url'
+            value: @voicemail?.number_domain
 
       for app in @_apps
         checkbox
@@ -306,7 +306,6 @@ do (jQuery) ->
 
         # Update the host record accordingly
         doc.voicemail ?= {}
-        doc.voicemail.users_couchdb_uri ?= window.location.protocol + '//' + encodeURIComponent(username) + ':' + encodeURIComponent(password) + '@' + window.location.hostname + ':5984/_users' # FIXME
         # When logged in the profile is normally the user record.
         # doc.voicemail.userdb_base_uri ?= profile.profile?.userdb_base_uri # is missing authentication
         doc.voicemail.userdb_base_uri ?= window.location.protocol + '//' + encodeURIComponent(username) + ':' + encodeURIComponent(password) + '@' + window.location.hostname + ':5984' # FIXME
@@ -346,16 +345,6 @@ do (jQuery) ->
                   if not data.ok
                     log data.error ? data.forbidden
                     return
-
-                  # Grant the user access:_users: rights
-                  $.ajax
-                    type: 'PUT'
-                    url: '/roles/admin/grant/'+encodeURIComponent(username)+'/access/_users' # No prefix
-                    dataType: 'json'
-                    success: (data) ->
-                      if not data.ok
-                        log data.error ? data.forbidden
-                        return
 
 
       create_user = (doc,cb) ->

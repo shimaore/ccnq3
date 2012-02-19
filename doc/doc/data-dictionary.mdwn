@@ -251,12 +251,12 @@ Related: applications/registrant
 Voicemail is stored inside a user's own CouchDB database.
 
     voicemail:
-      users_couchdb_uri: string, required; the URI (including authentication for the "voicemail manager") to the _users database
       userdb_base_uri: string, required; the URI prefix (including authentication for the "voicemail manager") to a user's database
       port: integer, optional; the (local) port for the voicemail ESL server [default: 7123]
       min_duration: integer, optional; the minimal duration for a voicemail fragment [default: 5]
       max_duration: integer, optional; the maximal duration for a voicemail fragment [default: 300]
       default_language: language used if none is specified in the sip_profile [default: 'en']
+      number_domain: string; a domain used to identify local numbers [default: "local"]
 
 
 ### Other data in a "host" provisioning record.
@@ -417,6 +417,8 @@ For non-trusted host that are allowed to submit P-Charge-Info, list of accounts 
       if true, a Privacy: id (mask calling number) header is added
     asserted_number: string
       if present, a P-Asserted-Identity (Caller-ID) header is added
+
+    user_database:  string; the name of the user's own CouchDB instance (for the user who "owns" this number)
 
 ## rule (aka outbound_route) (provisioning records)
 

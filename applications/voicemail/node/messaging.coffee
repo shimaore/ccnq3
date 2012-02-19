@@ -224,21 +224,27 @@ class User
 #
 org_couchdb_user = 'org.couchdb.user:'
 
-locate_user = (config,req,res,username,cb) ->
+locate_user = (config,req,res,number,cb,attempts) ->
 
-  users_db = nano config.voicemail.users_couchdb_uri
-  users_db.get org_couchdb_user+username, (e,b,h) ->
+  attempts ?= 3
+  if attempts <= 0
+    res.execute 'phrase', 'goodbye', hangup
+    return
+
+  number_domain = config.voicemail.number_domain ? 'local'
+
+  provisioning_db = nano config.provisioning.local_couchdb_uri
+  provisioning_db.get "number:#{number}@#{number_domain}", (e,b,h) ->
     if e? or not b?.user_database?
-      util.log "User #{username} not found, trying again."
+      util.log "Number #{number}@#{number_domain} not found, trying again."
       res.execute 'play_and_get_digits', "1 16 1 15000 # phrase:'voicemail_enter_id:#' phrase:'voicemail_fail_auth' destination \\d+ 3000", (req,res) ->
-        # FIXME restrict the number of attempts in a single call
-        return locate_user config, req, res, req.body.variable_destination, cb
+        return locate_user config, req, res, req.body.variable_destination, cb, attempts-1
       return
 
     # So we got a user document. Let's locate their user database.
-    # userdb_base_uri should contain authentication elements (e.g. "voicemail" user+pass)
+    # userdb_base_uri must contain authentication elements (e.g. "voicemail" user+pass)
     db_uri = config.voicemail.userdb_base_uri + '/' + b.user_database
-    cb db_uri, new User db_uri, username
+    cb db_uri, new User db_uri, number
 
 exports.record = (config,req,res,username) ->
 
