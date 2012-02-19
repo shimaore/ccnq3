@@ -186,6 +186,11 @@ do (jQuery) ->
             title: 'Base URI for user databases (Voicemail)'
             class:'url'
             value: @voicemail?.userdb_base_uri
+          textbox
+            id:'voicemail.default_language'
+            title: 'Default language'
+            class:'text'
+            value: @voicemail?.default_language
 
       for app in @_apps
         checkbox
