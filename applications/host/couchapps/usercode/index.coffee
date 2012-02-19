@@ -300,10 +300,11 @@ do (jQuery) ->
         password = hex_sha1 "a"+Math.random()
 
         # Update the host record accordingly
-        doc.voicemail =
-          users_couchdb_uri: window.location.protocol + '//' + encodeURIComponent(username) + ':' + encodeURIComponent(password) + '@' + window.location.hostname + ':5984/_users' # FIXME
-          # When logged in the profile is normally the user record.
-          userdb_base_uri: profile.profile?.userdb_base_uri
+        doc.voicemail ?= {}
+        doc.voicemail.users_couchdb_uri ?= window.location.protocol + '//' + encodeURIComponent(username) + ':' + encodeURIComponent(password) + '@' + window.location.hostname + ':5984/_users' # FIXME
+        # When logged in the profile is normally the user record.
+        # doc.voicemail.userdb_base_uri ?= profile.profile?.userdb_base_uri # is missing authentication
+        doc.voicemail.userdb_base_uri ?= window.location.protocol + '//' + encodeURIComponent(username) + ':' + encodeURIComponent(password) + '@' + window.location.hostname + ':5984' # FIXME
 
         # Create the user for the voicemail application
         p =
