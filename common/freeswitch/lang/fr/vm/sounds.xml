@@ -8,7 +8,7 @@
     </input>
   </macro>
 
-  <macro name="voicemail_enter_id" pause="7000">
+  <macro name="voicemail_enter_id">
     <input pattern="(.*)">
       <match>
         <action function="play-file" data="voicemail/vm-enter_id.wav"/>
@@ -17,7 +17,7 @@
     </input>
   </macro>
 
-  <macro name="voicemail_enter_pass" pause="7000">
+  <macro name="voicemail_enter_pass">
     <input pattern="(.*)">
       <match>
         <action function="play-file" data="voicemail/vm-enter_pass.wav"/>
