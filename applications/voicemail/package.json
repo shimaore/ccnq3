@@ -15,7 +15,7 @@
     "nano": "*"
   , "ccnq3_config": "*"
   , "request": ">=2.9.100"
-  , "esl": "*"
+  , "esl": ">=0.1.5"
   }
 , "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" }
 , "private": true
