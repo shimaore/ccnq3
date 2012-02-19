@@ -5,8 +5,8 @@ Released under the Affero GPL3 license or above
 
 p_fun = (f) -> '('+f+')'
 
-# This is installed by applications/provisioning (since this module
-# gets installed on the host running FreeSwitch, not on the manager).
+# This is installed by applications/roles (since the applications/voicemail
+# module gets installed on the host running FreeSwitch, not on the manager).
 ddoc =
   _id: '_design/voicemail'
   language: 'javascript'
