@@ -238,8 +238,8 @@ locate_user = (config,req,res,number,cb,attempts) ->
 
   number_domain = config.voicemail.number_domain ? 'local'
 
-  provisioning_db = nano config.provisioning.local_couchdb_uri
-  provisioning_db.get "number:#{number}@#{number_domain}", (e,b,h) ->
+  provisioning_db = pico config.provisioning.local_couchdb_uri
+  provisioning_db.retrieve "number:#{number}@#{number_domain}", (e,b,h) ->
     if e? or not b?.user_database?
       util.log "Number #{number}@#{number_domain} not found, trying again."
       res.execute 'play_and_get_digits', "1 16 1 15000 # phrase:'voicemail_enter_id:#' phrase:'voicemail_fail_auth' destination \\d+ 3000", (req,res) ->
