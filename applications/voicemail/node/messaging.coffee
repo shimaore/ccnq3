@@ -3,8 +3,8 @@
 # License: AGPL3+
 
 util = require 'util'
+pico = require 'pico'
 request = require 'request'
-nano = require 'nano'
 
 hangup = (req,res) -> res.hangup()
 
@@ -41,32 +41,35 @@ class Message
       @timestamp = timestamp
       @caller_id = caller_id
       @id = 'voicemail:' + timestamp + caller_id
-    @msg_uri = @db_uri + '/' + qs.escape(@id)
-    @db = nano @db_uri
+    @db = pico @db_uri
+    @msg_uri = @db.prefix @id
     @part = the_first_part
 
   # Record the current part
   start_recording: (req,res,cb) ->
     cb ?= (req,res) -> @post_recording req,res
-    request.head @msg_uri, (r) =>
+    @db.rev @id, (e,r,b) =>
+      if not b?.rev?
+        util.log "start_recording: Missing document #{@id}"
+        return
       # Play beep to indicate we are ready to record
       res.execute 'tone', XXX, (req,res) =>
         min_duration = config.voicemail.min_duration ? 5   # FIXME default_voicemail_min_duration
         max_duration = config.voicemail.max_duration ? 300 # FIXME default_voicemail_max_duration
-        res.execute 'record', "{RECORD_WRITE_ONLY=true,record_min_sec=#{min_duration}}#{@msg_uri}/part#{@part}.wav?rev=#{r._rev} #{max_duration}", cb
+        res.execute 'record', "{RECORD_WRITE_ONLY=true,record_min_sec=#{min_duration}}#{@msg_uri}/part#{@part}.wav?rev=#{b.rev} #{max_duration}", cb
 
   # Delete parts
   delete_parts: (cb) ->
-    @db.get @id, (e,b,h) ->
+    @db.retrieve @id, (e,r,b) ->
       # Remove all attachments
       b._attachments = {}
-      @db.insert b, cb
+      @db.update b, cb
 
   # Post-recording menu
   post_recording: (req,res) ->
     # Check whether the attachment exists (it might be deleted if it doesn't match the minimum duration)
-    request.head "#{@msg_uri}/part#{@part}.wav", (error,content) ->
-      if error?
+    request.head "#{@msg_uri}/part#{@part}.wav", (e) ->
+      if e?
         res.execute 'phrase', "could not record please try again", (req,res) ->
           @start_recording req, res
         return
@@ -88,17 +91,20 @@ class Message
   # Play the parts one after the other; when the last part is played, call the optional callback
   listen_recording: (req,res,this_part,cb) ->
     cb ?= (req,res) -> @post_recording req,res
-    request.head "#{@msg_uri}/part#{this_part}.wav", (error,content) ->
+    request.head "#{@msg_uri}/part#{this_part}.wav", (error) ->
       if error
         # Presumably we've read all the parts
         return cb req, res
       else
-        res.execute 'playback', "#{msg_uri}/part#{this_part}.wav", (req,res) ->
+        res.execute 'playback', "#{@msg_uri}/part#{this_part}.wav", (req,res) ->
           listen_recording req, res, this_part+1, cb
 
   # Play the message enveloppe
   play_envelope: (req,res,cb) ->
-    @db.get @id, (e,b,h) ->
+    @db.retrieve @id, (e,r,b) ->
+      if not b?
+        util.log "play_envelope: Missing #{@id}"
+        return
       res.execute 'play_and_get_digits', "1 1 1 1000 # phrase:'message received:#{b.timestamp}' silence_stream://250 choice \\d 1000", (req,res) ->
         if req.body.variable_choice
           cb req, res, req.body.variable_choice
@@ -107,7 +113,7 @@ class Message
 
   # Play a recording, calling the callback with an optional collected digit
   play_recording: (req,res,this_part,cb) ->
-    request.head "#{@msg_uri}/part#{this_part}.wav", (error,content) ->
+    request.head "#{@msg_uri}/part#{this_part}.wav", (error) ->
       if error
         cb req, res
       else
@@ -127,10 +133,9 @@ class Message
       timestamp: @timestamp ? timestamp()
       box: 'new' # In which box is this message?
       caller_id: @caller_id
-      # FIXME Add more VM metadata such as caller-id, ..
 
     # Create new CDB record to hold the voicemail metadata
-    @db.insert msg, (e,b,h) ->
+    @db.update msg, (e) ->
       if e
         util.log "Could not create #{msg_uri}"
         res.execute 'phrase', "could not record message", hangup
@@ -141,14 +146,14 @@ class Message
 class User
 
   constructor: (@db_uri,@user) ->
-    @user_db = nano @db_uri
+    @user_db = pico @db_uri
 
   voicemail_settings: (req,res,cb) ->
     # Memoize
     if @vm_settings
       return cb @vm_settings
 
-    @user_db.get 'voicemail_settings', (e,vm_settings,h) =>
+    @user_db.get 'voicemail_settings', (e,r,vm_settings) =>
       if e
         util.log "VM Box for #{@user} is not available from #{@db_uri}: #{e}"
         res.execute 'phrase', 'sorry', hangup
@@ -191,10 +196,10 @@ class User
             @authenticate req, res,cb, attempts-1
 
   new_messages: (req, res,cb) ->
-    @user_db.view 'voicemail', 'new_messages', (e,b,h) ->
+    @user_db.view 'voicemail', 'new_messages', (e,r,b) ->
       if e
         cb req, res
-      res.execute 'phrase', "voicemail_message_count,#{b.total_rows}:new", (req,res) -> cb req, res, r.rows
+      res.execute 'phrase', "voicemail_message_count,#{b.total_rows}:new", (req,res) -> cb req, res, b.rows
 
   navigate_messages: (req,res,rows,current,cb) ->
     # Exit once we reach the end or there are no messages, etc.
