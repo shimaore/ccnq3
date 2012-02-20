@@ -41,7 +41,7 @@ class Message
       @timestamp = timestamp
       @caller_id = caller_id
       @id = 'voicemail:' + timestamp + caller_id
-    @db = pico @db_uri
+    @db = new pico @db_uri
     @msg_uri = @db.prefix @id
     @part = the_first_part
 
@@ -146,7 +146,7 @@ class Message
 class User
 
   constructor: (@db_uri,@user) ->
-    @user_db = pico @db_uri
+    @user_db = new pico @db_uri
 
   voicemail_settings: (req,res,cb) ->
     # Memoize
@@ -238,7 +238,7 @@ locate_user = (config,req,res,number,cb,attempts) ->
 
   number_domain = config.voicemail.number_domain ? 'local'
 
-  provisioning_db = pico config.provisioning.local_couchdb_uri
+  provisioning_db = new pico config.provisioning.local_couchdb_uri
   provisioning_db.retrieve "number:#{number}@#{number_domain}", (e,b,h) ->
     if e? or not b?.user_database?
       util.log "Number #{number}@#{number_domain} not found, trying again."
