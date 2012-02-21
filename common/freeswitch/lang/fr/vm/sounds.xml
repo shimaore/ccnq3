@@ -1,7 +1,7 @@
 <include><!--This line will be ignored it's here to validate the xml and is optional -->
 
-  <macro name="sorry">
-    <input pattern="^sorry$">
+  <macro name="vm_say">
+    <input pattern="^sorry$" break_on_match="true">
       <match>
         <action function="play-file" data="misc/sorry.wav"/>
       </match>
@@ -37,7 +37,7 @@
   <macro name="voicemail_hello">
     <input pattern="(.*)">
       <match>
-        <!--<action function="play-file" data="voicemail/vm-hello.wav"/> -->
+        <action function="play-file" data="ivr/ivr-welcome.wav"/>
       </match>
     </input>
   </macro>
@@ -67,7 +67,7 @@
     <input pattern="^0:new" break_on_match="true">
       <match>
         <action function="play-file" data="voicemail/vm-you_have_neg.wav"/>
-        <action function="play-file" data="generic/401.wav"/>
+        <action function="play-file" data="generic/372.wav"/>
         <action function="play-file" data="voicemail/vm-new.wav"/>
         <action function="play-file" data="voicemail/vm-message.wav"/>
       </match>
@@ -83,7 +83,7 @@
     <input pattern="^0:saved" break_on_match="true">
       <match>
         <action function="play-file" data="voicemail/vm-you_have_neg.wav"/>
-        <action function="play-file" data="generic/401.wav"/>
+        <action function="play-file" data="generic/372.wav"/>
         <action function="play-file" data="voicemail/vm-message.wav"/>
         <action function="play-file" data="voicemail/vm-urgent.wav"/>
       </match>
