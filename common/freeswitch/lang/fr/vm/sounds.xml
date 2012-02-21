@@ -64,12 +64,28 @@
         <!-- TODO <action function="speak-text" data="Vous avez $1 nouveaux messages urgents dans le répertoire ${voicemail_current_folder}."/> -->
       </match>
     </input>
+    <input pattern="^0:new" break_on_match="true">
+      <match>
+        <action function="play-file" data="voicemail/vm-you_have_neg.wav"/>
+        <action function="play-file" data="generic/401.wav"/>
+        <action function="play-file" data="voicemail/vm-new.wav"/>
+        <action function="play-file" data="voicemail/vm-message.wav"/>
+      </match>
+    </input>
     <input pattern="^([^:]+):new">
       <match>
         <action function="play-file" data="voicemail/vm-you_have.wav"/>
         <action function="phrase" phrase="say-number" data="$1"/>
         <action function="play-file" data="voicemail/vm-new.wav"/>
         <action function="play-file" data="voicemail/vm-message.wav"/>
+      </match>
+    </input>
+    <input pattern="^0:saved" break_on_match="true">
+      <match>
+        <action function="play-file" data="voicemail/vm-you_have_neg.wav"/>
+        <action function="play-file" data="generic/401.wav"/>
+        <action function="play-file" data="voicemail/vm-message.wav"/>
+        <action function="play-file" data="voicemail/vm-urgent.wav"/>
       </match>
     </input>
     <input pattern="^([^:]+):saved">
