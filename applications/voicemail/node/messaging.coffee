@@ -150,13 +150,14 @@ class User
 
   voicemail_settings: (req,res,cb) ->
     # Memoize
-    if @vm_settings
+    if @vm_settings?
       return cb @vm_settings
 
-    @user_db.get 'voicemail_settings', (e,r,vm_settings) =>
+    @user_db.retrieve 'voicemail_settings', (e,r,vm_settings) =>
       if e
-        util.log "VM Box for #{@user} is not available from #{@db_uri}: #{e}"
+        util.log "VM Box for #{@user} is not available from #{@db_uri}."
         res.execute 'phrase', 'sorry', hangup
+        return
       else
         @vm_settings = vm_settings # Memoize
         cb vm_settings
@@ -183,7 +184,7 @@ class User
         if vm_settings.language?
           res.execute 'set',  "language=#{vm_settings.language}", cb
         else
-          do cb
+          cb req, res
 
       if vm_settings.pin?
         res.execute 'play_and_get_digits', "4 10 1 15000 # phrase:'voicemail_enter_pass:#' phrase:'voicemail_fail_auth' pin \\d+ 3000", (req,res) ->
@@ -197,13 +198,13 @@ class User
   new_messages: (req, res,cb) ->
     @user_db.view 'voicemail', 'new_messages', (e,r,b) ->
       if e
-        cb req, res
+        return cb req, res
       res.execute 'phrase', "voicemail_message_count,#{b.total_rows}:new", (req,res) -> cb req, res, b.rows
 
   navigate_messages: (req,res,rows,current,cb) ->
     # Exit once we reach the end or there are no messages, etc.
-    if current < 0 or current >= rows.length
-      cb req, res
+    if current < 0 or not rows? or current >= rows.length
+      return cb req, res
 
     navigate = (req,res,key) ->
       switch key
@@ -221,6 +222,9 @@ class User
       else
         # Default navigation is: read next message
         @navigate_messages req, res, rows, current+1, cb
+
+  main_menu: (req,res,cb) ->
+    cb req, res
 
 ##
 # The callback will receive the CouchDB database URI for the user
