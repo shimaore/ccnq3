@@ -185,15 +185,14 @@ class User
         else
           do cb
 
-      if vm_settings.no_pin
-        do wrap_cb
-
       if vm_settings.pin?
         res.execute 'play_and_get_digits', "4 10 1 15000 # phrase:'voicemail_enter_pass:#' phrase:'voicemail_fail_auth' pin \\d+ 3000", (req,res) ->
           if req.body.variable_pin is vm_settings.pin
             do wrap_cb
           else
             @authenticate req, res,cb, attempts-1
+      else
+        do wrap_cb
 
   new_messages: (req, res,cb) ->
     @user_db.view 'voicemail', 'new_messages', (e,r,b) ->

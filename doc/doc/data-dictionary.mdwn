@@ -584,8 +584,8 @@ are not replicated.
 ## voicemail_settings record
 
     _id: 'voicemail_settings'
-    no_pin:  boolean; if true, the user has no PIN
-    pin: string of digits; the user's voicemail PIN
+    pin: string of digits; the user's voicemail PIN [optional]
+      Note: if no "pin" is specified then no authentication is required to access the voicemail box.
     language: language string for this user's voicemail
 
 
