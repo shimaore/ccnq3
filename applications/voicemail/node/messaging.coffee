@@ -5,6 +5,7 @@
 util = require 'util'
 pico = require 'pico'
 request = require 'request'
+fs = require 'fs'
 
 hangup = (req,res) -> res.hangup()
 
@@ -25,22 +26,29 @@ timestamp = -> new Date().toJSON()
     transfer_on_failure
 ###
 
+goodbye = (res) ->
+  res.execute 'phrase', 'voicemail_goodbye', hangup
+
 ##
 # Message "part" (segments/fragments) are numbered out from 1.
 the_first_part = 1
+
+default_message_min_duration = 5
+default_message_max_duration = 300
 
 class Message
 
   ##
   # new Message db_uri, _id
-  # new Message db_uri, timestamp, caller_id
-  constructor: (@db_uri,timestamp,caller_id) ->
+  # new Message db_uri, timestamp, caller_id, uuid
+  constructor: (@db_uri,timestamp,caller_id,uuid) ->
     if not @caller_id?
       @id = timestamp
     else
       @timestamp = timestamp
       @caller_id = caller_id
-      @id = 'voicemail:' + timestamp + caller_id
+      @uuid = uuid
+      @id = 'voicemail:' + timestamp + uuid
     @db = pico @db_uri
     @msg_uri = @db.prefix @id
     @part = the_first_part
@@ -52,11 +60,25 @@ class Message
       if not b?.rev?
         util.log "start_recording: Missing document #{@id}"
         return
-      # Play beep to indicate we are ready to record
-      res.execute 'tone', XXX, (req,res) =>
-        min_duration = config.voicemail.min_duration ? 5   # FIXME default_voicemail_min_duration
-        max_duration = config.voicemail.max_duration ? 300 # FIXME default_voicemail_max_duration
-        res.execute 'record', "{RECORD_WRITE_ONLY=true,record_min_sec=#{min_duration}}#{@msg_uri}/part#{@part}.wav?rev=#{b.rev} #{max_duration}", cb
+      fifo_path = "/tmp/#{@id}.wav"
+      child_process.exec "/usr/bin/mkfifo '#{fifo_path}'", (error) =>
+        if error?
+          util.log "start_recording: Could not mkfifo"
+
+        # Start the proxy on the fifo
+        fs.createReadStream(fifo_path).pipe request.put "#{@msg_uri}/part#{@part}.wav?rev=#{b.rev}"
+        # Note: I ended up not using mod_httapi because the name parser
+        # didn't know what to do of "extension .wav?rev=1-....".
+
+        # Play beep to indicate we are ready to record
+        res.execute 'gentones', '%(500,0,800)', (req,res) =>
+          res.execute 'set', 'RECORD_WRITE_ONLY=true', (req,res) =>
+            res.execute 'set', "record_min_sec=#{message_min_duration}", (req,res) =>
+              res.execute 'record', "#{fifo_path} #{message_max_duration}", (req,res) ->
+
+                # Remove the FIFO
+                fs.unlink fifo_path, ->
+                  cb req,res
 
   # Delete parts
   delete_parts: (cb) ->
@@ -86,7 +108,7 @@ class Message
             @part++
             @start_recording req, res
           else
-            res.execute 'phrase', 'goodbye', hangup
+            goodbye res
 
   # Play the parts one after the other; when the last part is played, call the optional callback
   listen_recording: (req,res,this_part,cb) ->
@@ -138,7 +160,7 @@ class Message
     @db.update msg, (e) ->
       if e
         util.log "Could not create #{msg_uri}"
-        res.execute 'phrase', "could not record message", hangup
+        res.execute 'phrase', "sorry", hangup
         return
       cb req,res
 
@@ -156,7 +178,7 @@ class User
     @user_db.retrieve 'voicemail_settings', (e,r,vm_settings) =>
       if e
         util.log "VM Box for #{@user} is not available from #{@db_uri}."
-        res.execute 'phrase', 'sorry', hangup
+        res.execute 'phrase', 'vm_say:sorry', hangup
         return
       else
         @vm_settings = vm_settings # Memoize
@@ -164,27 +186,27 @@ class User
 
   play_prompt: (req,res,cb) ->
     @voicemail_settings req, res, (vm_settings) ->
-      if vm_settings._attachments["prompt.wav"]
+      if vm_settings._attachments?["prompt.wav"]
         res.execute 'playback', @db_uri + '/voicemail_settings/prompt.wav', cb
 
-      else if vm_settings._attachments["name.wav"]
-        res.execute 'phrase', "please leave a message for,#{@db_uri}/voicemail_settings/name.wav", cb
+      else if vm_settings._attachments?["name.wav"]
+        res.execute 'phrase', "voicemail_record_message,#{@db_uri}/voicemail_settings/name.wav", cb
 
       else
-        res.execute 'phrase', "please leave a message for,#{@user}", cb
+        res.execute 'phrase', "voicemail_record_message,#{@user}", cb
 
   authenticate: (req,res,cb,attempts) ->
     attempts ?= 3
     if attempts <= 0
-      res.execute 'phrase', 'goodbye', hangup
-      return
+      return goodbye res
 
     @voicemail_settings req, res, (vm_settings) ->
       wrap_cb = ->
         if vm_settings.language?
-          res.execute 'set',  "language=#{vm_settings.language}", cb
+          res.execute 'set',  "language=#{vm_settings.language}", (req,res) ->
+            res.execute 'phrase', 'voicemail_hello', cb
         else
-          cb req, res
+          res.execute 'phrase', 'voicemail_hello', cb
 
       if vm_settings.pin?
         res.execute 'play_and_get_digits', "4 10 1 15000 # phrase:'voicemail_enter_pass:#' phrase:'voicemail_fail_auth' pin \\d+ 3000", (req,res) ->
@@ -200,6 +222,12 @@ class User
       if e
         return cb req, res
       res.execute 'phrase', "voicemail_message_count,#{b.total_rows}:new", (req,res) -> cb req, res, b.rows
+
+  saved_messages: (req, res,cb) ->
+    @user_db.view 'voicemail', 'saved_messages', (e,r,b) ->
+      if e
+        return cb req, res
+      res.execute 'phrase', "voicemail_message_count,#{b.total_rows}:saved", (req,res) -> cb req, res, b.rows
 
   navigate_messages: (req,res,rows,current,cb) ->
     # Exit once we reach the end or there are no messages, etc.
@@ -223,8 +251,31 @@ class User
         # Default navigation is: read next message
         @navigate_messages req, res, rows, current+1, cb
 
+  config_menu: (req,res,cb) ->
+    res.execute 'play_and_get_digits', '1 1 1 15000 # phrase:voicemail_config_menu:1:2:3:4:5 silence_stream://250 choice \\d', (req,res) ->
+      switch req.body.variable_choice
+        when "1"
+          record_greetings req,res,cb
+        when "2"
+          choose_greetings req,res,cb
+        when "3"
+          choose_name res,res,cb
+        when "4"
+          change_password req,res,cb
+        when "5"
+          main_menu req,res,cb
+
   main_menu: (req,res,cb) ->
-    cb req, res
+    res.execute 'play_and_get_digits', '1 1 1 15000 # phrase:voicemail_menu:1:2:3:4 silence_stream://250 choice \\d', (req,res) ->
+      switch req.body.variable_choice
+        when "1"
+          new_messages req,res,cb
+        when "2"
+          saved_messages req,res,cb
+        when "3"
+          config_menu res,res,cb
+        when "4"
+          goodbye res
 
 ##
 # The callback will receive the CouchDB database URI for the user
@@ -234,10 +285,12 @@ org_couchdb_user = 'org.couchdb.user:'
 
 locate_user = (config,req,res,number,cb,attempts) ->
 
+  message_min_duration = config.voicemail.min_duration if config.voicemail.min_duration?
+  message_max_duration = config.voicemail.max_duration if config.voicemail.max_duration?
+
   attempts ?= 3
   if attempts <= 0
-    res.execute 'phrase', 'goodbye', hangup
-    return
+    return goodbye res
 
   number_domain = config.voicemail.number_domain ? 'local'
 
@@ -258,7 +311,7 @@ exports.record = (config,req,res,username) ->
 
   locate_user arguments..., (db_uri,user) ->
 
-    msg = new Message db_uri, timestamp(), caller_id
+    msg = new Message db_uri, timestamp(), req.channel_data.variable_sip_from_user, req.channel_data.variable_uuid
     msg.create req, res, (req,res) ->
       user.play_prompt req, res, (req,res)-> msg.start_recording req, res
 
