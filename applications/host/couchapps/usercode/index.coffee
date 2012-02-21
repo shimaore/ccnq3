@@ -298,6 +298,12 @@ do (jQuery) ->
 
           return doc
 
+      # FIXME: if account creation fails on first attempt, the password for the account
+      # and the password for userdb_base_uri are out-of-sync.
+      # (In this case the user account needs to be deleted and re-created and userdb_base_uri
+      # must be overwritten.)
+      # FIXME: grant_rights does not work when the account is first created (by signup),
+      # it needs to be called a second time??
       add_voicemail = (doc) ->
 
         # Username/password for the voicemail application
@@ -320,7 +326,7 @@ do (jQuery) ->
             if status is 409 # Conflict = user already created
               do grant_rights
             else
-              alert "Voicemail signup failed: #{error}"
+              alert "Voicemail signup failed"
               log 'Voicemail user record creation failed.'
 
           success: grant_rights
