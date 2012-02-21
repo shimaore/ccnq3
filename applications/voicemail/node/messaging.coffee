@@ -5,7 +5,9 @@
 util = require 'util'
 pico = require 'pico'
 request = require 'request'
+
 fs = require 'fs'
+child_process = require 'child_process'
 
 hangup = (req,res) -> res.hangup()
 
@@ -33,8 +35,8 @@ goodbye = (res) ->
 # Message "part" (segments/fragments) are numbered out from 1.
 the_first_part = 1
 
-default_message_min_duration = 5
-default_message_max_duration = 300
+message_min_duration = 5
+message_max_duration = 300
 
 class Message
 
@@ -42,7 +44,7 @@ class Message
   # new Message db_uri, _id
   # new Message db_uri, timestamp, caller_id, uuid
   constructor: (@db_uri,timestamp,caller_id,uuid) ->
-    if not @caller_id?
+    if not uuid?
       @id = timestamp
     else
       @timestamp = timestamp
@@ -55,26 +57,39 @@ class Message
 
   # Record the current part
   start_recording: (req,res,cb) ->
-    cb ?= (req,res) -> @post_recording req,res
+    cb ?= (req,res) => @post_recording req,res
     @db.rev @id, (e,r,b) =>
       if not b?.rev?
         util.log "start_recording: Missing document #{@id}"
         return
-      fifo_path = "/tmp/#{@id}.wav"
-      child_process.exec "/usr/bin/mkfifo '#{fifo_path}'", (error) =>
+      fifo_path = "/tmp/#{@id}.PCMU"
+      upload_url = "#{@msg_uri}/part#{@part}.wav?rev=#{b.rev}"
+      child_process.exec "/usr/bin/mkfifo -m 0660 '#{fifo_path}'", (error) =>
         if error?
           util.log "start_recording: Could not mkfifo"
 
         # Start the proxy on the fifo
-        fs.createReadStream(fifo_path).pipe request.put "#{@msg_uri}/part#{@part}.wav?rev=#{b.rev}"
+        fs.createReadStream(fifo_path).pipe request.put upload_url
         # Note: I ended up not using mod_httapi because the name parser
         # didn't know what to do of "extension .wav?rev=1-....".
 
         # Play beep to indicate we are ready to record
-        res.execute 'gentones', '%(500,0,800)', (req,res) =>
-          res.execute 'set', 'RECORD_WRITE_ONLY=true', (req,res) =>
-            res.execute 'set', "record_min_sec=#{message_min_duration}", (req,res) =>
-              res.execute 'record', "#{fifo_path} #{message_max_duration}", (req,res) ->
+        res.execute 'set', 'RECORD_WRITE_ONLY=true', (req,res) =>
+          res.execute 'set', 'playback_terminators=#1234567890', (req,res) =>
+            res.execute 'gentones', '%(500,0,800)', (req,res) =>
+
+              # FIXME save "req.body.variable_record_seconds" somewhere
+
+              res.execute 'record', "#{fifo_path} #{message_max_duration} 20 3", (req,res) ->
+                # The DTMF that was pressed is available in req.body.playback_terminator_used
+
+                # Note: record has no "minimum duration".
+                # We manually junk the segment if it is too short.
+                if req.body.record_seconds < message_min_duration
+                  # FIXME this will probably break if the fifo-proxy hasn't had time to finish pushing the
+                  # content (and therefor the attachment has not been fully inserted).
+                  # Additionally this might have the wrong "rev" if the document was inserted.
+                  request.del upload_url
 
                 # Remove the FIFO
                 fs.unlink fifo_path, ->
@@ -122,12 +137,12 @@ class Message
           listen_recording req, res, this_part+1, cb
 
   # Play the message enveloppe
-  play_envelope: (req,res,cb) ->
-    @db.retrieve @id, (e,r,b) ->
+  play_enveloppe: (req,res,cb) ->
+    @db.retrieve @id, (e,r,b) =>
       if not b?
-        util.log "play_envelope: Missing #{@id}"
+        util.log "play_enveloppe: Missing #{@id}"
         return
-      res.execute 'play_and_get_digits', "1 1 1 1000 # phrase:'message received:#{b.timestamp}' silence_stream://250 choice \\d 1000", (req,res) ->
+      res.execute 'play_and_get_digits', "1 1 1 1000 # phrase:'message received:#{b.timestamp}:#{b.caller_id}' silence_stream://250 choice \\d 1000", (req,res) ->
         if req.body.variable_choice
           cb req, res, req.body.variable_choice
         else
@@ -240,11 +255,17 @@ class User
           if current is 0
             res.execute 'phrase', 'no previous message', (req,res)->
               @navigate_messages req, res, rows, current, cb
-          else
-            @navigate_messages req, res, rows, current-1, cb
+            return
+          @navigate_messages req, res, rows, current-1, cb
+
+        when "2"
+          if current is rows.length-1
+            res.execute 'phrase', 'no next message', (req,res)->
+              @navigate_messages req, res, rows, current, cb
+          @navigate_messages req, res, rows, current+1, cb
 
     msg = new Message @db_uri, rows[current]._id
-    msg.play_enveloppe (req,res,choice) ->
+    msg.play_enveloppe req,res, (req,res,choice) =>
       if choice?
         navigate req, res, choice
       else
