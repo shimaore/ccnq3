@@ -56,28 +56,28 @@ require('ccnq3_config').get (config)->
 
   server = esl.createCallServer()
 
-  server.on 'CONNECT', (req,res) ->
+  server.on 'CONNECT', (call) ->
 
     # The XML dialplan provides us with the username
     # and already answer()ed the call.
-    user  = req.channel_data.variable_vm_user
-    mode  = req.channel_data.variable_vm_mode
+    user  = call.body.variable_vm_user
+    mode  = call.body.variable_vm_mode
 
     switch mode
       when 'record'
         util.log "Record for #{user}"
-        messaging.record config, req, res, user
+        messaging.record config, call, user
 
       when 'inbox'
         util.log "Inbox for #{user}"
-        messaging.inbox config, req, res, user
+        messaging.inbox config, call, user
 
       when 'main'
         util.log "Main for #{user}"
-        messaging.main config, req, res, user
+        messaging.main config, call, user
 
       else
         # FIXME say something
-        server.force_disconnect()
+        call.command 'hangup'
 
   server.listen config.voicemail?.port ? 7123  # FIXME default_voicemail_port
