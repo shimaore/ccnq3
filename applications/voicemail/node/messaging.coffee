@@ -366,7 +366,7 @@ exports.inbox = (config,call,username) ->
   locate_user arguments..., (db_uri,user) ->
     user.authenticate call, ->
       # Enumerate messages
-      user.new_messages call, (rows) ->
+      user.new_messages call, (call,rows) ->
         user.navigate_messages call, rows, 0, ->
           # Go to the main menu after message navigation
           user.main_menu call
