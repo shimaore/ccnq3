@@ -37,7 +37,8 @@ the_first_part = 1
 
 message_min_duration = 5
 message_max_duration = 300
-message_format = 'PCMU'
+message_format = 'wav'
+message_streaming = false
 
 class Message
 
@@ -62,39 +63,60 @@ class Message
     @db.rev @id, (e,r,b) =>
       if not b?.rev?
         util.log "start_recording: Missing document #{@id}"
+        # FIXME notify the user
         return
+
       fifo_path = "/tmp/#{@id}.#{message_format}"
       upload_url = "#{@msg_uri}/part#{@part}.#{message_format}?rev=#{b.rev}"
-      child_process.exec "/usr/bin/mkfifo -m 0660 '#{fifo_path}'", (error) =>
-        if error?
-          util.log "start_recording: Could not mkfifo"
+      fifo_stream = null
 
-        # Start the proxy on the fifo
-        fs.createReadStream(fifo_path).pipe request.put upload_url
-        # Note: I ended up not using mod_httapi because the name parser
-        # didn't know what to do of "extension .wav?rev=1-....".
+      if message_streaming
+        preprocess = (cb) ->
+          child_process.exec "/usr/bin/mkfifo -m 0660 '#{fifo_path}'", (error) ->
+            if error?
+              util.log "start_recording: Could not mkfifo"
+              # FIXME notify the user
+              return
 
+            # Start the proxy on the fifo
+            fifo_stream = fs.createReadStream(fifo_path).pipe request.put upload_url
+            do cb
+        postprocess = (cb) -> do cb
+      else
+        preprocess = (cb) -> do cb
+        postprocess = (cb) ->
+          # Upload the file
+          fifo_stream = fs.createReadStream(fifo_path).pipe request.put upload_url
+          do cb
+
+      preprocess =>
         # Play beep to indicate we are ready to record
         res.execute 'set', 'RECORD_WRITE_ONLY=true', (req,res) =>
           res.execute 'set', 'playback_terminators=#1234567890', (req,res) =>
             res.execute 'gentones', '%(500,0,800)', (req,res) =>
 
-              # FIXME save "req.body.variable_record_seconds" somewhere
-
-              res.execute 'record', "#{fifo_path} #{message_max_duration} 20 3", (req,res) ->
+              res.execute 'record', "#{fifo_path} #{message_max_duration} 20 3", (req,res) =>
                 # The DTMF that was pressed is available in req.body.playback_terminator_used
 
-                # Note: record has no "minimum duration".
-                # We manually junk the segment if it is too short.
-                if req.body.record_seconds < message_min_duration
-                  # FIXME this will probably break if the fifo-proxy hasn't had time to finish pushing the
-                  # content (and therefor the attachment has not been fully inserted).
-                  # Additionally this might have the wrong "rev" if the document was inserted.
-                  request.del upload_url
+                # FIXME save "req.body.variable_record_seconds" somewhere
 
-                # Remove the FIFO
-                fs.unlink fifo_path, ->
-                  cb req,res
+                postprocess =>
+
+                  fifo_stream.on 'close', ->
+                    if req.body.variable_record_seconds < message_min_duration
+                      request.del upload_url
+
+                    # Remove the FIFO/file
+                    fs.unlink fifo_path, ->
+                      cb req,res
+
+                  fifo_stream.on 'error', =>
+                    # FIXME Remove the attachment from the database?
+                    # request.del upload_url
+                    # Remove the FIFO/file
+                    fs.unlink fifo_path, =>
+                      # FIXME notify the user that they should retry
+                      @start_recording req,res,cb
 
   # Delete parts
   delete_parts: (cb) ->
