@@ -37,6 +37,7 @@ the_first_part = 1
 
 message_min_duration = 5
 message_max_duration = 300
+message_format = 'PCMU'
 
 class Message
 
@@ -62,8 +63,8 @@ class Message
       if not b?.rev?
         util.log "start_recording: Missing document #{@id}"
         return
-      fifo_path = "/tmp/#{@id}.PCMU"
-      upload_url = "#{@msg_uri}/part#{@part}.wav?rev=#{b.rev}"
+      fifo_path = "/tmp/#{@id}.#{message_format}"
+      upload_url = "#{@msg_uri}/part#{@part}.#{message_format}?rev=#{b.rev}"
       child_process.exec "/usr/bin/mkfifo -m 0660 '#{fifo_path}'", (error) =>
         if error?
           util.log "start_recording: Could not mkfifo"
@@ -105,7 +106,7 @@ class Message
   # Post-recording menu
   post_recording: (req,res) ->
     # Check whether the attachment exists (it might be deleted if it doesn't match the minimum duration)
-    request.head "#{@msg_uri}/part#{@part}.wav", (e) ->
+    request.head "#{@msg_uri}/part#{@part}.#{message_format}", (e) ->
       if e?
         res.execute 'phrase', "could not record please try again", (req,res) ->
           @start_recording req, res
@@ -128,12 +129,12 @@ class Message
   # Play the parts one after the other; when the last part is played, call the optional callback
   listen_recording: (req,res,this_part,cb) ->
     cb ?= (req,res) -> @post_recording req,res
-    request.head "#{@msg_uri}/part#{this_part}.wav", (error) ->
+    request.head "#{@msg_uri}/part#{this_part}.#{message_format}", (error) ->
       if error
         # Presumably we've read all the parts
         return cb req, res
       else
-        res.execute 'playback', "#{@msg_uri}/part#{this_part}.wav", (req,res) ->
+        res.execute 'playback', "#{@msg_uri}/part#{this_part}.#{message_format}", (req,res) ->
           listen_recording req, res, this_part+1, cb
 
   # Play the message enveloppe
@@ -150,11 +151,11 @@ class Message
 
   # Play a recording, calling the callback with an optional collected digit
   play_recording: (req,res,this_part,cb) ->
-    request.head "#{@msg_uri}/part#{this_part}.wav", (error) ->
+    request.head "#{@msg_uri}/part#{this_part}.#{message_format}", (error) ->
       if error
         cb req, res
       else
-        res.execute 'play_and_get_digits', "1 1 1 1000 # #{msg_uri}/part#{this_part}.wav silence_stream://250 choice \\d 1000", (req,res) ->
+        res.execute 'play_and_get_digits', "1 1 1 1000 # #{msg_uri}/part#{this_part}.#{message_format} silence_stream://250 choice \\d 1000", (req,res) ->
           if req.body.variable_choice
             # Act on user interaction
             cb req, res, req.body.variable_choice
@@ -201,11 +202,11 @@ class User
 
   play_prompt: (req,res,cb) ->
     @voicemail_settings req, res, (vm_settings) ->
-      if vm_settings._attachments?["prompt.wav"]
-        res.execute 'playback', @db_uri + '/voicemail_settings/prompt.wav', cb
+      if vm_settings._attachments?["prompt.#{message_format}"]
+        res.execute 'playback', @db_uri + "/voicemail_settings/prompt.#{message_format}", cb
 
-      else if vm_settings._attachments?["name.wav"]
-        res.execute 'phrase', "voicemail_record_message,#{@db_uri}/voicemail_settings/name.wav", cb
+      else if vm_settings._attachments?["name.#{message_format}"]
+        res.execute 'phrase', "voicemail_record_message,#{@db_uri}/voicemail_settings/name.#{message_format}", cb
 
       else
         res.execute 'phrase', "voicemail_record_message,#{@user}", cb
