@@ -15,7 +15,7 @@
     "pico": ">=0.0.10"
   , "ccnq3_config": "*"
   , "request": ">=2.9.100"
-  , "esl": ">=0.2.0"
+  , "esl": ">=0.2.2"
   }
 , "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" }
 , "private": true

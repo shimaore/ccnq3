@@ -29,7 +29,7 @@ timestamp = -> new Date().toJSON()
 ###
 
 goodbye = (res) ->
-  res.execute 'phrase', 'voicemail_goodbye', hangup
+  res.command 'phrase', 'voicemail_goodbye', hangup
 
 ##
 # Message "part" (segments/fragments) are numbered out from 1.
@@ -91,11 +91,11 @@ class Message
 
       preprocess =>
         # Play beep to indicate we are ready to record
-        res.execute 'set', 'RECORD_WRITE_ONLY=true', (req,res) =>
-          res.execute 'set', 'playback_terminators=#1234567890', (req,res) =>
-            res.execute 'gentones', '%(500,0,800)', (req,res) =>
+        res.command 'set', 'RECORD_WRITE_ONLY=true', (req,res) =>
+          res.command 'set', 'playback_terminators=#1234567890', (req,res) =>
+            res.command 'gentones', '%(500,0,800)', (req,res) =>
 
-              res.execute 'record', "#{fifo_path} #{message_max_duration} 20 3", (req,res) =>
+              res.command 'record', "#{fifo_path} #{message_max_duration} 20 3", (req,res) =>
                 # The DTMF that was pressed is available in req.body.playback_terminator_used
 
                 # FIXME save "req.body.variable_record_seconds" somewhere
@@ -130,11 +130,11 @@ class Message
     # Check whether the attachment exists (it might be deleted if it doesn't match the minimum duration)
     request.head "#{@msg_uri}/part#{@part}.#{message_format}", (e) ->
       if e?
-        res.execute 'phrase', "could not record please try again", (req,res) ->
+        res.command 'phrase', "could not record please try again", (req,res) ->
           @start_recording req, res
         return
 
-      res.execute 'play_and_get_digits', "1 1 1 15000 # phrase:'to-start-over to-listen to-append to-finish:1234' phrase:'invalid choice' choice \\d 3000", (req,res) ->
+      res.command 'play_and_get_digits', "1 1 1 15000 # phrase:'to-start-over to-listen to-append to-finish:1234' phrase:'invalid choice' choice \\d 3000", (req,res) ->
         switch req.body.variable_choice
           when "1"
             @delete_parts ->
@@ -156,7 +156,7 @@ class Message
         # Presumably we've read all the parts
         return cb req, res
       else
-        res.execute 'playback', "#{@msg_uri}/part#{this_part}.#{message_format}", (req,res) ->
+        res.command 'playback', "#{@msg_uri}/part#{this_part}.#{message_format}", (req,res) ->
           listen_recording req, res, this_part+1, cb
 
   # Play the message enveloppe
@@ -165,7 +165,7 @@ class Message
       if not b?
         util.log "play_enveloppe: Missing #{@id}"
         return
-      res.execute 'play_and_get_digits', "1 1 1 1000 # phrase:'message received:#{b.timestamp}:#{b.caller_id}' silence_stream://250 choice \\d 1000", (req,res) ->
+      res.command 'play_and_get_digits', "1 1 1 1000 # phrase:'message received:#{b.timestamp}:#{b.caller_id}' silence_stream://250 choice \\d 1000", (req,res) ->
         if req.body.variable_choice
           cb req, res, req.body.variable_choice
         else
@@ -177,7 +177,7 @@ class Message
       if error
         cb req, res
       else
-        res.execute 'play_and_get_digits', "1 1 1 1000 # #{msg_uri}/part#{this_part}.#{message_format} silence_stream://250 choice \\d 1000", (req,res) ->
+        res.command 'play_and_get_digits', "1 1 1 1000 # #{msg_uri}/part#{this_part}.#{message_format} silence_stream://250 choice \\d 1000", (req,res) ->
           if req.body.variable_choice
             # Act on user interaction
             cb req, res, req.body.variable_choice
@@ -198,7 +198,7 @@ class Message
     @db.update msg, (e) ->
       if e
         util.log "Could not create #{msg_uri}"
-        res.execute 'phrase', "sorry", hangup
+        res.command 'phrase', "sorry", hangup
         return
       cb req,res
 
@@ -216,7 +216,7 @@ class User
     @user_db.retrieve 'voicemail_settings', (e,r,vm_settings) =>
       if e
         util.log "VM Box for #{@user} is not available from #{@db_uri}."
-        res.execute 'phrase', 'vm_say:sorry', hangup
+        res.command 'phrase', 'vm_say:sorry', hangup
         return
       else
         @vm_settings = vm_settings # Memoize
@@ -225,13 +225,13 @@ class User
   play_prompt: (req,res,cb) ->
     @voicemail_settings req, res, (vm_settings) ->
       if vm_settings._attachments?["prompt.#{message_format}"]
-        res.execute 'playback', @db_uri + "/voicemail_settings/prompt.#{message_format}", cb
+        res.command 'playback', @db_uri + "/voicemail_settings/prompt.#{message_format}", cb
 
       else if vm_settings._attachments?["name.#{message_format}"]
-        res.execute 'phrase', "voicemail_record_message,#{@db_uri}/voicemail_settings/name.#{message_format}", cb
+        res.command 'phrase', "voicemail_record_message,#{@db_uri}/voicemail_settings/name.#{message_format}", cb
 
       else
-        res.execute 'phrase', "voicemail_record_message,#{@user}", cb
+        res.command 'phrase', "voicemail_record_message,#{@user}", cb
 
   authenticate: (req,res,cb,attempts) ->
     attempts ?= 3
@@ -241,13 +241,13 @@ class User
     @voicemail_settings req, res, (vm_settings) ->
       wrap_cb = ->
         if vm_settings.language?
-          res.execute 'set',  "language=#{vm_settings.language}", (req,res) ->
-            res.execute 'phrase', 'voicemail_hello', cb
+          res.command 'set',  "language=#{vm_settings.language}", (req,res) ->
+            res.command 'phrase', 'voicemail_hello', cb
         else
-          res.execute 'phrase', 'voicemail_hello', cb
+          res.command 'phrase', 'voicemail_hello', cb
 
       if vm_settings.pin?
-        res.execute 'play_and_get_digits', "4 10 1 15000 # phrase:'voicemail_enter_pass:#' phrase:'voicemail_fail_auth' pin \\d+ 3000", (req,res) ->
+        res.command 'play_and_get_digits', "4 10 1 15000 # phrase:'voicemail_enter_pass:#' phrase:'voicemail_fail_auth' pin \\d+ 3000", (req,res) ->
           if req.body.variable_pin is vm_settings.pin
             do wrap_cb
           else
@@ -259,13 +259,13 @@ class User
     @user_db.view 'voicemail', 'new_messages', (e,r,b) ->
       if e
         return cb req, res
-      res.execute 'phrase', "voicemail_message_count,#{b.total_rows}:new", (req,res) -> cb req, res, b.rows
+      res.command 'phrase', "voicemail_message_count,#{b.total_rows}:new", (req,res) -> cb req, res, b.rows
 
   saved_messages: (req, res,cb) ->
     @user_db.view 'voicemail', 'saved_messages', (e,r,b) ->
       if e
         return cb req, res
-      res.execute 'phrase', "voicemail_message_count,#{b.total_rows}:saved", (req,res) -> cb req, res, b.rows
+      res.command 'phrase', "voicemail_message_count,#{b.total_rows}:saved", (req,res) -> cb req, res, b.rows
 
   navigate_messages: (req,res,rows,current,cb) ->
     # Exit once we reach the end or there are no messages, etc.
@@ -276,14 +276,14 @@ class User
       switch key
         when "1"
           if current is 0
-            res.execute 'phrase', 'no previous message', (req,res)->
+            res.command 'phrase', 'no previous message', (req,res)->
               @navigate_messages req, res, rows, current, cb
             return
           @navigate_messages req, res, rows, current-1, cb
 
         when "2"
           if current is rows.length-1
-            res.execute 'phrase', 'no next message', (req,res)->
+            res.command 'phrase', 'no next message', (req,res)->
               @navigate_messages req, res, rows, current, cb
           @navigate_messages req, res, rows, current+1, cb
 
@@ -296,7 +296,7 @@ class User
         @navigate_messages req, res, rows, current+1, cb
 
   config_menu: (req,res,cb) ->
-    res.execute 'play_and_get_digits', '1 1 1 15000 # phrase:voicemail_config_menu:1:2:3:4:5 silence_stream://250 choice \\d', (req,res) ->
+    res.command 'play_and_get_digits', '1 1 1 15000 # phrase:voicemail_config_menu:1:2:3:4:5 silence_stream://250 choice \\d', (req,res) ->
       switch req.body.variable_choice
         when "1"
           record_greetings req,res,cb
@@ -310,7 +310,7 @@ class User
           main_menu req,res,cb
 
   main_menu: (req,res,cb) ->
-    res.execute 'play_and_get_digits', '1 1 1 15000 # phrase:voicemail_menu:1:2:3:4 silence_stream://250 choice \\d', (req,res) ->
+    res.command 'play_and_get_digits', '1 1 1 15000 # phrase:voicemail_menu:1:2:3:4 silence_stream://250 choice \\d', (req,res) ->
       switch req.body.variable_choice
         when "1"
           new_messages req,res,cb
@@ -342,7 +342,7 @@ locate_user = (config,req,res,number,cb,attempts) ->
   provisioning_db.retrieve "number:#{number}@#{number_domain}", (e,r,b) ->
     if e? or not b?.user_database?
       util.log "Number #{number}@#{number_domain} not found, trying again."
-      res.execute 'play_and_get_digits', "1 16 1 15000 # phrase:'voicemail_enter_id:#' phrase:'voicemail_fail_auth' destination \\d+ 3000", (req,res) ->
+      res.command 'play_and_get_digits', "1 16 1 15000 # phrase:'voicemail_enter_id:#' phrase:'voicemail_fail_auth' destination \\d+ 3000", (req,res) ->
         return locate_user config, req, res, req.body.variable_destination, cb, attempts-1
       return
 
