@@ -66,7 +66,7 @@ class Message
         # FIXME notify the user
         return
 
-      fifo_path = "/tmp/#{@id}.#{message_format}"
+      fifo_path = "/tmp/#{@id}-part#{@part}.#{message_format}"
       upload_url = "#{@msg_uri}/part#{@part}.#{message_format}?rev=#{b.rev}"
       fifo_stream = null
 
@@ -170,7 +170,7 @@ class Message
         # Presumably we've read all the parts
         return cb call
 
-      fifo_path = "/tmp/#{@id}.#{message_format}"
+      fifo_path = "/tmp/#{@id}-part#{@part}.#{message_format}"
       download_url = "#{@msg_uri}/part#{this_part}.#{message_format}"
       fifo_stream = null
 
