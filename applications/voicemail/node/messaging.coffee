@@ -175,17 +175,17 @@ class Message
 
   # Play a recording, calling the callback with an optional collected digit
   play_recording: (call,this_part,cb) ->
-    request.head "#{@msg_uri}/part#{this_part}.#{message_format}", (error) ->
+    request.head "#{@msg_uri}/part#{this_part}.#{message_format}", (error) =>
       if error
         cb call
       else
-        call.command 'play_and_get_digits', "1 1 1 1000 # #{@msg_uri}/part#{this_part}.#{message_format} silence_stream://250 choice \\d 1000", (call) ->
+        call.command 'play_and_get_digits', "1 1 1 1000 # #{@msg_uri}/part#{this_part}.#{message_format} silence_stream://250 choice \\d 1000", (call) =>
           if call.body.variable_choice
             # Act on user interaction
             cb call, call.body.variable_choice
           else
             # Keep playing
-            play_recording call, this_part+1, cb
+            @play_recording call, this_part+1, cb
 
   # Create a new voicemail record in the database
   create: (call,cb) ->
