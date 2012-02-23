@@ -152,7 +152,7 @@
 
   </macro>
 
-  <macro name="say-counted">
+  <macro name="say-counted" pause="100">
 
     <!-- workaround -->
     <input pattern="^([1-9])_(0)$" break_on_match="true">
@@ -290,7 +290,7 @@
 
   </macro>
 
-  <macro name="say-number">
+  <macro name="say-number" pause="0">
 
     <!-- work around bug in switch_perform_substitution which prevents from
          doing for example ${1}0, while $10 is interpreted as 'dollar-ten' -->
