@@ -457,7 +457,7 @@
       </match>
     </input>
 
-    <input pattern="^([1-9]0|1[0-9]|[1-9])$" break_on_match="true">
+    <input pattern="^([1-9]0|1[0-9]|[1-9])f?$" break_on_match="true">
       <match>
         <action function="play-file" data="digits/$1.wav"/>
       </match>
