@@ -290,7 +290,7 @@
 
   </macro>
 
-  <macro name="say-number" pause="0">
+  <macro name="say-number" pause="100">
 
     <!-- work around bug in switch_perform_substitution which prevents from
          doing for example ${1}0, while $10 is interpreted as 'dollar-ten' -->
