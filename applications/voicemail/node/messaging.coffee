@@ -162,12 +162,12 @@ class Message
           @listen_recording call, this_part+1, cb
 
   # Play the message enveloppe
-  play_enveloppe: (call,cb) ->
+  play_enveloppe: (call,index,cb) ->
     @db.retrieve @id, (e,r,b) =>
       if not b?
         util.log "play_enveloppe: Missing #{@id}"
         return
-      call.command 'play_and_get_digits', "1 1 1 1000 # phrase:'message received:#{b.timestamp}:#{b.caller_id}' silence_stream://250 choice \\d 1000", (call) ->
+      call.command 'play_and_get_digits', "1 1 1 1000 # phrase:'message received:#{index}:#{b.caller_id}:#{b.timestamp}' silence_stream://250 choice \\d 1000", (call) ->
         if call.body.variable_choice
           cb call, call.body.variable_choice
         else
@@ -290,7 +290,7 @@ class User
           @navigate_messages call, rows, current+1, cb
 
     msg = new Message @db_uri, rows[current]._id
-    msg.play_enveloppe call, (call,choice) =>
+    msg.play_enveloppe call, current, (call,choice) =>
       if choice?
         navigate call, choice
       else

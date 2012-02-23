@@ -392,4 +392,19 @@
       </match>
     </input>
   </macro>
+
+  <macro name="message received">
+    <input pattern="^([^:]):([^:]*):[0-9]{4}-([0-9]{2]})-([0-9]{2})T([0-9]{2}:[0-9]{2})"> <!-- message_number,caller_id,timestamp -->
+      <match>
+        <action function="play-file" data="voicemail/vm-message_number.wav"/>
+        <action function="phrase" phrase="say-number" data="$1"/>
+        <action function="play-file" data="voicemail/vm-received.wav"/>
+        <action function="phrase" data="say-number" data="$4"/>
+        <action function="phrase" data="say-month" data="$3"/>
+        <action function="play-file" data="time/at.wav"/>
+        <action function="phrase" phrase="say-time" data="$5"/>
+      </match>
+    </input>
+  </macro>
+
 </include><!--This line will be ignored it's here to validate the xml and is optional -->

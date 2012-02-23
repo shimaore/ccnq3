@@ -440,6 +440,19 @@
 
   </macro>
 
+  <macro name="say-month">
+    <input pattern="^(1[12])$" break_on_match="true">
+      <match>
+        <action function="play-file" data="time/mon-$1.wav"/>
+      </match>
+    </input>
+    <input pattern="^0([0-9])$" break_on_match="true">
+      <match>
+        <action function="play-file" data="time/mon-$1.wav"/>
+      </match>
+    </input>
+  </macro>
+
   <macro name="say-time">
     <input pattern="^([0-9]{2}):00" break_on_match="true">
       <match>
@@ -452,7 +465,7 @@
         <action function="phrase" phrase="say-number" data="$1f"/>
         <action function="play-file" data="time/hour.wav"/>
         <action function="phrase" phrase="say-number" data="$2f"/>
-        <action function="play-file" data="time/minute.wav"/>
+        <!-- <action function="play-file" data="time/minute.wav"/> -->
       </match>
     </input>
   </macro>
