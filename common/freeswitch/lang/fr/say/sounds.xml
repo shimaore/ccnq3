@@ -305,7 +305,7 @@
 
   <macro name="say-number" pause="100">
 
-    <input pattern="^ *(.*)$" break_on_match="true">
+    <input pattern="^ +(.*)$" break_on_match="true">
       <match>
         <action function="phrase" phrase="say-number" data="$1"/>
       </match>
@@ -333,18 +333,6 @@
       </match>
     </input>
 
-    <!-- ignore leading zeros -->
-    <input pattern="^0$" break_on_match="true">
-      <match>
-        <action function="play-file" data="digits/0.wav"/>
-      </match>
-    </input>
-    <input pattern="^0(.*)$" break_on_match="true">
-      <match>
-        <action function="phrase" phrase="say-number" data="$1"/>
-      </match>
-    </input>
-
     <!-- fractions -->
     <!-- note: in french you would say "21 secondes virgule 1" so we do not
          deal with feminine here -->
@@ -362,6 +350,18 @@
         <action function="phrase" phrase="say-number" data="$1"/>
         <action function="play-file" data="digits/point.wav"/>
         <action function="phrase" phrase="say-number" data="$2"/>
+      </match>
+    </input>
+
+    <!-- ignore leading zeros -->
+    <input pattern="^0f?$" break_on_match="true">
+      <match>
+        <action function="play-file" data="digits/0.wav"/>
+      </match>
+    </input>
+    <input pattern="^0+(.*)$" break_on_match="true">
+      <match>
+        <action function="phrase" phrase="say-number" data="$1"/>
       </match>
     </input>
 
