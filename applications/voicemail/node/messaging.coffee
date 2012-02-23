@@ -294,8 +294,12 @@ class User
       if choice?
         navigate call, choice
       else
-        # Default navigation is: read next message
-        @navigate_messages call, rows, current+1, cb
+        msg.play_recording call, the_first_part, (call,choice) =>
+          if choice?
+            navigate call, choice
+          else
+            # Default navigation is: read next message
+            @navigate_messages call, rows, current+1, cb
 
   config_menu: (call,cb) ->
     call.command 'play_and_get_digits', '1 1 1 15000 # phrase:voicemail_config_menu:1:2:3:4:5 silence_stream://250 choice \\d', (call) ->
