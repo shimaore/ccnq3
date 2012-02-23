@@ -164,7 +164,7 @@ class Message
   # Play the message enveloppe
   play_enveloppe: (call,index,cb) ->
     @db.retrieve @id, (e,r,b) =>
-      if not b?
+      if e or not b?
         util.log "play_enveloppe: Missing #{@id}"
         return
       call.command 'play_and_get_digits', "1 1 1 1000 # phrase:'message received:#{index}:#{b.caller_id}:#{b.timestamp}' silence_stream://250 choice \\d 1000", (call) ->
