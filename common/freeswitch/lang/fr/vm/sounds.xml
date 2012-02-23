@@ -399,8 +399,8 @@
         <action function="play-file" data="voicemail/vm-message_number.wav"/>
         <action function="phrase" phrase="say-number" data="$1"/>
         <action function="play-file" data="voicemail/vm-received.wav"/>
-        <action function="phrase" data="say-number" data="$4"/>
-        <action function="phrase" data="say-month" data="$3"/>
+        <action function="phrase" phrase="say-number" data="$4"/>
+        <action function="phrase" phrase="say-month" data="$3"/>
         <action function="play-file" data="time/at.wav"/>
         <action function="phrase" phrase="say-time" data="$5"/>
       </match>
