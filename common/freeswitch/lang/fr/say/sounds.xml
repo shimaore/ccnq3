@@ -292,6 +292,13 @@
 
   <macro name="say-number" pause="100">
 
+    <input pattern="^-(.*)$" break_on_match="true">
+      <match>
+        <action function="play-file" data="currency/minus.wav"/>
+        <action function="phrase" phrase="say-number" data="$1"/>
+      </match>
+    </input>
+
     <!-- work around bug in switch_perform_substitution which prevents from
          doing for example ${1}0, while $10 is interpreted as 'dollar-ten' -->
     <input pattern="^([1-9])_(0)$" break_on_match="true">
