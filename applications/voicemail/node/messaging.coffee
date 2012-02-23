@@ -153,12 +153,13 @@ class Message
   # Play the parts one after the other; when the last part is played, call the optional callback
   listen_recording: (call,this_part,cb) ->
     cb ?= (call) -> @post_recording call
-    request.head "#{@msg_uri}/part#{this_part}.#{message_format}", (error) ->
-      if error
+    url = "#{@msg_uri}/part#{this_part}.#{message_format}"
+    request.head url, (error,response) ->
+      if error or response.statusCode isnt 200
         # Presumably we've read all the parts
         return cb call
       else
-        call.command 'playback', "#{@msg_uri}/part#{this_part}.#{message_format}", (call) ->
+        call.command 'playback', url, (call) ->
           @listen_recording call, this_part+1, cb
 
   # Play the message enveloppe
@@ -175,11 +176,13 @@ class Message
 
   # Play a recording, calling the callback with an optional collected digit
   play_recording: (call,this_part,cb) ->
-    request.head "#{@msg_uri}/part#{this_part}.#{message_format}", (error) =>
-      if error
+    url = "#{@msg_uri}/part#{this_part}.#{message_format}"
+    request.head url, (error,response) =>
+      if error or response.statusCode isnt 200
+        # FIXME indicate the caller did not leave a message
         cb call
       else
-        call.command 'play_and_get_digits', "1 1 1 1000 # #{@msg_uri}/part#{this_part}.#{message_format} silence_stream://250 choice \\d 1000", (call) =>
+        call.command 'play_and_get_digits', "1 1 1 1000 # #{url} silence_stream://250 choice \\d 1000", (call) =>
           if call.body.variable_choice
             # Act on user interaction
             cb call, call.body.variable_choice
