@@ -311,7 +311,21 @@
       </match>
     </input>
 
-    <input pattern="^(million|thousand|hundred)(.*)$" break_on_match="true">
+    <input pattern="^iterated *([^ ]+)(.*)$" break_on_match="true">
+      <match>
+        <action function="phrase" phrase="say-iterated" data="$1"/>
+        <action function="phrase" phrase="say-number" data="$2"/>
+      </match>
+    </input>
+
+    <input pattern="^counted *([^ ]+)(.*)$" break_on_match="true">
+      <match>
+        <action function="phrase" phrase="say-counted" data="$1"/>
+        <action function="phrase" phrase="say-number" data="$2"/>
+      </match>
+    </input>
+
+    <input pattern="^(million|thousand|hundred|point)(.*)$" break_on_match="true">
       <match>
         <action function="play-file" data="digits/$1.wav"/>
         <action function="phrase" phrase="say-number" data="$2"/>
@@ -339,17 +353,12 @@
     <!-- pronounce initial zeros -->
     <input pattern="^([0-9]*)\.([0]+)([1-9][0-9]*)$" break_on_match="true">
       <match>
-        <action function="phrase" phrase="say-number" data="$1"/>
-        <action function="play-file" data="digits/point.wav"/>
-        <action function="phrase" phrase="say-iterated" data="$2"/>
-        <action function="phrase" phrase="say-number" data="$3"/>
+        <action function="phrase" phrase="say-number" data="$1 point iterated $2 $3"/>
       </match>
     </input>
-    <input pattern="^([0-9]*)\.([1-9][0-9]*)" break_on_match="true">
+    <input pattern="^([0-9]*)\.([1-9][0-9]*)$" break_on_match="true">
       <match>
-        <action function="phrase" phrase="say-number" data="$1"/>
-        <action function="play-file" data="digits/point.wav"/>
-        <action function="phrase" phrase="say-number" data="$2"/>
+        <action function="phrase" phrase="say-number" data="$1 point $2"/>
       </match>
     </input>
 
