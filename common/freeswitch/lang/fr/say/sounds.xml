@@ -184,7 +184,7 @@
 
     <input pattern="^([1-9]|[1-9][0-9]|[1-9][0-9][0-9])([0-9]{6}f?n?)$" break_on_match="true">
       <match>
-        <action function="phrase" phrase="say-number" data="$1 million counted $2"/>
+        <action function="phrase" phrase="say-number" data="$1 million counted $2n"/>
       </match>
     </input>
 
@@ -203,13 +203,13 @@
 
     <input pattern="^1([0-9]{3}f?n?)$" break_on_match="true">
       <match>
-        <action function="phrase" phrase="say-number" data="thousand counted $1"/>
+        <action function="phrase" phrase="say-number" data="thousand counted $1n"/>
       </match>
     </input>
 
     <input pattern="^([2-9]|[1-9][0-9]|[1-9][0-9][0-9])([0-9]{3}f?n?)$" break_on_match="true">
       <match>
-        <action function="phrase" phrase="say-number" data="$1 thousand counted $2"/>
+        <action function="phrase" phrase="say-number" data="$1 thousand counted $2n"/>
       </match>
     </input>
 
@@ -230,13 +230,13 @@
     <input pattern="^1([0-9][0-9]f?n?)$" break_on_match="true">
       <match>
         <action function="play-file" data="digits/hundred.wav"/>
-        <action function="phrase" phrase="say-number" data="hunded counted $1"/>
+        <action function="phrase" phrase="say-number" data="hundred counted $1n"/>
       </match>
     </input>
 
     <input pattern="^([2-9])([0-9][0-9]f?n?)$" break_on_match="true">
       <match>
-        <action function="phrase" phrase="say-number" data="$1 hundred counted $2"/>
+        <action function="phrase" phrase="say-number" data="$1 hundred counted $2n"/>
       </match>
     </input>
 
@@ -244,7 +244,7 @@
 
     <input pattern="^1n$" break_on_match="true">
       <match>
-        <action function="play-file" data="digits/h-1n.wav"/> <!-- et unième -->
+        <action function="play-file" data="digits/h-1n.wav"/> <!-- FIXME Needs unième -->
       </match>
     </input>
 
