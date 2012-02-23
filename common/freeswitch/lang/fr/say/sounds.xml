@@ -300,6 +300,13 @@
       </match>
     </input>
 
+    <!-- ignore leading zeros -->
+    <input pattern="^0(.*)$" break_on_match="true">
+      <match>
+        <action function="say-counted" data="$1"/>
+      </match>
+    </input>
+
     <!-- fractions -->
     <!-- note: in french you would say "21 secondes virgule 1" so we do not
          deal with feminine here -->
