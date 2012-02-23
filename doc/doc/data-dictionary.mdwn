@@ -419,6 +419,8 @@ For non-trusted host that are allowed to submit P-Charge-Info, list of accounts 
       if present, a P-Asserted-Identity (Caller-ID) header is added
 
     user_database:  string; the name of the user's own CouchDB instance (for the user who "owns" this number)
+      Note: this is used by the voicemail system to locate the voicemail_settings record and record or playback voicemail
+      messages.
 
 ## rule (aka outbound_route) (provisioning records)
 
