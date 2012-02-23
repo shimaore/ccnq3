@@ -289,7 +289,7 @@ class User
               @navigate_messages call, rows, current, cb
           @navigate_messages call, rows, current+1, cb
 
-    msg = new Message @db_uri, rows[current]._id
+    msg = new Message @db_uri, rows[current].id
     msg.play_enveloppe call, current, (call,choice) =>
       if choice?
         navigate call, choice
