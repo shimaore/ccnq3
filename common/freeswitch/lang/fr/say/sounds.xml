@@ -247,7 +247,7 @@
       </match>
     </input>
 
-    <input pattern="^7([2-9])" break_on_match="true">
+    <input pattern="^7([02-9])" break_on_match="true">
       <match>
         <action function="play-file" data="digits/60.wav"/>
         <action function="play-file" data="digits/h-1$1.wav"/>
@@ -433,7 +433,7 @@
       </match>
     </input>
 
-    <input pattern="^7([2-9])" break_on_match="true">
+    <input pattern="^7([02-9])" break_on_match="true">
       <match>
         <action function="phrase" phrase="say-number" data="60"/>
         <action function="phrase" phrase="say-number" data="1$2"/>
