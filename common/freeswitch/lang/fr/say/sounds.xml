@@ -305,6 +305,19 @@
 
   <macro name="say-number" pause="100">
 
+    <input pattern="^ *(.*)$" break_on_match="true">
+      <match>
+        <action function="phrase" phrase="say-number" data="$1"/>
+      </match>
+    </input>
+
+    <input pattern="^(million|thousand|hundred)(.*)$" break_on_match="true">
+      <match>
+        <action function="play-file" data="digits/$1.wav"/>
+        <action function="phrase" phrase="say-number" data="$2"/>
+      </match>
+    </input>
+
     <input pattern="^-(.*)$" break_on_match="true">
       <match>
         <action function="play-file" data="currency/minus.wav"/>
@@ -356,16 +369,13 @@
 
     <input pattern="^([1-9]|[1-9][0-9]|[1-9][0-9][0-9])000000" break_on_match="true">
       <match>
-        <action function="phrase" phrase="say-number" data="$1"/>
-        <action function="play-file" data="digits/million.wav"/>
+        <action function="phrase" phrase="say-number" data="$1 million"/>
       </match>
     </input>
 
     <input pattern="^([1-9]|[1-9][0-9]|[1-9][0-9][0-9])([0-9]{6})(.*)" break_on_match="true">
       <match>
-        <action function="phrase" phrase="say-number" data="$1"/>
-        <action function="play-file" data="digits/million.wav"/>
-        <action function="phrase" phrase="say-number" data="$2$3"/>
+        <action function="phrase" phrase="say-number" data="$1 million $2$3"/>
       </match>
     </input>
 
@@ -373,29 +383,25 @@
 
     <input pattern="^1000" break_on_match="true">
       <match>
-        <action function="play-file" data="digits/thousand.wav"/>
+        <action function="phrase" phrase="say-number" data="thousand"/>
       </match>
     </input>
 
     <input pattern="^([2-9]|[1-9][0-9]|[1-9][0-9][0-9])000" break_on_match="true">
       <match>
-        <action function="phrase" phrase="say-number" data="$1"/>
-        <action function="play-file" data="digits/thousand.wav"/>
+        <action function="phrase" phrase="say-number" data="$1 thousand"/>
       </match>
     </input>
 
     <input pattern="^1([0-9]{3})(.*)" break_on_match="true">
       <match>
-        <action function="play-file" data="digits/thousand.wav"/>
-        <action function="phrase" phrase="say-number" data="$1$2"/>
+        <action function="phrase" phrase="say-number" data="thousand $1$2"/>
       </match>
     </input>
 
     <input pattern="^([2-9]|[1-9][0-9]|[1-9][0-9][0-9])([0-9]{3})(.*)" break_on_match="true">
       <match>
-        <action function="phrase" phrase="say-number" data="$1"/>
-        <action function="play-file" data="digits/thousand.wav"/>
-        <action function="phrase" phrase="say-number" data="$2$3"/>
+        <action function="phrase" phrase="say-number" data="$1 thousand $2$3"/>
       </match>
     </input>
 
@@ -403,29 +409,25 @@
 
     <input pattern="^100" break_on_match="true">
       <match>
-        <action function="play-file" data="digits/hundred.wav"/>
+        <action function="phrase" phrase="say-number" data="hundred"/>
       </match>
     </input>
 
     <input pattern="^([2-9])00" break_on_match="true">
       <match>
-        <action function="phrase" phrase="say-number" data="$1"/>
-        <action function="play-file" data="digits/hundred.wav"/>
+        <action function="phrase" phrase="say-number" data="$1 hundred"/>
       </match>
     </input>
 
     <input pattern="^1([0-9][0-9])(.*)" break_on_match="true">
       <match>
-        <action function="play-file" data="digits/hundred.wav"/>
-        <action function="phrase" phrase="say-number" data="$1$2"/>
+        <action function="phrase" phrase="say-number" data="hundred $1$2"/>
       </match>
     </input>
 
     <input pattern="^([2-9])([0-9][0-9])(.*)" break_on_match="true">
       <match>
-        <action function="phrase" phrase="say-number" data="$1"/>
-        <action function="play-file" data="digits/hundred.wav"/>
-        <action function="phrase" phrase="say-number" data="$2$3"/>
+        <action function="phrase" phrase="say-number" data="$1 hundred $2$3"/>
       </match>
     </input>
 
