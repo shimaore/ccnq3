@@ -179,7 +179,7 @@ class Message
       if error
         cb call
       else
-        call.command 'play_and_get_digits', "1 1 1 1000 # #{msg_uri}/part#{this_part}.#{message_format} silence_stream://250 choice \\d 1000", (call) ->
+        call.command 'play_and_get_digits', "1 1 1 1000 # #{@msg_uri}/part#{this_part}.#{message_format} silence_stream://250 choice \\d 1000", (call) ->
           if call.body.variable_choice
             # Act on user interaction
             cb call, call.body.variable_choice
@@ -199,7 +199,7 @@ class Message
     # Create new CDB record to hold the voicemail metadata
     @db.update msg, (e) ->
       if e
-        util.log "Could not create #{msg_uri}"
+        util.log "Could not create #{@msg_uri}"
         call.command 'phrase', "sorry", hangup
         return
       cb call
