@@ -301,6 +301,11 @@
     </input>
 
     <!-- ignore leading zeros -->
+    <input pattern="^0$" break_on_match="true">
+      <match>
+        <action function="play-file" data="digits/0.wav"/>
+      </match>
+    </input>
     <input pattern="^0(.*)$" break_on_match="true">
       <match>
         <action function="say-number" data="$1"/>
