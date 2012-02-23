@@ -286,7 +286,7 @@
     <input pattern="^81" break_on_match="true">
       <match>
         <action function="play-file" data="digits/80.wav"/>
-        <action function="play-file" data="digits/h-1.wav"/> <!-- FIXME Needs "unième" -->
+        <action function="play-file" data="digits/h-1n.wav"/>
       </match>
     </input>
 
