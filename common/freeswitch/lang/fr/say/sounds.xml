@@ -193,7 +193,14 @@
       </match>
     </input>
 
-    <input pattern="^([1-9]|[1-9][0-9]|[1-9][0-9][0-9])([0-9]{3})(.*)" break_on_match="true">
+    <input pattern="^1([0-9]{3})(.*)" break_on_match="true">
+      <match>
+        <action function="play-file" data="digits/thousand.wav"/>
+        <action function="phrase" phrase="say-counted" data="$1$2"/>
+      </match>
+    </input>
+
+    <input pattern="^([2-9]|[1-9][0-9]|[1-9][0-9][0-9])([0-9]{3})(.*)" break_on_match="true">
       <match>
         <action function="phrase" phrase="say-number" data="$1"/>
         <action function="play-file" data="digits/thousand.wav"/>
@@ -210,9 +217,17 @@
       </match>
     </input>
 
-    <input pattern="^([0-9]+)([0-9][0-9])(.*)" break_on_match="true">
+    <input pattern="^1([0-9][0-9])(.*)" break_on_match="true">
+      <match>
+        <action function="play-file" data="digits/hundred.wav"/>
+        <action function="phrase" phrase="say-counted" data="$1$2"/>
+      </match>
+    </input>
+
+    <input pattern="^([2-9])([0-9][0-9])(.*)" break_on_match="true">
       <match>
         <action function="phrase" phrase="say-number" data="$1"/>
+        <action function="play-file" data="digits/hundred.wav"/>
         <action function="phrase" phrase="say-counted" data="$2$3"/>
       </match>
     </input>
@@ -351,7 +366,14 @@
       </match>
     </input>
 
-    <input pattern="^([1-9]|[1-9][0-9]|[1-9][0-9][0-9])([0-9]{3})(.*)" break_on_match="true">
+    <input pattern="^1([0-9]{3})(.*)" break_on_match="true">
+      <match>
+        <action function="play-file" data="digits/thousand.wav"/>
+        <action function="phrase" phrase="say-number" data="$1$2"/>
+      </match>
+    </input>
+
+    <input pattern="^([2-9]|[1-9][0-9]|[1-9][0-9][0-9])([0-9]{3})(.*)" break_on_match="true">
       <match>
         <action function="phrase" phrase="say-number" data="$1"/>
         <action function="play-file" data="digits/thousand.wav"/>
@@ -368,7 +390,14 @@
       </match>
     </input>
 
-    <input pattern="^([1-9])([0-9][0-9])(.*)" break_on_match="true">
+    <input pattern="^1([0-9][0-9])(.*)" break_on_match="true">
+      <match>
+        <action function="play-file" data="digits/hundred.wav"/>
+        <action function="phrase" phrase="say-number" data="$1$2"/>
+      </match>
+    </input>
+
+    <input pattern="^([2-9])([0-9][0-9])(.*)" break_on_match="true">
       <match>
         <action function="phrase" phrase="say-number" data="$1"/>
         <action function="play-file" data="digits/hundred.wav"/>
