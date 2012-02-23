@@ -161,8 +161,14 @@
       </match>
     </input>
 
+    <input pattern="^(million|thousand|hundred)$" break_on_match="true">
+      <match>
+        <action function="play-file" data="digits/h-$1.wav"/>
+      </match>
+    </input>
+
     <!-- ignore leading zeros -->
-    <input pattern="^0(.*)$" break_on_match="true">
+    <input pattern="^0+(.*)$" break_on_match="true">
       <match>
         <action function="phrase" phrase="say-counted" data="$1"/>
       </match>
@@ -170,77 +176,67 @@
 
     <!-- 9 digits counted -->
 
-    <input pattern="^([1-9]|[1-9][0-9]|[1-9][0-9][0-9])000000" break_on_match="true">
+    <input pattern="^([1-9]|[1-9][0-9]|[1-9][0-9][0-9])000000f?$" break_on_match="true">
       <match>
-        <action function="phrase" phrase="say-number" data="$1"/>
-        <action function="play-file" data="digits/h-million.wav"/>
+        <action function="phrase" phrase="say-number" data="$1 counted million"/>
       </match>
     </input>
 
-    <input pattern="^([1-9]|[1-9][0-9]|[1-9][0-9][0-9])([0-9]{6})(.*)" break_on_match="true">
+    <input pattern="^([1-9]|[1-9][0-9]|[1-9][0-9][0-9])([0-9]{6}f?)$" break_on_match="true">
       <match>
-        <action function="phrase" phrase="say-number" data="$1"/>
-        <action function="play-file" data="digits/million.wav"/>
-        <action function="phrase" phrase="say-counted" data="$2$3"/>
+        <action function="phrase" phrase="say-number" data="$1 million counted $2"/>
       </match>
     </input>
 
     <!-- 6 digits counted -->
-    <input pattern="^1000" break_on_match="true">
+    <input pattern="^1000f?$" break_on_match="true">
       <match>
-        <action function="play-file" data="digits/h-thousand.wav"/>
+        <action function="phrase" phrase="say-number" data="counted thousand"/>
       </match>
     </input>
 
-    <input pattern="^([2-9]|[1-9][0-9]|[1-9][0-9][0-9])000" break_on_match="true">
+    <input pattern="^([2-9]|[1-9][0-9]|[1-9][0-9][0-9])000f?$" break_on_match="true">
       <match>
-        <action function="phrase" phrase="say-number" data="$1"/>
-        <action function="play-file" data="digits/h-thousand.wav"/>
+        <action function="phrase" phrase="say-number" data="$1 counted thousand"/>
       </match>
     </input>
 
-    <input pattern="^1([0-9]{3})(.*)" break_on_match="true">
+    <input pattern="^1([0-9]{3}f)$" break_on_match="true">
       <match>
-        <action function="play-file" data="digits/thousand.wav"/>
-        <action function="phrase" phrase="say-counted" data="$1$2"/>
+        <action function="phrase" phrase="say-number" data="thousand counted $1"/>
       </match>
     </input>
 
-    <input pattern="^([2-9]|[1-9][0-9]|[1-9][0-9][0-9])([0-9]{3})(.*)" break_on_match="true">
+    <input pattern="^([2-9]|[1-9][0-9]|[1-9][0-9][0-9])([0-9]{3}f?)$" break_on_match="true">
       <match>
-        <action function="phrase" phrase="say-number" data="$1"/>
-        <action function="play-file" data="digits/thousand.wav"/>
-        <action function="phrase" phrase="say-counted" data="$2$3"/>
+        <action function="phrase" phrase="say-number" data="$1 thousand counted $2"/>
       </match>
     </input>
 
     <!-- 3 digits counted -->
 
-    <input pattern="^100" break_on_match="true">
+    <input pattern="^100f?$" break_on_match="true">
       <match>
-        <action function="play-file" data="digits/h-hundred.wav"/>
+        <action function="phrase" phrase="say-number" data="counted hundred"/>
       </match>
     </input>
 
-    <input pattern="^([2-9])00" break_on_match="true">
+    <input pattern="^([2-9])00f?$" break_on_match="true">
       <match>
-        <action function="phrase" phrase="say-number" data="$1"/>
-        <action function="play-file" data="digits/h-hundred.wav"/>
+        <action function="phrase" phrase="say-number" data="$1 counted hundred"/>
       </match>
     </input>
 
-    <input pattern="^1([0-9][0-9])(.*)" break_on_match="true">
+    <input pattern="^1([0-9][0-9]f?)$" break_on_match="true">
       <match>
         <action function="play-file" data="digits/hundred.wav"/>
-        <action function="phrase" phrase="say-counted" data="$1$2"/>
+        <action function="phrase" phrase="say-number" data="hunded counted $1"/>
       </match>
     </input>
 
-    <input pattern="^([2-9])([0-9][0-9])(.*)" break_on_match="true">
+    <input pattern="^([2-9])([0-9][0-9]f?)$" break_on_match="true">
       <match>
-        <action function="phrase" phrase="say-number" data="$1"/>
-        <action function="play-file" data="digits/hundred.wav"/>
-        <action function="phrase" phrase="say-counted" data="$2$3"/>
+        <action function="phrase" phrase="say-number" data="$1 hundred counted $2"/>
       </match>
     </input>
 
