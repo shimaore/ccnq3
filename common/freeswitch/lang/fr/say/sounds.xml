@@ -152,7 +152,7 @@
 
   </macro>
 
-  <macro name="say-counted" pause="100">
+  <macro name="say-counted" pause="1">
 
     <!-- workaround -->
     <input pattern="^([1-9])_(0)$" break_on_match="true">
@@ -304,7 +304,7 @@
 
   </macro>
 
-  <macro name="say-number" pause="100">
+  <macro name="say-number" pause="1">
 
     <input pattern="^ +(.*)$" break_on_match="true">
       <match>
