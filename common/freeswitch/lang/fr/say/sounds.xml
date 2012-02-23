@@ -394,7 +394,13 @@
       </match>
     </input>
 
-    <input pattern="^([23456])1" break_on_match="true">
+    <input pattern="^21" break_on_match="true">
+      <match>
+        <action function="play-file" data="digits/21.wav"/>
+      </match>
+    </input>
+
+    <input pattern="^([3456])1" break_on_match="true">
       <match>
         <action function="phrase" phrase="say-number" data="$1_0"/>
         <action function="play-file" data="generic/234.wav"/>
