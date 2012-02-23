@@ -143,24 +143,12 @@ class Message
               @part = the_first_part
               @start_recording call
           when "2"
-            @listen_recording call, the_first_part
+            @play_recording call, the_first_part, (call) -> @post_recording call
           when "3"
             @part++
             @start_recording call
           else
             goodbye call
-
-  # Play the parts one after the other; when the last part is played, call the optional callback
-  listen_recording: (call,this_part,cb) ->
-    cb ?= (call) -> @post_recording call
-    url = "#{@msg_uri}/part#{this_part}.#{message_format}"
-    request.head url, (error,response) ->
-      if error or response.statusCode isnt 200
-        # Presumably we've read all the parts
-        return cb call
-      else
-        call.command 'playback', url, (call) ->
-          @listen_recording call, this_part+1, cb
 
   # Play the message enveloppe
   play_enveloppe: (call,index,cb) ->
@@ -179,16 +167,54 @@ class Message
     url = "#{@msg_uri}/part#{this_part}.#{message_format}"
     request.head url, (error,response) =>
       if error or response.statusCode isnt 200
-        # FIXME indicate the caller did not leave a message
-        cb call
+        # Presumably we've read all the parts
+        return cb call
+
+      fifo_path = "/tmp/#{@id}.#{message_format}"
+      download_url = "#{@msg_uri}/part#{this_part}.#{message_format}"
+      fifo_stream = null
+
+      if message_streaming
+        preprocess = (cb) ->
+          child_process.exec "/usr/bin/mkfifo -m 0660 '#{fifo_path}'", (error) ->
+            if error?
+              util.log "start_recording: Could not mkfifo"
+              # FIXME notify the user
+              return
+
+            # Start the proxy on the fifo
+            fifo_stream = request(download_url).pipe fs.createWriteStream fifo_path
+            cb call
       else
-        call.command 'play_and_get_digits', "1 1 1 1000 # #{url} silence_stream://250 choice \\d 1000", (call) =>
-          if call.body.variable_choice
-            # Act on user interaction
-            cb call, call.body.variable_choice
-          else
-            # Keep playing
-            @play_recording call, this_part+1, cb
+        preprocess = (cb) ->
+          # Download the file
+          fifo_stream = request(download_url).pipe  fs.createWriteStream fifo_path
+          cb call
+
+      recurse = -> @play_recording call, this_part+1, cb
+
+      preprocess =>
+
+        call.command 'play_and_get_digits', "1 1 1 1000 # #{fifo_path} silence_stream://250 choice \\d 1000", (call) =>
+
+          choice = call.body.variable_choice
+
+          fifo_stream.on 'close', ->
+            # Remove the FIFO/file
+            fs.unlink fifo_path, ->
+              if choice
+                # Act on user interaction
+                cb call, choice
+              else
+                # Keep playing
+                do recurse
+
+          fifo_stream.on 'error', ->
+            # Remove the FIFO/file
+            fs.unlink fifo_path, =>
+              # FIXME notify the user that we skipped a part (?)
+              do recurse
+
 
   # Create a new voicemail record in the database
   create: (call,cb) ->
