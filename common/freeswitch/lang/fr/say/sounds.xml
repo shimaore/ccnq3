@@ -467,16 +467,18 @@
   </macro>
 
   <macro name="say-month">
-    <input pattern="^(1[12])$" break_on_match="true">
-      <match>
-        <action function="play-file" data="time/mon-$1.wav"/>
-      </match>
-    </input>
-    <input pattern="^0([0-9])$" break_on_match="true">
-      <match>
-        <action function="play-file" data="time/mon-$1.wav"/>
-      </match>
-    </input>
+    <input pattern="^0?1$" break_on_match="true"> <match> <action function="play-file" data="time/mon-0.wav"/> </match> </input>
+    <input pattern="^0?2$" break_on_match="true"> <match> <action function="play-file" data="time/mon-1.wav"/> </match> </input>
+    <input pattern="^0?3$" break_on_match="true"> <match> <action function="play-file" data="time/mon-2.wav"/> </match> </input>
+    <input pattern="^0?4$" break_on_match="true"> <match> <action function="play-file" data="time/mon-3.wav"/> </match> </input>
+    <input pattern="^0?5$" break_on_match="true"> <match> <action function="play-file" data="time/mon-4.wav"/> </match> </input>
+    <input pattern="^0?6$" break_on_match="true"> <match> <action function="play-file" data="time/mon-5.wav"/> </match> </input>
+    <input pattern="^0?7$" break_on_match="true"> <match> <action function="play-file" data="time/mon-6.wav"/> </match> </input>
+    <input pattern="^0?8$" break_on_match="true"> <match> <action function="play-file" data="time/mon-7.wav"/> </match> </input>
+    <input pattern="^0?9$" break_on_match="true"> <match> <action function="play-file" data="time/mon-8.wav"/> </match> </input>
+    <input pattern="^10$" break_on_match="true"> <match> <action function="play-file" data="time/mon-9.wav"/> </match> </input>
+    <input pattern="^11$" break_on_match="true"> <match> <action function="play-file" data="time/mon-10.wav"/> </match> </input>
+    <input pattern="^12$" break_on_match="true"> <match> <action function="play-file" data="time/mon-11.wav"/> </match> </input>
   </macro>
 
   <macro name="say-time">
