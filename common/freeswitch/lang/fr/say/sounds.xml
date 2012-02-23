@@ -229,7 +229,6 @@
 
     <input pattern="^1([0-9][0-9]f?n?)$" break_on_match="true">
       <match>
-        <action function="play-file" data="digits/hundred.wav"/>
         <action function="phrase" phrase="say-number" data="hundred counted $1n"/>
       </match>
     </input>
