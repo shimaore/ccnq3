@@ -186,7 +186,13 @@
     </input>
 
     <!-- 6 digits counted -->
-    <input pattern="^([1-9]|[1-9][0-9]|[1-9][0-9][0-9])000" break_on_match="true">
+    <input pattern="^1000" break_on_match="true">
+      <match>
+        <action function="play-file" data="digits/h-thousand.wav"/>
+      </match>
+    </input>
+
+    <input pattern="^([2-9]|[1-9][0-9]|[1-9][0-9][0-9])000" break_on_match="true">
       <match>
         <action function="phrase" phrase="say-number" data="$1"/>
         <action function="play-file" data="digits/h-thousand.wav"/>
@@ -210,7 +216,13 @@
 
     <!-- 3 digits counted -->
 
-    <input pattern="^([1-9])00" break_on_match="true">
+    <input pattern="^100" break_on_match="true">
+      <match>
+        <action function="play-file" data="digits/h-hundred.wav"/>
+      </match>
+    </input>
+
+    <input pattern="^([2-9])00" break_on_match="true">
       <match>
         <action function="phrase" phrase="say-number" data="$1"/>
         <action function="play-file" data="digits/h-hundred.wav"/>
@@ -359,7 +371,13 @@
 
     <!-- six digits or less -->
 
-    <input pattern="^([1-9]|[1-9][0-9]|[1-9][0-9][0-9])000" break_on_match="true">
+    <input pattern="^1000" break_on_match="true">
+      <match>
+        <action function="play-file" data="digits/thousand.wav"/>
+      </match>
+    </input>
+
+    <input pattern="^([2-9]|[1-9][0-9]|[1-9][0-9][0-9])000" break_on_match="true">
       <match>
         <action function="phrase" phrase="say-number" data="$1"/>
         <action function="play-file" data="digits/thousand.wav"/>
@@ -383,7 +401,13 @@
 
     <!-- three digits or less -->
 
-    <input pattern="^([1-9])00" break_on_match="true">
+    <input pattern="^100" break_on_match="true">
+      <match>
+        <action function="play-file" data="digits/hundred.wav"/>
+      </match>
+    </input>
+
+    <input pattern="^([2-9])00" break_on_match="true">
       <match>
         <action function="phrase" phrase="say-number" data="$1"/>
         <action function="play-file" data="digits/hundred.wav"/>
