@@ -301,25 +301,25 @@ class User
     call.command 'play_and_get_digits', '1 1 1 15000 # phrase:voicemail_config_menu:1:2:3:4:5 silence_stream://250 choice \\d', (call) ->
       switch call.body.variable_choice
         when "1"
-          record_greetings call,cb
+          @record_greetings call,cb
         when "2"
-          choose_greetings call,cb
+          @choose_greetings call,cb
         when "3"
-          choose_name call,cb
+          @choose_name call,cb
         when "4"
-          change_password call,cb
+          @change_password call,cb
         when "5"
-          main_menu call,cb
+          @main_menu call,cb
 
   main_menu: (call,cb) ->
     call.command 'play_and_get_digits', '1 1 1 15000 # phrase:voicemail_menu:1:2:3:4 silence_stream://250 choice \\d', (call) ->
       switch call.body.variable_choice
         when "1"
-          new_messages call,cb
+          @new_messages call,cb
         when "2"
-          saved_messages call,cb
+          @saved_messages call,cb
         when "3"
-          config_menu call,cb
+          @config_menu call,cb
         when "4"
           goodbye call
 
