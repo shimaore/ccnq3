@@ -167,7 +167,7 @@ class Message
       if e or not b?
         util.log "play_enveloppe: Missing #{@id}"
         return
-      call.command 'play_and_get_digits', "1 1 1 1000 # phrase:'message received:#{index}:#{b.caller_id}:#{b.timestamp}' silence_stream://250 choice \\d 1000", (call) ->
+      call.command 'play_and_get_digits', "1 1 1 1000 # phrase:'message received:#{index+1}:#{b.caller_id}:#{b.timestamp}' silence_stream://250 choice \\d 1000", (call) ->
         if call.body.variable_choice
           cb call, call.body.variable_choice
         else
