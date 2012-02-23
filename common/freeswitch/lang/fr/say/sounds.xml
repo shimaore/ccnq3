@@ -303,7 +303,7 @@
     <!-- ignore leading zeros -->
     <input pattern="^0(.*)$" break_on_match="true">
       <match>
-        <action function="say-counted" data="$1"/>
+        <action function="say-number" data="$1"/>
       </match>
     </input>
 
