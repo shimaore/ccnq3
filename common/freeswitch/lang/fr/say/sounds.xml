@@ -373,6 +373,12 @@
 
     <!-- two digits or less -->
 
+    <input pattern="^([234568])0" break_on_match="true">
+      <match>
+        <action function="phrase" phrase="say-number" data="$1_0"/>
+      </match>
+    </input>
+
     <input pattern="^([234568])([2-9])" break_on_match="true">
       <match>
         <action function="phrase" phrase="say-number" data="$1_0"/>
