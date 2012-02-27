@@ -33,6 +33,7 @@ timestamp = -> new Date().toJSON()
 goodbye = (call) ->
   call.command 'phrase', 'voicemail_goodbye', hangup
 
+# The DTMF that was pressed is available in call.body.playback_terminator_used in the callback
 record_to_url = (call,fifo_path,upload_url,next) ->
 
   cleanup = (cb) ->
@@ -55,8 +56,6 @@ record_to_url = (call,fifo_path,upload_url,next) ->
 
   preprocess = (cb) ->
     cb? null
-  postprocess = (cb) ->
-    cb? null
 
   if message_record_streaming
     preprocess = (cb) ->
@@ -69,10 +68,14 @@ record_to_url = (call,fifo_path,upload_url,next) ->
         # Start the proxy on the fifo
         register_fifo fs.createReadStream(fifo_path).pipe request.put upload_url
         cb? null
+      call.register_callback 'RECORD_STOP', ->
+        next null, call
   else
-    postprocess = (cb) ->
-      # Upload the file
-      register_fifo fs.createReadStream(fifo_path).pipe request.put upload_url
+    preprocess = (cb) ->
+      call.register_callback 'RECORD_STOP', ->
+        register_fifo fs.createReadStream(fifo_path).pipe request.put upload_url
+        # FIXME call next after the upload completed.
+        next null, call
       cb? null
 
   preprocess (error) ->
@@ -84,11 +87,7 @@ record_to_url = (call,fifo_path,upload_url,next) ->
       call.command 'set', 'playback_terminators=#1234567890', (call) ->
         call.command 'gentones', '%(500,0,800)', (call) ->
 
-          call.command 'record', "#{fifo_path} #{message_max_duration} 20 3", (call) ->
-            # The DTMF that was pressed is available in call.body.playback_terminator_used
-
-            postprocess (error) ->
-              next error, call
+          call.command 'record', "#{fifo_path} #{message_max_duration} 20 3"
 
 play_from_url = (call,fifo_path,download_url,next) ->
 
