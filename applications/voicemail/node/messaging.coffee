@@ -49,8 +49,7 @@ record_to_url = (call,fifo_path,upload_url,next) ->
         next error, call
 
     fifo_stream.on 'end', ->
-      cleanup ->
-        next null, call
+      do cleanup
 
   preprocess = (cb) ->
     cb? null
@@ -86,7 +85,8 @@ record_to_url = (call,fifo_path,upload_url,next) ->
           call.command 'record', "#{fifo_path} #{message_max_duration} 20 3", (call) ->
             # The DTMF that was pressed is available in call.body.playback_terminator_used
 
-            do postprocess
+            postprocess (error) ->
+              next error, call
 
 play_from_url = (call,fifo_path,download_url,next) ->
 
