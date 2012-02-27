@@ -257,6 +257,11 @@ Voicemail is stored inside a user's own CouchDB database.
       max_duration: integer, optional; the maximal duration for a voicemail fragment [default: 300]
       default_language: language used if none is specified in the sip_profile [default: 'en']
       number_domain: string; a domain used to identify local numbers [default: "local"]
+      record_streaming: boolean; if true stream recording of messages (only available with non-encapsulated formats such as "PCMU") [default: false]
+        Note: if false messages are first recorded on the local server then uploaded to the message store
+      playback_streaming: boolean; if true stream playback of messages [default: true]
+      format: string; voicemail message format [default: "wav"]
+        Note: see http://wiki.freeswitch.org/wiki/Mod_native_file for an explanation; meaningul values would be "PCMU" or "PCMA" in most cases.
 
 
 ### Other data in a "host" provisioning record.

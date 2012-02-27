@@ -38,7 +38,8 @@ the_first_part = 1
 message_min_duration = 5
 message_max_duration = 300
 message_format = 'wav'
-message_streaming = false
+message_record_streaming = false
+message_playback_streaming = true
 
 class Message
 
@@ -70,7 +71,7 @@ class Message
       upload_url = "#{@msg_uri}/part#{@part}.#{message_format}?rev=#{b.rev}"
       fifo_stream = null
 
-      if message_streaming
+      if message_record_streaming
         preprocess = (cb) ->
           child_process.exec "/usr/bin/mkfifo -m 0660 '#{fifo_path}'", (error) ->
             if error?
@@ -174,7 +175,7 @@ class Message
       download_url = "#{@msg_uri}/part#{this_part}.#{message_format}"
       fifo_stream = null
 
-      if message_streaming
+      if message_playback_streaming
         preprocess = (cb) ->
           child_process.exec "/usr/bin/mkfifo -m 0660 '#{fifo_path}'", (error) ->
             if error?
@@ -366,6 +367,9 @@ locate_user = (config,call,number,cb,attempts) ->
 
   message_min_duration = config.voicemail.min_duration if config.voicemail.min_duration?
   message_max_duration = config.voicemail.max_duration if config.voicemail.max_duration?
+  message_record_streaming   = config.voicemail.record_streaming   if config.voicemail.record_streaming?
+  message_playback_streaming = config.voicemail.playback_streaming if config.voicemail.playback_streaming?
+  message_format = config.voicemail.message_format if config.voicemail.format?
 
   attempts ?= 3
   if attempts <= 0
