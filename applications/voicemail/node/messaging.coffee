@@ -272,8 +272,11 @@ class Message
       if not e
         b.box = 'trash'
         @db.update b, (e,r,b) =>
-          # FIXME indicate error
-          cb call
+          if not e
+            call.command 'phrase', 'voicemail_ack,deleted', cb
+          else
+            # FIXME indicate error
+            cb call
       else
         # FIXME indicate error
         cb call
@@ -283,8 +286,11 @@ class Message
       if not e
         b.box = 'saved'
         @db.update b, (e,r,b) =>
-          # FIXME indicate error
-          cb call
+          if not e
+            call.command 'phrase', 'voicemail_ack,saved', cb
+          else
+            # FIXME indicate error
+            cb call
       else
         # FIXME indicate error
         cb call
