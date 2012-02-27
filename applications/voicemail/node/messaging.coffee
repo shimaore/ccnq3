@@ -159,7 +159,7 @@ class Message
         util.log "play_enveloppe: Missing #{@id}"
         return
       call.command 'play_and_get_digits', "1 1 1 1000 # phrase:'message received:#{index+1}:#{b.caller_id}:#{b.timestamp}' silence_stream://250 choice \\d 1000", (call) ->
-        if call.body.variable_choice
+        if call.body.variable_choice?
           cb call, call.body.variable_choice
         else
           cb call
@@ -204,7 +204,7 @@ class Message
           fifo_stream.on 'close', ->
             # Remove the FIFO/file
             fs.unlink fifo_path, ->
-              if choice
+              if choice?
                 # Act on user interaction
                 cb call, choice
               else
@@ -307,18 +307,39 @@ class User
 
     navigate = (call,key) ->
       switch key
-        when "1"
+        when "7"
           if current is 0
             call.command 'phrase', 'no previous message', (call)->
               @navigate_messages call, rows, current, cb
             return
           @navigate_messages call, rows, current-1, cb
 
-        when "2"
+        when "9"
           if current is rows.length-1
             call.command 'phrase', 'no next message', (call)->
               @navigate_messages call, rows, current, cb
           @navigate_messages call, rows, current+1, cb
+
+        when "3"
+          @remove_message call, rows, current, cb
+
+        when "2"
+          @save_message call, rows, current, cb
+
+        when "4"
+          @forward_to_email call, rows, current, cb
+
+        when "5"
+          @return_call call, rows, current, cb
+
+        when "6"
+          @forward_message call, rows, current, cb
+
+        when "0"
+          @main_menu call
+
+        else # including "1" meaning "listen"
+          @navigate_messages call, rows, current, cb
 
     msg = new Message @db_uri, rows[current].id
     msg.play_enveloppe call, current, (call,choice) =>
@@ -329,34 +350,62 @@ class User
           if choice?
             navigate call, choice
           else
-            # Default navigation is: read next message
-            @navigate_messages call, rows, current+1, cb
+            call.command 'play_and_get_digits', '1 1 1 1000 # phrase:voicemail_listen_file_check:1:2:3:4:5:6 silence_stream://250 choice \\d', (call) ->
+              choice = call.body.variable_choice
+              if choice?
+                navigate call, choice
+              else
+                # Default navigation is: read next message
+                @navigate_messages call, rows, current+1, cb
 
-  config_menu: (call,cb) ->
+  config_menu: (call) ->
     call.command 'play_and_get_digits', '1 1 1 15000 # phrase:voicemail_config_menu:1:2:3:4:5 silence_stream://250 choice \\d', (call) ->
       switch call.body.variable_choice
         when "1"
-          @record_greetings call,cb
+          @record_greetings call
         when "2"
-          @choose_greetings call,cb
+          @choose_greetings call
         when "3"
-          @choose_name call,cb
+          @choose_name call
         when "4"
-          @change_password call,cb
+          @change_password call
         when "5"
-          @main_menu call,cb
+          @main_menu call
+        else
+          @config_menu call
 
-  main_menu: (call,cb) ->
+  main_menu: (call) ->
     call.command 'play_and_get_digits', '1 1 1 15000 # phrase:voicemail_menu:1:2:3:4 silence_stream://250 choice \\d', (call) ->
       switch call.body.variable_choice
         when "1"
-          @new_messages call,cb
+          @new_messages call, (call) -> @main_menu call
         when "2"
-          @saved_messages call,cb
+          @saved_messages call, (call) -> @main_menu call
         when "3"
-          @config_menu call,cb
+          @config_menu call
         when "4"
           goodbye call
+
+  record_greetings: (call) ->
+    # FIXME
+    @main_menu call
+
+  choose_greetings: (call) ->
+    # FIXME
+    @main_menu call
+
+  choose_name: (call) ->
+    # FIXME
+    @main_menu call
+
+  change_password: (call) ->
+    # FIXME
+    @main_menu call
+
+  change_password: (call) ->
+    # FIXME
+    @main_menu call
+
 
 ##
 # The callback will receive the CouchDB database URI for the user
