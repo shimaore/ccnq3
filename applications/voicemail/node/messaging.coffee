@@ -312,6 +312,26 @@ class User
         return cb call
       call.command 'phrase', "voicemail_message_count,#{b.total_rows}:saved", (call) -> cb call, b.rows
 
+  remove_message: (call,rows,current,cb) ->
+    # FIXME
+    cb call
+
+  save_message: (call,rows,current,cb) ->
+    # FIXME
+    cb call
+
+  forward_to_email: (call,rows,current,cb) ->
+    # FIXME
+    cb call
+
+  return_call: (call,rows,current,cb) ->
+    # FIXME
+    cb call
+
+  forward_message: (call,rows,current,cb) ->
+    # FIXME
+    cb call
+
   navigate_messages: (call,rows,current,cb) ->
     # Exit once we reach the end or there are no messages, etc.
     if current < 0 or not rows? or current >= rows.length
