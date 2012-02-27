@@ -108,6 +108,8 @@ play_from_url = (call,fifo_path,download_url,next) ->
     fifo_stream.on 'end', ->
       do cleanup
 
+  call.register_callback 'PLAYBACK_STOP', cleanup
+
   if message_playback_streaming
     preprocess = (cb) ->
       child_process.exec "rm -f '#{fifo_path}'; /usr/bin/mkfifo -m 0660 '#{fifo_path}'", (error) ->
