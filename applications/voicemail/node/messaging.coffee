@@ -137,15 +137,16 @@ class Message
           @start_recording call
         return
 
-      call.command 'play_and_get_digits', "1 1 1 15000 # phrase:'to-start-over to-listen to-append to-finish:1234' phrase:'invalid choice' choice \\d 3000", (call) ->
+      # FIXME The default FreeSwitch prompts only allow for one-part messages, while we allow for multiple.
+      call.command 'play_and_get_digits', "1 1 1 15000 # phrase:voicemail_record_file_check:1:2:3' phrase:'invalid choice' choice \\d 3000", (call) ->
         switch call.body.variable_choice
-          when "1"
+          when "3"
             @delete_parts ->
               @part = the_first_part
               @start_recording call
-          when "2"
+          when "1"
             @play_recording call, the_first_part, (call) -> @post_recording call
-          when "3"
+          when "2"
             @part++
             @start_recording call
           else
@@ -230,7 +231,7 @@ class Message
     @db.update msg, (e) ->
       if e
         util.log "Could not create #{@msg_uri}"
-        call.command 'phrase', "sorry", hangup
+        call.command 'phrase', 'vm_say:sorry', hangup
         return
       cb call
 
