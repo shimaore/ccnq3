@@ -9,6 +9,8 @@ request = require 'request'
 fs = require 'fs'
 child_process = require 'child_process'
 
+voicemail_dir = '/opt/ccnq3/freeswitch/messages'
+
 hangup = (call) -> call.hangup()
 
 timestamp = -> new Date().toJSON()
@@ -170,7 +172,7 @@ class Message
         # FIXME notify the user
         return
 
-      fifo_path = "/tmp/#{@id}-part#{@part}.#{message_format}"
+      fifo_path = "#{voicemail_dir}/#{@id}-part#{@part}.#{message_format}"
       upload_url = "#{@msg_uri}/part#{@part}.#{message_format}?rev=#{b.rev}"
       record_to_url call, fifo_path, upload_url, (error,call) ->
         if error?
@@ -190,7 +192,7 @@ class Message
         # Presumably we've read all the parts
         return cb call
 
-      fifo_path = "/tmp/#{@id}-part#{@part}.#{message_format}"
+      fifo_path = "#{voicemail_dir}/#{@id}-part#{@part}.#{message_format}"
       download_url = "#{@msg_uri}/part#{this_part}.#{message_format}"
       play_from_url call, fifo_path, download_url, (error,call) =>
         if error?
