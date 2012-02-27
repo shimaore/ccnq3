@@ -336,7 +336,7 @@ class User
           @forward_message call, rows, current, cb
 
         when "0"
-          @main_menu call
+          cb call
 
         else # including "1" meaning "listen"
           @navigate_messages call, rows, current, cb
