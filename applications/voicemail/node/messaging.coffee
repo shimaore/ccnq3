@@ -305,18 +305,18 @@ class User
     if current < 0 or not rows? or current >= rows.length
       return cb call
 
-    navigate = (call,key) ->
+    navigate = (call,key) =>
       switch key
         when "7"
           if current is 0
-            call.command 'phrase', 'no previous message', (call)->
+            call.command 'phrase', 'no previous message', (call) =>
               @navigate_messages call, rows, current, cb
             return
           @navigate_messages call, rows, current-1, cb
 
         when "9"
           if current is rows.length-1
-            call.command 'phrase', 'no next message', (call)->
+            call.command 'phrase', 'no next message', (call) =>
               @navigate_messages call, rows, current, cb
           @navigate_messages call, rows, current+1, cb
 
@@ -350,7 +350,7 @@ class User
           if choice?
             navigate call, choice
           else
-            call.command 'play_and_get_digits', '1 1 1 1000 # phrase:voicemail_listen_file_check:1:2:3:4:5:6 silence_stream://250 choice \\d', (call) ->
+            call.command 'play_and_get_digits', '1 1 1 1000 # phrase:voicemail_listen_file_check:1:2:3:4:5:6 silence_stream://250 choice \\d', (call) =>
               choice = call.body.variable_choice
               if choice?
                 navigate call, choice
@@ -359,7 +359,7 @@ class User
                 @navigate_messages call, rows, current+1, cb
 
   config_menu: (call) ->
-    call.command 'play_and_get_digits', '1 1 1 15000 # phrase:voicemail_config_menu:1:2:3:4:5 silence_stream://250 choice \\d', (call) ->
+    call.command 'play_and_get_digits', '1 1 1 15000 # phrase:voicemail_config_menu:1:2:3:4:5 silence_stream://250 choice \\d', (call) =>
       switch call.body.variable_choice
         when "1"
           @record_greetings call
@@ -375,12 +375,12 @@ class User
           @config_menu call
 
   main_menu: (call) ->
-    call.command 'play_and_get_digits', '1 1 1 15000 # phrase:voicemail_menu:1:2:3:4 silence_stream://250 choice \\d', (call) ->
+    call.command 'play_and_get_digits', '1 1 1 15000 # phrase:voicemail_menu:1:2:3:4 silence_stream://250 choice \\d', (call) =>
       switch call.body.variable_choice
         when "1"
-          @new_messages call, (call) -> @main_menu call
+          @new_messages call, (call) => @main_menu call
         when "2"
-          @saved_messages call, (call) -> @main_menu call
+          @saved_messages call, (call) => @main_menu call
         when "3"
           @config_menu call
         when "4"
