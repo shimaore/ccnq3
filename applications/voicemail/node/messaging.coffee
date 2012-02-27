@@ -31,49 +31,52 @@ timestamp = -> new Date().toJSON()
 goodbye = (call) ->
   call.command 'phrase', 'voicemail_goodbye', hangup
 
-record_to_url = (call,fifo_path,upload_url,cb) ->
-
-  fifo_stream = null
-
-  preprocess = (cb) ->
-    cb null
-  postprocess = (cb) ->
-    cb null
-
-  if message_record_streaming
-    preprocess = (cb) ->
-      child_process.exec "rm -f '#{fifo_path}'; /usr/bin/mkfifo -m 0660 '#{fifo_path}'", (error) ->
-        if error?
-          util.log "do_recording: Could not mkfifo"
-          return cb error
-
-        # Start the proxy on the fifo
-        fifo_stream = fs.createReadStream(fifo_path).pipe request.put upload_url
-        cb null
-  else
-    postprocess = (cb) ->
-      # Upload the file
-      fifo_stream = fs.createReadStream(fifo_path).pipe request.put upload_url
-      cb null
+record_to_url = (call,fifo_path,upload_url,next) ->
 
   cleanup = (cb) ->
     # Remove the FIFO/file
     fs.unlink fifo_path, cb
 
-  preprocess (error) ->
-    if error?
-      # FIXME notify the user
-      cleanup ->
-        cb error, call
-      return
+  fifo_stream = null
 
-    fifo_stream.on 'error', (error)->
+  register_fifo = (stream) ->
+
+    fifo_stream = stream
+
+    fifo_stream.on 'error', (error) ->
+      util.log util.inspect error
       cleanup ->
-        # FIXME notify the user that they should retry
-        cb error,call
+        next error, call
 
     fifo_stream.on 'end', ->
-      do cleanup
+      cleanup ->
+        next null, call
+
+  preprocess = (cb) ->
+    cb? null
+  postprocess = (cb) ->
+    cb? null
+
+  if message_record_streaming
+    preprocess = (cb) ->
+      child_process.exec "rm -f '#{fifo_path}'; /usr/bin/mkfifo -m 0660 '#{fifo_path}'", (error) ->
+        if error?
+          util.log util.inspect error
+          cleanup -> cb? error
+          return
+
+        # Start the proxy on the fifo
+        register_fifo fs.createReadStream(fifo_path).pipe request.put upload_url
+        cb? null
+  else
+    postprocess = (cb) ->
+      # Upload the file
+      register_fifo fs.createReadStream(fifo_path).pipe request.put upload_url
+      cb? null
+
+  preprocess (error) ->
+    if error?
+      return next error, call
 
     # Play beep to indicate we are ready to record
     call.command 'set', 'RECORD_WRITE_ONLY=true', (call) ->
@@ -83,12 +86,26 @@ record_to_url = (call,fifo_path,upload_url,cb) ->
           call.command 'record', "#{fifo_path} #{message_max_duration} 20 3", (call) ->
             # The DTMF that was pressed is available in call.body.playback_terminator_used
 
-            postprocess (error)->
-              cb error, call
+            do postprocess
 
-play_from_url = (call,fifo_path,download_url,cb) ->
+play_from_url = (call,fifo_path,download_url,next) ->
+
+  cleanup = (cb) ->
+    # Remove the FIFO/file
+    fs.unlink fifo_path, cb
 
   fifo_stream = null
+
+  register_fifo = (stream) ->
+
+    fifo_stream = stream
+
+    fifo_stream.on 'error', (error)->
+      cleanup ->
+        next error, call
+
+    fifo_stream.on 'end', ->
+      do cleanup
 
   if message_playback_streaming
     preprocess = (cb) ->
@@ -100,36 +117,21 @@ play_from_url = (call,fifo_path,download_url,cb) ->
           return cb error, call
 
         # Start the proxy on the fifo
-        fifo_stream = request(download_url).pipe fs.createWriteStream fifo_path
-        do cb
+        register_fifo request(download_url).pipe fs.createWriteStream fifo_path
+        cb? null
   else
     preprocess = (cb) ->
       # Download the file
-      fifo_stream = request(download_url).pipe  fs.createWriteStream fifo_path
-      do cb
-
-  cleanup = (cb) ->
-    # Remove the FIFO/file
-    fs.unlink fifo_path, cb
+      register_fifo request(download_url).pipe  fs.createWriteStream fifo_path
+      cb? null
 
   preprocess (error) ->
 
     if error?
-      # FIXME notify the user
-      cleanup ->
-        cb error,call
-      return
-
-    fifo_stream.on 'error', (error)->
-      cleanup ->
-        # FIXME notify the user that we skipped a part (?)
-        cb error, call
-
-    fifo_stream.on 'end', ->
-      do cleanup
+      return next error, call
 
     call.command 'play_and_get_digits', "1 1 1 1000 # #{fifo_path} silence_stream://250 choice \\d 1000", (call) ->
-      cb null, call
+      next null, call
 
 
 ##
