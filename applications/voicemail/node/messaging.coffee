@@ -100,6 +100,16 @@ class Message
         if error?
           return cleanup cb
 
+        fifo_stream.on 'error', ->
+          # FIXME Remove the attachment from the database?
+          # request.del upload_url
+          cleanup =>
+            # FIXME notify the user that they should retry
+            do recurse
+
+        fifo_stream.on 'end', ->
+          do cleanup
+
         # Play beep to indicate we are ready to record
         call.command 'set', 'RECORD_WRITE_ONLY=true', (call) ->
           call.command 'set', 'playback_terminators=#1234567890', (call) ->
@@ -112,19 +122,8 @@ class Message
 
                 postprocess ->
 
-                  fifo_stream.on 'close', ->
-                    if call.body.variable_record_seconds < message_min_duration
-                      request.del upload_url
-
-                    cleanup ->
-                      cb call
-
-                  fifo_stream.on 'error', ->
-                    # FIXME Remove the attachment from the database?
-                    # request.del upload_url
-                    cleanup =>
-                      # FIXME notify the user that they should retry
-                      do recurse
+                  if call.body.variable_record_seconds < message_min_duration
+                    request.del upload_url
 
   # Delete parts
   delete_parts: (cb) ->
@@ -210,23 +209,25 @@ class Message
         if error?
           return cleanup cb
 
+        fifo_stream.on 'error', ->
+          cleanup ->
+            # FIXME notify the user that we skipped a part (?)
+            do recurse
+
+        fifo_stream.on 'end', ->
+          do cleanup
+
         call.command 'play_and_get_digits', "1 1 1 1000 # #{fifo_path} silence_stream://250 choice \\d 1000", (call) =>
 
           choice = call.body.variable_choice
 
-          fifo_stream.on 'close', ->
-            cleanup ->
-              if choice?
-                # Act on user interaction
-                cb call, choice
-              else
-                # Keep playing
-                do recurse
+          if choice?
+            # Act on user interaction
+            cb call, choice
+          else
+            # Keep playing
+            do recurse
 
-          fifo_stream.on 'error', ->
-            cleanup ->
-              # FIXME notify the user that we skipped a part (?)
-              do recurse
 
 
   # Create a new voicemail record in the database
