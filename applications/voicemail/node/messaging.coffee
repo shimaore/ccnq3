@@ -440,10 +440,6 @@ class User
     # FIXME
     @main_menu call
 
-  change_password: (call) ->
-    # FIXME
-    @main_menu call
-
 
 ##
 # The callback will receive the CouchDB database URI for the user
