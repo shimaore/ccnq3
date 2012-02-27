@@ -378,9 +378,13 @@ class User
     call.command 'play_and_get_digits', '1 1 1 15000 # phrase:voicemail_menu:1:2:3:4 silence_stream://250 choice \\d', (call) =>
       switch call.body.variable_choice
         when "1"
-          @new_messages call, (call) => @main_menu call
+          @new_messages call, (call,rows) =>
+            @navigate_messages call, rows, 0, =>
+              @main_menu call
         when "2"
-          @saved_messages call, (call) => @main_menu call
+          @saved_messages call, (call,rows) =>
+            @navigate_messages call, rows, 0, =>
+              @main_menu call
         when "3"
           @config_menu call
         when "4"
