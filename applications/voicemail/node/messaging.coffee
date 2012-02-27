@@ -94,7 +94,7 @@ class Message
         # Remove the FIFO/file
         fs.unlink fifo_path, cb
 
-      recurse = -> @start_recording call, cb
+      recurse = => @start_recording call, cb
 
       preprocess (error) =>
         if error?
@@ -103,7 +103,7 @@ class Message
         fifo_stream.on 'error', ->
           # FIXME Remove the attachment from the database?
           # request.del upload_url
-          cleanup =>
+          cleanup ->
             # FIXME notify the user that they should retry
             do recurse
 
@@ -202,7 +202,7 @@ class Message
         # Remove the FIFO/file
         fs.unlink fifo_path, cb
 
-      recurse = -> @play_recording call, this_part+1, cb
+      recurse = => @play_recording call, this_part+1, cb
 
       preprocess (error) =>
 
