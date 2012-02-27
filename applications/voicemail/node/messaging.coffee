@@ -421,6 +421,8 @@ class User
           @config_menu call
         when "4"
           goodbye call
+        else
+          @main_menu call
 
   record_greetings: (call) ->
     # FIXME
