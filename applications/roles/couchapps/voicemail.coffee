@@ -19,3 +19,9 @@ ddoc.views.new_messages =
 
     if doc.type? and doc.type is 'voicemail' and doc.box? and doc.box is 'new'
       emit doc._id, null
+
+ddoc.views.saved_messages =
+  map: p_fun (doc) ->
+
+    if doc.type? and doc.type is 'voicemail' and doc.box? and doc.box is 'saved'
+      emit doc._id, null

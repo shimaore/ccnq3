@@ -267,6 +267,40 @@ class Message
         return
       cb call
 
+  remove: (call,cb) ->
+    @db.retrieve @id, (e,r,b) =>
+      if not e
+        b.box = 'trash'
+        @db.update b, (e,r,b) =>
+          # FIXME indicate error
+          cb call
+      else
+        # FIXME indicate error
+        cb call
+
+  save: (call,cb) ->
+    @db.retrieve @id, (e,r,b) =>
+      if not e
+        b.box = 'saved'
+        @db.update b, (e,r,b) =>
+          # FIXME indicate error
+          cb call
+      else
+        # FIXME indicate error
+        cb call
+
+  forward_to_email: (call,cb) ->
+    # FIXME
+    cb call
+
+  return_call: (call,cb) ->
+    # FIXME
+    cb call
+
+  forward: (call,cb) ->
+    # FIXME
+    cb call
+
 
 class User
 
@@ -332,31 +366,12 @@ class User
         return cb call
       call.command 'phrase', "voicemail_message_count,#{b.total_rows}:saved", (call) -> cb call, b.rows
 
-  remove_message: (call,rows,current,cb) ->
-    # FIXME
-    cb call
-
-  save_message: (call,rows,current,cb) ->
-    # FIXME
-    cb call
-
-  forward_to_email: (call,rows,current,cb) ->
-    # FIXME
-    cb call
-
-  return_call: (call,rows,current,cb) ->
-    # FIXME
-    cb call
-
-  forward_message: (call,rows,current,cb) ->
-    # FIXME
-    cb call
-
   navigate_messages: (call,rows,current,cb) ->
     # Exit once we reach the end or there are no messages, etc.
     if current < 0 or not rows? or current >= rows.length
       return cb call
 
+    msg = new Message @db_uri, rows[current].id
     navigate = (call,key) =>
       switch key
         when "7"
@@ -373,19 +388,21 @@ class User
           @navigate_messages call, rows, current+1, cb
 
         when "3"
-          @remove_message call, rows, current, cb
+          msg.remove call, =>
+            @navigate_messages call, rows, current+1, cb
 
         when "2"
-          @save_message call, rows, current, cb
+          msg.save call, =>
+            @navigate_messages call, rows, current+1, cb
 
         when "4"
-          @forward_to_email call, rows, current, cb
+          msg.forward_to_email call, cb
 
         when "5"
-          @return_call call, rows, current, cb
+          msg.return_call call, cb
 
         when "6"
-          @forward_message call, rows, current, cb
+          msg.forward call, cb
 
         when "0"
           cb call
@@ -393,7 +410,6 @@ class User
         else # including "1" meaning "listen"
           @navigate_messages call, rows, current, cb
 
-    msg = new Message @db_uri, rows[current].id
     msg.play_enveloppe call, current, (call,choice) =>
       if choice?
         navigate call, choice
