@@ -73,7 +73,7 @@ class Message
 
       if message_record_streaming
         preprocess = (cb) ->
-          child_process.exec "/usr/bin/mkfifo -m 0660 '#{fifo_path}'", (error) ->
+          child_process.exec "rm -f '#{fifo_path}'; /usr/bin/mkfifo -m 0660 '#{fifo_path}'", (error) ->
             if error?
               util.log "start_recording: Could not mkfifo"
               # FIXME notify the user
@@ -183,7 +183,7 @@ class Message
 
       if message_playback_streaming
         preprocess = (cb) ->
-          child_process.exec "/usr/bin/mkfifo -m 0660 '#{fifo_path}'", (error) ->
+          child_process.exec "rm -f '#{fifo_path}'; /usr/bin/mkfifo -m 0660 '#{fifo_path}'", (error) ->
             if error?
               util.log "play_recording: Could not mkfifo"
               util.log util.inspect error
