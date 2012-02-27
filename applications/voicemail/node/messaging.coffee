@@ -182,6 +182,30 @@ class Message
         # FIXME save "call.body.variable_record_seconds" somewhere
         cb call
 
+  # Play a recording, calling the callback with an optional collected digit
+  play_recording: (call,this_part,cb) ->
+    url = "#{@msg_uri}/part#{this_part}.#{message_format}"
+    request.head url, (error,response) =>
+      if error or response.statusCode isnt 200
+        # Presumably we've read all the parts
+        return cb call
+
+      fifo_path = "/tmp/#{@id}-part#{@part}.#{message_format}"
+      download_url = "#{@msg_uri}/part#{this_part}.#{message_format}"
+      play_from_url call, fifo_path, download_url, (error,call) =>
+        if error?
+          return @play_recording call, this_part+1, cb
+
+        choice = call.body.variable_choice
+
+        if choice?
+          # Act on user interaction
+          cb call, choice
+        else
+          # Keep playing
+          @play_recording call, this_part+1, cb
+
+
   # Delete parts
   delete_parts: (cb) ->
     @db.retrieve @id, (e,r,b) ->
@@ -224,30 +248,6 @@ class Message
           cb call, call.body.variable_choice
         else
           cb call
-
-  # Play a recording, calling the callback with an optional collected digit
-  play_recording: (call,this_part,cb) ->
-    url = "#{@msg_uri}/part#{this_part}.#{message_format}"
-    request.head url, (error,response) =>
-      if error or response.statusCode isnt 200
-        # Presumably we've read all the parts
-        return cb call
-
-      fifo_path = "/tmp/#{@id}-part#{@part}.#{message_format}"
-      download_url = "#{@msg_uri}/part#{this_part}.#{message_format}"
-      play_from_url call, fifo_path, download_url, (error,call) =>
-        if error?
-          return @play_recording call, this_part+1, cb
-
-        choice = call.body.variable_choice
-
-        if choice?
-          # Act on user interaction
-          cb call, choice
-        else
-          # Keep playing
-          @play_recording call, this_part+1, cb
-
 
 
   # Create a new voicemail record in the database
