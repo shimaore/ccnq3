@@ -77,7 +77,7 @@ class Message
             if error?
               util.log "start_recording: Could not mkfifo"
               # FIXME notify the user
-              return
+              return cb error
 
             # Start the proxy on the fifo
             fifo_stream = fs.createReadStream(fifo_path).pipe request.put upload_url
@@ -90,9 +90,16 @@ class Message
           fifo_stream = fs.createReadStream(fifo_path).pipe request.put upload_url
           do cb
 
+      cleanup = (cb) ->
+        # Remove the FIFO/file
+        fs.unlink fifo_path, cb
+
       recurse = -> @start_recording call, cb
 
-      preprocess =>
+      preprocess (error) =>
+        if error?
+          return cleanup cb
+
         # Play beep to indicate we are ready to record
         call.command 'set', 'RECORD_WRITE_ONLY=true', (call) ->
           call.command 'set', 'playback_terminators=#1234567890', (call) ->
@@ -109,15 +116,13 @@ class Message
                     if call.body.variable_record_seconds < message_min_duration
                       request.del upload_url
 
-                    # Remove the FIFO/file
-                    fs.unlink fifo_path, ->
+                    cleanup ->
                       cb call
 
                   fifo_stream.on 'error', ->
                     # FIXME Remove the attachment from the database?
                     # request.del upload_url
-                    # Remove the FIFO/file
-                    fs.unlink fifo_path, =>
+                    cleanup =>
                       # FIXME notify the user that they should retry
                       do recurse
 
@@ -180,30 +185,37 @@ class Message
         preprocess = (cb) ->
           child_process.exec "/usr/bin/mkfifo -m 0660 '#{fifo_path}'", (error) ->
             if error?
-              util.log "start_recording: Could not mkfifo"
+              util.log "play_recording: Could not mkfifo"
+              util.log util.inspect error
               # FIXME notify the user
-              return
+              return cb error, call
 
             # Start the proxy on the fifo
             fifo_stream = request(download_url).pipe fs.createWriteStream fifo_path
-            cb call
+            do cb
       else
         preprocess = (cb) ->
           # Download the file
           fifo_stream = request(download_url).pipe  fs.createWriteStream fifo_path
-          cb call
+          do cb
+
+      cleanup = (cb) ->
+        # Remove the FIFO/file
+        fs.unlink fifo_path, cb
 
       recurse = -> @play_recording call, this_part+1, cb
 
-      preprocess =>
+      preprocess (error) =>
+
+        if error?
+          return cleanup cb
 
         call.command 'play_and_get_digits', "1 1 1 1000 # #{fifo_path} silence_stream://250 choice \\d 1000", (call) =>
 
           choice = call.body.variable_choice
 
           fifo_stream.on 'close', ->
-            # Remove the FIFO/file
-            fs.unlink fifo_path, ->
+            cleanup ->
               if choice?
                 # Act on user interaction
                 cb call, choice
@@ -212,8 +224,7 @@ class Message
                 do recurse
 
           fifo_stream.on 'error', ->
-            # Remove the FIFO/file
-            fs.unlink fifo_path, =>
+            cleanup ->
               # FIXME notify the user that we skipped a part (?)
               do recurse
 
