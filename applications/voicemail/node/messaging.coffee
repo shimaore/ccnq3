@@ -263,7 +263,7 @@ class Message
     @db.update msg, (e) ->
       if e
         util.log "Could not create #{@msg_uri}"
-        call.command 'phrase', 'vm_say:sorry', hangup
+        call.command 'phrase', 'vm_say,sorry', hangup
         return
       cb call
 
@@ -321,7 +321,7 @@ class User
     @user_db.retrieve 'voicemail_settings', (e,r,vm_settings) =>
       if e
         util.log "VM Box for #{@user} is not available from #{@db_uri}."
-        call.command 'phrase', 'vm_say:sorry', hangup
+        call.command 'phrase', 'vm_say,sorry', hangup
         return
       else
         @vm_settings = vm_settings # Memoize
