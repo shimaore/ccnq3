@@ -23,7 +23,7 @@ require('ccnq3_config').get (config)->
 
   server.on 'CONNECT', (call) ->
 
-    cid = call.body.variable_caller_id_number
+    cid = call.body?['Caller-Caller-ID-Number'] ? ''
 
     x = cid.match /^[+]?1?(\d{10})$/
     if x?
