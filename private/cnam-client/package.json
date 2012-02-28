@@ -1,0 +1,22 @@
+{
+  "name": "ccnq3_cnam_client"
+, "version": "0.0.1"
+, "description": "CNAM client application for CCNQ3"
+, "keywords": ""
+, "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" }
+, "config": {
+    "config_file": "/etc/ccnq3/host.json"
+  }
+, "scripts": {
+    "start": "daemon -n ccnq3_cnam_client -o daemon.debug -r -D \"`pwd`/node\" -- ./cnam-client.coffee"
+  , "stop":  "daemon -n ccnq3_cnam_client -o daemon.debug --stop"
+  }
+, "dependencies": {
+    "pico": ">=0.0.10"
+  , "ccnq3_config": "*"
+  , "request": ">=2.9.100"
+  , "esl": ">=0.2.2"
+  }
+, "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" }
+, "private": true
+}
