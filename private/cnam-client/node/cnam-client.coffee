@@ -19,7 +19,7 @@ require('ccnq3_config').get (config)->
   # esl.debug = true
   cnam_uri = config.cnam_client?.uri ? 'https://cnam.sotelips.net:9443/1'
 
-  server = esl.createServer()
+  server = esl.createCallServer()
 
   server.on 'CONNECT', (call) ->
 
