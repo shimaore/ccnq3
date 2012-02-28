@@ -11,15 +11,14 @@ request = require('request').defaults timeout:500
 ##
 # Expected to be used with:
 #
-#   <application action="set" data="socket_resume=true"/>
-#   <application action="socket" data="127.0.0.1:7124 sync full"/>
+#   <action application="set" data="socket_resume=true"/>
+#   <action application="socket" data="127.0.0.1:7124 sync full"/>
 #
 require('ccnq3_config').get (config)->
 
   # esl.debug = true
   cnam_uri = config.cnam_client?.uri ? 'https://cnam.sotelips.net:9443/1'
 
-  # server = esl.createCallServer()
   server = esl.createServer()
 
   server.on 'CONNECT', (call) ->
@@ -35,7 +34,9 @@ require('ccnq3_config').get (config)->
           data = b
         data = data.replace /[^\w,.@-]/g, ' '
         data = data.replace /\s+$/g, ''
-        call.command 'set', "effective_caller_id_name=No data", (call) ->
+        call.command 'set', "effective_caller_id_name=#{data}", (call) ->
           call.end()
+    else
+      call.end()
 
   server.listen config.cnam_client?.port ? 7124
