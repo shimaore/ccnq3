@@ -11,10 +11,10 @@ esl = require 'esl'
 fs_command = (cmd,cb) ->
   util.log "Executing #{cmd}"
   client = esl.createClient()
-  client.on 'esl_auth_request', (req,res) ->
-    res.auth 'CCNQ', (req,res) ->
-      res.api cmd, (req,res) ->
-        res.exit (req,res) ->
+  client.on 'esl_auth_request', (call) ->
+    call.auth 'CCNQ', (call) ->
+      call.api cmd, (call) ->
+        call.exit (call) ->
           client.end()
   if cb?
     client.on 'close', cb
