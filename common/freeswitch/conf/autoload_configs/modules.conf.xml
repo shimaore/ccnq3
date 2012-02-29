@@ -13,7 +13,6 @@
     <load module="mod_hash"/> <!-- See http://wiki.freeswitch.org/wiki/Limit#Rate_Limiting_calls_.2F_Anti_SPIT -->
     <load module="mod_dptools"/>
     <load module="mod_enum"/>
-    <load module="mod_httapi"/>
 
     <!-- <load module="mod_fsv"/> --> <!-- Video recording -->
 
