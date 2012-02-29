@@ -480,30 +480,30 @@ class User
         else
           @main_menu call
 
-  record_greeting: (call) ->
-    call.command 'phrase', 'voicemail_record_greeting', (call) =>
-      tmp_file = voicemail_dir + '/prompt' + Math.random() + '.' + message_format
-      upload_url = @db_uri + "/voicemail_settings/prompt.#{message_format}"
-      record_to_url call, tmp_file, upload_url, (error,call) =>
-        if error
-          @record_greeting call
-        else
-          @main_menu call
+  record_something: (that,phrase,call) ->
+    @user_db.rev 'voicemail_settings', (e,r,b) =>
+      if e?
+        @main_menu call
+      rev = b.rev
+
+      call.command 'phrase', phrase, (call) =>
+        tmp_file = voicemail_dir + '/' + that + Math.random() + '.' + message_format
+        upload_url = @db_uri + '/voicemail_settings/' + that + '.' + message_format + '?rev=' + rev
+        record_to_url call, tmp_file, upload_url, (error,call) =>
+          if error
+            @record_greeting call
+          else
+            @main_menu call
+
+
+  record_greeting: (call) -> @record_something 'prompt', 'voicemail_record_greeting', call
 
   choose_greeting: (call) ->
     # FIXME
     @main_menu call
     # call.command 'play_and_get_digits', '1 1 1 1500 # phrase:voicemail_choose_greeting silence_stream://250 choice \\d', (call) =>
 
-  record_name: (call) ->
-    call.command 'phrase', 'voicemail_record_name', (call) =>
-      tmp_file = voicemail_dir + '/name' + Math.random() + '.' +message_format
-      upload_url = @db_uri + "/voicemail_settings/name.#{message_format}"
-      record_to_url call, tmp_file, upload_url, (error,call) =>
-        if error
-          @record_name call
-        else
-          @main_menu call
+  record_name: (call) -> @record_something 'name', 'voicemail_record_name', call
 
   change_password: (call) ->
     call.command 'play_and_get_digits', "#{min_pin_length} 16 1 15000 # voicemail/vm-enter-pass.wav silence_stream://250 new_pin \\d+", (call) =>
