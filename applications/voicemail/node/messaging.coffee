@@ -482,7 +482,7 @@ class User
 
   record_greeting: (call) ->
     call.command 'phrase', 'voicemail_record_greeting', (call) =>
-      tmp_file = voicemail_dir + '/prompt' + Math.random() + message_format
+      tmp_file = voicemail_dir + '/prompt' + Math.random() + '.' + message_format
       upload_url = @db_uri + "/voicemail_settings/prompt.#{message_format}"
       record_to_url call, tmp_file, upload_url, (error,call) ->
         if error
@@ -497,7 +497,7 @@ class User
 
   record_name: (call) ->
     call.command 'phrase', 'voicemail_record_name', (call) =>
-      tmp_file = voicemail_dir + '/prompt' + Math.random() + message_format
+      tmp_file = voicemail_dir + '/name' + Math.random() + '.' +message_format
       upload_url = @db_uri + "/voicemail_settings/name.#{message_format}"
       record_to_url call, tmp_file, upload_url, (error,call) ->
         if error
