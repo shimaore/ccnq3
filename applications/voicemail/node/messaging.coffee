@@ -342,7 +342,7 @@ class User
         cb vm_settings
 
   play_prompt: (call,cb) ->
-    @voicemail_settings call, (vm_settings) ->
+    @voicemail_settings call, (vm_settings) =>
       if vm_settings._attachments?["prompt.#{message_format}"]
         call.command 'playback', @db_uri + "/voicemail_settings/prompt.#{message_format}", cb
 
