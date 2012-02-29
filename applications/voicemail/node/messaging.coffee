@@ -343,11 +343,13 @@ class User
 
   play_prompt: (call,cb) ->
     @voicemail_settings call, (vm_settings) =>
+      fifo_path = voicemail_dir + '/prompt' + Math.random() + '.' + message_format
       if vm_settings._attachments?["prompt.#{message_format}"]
-        call.command 'playback', @db_uri + "/voicemail_settings/prompt.#{message_format}", cb
+        play_from_url fifo_path, @db_uri + "/voicemail_settings/prompt.#{message_format}", cb
 
       else if vm_settings._attachments?["name.#{message_format}"]
-        call.command 'phrase', "voicemail_record_message,#{@db_uri}/voicemail_settings/name.#{message_format}", cb
+        call.command 'playback', 'voicemail/vm-record_message.wav', (call) ->
+          play_from_url fifo_path, @db_uri + "/voicemail_settings/name.#{message_format}", cb
 
       else
         call.command 'phrase', "voicemail_record_message,#{@user}", cb
