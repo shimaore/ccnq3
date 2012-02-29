@@ -148,6 +148,8 @@ message_format = 'wav'
 message_record_streaming = false
 message_playback_streaming = true
 
+min_pin_length = 6
+
 class Message
 
   ##
@@ -443,11 +445,11 @@ class User
     call.command 'play_and_get_digits', '1 1 1 15000 # phrase:voicemail_config_menu:1:2:3:4:5 silence_stream://250 choice \\d', (call) =>
       switch call.body.variable_choice
         when "1"
-          @record_greetings call
+          @record_greeting call
         when "2"
-          @choose_greetings call
+          @choose_greeting call
         when "3"
-          @choose_name call
+          @record_name call
         when "4"
           @change_password call
         when "5"
@@ -473,21 +475,45 @@ class User
         else
           @main_menu call
 
-  record_greetings: (call) ->
-    # FIXME
-    @main_menu call
+  record_greeting: (call) ->
+    call.command 'phrase', 'voicemail_record_greeting', (call) =>
+      tmp_file = voicemail_dir + '/prompt' + Math.random() + message_format
+      upload_url = @db_uri + "/voicemail_settings/prompt.#{message_format}"
+      record_to_url call, tmp_file, upload_url, (error,call) ->
+        if error
+          @record_greeting call
+        else
+          @main_menu call
 
-  choose_greetings: (call) ->
+  choose_greeting: (call) ->
     # FIXME
     @main_menu call
+    # call.command 'play_and_get_digits', '1 1 1 1500 # phrase:voicemail_choose_greeting silence_stream://250 choice \\d', (call) =>
 
-  choose_name: (call) ->
-    # FIXME
-    @main_menu call
+  record_name: (call) ->
+    call.command 'phrase', 'voicemail_record_name', (call) =>
+      tmp_file = voicemail_dir + '/prompt' + Math.random() + message_format
+      upload_url = @db_uri + "/voicemail_settings/name.#{message_format}"
+      record_to_url call, tmp_file, upload_url, (error,call) ->
+        if error
+          @record_name call
+        else
+          @main_menu call
 
   change_password: (call) ->
-    # FIXME
-    @main_menu call
+    call.command 'play_and_get_digits', "#{min_pin_length} 16 1 15000 # voicemail/vm-enter-pass.wav silence_stream://250 new_pin \\d+", (call) =>
+      new_pin = call.body.variable_new_pin
+      if new_pin?.length < min_pin_length
+        return @change_password call
+      @user_db.retrieve 'voicemail_settings', (e,r,vm_settings) =>
+        if error
+          return @change_password call
+        vm_settings.pin = new_pin
+        @user_db.update vm_settings, (e) ->
+          if e
+            return @change_password call
+          delete @vm_settings # remove memoized value
+          @main_menu call
 
 
 ##
