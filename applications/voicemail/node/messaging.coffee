@@ -30,15 +30,22 @@ timestamp = -> new Date().toJSON()
     transfer_on_failure
 ###
 
-goodbye = (call) ->
+make_cleanup = (fifo_path) ->
+  return (cb) ->
+    fs.stat fifo_path, (err,stats) ->
+      if err?
+        cb err
+      else
+        # Remove the FIFO/file
+        fs.unlink fifo_path, cb
+
+ goodbye = (call) ->
   call.command 'phrase', 'voicemail_goodbye', hangup
 
 # The DTMF that was pressed is available in call.body.playback_terminator_used in the callback
 record_to_url = (call,fifo_path,upload_url,next) ->
 
-  cleanup = (cb) ->
-    # Remove the FIFO/file
-    fs.unlink fifo_path, cb
+  cleanup = make_cleanup fifo_path
 
   fifo_stream = null
 
@@ -91,9 +98,7 @@ record_to_url = (call,fifo_path,upload_url,next) ->
 
 play_from_url = (call,fifo_path,download_url,next) ->
 
-  cleanup = (cb) ->
-    # Remove the FIFO/file
-    fs.unlink fifo_path, cb
+  cleanup = make_cleanup fifo_path
 
   fifo_stream = null
 
