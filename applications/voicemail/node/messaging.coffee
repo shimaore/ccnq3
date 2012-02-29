@@ -140,6 +140,7 @@ play_from_url = (call,fifo_path,download_url,next) ->
 ##
 # Message "part" (segments/fragments) are numbered out from 1.
 the_first_part = 1
+the_last_part = 1
 
 message_min_duration = 5
 message_max_duration = 300
@@ -235,8 +236,11 @@ class Message
           when "1"
             @play_recording call, the_first_part, (call) -> @post_recording call
           when "2"
-            @part++
-            @start_recording call
+            if @part < the_last_part
+              @part++
+              @start_recording call
+            else
+              goodbye call
           else
             goodbye call
 
@@ -499,6 +503,7 @@ locate_user = (config,call,number,cb,attempts) ->
   message_record_streaming   = config.voicemail.record_streaming   if config.voicemail.record_streaming?
   message_playback_streaming = config.voicemail.playback_streaming if config.voicemail.playback_streaming?
   message_format = config.voicemail.message_format if config.voicemail.format?
+  the_last_part = config.voicemail.max_parts if config.voicemail.max_parts?
 
   attempts ?= 3
   if attempts <= 0

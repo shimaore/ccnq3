@@ -262,6 +262,7 @@ Voicemail is stored inside a user's own CouchDB database.
       playback_streaming: boolean; if true stream playback of messages [default: true]
       format: string; voicemail message format [default: "wav"]
         Note: see http://wiki.freeswitch.org/wiki/Mod_native_file for an explanation; meaningul values would be "PCMU" or "PCMA" in most cases.
+      max_parts: integer; the maximum number of segments/parts that might be recorded in a voicemail message [default: 1]
 
 
 ### Other data in a "host" provisioning record.
