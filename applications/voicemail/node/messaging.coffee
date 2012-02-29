@@ -234,7 +234,7 @@ class Message
         return
 
       # FIXME The default FreeSwitch prompts only allow for one-part messages, while we allow for multiple.
-      call.command 'play_and_get_digits', "1 1 1 15000 # phrase:voicemail_record_file_check:1:2:3' phrase:'invalid choice' choice \\d 3000", (call) ->
+      call.command 'play_and_get_digits', "1 1 1 15000 # phrase:voicemail_record_file_check:1:2:3 phrase:'invalid choice' choice \\d 3000", (call) ->
         switch call.body.variable_choice
           when "3"
             @delete_parts ->
