@@ -12,7 +12,7 @@ request = require('request').defaults timeout:500
 # Expected to be used with:
 #
 #   <action application="set" data="socket_resume=true"/>
-#   <action application="socket" data="127.0.0.1:7124 sync full"/>
+#   <action application="socket" data="127.0.0.1:7124 async full"/>
 #
 require('ccnq3_config').get (config)->
 
