@@ -161,9 +161,9 @@ min_pin_length = 6
 class Message
 
   ##
-  # new Message db_uri, _id
-  # new Message db_uri, timestamp, caller_id, uuid
-  constructor: (@db_uri,timestamp,caller_id,uuid) ->
+  # new Message user, db_uri, _id
+  # new Message user, db_uri, timestamp, caller_id, uuid
+  constructor: (@user,@db_uri,timestamp,caller_id,uuid) ->
     if not uuid?
       @id = timestamp
     else
@@ -399,7 +399,7 @@ class User
     if current < 0 or not rows? or current >= rows.length
       return cb call
 
-    msg = new Message @db_uri, rows[current].id
+    msg = new Message @, @db_uri, rows[current].id
     navigate = (call,key) =>
       switch key
         when "7"
@@ -567,7 +567,7 @@ exports.record = (config,call,username) ->
 
   locate_user arguments..., (db_uri,user) ->
 
-    msg = new Message db_uri, timestamp(), call.body.variable_sip_from_user, call.body.variable_uuid
+    msg = new Message user, db_uri, timestamp(), call.body.variable_sip_from_user, call.body.variable_uuid
     msg.create call, ->
       user.play_prompt call, -> msg.start_recording call
 
