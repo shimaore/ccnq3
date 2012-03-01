@@ -515,6 +515,24 @@
 
   </macro>
 
+  <macro name="say-day-of-month">
+    <input pattern="^0?1$" break_on_match="true">
+      <match>
+        <action function="phrase" phrase="say-counted" data="1"/>
+      </match>
+    </input>
+    <input pattern="^0?([2-9])$" break_on_match="true">
+      <match>
+        <action function="phrase" phrase="say-number" data="$1"/>
+      </match>
+    </input>
+    <input pattern="^([123][2-9])$" break_on_match="true">
+      <match>
+        <action function="phrase" phrase="say-number" data="$1"/>
+      </match>
+    </input>
+  </macro>
+
   <macro name="say-month">
     <input pattern="^0?1$" break_on_match="true"> <match> <action function="play-file" data="time/mon-0.wav"/> </match> </input>
     <input pattern="^0?2$" break_on_match="true"> <match> <action function="play-file" data="time/mon-1.wav"/> </match> </input>
