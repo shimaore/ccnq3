@@ -348,11 +348,11 @@ class User
     fifo_path = voicemail_fifo_path()
     @voicemail_settings call, (vm_settings) =>
       if vm_settings._attachments?["prompt.#{message_format}"]
-        play_from_url call, fifo_path, @db_uri + "/voicemail_settings/prompt.#{message_format}", (call) ->
+        play_from_url call, fifo_path, @db_uri + "/voicemail_settings/prompt.#{message_format}", (error,call) ->
           call.command 'phrase', 'voicemail_record_message', cb
 
       else if vm_settings._attachments?["name.#{message_format}"]
-        play_from_url call, fifo_path, @db_uri + "/voicemail_settings/name.#{message_format}", (call) ->
+        play_from_url call, fifo_path, @db_uri + "/voicemail_settings/name.#{message_format}", (error,call) ->
           call.command 'phrase', 'voicemail_unavailable', (call) ->
             call.command 'phrase', 'voicemail_record_message', cb
 
