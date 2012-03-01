@@ -348,7 +348,7 @@ class User
         play_from_url call, fifo_path, @db_uri + "/voicemail_settings/prompt.#{message_format}", cb
 
       else if vm_settings._attachments?["name.#{message_format}"]
-        call.command 'playback', 'voicemail/vm-record_message.wav', (call) ->
+        call.command 'phrase', 'voicemail_record_message', (call) ->
           play_from_url call, fifo_path, @db_uri + "/voicemail_settings/name.#{message_format}", cb
 
       else
