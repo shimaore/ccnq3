@@ -56,6 +56,8 @@ require('ccnq3_config').get (config)->
 
   server = esl.createCallServer()
 
+  messaging.notifier = require('./notifier').notifier
+
   server.on 'CONNECT', (call) ->
 
     # The XML dialplan provides us with the username

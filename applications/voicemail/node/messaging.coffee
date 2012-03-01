@@ -156,6 +156,8 @@ message_format = 'wav'
 message_record_streaming = false
 message_playback_streaming = true
 
+exports.notifier = ->
+
 min_pin_length = 6
 
 class Message
@@ -276,6 +278,8 @@ class Message
       box: 'new' # In which box is this message?
       caller_id: @caller_id
 
+    call.on 'HANGUP', -> @notify()
+
     # Create new CDB record to hold the voicemail metadata
     @db.update msg, (e) ->
       if e
@@ -284,11 +288,15 @@ class Message
         return
       cb call
 
+  notify: ->
+    exports.notifier @user.user
+
   remove: (call,cb) ->
     @db.retrieve @id, (e,r,b) =>
       if not e
         b.box = 'trash'
         @db.update b, (e,r,b) =>
+          @notify()
           if not e
             call.command 'phrase', 'voicemail_ack,deleted', cb
           else
@@ -303,6 +311,7 @@ class Message
       if not e
         b.box = 'saved'
         @db.update b, (e,r,b) =>
+          @notify()
           if not e
             call.command 'phrase', 'voicemail_ack,saved', cb
           else
