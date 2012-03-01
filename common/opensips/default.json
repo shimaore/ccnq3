@@ -49,6 +49,7 @@
   "cache_timeout": 45,
 
   "number_domain": "local",
+  "voicemail_notifier": "",
 
   "ok":true
 }
