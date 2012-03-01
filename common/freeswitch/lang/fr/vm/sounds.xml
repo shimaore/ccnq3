@@ -307,6 +307,14 @@
     </input>
   </macro>
 
+   <macro name="voicemail_unavailable">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="voicemail/vm-not_available.wav"/>
+      </match>
+    </input>
+  </macro>
+
   <macro name="voicemail_say_number">
     <input pattern="^(\d+)$">
       <match>
