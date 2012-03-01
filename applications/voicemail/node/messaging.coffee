@@ -42,6 +42,9 @@ make_cleanup = (fifo_path) ->
  goodbye = (call) ->
   call.command 'phrase', 'voicemail_goodbye', hangup
 
+voicemail_fifo_path = ->
+  fifo_path ?= voicemail_dir + '/file-' + Math.random() + '.' + message_format
+
 # The DTMF that was pressed is available in call.body.playback_terminator_used in the callback
 record_to_url = (call,fifo_path,upload_url,next) ->
 
@@ -342,7 +345,7 @@ class User
         cb vm_settings
 
   play_prompt: (call,cb) ->
-    fifo_path = voicemail_dir + '/prompt' + Math.random() + '.' + message_format
+    fifo_path = voicemail_fifo_path()
     @voicemail_settings call, (vm_settings) =>
       if vm_settings._attachments?["prompt.#{message_format}"]
         play_from_url call, fifo_path, @db_uri + "/voicemail_settings/prompt.#{message_format}", (call) ->
