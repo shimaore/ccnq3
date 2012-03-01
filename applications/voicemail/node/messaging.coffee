@@ -230,21 +230,21 @@ class Message
   # Post-recording menu
   post_recording: (call) ->
     # Check whether the attachment exists (it might be deleted if it doesn't match the minimum duration)
-    request.head "#{@msg_uri}/part#{@part}.#{message_format}", (e) ->
+    request.head "#{@msg_uri}/part#{@part}.#{message_format}", (e) =>
       if e?
-        call.command 'phrase', "could not record please try again", (call) ->
+        call.command 'phrase', "could not record please try again", (call) =>
           @start_recording call
         return
 
       # FIXME The default FreeSwitch prompts only allow for one-part messages, while we allow for multiple.
-      call.command 'play_and_get_digits', "1 1 1 15000 # phrase:voicemail_record_file_check:1:2:3 phrase:'invalid choice' choice \\d 3000", (call) ->
+      call.command 'play_and_get_digits', "1 1 1 15000 # phrase:voicemail_record_file_check:1:2:3 phrase:'invalid choice' choice \\d 3000", (call) =>
         switch call.body.variable_choice
           when "3"
             @delete_parts ->
               @part = the_first_part
               @start_recording call
           when "1"
-            @play_recording call, the_first_part, (call) -> @post_recording call
+            @play_recording call, the_first_part, (call) => @post_recording call
           when "2"
             if @part < the_last_part
               @part++
