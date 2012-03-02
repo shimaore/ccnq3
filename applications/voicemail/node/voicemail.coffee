@@ -56,7 +56,7 @@ require('ccnq3_config').get (config)->
 
   server = esl.createCallServer()
 
-  messaging.notifier = require('./notifier').notifier
+  messaging.notifier = require('./notifier').notifier config
 
   server.on 'CONNECT', (call) ->
 
