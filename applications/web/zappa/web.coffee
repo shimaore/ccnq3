@@ -5,6 +5,7 @@
 url = require 'url'
 request = require 'request'
 fs = require 'fs'
+util = require 'util'
 
 require('ccnq3_config').get (config) ->
   require('zappa').run 8080, ->
@@ -87,6 +88,9 @@ require('ccnq3_config').get (config) ->
           headers: @request.headers
           jar: false
           timeout: 1000
+        , (e,r,b) ->
+          if e?
+            util.log @request.url + ' failed with error ' + util.inspect e
         @request.pipe proxy
         proxy.pipe @response
         return
