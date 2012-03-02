@@ -3,6 +3,7 @@
 #
 
 dgram = require 'dgram'
+dns = require 'dns'
 pico = require 'pico'
 
 exports.notifier = (config) ->
@@ -24,7 +25,7 @@ exports.notifier = (config) ->
         dns.resolveSrv '_sip._udp.' + domain_name, (e,addresses) ->
           if e? then return
           for address in addresses
-            send_sip_notifications address.port, address.name
+            send_sip_notification address.port, address.name
       else
         # Currently no MWI to static endpoints
         return
@@ -40,14 +41,18 @@ exports.notifier = (config) ->
           # FIXME no tag, etc.
           headers = new Buffer """
             NOTIFY sip:#{endpoint} SIP/2.0
+            Via: SIP/2.0/UDP #{target_name}:#{target_port};branch=0
+            Max-Forwards: 2
             To: <sip:#{endpoint}>
             From: <sip:#{endpoint}>
+            Call-ID: #{Math.random()}
+            CSeq: 1 NOTIFY
             Event: message-summary
             Subscription-State: active
             Content-Type: application/simple-message-summary
             Content-Length: #{body.length}
             \n
-          """
+          """.replace /\n/g, "\r\n"
 
           message = new Buffer headers.length + body.length
           headers.copy message
