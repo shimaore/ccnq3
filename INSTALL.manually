@@ -133,7 +133,7 @@ These records should be layed out as follows:
       "type":"domain"
       "domain":"phone.example.net",
       "records":[
-        {"class":"NS","value":"vm1.phone.example.net"},
+        {"class":"NS","value":"vm1.phone.example.net"}
       ]
     }
 
@@ -203,20 +203,11 @@ Notes:
 
 * Add a registering endpoint record to test the new setup.
 
-    {
-      "_id":"endpoint:0976543210@a.phone.example.net",
-      "type":"endpoint",
-      "endpoint":"0976543210@a.phone.example.net",
-      "password":"XXXX",
-      "ha1":"XXXX",
-      "ha1b":"XXXX",
-      "location":"maison",
-      "outbound_route":1,
-      "account":"stephane bob help"
-    }
-
-  ha1 and ha1b must be calculated by hand at this time
-  (see doc/doc/data-dictionary).
+   Register Usermame: 0976543210@a.phone.example.net
+   Register Password: XXXX
+   Account: test
+   Location: home
+   Outbound Route: 1
 
 * Test registration.
 
