@@ -1,0 +1,4 @@
+Please note that the default FreeSwitch installation in /opt/freeswitch
+is left alone. The FreeSwitch configuration used by ccnq3-voice is located 
+in /opt/ccnq3/freeswitch. However /etc/default/freeswitch is modified to
+use ccnq3-voice's configuration files rather than the default.
