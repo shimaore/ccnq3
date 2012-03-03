@@ -35,7 +35,7 @@ exports.notifier = (config) ->
           if e? then return
 
           body = new Buffer """
-            Message-Waiting: #{if b.total_rows? > 0 then 'yes' else 'no'}
+            Message-Waiting: #{if b.total_rows > 0 then 'yes' else 'no'}
           """
 
           # FIXME no tag, etc.

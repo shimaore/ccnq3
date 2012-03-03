@@ -278,7 +278,8 @@ class Message
       box: 'new' # In which box is this message?
       caller_id: @caller_id
 
-    call.on 'HANGUP', -> @notify()
+    # If the user simply hungs up this is the only event we will receive.
+    call.on 'esl_disconnect_notice', => @notify()
 
     # Create new CDB record to hold the voicemail metadata
     @db.update msg, (e) ->
