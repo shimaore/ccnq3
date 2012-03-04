@@ -389,6 +389,10 @@ For non-trusted host that are allowed to submit P-Charge-Info, list of accounts 
             Routing can be done via a CFA, pointing e.g. to the ingress side of an open (inbound) carrier-sbc.
       Note: Support for this feature might be removed at any time, do not depend on it.
 
+    emergency_domain: string
+      Note: This domain is used when an outbound-proxy sends a query to an emergency server.
+        The emergency server will use this domain in its 302 Redirect response to the outbound-proxy.
+
 
 ## number (provisioning records)
 
@@ -490,6 +494,23 @@ The following two (output) fields are required even though they are not currentl
 
 Note: Changes to rules and gateways are not applied automatically. Use sip_commands.opensips = "reload routes" (or the equivalent portal action) to apply the changes.
 
+## emergency(provisioning records)
+
+This is currently used to implement a French emergency call router.
+
+The trigger (destination) number are in the form: 33#xx1#xx2
+where
+  xx1 is the emergency number (112|15|17|18|119|115|116000)
+  xx2 is the INSEE Commune identifier used to route the call.
+
+  _id: type + ":" + country_code + "#" + emergency_number + "#" + code_insee
+  type: "emergency"
+  country_code: string; [for example "33"]
+  emergency_number: string; [for example "112"]
+  code_insee: string; [in France, a five-digit string]
+
+  destination: string; a target phone number expressed as a global phone number ("E.164-without-plus-sign")
+    Note: this destination is used with the "emergency_domain" of the server that sends the request.
 
 ## gateway (provisioning records)
 
@@ -531,6 +552,7 @@ This feature means that you normally should not have to manually create "gateway
     type:"location"
     location:  string; a unique identifier for this location
     routing_data:  string; specific to the emergency routing system used
+      Note: In France this would be the INSEE code of the commune.
 
 
 # _users database
