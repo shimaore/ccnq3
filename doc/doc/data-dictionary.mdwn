@@ -420,9 +420,9 @@ For non-trusted host that are allowed to submit P-Charge-Info, list of accounts 
     inv_timer: integer; maximum ringback duration
 
     privacy: boolean
-      if true, a Privacy: id (mask calling number) header is added
+      if true, a Privacy: id (mask calling number) header is added to outbound calls
     asserted_number: string
-      if present, a P-Asserted-Identity (Caller-ID) header is added
+      if present, a P-Asserted-Identity (Caller-ID) header is added to outbound calls
 
     reject_anonymous: boolean
       if true, reject anonymous inbound calls
