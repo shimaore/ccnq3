@@ -13,7 +13,8 @@
     "invite-router",
     "invite",
     "invite-emergency",
-    "non-loose-route"
+    "non-loose-route",
+    "loose-route-disabled"
   ],
 
   "opensips_base_lib": ".",
