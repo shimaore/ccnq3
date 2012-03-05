@@ -10,7 +10,6 @@
     "nonat",
     "accounting",
     "authenticate",
-    "invite-router",
     "invite",
     "invite-emergency",
     "non-loose-route",
@@ -37,6 +36,8 @@
 
   "inv_timeout": 90,
   "dialog_timeout": 28800,
+
+  "challenge": "",
 
   "sort_order": 1,
 
