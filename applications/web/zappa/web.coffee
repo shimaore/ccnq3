@@ -88,7 +88,7 @@ require('ccnq3_config').get (config) ->
           headers: @request.headers
           jar: false
           timeout: 1000
-        , (e,r,b) ->
+        , (e,r,b) =>
           if e?
             util.log @request.url + ' failed with error ' + util.inspect e
         @request.pipe proxy
