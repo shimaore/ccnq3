@@ -1,4 +1,4 @@
-This document is up-to-date as of 2012-01-02.
+This document is up-to-date as of 2012-03-05.
 
 Notes:
 * URI of databases = URI of CouchDB databases (always a string).
@@ -498,10 +498,10 @@ Note: Changes to rules and gateways are not applied automatically. Use sip_comma
 
 This is currently used to implement a French emergency call router.
 
-The trigger (destination) number are in the form: 33#xx1#xx2
+The trigger (destination) number uses the format: 33#xxy#abcde
 where
-  xx1 is the emergency number (112|15|17|18|119|115|116000)
-  xx2 is the INSEE Commune identifier used to route the call.
+  xxy is the emergency number (112|15|17|18|119|115|116000)
+  abcde is the INSEE Commune identifier used to route the call.
 
   _id: type + ":" + country_code + "#" + emergency_number + "#" + code_insee
   type: "emergency"
