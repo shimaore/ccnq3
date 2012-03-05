@@ -121,6 +121,12 @@ do(jQuery,Sammy) ->
         class:'integer'
         value:@inbound_sbc
 
+       textbox
+        id:'emergency_domain'
+        title:'Emergency domain'
+        class:'text'
+        value:@emergency_domain
+
       # Exclude obsolete "dest_domain" and "allow_onnet"
 
       input type:'submit'
