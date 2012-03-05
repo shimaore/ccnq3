@@ -176,6 +176,10 @@ To add an OpenSIPS host:
       local_ipv4: for models using it ("conference"), IP where to send all INVITE messages
       local_ipv6: reserved
 
+      voicemail_notifier: incoming SUBSCRIBE messages are sent to this host:port or name
+        Note: typically should point to the ingress-* profile's NAPTR record.
+        Note: if this parameter is not defined, forwarding of message waiting indication (MWI) via SUBSCRIBE and NOTIFY messages will not work.
+
     sip_commands.opensips: string
       One of:
         "reload routes"         [apply "rule" or "gateway" record changes]
