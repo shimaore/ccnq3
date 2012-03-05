@@ -8,7 +8,7 @@
     "config_file": "/etc/ccnq3/host.json"
   },
   "scripts": {
-    "start": "daemon -n ccnq3_emergency -o daemon.debug -D \"`pwd`/agents\" -r -- ./emergency.coffee; /usr/sbin/opensips -f /tmp/emergency.cfg"
+    "start": "daemon -n ccnq3_emergency -o daemon.debug -D \"`pwd`/agents\" -r -- ./emergency.coffee; sleep 3; /usr/sbin/opensips -f /tmp/emergency.cfg"
   , "stop":  "daemon -n ccnq3_emergency -o daemon.debug --stop; echo ':kill:' | nc -u -t 1 127.0.0.1 30012 || true"
   , "couchapps": "cd couchapps && ./install.coffee"
   },

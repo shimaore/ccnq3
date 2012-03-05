@@ -8,7 +8,7 @@
     "config_file": "/etc/ccnq3/host.json"
   },
   "scripts": {
-    "start": "daemon -n ccnq3_registrant -o daemon.debug -D \"`pwd`/agents\" -r -- ./registrant.coffee; /usr/sbin/opensips -f /tmp/registrant.cfg"
+    "start": "daemon -n ccnq3_registrant -o daemon.debug -D \"`pwd`/agents\" -r -- ./registrant.coffee; sleep 3; /usr/sbin/opensips -f /tmp/registrant.cfg"
   , "stop":  "daemon -n ccnq3_registrant -o daemon.debug --stop; echo ':kill:' | nc -u -t 1 127.0.0.1 30010 || true"
   , "couchapps": "cd couchapps && ./install.coffee"
   },
