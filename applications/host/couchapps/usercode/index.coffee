@@ -33,6 +33,9 @@ do (jQuery) ->
     "applications/traces"
     # Applications for a server running FreeSwitch
     "applications/voicemail"
+    # Applications for a server running OpenSIPS
+    "applications/registrant"
+    "applications/emergency"
   ]
 
   log = (text,clear) ->
@@ -61,6 +64,9 @@ do (jQuery) ->
       "applications/traces"         : "Traces (requires ccnq3-traces package)"
       # Applications for a server running FreeSwitch
       "applications/voicemail"      : "Voicemail (requires FreeSwitch)"
+      # Applications for a server running OpenSIPS
+      "applications/registrant"     : "Registrant (requires ccnq3-voice package)"
+      "applications/emergency"      : "Emergency Router (requires ccnq3-voice package)"
     }
 
     form id:'host_record', method:'post', action:'#/host', class:'validate', ->
@@ -175,7 +181,22 @@ do (jQuery) ->
             title:'Stop Registrant'
             value:'stop'
 
-        if 'applications/voicemail' in @applications
+        if 'applications/emergency' in @applications
+          radio
+            id:'sip_commands.emergency'
+            title:'No Emergency Router changes'
+            value:''
+            checked:true
+          radio
+            id:'sip_commands.emergency'
+            title:'Start Emergency Router'
+            value:'start'
+          radio
+            id:'sip_commands.emergency'
+            title:'Stop Emergency Router'
+            value:'stop'
+
+         if 'applications/voicemail' in @applications
           textbox
             id:'voicemail.userdb_base_uri'
             title: 'Voicemail: Base URI for user databases'
