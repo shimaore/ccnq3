@@ -1,7 +1,7 @@
 <extension name="apply-cnam" continue="true">
     <condition field="destination_number" expression="^call">
-      <action application="set" data="cnam_uri=$${cnam_uri}" />
-      <action application="lua" data="cnam.lua ${ccnq_from_e164}"/>
+      <action application="set" data="socket_resume=true"/>
+      <action application="socket" data="127.0.0.1:7124 async full"/>
     </condition>
 </extension>
 
