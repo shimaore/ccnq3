@@ -20,12 +20,12 @@ opensips_command = (port,command) ->
     #       to declare the UDP session over with.
     client.close()
 
-process_changes = (port,command) ->
+process_changes = (port,command,cfg) ->
   switch command
     when 'stop'
       opensips_command port, ":kill:\n"
     when 'start'
-      spawn '/usr/sbin/opensips', [ '-f', '/tmp/registrant.cfg' ]
+      spawn '/usr/sbin/opensips', [ '-f', cfg ]
 
 
 require('ccnq3_config').get (config) ->
@@ -67,4 +67,4 @@ require('ccnq3_config').get (config) ->
 
       # Process any MI commands
       if p.sip_commands?.registrant?
-        process_changes params.mi_port, p.sip_commands.registrant
+        process_changes params.mi_port, p.sip_commands.registrant, params.runtime_opensips_cfg

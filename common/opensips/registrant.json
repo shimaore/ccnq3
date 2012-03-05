@@ -18,7 +18,7 @@
 
   "opensips_base_lib": ".",
   "model": "registrant",
-  "runtime_opensips_cfg": "/etc/ccnq3/registrant.cfg",
+  "runtime_opensips_cfg": "/tmp/registrant.cfg",
 
   "db_url": "http://127.0.0.1:34340/",
 
@@ -46,7 +46,6 @@
 
   "sort_order": 1,
 
-  "runtime_opensips_cfg": "/tmp/registrant.cfg",
   "uac_hash_size": 3,
   "uac_timer_interval": 10,
   "proxy_port": 5070,
