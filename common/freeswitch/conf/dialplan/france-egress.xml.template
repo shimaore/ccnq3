@@ -6,10 +6,13 @@
   national dialing plan do interfere with national prefixes.
   (For example, 112 and 3615 are prefixes for geographic numbers.)
 
-  We use the carré / hash (#) sign to mark such special numbers.
+  On the other hand, in order to be routable all output numbers must
+  contain digits. However digit 0 cannot be used as the first digit
+  for a national number, so we use it to prefix special numbers.
+
   For example:
-    3615 (french national dialing plan) is mapped to 33#3615 (international numbering plan)
-    112 (french national dialing plan) is mapped to 33#112 (international numbering plan)
+    3615 (french national dialing plan) is mapped to 3303615 (international numbering plan)
+    112 (french national dialing plan) is mapped to 330112 (international numbering plan)
 
   See http://www.arcep.fr/index.php?id=interactivenumeros
 -->
@@ -41,7 +44,7 @@
 <!-- special services -->
 <extension name="cleanup-called-2">
   <condition field="destination_number" expression="^(1[0-9]{1,5}|3[0-9]{3})$">
-    <action application="set" data="ccnq_to_e164=33#$1"/>
+    <action application="set" data="ccnq_to_e164=330$1"/>
     <action application="transfer" data="call"/>
   </condition>
 </extension>

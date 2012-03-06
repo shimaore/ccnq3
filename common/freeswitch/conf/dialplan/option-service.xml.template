@@ -34,7 +34,7 @@
 
     <extension name="egress-emergency">
       <condition field="${ccnq_account}" expression="^.+$" />
-      <condition field="${ccnq_to_e164}" expression="^33#(112|15|17|18|119|115|116000|19)$">
+      <condition field="${ccnq_to_e164}" expression="^330(112|15|17|18|119|115|116000|19)$">
         <action application="set" data="ccnq_called=$1"/>
         <action application="set" data="ccnq_routing=${sip_h_x-ccnq3-routing}"/>
         <action application="transfer" data="9*${ccnq_called}*${ccnq_routing} XML egress-$${profile_name}-send-call"/>
