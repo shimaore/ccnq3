@@ -133,7 +133,7 @@ ddoc.shows.freeswitch_local_conf = p_fun (doc,req) ->
       <X-PRE-PROCESS cmd="set" data="ingress_target=#{profile.ingress_target}"/>
       <X-PRE-PROCESS cmd="set" data="egress_target=#{profile.egress_target}"/>
       <X-PRE-PROCESS cmd="set" data="enum_root=#{profile.enum_root}"/>
-      <X-PRE-PROCESS cmd="set" data="default_language=#{profile.default_language ? doc.voicemail.default_language ? 'en'}"/>
+      <X-PRE-PROCESS cmd="set" data="default_language=#{profile.default_language ? doc.voicemail?.default_language ? 'en'}"/>
 
       <X-PRE-PROCESS cmd="include" data="dialplan/#{profile.handler}.xml.template"/>
       <X-PRE-PROCESS cmd="include" data="dialplan/send-call-to-#{send_call_to}.xml.template"/>
