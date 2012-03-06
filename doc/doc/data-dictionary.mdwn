@@ -517,19 +517,16 @@ Note: Changes to rules and gateways are not applied automatically. Use sip_comma
 
 This is currently used to implement a French emergency call router.
 
-The trigger (destination) number uses the format: 33#xxy#abcde
-where
-  xxy is the emergency number (112|15|17|18|119|115|116000)
-  abcde is the INSEE Commune identifier used to route the call.
+The trigger (destination) number uses the format: number#routing_data
 
-  _id: type + ":" + country_code + "#" + emergency_number + "#" + code_insee
+  _id: type + ":" + number + "#" + routing_data
   type: "emergency"
-  country_code: string; [for example "33"]
-  emergency_number: string; [for example "112"]
-  code_insee: string; [in France, a five-digit string]
+  number: string; [for example local number "112", or global number "330112"]
+  routing_data: string, matching the routing_data field of the location record.
+    Note: In France this would be the INSEE code of the commune.
 
-  destination: string; a target phone number expressed as a global phone number ("E.164-without-plus-sign")
-    Note: this destination is used with the "emergency_domain" of the server that sends the request.
+  destination: string; a target phone number expressed in the emergency_domain of the server that sent the request.
+    Note: this means that the Contact URI returned in the 302 message will consist of destination@emergency_domain.
 
 ## gateway (provisioning records)
 
