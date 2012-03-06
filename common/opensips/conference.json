@@ -26,6 +26,7 @@
   "ignore_dest_domain": 1,
   "ignore_account": 1,
   "ignore_location": 1,
+  "ignore_routing_data": 1,
   "skip_lineside": 1,
 
   "proxy_ip": "",

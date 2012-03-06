@@ -23,6 +23,9 @@
   "model": "complete",
   "runtime_opensips_cfg": "/etc/opensips/opensips.cfg",
 
+  "ignore_location": 1,
+  "ignore_routing_data": 1,
+
   "db_url": "http://127.0.0.1:34340/",
 
   "proxy_ip": "",
