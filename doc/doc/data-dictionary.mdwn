@@ -177,7 +177,7 @@ To add an OpenSIPS host:
       local_ipv6: reserved
 
       voicemail_notifier: incoming SUBSCRIBE messages are sent to this host:port or name
-        Note: typically should point to the ingress-* profile's NAPTR record.
+        Note: typically should point to the egress-* voicemail profile's NAPTR record.
         Note: if this parameter is not defined, forwarding of message waiting indication (MWI) via SUBSCRIBE and NOTIFY messages will not work.
 
     sip_commands.opensips: string
@@ -241,6 +241,7 @@ Related: applications/registrant
       local_ipv4: string, IP where to send incoming calls
       local_port: integer, port where to send incoming calls
       remote_ipv4: string, upstream registrar
+      proxy_port: integer, the port for this SIP service [default: 5070]
 
     sip_commands.registrant: string
       One of:
@@ -255,9 +256,9 @@ Related: applications/registrant
 
 Related: applications/emergency
 
-    emergency:
-      ok: true
-        Note: the configuration hash is currently empty, but needs to be present for the service to start.
+    emergency: {}
+      Note: the configuration hash may be empty, but needs to be present for the service to start.
+      proxy_port: integer, the port for this SIP service [default: 5072]
 
     sip_commands.emergency: string
       One of:
