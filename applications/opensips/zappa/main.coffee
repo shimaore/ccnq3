@@ -71,7 +71,10 @@ require('ccnq3_config').get (config)->
       return doc
 
     _request = (that,loc) ->
-      request(loc).pipe(that.response)
+      r = request loc, (e,r,b) ->
+        if e?
+          util.log loc + 'failed with error ' + util.inspect e
+      r.pipe(that.response)
 
     _pipe = (that,base,t,id) ->
       loc = "#{base}/_design/opensips/_show/format/#{qs.escape id}?t=#{t}&c=#{qs.escape that.query.c}"
@@ -85,7 +88,7 @@ require('ccnq3_config').get (config)->
 
     _list = (that,base,t,view) ->
       loc = "#{base}/_design/opensips/_list/format/#{view}?t=#{t}&c=#{qs.escape that.query.c}"
-      request(loc).pipe(that.response)
+      _request that, loc
 
     pipe_list = (that,t,view) ->
       _list that, config.provisioning.local_couchdb_uri, t, view
@@ -96,7 +99,7 @@ require('ccnq3_config').get (config)->
     _list_key = (that,base,t,view,key) ->
       key = "\"#{key}\""
       loc = "#{base}/_design/opensips/_list/format/#{view}?t=#{t}&c=#{qs.escape that.query.c}&key=#{qs.escape key}"
-      request(loc).pipe(that.response)
+      _request that, loc
 
     pipe_list_key = (that,t,view,key) ->
       _list_key that, config.provisioning.local_couchdb_uri, t, view, key
