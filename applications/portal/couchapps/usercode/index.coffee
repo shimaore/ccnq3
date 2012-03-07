@@ -25,7 +25,7 @@ $(document).ready ->
     $(container).data 'model', model
 
     @bind 'error.portal', (notice) ->
-      console.log "Model error: #{notice.error}"
+      console.log "Portal error: #{notice.error}"
       $('#log').append "An error occurred: #{notice.error}"
 
     $('#log').ajaxError ->

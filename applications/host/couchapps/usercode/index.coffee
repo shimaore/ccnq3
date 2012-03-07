@@ -420,7 +420,7 @@ do (jQuery) ->
                   log data.error ? data.forbidden
 
       @bind 'error.host', (notice) ->
-        console.log "Model error: #{notice.error}"
+        console.log "Host error: #{notice.error}"
         $('#log').append "An error occurred: #{notice.error}"
 
       # Show template (to create new host)
