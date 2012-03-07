@@ -9,7 +9,7 @@ do(jQuery,Sammy) ->
 
   ## Endpoint
 
-  selector = '#endpoint_record'
+  endpoint_selector = '#endpoint_record'
 
   endpoint_tpl = $.compile_template ->
     form id:'endpoint_record', method:'post', action:'#/endpoint', class:'validate', ->
@@ -189,16 +189,16 @@ do(jQuery,Sammy) ->
         @send endpoint.get, @params.id,
           success: (doc) =>
             @swap endpoint_tpl doc
-            $(selector).data 'doc', doc
+            $(endpoint_selector).data 'doc', doc
           error: =>
             doc = {}
             @swap endpoint_tpl
-            $(selector).data 'doc', doc
+            $(endpoint_selector).data 'doc', doc
 
       @bind 'save-endpoint', (event) ->
 
-        doc = $(selector).data('doc') ? {}
-        $.extend doc, $(selector).toDeepJson()
+        doc = $(endpoint_selector).data('doc') ? {}
+        $.extend doc, $(endpoint_selector).toDeepJson()
 
         push = ->
           $.ccnq3.push_document 'provisioning'
@@ -207,17 +207,17 @@ do(jQuery,Sammy) ->
           endpoint.update doc._id, doc,
             success: (resp) ->
               endpoint.get resp.id, (doc)->
-                $(selector).data 'doc', doc
+                $(endpoint_selector).data 'doc', doc
                 do push
         else
           endpoint.create doc,
             success: (resp) ->
               endpoint.get resp.id, (doc)->
-                $(selector).data 'doc', doc
+                $(endpoint_selector).data 'doc', doc
                 do push
 
       @post '#/endpoint', ->
-        form_is_valid = $(selector).valid()
+        form_is_valid = $(endpoint_selector).valid()
 
         if form_is_valid
           @trigger 'save-endpoint'
@@ -226,7 +226,7 @@ do(jQuery,Sammy) ->
 
       @del '#/endpoint', ->
 
-        doc = $(selector).data('doc') ? {}
+        doc = $(endpoint_selector).data('doc') ? {}
 
         @send endpoint.remove, doc, ->
           $('#endpoint_form').data 'doc', {}
@@ -246,7 +246,7 @@ do(jQuery,Sammy) ->
 
   ## Number
 
-  selector = '#number_record'
+  number_selector = '#number_record'
 
   number_tpl = $.compile_template ->
     form id:'number_record', method:'post', action:'#/number', class:'validate', ->
@@ -374,16 +374,16 @@ do(jQuery,Sammy) ->
         @send number.get, @params.id,
           success: (doc) =>
             @swap number_tpl doc
-            $(selector).data 'doc', doc
+            $(number_selector).data 'doc', doc
           error: =>
             doc = {}
             @swap number_tpl
-            $(selector).data 'doc', doc
+            $(number_selector).data 'doc', doc
 
       @bind 'save-number', (event) ->
 
-        doc = $(selector).data('doc') ? {}
-        $.extend doc, $(selector).toDeepJson()
+        doc = $(number_selector).data('doc') ? {}
+        $.extend doc, $(number_selector).toDeepJson()
 
         push = ->
           $.ccnq3.push_document 'provisioning'
@@ -392,17 +392,17 @@ do(jQuery,Sammy) ->
           number.update doc._id, doc,
             success: (resp) ->
               number.get resp.id, (doc)->
-                $(selector).data 'doc', doc
+                $(number_selector).data 'doc', doc
                 do push
         else
           number.create doc,
             success: (resp) ->
               number.get resp.id, (doc)->
-                $(selector).data 'doc', doc
+                $(number_selector).data 'doc', doc
                 do push
 
       @post '#/number', ->
-        form_is_valid = $(selector).valid()
+        form_is_valid = $(number_selector).valid()
 
         if form_is_valid
           @trigger 'save-number'
@@ -411,7 +411,7 @@ do(jQuery,Sammy) ->
 
       @del '#/number', ->
 
-        doc = $(selector).data('doc') ? {}
+        doc = $(number_selector).data('doc') ? {}
 
         @send number.remove, doc, ->
           $('#number_form').data 'doc', {}
