@@ -211,6 +211,13 @@ You should not have to modify these settings.
       SMTP: null
     mail_password:
       sender_local_part: "support"; The mail_password agent will send emails from  sender_local_part+"@"+domain (where domain is the user's record's "domain" field).
+      file_base: string; a prefix used to locate the format files used by the email notifier.
+        Note: On Unix the string must finish with a slash.
+        Note: The notifier will try to append "portal_password.subject", "portal_password.body", "portal_password.html" to compose the email subject, text body and HTML body, respectively. If one of the files is missing, a default is used.
+        Note: The files must contain Milk templates. The template will receive in particular the following parameters:
+          domain: the web domain used to create the account
+          name: the username
+          password: the password
 
     Note: "host" records are referred to as the "config" record inside most applications.
 
@@ -284,6 +291,15 @@ This section specifies the parameters for applications/voicemail.
         Note: see http://wiki.freeswitch.org/wiki/Mod_native_file for an explanation; meaningul values would be "PCMU" or "PCMA" in most cases.
       max_parts: integer; the maximum number of segments/parts that might be recorded in a voicemail message [default: 1]
       sender: string; the email address used to send email notifications from, if none is specified for a number.
+      file_base: string; a prefix used to locate the format files used by the email notifier.
+        Note: On Unix this string must be terminated by a slash.
+        Note: The notifier will attempt to append "voicemail_notification" or "voicemail_notification_with_attachment", then the user's language, then the component of the email message (subject, text body, or HTML body) and locate the appropriate files.
+          For example, for a notification without attachment using language 'en' the following suffix will be used:
+            voicemail_notification.en.subject, voicemail_notification.en.body, voicemail_notification.en.html
+        Note: If present, the content of those files will be used as Milk templates. The parameters will consist of the content of the voicemail message record. Especially the following parameters are available:
+          caller_id
+          timestamp
+        (See the "voicemail records" section below.)
 
 
 ### Other data in a "host" provisioning record.
