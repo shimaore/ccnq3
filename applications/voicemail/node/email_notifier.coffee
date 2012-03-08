@@ -5,6 +5,7 @@
 pico = require 'pico'
 mailer = require 'nodemailer'
 Milk = require 'milk'
+util = require 'util'
 
 exports.notifier = (config) ->
 
@@ -74,6 +75,6 @@ exports.notifier = (config) ->
 
         mailer.send_mail email_options, (err,status) ->
           if err? or not status
-            return util.log("Email failed: #{err}")
+            return util.log util.inspect err
 
   return send_notification_to
