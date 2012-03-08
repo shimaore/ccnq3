@@ -448,6 +448,7 @@ For non-trusted host that are allowed to submit P-Charge-Info, list of accounts 
 
     registrant_password: password for applications/registrant
       Note: you must issue a "restart" registrant command for the changes to be applied.
+    # FIXME: need registrant_sip_domain
 
     # Local-number properties:
     endpoint [required]
