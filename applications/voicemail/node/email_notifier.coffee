@@ -4,7 +4,7 @@
 
 pico = require 'pico'
 mailer = require 'nodemailer'
-milk = require 'milk'
+Milk = require 'milk'
 
 exports.notifier = (config) ->
 
@@ -13,7 +13,7 @@ exports.notifier = (config) ->
 
   file_base = config.voicemail.file_base
 
-  send_notification_to = (numberi,msg_id) ->
+  send_notification_to = (number,msg_id) ->
     number_domain = config.voicemail.number_domain ? 'local'
 
     provisioning_db = pico config.provisioning.local_couchdb_uri
@@ -31,7 +31,7 @@ exports.notifier = (config) ->
           for email, params of b.email_notifications
             send_email_notification email, params.attach_message, b.language, msg
 
-      send_email_notifcation = (email,attach,language,msg) ->
+      send_email_notification = (email,attach,language,msg) ->
         if attach
           file_name = 'voicemail_notification'
         else
