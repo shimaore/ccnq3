@@ -268,6 +268,7 @@ Related: applications/emergency
 ### Specific to hosts running voicemail
 
 Voicemail is stored inside a user's own CouchDB database.
+This section specifies the parameters for applications/voicemail.
 
     voicemail:
       userdb_base_uri: string, required; the URI prefix (including authentication for the "voicemail manager") to a user's database
@@ -282,6 +283,7 @@ Voicemail is stored inside a user's own CouchDB database.
       format: string; voicemail message format [default: "wav"]
         Note: see http://wiki.freeswitch.org/wiki/Mod_native_file for an explanation; meaningul values would be "PCMU" or "PCMA" in most cases.
       max_parts: integer; the maximum number of segments/parts that might be recorded in a voicemail message [default: 1]
+      sender: string; the email address used to send email notifications from, if none is specified for a number.
 
 
 ### Other data in a "host" provisioning record.
@@ -457,6 +459,10 @@ For non-trusted host that are allowed to submit P-Charge-Info, list of accounts 
     user_database:  string; the name of the user's own CouchDB instance (for the user who "owns" this number)
       Note: this is used by the voicemail system to locate the voicemail_settings record and record or playback voicemail
       messages.
+
+    voicemail_sender: string; the email address used to send out voicemail notifications for this number
+      Note: if not present, the "voicemail.sender" configuration parameter of the host running voicemail is used.
+        If neither are present, the recipient's email address is used as as stop-gap.
 
 ## whitelist/blacklist (provisioning records)
 
@@ -654,6 +660,8 @@ are not replicated.
       Note: if no "pin" is specified then no authentication is required to access the voicemail box.
     language: language string for this user's voicemail
 
+    email_notifications: hash; the key is the target email address; the values should be a hash containing:
+      attach_message: boolean; if true the voice message is sent along with the notification
 
     _attachments:
       prompt.wav  voicemail prompt

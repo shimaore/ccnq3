@@ -157,6 +157,7 @@ message_record_streaming = false
 message_playback_streaming = true
 
 exports.notifier = ->
+exports.email_notifier = ->
 
 min_pin_length = 6
 
@@ -279,7 +280,9 @@ class Message
       caller_id: @caller_id
 
     # If the user simply hungs up this is the only event we will receive.
-    call.on 'esl_disconnect_notice', => @notify()
+    call.on 'esl_disconnect_notice', =>
+      @notify()
+      @notify_via_email()
 
     # Create new CDB record to hold the voicemail metadata
     @db.update msg, (e) ->
@@ -291,6 +294,9 @@ class Message
 
   notify: ->
     exports.notifier @user.user
+
+  notify_via_email: ->
+    exports.email_notifier @user.user, @id
 
   remove: (call,cb) ->
     @db.retrieve @id, (e,r,b) =>
