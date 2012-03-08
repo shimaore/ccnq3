@@ -209,6 +209,7 @@ You should not have to modify these settings.
     mailer:     Used as the configuration for the node-mailer package.
       sendmail: "/usr/sbin/sendmail"
       SMTP: null
+        Note: this is required for applications/portal and applications/voicemail to send out email notifications.
     mail_password:
       sender_local_part: "support"; The mail_password agent will send emails from  sender_local_part+"@"+domain (where domain is the user's record's "domain" field).
       file_base: string; a prefix used to locate the format files used by the email notifier.
