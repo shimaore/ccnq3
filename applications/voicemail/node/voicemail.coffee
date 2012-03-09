@@ -70,6 +70,10 @@ require('ccnq3_config').get (config)->
       when 'record'
         util.log "Record for #{user}"
         call.linger ->
+          call.register_callback 'esl_linger', ->
+            # Keep the call opened for a little while.
+            seconds = 1000
+            setTimeout (-> call.exit()), 20*seconds
           messaging.record config, call, user
 
       when 'inbox'
