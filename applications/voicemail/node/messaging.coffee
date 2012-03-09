@@ -83,9 +83,8 @@ record_to_url = (call,fifo_path,upload_url,next) ->
   else
     preprocess = (cb) ->
       call.register_callback 'RECORD_STOP', ->
-        register_fifo fs.createReadStream(fifo_path).pipe request.put upload_url
-        # FIXME call next after the upload completed.
-        next null, call
+        register_fifo fs.createReadStream(fifo_path).pipe request.put upload_url, (e,r,b) ->
+          next e, call
       cb? null
 
   preprocess (error) ->

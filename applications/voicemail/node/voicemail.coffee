@@ -69,7 +69,8 @@ require('ccnq3_config').get (config)->
     switch mode
       when 'record'
         util.log "Record for #{user}"
-        messaging.record config, call, user
+        call.linger ->
+          messaging.record config, call, user
 
       when 'inbox'
         util.log "Inbox for #{user}"
