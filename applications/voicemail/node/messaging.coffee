@@ -281,6 +281,8 @@ class Message
     # If the user simply hungs up this is the only event we will receive.
     call.on 'esl_disconnect_notice', =>
       @notify()
+    # Wait for linger to finish.
+    call.on 'esl_disconnect', =>
       @notify_via_email()
 
     # Create new CDB record to hold the voicemail metadata
