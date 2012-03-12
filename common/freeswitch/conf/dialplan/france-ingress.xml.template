@@ -1,32 +1,17 @@
-<!--
-  Internally we route french numbers like any international number,
-  e.g. 33+national number (without the "0" or "E" prefix)
-  however in France the dialing plan cannot be readily mapped into
-  the international numbering plan because special codes, etc. in the
-  national dialing plan do interfere with national prefixes.
-  (For example, 112 and 3615 are prefixes for geographic numbers.)
-
-  We use the carré / hash (#) sign to mark such special numbers.
-  For example:
-    3615 (french national dialing plan) is mapped to 33#3615 (international numbering plan)
-    112 (french national dialing plan) is mapped to 33#112 (international numbering plan)
-
-  See http://www.arcep.fr/index.php?id=8652
--->
-
-<!-- from: national number -->
-<extension name="cleanup-caller-id" continue="true">
-  <condition field="destination_number" expression="^call"/>
-  <condition field="caller_id_number" expression="^33([0-9]+)$">
-    <action application="set" data="effective_caller_id_number=0$1"/>
-  </condition>
-</extension>
-
 <!-- from: international number -->
 <extension name="cleanup-caller-id" continue="true">
   <condition field="destination_number" expression="^call"/>
   <condition field="caller_id_number" expression="^([1-9][0-9]+)$">
     <action application="set" data="effective_caller_id_number=00$1"/>
+  </condition>
+</extension>
+
+<!-- from: national number -->
+<!-- This one needs to be second, otherwise the international rule will apply and overwrite. -->
+<extension name="cleanup-caller-id" continue="true">
+  <condition field="destination_number" expression="^call"/>
+  <condition field="caller_id_number" expression="^33([0-9]+)$">
+    <action application="set" data="effective_caller_id_number=0$1"/>
   </condition>
 </extension>
 
