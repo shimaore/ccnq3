@@ -334,6 +334,11 @@ This section specifies the parameters for applications/voicemail.
           timestamp
         (See the "voicemail records" section below.)
 
+      callback:  Configuration to allow users to call the number that left a voicemail message
+        profile   "ingress-#{profile_name}" or "egress-#{profile_name}"
+        domain    the domain name where the message should be sent to
+        Note: if sending to a proxy, make sure the voicemail server has a matching endpoint record with "sbc" set to type 10 so that it is authorized to pass charging information along.
+
 
 ### Other data in a "host" provisioning record.
 

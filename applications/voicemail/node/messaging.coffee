@@ -155,6 +155,9 @@ message_format = 'wav'
 message_record_streaming = false
 message_playback_streaming = true
 
+callback_profile = null
+callback_domain = null
+
 exports.notifier = ->
 exports.email_notifier = ->
 
@@ -334,8 +337,18 @@ class Message
     cb call
 
   return_call: (call,cb) ->
-    # FIXME
-    cb call
+    account = @user.account
+    destination = @caller_id
+    if callback_profile? and callback_domain? and account? and destination?
+      call.command 'export', "sip_h_P-Charge-Info=#{account}", (call) ->
+        call.command 'bridge', "sofia/#{callback_profile}/#{destination}@#{callback_domain}", cb
+    else
+      util.log 'Could not place callback, ' + util.inspect
+        account: account
+        destination: destination
+        callback_profile: callback_profile
+        callback_domain: callback_domain
+      cb call
 
   forward: (call,cb) ->
     # FIXME
@@ -344,7 +357,7 @@ class Message
 
 class User
 
-  constructor: (@db_uri,@user) ->
+  constructor: (@db_uri,@user,@account) ->
     @user_db = pico @db_uri
 
   voicemail_settings: (call,cb) ->
@@ -561,6 +574,10 @@ locate_user = (config,call,number,cb,attempts) ->
   message_format = config.voicemail.message_format if config.voicemail.format?
   the_last_part = config.voicemail.max_parts if config.voicemail.max_parts?
 
+  if config.voicemail.callback
+    callback_profile = config.voicemail.callback.profile
+    callback_domain = config.voicemail.callback.domain
+
   attempts ?= 3
   if attempts <= 0
     return goodbye call
@@ -578,7 +595,7 @@ locate_user = (config,call,number,cb,attempts) ->
     # So we got a user document. Let's locate their user database.
     # userdb_base_uri must contain authentication elements (e.g. "voicemail" user+pass)
     db_uri = config.voicemail.userdb_base_uri + '/' + b.user_database
-    cb db_uri, new User db_uri, number
+    cb db_uri, new User db_uri, number, b.account
 
 exports.record = (config,call,username) ->
 
