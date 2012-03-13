@@ -1,0 +1,7 @@
+#!/bin/sh
+
+NAME=ccnq3
+USER=ccnq3
+WORKDIR=/opt/${NAME}
+
+su -s /bin/sh -c "(cd ${WORKDIR}/src && npm compact)" $USER

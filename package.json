@@ -12,6 +12,7 @@
   , "stop":   "./npm-apps.coffee stop"
   , "updates": "./npm-apps.coffee install && ./npm-apps.coffee update && ./npm-apps.coffee run-script couchapps"
   , "bootstrap": "./npm-apps.coffee run-script bootstrap"
+  , "compact": "./npm-apps.coffee run-script compact"
   },
   "dependencies": {
     "ccnq3_config": ">=0.2.3"
