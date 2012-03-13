@@ -9,12 +9,14 @@
   },
   "scripts": {
     "couchapps": "cd couchapps && coffee install.coffee"
+  , "compact": "cd couchapps && coffee compact.coffee"
   , "preinstall": "coffee -c couchapps/*/*.coffee"
   },
   "dependencies": {
     "cdb": "*"
   , "couchapp": "*"
   , "ccnq3_config": ">=0.1"
+  , "pico": "*"
   },
   "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },
 
