@@ -1,17 +1,49 @@
-This document is up-to-date as of 2012-03-05.
-
 Notes:
 * URI of databases = URI of CouchDB databases (always a string).
   These URIs might contain authentication usernames and passwords.
 
 # provisioning database
 
+The provisioning database contains the master copy of all provisioning information
+for an entire system.
+It contains different types of records, which can be identified by their "type" field.
+The type is also the first part of the records' identifier, to avoid collisions.
+
 ## host (aka config) provisioning records
 
-### Common section
+There must be exactly one "host" record for each server in the system.
+
+Most changes in this type of records might require you to:
+
+  * either restart the ccnq3 processes to apply the changes:
+
+      /etc/init.d/ccnq3 restart
+
+    (This should be sufficient in most cases.)
+
+  * in some cases reinstall the ccnq3 package:
+
+      aptitude reinstall ccnq3
+
+    This is especially true when adding an application, so that
+    the proper dependencies might be installed for the new application.
+
+However this does not apply to commands (such as the ones in "sip_commands"),
+which are executed immediately.
+
+Please note that restarting, reinstalling, or submitting commands in a lot of
+cases will cause calls to disconnect. These operations are best used during
+dedicated maintenance windows and should be avoided during production use.
+
+Currently the main freeswitch, opensips, and medaproxy processes are not started by ccnq3.
+These processes might be controlled using their respective /etc/init.d/ scripts.
+
+### Common section (host provisioning record)
 
 All the fields in this section are pre-populated by the various scripts.
+There is no reason to change them after the initial installation of a server.
 Only the "applications" array will need to be expanded.
+(This can be easily done using the web portal.)
 
 Caveat: provisioning.host_couchdb_uri might need to be fixed if the system cannot guess
 your installation.
@@ -35,7 +67,7 @@ your installation.
       random IPv6 address is selected, from the ones present in the
       "interfaces" records.
 
-    # Note: Changing any of these settings would require to restart the matching
+    # Note: Changing any of the following settings would require to restart the matching
     #       services, since configuration is read (in most cases) once at startup.
 
     admin:   (only present for bootstrap-system hosts normally; there's no reason to modify these)
@@ -79,7 +111,6 @@ To add a FreeSwitch host:
    (You'll need to configure at least "sip_domain_name".)
    (You'll need to configure one sip_profiles[] in order to be able to place calls.)
 2. add "applications/freeswitch" to the applications field [and restart ccnq3]
-3. run common/freeswitch/install.sh on the host to enable FreeSwitch
 
 
     sip_domain_name:  string (required); FQDN accepted by the server
@@ -147,6 +178,8 @@ To add a FreeSwitch host:
         Note: Add a command then remove it from the hash to prevent accidental misfiring of commands.
         Note: A special "sofia_profile" key "opensips" is used to send events to a running OpenSIPS process (rather than a
               FreeSwitch sofia profile). See below for more information.
+        Note: A special "sofia_profile" key "registrant" is used to send events to a running registrant process (rather than a
+              FreeSwitch sofia profile). See below for more information.
 
     sip_variables: {} of global (FreeSwitch) variables; defaults to {}
         Note: The idea is that these can be used on a per-host basis by additional dialplans, profiles, etc.
@@ -159,7 +192,6 @@ To add an OpenSIPS host:
 1. configure the fields in this section
 2. add "applications/opensips" to the applications field [and restart ccnq3]
 3. run common/mediaproxy/install.sh to install mediaproxy FIXME still requires some work
-4. run common/opensips/install.sh on the host to enable OpenSIPS
 
 
     opensips_proxy:
@@ -583,6 +615,8 @@ The trigger (destination) number uses the format: number#routing_data
 
 Note: You do not need to create gateway records for sip_profiles which have an "egress_gwid" field, these are created automatically using the host's sip_domain_name and the egress_gwid. (They will not show up in the database but will be accessible to all the OpenSIPS hosts within that sip_domain_name.)
 This feature means that you normally should not have to manually create "gateway"-type records, since all the interesting records should be created automatically.
+
+Note: Changes to rules and gateways are not applied automatically. Use sip_commands.opensips = "reload routes" (or the equivalent portal action) to apply the changes.
 
 ## location (provisioning records)
 
