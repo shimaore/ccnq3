@@ -1,8 +1,49 @@
-ccnq3 (0.0.51-186) unstable; urgency=low
+ccnq3 (0.0.51-187) unstable; urgency=low
 
   * Voice server installation
+  * Clarified which parameters are used for inbound calls.
+  * (initial) Emergency call routing server.
+  * Replaced old (lua-based) cnam client with new (esl-socket/node.js-based) cnam client.
+  * Removed duplicate attempt at installating the voicemail usercode.
+  * Embedded emergency server.
+  * Simplified configuration code of registrant
+  * Added provisioning options for registrant and emergency
+  * Added workaround: it might take a short while for the agent to create the configuration file
+  * Forced success of opensips.
+  * Corrected access to the request's URL for Logging purposes.
+  * Removed extraneous installation option "couchapps" for package which does not need it.
+  * Updated documentation for emergency server.
+  * Fixed syntax error in emergency JSON configuration.
+  * Added loose-route-disabled pathway for emergency server.
+  * Fixed emergency router's opensips syntax
+  * Added support for "emergency_domain" in the endpoint web UI
+  * Documented voicemail_notifier parameter for OpenSIPS.
+  * Moved location -> routing_data resolution out of outbound-proxy.
+  * Change "local French" to "international" mapping for special numbers so that they can be effectively routed using LCR.
+  * Added/corrected documentation.
+  * Rewrote documentation for the emergency server.
+  * Corrected opensips_http_db so that it does not crash on request errors.
+  * doc.voicemail might not be available
+  * Clarified which model generated the error
+  * Corrected bug where the selector for endpoint was overwritten.
+  * The OpenSIPS json module translates boolean values into strings. Corrected OpenSIPS code to test the proper value.
+  * Fixed $hdr() syntax for emergency lookup
+  * Working around loudness in forwarder code
+  * Initial code for voicemail email notifications.
+  * Documented file_base and the use of Milk templates for email notifications.
+  * (minor,fixme)
+  * Fixed dependencies for voicemail email_notifier
+  * Provided util to email_notifier
+  * Documented in which cases the "mailer" host configuration is required.
+  * Attempted to fix timing issues in voicemail message upload
+  * Need to make sure we capture RECORD_STOP
+  * Worked around proper end-of-upload notification: wait before sending the email out.
+  * Provided proper URI to CouchDB to retrieve attachment
+  * Swapped international and national rule (FR) so that they apply properly
+  * (initial) Added _compact code in applications
+  * Added compact command to the ccnq3 package and cron.daily for compact to the Debian package.
 
- -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Wed, 29 Feb 2012 22:35:12 +0100
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 13 Mar 2012 13:02:15 +0100
 
 ccnq3 (0.0.50-10) unstable; urgency=low
 
