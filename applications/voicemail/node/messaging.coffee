@@ -166,16 +166,9 @@ min_pin_length = 6
 class Message
 
   ##
-  # new Message user, db_uri, _id
-  # new Message user, db_uri, timestamp, caller_id, uuid
-  constructor: (@user,@db_uri,timestamp,caller_id,uuid) ->
-    if not uuid?
-      @id = timestamp
-    else
-      @timestamp = timestamp
-      @caller_id = caller_id
-      @uuid = uuid
-      @id = 'voicemail:' + timestamp + uuid
+  # new Message(user, db_uri, _id)
+  # new Message(user, db_uri).create(call,cb)
+  constructor: (@user,@db_uri,@id) ->
     @db = pico @db_uri
     @part = the_first_part
 
@@ -276,12 +269,15 @@ class Message
 
   # Create a new voicemail record in the database
   create: (call,cb) ->
+    id_timestamp = timestamp()
+    @id = 'voicemail:' + id_timestamp + call.body.variable_uuid
     msg =
       type: "voicemail"
       _id: @id
-      timestamp: @timestamp ? timestamp()
+      timestamp: id_timestamp
       box: 'new' # In which box is this message?
-      caller_id: @caller_id
+      caller_id: call.body.variable_sip_from_user
+      recipient: call.body.variable_sip_to_user
 
     # If the user simply hungs up this is the only event we will receive.
     call.on 'esl_disconnect_notice', =>
@@ -339,18 +335,19 @@ class Message
     cb call
 
   return_call: (call,cb) ->
-    account = @user.account
-    destination = @caller_id
-    if callback_profile? and callback_domain? and account? and destination?
-      call.command 'export', "sip_h_P-Charge-Info=#{account}", (call) ->
-        call.command 'bridge', "sofia/#{callback_profile}/#{destination}@#{callback_domain}", cb
-    else
-      util.log 'Could not place callback, ' + util.inspect
-        account: account
-        destination: destination
-        callback_profile: callback_profile
-        callback_domain: callback_domain
-      cb call
+    @db.retrieve @id, (e,r,b) ->
+      account = @user.account
+      destination = b.caller_id
+      if callback_profile? and callback_domain? and account? and destination?
+        call.command 'export', "sip_h_P-Charge-Info=#{account}", (call) ->
+          call.command 'bridge', "sofia/#{callback_profile}/#{destination}@#{callback_domain}", cb
+      else
+        util.log 'Could not place callback, ' + util.inspect
+          account: account
+          destination: destination
+          callback_profile: callback_profile
+          callback_domain: callback_domain
+        cb call
 
   forward: (call,cb) ->
     # FIXME
@@ -603,7 +600,7 @@ exports.record = (config,call,username) ->
 
   locate_user arguments..., (db_uri,user) ->
 
-    msg = new Message user, db_uri, timestamp(), call.body.variable_sip_from_user, call.body.variable_uuid
+    msg = new Message user, db_uri
     msg.create call, ->
       user.play_prompt call, -> msg.start_recording call
 
