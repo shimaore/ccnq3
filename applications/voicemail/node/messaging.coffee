@@ -335,7 +335,7 @@ class Message
     cb call
 
   return_call: (call,cb) ->
-    @db.retrieve @id, (e,r,b) ->
+    @db.retrieve @id, (e,r,b) =>
       account = @user.account
       destination = b.caller_id
       if callback_profile? and callback_domain? and account? and destination?
