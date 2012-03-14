@@ -177,8 +177,10 @@ class Message
       @uuid = uuid
       @id = 'voicemail:' + timestamp + uuid
     @db = pico @db_uri
-    @msg_uri = @db.prefix @id
     @part = the_first_part
+
+  msg_uri: ->
+    @db.prefix @id
 
   # Record the current part
   start_recording: (call,cb) ->
@@ -190,7 +192,7 @@ class Message
         return
 
       fifo_path = "#{voicemail_dir}/#{@id}-part#{@part}.#{message_format}"
-      upload_url = "#{@msg_uri}/part#{@part}.#{message_format}?rev=#{b.rev}"
+      upload_url = "#{@msg_uri()}/part#{@part}.#{message_format}?rev=#{b.rev}"
       record_to_url call, fifo_path, upload_url, (error,call) ->
         if error?
           # FIXME Remove the attachment from the database?
@@ -203,14 +205,14 @@ class Message
 
   # Play a recording, calling the callback with an optional collected digit
   play_recording: (call,this_part,cb) ->
-    url = "#{@msg_uri}/part#{this_part}.#{message_format}"
+    url = "#{@msg_uri()}/part#{this_part}.#{message_format}"
     request.head url, (error,response) =>
       if error or response.statusCode isnt 200
         # Presumably we've read all the parts
         return cb call
 
       fifo_path = "#{voicemail_dir}/#{@id}-part#{@part}.#{message_format}"
-      download_url = "#{@msg_uri}/part#{this_part}.#{message_format}"
+      download_url = "#{@msg_uri()}/part#{this_part}.#{message_format}"
       play_from_url call, fifo_path, download_url, (error,call) =>
         if error?
           return @play_recording call, this_part+1, cb
@@ -235,7 +237,7 @@ class Message
   # Post-recording menu
   post_recording: (call) ->
     # Check whether the attachment exists (it might be deleted if it doesn't match the minimum duration)
-    request.head "#{@msg_uri}/part#{@part}.#{message_format}", (e) =>
+    request.head "#{@msg_uri()}/part#{@part}.#{message_format}", (e) =>
       if e?
         call.command 'phrase', "could not record please try again", (call) =>
           @start_recording call
@@ -291,7 +293,7 @@ class Message
     # Create new CDB record to hold the voicemail metadata
     @db.update msg, (e) ->
       if e
-        util.log "Could not create #{@msg_uri}"
+        util.log "Could not create #{@msg_uri()}"
         call.command 'phrase', 'vm_say,sorry', hangup
         return
       cb call
