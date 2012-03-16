@@ -456,7 +456,8 @@ class User
           msg.forward_to_email call, cb
 
         when "5"
-          msg.return_call call, cb
+          msg.return_call call, (call) =>
+            @navigate_messages call, rows, current, cb
 
         when "6"
           msg.forward call, cb
