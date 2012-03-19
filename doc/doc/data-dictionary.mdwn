@@ -273,6 +273,48 @@ Note: this is not enabled by default even after you install the ccnq3-traces pac
       workdir: string, directory used to store the traces, defaults to /opt/ccnq3/traces
       filter: string, pcap filter for traces, defaults to ports used by ccnq3 applications
 
+      run: {} of traces to run; the index is the TCP port number; content:
+          to_user     string; To username (destination number)
+          from_user   string; From username (calling number)
+          call_id     string; Call-ID
+          days_ago    integer; only lookup for this number of days ago (0 = today)
+          format      string; either 'pcap' or 'json'
+
+        Note: for each entry, a single-shot web server will be started on the specified port number.
+          That server will send back either a JSON or a PCAP document which will contain packets found
+          in the available trace files on the server.
+          (Since the trace files are rotated to not exceed a given disk space, it is possible that a
+          trace might not be found even though a call was placed.)
+
+        Note: the JSON ouput is an array of hash record; the records might contain the following fields:
+            "frame.time"
+            "ip.version"
+            "ip.dsfield.dscp"
+            "ip.src"
+            "ip.dst"
+            "ip.proto"
+            "udp.srcport"
+            "udp.dstport"
+            "sip.Call-ID"
+            "sip.Request-Line"
+            "sip.Method"
+            "sip.r-uri.user"
+            "sip.r-uri.host"
+            "sip.r-uri.port"
+            "sip.Status-Line"
+            "sip.Status-Code"
+            "sip.to.user"
+            "sip.from.user"
+            "sip.From"
+            "sip.To"
+            "sip.contact.addr"
+            "sip.User-Agent"
+        Note: to obtain the complete data use the PCAP download.
+
+        Note: this type of request is highly CPU intensive for the target host.
+          It is only meant as a troubleshooting tool for administrators, not as a generically available service.
+          Use the cdr database to obtain per-call information as a generic service.
+
 ### Specific to hosts running as registrants.
 
 Related: applications/registrant
