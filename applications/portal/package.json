@@ -24,7 +24,8 @@
   , "node-uuid": ">=1.2.0"
   , "milk": "*"
 
-  , "ccnq3_roles": ">=0.0.57"
+  , "ccnq3_roles": ">=0.0.59"
+  , "request": ">=2.9.100"
   , "express": "*"
   , "connect-memcached": ">=0.0.2"
   , "connect-redis": ">=1.0.7"
