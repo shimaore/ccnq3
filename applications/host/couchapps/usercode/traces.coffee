@@ -87,18 +87,25 @@ do (jQuery) ->
           #    for pcap download, we need to open the file
 
           port = Math.floor(Math.random()*2000)+8000
-          id = make_id host_username doc.host
+          id = make_id 'host', doc.host
           model.get id, (doc) ->
               doc.traces.run ?= {}
               if doc.traces.run[port]
                 return log 'Sorry, try again'
               doc.traces.run[port] = form
-              model.update doc._id, doc,
+              model.update id, doc,
                 success: -> setTimeout wait_for_capture, 1000
 
           # Attempt to download the capture content
           wait_for_capture = ->
             url = "/roles/traces/#{encodeURIComponent doc.host}/#{encodeURIComponent port}"
+
+            # Do no re-submit this query
+            model.get id, (doc) ->
+              doc.traces.run ?= {}
+              delete doc.traces.run[port]
+              model.update id, doc,
+                success: -> log 'Completed', true
 
             # For a PCAP file, simply redirect the browser
             if not form.inline
