@@ -19,6 +19,7 @@ $(document).ready ->
           ul ->
             li -> a href:'#/host', 'New host'
             li -> a href:'#/endpoint', 'New endpoint'
+            li -> a href:'#/number', 'New number'
 
     app = @
 
