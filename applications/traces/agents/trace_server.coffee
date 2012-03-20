@@ -137,7 +137,7 @@ module.exports = (config,port,doc) ->
               res.write JSON.stringify(data)
             buffer = d[0]
 
-          tshark.on 'exit', ->
+          tshark.stdout.on 'end', ->
             # Process any leftover content
             do process_buffer
             # Close the JSON content
@@ -181,11 +181,11 @@ module.exports = (config,port,doc) ->
           tshark.stdin.write tshark_command
           tshark.stdin.end()
 
-          tshark.on 'exit', ->
-            # Remove the temporary (pcap) file
-            fs.unlink fh
+          tshark.stdout.on 'end', ->
             # The response is complete
             res.end()
+            # Remove the temporary (pcap) file
+            fs.unlink fh
             # Stop the server (single-shot)
             server.close()
 
