@@ -121,6 +121,7 @@ module.exports = (config,port,doc) ->
         pcap.on 'exit', ->
           tshark = spawn shell
           tshark.stdin.write tshark_command
+          tshark.stdin.end()
 
           buffer = ''
           process_buffer = ->
@@ -154,6 +155,7 @@ module.exports = (config,port,doc) ->
 
         # Start the pcap_command
         pcap.stdin.write pcap_command
+        pcap.stdin.end()
 
       server.listen port
 
@@ -176,6 +178,7 @@ module.exports = (config,port,doc) ->
         pcap.on 'exit', ->
           tshark = spawn shell
           tshark.stdin.write tshark_command
+          tshark.stdin.end()
 
           tshark.on 'exit', ->
             # Remove the temporary (pcap) file
@@ -190,5 +193,6 @@ module.exports = (config,port,doc) ->
 
         # Start the pcap_command
         pcap.stdin.write pcap_command
+        pcap.stdin.end()
 
       server.listen port
