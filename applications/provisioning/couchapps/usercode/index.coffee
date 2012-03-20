@@ -340,6 +340,33 @@ do(jQuery,Sammy) ->
         class:'text'
         value:@asserted_number
 
+      checkbox
+        id:'reject_anonymous'
+        title:'Reject anonymous (inbound)'
+        value:@reject_anonymous
+
+      checkbox
+        id:'use_blacklist'
+        title:'Use blacklist (inbound)'
+        value:@use_blacklist
+
+      checkbox
+        id:'use_whitelist'
+        title:'Use whitelist (inbound)'
+        value:@use_whitelist
+
+      textbox
+        id:'user_database'
+        title:'User Database (voicemail)'
+        class:'text'
+        value:@user_database
+
+      textbox
+        id:'voicemail_sender'
+        title:'Notification Sender (voicemail)'
+        class:'email'
+        value:@voicemail_sender
+
       input type:'submit'
 
     form method:'delete', action:'#/number', ->
