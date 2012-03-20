@@ -66,7 +66,7 @@ do (jQuery) ->
 
       @get '#/trace', ->
 
-        model.view 'host/hosts', (data) =>
+        model.view 'host/traces_hosts', (data) =>
           hosts = (row.key for row in data.rows)
           @swap trace_tpl {hosts:hosts}
 
@@ -89,8 +89,6 @@ do (jQuery) ->
           port = Math.floor(Math.random()*2000)+8000
           id = make_id host_username doc.host
           model.get id, (doc) ->
-              unless doc.applications?.indexOf 'applications/traces' >= 0 and doc.traces?.interfaces
-                return log 'This host is not configured to run traces'
               doc.traces.run ?= {}
               if doc.traces.run[port]
                 return log 'Sorry, try again'

@@ -20,9 +20,9 @@ ddoc = {
 
 module.exports = ddoc
 
-ddoc.views.hosts =
+ddoc.views.traces_hosts =
   map: p_fun (doc) ->
-    if doc.type is 'host'
+    if doc.type is 'host' and doc.applications?.indexOf('applications/traces') >= 0 and doc.traces?.interfaces?
       emit doc.host, null
 
 ddoc.filters.hostname = p_fun (doc,req) ->
