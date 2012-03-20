@@ -112,6 +112,7 @@ module.exports = (config,port,doc) ->
         # Start the JSON content.
         # Start the array.
         res.write '['
+        first_entry = true
 
         # Fork the find/mergecap/ngrep pipe.
         pcap = spawn shell
@@ -127,9 +128,12 @@ module.exports = (config,port,doc) ->
             while d.length > 1
               line = d.shift()
               data = line_parser line
-              # Write the JSON content,
               # Make the array properly formatted
-              res.write data.toJSON() + ','
+              if not first_entry
+                res.write ','
+              first_entry = false
+              # Write the JSON content
+              res.write JSON.stringify(data)
             buffer = d[0]
 
           tshark.on 'exit', ->
