@@ -72,9 +72,9 @@ and host vm3 will be a carrier-side server.
 
     access:provisioning:  # Pull provisioning database
     update:provisioning:  # Push provisioning database
-    update:_users:        # Allows to create the user record
+    update:_users:        # Allows to create user records
     update:_users:        # Allows to grant the role (via applications/roles/zappa/admin.coffee)
-    update:host:          # Role to add
+    update:host:          # Role to add and modify hosts (servers)
     update:user_db:       # Allows to grant this role to new "voicemail@" accounts. (Not required if not using voicemail.)
     access:_users:        # Allows to grant this role to new "voicemail@" accounts. (Not required if not using voicemail.)
     access:traces:        # Allows to grant the role to users who need to gather sniffer traces
