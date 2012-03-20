@@ -9,7 +9,10 @@ do (jQuery) ->
   container = '#content'
 
   profile = $(container).data 'profile'
-  # model = $(container).data 'model'
+  model = $(container).data 'model'
+
+  # Load the traces module.
+  model.require "host/traces.js"
 
   # FIXME: Retrieve the default value for host_couchdb_uri (public, no password embedded) from some configuration area.
 
