@@ -62,9 +62,13 @@ do (jQuery) ->
 
     app = $.sammy container, ->
 
+      model = @createModel 'host'
+
       @get '#/trace', ->
 
-        @swap trace_tpl {hosts:hosts}
+        model.view 'hosts', (data) =>
+          hosts = (row.key for row in data.rows)
+          @swap trace_tpl {hosts:hosts}
 
       @post '#/trace', ->
         form_is_valid = $(selector).valid()

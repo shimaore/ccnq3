@@ -20,6 +20,11 @@ ddoc = {
 
 module.exports = ddoc
 
+ddoc.views.hosts =
+  map: p_fun (doc) ->
+    if doc.type is 'host'
+      emit doc.host, null
+
 ddoc.filters.hostname = p_fun (doc,req) ->
   return doc.type is 'host' and doc.host is req.query.hostname
 
