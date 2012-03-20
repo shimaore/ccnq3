@@ -71,6 +71,7 @@ do (jQuery) ->
           @swap trace_tpl {hosts:hosts}
 
       @post '#/trace', ->
+
         form_is_valid = $(selector).valid()
         form = $(selector).toDeepJson()
 
@@ -86,17 +87,15 @@ do (jQuery) ->
           #    for pcap download, we need to open the file
 
           port = Math.floor(Math.random()*2000)+8000
-          provisioning = $.couch.db("provisioning")
           id = make_id host_username doc.host
-          provisioing.openDoc id,
-            success: (doc) ->
+          model.get id, (doc) ->
               unless doc.applications?.indexOf 'applications/traces' >= 0 and doc.traces?.interfaces
                 return log 'This host is not configured to run traces'
               doc.traces.run ?= {}
               if doc.traces.run[port]
                 return log 'Sorry, try again'
               doc.traces.run[port] = form
-              provisioning.saveDoc doc,
+              model.update doc._id, doc,
                 success: -> setTimeout wait_for_capture, 1000
 
           # Attempt to download the capture content
