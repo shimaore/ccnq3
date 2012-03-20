@@ -16,11 +16,12 @@ do (jQuery) ->
   selector = '#host_record'
 
   all_apps = [
+    # Required on all servers
+    "applications/host"
     # Applications for a manager
     "applications/usercode"
     "applications/provisioning"
     "applications/roles"
-    "applications/host"
     "applications/portal"
     "applications/inbox"
     "public"
