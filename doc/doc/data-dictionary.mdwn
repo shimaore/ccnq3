@@ -261,6 +261,7 @@ To start traces:
 1. install the ccnq3-traces package
 2. configure the fields in this section
 3. add "applications/traces" to the applications field
+4. make sure users who need to run traces have the "access:traces:" role.
 
 Note: this is not enabled by default even after you install the ccnq3-traces package.
 
