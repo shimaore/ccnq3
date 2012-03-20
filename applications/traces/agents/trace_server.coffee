@@ -157,6 +157,7 @@ module.exports = (config,port,doc) ->
         pcap.stdin.write pcap_command
         pcap.stdin.end()
 
+      server.on 'error', (e) -> console.log e
       server.listen port
 
     when 'pcap'
@@ -195,4 +196,5 @@ module.exports = (config,port,doc) ->
         pcap.stdin.write pcap_command
         pcap.stdin.end()
 
+      server.on 'error', (e) -> console.log e
       server.listen port
