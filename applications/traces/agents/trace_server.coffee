@@ -162,7 +162,7 @@ module.exports = (config,port,doc) ->
 
     when 'pcap'
       tshark_command = """
-        nice tshark -r "#{fh}" -R '#{tshark_filter}' -w -
+        nice tshark -r "#{fh}" -R '#{tshark_filter}' -w - | gzip
       """
 
       # Minimalist web server
