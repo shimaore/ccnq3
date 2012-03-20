@@ -5,13 +5,14 @@
 
   @get '/roles/traces/:host/:port', ->
 
-    if @session.roles.indexOf 'access:traces:' < 0
-      return error:'Unauthorized'
+    unless @session.roles?.indexOf 'access:traces:' >= 0
+      return send error:'Unauthorized'
 
     proxy = request
       uri: "http://#{@request.param 'host'}:#{@request.param 'port'}"
       jar: false
       timeout: 30000
     , (e) -> if e? then console.log e
+    console.log proxy
     proxy.pipe @response
     return
