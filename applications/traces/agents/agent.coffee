@@ -21,4 +21,4 @@ require('ccnq3_config').get (config) ->
     if doc.traces?.run?
       for port, params of doc.traces.run
         do (port,params) ->
-          trace_server p, port, params
+          trace_server doc, port, params
