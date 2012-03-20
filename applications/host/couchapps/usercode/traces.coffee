@@ -66,7 +66,7 @@ do (jQuery) ->
 
       @get '#/trace', ->
 
-        model.view 'hosts', (data) =>
+        model.view 'host/hosts', (data) =>
           hosts = (row.key for row in data.rows)
           @swap trace_tpl {hosts:hosts}
 
