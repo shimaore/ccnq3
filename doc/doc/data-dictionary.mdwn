@@ -94,6 +94,7 @@ your installation.
         Note: realtime (call-handling) applications should only rely on this database as their primary source
         Note: must have db admin access to the database (so that applications can push their design documents)
 
+
     install: (normally not defined)
       # This feature is used to force re-installation of the corresponding databases (for example to change the URI)
       usercode:
@@ -120,6 +121,7 @@ To add a FreeSwitch host:
         to create gateway entries for the egress_gwid in those domains/clusters.
         Finally, this is the domain name accepted by OpenSIPS servers in that cluster.
     rtp_ip: local IP to bind to for RTP [default: "auto"]
+    cdr_aggregate_uri: URI where the local CDRs should be replicated to [no default]
     sip_profiles: {} of profiles descriptions:
 
         sip_profiles[profile_name]:
@@ -199,6 +201,7 @@ To add an OpenSIPS host:
       hostname:"127.0.0.1"   string, required, do not change [default]
       usrloc_uri: URI of the location database (used to save registration data)
         Note: this should be "http://127.0.0.1:5984/location" [default]
+      usrloc_aggregate_uri: URI where the location database should be replicated to [no default]
 
     opensips:
       model: "complete", or any other model defined in common/opensips [required]
