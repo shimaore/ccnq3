@@ -122,6 +122,7 @@ To add a FreeSwitch host:
         Finally, this is the domain name accepted by OpenSIPS servers in that cluster.
     rtp_ip: local IP to bind to for RTP [default: "auto"]
     cdr_aggregate_uri: URI where the local CDRs should be replicated to [no default]
+      Note: must contain authentication (for the local host).
     sip_profiles: {} of profiles descriptions:
 
         sip_profiles[profile_name]:
@@ -202,6 +203,7 @@ To add an OpenSIPS host:
       usrloc_uri: URI of the location database (used to save registration data)
         Note: this should be "http://127.0.0.1:5984/location" [default]
       usrloc_aggregate_uri: URI where the location database should be replicated to [no default]
+        Note: must contain authentication (for the local host).
 
     opensips:
       model: "complete", or any other model defined in common/opensips [required]
@@ -385,6 +387,15 @@ This section specifies the parameters for applications/voicemail.
         domain    the domain name where the message should be sent to
         Note: if sending to a proxy, make sure the voicemail server has a matching endpoint record with "sbc" set to type 10 so that it is authorized to pass charging information along.
 
+### Specific to hosts running the cdrs (CDR aggregation) service.
+
+    aggregate
+      cdrs_uri
+
+### Specific to hosts running the locations (Location aggregation) service.
+
+    aggregate
+      locations_uri
 
 ### Other data in a "host" provisioning record.
 

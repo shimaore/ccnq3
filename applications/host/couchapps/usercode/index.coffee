@@ -29,6 +29,8 @@ do (jQuery) ->
     "applications/inbox"
     "public"
     "applications/web"
+    "applications/cdrs"
+    "applications/locations"
     # Applications for a server running ccnq3-dns
     "applications/dns"
     # Applications for a server running ccnq3-voice
@@ -60,6 +62,8 @@ do (jQuery) ->
       "applications/inbox"          : "(Manager) inbox"
       "public"                      : "(Manager) public"
       "applications/web"            : "(Manager) web"
+      "applications/cdrs"           : "(Aggregate) cdrs"
+      "applications/locations"      : "(Aggregate) locations"
       # Applications for a server running ccnq3-dns
       "applications/dns"            : "CCNQ3 DNS (requires ccnq3-dns package)"
       # Applications for a server running ccnq3-voice
