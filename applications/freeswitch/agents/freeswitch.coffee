@@ -74,6 +74,11 @@ qs = require 'querystring'
 last_rev = ''
 
 require('ccnq3_config').get (config) ->
+
+  # Aggregate back towards the main database if requested.
+  require('./aggregate') config
+
+  # Monitor for changes and commands.
   options =
     uri: config.provisioning.local_couchdb_uri
     filter_name: "host/hostname"
