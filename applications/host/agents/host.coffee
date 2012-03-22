@@ -14,23 +14,20 @@ handler = require './handlers'
 
 # Main
 
-request = require 'request'
 qs = require 'querystring'
 cdb_changes = require 'cdb_changes'
 
-replicate = require('./replicate').replicate
-
-minutes = 60 * 1000
-default_replicate_interval = 5 * minutes
+pico = require 'pico'
 
 require('ccnq3_config').get (config) ->
 
-  replicate config
-
-  replication = -> replicate config
-
-  # The replicator tends to die randomly, so restart it at regular intervals.
-  setInterval replication, config.replicate_interval ? default_replicate_interval
+  # Start replication
+  if config.admin?.system
+    console.log "Not replicating from manager"
+  else
+    source_uri = config.provisioning.host_couchdb_uri
+    target_uri = config.provisioning.local_couchdb_uri
+    pico.replicate source_uri, target_uri, config.replicate_interval
 
   # Main agent code
 
@@ -45,16 +42,15 @@ require('ccnq3_config').get (config) ->
   cdb_changes.monitor options, (p) ->
     if p.error? then return util.log(p.error)
 
-    replicate config
-
     [old_config,new_config] = [new_config,p]
 
     if new_config._attachments?
 
       base_uri = new_config.provisioning.host_couchdb_uri + '/' + qs.escape "host@#{new_config.host}"
+      base = pico.request base_uri
 
       for attachment_name, info in new_config._attachments
-        request base_uri + '/' + qs.escape attachment_name, (err,code) ->
+        base qs.escape attachment_name, (err,code) ->
           if err
             return util.log err
 
