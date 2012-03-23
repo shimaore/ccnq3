@@ -1,16 +1,44 @@
 This document describes the configuration parameters for ccnq3.
 
+Conventions
+===========
+
+Database URI
+------------
+
 In this document the term *URI of database* signifies a URI of some CouchDB database,
 and is always a string.
+
 These URIs might contain authentication usernames and passwords.
+
+Account
+-------
+
+In this document the term *account* refers to an opaque string
+used to authorize operations based on prefixes stored in the `roles`
+fields of a user account.
+
+Account-based roles follow the syntax
+  (`access`|`update`) `:` operation `:` account
+where operations include replicating documents, granting authorization, etc.
+
+This allows you (assuming you provide your customers access to the embedded
+web portal) to create hierarchical access to information, for example along
+a carrier/reseller/customer model.
+
+The account "" (the empty string), located at the root of the hierarchy, can be
+used to restrict access to provisioning data that should only be managed by
+system administrators. It is used in this manner in the following documentation.
+
 
 provisioning database
 =====================
 
 The provisioning database contains the master copy of all provisioning information
 for an entire system.
+
 It contains different types of records, which can be identified by their "type" field.
-The type is also the first part of the records' identifier, to avoid collisions.
+The type is also the first part of the records' identifier, to avoid identifier collisions.
 
 host (aka config) provisioning records
 --------------------------------------
@@ -19,10 +47,10 @@ The local configuration file for a host, normally found in
 `/etc/ccnq3/host.json`, is a copy of the `host` record for that
 specific server as found in the master CouchDB provisioning database.
 
-There must be exactly one "host" record for each server in the system.
-Servers are identified by there (arbitrary) Full Qualified Domain Name (FQDN).
+There must be exactly one `host` record for each server in the system.
+Servers are identified by their (arbitrary) Fully Qualified Domain Name (FQDN).
 
-Most changes in this type of records might require you to:
+Most changes in `host` records might require you to:
 
 *   either restart the ccnq3 processes to apply the changes:
 
@@ -37,26 +65,28 @@ Most changes in this type of records might require you to:
     This is especially true when adding an application, so that
     the proper dependencies might be installed for the new application.
 
-However this does not apply to commands (such as the ones in "sip_commands"),
+However this does not apply to commands (such as the ones in `sip_commands`),
 which are executed immediately.
 
-Please note that restarting, reinstalling, or submitting commands in a lot of
-cases will cause calls to disconnect. These operations are best used during
+Operational note:
+In a lot of cases, restarting, reinstalling, or submitting commands
+will cause calls to disconnect. These operations are best used during
 dedicated maintenance windows and should be avoided during production use.
 
 Currently the main freeswitch, opensips, and medaproxy processes are not started by ccnq3.
 These processes might be controlled using their respective /etc/init.d/ scripts.
 
-Developper note: "host" records are referred to as the "config" record inside most applications.
+Developper note:
+As suggested above, the `host` record for a particuler server is referred to as the `config` record for that server inside most applications.
 
 ### Common section (host provisioning record) ###
 
-All the fields in this section are pre-populated by the various scripts.
+All the fields in this section are pre-populated by the installation scripts.
 There is no reason to change them after the initial installation of a server.
-Only the "applications" array will need to be expanded.
-(This can be easily done using the web portal.)
+Only the `applications` array will need to be expanded.
+This can be easily done using the web portal.
 
-Caveat: provisioning.host_couchdb_uri might need to be fixed if the system cannot guess
+Installation caveat: `provisioning.host_couchdb_uri` might need to be fixed if the system cannot guess
 your installation.
 
 *   `_id`: type+":"+host
@@ -67,14 +97,19 @@ your installation.
 
     `new Date().getTime()`  for example
 
+    This field is automatically managed by the web portal when it is used to modify a host record.
+
 *   `type`: "host"
-*   `host`: string; hostname, preferably FQDN (must match what the "hostname" command returns)
+
+*   `host`: string; hostname, preferably FQDN
+
+    This value must match what the `hostname` command returns.
 
 *   `interfaces`: {} of {}, fields:
     * `ipv4`: IP (if interface supports v4)
     * `ipv6`: IP (if interface supports v6)
 
-    The key of the records must be unique, so they cannot just be the interface's name,
+    The keys of the records in the `interfaces` hash must be unique, so they cannot just be the interface's name,
     since an interface may have multiple v4 or v6 IP addresses.
 
     The key `primary` has a special meaning (see next item).
