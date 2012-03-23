@@ -13,7 +13,9 @@ services provided by the system you should be able to remove the entry
 in your /etc/hosts file, assuming you can get to the host using the
 information available in public DNS.
 
-# --- Naming conventions in this document --- #
+
+Naming conventions in this document
+===================================
 
 In this document we will assume that your main domain for installation
 is "phone.example.net". IP Addresses are assigned from a block in RFC5737.
@@ -28,7 +30,9 @@ and "trunk.phone.example.net" for the carrier-side.
 Host vm1 will be the manager host; host vm2 will be a client-side server,
 and host vm3 will be a carrier-side server.
 
-# --- Create a managing user --- #
+
+Create a managing user
+======================
 
 * Check that Futon is running on the server.
      http://admin:XXXXX@vm1.phone.example.net:8080/_utils
@@ -95,12 +99,15 @@ and host vm3 will be a carrier-side server.
 
 * Logout of Futon.
 
-# --- DNS --- #
+
+DNS
+===
 
 The following step is to enable the ccnq3_dns service, which will provide dedicated
 DNS responses based on your provisioning data.
 
-## Standard DNS layout
+Standard DNS layout
+-------------------
 
 We recommend that most hosts use a locally-installed DNS cache (such as the plain bind9
 package). Their /etc/resolv.conf file should therefor contain:
@@ -109,7 +116,8 @@ package). Their /etc/resolv.conf file should therefor contain:
 
 These hosts will require no further changes related to DNS.
 
-## Hosts running the ccnq3_dns service
+Hosts running the ccnq3_dns service
+-----------------------------------
 
 Optimally you should select a pair of servers to run the ccnq3_dns service. These servers
 will not be able to run bind9, so they must rely on (at least two) other servers (preferably
@@ -120,7 +128,8 @@ On these servers you should also install the ccnq3-dns package:
 
     aptitude install -q -y ccnq3-dns
 
-## Domains to be created
+Domains to be created
+---------------------
 
 You must create two records in the provisioning database (using Futon):
 
@@ -154,7 +163,8 @@ Notes:
 * No account field, so these records won't be picked-up for replication.
 
 
-# --- Adding a new "voice" host --- #
+Adding a new "voice" host
+=========================
 
 * Install the "ccnq3-voice" package on the host.
 * Log into the web application and go to Provisioning/New host;
@@ -212,7 +222,8 @@ Notes:
 
 * Test registration.
 
-# --- Finishing configuring the hosts --- #
+Finishing configuring the hosts
+===============================
 
 * Here are example records for the "client-sbc" host and the "carrier-side sbc" host.
 
@@ -351,15 +362,18 @@ The ruleid is a random/incremental field used to manage the records.
   * Send "reload routes" command (in the portal)
 
 
-# --- End-user data --- #
+End-user data
+=============
 
 Here are some provisioning records as examples.
 
-## Endpoint
+Endpoint
+--------
 
 See above for a complete example.
 
-## Number
+Number
+------
 
 There are two types of "number" records. Both types must be provisioned for
 a number to be fully provisioned.
@@ -395,7 +409,9 @@ name after the @ sign will generally be "local".
       "location":"maison"
     }
 
-## Location
+
+Location
+--------
 
 Used for emergency call routing.
 

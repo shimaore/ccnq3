@@ -10,6 +10,7 @@ endif
 all:
 	$(IKIWIKI) `pwd` html -v --wikiname CCNQ3 --plugin=goodstuff \
 		--exclude=html --exclude=Makefile
+	cp /usr/share/ikiwiki/themes/blueview/* html/
 
 clean:
 	rm -rf .ikiwiki html

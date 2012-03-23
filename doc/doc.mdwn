@@ -1,4 +1,3 @@
 Documentation for CCNQ3.
 
-* [[ROADMAP]].
-* [[FAQ]].
+* [[data-dictionary]]
