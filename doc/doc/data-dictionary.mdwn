@@ -774,7 +774,10 @@ number (provisioning records)
 *   `registrant_password`: password for applications/registrant
 
     You must issue a `start` registrant command for the changes to be applied.
-    # FIXME: need registrant_sip_domain
+
+*   `registrant_sip_domain`: sip_domain_name where this registration should be effective
+
+    FIXME: not implemented yet
 
 ### Local-number properties ###
 
