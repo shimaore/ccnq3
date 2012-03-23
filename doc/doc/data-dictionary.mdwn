@@ -389,10 +389,31 @@ This section specifies the parameters for applications/voicemail.
 
 ### Specific to hosts running the cdrs (CDR aggregation) service.
 
+To activate the CDR aggregation service:
+1. Set the "aggregate.cdrs_uri" URI in the target host; make sure the CouchDB system has enough storage.
+2. Add "applications/cdrs" to the list of applications on the target host. Restart the ccnq3 service to activate.
+3. On each source host (hosts which are running FreeSwitch and generating global CDRs; normally your inbound-carrier and outbound-carrier SBCs), set the "cdr_aggregate_uri" to the target's host URI, with the local (source) host authentication.
+
+For example
+on the target host, set "aggregate.cdrs_uri" to http://admin:password@target.example.net/cdrs
+on the source host, set "cdr_aggregate_uri" to http://host%40source.example.net@target.example.net/cdrs
+(both URIs point to the same database, but the authentication is different).
+
     aggregate
-      cdrs_uri
+      cdrs_uri: string;  URI for the database where the CDRs should be aggregated [no default]
+        Note: the URI must contain authentication (it is used e.g. to create the database)
 
 ### Specific to hosts running the locations (Location aggregation) service.
+
+To activate the locations aggregation service:
+1. Set the "aggregate.locations_uri" URI in the target host.
+2. Add "applications/locations" to the list of applications on the target host. Restart the ccnq3 service to activate.
+3. On each source host (hosts which are running OpenSIPS with registration), set the "opensips_proxy.usrloc_aggregate_uri" to the target's host URI, with the local (source) host authentication.
+
+For example
+on the target host, set "aggregate.locations_uri" to http://admin:password@target.example.net/locations
+on the source host, set "opensips_proxy.usrloc_aggregate_uri" to http://host%40source.example.net@target.example.net/locations
+(both URIs point to the same database, but the authentication is different).
 
     aggregate
       locations_uri
