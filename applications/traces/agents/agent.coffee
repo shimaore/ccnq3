@@ -17,8 +17,8 @@ require('ccnq3_config').get (config) ->
     filter_params:
       hostname: config.host
 
-  db.monitor options, (doc) ->
-    if doc.traces?.run?
-      for port, params of doc.traces.run
+  db.monitor options, (config) ->
+    if config.traces?.run?
+      for port, params of config.traces.run
         do (port,params) ->
-          trace_server doc, port, params
+          trace_server config, port, params
