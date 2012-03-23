@@ -14,7 +14,7 @@
   "dependencies": {
     "cdb": "*"
   , "couchapp": "*"
-  , "pico": "*"
+  , "pico": ">=0.0.11e"
   , "ccnq3_config": ">=0.1"
   },
   "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },

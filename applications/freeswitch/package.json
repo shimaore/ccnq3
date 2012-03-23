@@ -19,7 +19,7 @@
   , "ccnq3_config": ">=0.1"
   , "couchapp": "*"
   , "request": "*"
-  , "pico": ">=0.0.11b"
+  , "pico": ">=0.0.11e"
   , "esl": ">=0.2.15"
   },
   "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },

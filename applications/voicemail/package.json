@@ -12,7 +12,7 @@
   , "stop":  "daemon -n ccnq3_voicemail -o daemon.debug --stop"
   }
 , "dependencies": {
-    "pico": ">=0.0.10"
+    "pico": ">=0.0.11e"
   , "ccnq3_config": "*"
   , "request": ">=2.9.100"
   , "esl": ">=0.2.18"
