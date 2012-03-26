@@ -775,9 +775,12 @@ number (provisioning records)
 
     You must issue a `start` registrant command for the changes to be applied.
 
-*   `registrant_sip_domain`: sip_domain_name where this registration should be effective
+*   `registrant_host`: host(s) where this registration should be effective
 
-    FIXME: not implemented yet
+    This parameter can actually be either a string (single host) or an array of strings (multiple hosts).
+
+Please note that for a number to use the registrant function, both `registrant_password` and `registrant_host` must be specified.
+
 
 ### Local-number properties ###
 
