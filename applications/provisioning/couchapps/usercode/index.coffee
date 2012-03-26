@@ -281,6 +281,15 @@ do(jQuery,Sammy) ->
         class:'text'
         value:@registrant_password
 
+      ###
+      # registrant_host actually might be string or array FIXME
+      textbox
+        id:'registrant_host'
+        title:'Registrant Host (global)'
+        class:'text'
+        value:@registrant_host
+      ###
+
       textbox
         id:'endpoint'
         title:'Endpoint (local)'
