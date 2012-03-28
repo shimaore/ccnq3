@@ -7,7 +7,7 @@ if [[ $# -eq 1 ]] && [[ $1 == 'autoconf' ]]; then
         exit
 fi
 
-declare -A colors
+declare -a colors
 colors[200]=00ff0f
 colors[203]=00ff1f
 colors[204]=00ff2f

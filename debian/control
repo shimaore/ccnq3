@@ -12,13 +12,14 @@ Description: Installs the ccnq3 code in /opt/ccnq3/src
 Package: ccnq3-traces
 Architecture: all
 Depends: ccnq3 (= ${binary:Version}), tshark (>=1.2), ngrep (>=1.45), ${perl:Depends}
+Recommends: ccnq3-munin-traces
 Description: Installs the SIP traces in /opt/ccnq3/traces
 
 Package: ccnq-base
 Architecture: all
 Depends:
   git-core, etckeeper,
-  ntp, monit, munin-node, watchdog, nullmailer,
+  ntp, monit, watchdog, nullmailer,
   build-essential, dpkg-dev,
   psmisc, dnsutils, netcat, netcat6, mtr-tiny, tshark, ngrep,
   less, bash-completion, bzip2, curl, rsync
@@ -43,11 +44,57 @@ Description: Allows the ccnq3_dns service to be available on port 53
 Package: ccnq3-voice
 Architecture: all
 Depends: ccnq3-traces (= ${binary:Version}),
-  opensips (>=1.7.1-2), opensips-dbhttp-module, opensips-json-module,
-  memcached,
-  mediaproxy-dispatcher (>= 2.5.2-20120112),
-  freeswitch (>=1.0.head~git.master.20120103), freeswitch-lua,
-  mediaproxy-relay (>= 2.5.2-20120112), conntrack
+  ccnq3-opensips (= ${binary:Version}),
+  ccnq3-freeswitch (= ${binary:Version}),
+  ccnq3-mediaproxy-relay (= ${binary:Version}),
+  ccnq3-munin-traces (= ${binary:Version}),
+  ccnq3-munin-opensips (= ${binary:Version}),
+  ccnq3-munin-freeswitch (= ${binary:Version})
 Description: Dependencies for a server running voice traffic
   Install this package on any host that will be running voice traffic
   inside a ccnq3 system.
+
+Package: ccnq3-opensips
+Architecture: all
+Depends: ccnq3 (= ${binary:Version}),
+  opensips (>=1.7.1-2), opensips-dbhttp-module, opensips-json-module,
+  memcached,
+  mediaproxy-dispatcher (>= 2.5.2-20120112)
+Recommends: ccnq3-munin-opensips
+Description: Dependencies for a server running OpenSIPS in CCNQ3
+
+Package: ccnq3-freeswitch
+Architecture: all
+Depends: ccnq3 (= ${binary:Version}),
+  freeswitch (>=1.0.head~git.master.20120103)
+Recommends: ccnq3-munin-freeswitch
+Description: Dependencies for a server running FreeSwitch in CCNQ3
+
+Package: ccnq3-mediaproxy-relay
+Architecture: all
+Depends: ccnq3 (= ${binary:Version}),
+  mediaproxy-relay (>= 2.5.2-20120112), conntrack
+Description: Dependencies for a server running mediaproxy-relay in CCNQ3
+  Note that this depends on a mediaproxy version that can only handle local
+  mediaproxy-dispatcher.
+
+Package: ccnq3-munin-traces
+Architecture: all
+Depends: munin-node, ccnq3-traces (= ${binary:Version}),
+  bash, perl, findutils, ngrep, libdatetime-perl
+Description: munin modules for ccnq3-traces
+  Provides dumpcap_reasons and dumpcap_reasons_abs munin plugins.
+
+Package: ccnq3-munin-opensips
+Architecture: all
+Depends: munin-node, ccnq3-opensips (= ${binary:Version}),
+  bash
+Description: munin modules for ccnq3-opensips
+  Provides the opensips_dialogs munin plugin.
+
+Package: ccnq3-munin-freeswitch
+Architecture: all
+Depends: munin-node, ccnq3-freeswitch (= ${binary:Version}),
+  bash, sqlite3
+Description: munin modules for ccnq3-freeswitch
+  Provides the freeswitch_channels munin plugin.
