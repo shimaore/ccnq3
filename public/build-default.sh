@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-coffee -c js/*.coffee
+coffee -c js/*.coffee js/*/*.coffee
 cat js/jshash-2.2/sha1-min.js \
     js/jshash-2.2/md5-min.js  \
     js/jquery.js          \

@@ -1,6 +1,6 @@
-@include = ->
+do (jQuery) ->
 
-  @coffee '/roles/login.js': ->
+    $ = jQuery
 
     extra_login = $.extra_login
 
@@ -34,23 +34,19 @@
             auth.notify 'Could not access your profile.'
             return
           auth.notify "Welcome #{profile.name}."
-          next()
-
-      # Create the user database if needed.
-      create_database = (auth,next) ->
-        auth.notify 'Checking your database.'
-        auth.$.getJSON profile.userdb_base_uri+'/'+profile.user_database, (db_info) ->
-          if db_info.db_name
-            auth.notify ''
-            next()
-          else
-            # Attempt to create the database.
-            auth.$.getJSON '/u/user-database.json', (r) ->
-              if r.ok
-                next()
-              else
-                auth.notify 'Could not create your database.'
-                return
+          auth.$.getJSON auth.profile.userdb_base_uri+'/'+auth.profile.user_database, (db_info) ->
+            if db_info.db_name
+              next()
+            else
+              # Attempt to create the database.
+              auth.notify "Welcome #{profile.name} (creating your database)."
+              auth.$.getJSON '/u/user-database.json', (r) ->
+                if r.ok
+                  auth.notify "Welcome #{profile.name} (database created)."
+                  next()
+                else
+                  auth.notify 'Could not create your database.'
+                  return
 
       # Replicate the usercode applications
       usercode_replicate = (auth,next) ->

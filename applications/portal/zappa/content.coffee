@@ -21,6 +21,6 @@ Fill-in the "content" div.
           $.getScript '/u/login.js'
           $.getScript '/u/register.js'
           $.getScript '/u/recover.js'
-          $.getScript '/roles/login.js', ->
+          $.getScript '/public/js/roles/login.js', ->
             # Application-specific code here.
             $.getScript '/login.js'
