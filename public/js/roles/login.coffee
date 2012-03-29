@@ -34,10 +34,11 @@ do (jQuery) ->
             auth.notify 'Could not access your profile.'
             return
           auth.notify "Welcome #{profile.name}."
-          auth.$.getJSON auth.profile.userdb_base_uri+'/'+auth.profile.user_database, (db_info) ->
-            if db_info.db_name
-              next()
-            else
+          auth.$.ajax
+            url: auth.profile.userdb_base_uri+'/'+auth.profile.user_database
+            dataType: 'json',
+            success: -> next()
+            error: ->
               # Attempt to create the database.
               auth.notify "Welcome #{profile.name} (creating your database)."
               auth.$.getJSON '/u/user-database.json', (r) ->
