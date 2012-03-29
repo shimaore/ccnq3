@@ -26,7 +26,7 @@ require('ccnq3_config').get (config)->
       , 'methodOverride'
 
       # applications/portal
-      portal_modules = ['login','profile','recover','register']
+      portal_modules = ['login','profile','recover','register','user_database']
       @include "./#{name}.coffee" for name in portal_modules
 
       # applications/roles

@@ -1,7 +1,0 @@
-
-track_users
-  inspect "_users" cdb records for changes
-  create a new / delete existing user database as needed
-
-TODO Using the user's database to do validation is OK but cannot be maintained.
-TODO Keep the smallest set of tests possible, use an application. And use extensive validation when importing into the generic "provisioning" database.
