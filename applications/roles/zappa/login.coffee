@@ -1,6 +1,6 @@
-do (jQuery) ->
+@include = ->
 
-    $ = jQuery
+  @coffee '/roles/login.js': ->
 
     extra_login = $.extra_login
 
