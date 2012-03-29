@@ -36,8 +36,11 @@ do (jQuery) ->
           auth.notify "Welcome #{profile.name}."
           auth.$.ajax
             url: auth.profile.userdb_base_uri+'/'+auth.profile.user_database
-            dataType: 'json',
-            success: -> next()
+            dataType: 'json'
+            cache: false
+            success: ->
+              # Database already exists.
+              next()
             error: ->
               # Attempt to create the database.
               auth.notify "Welcome #{profile.name} (creating your database)."
