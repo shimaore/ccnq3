@@ -35,7 +35,7 @@
             return
           auth.notify "Welcome #{profile.name}."
           auth.$.ajax
-            url: auth.profile.userdb_base_uri+'/'+auth.profile.user_database
+            url: profile.userdb_base_uri+'/'+profile.user_database
             dataType: 'json'
             cache: false
             success: ->
