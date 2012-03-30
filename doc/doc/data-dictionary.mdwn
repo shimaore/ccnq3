@@ -1043,9 +1043,17 @@ The `roles` hash can also be manipulated using the REST API in applications/role
 *   `roles`: [] of string
 *   `domain`:  string; name of the domain used at registration time
 *   `profile`:
+
+    The default `profile` record contains the user's registration data along with user-accessible data
+    that allows it to connect to its private database (user database).
+
+    This record is returned by the `GET /u/profile.json` portal API to a logged-in user.
+
     * `name`:  string; user's full name
     * `email`:  string or array of strings; email or email addresses for this user
     * `phone`:  string; phone number for this user
+
+    Other information may be stored but should not be relied upon.
     * `userdb_base_uri`:  base URI (to which the user_database is concatenated)
     * `user_name`: name
     * `user_database`: user_database
@@ -1077,6 +1085,10 @@ usercode database
 This database should only contain design documents which are replicated into each user's private database when the user logs in.
 
 Usercode documents are normally installed automatically by the applications that require or provide them.
+
+Developper note:
+The default portal application locates usable design documents inside a user database by looking for an `index.html` attachment. The presence of this attachment indicates the design document is an application. The application is activated by running its `index.js` attachment.
+In the source code these *usercode applications* are located in `applications/*/couchapps/usercode/`.
 
 endpoint-location database
 ==========================
@@ -1140,6 +1152,10 @@ Records replicated to/from other databases are documented as part of that databa
 A *user database* may additionally contain records which are never replicated to or from other databases.
 These records are described below.
 
+An application may create the database itself (server-side) using the standard CouchDB API, if it has database-level administrative access.
+An application may create the database (server-side or client-side) using the `GET /u/user-database.json` portal API for a logged-in user.
+The default portal will create the *user database* for a given user the first time the user logs in (by calling `GET /u/user-database.json`).
+
 voicemail_settings record
 -------------------------
 
@@ -1190,3 +1206,120 @@ Each new voicemail message is stored in an individual voicemail record.
     By default (`max_parts` == 1) only one fragment is recorded, so only `part1.wav` might be present.
 
     The filename extension depends on the voicemail server's `format` setting. It defaults to `wav`.
+
+API
+===
+
+CouchDB API
+-----------
+
+The CouchDB API is available to a server-side or client-side application.
+
+It may be accessed directly (typically on port 5984) or via the web application (typically on port 8080).
+
+Portal API
+----------
+
+The following REST URIs are provided by the portal API.
+
+Operational note: Both `applications/portal` and `applications/roles` must be activated on the portal server.
+
+The first API call should always be to the login application; session credentials are stored in a cookie on the client.
+
+*   `POST /u/login.json`
+
+    Logs in to the portal.
+
+    Parameters: `username`, `password`
+
+    Returns: {"ok":true} upon success, otherwise {"error":"error text"}
+
+*   `POST /u/logout.json`
+
+    Logs out from the portal.
+
+    Returns: {"ok":true}
+
+*   `GET /u/profile.json`
+
+    Validates and returns the user's profile information.
+
+    Validation means the `confirmed` role is added to the user's roles.
+
+    Returns: a JSON record containing:
+    * `name`:  string; the user's full name
+    * `email`:  string or array of strings; email or email addresses for this user
+    * `phone`:  string; phone number for this user
+    * `userdb_base_uri`: string; base URI (to which the user_database is concatenated)
+    * `user_name`: string; session username
+    * `user_database`: string; user_database
+
+*   `POST /u/recover.json`
+
+    Triggers an email to the user with a new password.
+
+    (The trigger is conveyed by the addition of ``"send_password":true` to the user's record.)
+
+    Returns: either {"ok":true} or {"error":"error text"}
+
+*   `PUT /u/register.json`
+
+    Creates a new user record.
+
+    The username is assumed to be the `email` field.
+
+    An error will occur if the username already exists.
+
+    The user will automatically receive an email containing a new password.
+
+    Parameters: `name`, `email`
+
+    Returns:  either {"ok":true} or {"error":"error text"}
+
+*   `GET /u/user-database.json`
+
+    Creates a user's database.
+
+    The user record must contain a `user_database` field.
+
+    Returns: either {"ok":true} or {"error":"error text"}
+
+    Application note: This API is available to allow a logged-in user to request its own database be created.
+    Obviously this can be achieved by a `PUT` operation on the CouchDB database directly done by a database-administrator account.
+
+*   `POST /roles/replicate/push/{target}`
+
+    Replicates from the user's database into the main database indicated by `target`.
+
+    Returns: CouchDB json response or an {"error":} record.
+
+*   `POST /roles/replicate/pull/{source}`
+
+    Replicates from a main database indicated by `source` into the user's database.
+
+    Returns: CouchDB json response or an {"error":} record.
+
+*   `GET /roles/traces/{host}/{port}`
+
+    Proxies data from an (internal) host and port.
+
+    This operation is only available to users having the `access:traces:` role.
+
+    Due to security concerns this role should be restricted to system administrators.
+
+    Caveat: This API might be removed at any time, do not depend on it.
+
+Web Application
+---------------
+
+The web application automatically provides unified access to:
+
+* the portal application, including the Portal API described above and other portal documents;
+
+* specific CouchDB APIs: `_session`, `_users`, `provisioning`, `cdr`, user databases, and other utilities;
+
+* the `public` static files;
+
+* a default application to bootstrap the portal.
+
+It is available on TCP port 8080 on the host on which `applications/web` is active.

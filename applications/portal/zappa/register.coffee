@@ -87,7 +87,7 @@
       # PUT without _rev can only happen once
       db.put p, (r) =>
         if r.error?
-          return @send r
+          return @send error:r
         else
           if config.users.logged_in_after_initial_registration
             @session.logged_in = username

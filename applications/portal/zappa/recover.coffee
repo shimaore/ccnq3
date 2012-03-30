@@ -83,6 +83,6 @@
       p.send_password = true
       users_cdb.put p, (r) =>
         if r.error?
-          return @send r
+          return @send error:r
         else
           return @send ok:true
