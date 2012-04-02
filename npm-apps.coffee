@@ -1,10 +1,15 @@
 #!/usr/bin/env coffee
 
+finalize = ->
+  console.log "Done."
+
 log = (application,error,stdout,stderr) ->
   console.log """
     #{application}: #{error ? 'OK'}
     """
-  throw error if error?
+  if error?
+    finalize = ->
+      throw error
 
 operation = process.argv.slice(2).join(' ')
 
@@ -15,9 +20,9 @@ require('ccnq3_config').get (config) ->
   source = config.source ? __dirname
 
   run = (applications) ->
-      return unless applications?.length > 0
+      return finalize() unless applications?.length > 0
       application = applications.shift()
-      return unless application?
+      return finalize() unless application?
 
       command = "npm #{operation}"
       options = cwd: "#{source}/#{application}"
