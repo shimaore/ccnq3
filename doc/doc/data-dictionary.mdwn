@@ -1152,9 +1152,12 @@ Records replicated to/from other databases are documented as part of that databa
 A *user database* may additionally contain records which are never replicated to or from other databases.
 These records are described below.
 
+An application should create the database (server-side or client-side) using the `PUT /roles/userdb/{user_database}` portal API for a logged-in user.
+The default portal will create the *user database* for a given user the first time the user logs in (by calling `PUT /roles/userdb/{user_database}`).
+
 An application may create the database itself (server-side) using the standard CouchDB API, if it has database-level administrative access.
-An application may create the database (server-side or client-side) using the `GET /u/user-database.json` portal API for a logged-in user.
-The default portal will create the *user database* for a given user the first time the user logs in (by calling `GET /u/user-database.json`).
+However databases created that way are world-readable; it is your responsability to ensure that the database will get proper security tokens.
+Therefor we recommend to directly use the `PUT /roles/userdb/{user_database}` API to make sure the database has the proper security tokens.
 
 voicemail_settings record
 -------------------------
@@ -1276,16 +1279,18 @@ The first API call should always be to the login application; session credential
 
     Returns:  either {"ok":true} or {"error":"error text"}
 
-*   `GET /u/user-database.json`
+*   `PUT /roles/userdb/{user_database}`
 
-    Creates a user's database.
-
-    The user record must contain a `user_database` field.
+    Creates a user's database, if any user is registered to use it.
 
     Returns: either {"ok":true} or {"error":"error text"}
 
-    Application note: This API is available to allow a logged-in user to request its own database be created.
-    Obviously this can be achieved by a `PUT` operation on the CouchDB database directly done by a database-administrator account.
+    Application note:
+    This API is available to allow a logged-in user to request its own database be created.
+    It might also be used by a third party to create the database as well.
+
+    Caveat:
+    The API will return {"ok":true} if the database is not assigned to any user (and skip the actual database creation).
 
 *   `POST /roles/replicate/push/{target}`
 
