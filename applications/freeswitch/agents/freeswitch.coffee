@@ -22,8 +22,7 @@ fs_command = (cmd,cb) ->
 
 process_changes = (commands) ->
 
-  # FIXME really we should only execute commands for ingress-* and egress-*
-  for profile_name, command of commands when profile_name isnt 'opensips' and profile_name isnt 'freeswitch' and profile_name isnt 'registrant'
+  for profile_name, command of commands when profile_name.match /^(ingress-|egress-)/
     switch command
       when 'start'
         fs_command "sofia profile #{profile_name} start"
