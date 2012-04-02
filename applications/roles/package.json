@@ -1,6 +1,6 @@
 {
   "name": "ccnq3_roles",
-  "version": "0.0.66",
+  "version": "0.0.68",
   "description": "User management applications for CCNQ3",
   "keywords": "",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
@@ -11,8 +11,7 @@
     "couchapps": "cd couchapps && ./install.coffee"
   },
   "dependencies": {
-    "cdb": "*"
-  , "cdb_changes": ">=0.0.3"
+    "pico": ">=0.0.12"
   , "couchapp": "*"
   , "zappa": "0.3.3"
   , "ccnq3_config": ">=0.1"

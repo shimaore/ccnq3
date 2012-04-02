@@ -1,7 +1,7 @@
 #!/usr/bin/env coffee
 
 couchapp = require 'couchapp'
-cdb = require 'cdb'
+pico = require 'pico'
 
 push_script = (uri, script,cb) ->
   couchapp.createApp require("./#{script}"), uri, (app)-> app.push(cb)
@@ -18,8 +18,8 @@ cfg.get (config) ->
 
   update = (uri) ->
     # Set the security object for the _users source database.
-    users = cdb.new uri
-    users.security (p)->
+    users = pico uri
+    users.get '_security', json:true, (e,r,p)->
       p.admins ||= {}
       p.admins.roles ||= []
       p.admins.roles.push("users_admin")   if p.admins.roles.indexOf("users_admin") < 0
@@ -27,6 +27,7 @@ cfg.get (config) ->
       p.readers.roles ||= []
       p.readers.roles.push("update:_users:") if p.readers.roles.indexOf("update:_users:") < 0
       p.readers.roles.push("access:_users:") if p.readers.roles.indexOf("access:_users:") < 0
+      users.put '_security', json:p
 
     push_script uri, 'main'
 

@@ -26,11 +26,11 @@ require('ccnq3_config').get (config)->
       , 'methodOverride'
 
       # applications/portal
-      portal_modules = ['login','profile','recover','register','user_database']
+      portal_modules = ['login','profile','recover','register']
       @include "./#{name}.coffee" for name in portal_modules
 
       # applications/roles
-      roles_modules = ['login', 'replicate', 'admin', 'traces']
+      roles_modules = ['login', 'replicate', 'admin', 'traces', 'userdb']
       @include "../node_modules/ccnq3_roles/zappa/#{name}.coffee" for name in roles_modules
 
       @include './content.coffee'

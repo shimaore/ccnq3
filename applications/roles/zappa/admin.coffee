@@ -5,7 +5,7 @@ Released under the AGPL3 license
 
 @include = ->
 
-  cdb = require 'cdb'
+  pico = require 'pico'
 
   # Verify whether a given role is present in the user account.
   user_is = (roles,role) ->
@@ -60,17 +60,17 @@ Released under the AGPL3 license
 
     require('ccnq3_config').get (config)=>
 
-      users_cdb = cdb.new config.users.couchdb_uri
-      users_cdb.get "org.couchdb.user:#{@params.user}", (p) =>
+      users_db = pico config.users.couchdb_uri
+      users_db.retrieve "org.couchdb.user:#{@params.user}", (e,r,p) =>
         # FIXME: should not allow to list users by brute force.
-        if p.error?
-          return @send error: p.error
+        if e?
+          return @send error:e
 
         p.roles ?= []
 
         cb p, (q)=>
 
-          users_cdb.put q, (r) =>
+          users_db.update q, (r) =>
             if r.error?
               return @send error: r.error
             return @send ok: true

@@ -44,11 +44,19 @@
             error: ->
               # Attempt to create the database.
               auth.notify "Welcome #{profile.name} (creating your database)."
-              auth.$.getJSON '/u/user-database.json', (r) ->
-                if r.ok
-                  auth.notify "Welcome #{profile.name} (database created)."
-                  next()
-                else
+              auth.$.ajax
+                type: 'PUT'
+                url: '/roles/userdb/'+profile.user_database
+                dataType: 'json'
+                cache: false
+                success: (r) ->
+                  if r.ok
+                    auth.notify "Welcome #{profile.name} (database created)."
+                    next()
+                  else
+                    auth.notify "Could not create your database (#{r.error})."
+                    return
+                error: ->
                   auth.notify 'Could not create your database.'
                   return
 

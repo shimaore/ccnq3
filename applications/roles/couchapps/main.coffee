@@ -22,6 +22,12 @@ ddoc.filters.confirmed = p_fun (doc,req) ->
 
   return user_is 'confirmed'
 
+# Information about user databases
+ddoc.views.userdb =
+  map: p_fun (doc) ->
+    if doc.user_database?
+      emit doc.user_database, doc.name
+
 # Document validation.
 ddoc.validate_doc_update = p_fun (newDoc, oldDoc, userCtx) ->
 
