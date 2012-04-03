@@ -17,12 +17,8 @@ License
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-Installation
-============
+Installation, Documentation
+===========================
 
-  Follow the instructions in INSTALL.md
-
-Documentation
-=============
-
-  Provisioning information can be found in PROVISIONING.md and doc/doc/data-dictionary.mdwn
+  See <http://shimaore.github.com/ccnq3/doc/>
+  or read doc/doc/Install.mdwn
