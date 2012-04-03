@@ -1,4 +1,5 @@
 License
+=======
 
     CCNQ3 -- carrierclass.net v3
     Copyright (C) 2011  Stéphane Alnet
@@ -17,9 +18,11 @@ License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 Installation
+============
 
-  Follow the instructions in INSTALL
+  Follow the instructions in INSTALL.md
 
 Documentation
+=============
 
-  Provisioning information can be found in doc/doc/data-dictionary.mdwn
+  Provisioning information can be found in PROVISIONING.md and doc/doc/data-dictionary.mdwn

@@ -1,3 +1,6 @@
+Introduction
+============
+
 The following steps are currently not automated and might not be
 available in the portal. They must be performed after the steps in
 the "INSTALL" file, which documents how to install the packages and
@@ -8,7 +11,7 @@ hostname (for example by adding a record for it your local /etc/hosts file)
 because the installation scripts cannot guess how you might access it
 (for example via a VPN or SSH port redirection).
 
-Note: Once you will have enabled ccnq3_dns and will be using the DNS
+Note: Once you will have enabled `ccnq3_dns` and will be using the DNS
 services provided by the system you should be able to remove the entry
 in your /etc/hosts file, assuming you can get to the host using the
 information available in public DNS.
@@ -20,9 +23,9 @@ Naming conventions in this document
 In this document we will assume that your main domain for installation
 is "phone.example.net". IP Addresses are assigned from a block in RFC5737.
 
-  vm1.phone.example.net  198.51.100.51
-  vm2.phone.example.net  198.51.100.52
-  vm3.phone.example.net  198.51.100.53
+    vm1.phone.example.net  198.51.100.51
+    vm2.phone.example.net  198.51.100.52
+    vm3.phone.example.net  198.51.100.53
 
 We will use two SIP domains, "a.phone.example.net" for client-side,
 and "trunk.phone.example.net" for the carrier-side.
@@ -83,7 +86,7 @@ Create a managing user
     access:_users:        # Allows to grant this role to new "voicemail@" accounts. (Not required if not using voicemail.)
     access:traces:        # Allows to grant the role to users who need to gather sniffer traces
 
-  to the "roles" array of your user's record (in the _users database).
+  to the "roles" array of your user's record (in the `_users` database).
   It should look something like this:
 
     [
@@ -103,7 +106,7 @@ Create a managing user
 DNS
 ===
 
-The following step is to enable the ccnq3_dns service, which will provide dedicated
+The following step is to enable the `ccnq3_dns` service, which will provide dedicated
 DNS responses based on your provisioning data.
 
 Standard DNS layout
@@ -116,10 +119,10 @@ package). Their /etc/resolv.conf file should therefor contain:
 
 These hosts will require no further changes related to DNS.
 
-Hosts running the ccnq3_dns service
------------------------------------
+Hosts running the `ccnq3_dns` service
+-------------------------------------
 
-Optimally you should select a pair of servers to run the ccnq3_dns service. These servers
+Optimally you should select a pair of servers to run the `ccnq3_dns` service. These servers
 will not be able to run bind9, so they must rely on (at least two) other servers (preferably
 in the CCNQ3 system) to provide them with DNS service. Their /etc/resolv.conf file should
 therefor contain the IP addresses for these two (or more) servers.
@@ -206,7 +209,7 @@ Adding a new "voice" host
     sudo /etc/init.d/freeswitch start
 
 * Currently all FreeSwitch changes can be triggered from CouchDB
-  (using the appropriate "sip_commands" if needed) or (which is
+  (using the appropriate `sip_commands` if needed) or (which is
   equivalent) from the web portal.
 
   OpenSIPS configuration changes require a restart of OpenSIPS
@@ -315,7 +318,7 @@ Finishing configuring the hosts
 
 * Configure OpenSIPS routing:
 
-The groupid should match the outbound_route for the endpoints.
+The groupid should match the `outbound_route` for the endpoints.
 The ruleid is a random/incremental field used to manage the records.
 
   * Add rule records
@@ -397,8 +400,8 @@ Qualified (local) number records are used by a client-side SBC to
 know which endpoint will handle an incoming number.
 They may also contain additional information such as the location of that
 specific number (for the purpose of emergency call routing).
-Since the default value for OpenSIPS' "number_domain" is "local", the
-name after the @ sign will generally be "local".
+Since the default value for OpenSIPS' `number_domain` is `local`, the
+name after the @ sign will generally be `local`.
 
     {
       "_id":"number:0976543210@local",
@@ -423,3 +426,10 @@ Used for emergency call routing.
         "account":"",
         "routing_data":"29789"
     }
+
+Further Reading
+===============
+
+This document is meant to help you bootstrap your provisioning.
+
+A complete provisioning documentation is available in doc/doc/data-dictionary.
