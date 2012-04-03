@@ -2,8 +2,8 @@ Conventions
 ===========
 
 Most commands must be ran as root. The only exception
-would be the gpg commands; in that case make sure you
-run apt-key as root.
+would be the `gpg` commands; in that case make sure you
+run `apt-key` as root.
 
 Requirements
 ============
@@ -12,8 +12,10 @@ Your base system should be a current Debian/testing system.
 Other systems might work but are not supported.
 
 Hostnames for the different servers MUST be:
+
 1. FQDN (e.g. "server.example.com", not "server")
 2. Valid DNS names (that resolve using A and/or AAAA queries)
+
 These are both required to ensure clients can properly access
 the server.
 
@@ -21,7 +23,9 @@ Add Repository
 ==============
 
 Add
+
     deb http://debian.sotelips.net/shimaore shimaore main
+
 to your existing /etc/apt/sources.list
 
     REPOSITORY=${REPOSITORY:-debian.sotelips.net}
@@ -30,6 +34,7 @@ to your existing /etc/apt/sources.list
     EOT
 
 Alternatively use
+
     apt-add-repository "deb http://${REPOSITORY}/shimaore shimaore main"
 
 Add Key
@@ -94,6 +99,7 @@ to sign the "shimaore" distribution.
     GPG
 
 Alternatively retrieve the key then add it:
+
     MAINTAINER='Stephane Alnet (Packaging) <stephane@shimaore.net>'
     gpg --recv-keys "=${MAINTAINER}"
     gpg --armor --export "=${MAINTAINER}" | apt-key add -
@@ -103,6 +109,7 @@ Update System, Install Packages
 ===============================
 
 Once the above is done, update your system...
+
     aptitude update
     aptitude -y dist-upgrade
 
@@ -115,14 +122,17 @@ Finally start the installation
 --------------
 
 The first host you will install is your "manager" host.
+
     aptitude -y install ccnq3
     cd /opt/ccnq3/src
     ./bootstrap-manager.sh
 
 If you have an existing CouchDB/BigCouch installation, use
+
     cd /opt/ccnq3/src
     export CDB_URI=http://admin:password@host:5984/
     su -s /bin/bash -c ./bootstrap.sh ccnq3
+
 instead.
 
 Normally you should not run voice services on the manager,
@@ -133,15 +143,19 @@ Other (non-manager) hosts
 -------------------------
 
 On a non-manager host you will use:
+
     aptitude install ccnq3-voice
     URI=http://...
     cd /opt/ccnq3/src
     ./bootstrap-local.sh $URI
+
 where the URI is provided by the provisioning system.
 
 If you need mediaproxy on that host, you must manually run
+
     cd /opt/ccnq3/src/common/mediaproxy
     ./install.sh
+
 because of some important caveats regarding IPv6.
 
 Installation of `ccnq3_dns`
@@ -152,6 +166,7 @@ installed to provide inbound routing for numbers.
 Since it uses port 53 it cannot be installed on any host
 which uses a local DNS resolver or proxy. The host(s) that
 run the service must:
+
 - use non-local nameservers (in /etc/resolv.conf)
 - forward UDP port 53 to UDP port 53053 (the `ccnq3-dns` package does this).
 
