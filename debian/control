@@ -4,7 +4,7 @@ Maintainer: Stephane Alnet (Packaging) <stephane@shimaore.net>
 Package: ccnq3
 Architecture: all
 Depends: ccnq-base (= ${binary:Version}),
-  daemon,
+  daemon, bash, openssl,
   nodejs (>=0.6.6),
   libmozjs-couchdb, couchdb (>=1.1.1-20111218)
 Description: Installs the ccnq3 code in /opt/ccnq3/src
