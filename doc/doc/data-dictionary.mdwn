@@ -30,6 +30,180 @@ The account "" (the empty string), located at the root of the hierarchy, can be
 used to restrict access to provisioning data that should only be managed by
 system administrators. It is used in this manner in the following documentation.
 
+Applications
+============
+
+Applications are modules inside the CCNQ3 system which may be added or removed on a server after installation of the Debian packages.
+Each application may come with database updates, new local processes, and sometimes offer remotely-accessible services.
+
+In a template CCNQ3 system, you would typically have two types of servers, _manager_ servers and _call-processing_ servers.
+A manager server would typically have the `ccnq3` package installed, and run the following applications:
+
+    # Core database management
+    applications/usercode
+    applications/provisioning
+    # Portal
+    applications/roles
+    applications/portal
+    applications/inbox
+    public
+    applications/web
+    # Aggregation
+    applications/cdrs
+    applications/locations
+
+A call-processing server would typically have the `ccnq3-voice` package installed, and run the following applications:
+
+    # Applications for a server running ccnq3-voice
+    applications/freeswitch
+    applications/opensips
+    applications/traces
+    # Additional applications for a server running FreeSwitch
+    applications/voicemail
+    # Additional applications for a server running OpenSIPS
+    applications/registrant
+    applications/emergency
+
+Finally, at least two servers (for redundancy purposes) must have the `ccnq3-dns` package installed, and run the following application:
+
+    application/dns
+
+Moreover all servers, regardless of intended purpose, must run the following application:
+
+    application/host
+
+Some of these applications are automatically installed. For example, a `manager` host (created using the `bootstrap-manager` script) will have most services enabled except the aggregation services. Removing automatically-installed applications in this case will lead to loss of functionality or breakage.
+
+You may add or remove applications using the web portal.
+However at this time the portal does not allow for application-specific parameters to be configured; this must be done manually in the CouchDB provisioning database.
+
+After adding or removing one or more applications on a given host, you must run
+
+    aptitude reinstall ccnq3
+
+on that host to ensure that the proper dependencies are updated.
+This operation will in most cases lead to loss of calls on call-processing servers.
+
+The following applications are available:
+
+applications/host
+-----------------
+
+The base host support application.
+
+Install on: all servers.
+
+Required: yes.
+
+applications/usercode
+---------------------
+
+Support for applications in users' databases.
+
+Install on: the portal server.
+
+applications/provisioning
+-------------------------
+
+Support for provisioning.
+Install on: the portal server.
+
+applications/roles
+------------------
+
+Support for role-based authorization in the portal.
+Install on: the portal server.
+
+applications/portal
+-------------------
+
+Portal registration and login.
+Install on: the portal server.
+
+applications/inbox
+------------------
+
+The portal inbox.
+Install on: the portal server.
+
+application/web
+---------------
+
+Web reverse proxy and static web server.
+Install on: the portal server.
+
+applications/cdrs
+-----------------
+
+A CDR aggregation application.
+
+Install on: the server that will aggregate the CDRs.
+
+applications/locations
+----------------------
+
+Registered endpoints location aggregation.
+Install on: the server that will aggregate the data.
+
+applications/dns
+----------------
+
+A database-driven DNS server.
+
+Install on: a server running the ccnq3-dns package.
+
+applications/freeswitch
+-----------------------
+
+FreeSwitch support application.
+Install on: any server running FreeSwitch.
+
+applications/opensips
+---------------------
+
+OpenSIPS support application.
+Install on: any server running OpenSIPS.
+
+applications/traces
+-------------------
+
+Support for portal access to local traces.
+Install on: servers with the ccnq3-traces package, typically OpenSIPS and FreeSwitch hosts.
+
+applications/voicemail
+----------------------
+
+FreeSwitch support for voicemail.
+Install on: a FreeSwitch server that will provide voicemail.
+
+applications/prepaid (unstable)
+--------------------
+
+FreeSwitch support for prepaid.
+Install on: a FreeSwitch server that will provide prepaid services.
+
+Currently untested and needs to be rewritten.
+
+applications/cnam-client (unstable)
+------------------------
+
+A CNAM client application.
+
+Install on: a server running FreeSwitch client-side.
+
+applications/registrant
+-----------------------
+
+OpenSIPS server providing batch registration to an upstream server.
+
+Install on: a server running OpenSIPS; will start a separate OpenSIPS instance for client registration.
+
+applications/emergency
+----------------------
+
+An emergency call routing server.
+
+Install on: a server running OpenSIPS; will start a separate OpenSIPS instance for 302 emergency calls redirection.
 
 provisioning database
 =====================
