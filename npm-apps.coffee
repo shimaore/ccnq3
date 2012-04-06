@@ -1,4 +1,9 @@
 #!/usr/bin/env coffee
+# (c) 2012 Stephane Alnet
+
+## npm-apps.coffee
+# Execute a given npm action (such as "install")
+# on all ccnq3 `applications` listed in `config.applications`.
 
 finalize = ->
   console.log "Done."

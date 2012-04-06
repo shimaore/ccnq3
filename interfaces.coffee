@@ -1,6 +1,13 @@
 #!/usr/bin/env coffee
 # (c) 2012 Stephane Alnet
 
+## interfaces.coffee
+# This script will print out a JSON document
+# containing IPv4 and IPv6 public addresses for
+# the local host.
+# This is used by the bootstrap.sh script to
+# initialize the config.interfaces parameter.
+
 interfaces = require('os').networkInterfaces()
 
 result = {}
