@@ -12,8 +12,7 @@
   , "stop":  "daemon -n ccnq3_cnam_client -o daemon.debug --stop"
   }
 , "dependencies": {
-    "pico": ">=0.0.11f"
-  , "ccnq3_config": "*"
+    "ccnq3_config": "*"
   , "request": ">=2.9.100"
   , "esl": ">=0.2.2"
   }

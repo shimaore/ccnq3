@@ -564,6 +564,11 @@ on the source host, set "opensips_proxy.usrloc_aggregate_uri" to http://host%40s
 
     * `locations_uri`
 
+### Specific to hosts running the CNAM-client ###
+
+*   `cnam_client`:
+    * `port`    FreeSwitch ESL `socket` port [default: 7124]
+    * `uri`     URI to query
 
 ### Attachments ###
 
