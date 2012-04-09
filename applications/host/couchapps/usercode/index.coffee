@@ -237,12 +237,9 @@ do (jQuery) ->
 
       model = @createModel 'host'
 
-      initialize_password = (doc) ->
-        ###
-          Password creation for host@#{hostname}
-        ###
+      rewrite_host_couchdb_uri = (doc) ->
         username = host_username doc.host
-        password = hex_sha1 "a"+Math.random()
+        password = doc.password
 
         u = doc.provisioning.host_couchdb_uri.match ///
             ^
@@ -257,12 +254,20 @@ do (jQuery) ->
 
         doc.provisioning.host_couchdb_uri = u[1] + encodeURIComponent(username) + ':' + encodeURIComponent(password) + '@' + u[2]
 
+      initialize_password = (doc) ->
+        ###
+          Password creation for host@#{hostname}
+        ###
+        password = hex_sha1 "a"+Math.random()
+
         ###
           Save the password so that the "create" method can retrieve it.
           (This isn't more of a security concern than storing it in the
           host_couchdb_uri.)
         ###
         doc.password = password
+
+        rewrite_host_couchdb_uri doc
 
       model.extend
         beforeSave: (doc) ->
@@ -324,6 +329,8 @@ do (jQuery) ->
 
           if not doc.password?
             initialize_password doc
+          else
+            rewrite_host_couchdb_uri doc
 
           return doc
 
