@@ -410,20 +410,27 @@ do (jQuery) ->
 
         $.couch.signup p, password,
 
-          error: (xhr,status,error) ->
-            alert "Host signup failed: #{error}"
-            log 'User record creation failed.'
+          error: (status) ->
+            if status is 409
+              do grant_rights
+            else
+              alert "Host signup failed: #{error}"
+              log 'User record creation failed.'
 
-          ###
-            Only admins may change the "roles" field. So we use
-            applications/roles/zappa/admin.coffe as a proxy for
-            non-admin users.
-            This requires
-              update:host:      # The role to be granted
-              update:_users:    # Authorization to grant a role
-            in "roles" for the requesting user.
-          ###
-          success: ->
+          success: grant_rights
+
+        ###
+          Only admins may change the "roles" field. So we use
+          applications/roles/zappa/admin.coffe as a proxy for
+          non-admin users.
+          This requires
+            update:host:      # The role to be granted
+            update:_users:    # Authorization to grant a role
+          in "roles" for the requesting user.
+        ###
+
+        grant_rights = ->
+            # Grant the `host` right
             $.ajax
               type: 'PUT'
               url: '/roles/admin/grant/'+encodeURIComponent(username)+'/host'
