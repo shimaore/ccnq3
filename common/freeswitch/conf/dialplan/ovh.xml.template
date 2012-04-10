@@ -53,6 +53,7 @@
         <action application="set" data="ccnq_to_e164=33$1"/>
         <action application="enum" data="${ccnq_to_e164} $${enum_root}"/>
         <action application="set" data="ccnq_account=${enum_route_2}"/>
+        <action application="export" data="sip_h_P-Charge-Info=sip:${url_encode(${ccnq_account})}@$${domain}"/> <!-- FIXME should be uri_encode -->
         <action application="bridge" data="sofia/egress-$${profile_name}/${enum_route_1}"/>
       </condition>
     </extension>
