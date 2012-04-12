@@ -67,6 +67,8 @@ if [ "x$1" == "x" ]; then
   , "applications/inbox"
   , "public"
   , "applications/web"
+  , "applications/cdrs"
+  , "applications/locations"
   ]
 , "source": "${SRC}"
 , "account": ""
