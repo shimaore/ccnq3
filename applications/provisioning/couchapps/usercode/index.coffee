@@ -14,7 +14,7 @@ do(jQuery,Sammy) ->
   endpoint_tpl = $.compile_template ->
     form id:'endpoint_record', method:'post', action:'#/endpoint', class:'validate', ->
 
-      if not @user_ip
+      if not @user_ip?
         @username = @endpoint
 
       # Static

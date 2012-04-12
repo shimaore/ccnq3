@@ -9,7 +9,10 @@ form.main {
 form.main input, form.main button, form.main select {
   margin: 11px;
 }
-
+.error {
+  color: white;
+  background-color: red;
+}
 #login_container {
   display: inline;
 }
