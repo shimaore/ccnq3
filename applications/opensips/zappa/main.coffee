@@ -53,8 +53,9 @@ require('ccnq3_config').get (config)->
       if t is 'date'
         d = new Date(x)
         # Format expected by db_str2time() in db/db_ut.c
-        # TODO: This requires opensips to be started in UTC, assuming
+        # Note: This requires opensips to be started in UTC, assuming
         #       toISOString() outputs using UTC (which it does in Node.js 0.4.11).
+        #       Our script ccnq3-opensips.postinst makes sure this is the case.
         return d.toISOString().replace 'T', ' '
 
       # string, blob, ...
