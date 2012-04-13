@@ -484,7 +484,7 @@ do (jQuery) ->
             success: (resp) ->
               model.get resp.id, (doc)->
                 $(selector).data 'doc', doc
-                do push
+                create_user doc, push
         else
           console.log 'Creating host'
           # No @send here, apparently
