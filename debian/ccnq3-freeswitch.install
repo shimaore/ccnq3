@@ -1,0 +1,2 @@
+common/freeswitch/conf/* /opt/ccnq3/freeswitch/conf
+common/freeswitch/lang /opt/ccnq3/freeswitch/conf

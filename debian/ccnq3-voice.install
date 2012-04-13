@@ -1,4 +1,2 @@
 bootstrap-local.sh /opt/ccnq3/src
-common /opt/ccnq3/src
-common/freeswitch/conf/* /opt/ccnq3/freeswitch/conf
-common/freeswitch/lang /opt/ccnq3/freeswitch/conf
+common/mediaproxy/install.sh /opt/ccnq3/src/common/mediaproxy

@@ -11,32 +11,6 @@ case "$1" in
   configure|upgrade)
 
     ###
-    # This used to be in common/freeswitch/install.sh
-    ###
-    CONF=$WORKDIR/freeswitch/conf
-    VOICEMAIL=$WORKDIR/freeswitch/messages
-    LOG=/opt/freeswitch/log
-
-    # allow access to configuration directories
-    adduser "$USER" $GROUP
-
-    # Startup parameters
-    DEFAULTS=/etc/default/freeswitch
-    DB=/dev/shm/freeswitch
-    sed -i -e 's/^FREESWITCH_ENABLED=.*$/FREESWITCH_ENABLED="true"/'              $DEFAULTS
-    sed -i -e '/^FREESWITCH_PARAMS=/ d' $DEFAULTS
-    echo "FREESWITCH_PARAMS=\"-nc -nonat -nonatmap -conf $CONF -log $LOG -db $DB\"" >> $DEFAULTS
-
-    # Default configuration
-    mkdir -p $CONF
-    chown -R freeswitch.$GROUP $CONF
-    chmod g+w $CONF # allow access to configuration directory
-
-    mkdir -p $VOICEMAIL
-    chown -R freeswitch.$GROUP $VOICEMAIL
-    chmod g+w $VOICEMAIL # allow access to voicemail directory
-
-    ###
     # This is used to be in common/opensips/install.sh
     ###
     CONF=/etc/opensips
