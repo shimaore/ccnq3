@@ -870,6 +870,19 @@ If the "challenge" configuration parameter is empty (the default), the domain na
 
 *   `user_srv`        string  Final user's domain (compatible with user_via)
 
+    Design note: a valid design to allow for easy migration of customers IP addresses
+    is to have:
+
+    * one endpoint with an identifier (not an IP address nor a `username@domain`)
+      which is used to route inbound calls; that endpoint uses the `user_srv` field
+      to terminate the calls on the proper customer system;
+    * one or more endpoints (using IP addresses as identifiers) to allow these
+      IP addresses to route outbound calls.
+
+    With this design a customer can migrate IP addresses temporarily or permanently by:
+    * adding or removing the IP addresses (used for outbound calls)
+    * updating the `user_srv` field of the endpoint used for inbound calls.
+
 *   `user_via`        string  If present, calls are routed via this SBC
 
     Usage note: This requires a type of SBC which has not yet been ported to ccnq3.
