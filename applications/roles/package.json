@@ -11,7 +11,7 @@
     "couchapps": "cd couchapps && ./install.coffee"
   },
   "dependencies": {
-    "pico": ">=0.0.12"
+    "pico": ">=0.0.14"
   , "couchapp": "*"
   , "zappa": "0.3.3"
   , "ccnq3_config": ">=0.1"
