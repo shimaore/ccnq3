@@ -70,9 +70,9 @@ Released under the AGPL3 license
 
         cb p, (q)=>
 
-          users_db.update q, (r) =>
-            if r.error?
-              return @send error: r.error
+          users_db.update q, (e) =>
+            if e?
+              return @send error: e
             return @send ok: true
 
   # TODO GET /admin/grant/:user , using a user's "primary account" (the _users' record "account" field).
