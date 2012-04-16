@@ -414,7 +414,7 @@ do (jQuery) ->
             if status is 409
               do grant_rights
             else
-              alert "Host signup failed: #{error}"
+              alert 'Host signup failed.'
               log 'User record creation failed.'
 
           success: grant_rights
@@ -431,10 +431,15 @@ do (jQuery) ->
 
         grant_rights = ->
             # Grant the `host` right
+            log "Updating server rights."
+            console.log "Updating server rights."
             $.ajax
               type: 'PUT'
               url: '/roles/admin/grant/'+encodeURIComponent(username)+'/host'
               dataType: 'json'
+              error: (status) ->
+                alert 'Updating server rights failed.'
+                log 'Updating server rights failed.'
               success: (data) ->
                 if data.ok
                   do cb
