@@ -3,10 +3,13 @@ Maintainer: Stephane Alnet (Packaging) <stephane@shimaore.net>
 
 Package: ccnq3
 Architecture: all
-Depends: ccnq-base (= ${binary:Version}),
+Depends:
+  curl,
   daemon, bash, openssl,
-  nodejs (>=0.6.6),
+  nodejs (>=0.6.6), build-essential,
   libmozjs-couchdb, couchdb (>=1.1.1-20111218)
+Recommends: monit, munin-node
+Suggests: ccnq-base (= ${binary:Version})
 Description: Installs the ccnq3 code in /opt/ccnq3/src
 
 Package: ccnq3-traces
@@ -20,12 +23,9 @@ Architecture: all
 Depends:
   git-core, etckeeper,
   ntp, monit, watchdog, nullmailer,
-  build-essential, dpkg-dev,
   psmisc, dnsutils, netcat, netcat6, mtr-tiny, tshark, ngrep,
   less, bash-completion, bzip2, curl, rsync
-Description: Base dependencies for CCNQ
-  This package contains base dependencies that the maintainer
-  finds useful.
+Description: Tools and Best Practices the maintainer finds useful
 
 Package: ccnq3-dns
 Architecture: all
@@ -59,6 +59,7 @@ Architecture: all
 Depends: ccnq3 (= ${binary:Version}),
   opensips (=1.7.2-1), opensips-dbhttp-module, opensips-json-module,
   memcached,
+  netcat,
   mediaproxy-dispatcher (>= 2.5.2-20120112)
 Recommends: ccnq3-munin-opensips
 Description: Dependencies for a server running OpenSIPS in CCNQ3
