@@ -14,7 +14,11 @@ Description: Installs the ccnq3 code in /opt/ccnq3/src
 
 Package: ccnq3-traces
 Architecture: all
-Depends: ccnq3 (= ${binary:Version}), tshark (>=1.2), ngrep (>=1.45), ${perl:Depends}
+Depends:
+  ccnq3 (= ${binary:Version}),
+  tshark (>=1.2), ngrep (>=1.45),
+  findutils,
+  ${perl:Depends}, procps, gzip
 Recommends: ccnq3-munin-traces
 Description: Installs the SIP traces in /opt/ccnq3/traces
 
