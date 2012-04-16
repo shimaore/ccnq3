@@ -45,6 +45,7 @@ do (jQuery) ->
   ]
 
   log = (text,clear) ->
+    console.log text
     if clear
       $('#host_log').html text+"\n"
     else
@@ -432,7 +433,6 @@ do (jQuery) ->
         grant_rights = ->
             # Grant the `host` right
             log "Updating server rights."
-            console.log "Updating server rights."
             $.ajax
               type: 'PUT'
               url: '/roles/admin/grant/'+encodeURIComponent(username)+'/host'
@@ -447,8 +447,7 @@ do (jQuery) ->
                   log data.error ? data.forbidden
 
       @bind 'error.host', (notice) ->
-        console.log "Host error: #{notice.error}"
-        $('#log').append "An error occurred: #{notice.error}"
+        log "An error occurred: #{notice.error}"
 
       # Show template (to create new host)
       @get '#/host', ->
