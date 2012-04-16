@@ -14,7 +14,7 @@ require('ccnq3_config').get (config)->
   user_info = ->
     backends.user_info      config, arguments...
 
-  zappa = require 'zappa'
+  zappa = require 'zappajs'
   zappa.run config.port, config.hostname, ->
 
     @enable 'default layout'

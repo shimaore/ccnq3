@@ -8,7 +8,7 @@ fs = require 'fs'
 util = require 'util'
 
 require('ccnq3_config').get (config) ->
-  require('zappa').run 8080, ->
+  require('zappajs').run 8080, ->
     @use 'logger'
 
     @enable 'default layout'

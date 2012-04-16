@@ -6,7 +6,7 @@ Released under the AGPL3 license
 
 require('ccnq3_config').get (config)->
 
-  zappa = require 'zappa'
+  zappa = require 'zappajs'
   zappa config.kayako_loginshare.port, config.kayako_loginshare.hostname, {config}, ->
 
     @use 'bodyParser'

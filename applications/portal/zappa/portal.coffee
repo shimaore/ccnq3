@@ -6,7 +6,7 @@
 
 require('ccnq3_config').get (config)->
 
-  zappa = require 'zappa'
+  zappa = require 'zappajs'
   zappa.run config.portal.port, config.portal.hostname, ->
 
       # Session store

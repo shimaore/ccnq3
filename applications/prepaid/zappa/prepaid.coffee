@@ -14,7 +14,7 @@ require('ccnq3_config').get (config)->
     if not it_does
       throw it_does
 
-    zappa = require 'zappa'
+    zappa = require 'zappajs'
     zappa.run config.prepaid.port, config.prepaid.hostname, ->
 
       @use 'bodyParser'

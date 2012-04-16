@@ -17,7 +17,7 @@ require('ccnq3_config').get (config)->
   config.opensips_proxy.hostname ?= "127.0.0.1"
   config.opensips_proxy.usrloc_uri ?= "http://127.0.0.1:5984/location"
 
-  zappa = require 'zappa'
+  zappa = require 'zappajs'
   zappa config.opensips_proxy.port, config.opensips_proxy.hostname, {config}, ->
 
     @use 'bodyParser'

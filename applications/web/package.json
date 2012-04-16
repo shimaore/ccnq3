@@ -14,7 +14,7 @@
   , "couchapps": "cd couchapps && ./install.coffee"
   },
   "dependencies": {
-    "zappa": "0.3.3"
+    "zappajs": ">=0.3.4"
   , "request": "*"
   , "ccnq3_config": "*"
   , "couchapp": "*"

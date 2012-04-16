@@ -17,7 +17,7 @@
     "cdb": ">=0.0.12"
   , "cdb_changes": "*"
   , "ccnq3_config": ">=0.1"
-  , "zappa": "0.3.3"
+  , "zappajs": ">=0.3.4"
   , "couchapp": "*"
   , "coffee-script": ">=1.1.2"
   , "request": "*"
