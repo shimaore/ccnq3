@@ -44,7 +44,7 @@ Description: Allows the ccnq3_dns service to be available on port 53
   a different forwarding solution), for example because you want to run both
   inbound_enum and a caching DNS server (such as bind9) on a server; in that
   case you should not install this package. The ccnq3_dns service will
-  still start, since it is part of the ccqn3 package.
+  still start, since it is part of the ccnq3 package.
 
 Package: ccnq3-voice
 Architecture: all
