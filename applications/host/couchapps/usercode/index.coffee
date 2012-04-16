@@ -400,26 +400,6 @@ do (jQuery) ->
         username = host_username doc.host
         password = doc.password
 
-        p =
-          name: username
-
-        ###
-          Quite obviously this can only be ran by server-admins or update:_users: roles.
-        ###
-        log "Creating user record for #{username} with password #{password}."
-        console.log "Creating user record for #{username} with password #{password}."
-
-        $.couch.signup p, password,
-
-          error: (status) ->
-            if status is 409
-              do grant_rights
-            else
-              alert 'Host signup failed.'
-              log 'User record creation failed.'
-
-          success: grant_rights
-
         ###
           Only admins may change the "roles" field. So we use
           applications/roles/zappa/admin.coffe as a proxy for
@@ -445,6 +425,25 @@ do (jQuery) ->
                   do cb
                 else
                   log data.error ? data.forbidden
+
+        ###
+          Quite obviously this can only be ran by server-admins or update:_users: roles.
+        ###
+        log "Creating user record for #{username} with password #{password}."
+
+        p =
+          name: username
+
+        $.couch.signup p, password,
+
+          error: (status) ->
+            if status is 409
+              do grant_rights
+            else
+              alert 'Host signup failed.'
+              log 'User record creation failed.'
+
+          success: grant_rights
 
       @bind 'error.host', (notice) ->
         log "An error occurred: #{notice.error}"
