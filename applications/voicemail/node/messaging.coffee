@@ -43,7 +43,7 @@ make_cleanup = (fifo_path) ->
   call.command 'phrase', 'voicemail_goodbye', hangup
 
 voicemail_fifo_path = ->
-  fifo_path ?= voicemail_dir + '/file-' + Math.random() + '.' + message_format
+  voicemail_dir + '/file-' + Math.random() + '.' + message_format
 
 # The DTMF that was pressed is available in call.body.playback_terminator_used in the callback
 record_to_url = (call,fifo_path,upload_url,next) ->
