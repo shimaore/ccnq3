@@ -1,9 +1,0 @@
-TODO "host" couchapp application:
-  - Add a new host in the database (similarly to what ../node/host.coffee does).
-  - Install (via git+npm) ccnq3_commands [option for any host]
-  - Install ccnq3_commands in crontab @reboot [option for any host]
-
-  - Centrally:
-    - Install ccnq3_roles
-    - Install ccnq3_portal
-    - ..
