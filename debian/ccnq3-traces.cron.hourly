@@ -10,7 +10,7 @@ my @files = <*.pcap*>;
 my %if;
 for (@files)
 {
-  next unless /^([^_]*)_(\d+)_(\d+).pcap(.gz)?$/;
+  next unless /^([^_]+)_(\d+)_(\d+).pcap(.gz)?$/;
   push @{$if{$1}}, [$2,$3,$4];
 }
 
