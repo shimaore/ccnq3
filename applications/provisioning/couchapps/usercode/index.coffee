@@ -9,6 +9,6 @@ do(jQuery,Sammy) ->
 
   model = $(container).data 'model'
 
-  model.require "host/endpoint.js"
-  model.require "host/number.js"
-  model.require "host/rule.js"
+  model.require "provisioning/endpoint.js"
+  model.require "provisioning/number.js"
+  model.require "provisioning/rule.js"
