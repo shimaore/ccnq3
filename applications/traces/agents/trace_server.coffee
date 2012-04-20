@@ -132,7 +132,7 @@ module.exports = (config,port,doc) ->
         nice tshark -r "#{fh}" -R '#{tshark_filter}' -nltad -T fields #{fields}
       """
 
-      res = request.put url, (e) -> console.dir error:e
+      res = request.put url, (e) -> console.dir url:url, error:e
 
       do (res) ->
 

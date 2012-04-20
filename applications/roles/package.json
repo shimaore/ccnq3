@@ -1,6 +1,6 @@
 {
   "name": "ccnq3_roles",
-  "version": "0.0.69",
+  "version": "0.0.70",
   "description": "User management applications for CCNQ3",
   "keywords": "",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
