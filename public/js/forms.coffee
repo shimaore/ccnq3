@@ -11,10 +11,12 @@ do (jQuery) ->
 
   $.ccnq3 = {}
 
-  $.ccnq3.push_document = (db) ->
+  $.ccnq3.push_document = (db,cb) ->
+    cb ?= ->
+      window.location = '#/inbox'
     $.post "/roles/replicate/push/#{db}", (data)->
       if data.ok
-        window.location = '#/inbox'
+        cb()
       else
         alert "Replication failed, please try again."
     , "json"

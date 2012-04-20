@@ -94,7 +94,9 @@ do (jQuery) ->
                 return log 'Sorry, try again'
               doc.traces.run[port] = form
               model.update id, doc,
-                success: -> setTimeout wait_for_capture, 1000
+                success: ->
+                  $.ccnq3.push_document 'provisioning', ->
+                    setTimeout wait_for_capture, 1000
 
           # Attempt to download the capture content
           wait_for_capture = ->
@@ -105,7 +107,9 @@ do (jQuery) ->
               doc.traces.run ?= {}
               delete doc.traces.run[port]
               model.update id, doc,
-                success: -> log 'Completed', true
+                success: ->
+                  $.ccnq3.push_document 'provisioning', ->
+                    log 'Completed', true
 
             # For a PCAP file, simply redirect the browser
             if not form.inline
