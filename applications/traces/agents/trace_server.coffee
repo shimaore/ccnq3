@@ -69,7 +69,7 @@ module.exports = (config,port,doc) ->
   ngrep_filter = ngrep_filter.join '|'
 
   pcap_command = """
-    nice find #{workdir} -name '*.pcap' -print0 -o -name '*.pcap.gz' -print0 | \\
+    nice find #{workdir} -name '*.pcap' -size +80c -print0 -o -name '*.pcap.gz' -size +80c -print0 | \\
     nice xargs -0 mergecap -w - | \\
     nice ngrep -i -l -q -I - -O '#{fh}' '#{ngrep_filter}' >/dev/null
   """
