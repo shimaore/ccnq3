@@ -13,6 +13,5 @@
       jar: false
       timeout: 30000
     , (e) => if e? then @send e
-    console.log proxy
     proxy.pipe @response
     return

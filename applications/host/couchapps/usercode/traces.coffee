@@ -109,7 +109,7 @@ do (jQuery) ->
               model.update id, doc,
                 success: ->
                   $.ccnq3.push_document 'provisioning', ->
-                    log 'Completed', true
+                    log 'Completed'
 
             # For a PCAP file, simply redirect the browser
             if not form.inline
@@ -121,6 +121,7 @@ do (jQuery) ->
           # Do an HTML overview of the packets
           render_packets = (data) ->
             $('#packets').empty()
+            log "Received #{data.length} packets.", true
             for packet in data
               do (packet) ->
 
