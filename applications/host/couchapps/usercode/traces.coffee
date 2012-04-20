@@ -8,7 +8,7 @@ do (jQuery) ->
   container = '#content'
 
   profile = $(container).data 'profile'
-  selector = 'trace_request'
+  selector = '#trace_request'
 
   log = (text,clear) ->
     if clear
