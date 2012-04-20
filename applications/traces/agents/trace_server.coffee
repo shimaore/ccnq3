@@ -120,8 +120,14 @@ module.exports = (config,port,doc) ->
         pcap = spawn shell
 
         # Wait for the pcap_command to terminate.
-        pcap.on 'exit', ->
+        pcap.on 'exit', (code) ->
+          if code isnt 0
+            return console.dir code:code, pcap_command:pcap_command
+
           tshark = spawn shell
+          tshark.on 'exit', (code) ->
+            if code isnt 0
+              console.dir code:code, tshark_command:tshark_command
           tshark.stdin.write tshark_command
           tshark.stdin.end()
 
@@ -178,8 +184,14 @@ module.exports = (config,port,doc) ->
         pcap = spawn shell
 
         # Wait for the pcap_command to terminate.
-        pcap.on 'exit', ->
+        pcap.on 'exit', (code) ->
+          if code isnt 0
+            return console.dir code:code, pcap_command:pcap_command
+
           tshark = spawn shell
+          tshark.on 'exit', (code) ->
+            if code isnt 0
+              console.dir code:code, tshark_command:tshark_command
           tshark.stdin.write tshark_command
           tshark.stdin.end()
 
