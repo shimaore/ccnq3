@@ -87,7 +87,7 @@ do (jQuery) ->
           #    for pcap download, we need to open the file
 
           port = Math.floor(Math.random()*2000)+8000
-          id = make_id 'host', doc.host
+          id = make_id 'host', form.host
           model.get id, (doc) ->
               doc.traces.run ?= {}
               if doc.traces.run[port]
@@ -98,7 +98,7 @@ do (jQuery) ->
 
           # Attempt to download the capture content
           wait_for_capture = ->
-            url = "/roles/traces/#{encodeURIComponent doc.host}/#{encodeURIComponent port}"
+            url = "/roles/traces/#{encodeURIComponent form.host}/#{encodeURIComponent port}"
 
             # Do no re-submit this query
             model.get id, (doc) ->
