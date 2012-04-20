@@ -174,8 +174,9 @@ module.exports = (config,port,doc) ->
             # Process any leftover content
             do process_buffer
             # Close the JSON content
+            res.write ']'
             # The response is complete
-            res.end ']'
+            res.end()
             # Remove the temporary (pcap) file
             fs.unlink fh
 
