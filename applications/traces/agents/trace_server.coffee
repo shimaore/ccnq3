@@ -46,6 +46,29 @@ line_parser = (t) ->
       result[trace_field_names[i]] = value
   return result
 
+# Convert a Javascript Date object into a string suitable to feeding
+# for wireshark.
+wireshark_date = (date) ->
+  pad = (n) -> if n < 10 then "0#{n}" else ''+n
+  [
+    ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][date.getMonth()]
+    ' '
+    date.getDate()
+    ', '
+    date.getFullYear()
+    ' '
+    pad date.getHours()
+    ':'
+    pad date.getMinutes()
+    ':'
+    pad date.getSeconds()
+  ].join ''
+
+test = ->
+  assert = require 'assert'
+  assert.equal wireshark_date( new Date '2012-05-07 15:06:56' ), 'May 7, 2012 15:06:56'
+  assert.equal wireshark_date( new Date '2040-12-27 07:16:08' ), 'Dec 27, 2040 07:16:08'
+
 # The server filters and formats the trace, and starts a one-time
 # web server that will output the data.
 module.exports = (config,port,doc) ->
@@ -80,11 +103,14 @@ module.exports = (config,port,doc) ->
   tshark_filter = []
   if doc.days_ago?
     # Wireshark's format: Nov 12, 1999 08:55:44.123
+    #
+    #
+    one_day = 86400*1000
     d = new Date()
-    d.setUTCHours(0); d.setUTCMinutes(0); d.setUTCSeconds(0)
-    time = d.getTime() - 86400*doc.days_ago
-    today    = new Date(time).toUTCString()
-    tomorrow = new Date(time+86400).toUTCString()
+    d.setHours(0); d.setMinutes(0); d.setSeconds(0)
+    time = d.getTime() - one_day*doc.days_ago
+    today    = wireshark_date new Date time
+    tomorrow = wireshark_date new Date time+one_day
     tshark_filter.push """
       frame.time >= "#{today}" && frame.time < "#{tomorrow}"
     """
