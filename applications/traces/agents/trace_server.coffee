@@ -132,7 +132,12 @@ module.exports = (config,port,doc) ->
         nice tshark -r "#{fh}" -R '#{tshark_filter}' -nltad -T fields #{fields}
       """
 
-      res = request.put url, (e) -> console.dir url:url, error:e
+      options =
+        url: url
+        headers:
+          'Content-Type': 'application/json'
+
+      res = request.put options, (e) -> console.dir url:url, error:e
 
       do (res) ->
 
@@ -147,6 +152,8 @@ module.exports = (config,port,doc) ->
         # Wait for the pcap_command to terminate.
         pcap.on 'exit', (code) ->
           if code isnt 0
+            res.write ']'
+            res.end()
             return console.dir code:code, pcap_command:pcap_command
 
           tshark = spawn shell
@@ -194,7 +201,13 @@ module.exports = (config,port,doc) ->
         nice tshark -r "#{fh}" -R '#{tshark_filter}' -w - | gzip
       """
 
-      res = request.put url, (e) -> console.dir error:e
+      options =
+        url: url
+        headers:
+          'Content-Type': 'binary/application'
+          'Content-Disposition': 'attachment; filename="trace.pcap"'
+
+      res = request.put options, (e) -> console.dir url:url, error:e
 
       do (res) ->
 
@@ -204,6 +217,7 @@ module.exports = (config,port,doc) ->
         # Wait for the pcap_command to terminate.
         pcap.on 'exit', (code) ->
           if code isnt 0
+            res.end()
             return console.dir code:code, pcap_command:pcap_command
 
           tshark = spawn shell
