@@ -8,11 +8,11 @@
     unless @session.roles?.indexOf 'access:traces:' >= 0
       return @send error:'Unauthorized'
 
-    server = http.CreateServer (req,res) =>
+    server = http.createServer (req,res) =>
       req.pipe @response
       req.on 'error', ->
         server.close()
       req.on 'end', ->
         server.close()
-    server.listen port
+    server.listen @request.param 'port'
     return
