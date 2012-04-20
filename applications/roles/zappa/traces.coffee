@@ -12,20 +12,26 @@
 
     port = @request.param 'port'
 
-    server = http.createServer (req,res) =>
-      @response.writeHead 200,
-        'Content-Type': req.headers 'Content-Type'
-        'Content-Disposition': req.headers 'Content-Disposition'
+    original_response = @response
+
+    server = http.createServer (req,res) ->
+      original_response.writeHead 200
+      # 'Content-Type': req.headers 'Content-Type'
+      # 'Content-Disposition': req.headers 'Content-Disposition'
 
       req.on 'error', (e) ->
         console.dir error:e, port:port
         delete servers[port]
+        server.close()
       req.on 'end', ->
         console.dir on:'end', port:port
         delete servers[port]
-      console.dir start:'pipe', port:port
+        server.close()
+
       # Pipe the body of the PUT request back to the original client.
-      req.pipe @response
+      console.dir start:'pipe', port:port
+      req.pipe original_response
+      res.end()
       return
     servers[port] = server
     server.listen port

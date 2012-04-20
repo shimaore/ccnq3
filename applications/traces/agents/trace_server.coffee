@@ -141,20 +141,15 @@ module.exports = (config,port,doc) ->
 
       do (res) ->
 
-        # Start the JSON content.
-        # Start the array.
-        res.write '['
-        first_entry = true
-
         # Fork the find/mergecap/ngrep pipe.
         pcap = spawn shell
 
         # Wait for the pcap_command to terminate.
         pcap.on 'exit', (code) ->
           if code isnt 0
-            res.write ']'
             res.end()
-            return console.dir code:code, pcap_command:pcap_command
+            console.dir code:code, pcap_command:pcap_command
+            return
 
           tshark = spawn shell
           tshark.on 'exit', (code) ->
@@ -164,13 +159,17 @@ module.exports = (config,port,doc) ->
           tshark.stdin.end()
 
           buffer = ''
+          first_entry = true
+
           process_buffer = ->
             d = buffer.split "\n"
             while d.length > 1
               line = d.shift()
               data = line_parser line
               # Make the array properly formatted
-              if not first_entry
+              if first_entry
+                res.write '['
+              else
                 res.write ','
               first_entry = false
               # Write the JSON content
@@ -181,7 +180,10 @@ module.exports = (config,port,doc) ->
             # Process any leftover content
             do process_buffer
             # Close the JSON content
-            res.write ']'
+            if first_entry
+              res.write '[]'
+            else
+              res.write ']'
             # The response is complete
             res.end()
             # Remove the temporary (pcap) file
@@ -218,7 +220,8 @@ module.exports = (config,port,doc) ->
         pcap.on 'exit', (code) ->
           if code isnt 0
             res.end()
-            return console.dir code:code, pcap_command:pcap_command
+            console.dir code:code, pcap_command:pcap_command
+            return
 
           tshark = spawn shell
           tshark.on 'exit', (code) ->
