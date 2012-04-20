@@ -13,6 +13,10 @@ form.main input, form.main button, form.main select {
   color: white;
   background-color: red;
 }
+.log {
+  color: black;
+  background-color: yellow;
+}
 #login_container {
   display: inline;
 }

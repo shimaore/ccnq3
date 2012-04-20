@@ -20,7 +20,7 @@ do (jQuery) ->
 
     form id:'trace_request', method:'post', action:'#/trace', class:'validate', ->
 
-      div id:'trace_log'
+      div id:'trace_log', class:'log'
 
       label for:'host', class:'normal', ->
         span 'Host'
