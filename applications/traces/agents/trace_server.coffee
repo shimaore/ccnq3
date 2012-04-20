@@ -50,6 +50,8 @@ line_parser = (t) ->
 # web server that will output the data.
 module.exports = (config,port,doc) ->
 
+  console.dir port:port, doc: doc
+
   shell = '/bin/sh'
 
   workdir = config.traces?.workdir ? '/opt/ccnq3/traces' # FIXME default_trace_workdir
