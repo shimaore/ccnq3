@@ -553,6 +553,8 @@ You must specify which interfaces will be used for traces by using the `traces.i
 *   `traces`:
 
     * `interfaces`: [] of interfaces names
+    * `upload_host`: hostname of the server that will proxy responses back to the clients.
+      Normally this is the host running the portal service.
 
     There's no reason to modify the following parameters for traces.
 

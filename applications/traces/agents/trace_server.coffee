@@ -1,6 +1,6 @@
 # (c) 2012 Stephane Alnet
 #
-http = require 'http'
+request = require 'request'
 spawn = require('child_process').spawn
 fs = require 'fs'
 
@@ -78,6 +78,7 @@ module.exports = (config,port,doc) ->
   shell = '/bin/sh'
 
   workdir = config.traces?.workdir ? '/opt/ccnq3/traces' # FIXME default_trace_workdir
+  url = 'http://' + config.traces.upload_host + ':' + port
 
   # We _have_ to use a file because tshark cannot read from a pipe/fifo/stdin.
   # (And we need tshark for its filtering and field selection features.)
@@ -131,11 +132,9 @@ module.exports = (config,port,doc) ->
         nice tshark -r "#{fh}" -R '#{tshark_filter}' -nltad -T fields #{fields}
       """
 
-      # Minimalist web server
-      server = http.createServer (req,res) ->
-        # We don't care to check the method, URI, etc. Just send the response.
-        res.writeHead 200,
-          'Content-Type': 'application/json'
+      res = request.put url, (e) -> console.dir error:e
+
+      do (res) ->
 
         # Start the JSON content.
         # Start the array.
@@ -179,8 +178,6 @@ module.exports = (config,port,doc) ->
             res.end ']'
             # Remove the temporary (pcap) file
             fs.unlink fh
-            # Stop the server (single-shot)
-            server.close()
 
           tshark.stdout.on 'data', (data) ->
             # Accumulate data in the buffer
@@ -191,20 +188,14 @@ module.exports = (config,port,doc) ->
         pcap.stdin.write pcap_command
         pcap.stdin.end()
 
-      server.on 'error', (e) -> console.log e
-      server.listen port
-
     when 'pcap'
       tshark_command = """
         nice tshark -r "#{fh}" -R '#{tshark_filter}' -w - | gzip
       """
 
-      # Minimalist web server
-      server = http.createServer (req,res) ->
-        # We don't care to check the method, URI, etc. Just send the response.
-        res.writeHead 200,
-          'Content-Type': 'binary/application'
-          'Content-Disposition': 'attachment; filename="trace.pcap"'
+      res = request.put url, (e) -> console.dir error:e
+
+      do (res) ->
 
         # Fork the find/mergecap/ngrep pipe.
         pcap = spawn shell
@@ -226,8 +217,6 @@ module.exports = (config,port,doc) ->
             res.end()
             # Remove the temporary (pcap) file
             fs.unlink fh
-            # Stop the server (single-shot)
-            server.close()
 
           # Pipe the output of tshark to the client.
           tshark.stdout.pipe(res)
@@ -235,6 +224,3 @@ module.exports = (config,port,doc) ->
         # Start the pcap_command
         pcap.stdin.write pcap_command
         pcap.stdin.end()
-
-      server.on 'error', (e) -> console.log e
-      server.listen port

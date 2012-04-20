@@ -87,36 +87,32 @@ do (jQuery) ->
           #    for pcap download, we need to open the file
 
           port = Math.floor(Math.random()*2000)+8000
+          url = "/roles/traces/#{encodeURIComponent form.host}/#{encodeURIComponent port}"
+
+          # For a PCAP file, simply redirect the browser
+          if not form.inline
+            return window.open url
+
+          # For the JSON content, we must download it then render it
+          $.getJSON url, render_packets
+
           id = make_id 'host', form.host
           model.get id, (doc) ->
-              doc.traces.run ?= {}
-              if doc.traces.run[port]
-                return log 'Sorry, try again'
-              doc.traces.run[port] = form
-              model.update id, doc,
-                success: ->
-                  $.ccnq3.push_document 'provisioning', ->
-                    setTimeout wait_for_capture, 3000
+            doc.traces.run ?= {}
+            if doc.traces.run[port]
+              return log 'Sorry, try again'
+            doc.traces.run[port] = form
+            model.update id, doc,
+              success: ->
+                $.ccnq3.push_document 'provisioning', ->
 
-          # Attempt to download the capture content
-          wait_for_capture = ->
-            url = "/roles/traces/#{encodeURIComponent form.host}/#{encodeURIComponent port}"
-
-            # Do no re-submit this query
-            model.get id, (doc) ->
-              doc.traces.run ?= {}
-              delete doc.traces.run[port]
-              model.update id, doc,
-                success: ->
-                  $.ccnq3.push_document 'provisioning', ->
-                    log 'Completed'
-
-            # For a PCAP file, simply redirect the browser
-            if not form.inline
-              return window.open url
-
-            # For the JSON content, we must download it then render it
-            $.getJSON( url, render_packets ).error -> setTimeout wait_for_capture, 3000
+                  model.get id, (doc) ->
+                    doc.traces.run ?= {}
+                    delete doc.traces.run[port]
+                    model.update id, doc,
+                      success: ->
+                        $.ccnq3.push_document 'provisioning', ->
+                          log 'Completed'
 
           # Do an HTML overview of the packets
           render_packets = (data) ->
