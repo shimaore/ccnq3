@@ -96,7 +96,7 @@ do (jQuery) ->
               model.update id, doc,
                 success: ->
                   $.ccnq3.push_document 'provisioning', ->
-                    setTimeout wait_for_capture, 1000
+                    setTimeout wait_for_capture, 3000
 
           # Attempt to download the capture content
           wait_for_capture = ->
@@ -116,7 +116,7 @@ do (jQuery) ->
               return window.open url
 
             # For the JSON content, we must download it then render it
-            $.getJSON( url, render_packets ).error -> setTimeout wait_for_capture, 1000
+            $.getJSON( url, render_packets ).error -> setTimeout wait_for_capture, 3000
 
           # Do an HTML overview of the packets
           render_packets = (data) ->
