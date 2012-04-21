@@ -104,8 +104,9 @@ do (jQuery) ->
 
             # Do no re-submit this query
             model.get id, (doc) ->
-              doc.traces.run ?= {}
-              delete doc.traces.run[port]
+              # doc.traces.run ?= {}
+              # delete doc.traces.run[port]
+              delete doc.traces.run
               model.update id, doc,
                 success: ->
                   $.ccnq3.push_document 'provisioning', ->
