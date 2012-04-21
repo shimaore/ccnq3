@@ -133,14 +133,12 @@ module.exports = (config,port,doc) ->
 
       # Minimalist web server
       server = http.createServer (req,res) ->
+
+        console.dir req:req,res:res,port:port
+
         # We don't care to check the method, URI, etc. Just send the response.
         res.writeHead 200,
           'Content-Type': 'application/json'
-
-        # Start the JSON content.
-        # Start the array.
-        res.write '['
-        first_entry = true
 
         # Fork the find/mergecap/ngrep pipe.
         pcap = spawn shell
@@ -148,23 +146,26 @@ module.exports = (config,port,doc) ->
         # Wait for the pcap_command to terminate.
         pcap.on 'exit', (code) ->
           if code isnt 0
-            return console.dir code:code, pcap_command:pcap_command
+            res.end()
+            console.dir on:'exit', code:code, pcap_command:pcap_command, port:port
+            return
 
           tshark = spawn shell
           tshark.on 'exit', (code) ->
-            if code isnt 0
-              console.dir code:code, tshark_command:tshark_command
-          tshark.stdin.write tshark_command
-          tshark.stdin.end()
+            console.dir on:'exit', code:code, tshark_command:tshark_command, port:port
 
           buffer = ''
+          first_entry = true
+
           process_buffer = ->
             d = buffer.split "\n"
             while d.length > 1
               line = d.shift()
               data = line_parser line
               # Make the array properly formatted
-              if not first_entry
+              if first_entry
+                res.write '['
+              else
                 res.write ','
               first_entry = false
               # Write the JSON content
@@ -172,11 +173,16 @@ module.exports = (config,port,doc) ->
             buffer = d[0]
 
           tshark.stdout.on 'end', ->
+            console.dir on:'end', port:port
             # Process any leftover content
             do process_buffer
             # Close the JSON content
+            if first_entry
+              res.write '[]'
+            else
+              res.write ']'
             # The response is complete
-            res.end ']'
+            res.end()
             # Remove the temporary (pcap) file
             fs.unlink fh
             # Stop the server (single-shot)
@@ -187,11 +193,18 @@ module.exports = (config,port,doc) ->
             buffer += data.toString()
             do process_buffer
 
+          # Start the tshark_command
+          console.dir start:tshark_command
+          tshark.stdin.write tshark_command
+          tshark.stdin.end()
+
         # Start the pcap_command
+        console.dir start:pcap_command
         pcap.stdin.write pcap_command
         pcap.stdin.end()
 
-      server.on 'error', (e) -> console.log e
+      server.on 'error', (e) -> console.dir error:e
+      console.dir server:'listen', port:port
       server.listen port
 
     when 'pcap'
@@ -201,6 +214,9 @@ module.exports = (config,port,doc) ->
 
       # Minimalist web server
       server = http.createServer (req,res) ->
+
+        console.dir req:req,res:res,port:port
+
         # We don't care to check the method, URI, etc. Just send the response.
         res.writeHead 200,
           'Content-Type': 'binary/application'
@@ -212,16 +228,16 @@ module.exports = (config,port,doc) ->
         # Wait for the pcap_command to terminate.
         pcap.on 'exit', (code) ->
           if code isnt 0
-            return console.dir code:code, pcap_command:pcap_command
+            res.end()
+            console.dir on:'exit', code:code, pcap_command:pcap_command, port:port
+            return
 
           tshark = spawn shell
           tshark.on 'exit', (code) ->
-            if code isnt 0
-              console.dir code:code, tshark_command:tshark_command
-          tshark.stdin.write tshark_command
-          tshark.stdin.end()
+            console.dir on:'exit', code:code, tshark_command:tshark_command, port:port
 
           tshark.stdout.on 'end', ->
+            console.dir on:'end', port:port
             # The response is complete
             res.end()
             # Remove the temporary (pcap) file
@@ -232,9 +248,16 @@ module.exports = (config,port,doc) ->
           # Pipe the output of tshark to the client.
           tshark.stdout.pipe(res)
 
+          # Start the tshark_command
+          console.dir start:tshark_command
+          tshark.stdin.write tshark_command
+          tshark.stdin.end()
+
         # Start the pcap_command
+        console.dir start:pcap_command
         pcap.stdin.write pcap_command
         pcap.stdin.end()
 
-      server.on 'error', (e) -> console.log e
+      server.on 'error', (e) -> console.log error:e
+      console.dir server:'listen', port:port
       server.listen port
