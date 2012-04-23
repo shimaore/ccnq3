@@ -12,6 +12,10 @@
       uri: "http://#{@request.param 'host'}:#{@request.param 'port'}"
       jar: false
       timeout: 30000
-    , (e) => if e? then @send error:e
-    proxy.pipe @response
+      json: true
+    , (e,r,b) =>
+      if e?
+        @send error:e
+      else
+        @send b
     return
