@@ -87,7 +87,7 @@ require('ccnq3_config').get (config) ->
           method: @request.method
           headers: @request.headers
           jar: false
-          timeout: 1000
+          timeout: 30000
         , (e,r,b) =>
           if e?
             util.log @request.url + ' failed with error ' + util.inspect e
