@@ -132,7 +132,7 @@ do (jQuery) ->
                   span class:'ip', ->
                     @['ip.src']+':'+(@['udp.srcport'] ? @['tcp.srcport'])
 
-                  '→'
+                  span '→'
 
                   span class:'ip', ->
                     @['ip.dst']+':'+(@['udp.dstport'] ? @['tcp.dstport'])
@@ -153,7 +153,7 @@ do (jQuery) ->
                   span class:'ip', ->
                     @['ip.dst']+':'+(@['udp.dstport'] ? @['tcp.dstport'])
 
-                  '←'
+                  span '←'
 
                   span class:'ip', ->
                     @['ip.src']+':'+(@['udp.srcport'] ? @['tcp.srcport'])

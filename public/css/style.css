@@ -21,6 +21,7 @@ form.main input, form.main button, form.main select {
   display: inline;
 }
 
+/* Inbox */
 .inbox_item_header {
   padding: 4px;
   margin-top: 4px;
@@ -40,4 +41,21 @@ span.time {
 span.subject {
   font-weight: bold;
   padding-left: 4px;
+}
+
+/* Traces */
+.request {
+  background-color: #f0ffff;
+}
+.reply {
+  background-color: #fffff0;
+}
+.time {
+  font-size: 60%;
+}
+.ip {
+  font-weight: bold;
+}
+.call-id, .line {
+  font-family: monospace;
 }
