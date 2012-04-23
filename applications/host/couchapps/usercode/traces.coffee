@@ -76,7 +76,7 @@ do (jQuery) ->
         form = $(selector).toDeepJson()
 
         if form_is_valid and (form.call_id? or form.from_user? or form.to_user?)
-          log '', true
+          log 'Submitting...', true
 
           form.format = if form.inline then 'json' else 'pcap'
 
@@ -110,7 +110,7 @@ do (jQuery) ->
               model.update id, doc,
                 success: ->
                   $.ccnq3.push_document 'provisioning', ->
-                    log 'Completed'
+                    log 'Submitted.'
 
             # For a PCAP file, simply redirect the browser
             if not form.inline
@@ -123,34 +123,57 @@ do (jQuery) ->
           render_packets = (data) ->
             $('#packets').empty()
             log "Received #{data.length} packets.", true
+
+            request_line_tpl = $.compile_template ->
+              dt class:'request', ->
+
+                  span class:'time', -> @['frame.time']
+
+                  span class:'ip', ->
+                    @['ip.src']+':'+(@['udp.srcport'] ? @['tcp.srcport'])
+
+                  '→'
+
+                  span class:'ip', ->
+                    @['ip.dst']+':'+(@['udp.dstport'] ? @['tcp.dstport'])
+
+                  span class:'call-id', -> @['sip.Call-ID']
+
+                  span class:'line', -> @['sip.Request-Line']
+
+              dd class:'request', ->
+                  span class:'from', -> @['sip.From']
+                  span class:'to',   -> @['sip.To']
+
+            status_line_tpl = $.compile_template ->
+              dt class:'reply', ->
+
+                  span class:'time', -> @['frame.time']
+
+                  span class:'ip', ->
+                    @['ip.dst']+':'+(@['udp.dstport'] ? @['tcp.dstport'])
+
+                  '←'
+
+                  span class:'ip', ->
+                    @['ip.src']+':'+(@['udp.srcport'] ? @['tcp.srcport'])
+
+                  span class:'call-id', -> @['sip.Call-ID']
+
+                  span class:'line', -> @['sip.Status-Line']
+
+              dd class:'reply', ->
+                  span class:'from', -> @['sip.From']
+                  span class:'to',   -> @['sip.To']
+
             for packet in data
               do (packet) ->
 
                 if packet['sip.Request-Line']
-                  $('<dt class="request"/>').text("""
-                    #{packet['frame.time']}
-                    #{packet['ip.src']}:#{packet['udp.srcport'] ? packet['tcp.srcport']}
-                    →
-                    #{packet['ip.dst']}:#{packet['udp.dstport'] ? packet['tcp.dstport']}
-                    #{packet['sip.Call-ID']}
-                    #{packet['sip.Request-Line']}
-                  """).appendTo '#packets'
-                  $('<dd class="request"/>').text("""
-                    <dd>From: #{packet['sip.From']} To: #{packet['sip.To']}</dd>
-                  """).appendTo '#packets'
+                  $(request_line_tpl packet).appendTo '#packets'
 
                 if packet['Status-Line']
-                  $('<dt class="reply"/>').text("""
-                    #{packet['frame.time']}
-                    #{packet['ip.dst']}:#{packet['udp.dstport'] ? packet['tcp.dstport']}
-                    ←
-                    #{packet['ip.src']}:#{packet['udp.srcport'] ? packet['tcp.srcport']}
-                    #{packet['sip.Call-ID']}
-                    #{packet['sip.Status-Line']}
-                  """).appendTo '#packets'
-                  $('<dd class="reply"/>').text("""
-                    <dd>From: #{packet['sip.From']} To: #{packet['sip.To']}</dd>
-                  """).appendTo '#packets'
+                  $(status_line_tpl packet).appendTo '#packets'
 
         else
           log 'One of the values is required.', true
