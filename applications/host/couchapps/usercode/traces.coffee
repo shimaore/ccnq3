@@ -127,7 +127,7 @@ do (jQuery) ->
               do (packet) ->
 
                 if packet['sip.Request-Line']
-                  $('<dt class="request"/>', text: """
+                  $('<dt class="request"/>').text("""
                     #{packet['frame.time']}
                     #{packet['ip.src']}:#{packet['udp.srcport'] ? packet['tcp.srcport']}
                     →
@@ -135,12 +135,12 @@ do (jQuery) ->
                     #{packet['sip.Call-ID']}
                     #{packet['sip.Request-Line']}
                   """).appendTo '#packets'
-                  $('<dd class="request"/>', text: """
+                  $('<dd class="request"/>').text("""
                     <dd>From: #{packet['sip.From']} To: #{packet['sip.To']}</dd>
                   """).appendTo '#packets'
 
                 if packet['Status-Line']
-                  $('<dt class="reply"/>', text: """
+                  $('<dt class="reply"/>').text("""
                     #{packet['frame.time']}
                     #{packet['ip.dst']}:#{packet['udp.dstport'] ? packet['tcp.dstport']}
                     ←
@@ -148,7 +148,7 @@ do (jQuery) ->
                     #{packet['sip.Call-ID']}
                     #{packet['sip.Status-Line']}
                   """).appendTo '#packets'
-                  $('<dd class="reply"/>', text: """
+                  $('<dd class="reply"/>').text("""
                     <dd>From: #{packet['sip.From']} To: #{packet['sip.To']}</dd>
                   """).appendTo '#packets'
 
