@@ -96,6 +96,7 @@ require('ccnq3_config').get (config) ->
       freeswitch_local_acl:       "#{conf_dir}/local-acl.xml"
       freeswitch_local_vars:      "#{conf_dir}/local-vars.xml"
       freeswitch_local_conf:      "#{conf_dir}/local-conf.xml"
+      freeswitch_local_json_cdr:  "#{conf_dir}/local-json_cdr.xml"
 
     host_uri = qs.escape make_id 'host', config.host
 

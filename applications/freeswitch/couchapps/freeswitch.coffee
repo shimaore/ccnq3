@@ -143,3 +143,46 @@ ddoc.shows.freeswitch_local_conf = p_fun (doc,req) ->
   send "\n</section>"
   send "\n</include>"
   return {}
+
+ddoc.shows.freeswitch_local_json_cdr = p_fun (doc,req) ->
+
+  # Convert the first character (supposed to be an hex digit)
+  # into a value 0-15.
+  hex1_to_num = (c) ->
+    if '0' <= c <= '9'
+      return c.charCodeAt(0) - '0'.charCodeAt(0)
+    if 'a' <= c <= 'f'
+      return c.charCodeAt(0) - 'a'.charCodeAt(0) + 10
+    if 'A' <= c <= 'F'
+      return c.charCodeAt(0) - 'A'.charCodeAt(0) + 10
+
+  # Convert the first two characters (supposed to be hex digits)
+  # into a value 0-255.
+  hex2_to_num = (str) ->
+    hex1_to_num(str.charAt 0)*16+hex1_to_num(str.charAt 1)
+
+  # Send out content
+  start
+    'Content-Type': 'text/xml'
+
+  cdr_uri = doc.cdr_uri ? 'http://127.0.0.1:5984/cdr'
+
+  # Parse for password
+  if m = cdr_uri.match /^(https?:\/\/)([^@\/]+)@(.+)$/
+    cdr_uri = m[1] + m[3]
+    cred = m[2]
+    # De-URI encode the username and password.
+    # This will break on multi-byte characters. RFC3986 specifies UTF-8
+    # (section 2.5) but it's not clear what charset FreeSwitch's XML files use,
+    # and the translation given here would have to detect UTF-8 in multi-byte,
+    # asses their correctness, and generate proper output for CouchDB.
+    cred = cred.replace /%([\da-f]{2})/ig, (str,p1) ->
+      String.fromCharCode hex2_to_num p1
+  else
+    cred = ''
+
+  send """
+    <param name="url" value="#{cdr_uri}" />\n
+    <param name="cred" value="#{cred}" />\n
+  """
+  return {}
