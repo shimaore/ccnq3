@@ -14,8 +14,7 @@ cfg.get (config) ->
   provisioning.create ->
     push_script provisioning_uri, 'freeswitch'
 
-  # FIXME Need centralized CDR system.
-  cdr_uri = 'http://127.0.0.1:5984/cdr'
+  cdr_uri = config.cdr_uri ? 'http://127.0.0.1:5984/cdr'
   cdr = cdb.new cdr_uri
   cdr.create ->
     # Need the callback to run.
