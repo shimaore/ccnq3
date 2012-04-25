@@ -1,6 +1,11 @@
 do (jQuery) ->
   defaults =
     limit: 100
+    sort: 'by_type'
+
+  sort_descending =
+    'by_date': true
+    'by_type': false
 
   $ = jQuery
 
@@ -12,14 +17,17 @@ do (jQuery) ->
           option value:100, -> '100'
           option value:200, -> '200'
           option value:500, -> '500'
+        select name:'inbox_sort', class:'inbox_sort', ->
+          option value:'by_type', -> 'By type'
+          option value:'by_date', -> 'By date'
       div class:'inbox_content'
 
 
   default_list_tpl = $.compile_template ->
     div class:"inbox_item #{@type}", type:@type, ->
       div class:'inbox_item_header', ->
-        span class:'date', -> @date
-        span class:'time', -> @time
+        span class:'date', -> @date ? ''
+        span class:'time', -> @time ? ''
         span class:'subject', -> @list
       div class:'inbox_item_body', ->
         @form
@@ -50,17 +58,25 @@ do (jQuery) ->
 
     app.swap do inbox_tpl
 
+    insert_docs = (docs) =>
+      content = @find('.inbox_content')
+      content.html ''
+      for doc in docs
+        do (doc) ->
+          content.append inbox_item doc
+
+    current_limit = =>
+      @find('.inbox_limit').val() ? defaults.limit
+
+    current_sort = =>
+      @find('.inbox_sort').val() ? defaults.limit
+
     refill = =>
-      inbox_model.viewDocs 'inbox/by_date',
+      inbox_model.viewDocs 'inbox/' + current_sort,
         include_docs: true
-        descending: true
-        limit: @find('.inbox_limit').val() ? defaults.limit
-      , (docs) =>
-          content = @find('.inbox_content')
-          content.html ''
-          for doc in docs
-            do (doc) ->
-              content.append inbox_item doc
+        descending: sort_descending[current_sort]
+        limit: current_limit()
+      , insert_docs
 
     @data 'changes', inbox_model.changes (results) =>
       content = @find('.inbox_content')
@@ -72,6 +88,9 @@ do (jQuery) ->
             content.prepend inbox_item doc
 
     @find('.inbox_limit').change ->
+      refill()
+
+    @find('.inbox_sort').change ->
       refill()
 
     refill()

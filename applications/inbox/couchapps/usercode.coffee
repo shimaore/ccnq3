@@ -20,6 +20,11 @@ ddoc.views.by_date =
     if doc.type? and doc.updated_at?
       emit doc.updated_at, null
 
+ddoc.views.by_type =
+  map: p_fun (doc) ->
+    if doc.type?
+      emit doc._id, null
+
 # Attachments (main couchapp)
 couchapp = require('couchapp')
 path     = require('path')
