@@ -69,12 +69,12 @@ do (jQuery) ->
       @find('.inbox_limit').val() ? defaults.limit
 
     current_sort = =>
-      @find('.inbox_sort').val() ? defaults.limit
+      @find('.inbox_sort').val() ? defaults.sort
 
     refill = =>
-      inbox_model.viewDocs 'inbox/' + current_sort,
+      inbox_model.viewDocs 'inbox/' + current_sort(),
         include_docs: true
-        descending: sort_descending[current_sort]
+        descending: sort_descending[current_sort()]
         limit: current_limit()
       , insert_docs
 
