@@ -12,6 +12,6 @@ require('ccnq3_config').get (config) ->
   provisioning = pico provisioning_uri
   provisioning.post '_compact', json:{}, log_error
 
-  cdr_uri = 'http://127.0.0.1:5984/cdr'
+  cdr_uri = config.cdr_uri ? 'http://127.0.0.1:5984/cdr'
   cdr = pico cdr_uri
   cdr.post '_compact', json:{}, log_error
