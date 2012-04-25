@@ -31,14 +31,6 @@ process_changes = (commands) ->
       when 'stop'
         fs_command "sofia profile #{profile_name} stop"
 
-  ###
-      when 'restart'
-        fs_command "sofia profile #{profile_name} killgw", ->
-          fs_command "sofia profile #{profile_name} rescan reloadxml"
-      when 'stop'
-        fs_command "sofia profile #{profile_name} killgw"
-  ###
-
   # Following commands are not module-specific.
   if commands.freeswitch?
     switch commands.freeswitch
