@@ -2,6 +2,7 @@ do (jQuery) ->
   defaults =
     limit: 100
     sort: 'by_type'
+    offset: 0
 
   sort_descending =
     'by_date': true
@@ -20,6 +21,9 @@ do (jQuery) ->
         select name:'inbox_sort', class:'inbox_sort', ->
           option value:'by_type', -> 'By type'
           option value:'by_date', -> 'By date'
+        input name:'inbox_offset', class:'inbox_offset'
+        span id:'inbox_shown_rows', class:'inbox_shown_rows'
+        span id:'inbox_total_rows', class:'inbox_total_rows'
       div class:'inbox_content'
 
 
@@ -58,12 +62,15 @@ do (jQuery) ->
 
     app.swap do inbox_tpl
 
-    insert_docs = (docs) =>
+    insert_docs = (v) =>
+      @find('.inbox_shown_rows').text v.rows.length
+      @find('.inbox_total_rows').text v.total_rows
+      @find('.inbox_offset').val v.offset
       content = @find('.inbox_content')
       content.html ''
-      for doc in docs
-        do (doc) ->
-          content.append inbox_item doc
+      for row in v.rows
+        do (row) ->
+          content.append inbox_item row.doc
 
     current_limit = =>
       @find('.inbox_limit').val() ? defaults.limit
@@ -71,10 +78,14 @@ do (jQuery) ->
     current_sort = =>
       @find('.inbox_sort').val() ? defaults.sort
 
+    current_offset = =>
+      @find('.inbox_offset').val() or defaults.offset
+
     refill = =>
-      inbox_model.viewDocs 'inbox/' + current_sort(),
+      inbox_model.view 'inbox/' + current_sort(),
         include_docs: true
         descending: sort_descending[current_sort()]
+        skip: current_offset()
         limit: current_limit()
       , insert_docs
 
@@ -91,6 +102,9 @@ do (jQuery) ->
       refill()
 
     @find('.inbox_sort').change ->
+      refill()
+
+    @find('.inbox_offset').change ->
       refill()
 
     refill()
