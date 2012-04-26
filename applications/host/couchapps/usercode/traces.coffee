@@ -56,7 +56,7 @@ do (jQuery) ->
     $('form.validate').validate()
 
     div id:'packets_container', ->
-      dl id:'packets'
+      div id:'packets'
 
   $(document).ready ->
 
@@ -125,9 +125,7 @@ do (jQuery) ->
             log "Received #{data.length} packets.", true
 
             request_line_tpl = $.compile_template ->
-              dt class:'request', ->
-
-                  span class:'time', -> @['frame.time']
+              div class:'request sip-header', ->
 
                   span class:'ip', ->
                     @['ip.src']+':'+(@['udp.srcport'] ? @['tcp.srcport'])
@@ -137,18 +135,16 @@ do (jQuery) ->
                   span class:'ip', ->
                     @['ip.dst']+':'+(@['udp.dstport'] ? @['tcp.dstport'])
 
-                  span class:'call-id', -> @['sip.Call-ID']
-
                   span class:'line', -> @['sip.Request-Line']
 
-              dd class:'request', ->
+              div class:'request sip-detail', ->
+                  span class:'time', -> @['frame.time']
+                  span class:'call-id', -> @['sip.Call-ID']
                   span class:'from', -> @['sip.From']
                   span class:'to',   -> @['sip.To']
 
             status_line_tpl = $.compile_template ->
-              dt class:'reply', ->
-
-                  span class:'time', -> @['frame.time']
+              div class:'reply sip-header', ->
 
                   span class:'ip', ->
                     @['ip.dst']+':'+(@['udp.dstport'] ? @['tcp.dstport'])
@@ -158,11 +154,11 @@ do (jQuery) ->
                   span class:'ip', ->
                     @['ip.src']+':'+(@['udp.srcport'] ? @['tcp.srcport'])
 
-                  span class:'call-id', -> @['sip.Call-ID']
-
                   span class:'line', -> @['sip.Status-Line']
 
-              dd class:'reply', ->
+              div class:'reply sip-detail', ->
+                  span class:'time', -> @['frame.time']
+                  span class:'call-id', -> @['sip.Call-ID']
                   span class:'from', -> @['sip.From']
                   span class:'to',   -> @['sip.To']
 

@@ -53,11 +53,10 @@ span.subject {
   margin-left: 50px;
 }
 .ip {
-  font-weight: bold;
   color: red;
 }
-.call-id, .line {
-  font-size: 9px;
+.sip-detail {
+  font-size: small;
   font-family: monospace;
 }
 .call-id {
@@ -65,4 +64,13 @@ span.subject {
 }
 .from, .to {
   color: #030;
+}
+.from:before {
+  content: "From: ";
+}
+.to:before {
+  content: "To: ";
+}
+.call-id:before {
+  content: "Call-ID: ";
 }
