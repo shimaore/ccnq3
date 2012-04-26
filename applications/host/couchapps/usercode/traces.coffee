@@ -175,6 +175,13 @@ do (jQuery) ->
                 if packet['Status-Line']
                   $(status_line_tpl packet).appendTo '#packets'
 
+            # Make the Call-ID clickable.
+            $('#packets').find('.call-id').click ->
+              $('#call-id').val $(@).text()
+              $('#from_user').val ''
+              $('#to_user').val ''
+              $('#trace_request').submit()
+
         else
           log 'One of the values is required.', true
 

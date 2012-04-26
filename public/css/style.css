@@ -60,6 +60,9 @@ span.subject {
   font-size: 9px;
   font-family: monospace;
 }
+.call-id {
+  text-decoration: underline;
+}
 .from, .to {
   color: #030;
 }
