@@ -35,7 +35,17 @@ ADMIN_PASSWORD=`openssl rand 64 -hex`
 # Double-enforce (currently having issues with this).
 killall couchdb beam.smp heart || echo OK
 
+CDB_DIR=/var/lib/couchdb/ccnq3
+mkdir -p $CDB_DIR
+chmod 0755 $CDB_DIR
+chown couchdb.couchdb $CDB_DIR
+
 tee "${COUCHDB_CONFIG}" <<EOT >/dev/null
+[couchdb]
+; Avoid issues with databases disappearing when CouchDB upgrades.
+database_dir = ${CDB_DIR}
+view_index_dir = ${CDB_DIR}
+
 [httpd]
 port = 5984
 bind_address = ::
