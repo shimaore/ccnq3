@@ -1,5 +1,5 @@
 // name: sammy
-// version: 0.7.0
+// version: 0.7.1
 
 // Sammy.js / http://sammyjs.org
 
@@ -74,7 +74,7 @@
     }
   };
 
-  Sammy.VERSION = '0.7.0';
+  Sammy.VERSION = '0.7.1';
 
   // Add to the global logger pool. Takes a function that accepts an
   // unknown number of arguments and should print them or send them somewhere
@@ -511,12 +511,12 @@
       }
     },
 
-	// provide log() override for inside an app that includes the relevant application element_selector
+  // provide log() override for inside an app that includes the relevant application element_selector
     log: function() {
       Sammy.log.apply(Sammy, Array.prototype.concat.apply([this.element_selector],arguments));
     },
-	
-	
+
+
     // `route()` is the main method for defining routes within an application.
     // For great detail on routes, check out:
     // [http://sammyjs.org/docs/routes](http://sammyjs.org/docs/routes)
@@ -899,7 +899,7 @@
       });
 
       // bind unload to body unload
-      $(window).bind('beforeunload', function() {
+      $(window).bind('unload', function() {
         app.unload();
       });
 
@@ -1097,11 +1097,20 @@
     //     // match all except a path
     //     app.contextMatchesOptions(context, {except: {path:'#/otherpath'}}); //=> true
     //     app.contextMatchesOptions(context, {except: {path:'#/mypath'}}); //=> false
+    //     // match multiple paths
+    //     app.contextMatchesOptions(context, {path: ['#/mypath', '#/otherpath']}); //=> true
+    //     app.contextMatchesOptions(context, {path: ['#/otherpath', '#/thirdpath']}); //=> false
+    //     // equivalent to
+    //     app.contextMatchesOptions(context, {only: {path: ['#/mypath', '#/otherpath']}}); //=> true
+    //     app.contextMatchesOptions(context, {only: {path: ['#/otherpath', '#/thirdpath']}}); //=> false
+    //     // match all except multiple paths
+    //     app.contextMatchesOptions(context, {except: {path: ['#/mypath', '#/otherpath']}}); //=> false
+    //     app.contextMatchesOptions(context, {except: {path: ['#/otherpath', '#/thirdpath']}}); //=> true
     //
     contextMatchesOptions: function(context, match_options, positive) {
       // empty options always match
       var options = match_options;
-      if (typeof options === 'undefined' || options == {}) {
+      if (typeof options === 'undefined' || $.isEmptyObject(options)) {
         return true;
       }
       if (typeof positive === 'undefined') {
@@ -1110,6 +1119,17 @@
       // normalize options
       if (typeof options === 'string' || _isFunction(options.test)) {
         options = {path: options};
+      }
+      // Do we have to match against multiple paths?
+      if (_isArray(options.path)){
+        var results, numopt, opts;
+        results = [];
+        for (numopt in options.path){
+          opts = $.extend({}, options, {path: options.path[numopt]});
+          results.push(this.contextMatchesOptions(context, opts));
+        }
+        var matched = $.inArray(true, results) > -1 ? true : false;
+        return positive ? matched : !matched;
       }
       if (options.only) {
         return this.contextMatchesOptions(context, options.only, true);
@@ -1161,18 +1181,24 @@
     //      var app = $.sammy(function() {
     //
     //        // implements a 'fade out'/'fade in'
-    //        this.swap = function(content) {
-    //          this.$element().hide('slow').html(content).show('slow');
-    //        }
-    //
-    //        get('#/', function() {
-    //          this.partial('index.html.erb') // will fade out and in
-    //        });
+    //        this.swap = function(content, callback) {
+    //          var context = this;
+    //          context.$element().fadeOut('slow', function() {
+    //            context.$element().html(content);
+    //            context.$element().fadeIn('slow', function() {
+    //              if (callback) {
+    //                callback.apply();
+    //              }
+    //            });
+    //          });
+    //        };
     //
     //      });
     //
-    swap: function(content) {
-      return this.$element().html(content);
+    swap: function(content, callback) {
+      var $el = this.$element().html(content);
+      if (_isFunction(callback)) { callback(content); }
+      return $el;
     },
 
     // a simple global cache for templates. Uses the same semantics as
@@ -1496,7 +1522,7 @@
           $.ajax($.extend({
             url: location,
             data: {},
-            dataType: is_json ? 'json' : null,
+            dataType: is_json ? 'json' : 'text',
             type: 'get',
             success: function(data) {
               if (should_cache) {
@@ -1539,7 +1565,7 @@
             context.load(partials[name])
                    .then(function(template) {
                      this.partials[name] = template;
-                   });              
+                   });
           })(this, name);
         }
       }
@@ -1567,8 +1593,15 @@
 
     // `render()` the `location` with `data` and then `swap()` the
     // app's `$element` with the rendered content.
-    partial: function(location, data) {
-      return this.render(location, data).swap();
+    partial: function(location, data, callback) {
+      if (_isFunction(callback)) {
+        return this.render(location, data).swap(callback);
+      } else if (!callback && _isFunction(data)) {
+        // invoked as partial(location, callback)
+        return this.render(location).swap(data);
+      } else {
+        return this.render(location, data).swap();
+      }
     },
 
     // defers the call of function to occur in order of the render queue.
@@ -1674,10 +1707,11 @@
       });
     },
 
-    // executes `EventContext#swap()` with the `content`
-    swap: function() {
+    // Swap the return contents ensuring order. See `Application#swap`
+    swap: function(callback) {
       return this.then(function(content) {
-        this.event_context.swap(content);
+        this.event_context.swap(content, callback);
+        return content;
       }).trigger('changed', {});
     },
 
@@ -1710,6 +1744,7 @@
       return this.then(function(content) {
         if (typeof data == 'undefined') { data = {content: content}; }
         this.event_context.trigger(name, data);
+        return content;
       });
     }
 
@@ -1839,8 +1874,8 @@
 
     // `render()` the `location` with `data` and then `swap()` the
     // app's `$element` with the rendered content.
-    partial: function(location, data) {
-      return new Sammy.RenderContext(this).partial(location, data);
+    partial: function(location, data, callback) {
+      return new Sammy.RenderContext(this).partial(location, data, callback);
     },
 
     // create a new `Sammy.RenderContext` calling `send()` with an arbitrary
@@ -1905,8 +1940,8 @@
     },
 
     // A shortcut to app's `swap()`
-    swap: function(contents) {
-      return this.app.swap(contents);
+    swap: function(contents, callback) {
+      return this.app.swap(contents, callback);
     },
 
     // Raises a possible `notFound()` error for the current path.
