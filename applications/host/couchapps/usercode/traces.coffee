@@ -173,7 +173,7 @@ do (jQuery) ->
 
             # Make the Call-ID clickable.
             $('#packets').find('.call-id').click ->
-              $('#call-id').val $(@).text()
+              $('#call_id').val $(@).text()
               $('#from_user').val ''
               $('#to_user').val ''
               $('#trace_request').submit()
