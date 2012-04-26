@@ -46,16 +46,20 @@ span.subject {
 /* Traces */
 .request {
   background-color: #f0ffff;
+  margin-left: 5px;
 }
 .reply {
   background-color: #fffff0;
-}
-.time {
-  font-size: 60%;
+  margin-left: 50px;
 }
 .ip {
   font-weight: bold;
+  color: red;
 }
 .call-id, .line {
+  font-size: 9px;
   font-family: monospace;
+}
+.from, .to {
+  color: #030;
 }
