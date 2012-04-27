@@ -122,6 +122,9 @@ do (jQuery) ->
           # Do an HTML overview of the packets
           render_packets = (data) ->
             $('#packets').empty()
+            unless data? and data.length?
+              log "Sorry, no data was received, try again.", true
+              return
             log "Received #{data.length} packets.", true
 
             request_line_tpl = $.compile_template ->
@@ -164,6 +167,9 @@ do (jQuery) ->
 
             for packet in data
               do (packet) ->
+
+                # Escape data in HTML
+                packet.autoescape = true
 
                 if packet['sip.Request-Line']
                   $(request_line_tpl packet).appendTo '#packets'
