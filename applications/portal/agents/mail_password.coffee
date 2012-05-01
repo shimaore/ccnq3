@@ -26,9 +26,6 @@ require('ccnq3_config').get (config)->
 
   random_password = require 'password'
 
-  sha1_hex = (t) ->
-    return crypto.createHash('sha1').update(t).digest('hex')
-
   file_base = config.portal.file_base
   file_name = 'portal_password'
 
@@ -52,9 +49,7 @@ require('ccnq3_config').get (config)->
     # Push the new password into the database.
     delete p.send_password
 
-    salt = sha1_hex "a"+Math.random()
-    p.salt = salt
-    p.password_sha = sha1_hex password+salt
+    p.password = password
 
     users_cdb.put p, (r) ->
       if r.error

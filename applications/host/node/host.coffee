@@ -19,7 +19,6 @@ sha1_hex = (t) ->
 exports.create_user = (users_db,hostname,cb) ->
   username = host_username hostname
 
-  salt = sha1_hex "a"+Math.random()
   password = sha1_hex "a"+Math.random()
 
   p =
@@ -27,8 +26,7 @@ exports.create_user = (users_db,hostname,cb) ->
     type: "user"
     name: username
     roles: ["host"]
-    salt: salt
-    password_sha: sha1_hex password+salt
+    password: password
 
   users_db.put p, (r)->
     if r.error?
