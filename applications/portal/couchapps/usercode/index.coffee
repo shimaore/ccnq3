@@ -50,7 +50,9 @@ $(document).ready ->
       profile.roles?.indexOf(role) >= 0
 
     if user_is 'access:_users:'
-      $.getScript '/_users/_design/portal/user_management.js'
+      ## Broken in CouchDB 1.2.0 [COUCHDB-1475]
+      # $.getScript '/_users/_design/portal/user_management.js'
+      false
 
     app.db.allApps
       eachApp: (appName, appPath, ddoc) ->
