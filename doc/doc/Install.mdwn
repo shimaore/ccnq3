@@ -101,7 +101,7 @@ to sign the "shimaore" distribution.
 Alternatively retrieve the key then add it:
 
     MAINTAINER='Stephane Alnet (Packaging) <stephane@shimaore.net>'
-    gpg --recv-keys "=${MAINTAINER}"
+    gpg --recv-keys "F24B9200"
     gpg --armor --export "=${MAINTAINER}" | apt-key add -
 
 
