@@ -20,9 +20,9 @@ exports.retrieve = (config,cb) ->
   pico = require 'pico'
   provisioning = pico config.provisioning.host_couchdb_uri
 
-  provisioning.retrieve username, (p) ->
-    if p.error
-      util.log "Retrieving live configuration failed: #{p.error}; using file-based configuration instead."
+  provisioning.retrieve username, (e,r,p) ->
+    if e
+      util.log "Retrieving live configuration failed: #{e}; using file-based configuration instead."
       cb config
     else
       util.log "Retrieved live configuration."
