@@ -11,7 +11,7 @@ cfg.get (config) ->
   update = (uri) ->
     cdrs = pico uri
 
-    cdrs.get '_security', json:true, (p) ->
+    cdrs.get '_security', json:true, (e,r,p) ->
       p.admins ||= {}
       p.admins.roles ||= []
       p.admins.roles.push("cdrs_admin") if p.admins.roles.indexOf("cdrs_admin") < 0
