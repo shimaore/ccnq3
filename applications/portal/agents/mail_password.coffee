@@ -16,8 +16,8 @@ require('ccnq3_config').get (config)->
   fs = require 'fs'
   Milk = require 'milk'
 
-  cdb = require 'cdb'
-  users_cdb = cdb.new (config.users.couchdb_uri)
+  pico = require 'pico'
+  users_db = pico config.users.couchdb_uri
 
   mailer = require 'nodemailer'
 
@@ -29,13 +29,11 @@ require('ccnq3_config').get (config)->
   file_base = config.portal.file_base
   file_name = 'portal_password'
 
-  cdb_changes = require 'cdb_changes'
   options =
-    uri: config.users.couchdb_uri
     filter_name: "portal/send_password"
-  cdb_changes.monitor options, (p) ->
-    if p.error?
-      return util.log(p.error)
+  users_db.monitor options, (e,r,p) ->
+    if e?
+      return util.log e
 
     password = random_password(3)
 
@@ -51,9 +49,9 @@ require('ccnq3_config').get (config)->
 
     p.password = password
 
-    users_cdb.put p, (r) ->
-      if r.error
-        return util.log("cdb PUT failed: #{r.error}")
+    users_db.update p, (e) ->
+      if e
+        return util.log("Update failed: #{e}")
 
       # Notify via email.
       util.log "Notifying #{p.name} of new password for #{p.domain}"

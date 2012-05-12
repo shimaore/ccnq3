@@ -5,7 +5,7 @@ Released under the AGPL3 license
 
 @include = ->
 
-  cdb = require 'cdb'
+  pico = require 'pico'
 
   config = null
   require('ccnq3_config').get (c) ->
@@ -15,10 +15,10 @@ Released under the AGPL3 license
     if not @session.logged_in?
       return @send error:'Not logged in.'
 
-    users_cdb = cdb.new config.users.couchdb_uri
-    users_cdb.get "org.couchdb.user:#{@session.logged_in}", (r) =>
-      if r.error?
-        return @send r
+    users_db = pico config.users.couchdb_uri
+    users_db.retrieve "org.couchdb.user:#{@session.logged_in}", (e) =>
+      if e?
+        return @send error:e
 
       user_is = (role) ->
         return r.roles.indexOf(role) >= 0
@@ -35,8 +35,8 @@ Released under the AGPL3 license
 
       r.roles.push 'confirmed'
       @session.roles = r.roles
-      users_cdb.put r, (s) =>
-        if s.error?
-          return @send s
+      users_db.update r, (e) =>
+        if e?
+          return @send error:e
 
         @send r.profile

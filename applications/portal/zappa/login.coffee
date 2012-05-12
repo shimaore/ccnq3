@@ -5,7 +5,7 @@ Released under the AGPL3 license
 
 @include = ->
 
-  cdb = require 'cdb'
+  pico = require 'pico'
   url = require 'url'
   querystring = require 'querystring'
 
@@ -96,19 +96,19 @@ Released under the AGPL3 license
   @post '/u/login.json': ->
     username = @request.param 'username'
     if not username?
-      return @send {error:'Missing username'}
+      return @send error:'Missing username'
     password = @request.param 'password'
     if not password?
-      return @send {error:'Missing password'}
+      return @send error:'Missing password'
 
     uri = url.parse config.session.couchdb_uri
     uri.auth = "#{querystring.escape username}:#{querystring.escape password}"
     delete uri.href
     delete uri.host
-    session_cdb = cdb.new url.format uri
-    session_cdb.get '', (p) =>
-      if p.error?
-        return @send p
+    session_db = pico url.format uri
+    session_db.get jar:false, json:true, (e,r,p) =>
+      if e?
+        return @send error:e
       @session.logged_in = p.userCtx.name
       @session.roles     = p.userCtx.roles
       return @send ok:true

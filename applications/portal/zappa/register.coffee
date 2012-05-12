@@ -5,7 +5,7 @@
 
 @include = ->
 
-  cdb = require 'cdb'
+  pico = require 'pico'
 
   config = null
   require('ccnq3_config').get (c) ->
@@ -69,9 +69,9 @@
 
     # Currently assumes username = email
     username = email
-    db = cdb.new config.users.couchdb_uri
-    db.exists (it_does) =>
-      if not it_does
+    db = pico config.users.couchdb_uri
+    db.get (e,r,b) =>
+      if e or not b.db_name?
         return @send error:'Not connected to the database'
 
       p =
@@ -85,9 +85,9 @@
         send_password: true # send them their new password
 
       # PUT without _rev can only happen once
-      db.put p, (r) =>
-        if r.error?
-          return @send error:r
+      db.update p, (e) =>
+        if e?
+          return @send error:e
         else
           if config.users.logged_in_after_initial_registration
             @session.logged_in = username

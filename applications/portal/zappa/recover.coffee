@@ -4,7 +4,7 @@
 ###
 
 @include = ->
-  cdb = require 'cdb'
+  pico = require 'pico'
   url = require 'url'
   querystring = require 'querystring'
 
@@ -72,17 +72,17 @@
   @post '/u/recover.json': ->
     email = @body.email
     if not email?
-      return @send {error:'Missing username'}
+      return @send error:'Missing username'
 
-    users_cdb = cdb.new config.users.couchdb_uri
-    users_cdb.get "org.couchdb.user:#{email}", (p) =>
-      if p.error?
+    users_db = pico config.users.couchdb_uri
+    users_db.retrieve "org.couchdb.user:#{email}", (e,r,p) =>
+      if e?
         return @send error: 'Please make sure you register first.'
 
       # Everything is OK
       p.send_password = true
-      users_cdb.put p, (r) =>
-        if r.error?
-          return @send error:r
+      users_db.update p, (e) =>
+        if e?
+          return @send error:e
         else
           return @send ok:true
