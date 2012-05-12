@@ -17,10 +17,10 @@ exports.retrieve = (config,cb) ->
     return cb config
 
   username = make_id 'host', config.host
-  cdb = require 'cdb'
-  provisioning = cdb.new config.provisioning.host_couchdb_uri
+  pico = require 'pico'
+  provisioning = pico config.provisioning.host_couchdb_uri
 
-  provisioning.get username, (p) ->
+  provisioning.retrieve username, (p) ->
     if p.error
       util.log "Retrieving live configuration failed: #{p.error}; using file-based configuration instead."
       cb config
