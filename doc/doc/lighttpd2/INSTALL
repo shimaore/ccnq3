@@ -1,9 +1,0 @@
-lighttpd2 is currently not in Debian.
-
-I installed:
-
-  libev4
-  http://download.opensuse.org/repositories/home:/stbuehler:/lighttpd2/Debian_6.0/amd64/liblighttpd2_2.0.0~snap-20110509-g259cdb-1_amd64.deb
-  http://download.opensuse.org/repositories/home:/stbuehler:/lighttpd2/Debian_6.0/amd64/lighttpd2_2.0.0~snap-20110509-g259cdb-1_amd64.deb
-
-Note that we do not use mimetypes.conf but add text/coffeescript and application/json.
