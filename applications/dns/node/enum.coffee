@@ -7,7 +7,7 @@
 
 Zone = require('./dns').Zone
 
-cdb = require 'cdb'
+pico = require 'pico'
 
 make_id = (t,n) -> [t,n].join ':'
 
@@ -22,20 +22,20 @@ exports.EnumZone = class EnumZone extends Zone
 
     number = prefix.split('.').reverse().join('')
 
-    provisioning = cdb.new @provisioning_uri
-    provisioning.get make_id('number',number), (r) =>
-      if r.inbound_uri?
+    provisioning = pico @provisioning_uri
+    provisioning.retrieve make_id('number',number), (error,response,doc) =>
+      if not error and doc.inbound_uri?
         cb [
           @create_record
             prefix: prefix
             ttl: @ttl
             class: "NAPTR"
-            value: [10,100,'u','E2U+sip',"!^.*$!#{r.inbound_uri}!", ""]
+            value: [10,100,'u','E2U+sip',"!^.*$!#{doc.inbound_uri}!", ""]
           @create_record
             prefix: prefix
             ttl: @ttl
             class: "NAPTR"
-            value: [20,100,'u','E2U+account', "!^.*$!#{r.account}!", ""]
+            value: [20,100,'u','E2U+account', "!^.*$!#{doc.account}!", ""]
         ]
         # In FreeSwitch XML, retrieve the account from enum_route_2.
       else
