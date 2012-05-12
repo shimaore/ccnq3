@@ -13,8 +13,7 @@
   , "preinstall": "coffee -c couchapps/*/*.coffee"
   },
   "dependencies": {
-    "cdb": "*"
-  , "couchapp": "*"
+    "couchapp": "*"
   , "ccnq3_config": ">=0.1"
   , "pico": ">=0.0.14"
   },

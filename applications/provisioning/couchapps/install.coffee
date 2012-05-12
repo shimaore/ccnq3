@@ -1,7 +1,7 @@
 #!/usr/bin/env coffee
 
 couchapp = require 'couchapp'
-cdb = require 'cdb'
+pico = require 'pico'
 
 push_script = (uri, script,cb) ->
   couchapp.createApp require("./#{script}"), uri, (app)-> app.push(cb)
@@ -14,10 +14,10 @@ cfg.get (config)->
 
   # Update ACLs and code
   update = (uri) ->
-    provisioning = cdb.new uri
+    provisioning = pico uri
 
     # Set the security object for the provisioning database.
-    provisioning.security (p)->
+    provisioning.get '_security', json:true, (e,r,p)->
       p.admins ||= {}
       p.admins.roles ||= []
       p.admins.roles.push("provisioning_admin") if p.admins.roles.indexOf("provisioning_admin") < 0
@@ -27,6 +27,8 @@ cfg.get (config)->
       p.readers.roles.push("provisioning_reader") if p.readers.roles.indexOf("provisioning_reader") < 0
       # Hosts have direct (read-only) access to the provisioning database (for replication / host-agent purposes).
       p.readers.roles.push("host")                if p.readers.roles.indexOf("host") < 0
+
+      provisioning.put '_security', json:p
 
     # These couchapps are available to provisioning_admin (and _admin) users.
     push_script uri, 'main'   # Filter replication from source to user's databases.
@@ -39,8 +41,8 @@ cfg.get (config)->
 
   # Otherwise create the database
   provisioning_uri = config.install?.provisioning?.couchdb_uri ? config.admin.couchdb_uri + '/provisioning'
-  provisioning = cdb.new(provisioning_uri)
-  provisioning.create ->
+  provisioning = pico provisioning_uri
+  provisioning.put ->
 
     update provisioning_uri
 
