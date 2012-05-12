@@ -31,8 +31,8 @@ In ccnq3 the system architecture is different:
   Outbound, always query internal ENUM (for our own numbers) and if applicable public ENUM (per account flag).
 
 
-- The XMPP bus is gone. RabbitMQ may be used but this hasn't been finalized yet.
+- The XMPP bus is gone.
   Most functions of the XMPP bus will be replaced by using the CouchDB _changes interface. System configuration will either be done via _changes triggers, or direct access to CouchDB for information.
   The API interface is gone. Data is directly stored in CouchDB, update validation is used to reject invalid data.
   The portal will mostly be implemented as couchapps.
-
+  RabbitMQ may be used but this hasn't been finalized yet.

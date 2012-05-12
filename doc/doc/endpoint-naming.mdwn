@@ -1,3 +1,0 @@
-
-For endpoints, if authenticating using IP then the endpoint name MUST be the IP (so that OpenSIPS can locate the record).
-If authenticating using username then the endpoint name MUST be the username@domain (so that OpenSIPS can locate the record).

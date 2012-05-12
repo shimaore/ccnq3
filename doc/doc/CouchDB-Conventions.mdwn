@@ -1,16 +1,19 @@
------ Conventions for usernames in CouchDB -----
+Conventions for usernames in CouchDB
+====================================
 
 For people, use people's actual email addresses.
 For processes, use process_name@server_name.
   (For example: freeswitch@prepaid.example.net, replicator@cdb1.example.net.)
 Reserve shortnames (no "@" sign) for admin accounts.
 
------ Conventions for CouchDB access -----
+Conventions for CouchDB access
+==============================
 
 View as a single system (using potential scaling arch., replication).
 (See BigCouch.)
 
 Common definitions:
+
 - Source databases are global databases containing the entire system information.
   Examples: "provisioning", "billing", "_users", "usercode"
 
