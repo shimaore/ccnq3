@@ -70,7 +70,7 @@
     # Currently assumes username = email
     username = email
     db = pico config.users.couchdb_uri
-    db.get (e,r,b) =>
+    db.get json:true, (e,r,b) =>
       if e or not b.db_name?
         return @send error:'Not connected to the database'
 

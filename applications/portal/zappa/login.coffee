@@ -109,6 +109,8 @@ Released under the AGPL3 license
     session_db.get jar:false, json:true, (e,r,p) =>
       if e?
         return @send error:e
+      if p.error
+        return @send p
       @session.logged_in = p.userCtx.name
       @session.roles     = p.userCtx.roles
       return @send ok:true

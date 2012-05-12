@@ -31,9 +31,7 @@ require('ccnq3_config').get (config)->
 
   options =
     filter_name: "portal/send_password"
-  users_db.monitor options, (e,r,p) ->
-    if e?
-      return util.log e
+  users_db.monitor options, (p) ->
 
     password = random_password(3)
 
