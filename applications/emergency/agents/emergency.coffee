@@ -2,8 +2,7 @@
 
 fs = require 'fs'
 util = require 'util'
-cdb = require 'cdb'
-cdb_changes = require 'cdb_changes'
+pico = require 'pico'
 spawn = require('child_process').spawn
 
 last_rev = ''
@@ -30,13 +29,11 @@ process_changes = (port,command,cfg) ->
 
 require('ccnq3_config').get (config) ->
 
-  provisioning = cdb.new config.provisioning.local_couchdb_uri
+  provisioning = pico config.provisioning.local_couchdb_uri
 
-  options =
-    uri: config.provisioning.local_couchdb_uri
-    # FIXME: filter, only host records for local host
+  # FIXME: filter, only host records for local host
 
-  cdb_changes.monitor options, (p) ->
+  provisioning.monitor (p) ->
     if p.error? then return util.log(p.error)
     if p._rev is last_rev then return util.log "Duplicate revision"
     last_rev = p._rev
