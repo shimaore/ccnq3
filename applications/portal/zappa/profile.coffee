@@ -16,7 +16,7 @@ Released under the AGPL3 license
       return @send error:'Not logged in.'
 
     users_db = pico config.users.couchdb_uri
-    users_db.retrieve "org.couchdb.user:#{@session.logged_in}", (e) =>
+    users_db.retrieve "org.couchdb.user:#{@session.logged_in}", (e,x,r) =>
       if e?
         return @send error:e
 
