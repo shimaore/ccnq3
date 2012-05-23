@@ -4,7 +4,7 @@ Maintainer: Stephane Alnet (Packaging) <stephane@shimaore.net>
 Package: ccnq3
 Architecture: all
 Depends:
-  findutils,
+  findutils, adduser, passwd,
   curl,
   daemon, bash, openssl,
   nodejs (>=0.6.6), build-essential,
