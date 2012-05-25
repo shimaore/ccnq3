@@ -1,14 +1,14 @@
 #!/usr/bin/env coffee
 
-cdb = require 'cdb'
+pico = require 'pico'
 
 cfg = require 'ccnq3_config'
 cfg.get (config) ->
 
   update = (uri) ->
-    locations = cdb.new uri
+    locations = pico uri
 
-    locations.security (p) ->
+    locations.get '_security', json:true, (e,r,p) ->
       p.admins ||= {}
       p.admins.roles ||= []
       p.admins.roles.push("locations_admin") if p.admins.roles.indexOf("locations_admin") < 0
@@ -20,6 +20,8 @@ cfg.get (config) ->
       # Hosts have read-write access so that they can push location updates.
       p.readers.roles.push("host")             if p.readers.roles.indexOf("host") < 0
 
+      locations.put '_security', json:p
+
   # If the database already exists
   locations_uri = config.aggregate?.locations_uri
   if locations_uri
@@ -28,8 +30,8 @@ cfg.get (config) ->
 
   # Otherwise create the database
   locations_uri = config.install?.aggregate?.locations_uri ? config.admin.couchdb_uri + '/locations'
-  locations = cdb.new locations_uri
-  locations.create ->
+  locations = pico locations_uri
+  locations.put ->
 
     update locations_uri
 

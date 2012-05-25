@@ -1,7 +1,6 @@
 #!/usr/bin/env coffee
 
 couchapp = require 'couchapp'
-cdb = require 'cdb'
 
 push_script = (uri,script,cb) ->
   couchapp.createApp require("./#{script}"), uri, (app)-> app.push(cb)

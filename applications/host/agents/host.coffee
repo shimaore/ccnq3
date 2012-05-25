@@ -15,7 +15,6 @@ handler = require './handlers'
 # Main
 
 qs = require 'querystring'
-cdb_changes = require 'cdb_changes'
 
 pico = require 'pico'
 
@@ -31,16 +30,16 @@ require('ccnq3_config').get (config) ->
 
   # Main agent code
 
+  src = pico config.provisioning.host_couchdb_uri
   options =
-    uri: config.provisioning.host_couchdb_uri
     filter_name: "host/hostname"
     filter_params:
       hostname: config.host
 
   new_config = config
 
-  cdb_changes.monitor options, (p) ->
-    if p.error? then return util.log(p.error)
+  src.monitor options, (e,r,p) ->
+    if e? then return util.log(e)
 
     [old_config,new_config] = [new_config,p]
 
@@ -50,7 +49,7 @@ require('ccnq3_config').get (config) ->
       base = pico.request base_uri
 
       for attachment_name, info in new_config._attachments
-        base qs.escape attachment_name, (err,code) ->
+        base qs.escape attachment_name, (err,response,code) ->
           if err
             return util.log err
 

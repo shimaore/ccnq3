@@ -37,10 +37,6 @@ applications/
   provisioning/   -- Installation and application for the provisioning database
 
 lib/          -- CoffeeScript libraries
-  cdb         -- CouchDB access helpers
-  cdb_changes -- monitor CouchDB _changes handler
-  esl         -- Access to the FreeSwitch Event System
-  password    -- A memorable password generator
 
 public/       -- Common content that should be installed under the root of the main site
               -- and made available as (relative URI) /public/...

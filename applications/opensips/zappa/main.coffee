@@ -133,8 +133,8 @@ require('ccnq3_config').get (config)->
 
       throw 'not handled'
 
-    cdb = require 'cdb'
-    loc_db = cdb.new config.opensips_proxy.usrloc_uri
+    pico = require 'pico'
+    loc_db = pico config.opensips_proxy.usrloc_uri
 
     @post '/location': ->
 
@@ -145,20 +145,20 @@ require('ccnq3_config').get (config)->
 
       if @body.query_type is 'insert' or @body.query_type is 'update'
 
-        loc_db.head doc._id, (p) =>
-          doc._rev = p._rev if p._rev?
-          loc_db.put doc, (r) =>
-            if r.error then return @send ""
-            @send r._id
+        loc_db.rev doc._id, (h) =>
+          doc._rev = h.rev if h.rev?
+          loc_db.put json:doc, (e,r,p) =>
+            if e then return @send ""
+            @send p._id
         return
 
       if @body.query_type is 'delete'
 
-        loc_db.head doc._id, (p) =>
-          if not p._rev? then return @send ""
-          doc._rev = p._rev
-          loc_db.del doc, (p) =>
-            if p.error then return @send ""
+        loc_db.rev doc._id, (h) =>
+          if not h.rev? then return @send ""
+          doc._rev = h.rev
+          loc_db.remove doc, (e) =>
+            if e then return @send ""
             @send ""
         return
 

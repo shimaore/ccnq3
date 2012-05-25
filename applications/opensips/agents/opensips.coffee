@@ -36,7 +36,7 @@ process_changes = (port,command) ->
 # Main
 
 util = require 'util'
-cdb_changes = require 'cdb_changes'
+pico = require 'pico'
 
 # FIXME keep last_rev in local storage
 last_rev = ''
@@ -47,14 +47,14 @@ require('ccnq3_config').get (config) ->
   require('./aggregate') config
 
   # Monitor for changes and commands.
+  src = pico config.provisioning.local_couchdb_uri
   options =
-    uri: config.provisioning.local_couchdb_uri
     filter_name: "host/hostname"
     filter_params:
       hostname: config.host
 
-  cdb_changes.monitor options, (p) ->
-    if p.error? then return util.log(p.error)
+  src.monitor options, (e,r,p) ->
+    if e? then return util.log(e)
     if p._rev is last_rev then return util.log "Duplicate revision"
     last_rev = p._rev
 

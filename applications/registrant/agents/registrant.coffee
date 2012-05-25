@@ -3,8 +3,7 @@
 fs = require 'fs'
 qs = require 'querystring'
 util = require 'util'
-cdb = require 'cdb'
-cdb_changes = require 'cdb_changes'
+pico = require 'pico'
 spawn = require('child_process').spawn
 
 last_rev = ''
@@ -31,14 +30,13 @@ process_changes = (port,command,cfg) ->
 
 require('ccnq3_config').get (config) ->
 
-  provisioning = cdb.new config.provisioning.local_couchdb_uri
+  provisioning = pico config.provisioning.local_couchdb_uri
 
   options =
-    uri: config.provisioning.local_couchdb_uri
     # FIXME: filter, only host records for local host
 
-  cdb_changes.monitor options, (p) ->
-    if p.error? then return util.log(p.error)
+  provisioning.monitor options, (e,r,p) ->
+    if e? then return util.log(e)
     if p._rev is last_rev then return util.log "Duplicate revision"
     last_rev = p._rev
 
@@ -60,10 +58,10 @@ require('ccnq3_config').get (config) ->
     params.local_port = p.registrant.local_port
 
     qs_host = qs.stringify key: JSON.stringify p.host
-    provisioning.req uri:"/_design/registrant/_view/registrant?#{qs_host}", (r) ->
+    provisioning.get "/_design/registrant/_view/registrant?#{qs_host}", json:true, (e,r,l) ->
       params.uac_entries = ("""
         modparam("uac_registrant","uac","sip:#{p.registrant.remote_ipv4},,sip:00#{row.value.number}@#{p.registrant.remote_ipv4},,00#{row.value.number},#{row.value.password},sip:00#{row.value.number}@#{p.interfaces.primary.ipv4 ? p.host}:5070,,,")\n
-      """ for row in r.rows).join ''
+      """ for row in l.rows).join ''
 
       require("#{base_path}/compiler.coffee") params
 

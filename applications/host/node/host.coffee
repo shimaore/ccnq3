@@ -28,9 +28,9 @@ exports.create_user = (users_db,hostname,cb) ->
     roles: ["host"]
     password: password
 
-  users_db.put p, (r)->
-    if r.error?
-      util.log util.inspect r
+  users_db.put json:p, (e)->
+    if e?
+      util.log util.inspect e
       throw "Creating user record for #{username}"
 
     util.log "Created user record for #{username}"
@@ -55,9 +55,9 @@ exports.update_config = (provisioning_uri,provisioning_db,password,config,cb) ->
   config.provisioning.host_couchdb_uri = url.format q
   config.provisioning.local_couchdb_uri = provisioning_uri
 
-  provisioning_db.put config, (r)->
-    if r.error?
-      util.log util.inspect r
+  provisioning_db.put json:config, (e)->
+    if e?
+      util.log util.inspect e
       throw "Creating provisioning record for #{username}"
 
     util.log "Created provisioning record for #{username}"
