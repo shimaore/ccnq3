@@ -463,13 +463,3 @@ do(jQuery,Sammy) ->
       """
         <p><a href="#/number/#{id}">Edit</a></p>
       """
-
-  Inbox.register 'rule',
-
-    list: (doc) ->
-      return "Rule #{doc.rule} for outbound route #{doc.groupid} prefix '#{doc.prefix}' to gwlist '#{doc.gwlist}'"
-
-    form: (doc) ->
-      """
-        <p>timerec #{doc.timerec}, priority #{doc.priority}, attrs #{doc.attrs}</p>
-      """
