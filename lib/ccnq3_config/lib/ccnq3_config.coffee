@@ -22,7 +22,7 @@ exports.retrieve = (config,cb) ->
 
   provisioning.retrieve username, (e,r,p) ->
     if e
-      util.log "Retrieving live configuration failed: #{e}; using file-based configuration instead."
+      util.log "Retrieving live configuration failed: #{util.inspect e}; using file-based configuration instead."
       cb config
     else
       util.log "Retrieved live configuration."
