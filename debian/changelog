@@ -1,3 +1,11 @@
+ccnq3 (0.0.54) unstable; urgency=low
+
+  * Fixed host records creation
+  * Corrected installation documentation.
+  * Provided proper reporting of ccnq3_config database errors.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 19 Jun 2012 00:52:39 +0200
+
 ccnq3 (0.0.53) unstable; urgency=low
 
   * Corrected npm call for compact command
