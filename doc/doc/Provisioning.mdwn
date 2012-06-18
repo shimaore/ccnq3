@@ -114,7 +114,7 @@ DNS responses based on your provisioning data.
 Standard DNS layout
 -------------------
 
-We recommend that most hosts use a locally-installed DNS cache (such as the plain bind9
+We recommend that most hosts use a locally-installed DNS cache resolver (such as the plain bind9
 package). Their /etc/resolv.conf file should therefor contain:
 
     nameserver 127.0.0.1
