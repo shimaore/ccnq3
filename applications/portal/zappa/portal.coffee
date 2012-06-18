@@ -31,6 +31,6 @@ require('ccnq3_config').get (config)->
 
       # applications/roles
       roles_modules = ['login', 'replicate', 'admin', 'traces', 'userdb']
-      @include "../node_modules/ccnq3_roles/zappa/#{name}.coffee" for name in roles_modules
+      @include "../../roles/zappa/#{name}.coffee" for name in roles_modules
 
       @include './content.coffee'
