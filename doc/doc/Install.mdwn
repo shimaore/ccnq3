@@ -130,7 +130,7 @@ The first host you will install is your "manager" host.
 If you have an existing CouchDB/BigCouch installation, use
 
     cd /opt/ccnq3/src
-    export CDB_URI=http://admin:password@host:5984/
+    export CDB_URI=http://admin:password@host:5984
     su -s /bin/bash -c ./bootstrap.sh ccnq3
 
 instead.
