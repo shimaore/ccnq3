@@ -1,3 +1,72 @@
+ccnq3 (0.0.52) unstable; urgency=low
+
+  * Worked around a potential situation where `$if` is undefined.
+  * Modularized host usercode
+  * Modularized provisioning usercode
+  * Removed obsolete doc file
+  * Corrected location for required modules.
+  * Cleaned-up/referenced testing needs
+  * Corrected trace's usercode form selector.
+  * Retrieved host name from the form.
+  * Added a callback to $.ccqn3.push_document. Added replication of the trace command so that it actually gets executed.
+  * Added styling to client-side logs.
+  * Added notification of proper receipt of response from trace server.
+  * Added record of requested traces on the target server.
+  * Added error reporting in trace_server.
+  * Restricted the size of the capture files to try to wean out invalid files.
+  * Corrected date-handling maths.
+  * Changed the timeout to query the server to account for replication in the back-end.
+  * Cleaned up trace-server, provide better logging.
+  * For now, enforced not re-running broken queries.
+  * Made trace-proxy work as store-and-forward since streaming proxy does not work well with bodyParser et al.
+  * Changed ccnq3_web timer to be at least the one used by the traces proxy.
+  * Reverted to using streaming for traces proxy.
+  * Corrected jquery syntax for text insertion.
+  * Reformatted packets ui to use CSS
+  * Styling traces
+  * Simplified coffeelint invocation.
+  * Set JSON CDR database URI as parameter.
+  * Updated applications/freeswitch to support config.cdr_uri
+  * Removed cruft comment.
+  * Changed default inbox sort order.
+  * Corrected call to get the sort type.
+  * Added crude offset/total_rows/shown_rows
+  * Corrected URI for compaction of local CDR database
+  * Added some styling to sniffer traces.
+  * Made the Call-ID clickable.
+  * Simplified layout for sniffer traces.
+  * Updated jquery/sammy
+  * Corrected target field name.
+  * Forced use of a new set of CouchDB databases in a ccnq3-specific directory.
+  * Escape data in HTML; give meaningful notice when no data is returned.
+  * Upgraded code to support CouchDB 1.2
+  * Commented (currently unused) user management couchapp.
+  * Proper key ref
+  * Moved private/ into its on subproject
+  * Moved slayers/ into their own
+  * Updated documentation; especially, got rid of redundant, small doc files.
+  * Removed lighttpd2 example; now that we provide a reverse proxy this is no longer required.
+  * Moved old bugs out of the way.
+  * removed old doc
+  * remove old code
+  * applications/dns: removed cdb
+  * applications/provisioning: migrated to pico
+  * Update ccnq3_config to use pico. (Created new version 0.2.5 of ccnq3_config.)
+  * applications/dns: forgot to add installer for pico dependency
+  * applications/emergency: updated to use pico
+  * applications/cdrs: Updated to use pico.
+  * applications/portal: Updated to use pico.
+  * Corrected ccnq3_config
+  * applications/cdrs: Corrected security update call.
+  * applications/portal: Added body response.
+  * applications/portal: retrieve body as json, collect login error.
+  * Added proper dependencies (used in startup scripts)
+  * Removed remaining references to cdb.
+  * Removed duplicate.
+  * Updated esl dependency (due to bugfix)
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Thu, 14 Jun 2012 15:53:14 +0200
+
 ccnq3 (0.0.51-187) unstable; urgency=low
 
   * Voice server installation
