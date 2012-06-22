@@ -16,16 +16,12 @@ require('ccnq3_config').get (config) ->
     @get '/', ->
       @render 'default',
         stylesheets: [
-          '/public/css/smoothness/jquery-ui'
-          '/public/css/datatables'
-          '/public/menu/menu'
-          '/public/css/style'
+          '/public/css/default'
           '/public/css/web'
         ]
         scripts: [
           '/public/js/default'
           '/u/content'
-          '/public/menu/menu'
         ]
 
     # No site-specific login additions.

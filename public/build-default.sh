@@ -15,13 +15,12 @@ cat js/jshash-2.2/sha1-min.js \
     js/coffeekup.js       \
     js/forms.js           \
     js/inbox.js           \
-    js/menu.js            \
-    js/jquery.smartWizard-2.0.js \
     js/milk.js            \
+    menu/menu.js          \
   > js/default.js
 
-cat css/smart_wizard.css  \
-    css/style.css         \
+cat css/style.css         \
     css/jquery-ui.css     \
     css/datatables.css    \
+    menu/menu.css         \
   > css/default.css
