@@ -17,7 +17,7 @@
     "pico": ">=0.0.14"
   , "couchapp": "*"
   , "nodemailer": "*"
-  , "zappajs": ">=0.3.4"
+  , "zappajs": "0.3.x >=0.3.4"
   , "password": "*"
   , "ccnq3_config": ">=0.1"
   , "node-uuid": ">=1.2.0"

@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "ccnq3_config": ">=0.1"
-  , "zappajs": ">=0.3.4"
+  , "zappajs": "0.3.x >=0.3.4"
   , "couchapp": "*"
   , "coffee-script": ">=1.1.2"
   , "request": "*"
