@@ -20,7 +20,9 @@ case "$1" in
       chmod o-rwx $CAP_DIR
       chmod g+s $CAP_DIR
 
-      adduser $USER $CAP_GROUP
+      if [ "`getent group $CAP_GROUP | cut -d : -f 4`" != "$USER" ]; then
+        adduser $USER $CAP_GROUP
+      fi
   ;;
 
   remove|purge)

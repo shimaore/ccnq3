@@ -17,7 +17,7 @@ case "$1" in
         $USER
 
     else
-      if [ "$(getent passwd $USER | cut -d : -f 6)" != "$WORKDIR" ]; then
+      if [ "`getent passwd $USER | cut -d : -f 6`" != "$WORKDIR" ]; then
         echo "Error: pre-existing $USER user with non-standard home directory." >&2
         exit 1
       fi

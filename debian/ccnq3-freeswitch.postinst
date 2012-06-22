@@ -18,7 +18,9 @@ case "$1" in
     LOG=/opt/freeswitch/log
 
     # allow access to configuration directories
-    adduser "$USER" $GROUP
+    if [ "`getent group $GROUP | cut -d : -f 4`" != "$USER" ]; then
+      adduser "$USER" $GROUP
+    fi
 
     # Startup parameters
     DEFAULTS=/etc/default/freeswitch
