@@ -42,7 +42,7 @@ exports.get = (cb)->
   try
     fs_config = JSON.parse fs.readFileSync config_location, 'utf8'
   catch error
-    util.log "Reading #{config_location}: #{error}"
+    util.log "Reading #{config_location}: #{util.inspect error}"
     return cb {}
   rev = fs_config?._rev
   exports.retrieve fs_config, (config) ->
