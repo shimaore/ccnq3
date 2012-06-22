@@ -1,3 +1,5 @@
+# Currently unused.
+#
 jQuery ($) ->
 
   $.menu ?= {}
