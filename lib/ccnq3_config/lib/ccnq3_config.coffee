@@ -1,4 +1,5 @@
 util = require 'util'
+pico = require 'pico'
 
 # Use a package-provided configuration file, if any.
 config_location = process.env.npm_package_config_config_file
@@ -17,7 +18,6 @@ exports.retrieve = (config,cb) ->
     return cb config
 
   username = make_id 'host', config.host
-  pico = require 'pico'
   provisioning = pico config.provisioning.host_couchdb_uri
 
   provisioning.retrieve username, (e,r,p) ->
