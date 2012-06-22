@@ -2,3 +2,5 @@
 
 Look into https://github.com/creationix/couch-client
 (has auto-batching + _changes)
+
+[[bugs/done]] I'm using `pico`.

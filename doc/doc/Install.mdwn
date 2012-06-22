@@ -19,6 +19,13 @@ Hostnames for the different servers MUST be:
 These are both required to ensure clients can properly access
 the server.
 
+IPv6
+====
+
+The Node.js packages downloaded during installation are downloaded from hosts that do not support IPv6 (for example github.com, the npm registry).
+
+Therefor installation and upgrades must currently be done with some kind of connectivity to the global IPv4 network.
+
 Add Repository
 ==============
 
