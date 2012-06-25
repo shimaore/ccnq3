@@ -1,3 +1,21 @@
+ccnq3 (0.0.55) unstable; urgency=low
+
+  * Corrected cache resolver reference in documentation.
+  * Stay on the 0.3.x zappajs path for now.
+  * Stashed away unsupported code.
+  * Explicited pico dependency.
+  * Provide proper error even in complex failure case.
+  * ccnq3_config: Removed dependency on runtime presence of coffee.
+  * Cleanup public/js and public/css, removed unused components.
+  * public/js/menu is unused; currently applications/web uses static menus.
+  * Added getent test to prevent unnecessary error messages during postint.
+  * Reviewed buglist.
+  * Pruned /doc
+  * Added HTTPS options for applications/web
+  * Added cache for static `/public` documents in applications/web
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Mon, 25 Jun 2012 10:40:56 +0200
+
 ccnq3 (0.0.54) unstable; urgency=low
 
   * Fixed host records creation
