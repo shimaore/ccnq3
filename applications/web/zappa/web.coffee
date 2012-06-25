@@ -70,11 +70,14 @@ require('ccnq3_config').get (config) ->
       jpeg: 'image/jpeg'
       gif: 'image/gif'
 
+    public_cache = (url) ->
+      public_cache[url] ?= fs.readFileSync __dirname + url
+
     @get /^\/public\//, ->
       type = @request.url.match(/\.([a-z]+)$/)?[1]
       if type of types
         @response.contentType types[type]
-        @send fs.readFileSync __dirname + @request.url
+        @send public_cache @request.url
       else
         @send 'Unknown document type'
 
