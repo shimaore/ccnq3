@@ -739,6 +739,16 @@ on the source host, set "opensips_proxy.usrloc_aggregate_uri" to http://host%40s
 
     * `locations_uri`
 
+### Specific to hosts running the web service ###
+
+*   `web`:
+    * `options`:
+        * `port`    Web service port number [default: 8080]
+        * `host`    hostname or IP to bind to [default: none, meaning all interfaces]
+        * `https`
+            * `key`   key in PEM format
+            * `cert`  certificate in PEM format
+
 ### Specific to hosts running the CNAM-client ###
 
 *   `cnam_client`:
