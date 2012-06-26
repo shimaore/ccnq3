@@ -43,7 +43,7 @@ modparam("dialog", "dlg_match_mode", 1) # default 0 (match on rr_param only); 1 
 modparam("dialog", "default_timeout", ${dialog_timeout}) # default 43200 (12h)
 # Set maximum duration of dialog (=call)
 modparam("dialog", "timeout_avp", "$avp(dialog_timer)")
-modparam("dialog", "dlg_extra_hdrs", "X-Reason: Call too long\r\n")
+modparam("dialog", "dlg_extra_hdrs", "CCNQ3-Reason: Call too long\r\n")
 
 
 modparam("dialog", "db_mode", 0) # No database of dialogs
