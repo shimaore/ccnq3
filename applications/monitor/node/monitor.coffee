@@ -8,7 +8,7 @@
 #
 #
 
-plugins = ['os','process','processes','interrupts','diskstats','meminfo','netdev','stat']
+plugins = ['os','process','processes','interrupts','diskstats','meminfo','netdev','stat','vmstat']
 
 get_data = (cb) ->
 
