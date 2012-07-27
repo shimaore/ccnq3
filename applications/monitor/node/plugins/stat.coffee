@@ -23,7 +23,7 @@ diskio_fields = 'noinfo read_io read_blk write_io write_blk'.split /\s+/
         out: parseInt l[1]
     else if name is 'intr'
       stat[name].total = parseInt l.shift()
-      stat[name].serviced = l.map parseInt
+      stat[name].serviced = l.map u.value
     else if name is 'disk_io'
       stat[name] = l.map (x) ->
         x = x.split /[(,:)]/
