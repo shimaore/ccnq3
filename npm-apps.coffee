@@ -30,7 +30,9 @@ require('ccnq3_config').get (config) ->
       application = applications.shift()
       return finalize() unless application?
 
-      options = cwd: "#{source}/#{application}"
+      options =
+        cwd: "#{source}/#{application}"
+        stdio: ['ignore','pipe','pipe']
       npm = child_process.spawn npm_cmd, operation, options
       npm.stdout.on 'data', (data) -> process.stdout.write data
       npm.stderr.on 'data', (data) -> process.stderr.write data
