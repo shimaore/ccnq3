@@ -8,15 +8,16 @@
 finalize = ->
   console.log "Done."
 
-log = (application,error,stdout,stderr) ->
+log = (application,error) ->
   console.log """
-    #{application}: #{error ? 'OK'}
+    #{application}: #{if error then 'Failed' else 'OK'}
     """
   if error?
     finalize = ->
-      throw error
+      throw new Error "#{application} reported an error."
 
-operation = process.argv.slice(2).join(' ')
+npm_cmd = '/usr/bin/npm'
+operation = process.argv.slice(2)
 
 child_process = require 'child_process'
 
@@ -29,10 +30,12 @@ require('ccnq3_config').get (config) ->
       application = applications.shift()
       return finalize() unless application?
 
-      command = "npm #{operation}"
       options = cwd: "#{source}/#{application}"
-      child_process.exec command, options, ->
-        log "#{operation} for #{application}", arguments...
+      npm = child_process.spawn npm_cmd, operation, options
+      npm.stdout.on 'data', (data) -> process.stdout.write data
+      npm.stderr.on 'data', (data) -> process.stderr.write data
+      npm.on 'exit', ->
+        log "#{operation.join ' '} for #{application}", arguments...
         run applications
 
   run config.applications
