@@ -12,7 +12,7 @@ log = (application,error) ->
   console.log """
     #{application}: #{if error then 'Failed' else 'OK'}
     """
-  if error?
+  if error
     finalize = ->
       throw new Error "#{application} reported an error."
 
