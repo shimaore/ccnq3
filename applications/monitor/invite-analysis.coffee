@@ -14,34 +14,42 @@ byline = require 'byline'
 
 fields = 'timestamp src dst code'.split /\s+/
 
+default_workdir = '/opt/ccnq3/traces'
+
+# Selection criteria for pcap files
+find_time = '1 hour ago'
+# Look for final replies to INVITE messages.
+ngrep_query = '^SIP/2.0 [2-6].*CSeq: [0-9]+ INVITE'
+# ngrep output mode (must match regex)
+ngrep_mode = 'single'
+
 @analyze = (cb) ->
-  # FIXME get the following from config
-  trace_dir = '/opt/ccnq3/traces'
-  intf = 'eth0'
+  return unless config.traces?.interfaces?.length > 0
 
-  # Find pcap files
-  find_time = '1 hour ago'
-  # Look for final replies to INVITE messages.
-  ngrep_query = '^SIP/2.0 [2-6].*CSeq: [0-9]+ INVITE'
-  # ngrep output mode (must match regex)
-  ngrep_mode = 'single'
+  trace_dir = config.traces.workdir ? default_workdir
 
-  child = exec """
-  (
-    find '#{trace_dir}' -type f -name '#{intf}*.pcap'    -newermt '#{find_time}' -print0 | \
-    xargs -0 -I 'FILE' -r -P 4 -n 1 \
-    ngrep -I FILE          -t -n -l -q -W '#{ngrep_mode}' '#{ngrep_query}'; \
-    find '#{trace_dir}' -type f -name '#{intf}*.pcap.gz' -newermt '#{find_time}' -print0 | \
-    xargs -0 -I 'FILE' -r -P 4 -n 1 \
-    zcat FILE | ngrep -I - -t -n -l -q -W '#{ngrep_mode}' '#{ngrep_query}'; \
-  )
-  """
+  for intf in config.traces.interfaces
+    do (intf) ->
 
-  stream = byline child.stdout
+      cmd = """
+      (
+        find '#{trace_dir}' -type f -name '#{intf}*.pcap'    -newermt '#{find_time}' -print0 | \
+        xargs -0 -I 'FILE' -r -P 4 -n 1 \
+        ngrep -I FILE          -t -n -l -q -W '#{ngrep_mode}' '#{ngrep_query}'; \
+        find '#{trace_dir}' -type f -name '#{intf}*.pcap.gz' -newermt '#{find_time}' -print0 | \
+        xargs -0 -I 'FILE' -r -P 4 -n 1 \
+        zcat FILE | ngrep -I - -t -n -l -q -W '#{ngrep_mode}' '#{ngrep_query}'; \
+      )
+      """
 
-  stream.on 'data', (line) ->
-    m = line.match /^. (\S+ \d\d:\d\d)\S+ (\S+) -> (\S+) SIP\/2.0 (\d{3})/
-    data = {}
-    data[key] = m[i] for key, i in fields
-    # Do something with data
-    cb data
+      child = exec cmd,
+        stdio: ['ignore','pipe','ignore']
+
+      stream = byline child.stdout
+
+      stream.on 'data', (line) ->
+        m = line.match /^. (\S+ \d\d:\d\d)\S+ (\S+) -> (\S+) SIP\/2.0 (\d{3})/
+        data = { intf }
+        data[key] = m[i] for key, i in fields
+        # Do something with data
+        cb data
