@@ -1,50 +1,50 @@
-#!/usr/bin/perl
-use strict; use warnings;
+#!/usr/bin/env coffee
 
-use constant WORKDIR => '/opt/ccnq3/traces';
+fs = require 'fs'
+path = require 'path'
+spawn = require('child_process').spawn
 
-chdir WORKDIR or die "Couldn't enter ".WORKDIR.": $!\n";
-my $DEBUG=0;
+default_workdir = '/opt/ccnq3/traces'
+default_ringsize = 50
 
-my @files = <*.pcap*>;
-my %if;
-for (@files)
-{
-  next unless /^([^_]+)_(\d+)_(\d+).pcap(.gz)?$/;
-  push @{$if{$1}}, [$2,$3,$4];
-}
+debug = false
 
-for my $if (keys %if)
-{
-  my $RING_SIZE = `ps -C dumpcap -f` =~ /-i\s+$if\s+.*\s+-b\s+files:(\d+)\b/m? $1:49;
-  print "RING_SIZE=$RING_SIZE\n" if $DEBUG;
+require('ccnq3_config').get (config) ->
 
-  @files = sort {$a->[1] <=> $b->[1]} @{$if{$if}};
-  while (@files > $RING_SIZE)
-  {
-    $_ = shift @files;
-    my $f = sprintf("%s_%s_%s.pcap%s",$if,@{$_});
-    if ($DEBUG)
-    {
-      print "unlink $f\n";
-    }
-    else
-    {
-      unlink $f;
-    }
-  }
-  pop @files; # remove current file
-  for (@files)
-  {
-    next if $_->[2];
-    my $f = sprintf("%s_%s_%s.pcap%s",$if,@{$_});
-    if ($DEBUG)
-    {
-      print("gzip $f\n");
-    }
-    else
-    {
-      system 'gzip', $f;
-    }
-  }
-}
+  return unless config.traces?.interfaces?.length > 0
+
+  trace_dir = config.traces.workdir ? default_workdir
+  ringsize = config.traces.ringsize ? default_ringsize
+
+  # For each interface, list of files.
+  ind = {}
+  fs.readdir trace_dir, (err,names)  ->
+    for name in names
+      if r = name.match /^([^_]+)_\d+_(\d+).pcap(.gz)?$/
+        [_name,intf,time,comp] = r
+        ind[intf] ?= []
+        ind[intf].push {name,time,comp}
+
+    console.log JSON.stringify ind, '  '
+
+    for intf, files of ind
+
+      # Sort by ascending timestamp, oldest first.
+      files = files.sort (a,b) -> if a.time > b.time then 1 else -1
+
+      while files.length > ringsize
+        a = files.shift()
+        full = path.join trace_dir, a.name
+        if debug
+          console.log "unlink #{full}"
+        else
+          fs.unlink full
+      files.pop() # remove current file
+      for a in files
+        do (a) ->
+          return if a.comp
+          full = path.join trace_dir, a.name
+          if debug
+            console.log "gzip #{full}"
+          else
+            spawn '/bin/gzip', [full]

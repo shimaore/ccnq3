@@ -19,7 +19,7 @@ Depends:
   ccnq3 (= ${binary:Version}),
   tshark (>=1.2), ngrep (>=1.45),
   findutils,
-  ${perl:Depends}, procps, gzip
+  procps, gzip
 Recommends: ccnq3-munin-traces
 Description: Installs the SIP traces in /opt/ccnq3/traces
 
