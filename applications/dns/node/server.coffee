@@ -12,12 +12,9 @@ configure = (db,server) ->
   zones = new Zones()
 
   # Enumerate the domains listed in the database with a "records" field.
-  options =
-    uri: "/_design/dns/_view/domains?include_docs=true"
+  db.view 'dns', 'domains', qs:{include_docs:true}, (e,r,b) ->
 
-  db.get options, (r) ->
-
-    for rec in r.rows ? []
+    for rec in b.rows ? []
       do (rec) ->
         doc = rec.doc
         return if not doc?
@@ -28,18 +25,17 @@ configure = (db,server) ->
         zones.add_zone zone
 
     # Add any other records (hosts, ..)
-    options =
-      uri: "/_design/dns/_view/names"
+    db.view 'dns', 'names', (e,r,b) ->
 
-    db.get options, (r) ->
-
-      for rec in r.rows ? []
+      for rec in b.rows ? []
         do (rec) ->
           domain = rec.key
           zone = zones.get_zone(domain) ? zones.add_zone new Zone domain, {}
           zone.add_record rec.value
 
       server.reload zones
+
+    return
 
 
 pico = require 'pico'
