@@ -47,4 +47,4 @@ require('ccnq3_config').get (config) ->
           if debug
             console.log "gzip #{full}"
           else
-            spawn '/bin/gzip', [full]
+            spawn '/bin/gzip', [full], stdio:'ignore'

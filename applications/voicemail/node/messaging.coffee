@@ -69,7 +69,7 @@ record_to_url = (call,fifo_path,upload_url,next) ->
 
   if message_record_streaming
     preprocess = (cb) ->
-      child_process.exec "rm -f '#{fifo_path}'; /usr/bin/mkfifo -m 0660 '#{fifo_path}'", (error) ->
+      child_process.exec "rm -f '#{fifo_path}'; /usr/bin/mkfifo -m 0660 '#{fifo_path}'", stdio:['ignore','ignore','pipe'], (error) ->
         if error?
           util.log util.inspect error
           cleanup -> cb? error
@@ -119,7 +119,7 @@ play_from_url = (call,fifo_path,download_url,next) ->
 
   if message_playback_streaming
     preprocess = (cb) ->
-      child_process.exec "rm -f '#{fifo_path}'; /usr/bin/mkfifo -m 0660 '#{fifo_path}'", (error) ->
+      child_process.exec "rm -f '#{fifo_path}'; /usr/bin/mkfifo -m 0660 '#{fifo_path}'", stdio:['ignore','ignore','pipe'], (error) ->
         if error?
           util.log "play_recording: Could not mkfifo"
           util.log util.inspect error

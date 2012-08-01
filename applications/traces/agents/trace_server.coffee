@@ -1,7 +1,6 @@
 # (c) 2012 Stephane Alnet
 #
 http = require 'http'
-spawn = require('child_process').spawn
 fs = require 'fs'
 packet_server = require './packet_server'
 json_pipe = require './json_pipe'

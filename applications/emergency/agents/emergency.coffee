@@ -24,7 +24,7 @@ process_changes = (port,command,cfg) ->
     when 'stop'
       opensips_command port, ":kill:\n"
     when 'start'
-      spawn '/usr/sbin/opensips', [ '-f', cfg ]
+      spawn '/usr/sbin/opensips', [ '-f', cfg ], stdio:'ignore'
 
 
 require('ccnq3_config').get (config) ->

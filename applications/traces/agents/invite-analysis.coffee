@@ -3,7 +3,6 @@
 # Note: re-INVITEs are treated the same as initial INVITEs.
 # Note: records may be outside the one-hour window. Filter unwanted records.
 
-exec = require('child_process').exec
 byline = require 'byline'
 
 default_workdir = '/opt/ccnq3/traces'

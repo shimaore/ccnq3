@@ -10,4 +10,4 @@ require('ccnq3_config').get (config) ->
     do (intf) ->
       child_process.exec """
         daemon -n 'ccnq3_traces_#{intf}' -o daemon.debug -r --stop
-      """
+      """, stdio: 'ignore'
