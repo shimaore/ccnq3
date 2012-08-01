@@ -27,4 +27,4 @@ require('ccnq3_config').get (config) ->
           -b files:#{config.traces.ringsize ? default_ringsize} \\
           -w #{config.traces.workdir ? default_workdir}/#{intf}.pcap \\
           -f "#{config.traces.filter ? default_filter}"
-      """
+      """, stdio: 'ignore'
