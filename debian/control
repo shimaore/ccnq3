@@ -8,7 +8,7 @@ Depends:
   curl,
   daemon, bash, openssl,
   nodejs (>=0.6.6), build-essential,
-  couchdb (=1.2.0-3)
+  couchdb (=1.2.0-4)
 Recommends: monit, munin-node
 Suggests: ccnq-base (= ${binary:Version})
 Description: Installs the ccnq3 code in /opt/ccnq3/src
