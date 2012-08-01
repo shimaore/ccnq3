@@ -32,10 +32,9 @@ require('ccnq3_config').get (config) ->
 
   provisioning = pico config.provisioning.local_couchdb_uri
 
-  options =
-    # FIXME: filter, only host records for local host
+  # FIXME: filter, only host records for local host
 
-  provisioning.monitor options, (e,r,p) ->
+  provisioning.monitor (e,r,p) ->
     if e? then return util.log(e)
     if p._rev is last_rev then return util.log "Duplicate revision"
     last_rev = p._rev
