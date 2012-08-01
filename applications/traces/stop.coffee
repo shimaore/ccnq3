@@ -8,6 +8,8 @@ require('ccnq3_config').get (config) ->
 
   for intf in config.traces.interfaces
     do (intf) ->
-      child_process.exec """
-        daemon -n 'ccnq3_traces_#{intf}' -o daemon.debug -r --stop
-      """, stdio: 'ignore'
+      child_process.spawn '/usr/bin/daemon', [
+        '-n', "ccnq3_traces_#{intf}"
+        '-o', "daemon.debug"
+        '--stop'
+      ], stdio: 'ignore'
