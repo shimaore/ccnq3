@@ -1,0 +1,2 @@
+#!/bin/sh
+exec /opt/ccnq3/src/applications/traces/cron.hourly
