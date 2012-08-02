@@ -1,6 +1,8 @@
 util = require 'util'
 pico = require 'pico'
 
+debug = false
+
 # Use a package-provided configuration file, if any.
 config_location = process.env.npm_package_config_config_file
 
@@ -8,7 +10,7 @@ make_id = (t,n) -> [t,n].join ':'
 
 if not config_location?
   config_location = '/etc/ccnq3/host.json'
-  util.log "NPM did not provide a config_file parameter, using #{config_location}."
+  util.log "NPM did not provide a config_file parameter, using #{config_location}." if debug
 
 exports.location = config_location
 
@@ -25,11 +27,11 @@ exports.retrieve = (config,cb) ->
       util.log "Retrieving live configuration failed: #{util.inspect e}; using file-based configuration instead."
       cb config
     else
-      util.log "Retrieved live configuration."
+      util.log "Retrieved live configuration." if debug
       cb p
 
 exports.update = (content) ->
-  util.log "Updating local configuration file."
+  util.log "Updating local configuration file." if debug
   fs = require 'fs'
   fs.writeFileSync config_location, JSON.stringify content
 
@@ -37,7 +39,7 @@ exports.update = (content) ->
 # Note: the configuration is not saved automatically since the
 #       current process might not have proper permissions to do so.
 exports.get = (cb)->
-  util.log "Using #{config_location} as configuration file."
+  util.log "Using #{config_location} as configuration file." if debug
   fs = require 'fs'
   try
     fs_config = JSON.parse fs.readFileSync config_location, 'utf8'
