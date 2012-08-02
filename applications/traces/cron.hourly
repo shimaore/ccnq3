@@ -25,7 +25,8 @@ require('ccnq3_config').get (config) ->
         ind[intf] ?= []
         ind[intf].push {name,time,comp}
 
-    console.log JSON.stringify ind, '  '
+    if debug
+      console.log JSON.stringify ind, '  '
 
     for intf, files of ind
 
