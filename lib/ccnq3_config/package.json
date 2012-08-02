@@ -1,10 +1,13 @@
 {
   "name": "ccnq3_config",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "CCNQ3 config access",
   "keywords": "ccnq3",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
   "main": "lib/ccnq3_config.js",
+  "files": [
+    "lib/ccnq3_config.js"
+  ],
   "dependencies": {
     "pico": "*"
   },
