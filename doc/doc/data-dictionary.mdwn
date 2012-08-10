@@ -205,6 +205,11 @@ An emergency call routing server.
 
 Install on: a server running OpenSIPS; will start a separate OpenSIPS instance for 302 emergency calls redirection.
 
+applications/monitor
+--------------------
+
+Monitors the local host and pushes statistics about it into a CouchDB database.
+
 provisioning database
 =====================
 
@@ -345,6 +350,26 @@ services, since configuration is read (in most cases) once at startup.
       * `couchdb_uri`
     * `users`:
       * `couchdb_uri`
+
+*   `monitor`:
+
+    This feature is used on host running the `applications/monitor` service.
+    All data is parsed and pushed into a CouchDB database at set intervals as a JSON record.
+    For analysis, reporting, and graphing, use CouchDB and other tools.
+
+    * `couchdb_uri`: string, required; the database where data should be stored
+    * `interval`: integer; the interval in milliseconds between two runs of the data collection [default: 5 minutes]
+    * `plugins`: array of strings; the list of monitor plugins that need to be activated [default: all of them]
+      The following plugins are available:
+      * `os`: Node.js `os` module data, plus `/proc/version`
+      * `process`: Node.js `process` module data (information about the monitor application itself)
+      * `processes`: `/proc/[pid]/(comm|cmdline|oom_score|stat|statm)` (currently does not support thread-level data)
+      * `interrupts`: `/proc/interrupts` data
+      * `diskstats`: `/proc/diskstats` data
+      * `meminfo`: `/proc/meminfo` data
+      * `netdev`: `/proc/net/dev` data
+      * `stat`: `/proc/stat` data
+      * `vmstat`: `/proc/vmstat` data
 
 ### Specific to hosts running FreeSwitch ###
 

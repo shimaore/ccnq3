@@ -1,16 +1,26 @@
-
-####
+#!/usr/bin/env coffee
+# (c) 2012 Stephane Alnet
 #
-# 1. get config
-# 2. retrieve data
-# 3. push into db
-# 4. restart after interval ## setInterval(cb,ms)
-#
-#
+# Monitors the local system and pushes data into CouchDB
+# at set intervals.
 
-plugins = ['os','process','processes','interrupts','diskstats','meminfo','netdev','stat','vmstat']
+pico = require 'pico'
 
-get_data = (cb) ->
+default_plugins = [
+  'os'
+  'process'
+  'processes'
+  'interrupts'
+  'diskstats'
+  'meminfo'
+  'netdev'
+  'stat'
+  'vmstat'
+]
+
+minutes = 60*1000 # ms
+
+get_data = (plugins,cb) ->
 
   get_data_of = (n,data,cb) ->
     if n >= plugins.length
@@ -18,7 +28,6 @@ get_data = (cb) ->
 
     plugin = plugins[n]
     p = require "./plugins/#{plugin}"
-    console.log "Running #{plugin}"
 
     p.get (error,rec) ->
       if error?
@@ -28,10 +37,30 @@ get_data = (cb) ->
 
       get_data_of n+1, data, cb
 
-  # FIXME: /proc/stat
-  # etc., see http://www.kernel.org/doc/man-pages/online/pages/man5/proc.5.html
-
   get_data_of 0, {}, cb
 
-get_data (data) ->
-  console.log "data = " + JSON.stringify data, null, "  "
+require('ccnq3_config').get (config) ->
+
+  plugins = config.monitor?.plugins ? default_plugins
+  db = config.monitor?.couchdb_uri
+  interval = config.monitor?.interval ? 5*minutes
+
+  if db?
+    db = pico db
+    hostname = require('os').hostname()
+
+    run = ->
+      now = new Date()
+      get_data plugins, (data) ->
+        data.hostname = hostname
+        data.timestamp = now
+        data._id = [ hostname, now.toJSON() ] .join ' '
+        db.update data, (e) ->
+          if e?
+            console.dir e
+
+    setInterval run, interval
+    run()
+
+  else
+    console.log "Missing configuration, not starting the monitor service."

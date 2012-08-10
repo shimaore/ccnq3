@@ -1,0 +1,21 @@
+{
+  "name": "ccnq3_monitor",
+  "version": "0.0.1",
+  "description": "Monitors system statistics",
+  "keywords": "",
+  "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
+  "config": {
+    "config_file": "/etc/ccnq3/host.json"
+  },
+  "scripts": {
+    "start": "daemon -n ccnq3_monitor -o daemon.debug -r -D \"`pwd`/node\" -- ./monitor.coffee"
+  , "stop":  "daemon -n ccnq3_monitor -o daemon.debug --stop"
+  },
+  "dependencies": {
+    "ccnq3_config": ">=0.1"
+  , "pico": ">=0.0.15"
+  },
+
+  "private": true,
+  "ok": true
+}
