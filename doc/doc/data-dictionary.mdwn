@@ -176,14 +176,6 @@ applications/voicemail
 FreeSwitch support for voicemail.
 Install on: a FreeSwitch server that will provide voicemail.
 
-applications/prepaid (unstable)
---------------------
-
-FreeSwitch support for prepaid.
-Install on: a FreeSwitch server that will provide prepaid services.
-
-Currently untested and needs to be rewritten.
-
 applications/cnam-client (unstable)
 ------------------------
 
