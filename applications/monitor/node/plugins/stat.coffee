@@ -35,4 +35,4 @@ diskio_fields = 'noinfo read_io read_blk write_io write_blk'.split /\s+/
     else
       stat[name] = l.map u.value
 
-  cb stat
+  cb null, stat

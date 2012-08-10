@@ -19,4 +19,4 @@ u = require './utils'
       interrupts[name].cpus[cpu] = parseInt l.shift()
     interrupts[name].description = l.join ' '
 
-  cb interrupts
+  cb null, interrupts

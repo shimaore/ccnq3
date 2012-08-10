@@ -15,4 +15,4 @@ fields = 'rx_bytes rx_packets rx_errors rx_drop rx_fifo rx_frame rx_compressed r
     netdev[name] = {}
     netdev[name][key] = parseInt l[i] for key, i in fields
 
-  cb netdev
+  cb null, netdev

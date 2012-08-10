@@ -12,4 +12,4 @@ u = require './utils'
     name = l[0]
     vmstat[name] = parseInt l[1]
 
-  cb vmstat
+  cb null, vmstat
