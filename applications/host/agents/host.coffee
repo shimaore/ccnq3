@@ -38,8 +38,7 @@ require('ccnq3_config').get (config) ->
 
   new_config = config
 
-  src.monitor options, (e,r,p) ->
-    if e? then return util.log(e)
+  src.monitor options, (p) ->
 
     [old_config,new_config] = [new_config,p]
 

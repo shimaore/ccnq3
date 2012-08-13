@@ -34,8 +34,7 @@ require('ccnq3_config').get (config) ->
 
   # FIXME: filter, only host records for local host
 
-  provisioning.monitor (e,r,p) ->
-    if e? then return util.log(e)
+  provisioning.monitor (p) ->
     if p._rev is last_rev then return util.log "Duplicate revision"
     last_rev = p._rev
 

@@ -53,8 +53,7 @@ require('ccnq3_config').get (config) ->
     filter_params:
       hostname: config.host
 
-  src.monitor options, (e,r,p) ->
-    if e? then return util.log(e)
+  src.monitor options, (p) ->
     if p._rev is last_rev then return util.log "Duplicate revision"
     last_rev = p._rev
 
