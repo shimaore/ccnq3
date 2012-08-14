@@ -509,6 +509,11 @@ Configuration options:
 
         If this parameter is not defined, forwarding of message waiting indication (MWI) via SUBSCRIBE and NOTIFY messages will not work.
 
+    * `lineside_extra_info`: OpenSIPS string containing variables to include in a `CCNQ3-Extra` header.
+
+        In the `complete` model it defaults to "$pr $si $sp -> $Ri $Rp $json(src_endpoint/endpoint) $au $ad $ar $ci $ru $fu $tu $ua".
+        Other models do not use the `CCNQ3-Extra` header.
+
 *   `sip_commands.opensips`: string
 
       One of:

@@ -32,4 +32,10 @@ CCNQ3-MediaProxy
   through multiple MediaProxy servers to avoid situations where this could
   create media issues.
 
+CCNQ3-Extra
+  Proprietary header providing extraneous information, typically to track
+  end-user properties in CDRs.
+  In the `complete` opensips model, the content of this field can be configured
+  by modifying the `lineside_extra_info` opensips configuration item.
+
 In accordance with RFC5727 and RFC6648, the CCNQ3 headers do not use `X-` nor `P-` prefixes.

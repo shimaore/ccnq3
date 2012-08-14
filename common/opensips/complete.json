@@ -49,5 +49,7 @@
 
   "sort_order": 1,
 
+  "lineside_extra_info": "$pr $si $sp -> $Ri $Rp $json(src_endpoint/endpoint) $au $ad $ar $ci $ru $fu $tu $ua",
+
   "ok":true
 }
