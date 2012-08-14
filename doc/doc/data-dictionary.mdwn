@@ -489,9 +489,9 @@ Configuration options:
 
       Must contain authentication (for the local host).
 
-*   opensips:
+*   `opensips`:
 
-    * `model`: "complete", or any other model defined in common/opensips [required]
+    * `model`: `"complete"`, or any other model defined in common/opensips [required]
 
     * `number_domain`: string; a domain used to identify local numbers [default: "local"]
 
@@ -499,7 +499,14 @@ Configuration options:
 
     * `listen`: [] of strings "host:port" to which OpenSIPS will bind()  [default is the empty array, in which case OpenSIPS binds to all interfaces on port 5060]
 
-    * `local_ipv4`: for models using it ("conference"), IP where to send all INVITE messages
+        For example, if you wish for OpenSIPS to only listen on local interfaces for test purposes, you might set `listen` to:
+
+            [
+              "127.0.0.1:5060",
+              "[::1]:5060"
+            ]
+
+    * `local_ipv4`: for models using it (`"conference"`), IP where to send all INVITE messages
 
     * `local_ipv6`: reserved
 
@@ -513,6 +520,10 @@ Configuration options:
 
         In the `complete` model it defaults to "$pr $si $sp -> $Ri $Rp $json(src_endpoint/endpoint) $au $ad $ar $ci $ru $fu $tu $ua".
         Other models do not use the `CCNQ3-Extra` header.
+
+    There are plenty other OpenSIPS configuration parameters; all of them can be modified via the database.
+    The list of parameters can be found in the source code, in the JSON configuration files under `common/opensips/`.
+    However in normal operation there is no reason to modify parameters except for those listed above.
 
 *   `sip_commands.opensips`: string
 
