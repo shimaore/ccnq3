@@ -14,6 +14,9 @@ Released under the AGPL3 license
   @helper this_user_is: (role) ->
     return user_is @session.roles, role
 
+  user_id = (username) ->
+    "org.couchdb.user:#{username}"
+
   # --- Operations ---
 
   # operation is either "update" or "access"
@@ -25,8 +28,7 @@ Released under the AGPL3 license
 
   # REST: Grant another user access to one of the accounts (or sub account)
   #       you have access to.
-
-  @helper _admin_handle: (operation,source,prefix,cb)->
+  @helper _admin_auth: (operation,source,prefix,cb) ->
 
     this_user_is = (role) =>
       user_is @session.roles, role
@@ -58,24 +60,49 @@ Released under the AGPL3 license
     if not this_user_may('update','_users',prefix) and not this_user_is('_admin')
       return @send forbidden: "You do not have administrative access."
 
-    require('ccnq3_config').get (config)=>
+    do cb
 
-      users_db = pico config.users.couchdb_uri
-      users_db.retrieve "org.couchdb.user:#{@params.user}", (e,r,p) =>
-        # FIXME: should not allow to list users by brute force.
-        if e?
-          return @send error:e
+  @helper _admin_handle: (operation,source,prefix,cb)->
+    @_admin_auth operation,source,prefix, =>
 
-        p.roles ?= []
+      require('ccnq3_config').get (config)=>
 
-        cb p, (q)=>
+        users_db = pico config.users.couchdb_uri
+        users_db.retrieve user_id(@params.user), (e,r,p) =>
 
-          users_db.update q, (e) =>
-            if e?
-              return @send error: e
-            return @send ok: true
+          if e?
+            return @send error:e
+
+          p.roles ?= []
+
+          cb p, (q)=>
+
+            users_db.update q, (e) =>
+              if e?
+                return @send error: e
+              return @send ok: true
 
   # TODO GET /admin/grant/:user , using a user's "primary account" (the _users' record "account" field).
+
+  # Create user
+  @post '/roles/admin/adduser': ->
+    operation = 'update'
+    source = '_users'
+    prefix = ''
+    @_admin_auth operation, source, prefix, =>
+
+      require('ccnq3_config').get (config)=>
+
+        p =
+          _id: user_id @body.name
+          type: 'user'
+          roles: []
+          password: @body.password
+          name: @body.name
+
+        users_db = pico config.users.couchdb_uri
+        users_db.put user_id(@body.name), json:p, (e,r,p) =>
+          @send status: r.statusCode, data: p
 
   # Grant right
   @put '/roles/admin/grant/:user/:operation(update|access)/:source/:prefix?': ->

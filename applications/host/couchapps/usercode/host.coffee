@@ -427,19 +427,27 @@ do (jQuery) ->
         ###
         log "Creating user record for #{username} with password #{password}."
 
-        p =
-          name: username
+        $.ajax
+          type: 'POST'
+          url: '/roles/admin/adduser'
+          data:
+            password: password
+            name: username
+          dataType: 'json'
 
-        $.couch.signup p, password,
+          error: ->
+            alert 'Host signup failed.'
+            log 'User record creation API failed.'
 
-          error: (status) ->
-            if status is 409
+          success: (data) ->
+            if data.forbidden
+              alert data.forbidden
+              log data.forbidden
+            else if (data.status >= 200 and data.status < 300) or data.status is 409
               do grant_rights
             else
               alert 'Host signup failed.'
               log 'User record creation failed.'
-
-          success: grant_rights
 
       @bind 'error.host', (notice) ->
         log "An error occurred: #{notice.error}"
