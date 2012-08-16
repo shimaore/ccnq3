@@ -20,7 +20,7 @@ case "$1" in
     grep -q TZ=UTC /etc/default/opensips || echo 'TZ=UTC' | tee -a $DEFAULTS > /dev/null
 
     # Replace the default configuration.
-    grep -q ccnq3 $CONF/opensips.cfg || echo 'route { exit; }' | tee $CONF/opensips.cfg > /dev/null
+    grep -q -i CCNQ3 $CONF/opensips.cfg || echo 'route { exit; }' | tee $CONF/opensips.cfg > /dev/null
     chown "$USER" $CONF $CONF/opensips.cfg
 
     ###
