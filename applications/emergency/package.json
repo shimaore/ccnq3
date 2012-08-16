@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "ccnq3_config": ">=0.1"
-  , "pico": "*"
+  , "pico": ">=0.0.18"
   },
   "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },
 

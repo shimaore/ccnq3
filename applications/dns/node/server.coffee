@@ -53,6 +53,7 @@ require('ccnq3_config').get (config) ->
   server.listen(53053)
 
   options =
+    since_name: "dns #{config.host}"
     filter_name: "dns/changes"
 
   provisioning.monitor options, (r) ->

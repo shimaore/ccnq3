@@ -12,13 +12,16 @@ require('ccnq3_config').get (config) ->
 
   db = pico config.provisioning.host_couchdb_uri
 
-  options =
-    filter_name: "host/hostname"
-    filter_params:
-      hostname: config.host
-
-  db.monitor options, (config) ->
+  handler = (config) ->
     if config.traces?.run?
       for port, params of config.traces.run
         do (port,params) ->
           trace_server config, port, params
+
+  options =
+    since_name: "traces #{config.host}"
+    filter_name: "host/hostname"
+    filter_params:
+      hostname: config.host
+
+  db.monitor options, handler

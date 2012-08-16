@@ -5,8 +5,6 @@ util = require 'util'
 pico = require 'pico'
 spawn = require('child_process').spawn
 
-last_rev = ''
-
 dgram = require 'dgram'
 opensips_command = (port,command) ->
   # Connect to the MI datagram port
@@ -31,12 +29,7 @@ require('ccnq3_config').get (config) ->
 
   provisioning = pico config.provisioning.local_couchdb_uri
 
-  # FIXME: filter, only host records for local host
-
-  provisioning.monitor (p) ->
-    if p.error? then return util.log(p.error)
-    if p._rev is last_rev then return util.log "Duplicate revision"
-    last_rev = p._rev
+  handler = (p) ->
 
     if not p.emergency? then return
 
@@ -56,3 +49,14 @@ require('ccnq3_config').get (config) ->
     # Process any MI commands
     if p.sip_commands?.emergency?
       process_changes params.mi_port, p.sip_commands.emergency, params.runtime_opensips_cfg
+
+  # Start with the current configuration
+  handler config
+
+  options =
+    since_name: "emergency #{config.host}"
+    filter_name: "host/hostname"
+    filter_params:
+      hostname: config.host
+
+  provisioning.monitor options, handler

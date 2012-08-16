@@ -32,6 +32,7 @@ require('ccnq3_config').get (config) ->
 
   src = pico config.provisioning.host_couchdb_uri
   options =
+    since_name: "host #{config.host}"
     filter_name: "host/hostname"
     filter_params:
       hostname: config.host

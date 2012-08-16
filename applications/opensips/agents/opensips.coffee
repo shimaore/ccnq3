@@ -38,24 +38,12 @@ process_changes = (port,command) ->
 util = require 'util'
 pico = require 'pico'
 
-# FIXME keep last_rev in local storage
-last_rev = ''
-
 require('ccnq3_config').get (config) ->
 
   # Aggregate back towards the main database if requested.
   require('./aggregate') config
 
-  # Monitor for changes and commands.
-  src = pico config.provisioning.local_couchdb_uri
-  options =
-    filter_name: "host/hostname"
-    filter_params:
-      hostname: config.host
-
-  src.monitor options, (p) ->
-    if p._rev is last_rev then return util.log "Duplicate revision"
-    last_rev = p._rev
+  handler = (p) ->
 
     # If the host does not support OpenSIPS then skip this update.
     return unless p.opensips?.model?
@@ -79,3 +67,17 @@ require('ccnq3_config').get (config) ->
     # 2. Process any MI commands
     if p.sip_commands?.opensips?
       process_changes params.mi_port, p.sip_commands.opensips
+
+  # First start with the current configuration.
+  handler config
+
+  # Monitor for changes and commands.
+  src = pico config.provisioning.local_couchdb_uri
+
+  options =
+    since_name: "opensips #{config.host}"
+    filter_name: "host/hostname"
+    filter_params:
+      hostname: config.host
+
+  src.monitor options, handler

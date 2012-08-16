@@ -61,25 +61,12 @@ save_uri_as = (uri,file,cb)->
 pico = require 'pico'
 qs = require 'querystring'
 
-# FIXME keep last_rev in local storage
-last_rev = ''
-
 require('ccnq3_config').get (config) ->
 
   # Aggregate back towards the main database if requested.
   require('./aggregate') config
 
-  # Monitor for changes and commands.
-  db = pico config.provisioning.local_couchdb_uri
-  options =
-    filter_name: "host/hostname"
-    filter_params:
-      hostname: config.host
-
-  db.monitor options, (p) ->
-    if e? then return util.log(e)
-    if p._rev is last_rev then return util.log "Duplicate revision"
-    last_rev = p._rev
+  handler = (p) ->
 
     # 1. Generate new configuration files
     conf_dir = '/opt/ccnq3/freeswitch/conf/'
@@ -119,3 +106,16 @@ require('ccnq3_config').get (config) ->
         process_changes p.sip_commands
 
     write_config_files -> apply_configuration_changes -> process_commands()
+
+  # Start with current configuration
+  handler config
+
+  # Monitor for changes and commands.
+  db = pico config.provisioning.local_couchdb_uri
+  options =
+    since_name: "freeswitch #{config.host}"
+    filter_name: "host/hostname"
+    filter_params:
+      hostname: config.host
+
+  db.monitor options, handler
