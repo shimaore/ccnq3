@@ -1059,7 +1059,7 @@ Please note that for a number to use the registrant function, both `registrant_p
 
 *   `use_whitelist`: boolean
 
-    If true, reject inbound calls from the whitelist
+    If true, accept inbound calls from the whitelist
 
 *   `user_database`:  string; the name of the user's own CouchDB instance (for the user who "owns" this number)
 
