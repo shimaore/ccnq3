@@ -8,12 +8,10 @@
     "db_http",
     "nonat",
     "accounting",
-    "forwarder",
     "registrant",
     "invite",
-    "invite-router-local",
     "loose-route",
-    "non-loose-route"
+    "non-loose-route-registrant"
   ],
 
   "opensips_base_lib": ".",
