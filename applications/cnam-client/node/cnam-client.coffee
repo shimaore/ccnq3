@@ -29,7 +29,7 @@ require('ccnq3_config').get (config)->
     if x?
       number = x[1]
       request.get cnam_uri+number, (e,r,b) ->
-        data = 'No data'
+        data = ''
         if not e?
           data = b
         data = data.replace /[^\w,.@-]/g, ' '
