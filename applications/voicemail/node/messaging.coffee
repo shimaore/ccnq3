@@ -394,8 +394,8 @@ class User
     if attempts <= 0
       return goodbye call
 
-    @voicemail_settings call, (vm_settings) ->
-      wrap_cb = ->
+    @voicemail_settings call, (vm_settings) =>
+      wrap_cb = =>
         if vm_settings.language?
           call.command 'set',  "language=#{vm_settings.language}", (call) ->
             call.command 'phrase', 'voicemail_hello', cb
