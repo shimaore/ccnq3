@@ -17,4 +17,4 @@ cfg.get (config) ->
   cdr_uri = config.cdr_uri ? 'http://127.0.0.1:5984/cdr'
   cdr = pico cdr_uri
   cdr.put ->
-    # Need the callback to run.
+    push_script cdr_uri, 'cdr'
