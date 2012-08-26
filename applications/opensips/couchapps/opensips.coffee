@@ -9,10 +9,11 @@ ddoc =
   _id: '_design/opensips'
   language: 'javascript'
   views: {}
-  lists: {} # http://guide.couchdb.org/draft/transforming.html
-  shows: {} # http://guide.couchdb.org/draft/show.html
-  filters: {} # used by _changes
-  rewrites: [] # http://blog.couchone.com/post/443028592/whats-new-in-apache-couchdb-0-11-part-one-nice-urls
+  lists: {}
+  shows: {}
+  filters: {}
+  updates: {}
+  rewrites: []
   lib: {}
 
 fs = require 'fs'
