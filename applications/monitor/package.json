@@ -8,12 +8,13 @@
     "config_file": "/etc/ccnq3/host.json"
   },
   "scripts": {
-    "start": "daemon -n ccnq3_monitor -o daemon.debug -r -D \"`pwd`/node\" -- ./monitor.coffee"
-  , "stop":  "daemon -n ccnq3_monitor -o daemon.debug --stop"
+    "start": "cake start"
+  , "stop":  "cake stop"
   },
   "dependencies": {
     "ccnq3_config": ">=0.1"
   , "pico": ">=0.0.15"
+  , "pkginfo": "*"
   },
 
   "private": true,

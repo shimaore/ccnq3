@@ -1,0 +1,22 @@
+{ spawn } = require 'child_process'
+pkginfo = require('pkginfo') module, 'name'
+daemon = '/usr/bin/daemon'
+
+task 'start', ->
+  server = spawn daemon, [
+    '-n', module.exports.name
+    '-o', 'daemon.debug'
+    '-r'
+    '-D', process.cwd()+'/node'
+    '--'
+    './monitor.coffee'
+  ], stdio:'ignore'
+  server.on 'exit', (code) ->
+    console.log 'Failed' if code
+
+task 'stop', ->
+  spawn daemon, [
+    '-n', module.exports.name
+    '-o', 'daemon.debug'
+    '--stop'
+  ]
