@@ -26,7 +26,7 @@ require('ccnq3_config').get (config)->
 
   random_password = require 'password'
 
-  file_base = config.portal.file_base
+  file_base = config.mail_password.file_base
   file_name = 'portal_password'
 
   options =
