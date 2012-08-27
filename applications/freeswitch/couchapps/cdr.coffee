@@ -11,6 +11,8 @@ ddoc =
 
 module.exports = ddoc
 
+p_fun = (f) -> '('+f+')'
+
 ddoc.filters.not_deleted = p_fun (doc,req) ->
   if doc._deleted?
     not doc._deleted
