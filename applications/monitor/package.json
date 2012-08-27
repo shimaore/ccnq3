@@ -8,6 +8,7 @@
     "config_file": "/etc/ccnq3/host.json"
   },
   "scripts": {
+    "couchapps": "cd couchapps && coffee install.coffee",
     "start": "cake start"
   , "stop":  "cake stop"
   },

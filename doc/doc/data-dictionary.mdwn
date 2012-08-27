@@ -366,6 +366,8 @@ services, since configuration is read (in most cases) once at startup.
       * `stat`: `/proc/stat` data
       * `vmstat`: `/proc/vmstat` data
 
+    * `couchdb_uri`: string; administrative access to the database where data is stored (this is only used to create the database and should only be present on the host running that database).
+
 ### Specific to hosts running FreeSwitch ###
 
 To add a FreeSwitch host:
