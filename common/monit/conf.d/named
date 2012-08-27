@@ -2,4 +2,3 @@ check process named with pidfile /var/run/named/named.pid
   start program = "/etc/init.d/bind9 start" with timeout 60 seconds
   stop  program = "/etc/init.d/bind9 stop"
   group server
-
