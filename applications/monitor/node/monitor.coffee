@@ -42,7 +42,7 @@ get_data = (plugins,cb) ->
 require('ccnq3_config').get (config) ->
 
   plugins = config.monitor?.plugins ? default_plugins
-  db = config.monitor?.couchdb_uri
+  db = config.monitor?.host_couchdb_uri
   interval = config.monitor?.interval ? 5*minutes
 
   if db?
