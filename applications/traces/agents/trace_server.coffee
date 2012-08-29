@@ -67,12 +67,14 @@ module.exports = (config,port,doc) ->
           'Content-Disposition': 'attachment; filename="trace.pcap"'
 
     options =
+      interfaces: config.traces.interfaces
       format: doc.format
       trace_dir: config.traces?.workdir ? default_workdir
+      # find_filter is left empty
       ngrep_filter: ngrep_filter
       tshark_filter: tshark_filter
 
-    self = packet_server config, options
+    self = packet_server options
 
     switch doc.format
       when 'json'

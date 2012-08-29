@@ -6,6 +6,8 @@ byline = require 'byline'
 events = require 'events'
 
 ## Fields returned in the "JSON" response.
+# An additional field "intf" indicates on which interface
+# the packet was captured.
 trace_field_names = [
   "frame.time"
   "ip.version"
@@ -66,7 +68,7 @@ tshark_line_parser = (t) ->
 
 module.exports = (options) ->
 
-  return unless options.interfaces?.length > 0
+  return unless options.interface? or options.interfaces?.length > 0
 
   self = new events.EventEmitter
 
