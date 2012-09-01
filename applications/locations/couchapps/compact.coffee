@@ -2,7 +2,7 @@
 
 pico = require 'pico'
 
-require('ccnq3_config').get (config) ->
+require('ccnq3_config') (config) ->
 
   locations_uri = config.aggregate?.locations_uri
   if locations_uri?

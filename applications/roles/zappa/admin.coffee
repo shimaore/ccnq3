@@ -65,7 +65,7 @@ Released under the AGPL3 license
   @helper _admin_handle: (operation,source,prefix,cb)->
     @_admin_auth operation,source,prefix, =>
 
-      require('ccnq3_config').get (config)=>
+      require('ccnq3_config') (config)=>
 
         users_db = pico config.users.couchdb_uri
         users_db.retrieve user_id(@params.user), (e,r,p) =>
@@ -91,7 +91,7 @@ Released under the AGPL3 license
     prefix = ''
     @_admin_auth operation, source, prefix, =>
 
-      require('ccnq3_config').get (config)=>
+      require('ccnq3_config') (config)=>
 
         p =
           _id: user_id @body.name

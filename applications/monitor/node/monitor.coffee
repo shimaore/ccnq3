@@ -39,7 +39,7 @@ get_data = (plugins,cb) ->
 
   get_data_of 0, {}, cb
 
-require('ccnq3_config').get (config) ->
+require('ccnq3_config') (config) ->
 
   plugins = config.monitor?.plugins ? default_plugins
   db = config.monitor?.host_couchdb_uri

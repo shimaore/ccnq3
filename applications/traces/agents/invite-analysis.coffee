@@ -43,7 +43,7 @@ minutes = 60*1000
 ## Do the INVITE response-code analysis for applications/monitor.
 # cb = (error,data) -> ...
 @invite_analysis = (since,cb) ->
-  require('ccnq3_config').get (config) ->
+  require('ccnq3_config') (config) ->
     interfaces = config.traces?.interfaces
     if interfaces?.length > 0
       server = @analyze "#{since+1} minutes ago", ngrep_filter

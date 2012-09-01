@@ -12,7 +12,7 @@
   , "compact": "cd couchapps && ./compact.coffee"
   },
   "dependencies": {
-    "ccnq3_config": ">=0.1"
+    "ccnq3_config": ">=0.3.0"
   , "pico": ">=0.0.15"
   },
   "engines": { "node": ">=0.6.6", "coffee": ">=1.1.2" },

@@ -38,7 +38,7 @@ process_changes = (port,command) ->
 util = require 'util'
 pico = require 'pico'
 
-require('ccnq3_config').get (config) ->
+require('ccnq3_config') (config) ->
 
   # Aggregate back towards the main database if requested.
   require('./aggregate') config

@@ -2,7 +2,7 @@
 
 child_process = require 'child_process'
 
-require('ccnq3_config').get (config) ->
+require('ccnq3_config') (config) ->
 
   return unless config.traces?.interfaces?.length > 0
 

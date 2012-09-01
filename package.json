@@ -16,7 +16,7 @@
   , "test": "coffeelint -r . ; find . -name '*.json' -exec jsonlint '{}' ';' >/dev/null"
   },
   "dependencies": {
-    "ccnq3_config": ">=0.2.3"
+    "ccnq3_config": ">=0.3.0"
   },
   "engines": { "node": ">=0.6.5", "coffee": ">=1.1.3" },
 

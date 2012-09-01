@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "couchapp": "*"
-  , "ccnq3_config": ">=0.1"
+  , "ccnq3_config": ">=0.3.0"
   },
   "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },
 

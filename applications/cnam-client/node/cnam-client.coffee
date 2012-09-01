@@ -14,7 +14,7 @@ request = require('request').defaults timeout:500
 #   <action application="set" data="socket_resume=true"/>
 #   <action application="socket" data="127.0.0.1:7124 async full"/>
 #
-require('ccnq3_config').get (config)->
+require('ccnq3_config') (config)->
 
   # esl.debug = true
   cnam_uri = config.cnam_client?.uri ? 'https://cnam.sotelips.net:9443/1'

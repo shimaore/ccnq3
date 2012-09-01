@@ -14,7 +14,7 @@
     "pico": ">=0.0.14"
   , "couchapp": "*"
   , "zappajs": "0.3.x >=0.3.4"
-  , "ccnq3_config": ">=0.1"
+  , "ccnq3_config": ">=0.3.0"
   , "request": ">=2.9.100"
   },
   "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },

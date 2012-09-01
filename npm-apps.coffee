@@ -21,7 +21,7 @@ operation = process.argv.slice(2)
 
 child_process = require 'child_process'
 
-require('ccnq3_config').get (config) ->
+require('ccnq3_config') (config) ->
 
   source = config.source ? __dirname
 

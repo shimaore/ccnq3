@@ -6,7 +6,7 @@ Released under the AGPL3 license
 
 # Local configuration file
 
-require('ccnq3_config').get (config)->
+require('ccnq3_config') (config)->
 
   util = require 'util'
   querystring = require 'querystring'
