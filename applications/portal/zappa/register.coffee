@@ -85,7 +85,7 @@
         send_password: true # send them their new password
 
       # PUT without _rev can only happen once
-      db.update p, (e) =>
+      db.put p, (e) =>
         if e?
           return @send error:e
         else

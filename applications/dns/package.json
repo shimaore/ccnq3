@@ -17,7 +17,7 @@
     "ccnq3_config": ">=0.3.0"
   , "underscore": ">= 1.2.2"
   , "couchapp": "*"
-  , "pico": ">=0.0.22"
+  , "pico": ">=0.1.0"
   },
   "engines": { "node": ">=0.6.5", "coffee": ">=1.1.3" },
 

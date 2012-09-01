@@ -47,7 +47,7 @@ require('ccnq3_config') (config)->
 
     p.password = password
 
-    users_db.update p, (e) ->
+    users_db.put p, (e) ->
       if e
         return util.log("Update failed: #{e}")
 

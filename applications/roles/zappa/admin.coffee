@@ -68,7 +68,7 @@ Released under the AGPL3 license
       require('ccnq3_config') (config)=>
 
         users_db = pico config.users.couchdb_uri
-        users_db.retrieve user_id(@params.user), (e,r,p) =>
+        users_db.get user_id(@params.user), (e,r,p) =>
 
           if e?
             return @send error:e
@@ -77,7 +77,7 @@ Released under the AGPL3 license
 
           cb p, (q)=>
 
-            users_db.update q, (e) =>
+            users_db.put q, (e) =>
               if e?
                 return @send error: e
               return @send ok: true

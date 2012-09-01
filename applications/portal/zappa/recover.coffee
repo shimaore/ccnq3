@@ -75,13 +75,13 @@
       return @send error:'Missing username'
 
     users_db = pico config.users.couchdb_uri
-    users_db.retrieve "org.couchdb.user:#{email}", (e,r,p) =>
+    users_db.get "org.couchdb.user:#{email}", (e,r,p) =>
       if e?
         return @send error: 'Please make sure you register first.'
 
       # Everything is OK
       p.send_password = true
-      users_db.update p, (e) =>
+      users_db.put p, (e) =>
         if e?
           return @send error:e
         else

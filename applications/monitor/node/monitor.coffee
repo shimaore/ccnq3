@@ -55,7 +55,7 @@ require('ccnq3_config') (config) ->
         data.hostname = hostname
         data.timestamp = now
         data._id = [ hostname, now.toJSON() ] .join ' '
-        db.update data, (e) ->
+        db.put data, (e) ->
           if e?
             console.dir e
 

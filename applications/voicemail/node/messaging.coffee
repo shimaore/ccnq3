@@ -222,10 +222,10 @@ class Message
 
   # Delete parts
   delete_parts: (cb) ->
-    @db.retrieve @id, (e,r,b) ->
+    @db.get @id, (e,r,b) ->
       # Remove all attachments
       b._attachments = {}
-      @db.update b, cb
+      @db.put b, cb
 
   # Post-recording menu
   post_recording: (call) ->
@@ -256,7 +256,7 @@ class Message
 
   # Play the message enveloppe
   play_enveloppe: (call,index,cb) ->
-    @db.retrieve @id, (e,r,b) =>
+    @db.get @id, (e,r,b) =>
       if e or not b?
         util.log "play_enveloppe: Missing #{@id}"
         return
@@ -287,7 +287,7 @@ class Message
       @notify_via_email()
 
     # Create new CDB record to hold the voicemail metadata
-    @db.update msg, (e) ->
+    @db.put msg, (e) ->
       if e
         util.log "Could not create #{@msg_uri()}"
         call.command 'phrase', 'vm_say,sorry', hangup
@@ -301,10 +301,10 @@ class Message
     exports.email_notifier @user.user, @id
 
   remove: (call,cb) ->
-    @db.retrieve @id, (e,r,b) =>
+    @db.get @id, (e,r,b) =>
       if not e
         b.box = 'trash'
-        @db.update b, (e,r,b) =>
+        @db.put b, (e,r,b) =>
           @notify()
           if not e
             call.command 'phrase', 'voicemail_ack,deleted', cb
@@ -316,10 +316,10 @@ class Message
         cb call
 
   save: (call,cb) ->
-    @db.retrieve @id, (e,r,b) =>
+    @db.get @id, (e,r,b) =>
       if not e
         b.box = 'saved'
-        @db.update b, (e,r,b) =>
+        @db.put b, (e,r,b) =>
           @notify()
           if not e
             call.command 'phrase', 'voicemail_ack,saved', cb
@@ -335,7 +335,7 @@ class Message
     cb call
 
   return_call: (call,cb) ->
-    @db.retrieve @id, (e,r,b) =>
+    @db.get @id, (e,r,b) =>
       account = @user.account
       destination = b.caller_id
       if callback_profile? and callback_domain? and account? and destination?
@@ -364,7 +364,7 @@ class User
     if @vm_settings?
       return cb @vm_settings
 
-    @user_db.retrieve 'voicemail_settings', (e,r,vm_settings) =>
+    @user_db.get 'voicemail_settings', (e,r,vm_settings) =>
       if e
         util.log "VM Box for #{@user} is not available from #{@db_uri}."
         call.command 'phrase', 'vm_say,sorry', hangup
@@ -548,11 +548,11 @@ class User
       new_pin = call.body.variable_new_pin
       if new_pin?.length < min_pin_length
         return @change_password call
-      @user_db.retrieve 'voicemail_settings', (e,r,vm_settings) =>
+      @user_db.get 'voicemail_settings', (e,r,vm_settings) =>
         if error
           return @change_password call
         vm_settings.pin = new_pin
-        @user_db.update vm_settings, (e) ->
+        @user_db.put vm_settings, (e) ->
           if e
             return @change_password call
           delete @vm_settings # remove memoized value
@@ -585,7 +585,7 @@ locate_user = (config,call,number,cb,attempts) ->
   number_domain = config.voicemail.number_domain ? 'local'
 
   provisioning_db = pico config.provisioning.local_couchdb_uri
-  provisioning_db.retrieve "number:#{number}@#{number_domain}", (e,r,b) ->
+  provisioning_db.get "number:#{number}@#{number_domain}", (e,r,b) ->
     if e? or not b?.user_database?
       util.log "Number #{number}@#{number_domain} not found, trying again."
       call.command 'play_and_get_digits', "1 16 1 15000 # phrase:'voicemail_enter_id:#' phrase:'voicemail_fail_auth' destination \\d+ 3000", (call) ->

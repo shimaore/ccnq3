@@ -14,7 +14,7 @@
   , "couchapps": "cd couchapps && ./install.coffee"
   },
   "dependencies": {
-    "pico": ">=0.0.14"
+    "pico": ">=0.1.0"
   , "couchapp": "*"
   , "nodemailer": "*"
   , "zappajs": "0.3.x >=0.3.4"

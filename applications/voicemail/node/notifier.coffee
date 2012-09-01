@@ -13,7 +13,7 @@ exports.notifier = (config) ->
     number_domain = config.voicemail.number_domain ? 'local'
 
     provisioning_db = pico config.provisioning.local_couchdb_uri
-    provisioning_db.retrieve "number:#{number}@#{number_domain}", (e,r,b) ->
+    provisioning_db.get "number:#{number}@#{number_domain}", (e,r,b) ->
       if e? or not b.user_database? then return
 
       endpoint = b.endpoint

@@ -16,7 +16,7 @@ Released under the AGPL3 license
       return @send error:'Not logged in.'
 
     users_db = pico config.users.couchdb_uri
-    users_db.retrieve "org.couchdb.user:#{@session.logged_in}", (e,x,r) =>
+    users_db.get "org.couchdb.user:#{@session.logged_in}", (e,x,r) =>
       if e?
         return @send error:e
 
@@ -35,7 +35,7 @@ Released under the AGPL3 license
 
       r.roles.push 'confirmed'
       @session.roles = r.roles
-      users_db.update r, (e) =>
+      users_db.put r, (e) =>
         if e?
           return @send error:e
 

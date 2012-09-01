@@ -19,16 +19,16 @@ exports.notifier = (config) ->
     number_domain = config.voicemail.number_domain ? 'local'
 
     provisioning_db = pico config.provisioning.local_couchdb_uri
-    provisioning_db.retrieve "number:#{number}@#{number_domain}", (e,r,b) ->
+    provisioning_db.get "number:#{number}@#{number_domain}", (e,r,b) ->
       if e? or not b.user_database? then return
 
       sender = b.voicemail_sender ? config.voicemail?.sender
       user_db = pico config.voicemail.userdb_base_uri + '/' + b.user_database
 
-      user_db.retrieve msg_id, (e,r,msg) ->
+      user_db.get msg_id, (e,r,msg) ->
         if e? then return
 
-        user_db.retrieve 'voicemail_settings', (e,r,b) ->
+        user_db.get 'voicemail_settings', (e,r,b) ->
           return unless b.email_notifications
           for email, params of b.email_notifications
             send_email_notification email, params.attach_message, b.language, msg

@@ -23,7 +23,7 @@ exports.EnumZone = class EnumZone extends Zone
     number = prefix.split('.').reverse().join('')
 
     provisioning = pico @provisioning_uri
-    provisioning.retrieve make_id('number',number), (error,response,doc) =>
+    provisioning.get make_id('number',number), (error,response,doc) =>
       if not error and doc.inbound_uri?
         cb [
           @create_record
