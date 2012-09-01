@@ -5,7 +5,7 @@
   "keywords": "",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
   "config": {
-    "config_file": "/etc/ccnq3/host.json"
+    "file": "/etc/ccnq3/host.json"
   },
   "scripts": {
     "start": "./start.coffee; daemon -n ccnq3_trace_server -o daemon.debug -D \"`pwd`/agents\" -r -- ./agent.coffee"

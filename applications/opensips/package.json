@@ -5,7 +5,7 @@
   "keywords": "",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
   "config": {
-    "config_file": "/etc/ccnq3/host.json"
+    "file": "/etc/ccnq3/host.json"
   },
   "scripts": {
     "start": "daemon -n ccnq3_opensips -o daemon.debug -D \"`pwd`/agents\" -r -- ./opensips.coffee; daemon -n ccnq3_opensips_http_db -o daemon.debug -D \"`pwd`/zappa\" -r -- ./main.coffee"

@@ -4,7 +4,7 @@ pico = require 'pico'
 debug = false
 
 # Use a package-provided configuration file, if any.
-config_location = process.env.npm_package_config_config_file
+config_location = process.env.npm_package_config_file
 
 make_id = (t,n) -> [t,n].join ':'
 
