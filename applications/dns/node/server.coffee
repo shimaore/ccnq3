@@ -19,7 +19,7 @@ configure = (db,server) ->
         doc = rec.doc
         return if not doc?
         if doc.ENUM
-          zone = new EnumZone doc.domain, db.prefix(), doc
+          zone = new EnumZone doc.domain, db.request.prefix(), doc
         else
           zone = new Zone doc.domain, doc
         zones.add_zone zone
