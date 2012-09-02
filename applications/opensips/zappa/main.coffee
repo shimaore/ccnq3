@@ -147,7 +147,7 @@ require('ccnq3_config') (config)->
 
         loc_db.rev doc._id, (h) =>
           doc._rev = h.rev if h.rev?
-          loc_db.put json:doc, (e,r,p) =>
+          loc_db.put doc, (e,r,p) =>
             if e then return @send ""
             @send p._id
         return
