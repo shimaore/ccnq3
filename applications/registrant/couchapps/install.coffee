@@ -11,5 +11,5 @@ cfg.get (config) ->
 
   provisioning_uri = config.provisioning.local_couchdb_uri
   provisioning = pico provisioning_uri
-  provisioning.put ->
+  provisioning.create ->
     push_script provisioning_uri, 'registrant'

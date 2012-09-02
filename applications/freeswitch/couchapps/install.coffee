@@ -11,10 +11,10 @@ cfg.get (config) ->
 
   provisioning_uri = config.provisioning.local_couchdb_uri
   provisioning = pico provisioning_uri
-  provisioning.put ->
+  provisioning.create ->
     push_script provisioning_uri, 'freeswitch'
 
   cdr_uri = config.cdr_uri ? 'http://127.0.0.1:5984/cdr'
   cdr = pico cdr_uri
-  cdr.put ->
+  cdr.create ->
     push_script cdr_uri, 'cdr'

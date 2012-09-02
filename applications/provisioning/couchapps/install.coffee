@@ -42,7 +42,7 @@ cfg.get (config)->
   # Otherwise create the database
   provisioning_uri = config.install?.provisioning?.couchdb_uri ? config.admin.couchdb_uri + '/provisioning'
   provisioning = pico provisioning_uri
-  provisioning.put ->
+  provisioning.create ->
 
     update provisioning_uri
 

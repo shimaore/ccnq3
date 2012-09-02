@@ -34,7 +34,7 @@ cfg.get (config) ->
   # Otherwise create the database
   cdrs_uri = config.install?.aggregate?.cdrs_uri ? config.admin.couchdb_uri + '/cdrs'
   cdrs = pico cdrs_uri
-  cdrs.put ->
+  cdrs.create ->
 
     update cdrs_uri
 

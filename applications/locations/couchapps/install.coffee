@@ -31,7 +31,7 @@ cfg.get (config) ->
   # Otherwise create the database
   locations_uri = config.install?.aggregate?.locations_uri ? config.admin.couchdb_uri + '/locations'
   locations = pico locations_uri
-  locations.put ->
+  locations.create ->
 
     update locations_uri
 

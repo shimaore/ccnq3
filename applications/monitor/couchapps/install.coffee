@@ -40,7 +40,7 @@ cfg.get (config)->
   return unless config.install?.monitor? or config.admin?.couchdb_uri?
   monitor_uri = config.install?.monitor?.couchdb_uri ? config.admin.couchdb_uri + '/monitor'
   monitor = pico monitor_uri
-  monitor.put ->
+  monitor.create ->
 
     update monitor_uri
 

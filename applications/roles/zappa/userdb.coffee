@@ -35,7 +35,7 @@ Released under the AGPL3 license
       readers_names = (row.value for row in b.rows)
 
       # Create the database
-      target_db.put =>
+      target_db.create =>
 
         # We do not check the return code:
         # it's OK if the database already exists.

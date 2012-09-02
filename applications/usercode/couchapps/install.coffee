@@ -37,7 +37,7 @@ cfg.get (config)->
   # Create the usercode database.
   usercode_uri = config.install?.usercode?.couchdb_uri ? config.admin.couchdb_uri + '/usercode'
   usercode = pico usercode_uri
-  usercode.put ->
+  usercode.create ->
 
     update usercode_uri
 

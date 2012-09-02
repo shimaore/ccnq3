@@ -32,4 +32,4 @@ ccnq3_config.get (config) ->
 
   else
 
-    pico(config.provisioning.local_couchdb_uri).put ->
+    pico(config.provisioning.local_couchdb_uri).create ->
