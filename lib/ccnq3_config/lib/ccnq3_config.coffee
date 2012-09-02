@@ -22,22 +22,14 @@ get = (cb)->
     util.log "Reading #{config_location}: #{util.inspect error}"
     return cb {}
   rev = fs_config?._rev
-  module.exports.retrieve fs_config, (config) ->
+  retrieve fs_config, (config) ->
     # Save any new revision locally
     if rev isnt config._rev
-      module.exports.update config
+      update config
     # Callback
     cb config
 
-module.exports = get
-
-module.exports.get = ->
-  console.warn "ccnq3_config.get(callback) is obsolete, use ccnq3_config(callback)."
-  get arguments...
-
-module.exports.location = config_location
-
-module.exports.retrieve = (config,cb) ->
+retrieve = (config,cb) ->
   if not config.host? or not config.provisioning? or not config.provisioning.host_couchdb_uri?
     util.log "Information to retrieve remote configuration is not available."
     return cb config
@@ -53,7 +45,15 @@ module.exports.retrieve = (config,cb) ->
       util.log "Retrieved live configuration." if debug
       cb p
 
-module.exports.update = (content) ->
+update = (content) ->
   util.log "Updating local configuration file." if debug
   fs = require 'fs'
   fs.writeFileSync config_location, JSON.stringify content
+
+module.exports = get
+module.exports.location = config_location
+module.exports.retrieve = retrieve
+module.exports.update = update
+module.exports.get = ->
+  console.warn "ccnq3_config.get(callback) is obsolete, use ccnq3_config(callback)."
+  get arguments...
