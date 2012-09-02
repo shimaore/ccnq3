@@ -37,7 +37,7 @@ retrieve = (config,cb) ->
   username = make_id 'host', config.host
   provisioning = pico config.provisioning.host_couchdb_uri
 
-  provisioning.retrieve username, (e,r,p) ->
+  provisioning.get username, (e,r,p) ->
     if e
       util.log "Retrieving live configuration failed: #{util.inspect e}; using file-based configuration instead."
       cb config
