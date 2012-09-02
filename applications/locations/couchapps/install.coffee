@@ -3,12 +3,12 @@
 pico = require 'pico'
 
 cfg = require 'ccnq3_config'
-cfg.get (config) ->
+cfg (config) ->
 
   update = (uri) ->
     locations = pico uri
 
-    locations.get '_security', json:true, (e,r,p) ->
+    locations.request.get '_security', json:true, (e,r,p) ->
       p.admins ||= {}
       p.admins.roles ||= []
       p.admins.roles.push("locations_admin") if p.admins.roles.indexOf("locations_admin") < 0
@@ -20,7 +20,7 @@ cfg.get (config) ->
       # Hosts have read-write access so that they can push location updates.
       p.readers.roles.push("host")             if p.readers.roles.indexOf("host") < 0
 
-      locations.put '_security', json:p
+      locations.request.put '_security', json:p
 
   # If the database already exists
   locations_uri = config.aggregate?.locations_uri

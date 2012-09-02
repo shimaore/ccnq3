@@ -6,12 +6,12 @@
 pico = require 'pico'
 
 cfg = require 'ccnq3_config'
-cfg.get (config) ->
+cfg (config) ->
 
   update = (uri) ->
     cdrs = pico uri
 
-    cdrs.get '_security', json:true, (e,r,p) ->
+    cdrs.request.get '_security', json:true, (e,r,p) ->
       p.admins ||= {}
       p.admins.roles ||= []
       p.admins.roles.push("cdrs_admin") if p.admins.roles.indexOf("cdrs_admin") < 0
@@ -23,7 +23,7 @@ cfg.get (config) ->
       # Hosts have read-write access so that they can push CDRs.
       p.readers.roles.push("host")        if p.readers.roles.indexOf("host") < 0
 
-      cdrs.put '_security', json:p
+      cdrs.request.put '_security', json:p
 
   # If the database already exists
   cdrs_uri = config.aggregate?.cdrs_uri

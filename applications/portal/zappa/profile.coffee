@@ -8,7 +8,7 @@ Released under the AGPL3 license
   pico = require 'pico'
 
   config = null
-  require('ccnq3_config').get (c) ->
+  require('ccnq3_config') (c) ->
     config = c
 
   @get '/u/profile.json': ->

@@ -8,7 +8,7 @@ push_script = (uri, script,cb) ->
 
 # Load Configuration
 cfg = require 'ccnq3_config'
-cfg.get (config) ->
+cfg (config) ->
 
   usercode_uri = config.usercode.couchdb_uri
   push_script usercode_uri, 'usercode'
@@ -19,7 +19,7 @@ cfg.get (config) ->
   update = (uri) ->
     # Set the security object for the _users source database.
     users = pico uri
-    users.get '_security', json:true, (e,r,p)->
+    users.request.get '_security', json:true, (e,r,p)->
       p.admins ||= {}
       p.admins.roles ||= []
       p.admins.roles.push("users_admin")   if p.admins.roles.indexOf("users_admin") < 0
@@ -27,7 +27,7 @@ cfg.get (config) ->
       p.readers.roles ||= []
       p.readers.roles.push("update:_users:") if p.readers.roles.indexOf("update:_users:") < 0
       p.readers.roles.push("access:_users:") if p.readers.roles.indexOf("access:_users:") < 0
-      users.put '_security', json:p
+      users.request.put '_security', json:p
 
     push_script uri, 'main'
 

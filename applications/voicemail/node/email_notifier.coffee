@@ -70,7 +70,7 @@ exports.notifier = (config) ->
               # data fields might be: content_type, revpos, digest, length, stub:boolean
               email_options.attachments.push {
                 fileName: name
-                streamSource: user_db.get qs.escape(msg_id) + '/' + qs.escape(name)
+                streamSource: user_db.request.get qs.escape(msg_id) + '/' + qs.escape(name)
                 contentType: data.content_type
               }
 

@@ -9,7 +9,7 @@ Released under the AGPL3 license
   pico = require 'pico'
 
   config = null
-  require('ccnq3_config').get (c)->
+  require('ccnq3_config') (c)->
     config = c
 
   @put '/roles/userdb/:name', ->
@@ -41,12 +41,12 @@ Released under the AGPL3 license
         # it's OK if the database already exists.
 
         # Restrict number of available past revisions.
-        target_db.put '_revs_limit',body:"10", (e,r,b) =>
+        target_db.request.put '_revs_limit',body:"10", (e,r,b) =>
           if e
             return @send error:e
 
           # Make sure the users can access it.
-          target_db.get '_security', json:true, (e,r,b) =>
+          target_db.request.get '_security', json:true, (e,r,b) =>
             if e? then return @send error:e
 
             b.readers ?= {}
@@ -54,6 +54,6 @@ Released under the AGPL3 license
             b.readers.names = readers_names
             b.readers.roles = [ 'update:user_db:' ] # e.g. voicemail
 
-            target_db.put '_security', json:b, (e,r,b) =>
+            target_db.request.put '_security', json:b, (e,r,b) =>
               if e? then return @send error:e
               @send ok:true

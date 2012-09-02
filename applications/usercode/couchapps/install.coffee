@@ -8,13 +8,13 @@ push_script = (uri, script,cb) ->
 
 # Load Configuration
 cfg = require 'ccnq3_config'
-cfg.get (config)->
+cfg (config)->
 
   update = (uri) ->
     db = pico uri
 
     # Set the security object for the usercode database.
-    db.get '_security', json:true, (e,r,p) ->
+    db.request.get '_security', json:true, (e,r,p) ->
       p.admins ||= {}
       p.admins.roles ||= []
       p.admins.roles.push("usercode_admin") if p.admins.roles.indexOf("usercode_admin") < 0
@@ -25,7 +25,7 @@ cfg.get (config)->
 
       # (Write access is restricted by the validator.)
 
-      db.put '_security', json:p
+      db.request.put '_security', json:p
 
     push_script uri, 'main'   # Filter replication from source to user's databases.
 

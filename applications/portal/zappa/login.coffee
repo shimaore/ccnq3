@@ -10,7 +10,7 @@ Released under the AGPL3 license
   querystring = require 'querystring'
 
   config = null
-  require('ccnq3_config').get (c) ->
+  require('ccnq3_config') (c) ->
     config = c
 
   @coffee '/u/login.js': ->
@@ -106,7 +106,7 @@ Released under the AGPL3 license
     delete uri.href
     delete uri.host
     session_db = pico url.format uri
-    session_db.get jar:false, json:true, (e,r,p) =>
+    session_db.request.get jar:false, json:true, (e,r,p) =>
       if e?
         return @send error:e
       if p.error

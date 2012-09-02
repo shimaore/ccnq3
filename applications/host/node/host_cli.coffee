@@ -11,7 +11,7 @@ pico = require 'pico'
 
 # Load Configuration
 ccnq3_config = require 'ccnq3_config'
-ccnq3_config.get (config) ->
+ccnq3_config (config) ->
 
   hostname = config.host
 

@@ -9,7 +9,7 @@
   querystring = require 'querystring'
 
   config = null
-  require('ccnq3_config').get (c) ->
+  require('ccnq3_config') (c) ->
     config = c
 
   @coffee '/u/recover.js': ->

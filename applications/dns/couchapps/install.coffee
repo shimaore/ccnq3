@@ -6,8 +6,7 @@ pico = require 'pico'
 push_script = (uri,script,cb) ->
   couchapp.createApp require("./#{script}"), uri, (app)-> app.push(cb)
 
-cfg = require 'ccnq3_config'
-cfg.get (config) ->
+require('ccnq3_config') (config) ->
 
   provisioning_uri = config.provisioning.local_couchdb_uri
   provisioning = pico provisioning_uri

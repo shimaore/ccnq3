@@ -8,7 +8,7 @@
   pico = require 'pico'
 
   config = null
-  require('ccnq3_config').get (c) ->
+  require('ccnq3_config') (c) ->
     config = c
 
   @coffee '/u/register.js': ->
@@ -70,7 +70,7 @@
     # Currently assumes username = email
     username = email
     db = pico config.users.couchdb_uri
-    db.get json:true, (e,r,b) =>
+    db.request.get json:true, (e,r,b) =>
       if e or not b.db_name?
         return @send error:'Not connected to the database'
 
