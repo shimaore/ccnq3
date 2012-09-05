@@ -14,7 +14,7 @@
   , "compact": "cd couchapps && ./compact.coffee"
   },
   "dependencies": {
-    "ccnq3_config": ">=0.3.0"
+    "ccnq3_config": ">=0.3.3"
   , "couchapp": "*"
   , "request": "*"
   , "pico": ">=0.1.0"

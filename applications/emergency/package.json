@@ -12,7 +12,7 @@
   , "stop":  "daemon -n ccnq3_emergency -o daemon.debug --stop; echo ':kill:' | nc -u -t 1 127.0.0.1 30012 || true"
   },
   "dependencies": {
-    "ccnq3_config": ">=0.3.0"
+    "ccnq3_config": ">=0.3.3"
   , "pico": ">=0.1.0"
   },
   "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },

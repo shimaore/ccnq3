@@ -12,7 +12,7 @@
   , "stop": "./stop.coffee; daemon -n ccnq3_trace_server -o daemon.debug --stop"
   },
   "dependencies": {
-    "ccnq3_config": ">=0.3.0"
+    "ccnq3_config": ">=0.3.3"
   , "pico": ">=0.1.0"
   , "byline": ">=2.0.3"
   },
