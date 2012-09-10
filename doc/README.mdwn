@@ -38,8 +38,7 @@ The web access is unified as follows:
       https://example.net/public/css
       https://example.net/public/images
 
-  - The "portal" application must be accessible under /u/
-      i.e.  https://example.net/u/path  is a proxy for  /path in the portal application
+  - The "portal" application must be accessible under /ccnq3/portal/
 
   - The global couchdb databases (_users,provisioning,..) and all the u${UUID} databases are mapped at the root.
 

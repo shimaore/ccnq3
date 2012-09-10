@@ -3,7 +3,7 @@
   # A proxy to access opened traces servers.
   request = require 'request'
 
-  @get '/roles/traces/:host/:port', ->
+  @get '/ccnq3/roles/traces/:host/:port', ->
 
     unless @session.roles?.indexOf 'access:traces:' >= 0
       return @send error:'Unauthorized'

@@ -23,7 +23,7 @@ require('ccnq3_config') (config) ->
         ]
         scripts: [
           '/public/js/default'
-          '/u/content'
+          '/ccnq3/portal/content'
         ]
 
     # No site-specific login additions.
@@ -39,7 +39,7 @@ require('ccnq3_config') (config) ->
             auth.notify 'Replicating provisioning data.'
             options =
               type: 'post'
-              url: '/roles/replicate/pull/provisioning'
+              url: '/ccnq3/roles/replicate/pull/provisioning'
               dataType:'json'
               success: (data) ->
                 if not data.ok
@@ -97,7 +97,7 @@ require('ccnq3_config') (config) ->
         return
 
     portal_proxy = make_proxy "http://#{config.portal.hostname}:#{config.portal.port}"
-    portal_urls = /^\/(u|roles)\/.*$/
+    portal_urls = /^\/ccnq3\//
     @get  portal_urls, portal_proxy
     @post portal_urls, portal_proxy
     @put  portal_urls, portal_proxy

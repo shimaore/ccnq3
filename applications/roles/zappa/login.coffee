@@ -1,6 +1,6 @@
 @include = ->
 
-  @coffee '/roles/login.js': ->
+  @coffee '/ccnq3/roles/login.js': ->
 
     extra_login = $.extra_login
 
@@ -29,7 +29,7 @@
 
       profile_login = (auth,next) ->
         auth.notify 'Validating your profile.'
-        auth.$.getJSON '/u/profile.json', (profile) ->
+        auth.$.getJSON '/ccnq3/portal/profile.json', (profile) ->
           if profile.error?
             auth.notify 'Could not access your profile.'
             return
@@ -46,7 +46,7 @@
               auth.notify "Welcome #{profile.name} (creating your database)."
               auth.$.ajax
                 type: 'PUT'
-                url: '/roles/userdb/'+profile.user_database
+                url: '/ccnq3/roles/userdb/'+profile.user_database
                 dataType: 'json'
                 cache: false
                 success: (r) ->
@@ -66,7 +66,7 @@
 
         options =
           type: 'post'
-          url: '/roles/replicate/pull/usercode'
+          url: '/ccnq3/roles/replicate/pull/usercode'
           dataType:'json'
           success: (data) ->
             if not data.ok
@@ -83,7 +83,7 @@
 
         options =
           type: 'post'
-          url: '/roles/replicate/pull/_users'
+          url: '/ccnq3/roles/replicate/pull/_users'
           dataType:'json'
           success: (data) ->
             if not data.ok

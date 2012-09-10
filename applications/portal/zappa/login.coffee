@@ -93,7 +93,7 @@ Released under the AGPL3 license
           div ->
           input type: 'submit', value: 'Sign in'
 
-  @post '/u/login.json': ->
+  @post '/ccnq3/portal/login.json': ->
     username = @request.param 'username'
     if not username?
       return @send error:'Missing username'
@@ -115,6 +115,6 @@ Released under the AGPL3 license
       @session.roles     = p.userCtx.roles
       return @send ok:true
 
-  @get '/u/logout.json': ->
+  @get '/ccnq3/portal/logout.json': ->
     delete @session.logged_in
     return @send ok:true

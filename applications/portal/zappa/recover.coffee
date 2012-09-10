@@ -69,7 +69,7 @@
       div ->
         input type: 'submit', value: 'Confirm'
 
-  @post '/u/recover.json': ->
+  @post '/ccnq3/portal/recover.json': ->
     email = @body.email
     if not email?
       return @send error:'Missing username'

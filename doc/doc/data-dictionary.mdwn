@@ -1284,7 +1284,7 @@ This is a standard CouchDB _users record with some additions.
 You normally do not need to manipulate these records directly;
 using the registration and password recovery options of the web portal will do this for you.
 
-The `profile` hash is returned by a GET /u/profile.json once logged-in.
+The `profile` hash is returned by a GET /ccnq3/portal/profile.json once logged-in.
 
 The `name` field is normally the user's main email address (at least that's what the registration code assumes); servers and applications will also have _users records so that they can remotely access the main database.
 
@@ -1303,7 +1303,7 @@ The `roles` hash can also be manipulated using the REST API in applications/role
     The default `profile` record contains the user's registration data along with user-accessible data
     that allows it to connect to its private database (user database).
 
-    This record is returned by the `GET /u/profile.json` portal API to a logged-in user.
+    This record is returned by the `GET /ccnq3/portal/profile.json` portal API to a logged-in user.
 
     * `name`:  string; user's full name
     * `email`:  string or array of strings; email or email addresses for this user
@@ -1408,12 +1408,12 @@ Records replicated to/from other databases are documented as part of that databa
 A *user database* may additionally contain records which are never replicated to or from other databases.
 These records are described below.
 
-An application should create the database (server-side or client-side) using the `PUT /roles/userdb/{user_database}` portal API for a logged-in user.
-The default portal will create the *user database* for a given user the first time the user logs in (by calling `PUT /roles/userdb/{user_database}`).
+An application should create the database (server-side or client-side) using the `PUT /ccnq3/roles/userdb/{user_database}` portal API for a logged-in user.
+The default portal will create the *user database* for a given user the first time the user logs in (by calling `PUT /ccnq3/roles/userdb/{user_database}`).
 
 An application may create the database itself (server-side) using the standard CouchDB API, if it has database-level administrative access.
 However databases created that way are world-readable; it is your responsability to ensure that the database will get proper security tokens.
-Therefor we recommend to directly use the `PUT /roles/userdb/{user_database}` API to make sure the database has the proper security tokens.
+Therefor we recommend to directly use the `PUT /ccnq3/roles/userdb/{user_database}` API to make sure the database has the proper security tokens.
 
 voicemail_settings record
 -------------------------
@@ -1485,7 +1485,7 @@ Operational note: Both `applications/portal` and `applications/roles` must be ac
 
 The first API call should always be to the login application; session credentials are stored in a cookie on the client.
 
-*   `POST /u/login.json`
+*   `POST /ccnq3/portal/login.json`
 
     Logs in to the portal.
 
@@ -1493,13 +1493,13 @@ The first API call should always be to the login application; session credential
 
     Returns: {"ok":true} upon success, otherwise {"error":"error text"}
 
-*   `POST /u/logout.json`
+*   `POST /ccnq3/portal/logout.json`
 
     Logs out from the portal.
 
     Returns: {"ok":true}
 
-*   `GET /u/profile.json`
+*   `GET /ccnq3/portal/profile.json`
 
     Validates and returns the user's profile information.
 
@@ -1513,7 +1513,7 @@ The first API call should always be to the login application; session credential
     * `user_name`: string; session username
     * `user_database`: string; user_database
 
-*   `POST /u/recover.json`
+*   `POST /ccnq3/portal/recover.json`
 
     Triggers an email to the user with a new password.
 
@@ -1521,7 +1521,7 @@ The first API call should always be to the login application; session credential
 
     Returns: either {"ok":true} or {"error":"error text"}
 
-*   `PUT /u/register.json`
+*   `PUT /ccnq3/portal/register.json`
 
     Creates a new user record.
 
@@ -1535,7 +1535,7 @@ The first API call should always be to the login application; session credential
 
     Returns:  either {"ok":true} or {"error":"error text"}
 
-*   `PUT /roles/userdb/{user_database}`
+*   `PUT /ccnq3/roles/userdb/{user_database}`
 
     Creates a user's database, if any user is registered to use it.
 
@@ -1548,19 +1548,19 @@ The first API call should always be to the login application; session credential
     Caveat:
     The API will return {"ok":true} if the database is not assigned to any user (and skip the actual database creation).
 
-*   `POST /roles/replicate/push/{target}`
+*   `POST /ccnq3/roles/replicate/push/{target}`
 
     Replicates from the user's database into the main database indicated by `target`.
 
     Returns: CouchDB json response or an {"error":} record.
 
-*   `POST /roles/replicate/pull/{source}`
+*   `POST /ccnq3/roles/replicate/pull/{source}`
 
     Replicates from a main database indicated by `source` into the user's database.
 
     Returns: CouchDB json response or an {"error":} record.
 
-*   `GET /roles/traces/{host}/{port}`
+*   `GET /ccnq3/roles/traces/{host}/{port}`
 
     Proxies data from an (internal) host and port.
 

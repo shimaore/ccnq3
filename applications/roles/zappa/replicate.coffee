@@ -7,7 +7,7 @@
   request = require('request').defaults jar:false
 
   # Start replication from user's database back to a main database.
-  @post '/roles/replicate/push/:target': ->
+  @post '/ccnq3/roles/replicate/push/:target': ->
     if not @session.logged_in?
       return @send error:'Not logged in.'
 
@@ -38,7 +38,7 @@
       @send json ? error:r.statusCode
 
   # Start replication from a main database to the user's database
-  @post '/roles/replicate/pull/:source': ->
+  @post '/ccnq3/roles/replicate/pull/:source': ->
     if not @session.logged_in?
       return @send error:'Not logged in.'
 

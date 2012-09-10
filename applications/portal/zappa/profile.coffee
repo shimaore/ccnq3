@@ -11,7 +11,7 @@ Released under the AGPL3 license
   require('ccnq3_config') (c) ->
     config = c
 
-  @get '/u/profile.json': ->
+  @get '/ccnq3/portal/profile.json': ->
     if not @session.logged_in?
       return @send error:'Not logged in.'
 

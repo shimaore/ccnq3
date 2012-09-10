@@ -368,7 +368,7 @@ do (jQuery) ->
           # Mark the user confirmed.
           $.ajax
             type: 'PUT'
-            url: '/roles/admin/grant/'+encodeURIComponent(username)+'/confirmed'
+            url: '/ccnq3/roles/admin/grant/'+encodeURIComponent(username)+'/confirmed'
             dataType: 'json'
             success: (data) ->
               if not data.ok
@@ -378,7 +378,7 @@ do (jQuery) ->
               # Grant the user update:user_db: rights
               $.ajax
                 type: 'PUT'
-                url: '/roles/admin/grant/'+encodeURIComponent(username)+'/update/user_db' # No prefix
+                url: '/ccnq3/roles/admin/grant/'+encodeURIComponent(username)+'/update/user_db' # No prefix
                 dataType: 'json'
                 success: (data) ->
                   if not data.ok
@@ -411,7 +411,7 @@ do (jQuery) ->
             log "Updating server rights."
             $.ajax
               type: 'PUT'
-              url: '/roles/admin/grant/'+encodeURIComponent(username)+'/host'
+              url: '/ccnq3/roles/admin/grant/'+encodeURIComponent(username)+'/host'
               dataType: 'json'
               error: (status) ->
                 alert 'Updating server rights failed.'
@@ -429,7 +429,7 @@ do (jQuery) ->
 
         $.ajax
           type: 'POST'
-          url: '/roles/admin/adduser'
+          url: '/ccnq3/roles/admin/adduser'
           data:
             password: password
             name: username

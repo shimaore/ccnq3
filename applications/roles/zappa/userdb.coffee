@@ -12,7 +12,7 @@ Released under the AGPL3 license
   require('ccnq3_config') (c)->
     config = c
 
-  @put '/roles/userdb/:name', ->
+  @put '/ccnq3/roles/userdb/:name', ->
     if not @session.logged_in?
       return @send error:'Not logged in.'
 

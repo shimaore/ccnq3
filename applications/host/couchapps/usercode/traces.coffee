@@ -82,7 +82,7 @@ do (jQuery) ->
 
           # Process:
           # 1. add a new entry in the host's traces.run hash
-          # 2. wait a little, then try to download from the trace_proxy (at /roles/traces/:host/:port)
+          # 2. wait a little, then try to download from the trace_proxy (at /ccnq3/roles/traces/:host/:port)
           # 3. for inline download, we need to format the output
           #    for pcap download, we need to open the file
 
@@ -100,7 +100,7 @@ do (jQuery) ->
 
           # Attempt to download the capture content
           wait_for_capture = ->
-            url = "/roles/traces/#{encodeURIComponent form.host}/#{encodeURIComponent port}"
+            url = "/ccnq3/roles/traces/#{encodeURIComponent form.host}/#{encodeURIComponent port}"
 
             # Do no re-submit this query
             model.get id, (doc) ->

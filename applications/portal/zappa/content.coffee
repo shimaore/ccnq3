@@ -7,20 +7,19 @@ Fill-in the "content" div.
 ###
 
 @include = ->
-  @coffee '/u/content.js': ->
+  @coffee '/ccnq3/portal/content.js': ->
     $(document).ready ->
 
       container = '#content'
 
       # Mark the user record as complete / get user info.
-      $.getJSON '/u/profile.json', (profile) =>
+      $.getJSON '/ccnq3/portal/profile.json', (profile) =>
         if profile.user_database?
           $(container).data 'login_profile', profile
           $.getScript "/#{profile.user_database}/_design/portal/index.js"
         else
-          $.getScript '/u/login.js'
-          $.getScript '/u/register.js'
-          $.getScript '/u/recover.js'
-          $.getScript '/roles/login.js', ->
+          for name in ['login', 'register', 'recover']
+            $.getScript "/ccnq3/portal/#{name}.js"
+          $.getScript '/ccnq3/roles/login.js', ->
             # Application-specific code here.
             $.getScript '/login.js'

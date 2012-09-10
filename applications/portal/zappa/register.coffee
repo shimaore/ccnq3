@@ -56,7 +56,7 @@
   crypto = require 'crypto'
   uuid = require 'node-uuid'
 
-  @put '/u/register.json': ->
+  @put '/ccnq3/portal/register.json': ->
 
     name = @request.param 'name'
     email = @request.param 'email'

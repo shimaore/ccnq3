@@ -33,7 +33,7 @@ $(document).ready ->
       $(@).append arguments[3]
 
     @get '#/logout', ->
-      $.getJSON '/u/logout.json', (data) ->
+      $.getJSON '/ccnq3/portal/logout.json', (data) ->
         if data.ok
           window.location = '/' # or '.'
 
