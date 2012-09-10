@@ -18,22 +18,21 @@ do (jQuery) ->
 
     portal:
 
-      ##
-      # $.ccnq3.portal.profile(callback)
+      #### `$.ccnq3.portal.profile(callback)`
       # Access the user profile after the user is logged in.
       # The callback receives the profile data as its first and only argument.
       profile: (cb) ->
         $.getJSON '/ccnq3/portal/profile.json', cb
 
-      ##
-      # $.ccnq3.portal.login(username,password)
+      #### `$.ccnq3.portal.login(username,password)`
       # Log the user in.
+      #
       # Events:
-      #   'notify' (text)
-      #   'success'
-      login: (username,password,notify) ->
+      #
+      # * `'notify' (text)`
+      # * `'success'`
+      login: (username,password) ->
 
-        # Log into the main portal
         main_login = (auth,next) ->
           auth.notify 'Portal sign in.'
           auth.$.ajax
@@ -68,12 +67,13 @@ do (jQuery) ->
           main_login auth, login_done
         return
 
-      ##
-      # $.ccnq3.portal.logout()
+      #### `$.ccnq3.portal.logout()`
       # Log the user out.
+      #
       # Events:
-      #   'success'
-      #   'error'
+      #
+      # * `'success'`
+      # * `'error'`
       logout: ->
         ee = new EventEmitter()
         $.ajax
@@ -85,10 +85,12 @@ do (jQuery) ->
               ee.emit 'error', data
           error: -> ee.emit 'error'
 
-      ##
-      # $.ccnq3.portal.recover(email)
+      #### `$.ccnq3.portal.recover(email)`
+      # Recover lost password for email address.
+      #
       # Events:
-      #   'success'
+      #
+      # * `'success'`
       recover: (email) ->
         ee = new EventEmitter()
         $.ajax
@@ -104,11 +106,13 @@ do (jQuery) ->
               ee.emit 'error', data
           error: -> ee.emit 'error'
 
-      ##
-      # $.ccnq3.portal.register({name,email,phone})
+      #### `$.ccnq3.portal.register({name,email,phone})`
+      # Register user.
+      #
       # Events:
-      #   'success'
-      #   'error' (data)
+      #
+      # * `'success'`
+      # * `'error' (data)`
       register: (data) ->
         ee = new EventEmitter()
         $.ajax
@@ -125,11 +129,14 @@ do (jQuery) ->
 
     roles:
       replicate:
-        ##
-        # $.ccnq3.roles.replicate.pull(db)
+        #### `$.ccnq3.roles.replicate.pull(db)`
+        # Replicate from main database `db` to user database.
+        # User must be logged in.
+        #
         # Events:
-        #   'success'
-        #   'error'
+        #
+        # * `'success'`
+        # * `'error'`
         pull: (db) ->
           ee = new EventEmitter()
           $.ajax
@@ -143,11 +150,14 @@ do (jQuery) ->
                 ee.emit 'error', data
             error: -> ee.emit 'error'
 
-        ##
-        # $.ccnq3.roles.replicate.push(db)
+        #### `$.ccnq3.roles.replicate.push(db)`
+        # Replicate from user database to main database `db`.
+        # User must be logged in.
+        #
         # Events:
-        #   'success'
-        #   'error'
+        #
+        # * `'success'`
+        # * `'error'`
         push: (db) ->
           ee = new EventEmitter()
           $.ajax
@@ -162,11 +172,14 @@ do (jQuery) ->
             error: -> ee.emit 'error'
 
       admin:
-        ##
-        # $.ccnq3.admin.adduser(db)
+        #### `$.ccnq3.admin.adduser(name,password)`
+        # Create user with given `name` and `password`.
+        # Must be logged in with admin rights.
+        #
         # Events:
-        #   'success'
-        #   'error' {error|forbidden}
+        #
+        # * `'success'`
+        # * `'error' {error|forbidden}`
         adduser: (name,password) ->
           ee = new EventEmitter()
           $.ajax
@@ -184,11 +197,15 @@ do (jQuery) ->
               ee.emit 'error', data
             error: -> ee.emit 'error'
 
-        ##
-        # $.ccnq3.admin.grant(user,operation,source,prefix)
+        #### `$.ccnq3.admin.grant(user,operation,source,prefix)`
+        # Grant rights to `user` for `operation` (`'update'` or
+        # `'access'`) for source (`'endpoint'`, etc.) on given
+        # account `prefix`.
+        #
         # Events:
-        #   'success'
-        #   'error'
+        #
+        # * `'success'`
+        # * `'error'`
         grant: (user,operation,source,prefix) ->
           ee = new EventEmitter()
           $.ajax
@@ -206,11 +223,13 @@ do (jQuery) ->
                 ee.emit 'error', data
             error: -> ee.emit 'error'
 
-        ##
-        # $.ccnq3.admin.revoke(user,operation,source,prefix)
+        ##*# `$.ccnq3.admin.revoke(user,operation,source,prefix)`
+        # Revoke rights. See `grant` above for arguments description.
+        #
         # Events:
-        #   'success'
-        #   'error'
+        #
+        # * `'success'`
+        # * `'error'`
         revoke: (user,operation,source,prefix) ->
           ee = new EventEmitter()
           $.ajax
@@ -228,11 +247,13 @@ do (jQuery) ->
                 ee.emit 'error', data
             error: -> ee.emit 'error'
 
-        ##
-        # $.ccnq3.admin.host(user)
+        #### `$.ccnq3.admin.host(user)`
+        # Internal use.
+        #
         # Events:
-        #   'success'
-        #   'error'
+        #
+        # * `'success'`
+        # * `'error'`
         host: (user) ->
           ee = new EventEmitter()
           $.ajax
@@ -249,11 +270,13 @@ do (jQuery) ->
                 ee.emit 'error', data.error ? data.forbidden
             error: -> ee.emit 'error'
 
-        ##
-        # $.ccnq3.admin.confirm(user)
+        #### `$.ccnq3.admin.confirm(user)`
+        # Internal use.
+        #
         # Events:
-        #   'success'
-        #   'error'
+        #
+        # * `'success'`
+        # * `'error'`
         confirm: (user) ->
           ee = new EventEmitter()
           $.ajax
@@ -270,11 +293,15 @@ do (jQuery) ->
                 ee.emit 'error', data.error ? data.forbidden
             error: -> ee.emit 'error'
 
-      ##
-      # $.ccnq3.userdb(name)
+      #### `$.ccnq3.userdb(name)`
+      # Internal use.
+      # Create user database `db`.
+      # Must be logged in.
+      #
       # Events:
-      #   'success'
-      #   'error'
+      #
+      # * `'success'`
+      # * `'error'`
       userdb: (name) ->
         ee = new EventEmitter()
         $.ajax
