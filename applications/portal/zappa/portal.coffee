@@ -28,6 +28,7 @@ require('ccnq3_config') (config)->
       # applications/portal
       portal_modules = ['login','profile','recover','register']
       @include "./#{name}.coffee" for name in portal_modules
+      @include "./#{name}-ui.coffee" for name in portal_modules
 
       # applications/roles
       roles_modules = ['login', 'replicate', 'admin', 'traces', 'userdb']
