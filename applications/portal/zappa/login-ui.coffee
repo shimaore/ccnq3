@@ -18,18 +18,18 @@ Released under the AGPL3 license
         $('button,input[type="submit"],input[type="reset"]').button()
 
         $('#login').submit ->
-          ee = $.ccnq3.login $('#login_username').val(), $('#login_password').val()
-          ee.on 'end', ->
+          ee = $.ccnq3.portal.login $('#login_username').val(), $('#login_password').val()
+          ee.on 'notify', (text) ->
+            $('#login_error').html(text)
+          ee.on 'success', ->
             $('#login_error').html('')
             $('#login').dialog('close')
             window.location.reload()
-          ee.on 'notify', (text) ->
-            $('#login_error').html(text)
           return false
 
         $('#logout').submit ->
-          ee = $.ccnq3.logout()
-          ee.on 'end', ->
+          ee = $.ccnq3.portal.logout()
+          ee.on 'success', ->
             window.location.reload()
           return false
 

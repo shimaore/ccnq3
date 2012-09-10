@@ -29,22 +29,16 @@
 
         $('#register').submit ->
           $('#register_error').html("")
-          ajax_options =
-            type: 'PUT'
-            url: '/ccnq3/portal/register.json'
-            data: $('#register').serialize()
-            dataType: 'json'
-            success: (data) ->
-              if data.ok
-                $('#register-message-email').html data.username
-                $('#register-message-domain').html data.domain
-                $('#register-message').dialog 'open'
-              else
-                if data.error is 409
-                  $('#register_error').html("You have already registered with this email address. Would you like to Sign In or do you need your password Recovered?")
-                else
-                  $('#register_error').html("Account creation failed: #{data.error}")
-          $.ajax(ajax_options)
+          ee = $.ccnq3.portal.register $('#register').serialize()
+          ee.on 'success', ->
+            $('#register-message-email').html data.username
+            $('#register-message-domain').html data.domain
+            $('#register-message').dialog 'open'
+          ee.on 'error', (data) ->
+            if data.error is 409
+              $('#register_error').html("You have already registered with this email address. Would you like to Sign In or do you need your password Recovered?")
+            else
+              $('#register_error').html("Account creation failed.")
           return false
 
   @get '/ccnq3/portal/register.widget': ->

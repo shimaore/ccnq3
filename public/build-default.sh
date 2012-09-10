@@ -13,10 +13,12 @@ cat js/jshash-2.2/sha1-min.js \
     js/sammy.title.js     \
     js/sammy.couch.js     \
     js/coffeekup.js       \
+    js/EventEmitter.min.js \
     js/forms.js           \
     js/inbox.js           \
     js/milk.js            \
     menu/menu.js          \
+    js/ccnq3.js           \
   > js/default.js
 
 cat css/style.css         \

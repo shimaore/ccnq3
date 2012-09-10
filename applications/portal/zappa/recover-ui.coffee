@@ -26,10 +26,10 @@
 
         $('#recover').submit ->
           $('#recover_error').html('')
-          ee = $.ccnq3.recover $('#recover_email').val()
-          ee.on 'fail', ->
+          ee = $.ccnq3.portal.recover $('#recover_email').val()
+          ee.on 'success', ->
             $('#recover_error').html('Operation failed')
-          ee.on 'end', ->
+          ee.on 'error', ->
             $('#login_error').html('')
             $('#login').dialog('close')
             window.location.reload()

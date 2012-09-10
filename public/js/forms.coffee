@@ -1,4 +1,3 @@
-
 do (jQuery) ->
 
   $ = jQuery
@@ -8,18 +7,6 @@ do (jQuery) ->
 
   $.fn.enable = () ->
     $(@).removeAttr('disabled')
-
-  $.ccnq3 = {}
-
-  $.ccnq3.push_document = (db,cb) ->
-    cb ?= ->
-      window.location = '#/inbox'
-    $.post "/roles/replicate/push/#{db}", (data)->
-      if data.ok
-        cb()
-      else
-        alert "Replication failed, please try again."
-    , "json"
 
   # require 'coffeekup'
 
