@@ -1,1 +1,1 @@
-sammy.src.js
+sammy.min.js
