@@ -10,7 +10,7 @@ $(document).ready ->
 
   app = $.sammy container, ->
 
-    @template_engine = 'coffeekup'
+    @template_engine = 'coffeecup'
 
     # Should use the proper database when used on a local replica, where
     # profile is empty.

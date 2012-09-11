@@ -12,7 +12,7 @@ cat js/jshash-2.2/sha1-min.js \
     js/sammy.js           \
     js/sammy.title.js     \
     js/sammy.couch.js     \
-    js/coffeekup.js       \
+    js/coffeecup.js       \
     js/EventEmitter.min.js \
     js/forms.js           \
     js/inbox.js           \

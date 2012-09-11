@@ -8,9 +8,9 @@ do (jQuery) ->
   $.fn.enable = () ->
     $(@).removeAttr('disabled')
 
-  # require 'coffeekup'
+  # require 'coffeecup'
 
-  coffeekup_helpers =
+  coffeecup_helpers =
 
     checkbox: (attrs) ->
       attrs.type = 'checkbox'
@@ -55,7 +55,7 @@ do (jQuery) ->
       input attrs
 
   $.compile_template = (template) ->
-    CoffeeKup.compile template, hardcode: coffeekup_helpers
+    coffeecup.compile template, hardcode: coffeecup_helpers
 
   $.fn.auto_add = () ->
 
