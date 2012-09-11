@@ -20,5 +20,5 @@ License
 Installation, Documentation
 ===========================
 
-  See <http://shimaore.github.com/ccnq3/doc/>
+  See <http://shimaore.github.com/ccnq3/_site/>
   or read doc/doc/Install.mdwn
