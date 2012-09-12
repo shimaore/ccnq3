@@ -58,7 +58,7 @@ do (jQuery) ->
           '$': $
 
         login_done = ->
-          ee.emit 'end'
+          ee.emit 'success'
           ee = null
 
         if $.extra_login
