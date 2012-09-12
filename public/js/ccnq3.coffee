@@ -65,7 +65,7 @@ do (jQuery) ->
           main_login auth, -> $.extra_login auth, login_done
         else
           main_login auth, login_done
-        return
+        return ee
 
       #### `$.ccnq3.portal.logout()`
       # Log the user out.
@@ -84,6 +84,7 @@ do (jQuery) ->
             else
               ee.emit 'error', data
           error: -> ee.emit 'error'
+        return ee
 
       #### `$.ccnq3.portal.recover(email)`
       # Recover lost password for email address.
@@ -105,6 +106,7 @@ do (jQuery) ->
             else
               ee.emit 'error', data
           error: -> ee.emit 'error'
+        return ee
 
       #### `$.ccnq3.portal.register({name,email,phone})`
       # Register user.
@@ -126,6 +128,7 @@ do (jQuery) ->
             else
               ee.emit 'error', data
           error: -> ee.emit 'error'
+        return ee
 
     roles:
       replicate:
@@ -149,6 +152,7 @@ do (jQuery) ->
               else
                 ee.emit 'error', data
             error: -> ee.emit 'error'
+          return ee
 
         #### `$.ccnq3.roles.replicate.push(db)`
         # Replicate from user database to main database `db`.
@@ -170,6 +174,7 @@ do (jQuery) ->
               else
                 ee.emit 'error', data
             error: -> ee.emit 'error'
+          return ee
 
       admin:
         #### `$.ccnq3.admin.adduser(name,password)`
@@ -196,6 +201,7 @@ do (jQuery) ->
                 return
               ee.emit 'error', data
             error: -> ee.emit 'error'
+          return ee
 
         #### `$.ccnq3.admin.grant(user,operation,source,prefix)`
         # Grant rights to `user` for `operation` (`'update'` or
@@ -222,6 +228,7 @@ do (jQuery) ->
               else
                 ee.emit 'error', data
             error: -> ee.emit 'error'
+          return ee
 
         ##*# `$.ccnq3.admin.revoke(user,operation,source,prefix)`
         # Revoke rights. See `grant` above for arguments description.
@@ -246,6 +253,7 @@ do (jQuery) ->
               else
                 ee.emit 'error', data
             error: -> ee.emit 'error'
+          return ee
 
         #### `$.ccnq3.admin.host(user)`
         # Internal use.
@@ -269,6 +277,7 @@ do (jQuery) ->
               else
                 ee.emit 'error', data.error ? data.forbidden
             error: -> ee.emit 'error'
+          return ee
 
         #### `$.ccnq3.admin.confirm(user)`
         # Internal use.
@@ -292,6 +301,7 @@ do (jQuery) ->
               else
                 ee.emit 'error', data.error ? data.forbidden
             error: -> ee.emit 'error'
+          return ee
 
       #### `$.ccnq3.userdb(name)`
       # Internal use.
@@ -314,3 +324,4 @@ do (jQuery) ->
             else
               ee.emit 'error', data
           error: -> ee.emit 'error'
+        return ee
