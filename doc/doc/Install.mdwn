@@ -8,8 +8,14 @@ run `apt-key` as root.
 Requirements
 ============
 
+Base system
+-----------
+
 Your base system should be a current Debian/testing system.
 Other systems might work but are not supported.
+
+Hostnames and DNS
+-----------------
 
 Hostnames for the different servers MUST be:
 
@@ -18,6 +24,19 @@ Hostnames for the different servers MUST be:
 
 These are both required to ensure clients can properly access
 the server.
+
+Note: compare the output of
+
+    cat /etc/hostname
+    hostname
+    hostname --fqdn
+
+to make sure they all report the name you expect.
+
+Note: ccnq3 contains a DNS server package that will automatically
+provide proper records for all servers configured in the system,
+so this requirement can be met relatively easily.
+See below for more information on `ccnq3_dns`.
 
 IPv6
 ====
@@ -177,7 +196,7 @@ run the service must:
 - use non-local nameservers (in /etc/resolv.conf)
 - forward UDP port 53 to UDP port 53053 (the `ccnq3-dns` package does this).
 
-See [[Provisioning]] for more information and follow-up steps.
+See [[provisioning]] for more information and follow-up steps.
 
 
 Tune-Up
