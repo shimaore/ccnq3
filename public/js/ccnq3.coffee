@@ -72,7 +72,7 @@ do (jQuery) ->
           first auth, ->
             process auth, what
 
-        process auth, $.ccnq3.portal.extra_login
+        process auth, [$.ccnq3.portal.extra_login...]
         return ee
 
       #### `$.ccnq3.portal.logout()`
