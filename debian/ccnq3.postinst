@@ -39,6 +39,7 @@ case "$1" in
     # Install other dependencies
     npm -g install coffee-script
     npm -g update coffee-script
+    su -s /bin/sh -c "npm config set production true" $USER
     su -s /bin/sh -c "(cd ${WORKDIR}/src && npm install)" $USER
     su -s /bin/sh -c "(cd ${WORKDIR}/src && npm run-script updates)" $USER
 
