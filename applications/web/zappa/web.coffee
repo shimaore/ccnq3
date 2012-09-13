@@ -30,29 +30,18 @@ require('ccnq3_config') (config) ->
     @coffee '/login.js': ->
 
       $(document).ready ->
-        extra_login = $.extra_login
+        extra_login = $.ccnq3.portal.extra_login
 
-        $.extra_login = (auth,next) ->
-
-          # Replicate any provisioning record
-          provisioning_replicate = (auth,next) ->
-            auth.notify 'Replicating provisioning data.'
-            options =
-              type: 'post'
-              url: '/ccnq3/roles/replicate/pull/provisioning'
-              dataType:'json'
-              success: (data) ->
-                if not data.ok
-                  auth.notify 'Provisioning replication failed.'
-                  return
-                auth.notify ''
-                next()
-            auth.$.ajax(options)
-
-          if extra_login?
-            extra_login auth, -> provisioning_replicate auth, next
-          else
-            provisioning_replicate auth, next
+        # Replicate any provisioning record
+        extra_login.push (auth,next) ->
+          auth.notify 'Replicating provisioning data.'
+          ee = $.ccnq3.roles.replicate.pull 'provisioning'
+          ee.on 'success', ->
+            auth.notify ''
+            next()
+          ee.on 'error', ->
+            auth.notify 'Provisioning replication failed.'
+            return
 
     @view 'default': ->
       div id:'menu_container'

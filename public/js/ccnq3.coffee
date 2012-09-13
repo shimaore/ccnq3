@@ -18,6 +18,8 @@ do (jQuery) ->
 
     portal:
 
+      extra_login: []
+
       #### `$.ccnq3.portal.profile(callback)`
       # Access the user profile after the user is logged in.
       # The callback receives the profile data as its first and only argument.
@@ -33,7 +35,8 @@ do (jQuery) ->
       # * `'success'`
       login: (username,password) ->
 
-        main_login = (auth,next) ->
+        # prepend main_login
+        $.ccnq3.portal.extra_login.unshift (auth,next) ->
           auth.notify 'Portal sign in.'
           auth.$.ajax
             type: 'post'
@@ -51,20 +54,24 @@ do (jQuery) ->
 
         ee = new EventEmitter()
 
+        # append login_done
+        $.ccnq3.portal.extra_login.push ->
+          ee.emit 'success'
+          ee = null
+
+        # Process
         auth =
           username: username
           password: password
           notify: (text) -> ee.emit 'notify', text
           '$': $
 
-        login_done = ->
-          ee.emit 'success'
-          ee = null
+        process = (auth,what) ->
+          first = what.shift()
+          first auth, ->
+            process auth, what
 
-        if $.extra_login
-          main_login auth, -> $.extra_login auth, login_done
-        else
-          main_login auth, login_done
+        process auth, $.ccnq3.portal.extra_login
         return ee
 
       #### `$.ccnq3.portal.logout()`
@@ -309,12 +316,13 @@ do (jQuery) ->
       #
       # * `'success'`
       # * `'error'`
-      userdb: (name) ->
+      userdb: (db) ->
         ee = new EventEmitter()
         $.ajax
           type: 'put'
-          url: "/ccnq3/roles/userdb/#{encodeURIComponent user}"
+          url: "/ccnq3/roles/userdb/#{encodeURIComponent db}"
           dataType:'json'
+          cache: false
           success: (data) ->
             if data.ok
               ee.emit 'success'
