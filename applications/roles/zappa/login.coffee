@@ -38,7 +38,7 @@
           auth.notify 'Could not access your profile.'
           return
         auth.notify "Welcome #{profile.name}."
-        auth.$.ajax
+        $.ajax
           url: profile.userdb_base_uri+'/'+profile.user_database
           dataType: 'json'
           cache: false
@@ -76,4 +76,4 @@
           auth.notify 'Database sign-in failed.'
 
       auth.notify 'Signing you into the database.'
-      auth.$.ajax options
+      $.ajax options

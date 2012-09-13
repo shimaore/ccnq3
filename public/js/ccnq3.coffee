@@ -38,12 +38,12 @@ do (jQuery) ->
         # prepend main_login
         $.ccnq3.portal.extra_login.unshift (auth,next) ->
           auth.notify 'Portal sign in.'
-          auth.$.ajax
+          $.ajax
             type: 'post'
             url: '/ccnq3/portal/login.json'
             data:
-              username: auth.username
-              password: auth.password
+              username: username
+              password: password
             dataType: 'json'
             success: (data) ->
               if not data.ok
@@ -51,6 +51,8 @@ do (jQuery) ->
                 return
               auth.notify ''
               next()
+            error: ->
+              auth.notify 'Sign in failed.'
 
         ee = new EventEmitter()
 
@@ -64,7 +66,6 @@ do (jQuery) ->
           username: username
           password: password
           notify: (text) -> ee.emit 'notify', text
-          '$': $
 
         process = (auth,what) ->
           first = what.shift()
