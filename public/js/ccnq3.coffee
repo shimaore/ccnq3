@@ -76,14 +76,11 @@ do (jQuery) ->
       # * `'error'`
       logout: ->
         ee = new EventEmitter()
-        $.ajax
-          url: '/ccnq3/portal/logout.json'
-          success: (data) ->
-            if data.ok
-              ee.emit 'success'
-            else
-              ee.emit 'error', data
-          error: -> ee.emit 'error'
+        $.getJSON '/ccnq3/portal/logout.json', (data) ->
+          if data.ok
+            ee.emit 'success'
+          else
+            ee.emit 'error', data
         return ee
 
       #### `$.ccnq3.portal.recover(email)`

@@ -33,9 +33,9 @@ $(document).ready ->
       $(@).append arguments[3]
 
     @get '#/logout', ->
-      $.getJSON '/ccnq3/portal/logout.json', (data) ->
-        if data.ok
-          window.location = '/' # or '.'
+      ee = $.ccnq3.portal.logout()
+      ee.on 'success', ->
+        window.location = '/' # or '.'
 
   # Load all the applications present in the _design documents.
   model = $(container).data 'model'
