@@ -1293,8 +1293,7 @@ The `roles` hash can also be manipulated using the REST API in applications/role
 *   `_id`: "org.couchdb.user:"+name
 *   `type`: "user"
 *   `name`:  string; the username
-*   `password_sha`:  string; sha1_hex(password+salt)
-*   `salt`:  string; a random string
+*   `password`:  string (write-only, cannot be retrieved)
 *   `user_database`:  string; the name of the user's own CouchDB instance
 *   `roles`: [] of string
 *   `domain`:  string; name of the domain used at registration time
