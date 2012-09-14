@@ -5,6 +5,30 @@
 
 @include = ->
 
+  # Based on chriso / node-validator .. which throws, sadly enough.
+  # Also it's missing raw IPv6 support.
+  email_regex = ///
+    ^
+    (?:[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+\.)*
+       [\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+
+    @
+    (?:
+      (?:
+        (?:[a-zA-Z0-9](?:[a-zA-Z0-9\-](?!\.)){0,61}[a-zA-Z0-9]?\.)+
+        [a-zA-Z0-9]
+        (?:[a-zA-Z0-9\-](?!$)){0,61}
+        [a-zA-Z0-9]?
+      )
+      |
+      (?:
+        \[
+          (?:(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.){3}(?:[01]?\d{1,2}|2[0-4]\d|25[0-5]) # IPv4
+        \]
+      )
+    )
+    $
+  ///
+
   pico = require 'pico'
 
   config = null
@@ -20,12 +44,15 @@
       delete profile[k]
 
     # Assumes username = email
-    username = @request.param 'email'
+    email = @request.param 'email'
+    if not email?
+      return @send error:'Missing email.'
+    if not email.match email_regex
+      return @send error:'Invalid email.'
+
+    username = email
 
     # Insert record
-    if not username
-      return @send error:'No username given'
-
     db = pico config.users.couchdb_uri
     db.request.get json:true, (e,r,b) =>
       if e or not b.db_name?
