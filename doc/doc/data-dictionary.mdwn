@@ -1304,11 +1304,14 @@ The `roles` hash can also be manipulated using the REST API in applications/role
 
     This record is returned by the `GET /ccnq3/portal/profile.json` portal API to a logged-in user.
 
+    Suggested content:
+
     * `name`:  string; user's full name
     * `email`:  string or array of strings; email or email addresses for this user
     * `phone`:  string; phone number for this user
 
     Other information may be stored but should not be relied upon.
+
     * `userdb_base_uri`:  base URI (to which the user_database is concatenated)
     * `user_name`: name
     * `user_database`: user_database
@@ -1317,6 +1320,7 @@ host records
 ------------
 
 These records are used to allow hosts (servers) within the system access to some functionality:
+
 * replicate the provisioning database from the master to their local copies;
 * replicate their local CDRs onto a master CDR database;
 * replicate their local database of user locations onto a master `locations` database.
@@ -1509,12 +1513,13 @@ The first API call should always be to the login application; session credential
     Validation means the `confirmed` role is added to the user's roles.
 
     Returns: a JSON record containing:
-    * `name`:  string; the user's full name
+
     * `email`:  string or array of strings; email or email addresses for this user
-    * `phone`:  string; phone number for this user
-    * `userdb_base_uri`: string; base URI (to which the user_database is concatenated)
+      (The initial value for this field is the email address provided at registration time.)
     * `user_name`: string; session username
+    * `userdb_base_uri`: string; base URI (to which the user_database is concatenated)
     * `user_database`: string; user_database
+    * any other fields provide at registration time (or later).
 
     Javascript API: `$.ccnq3.portal.profile(function(profile){})`
 
@@ -1524,6 +1529,8 @@ The first API call should always be to the login application; session credential
 
     (The trigger is conveyed by the addition of ``"send_password":true` to the user's record.)
 
+    Parameters: `email`
+
     Returns: either {"ok":true} or {"error":"error text"}
 
     Javascript API: `$.ccnq3.portal.recover(email)`
@@ -1532,13 +1539,13 @@ The first API call should always be to the login application; session credential
 
     Creates a new user record.
 
-    The username is assumed to be the `email` field.
+    The username is assumed to be the `email` field of the submitted body.
 
     An error will occur if the username already exists.
 
     The user will automatically receive an email containing a new password.
 
-    Parameters: `name`, `email`
+    Parameters: `email`
 
     Returns:  either {"ok":true} or {"error":"error text"}
 
