@@ -1492,11 +1492,15 @@ The first API call should always be to the login application; session credential
 
     Returns: {"ok":true} upon success, otherwise {"error":"error text"}
 
+    Javascript API: `$.ccnq3.portal.login(username,password)`
+
 *   `POST /ccnq3/portal/logout.json`
 
     Logs out from the portal.
 
     Returns: {"ok":true}
+
+    Javascript API: `$.ccnq3.portal.logout()`
 
 *   `GET /ccnq3/portal/profile.json`
 
@@ -1512,6 +1516,8 @@ The first API call should always be to the login application; session credential
     * `user_name`: string; session username
     * `user_database`: string; user_database
 
+    Javascript API: `$.ccnq3.portal.profile(function(profile){})`
+
 *   `POST /ccnq3/portal/recover.json`
 
     Triggers an email to the user with a new password.
@@ -1519,6 +1525,8 @@ The first API call should always be to the login application; session credential
     (The trigger is conveyed by the addition of ``"send_password":true` to the user's record.)
 
     Returns: either {"ok":true} or {"error":"error text"}
+
+    Javascript API: `$.ccnq3.portal.recover(email)`
 
 *   `PUT /ccnq3/portal/register.json`
 
@@ -1534,6 +1542,8 @@ The first API call should always be to the login application; session credential
 
     Returns:  either {"ok":true} or {"error":"error text"}
 
+    Javascript API: `$.ccnq3.portal.register({email,...})`
+
 *   `PUT /ccnq3/roles/userdb/{user_database}`
 
     Creates a user's database, if any user is registered to use it.
@@ -1547,17 +1557,23 @@ The first API call should always be to the login application; session credential
     Caveat:
     The API will return {"ok":true} if the database is not assigned to any user (and skip the actual database creation).
 
+    Javascript API: `$.ccnq3.roles.userdb(user_db)`
+
 *   `POST /ccnq3/roles/replicate/push/{target}`
 
     Replicates from the user's database into the main database indicated by `target`.
 
     Returns: CouchDB json response or an {"error":} record.
 
+    Javascript API: `$.ccnq3.roles.push(target)`
+
 *   `POST /ccnq3/roles/replicate/pull/{source}`
 
     Replicates from a main database indicated by `source` into the user's database.
 
     Returns: CouchDB json response or an {"error":} record.
+
+    Javascript API: `$.ccnq3.roles.pull(source)`
 
 *   `GET /ccnq3/roles/traces/{host}/{port}`
 
