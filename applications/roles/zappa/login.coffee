@@ -37,7 +37,7 @@
         if profile.error?
           auth.notify 'Could not access your profile.'
           return
-        auth.notify "Welcome #{profile.name}."
+        auth.notify "Welcome"
         $.ajax
           url: profile.userdb_base_uri+'/'+profile.user_database
           dataType: 'json'
@@ -47,10 +47,10 @@
             next()
           error: ->
             # Attempt to create the database.
-            auth.notify "Welcome #{profile.name} (creating your database)."
+            auth.notify "Welcome (creating your database)."
             ee = $.ccnq3.userdb profile.user_database
             ee.on 'success', ->
-              auth.notify "Welcome #{profile.name} (database created)."
+              auth.notify "Welcome (database created)."
               next()
             ee.on 'error', ->
               auth.notify 'Could not create your database.'

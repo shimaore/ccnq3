@@ -15,17 +15,17 @@
 
   @put '/ccnq3/portal/register.json': ->
 
-    name = @request.param 'name'
-    email = @request.param 'email'
-    if not name or not email
-      return @send error:'Invalid parameters, try again'
-
     profile = @body
     for k,v of profile when k.match /^_/
       delete profile[k]
 
-    # Currently assumes username = email
-    username = email
+    # Assumes username = email
+    username = @request.param 'email'
+
+    # Insert record
+    if not username
+      return @send error:'No username given'
+
     db = pico config.users.couchdb_uri
     db.request.get json:true, (e,r,b) =>
       if e or not b.db_name?

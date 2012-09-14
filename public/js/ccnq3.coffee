@@ -112,8 +112,9 @@ do (jQuery) ->
           error: -> ee.emit 'error'
         return ee
 
-      #### `$.ccnq3.portal.register({name,email,phone})`
+      #### `$.ccnq3.portal.register({email,...})`
       # Register user.
+      # At least one field, `email` must be provided.
       #
       # Events:
       #
