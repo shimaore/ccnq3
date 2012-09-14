@@ -307,7 +307,7 @@ do (jQuery) ->
             error: -> ee.emit 'error'
           return ee
 
-      #### `$.ccnq3.userdb(name)`
+      #### `$.ccnq3.roles.userdb(name)`
       # Internal use.
       # Create user database `db`.
       # Must be logged in.

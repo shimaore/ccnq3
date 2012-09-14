@@ -48,7 +48,7 @@
           error: ->
             # Attempt to create the database.
             auth.notify "Welcome (creating your database)."
-            ee = $.ccnq3.userdb profile.user_database
+            ee = $.ccnq3.roles.userdb profile.user_database
             ee.on 'success', ->
               auth.notify "Welcome (database created)."
               next()
