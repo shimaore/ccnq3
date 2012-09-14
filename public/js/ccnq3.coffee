@@ -59,7 +59,6 @@ do (jQuery) ->
         # append login_done
         $.ccnq3.portal.extra_login.push ->
           ee.emit 'success'
-          ee = null
 
         # Process
         auth =
