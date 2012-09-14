@@ -35,7 +35,6 @@ do (jQuery) ->
       # * `'success'`
       login: (username,password) ->
 
-        # prepend main_login
         $.ccnq3.portal.extra_login.unshift (auth,next) ->
           auth.notify 'Portal sign in.'
           $.ajax
@@ -54,13 +53,13 @@ do (jQuery) ->
             error: ->
               auth.notify 'Sign in failed.'
 
+
         ee = new EventEmitter()
 
-        # append login_done
         $.ccnq3.portal.extra_login.push ->
           ee.emit 'success'
 
-        # Process
+
         auth =
           username: username
           password: password
@@ -235,7 +234,7 @@ do (jQuery) ->
             error: -> ee.emit 'error'
           return ee
 
-        ##*# `$.ccnq3.admin.revoke(user,operation,source,prefix)`
+        #### `$.ccnq3.admin.revoke(user,operation,source,prefix)`
         # Revoke rights. See `grant` above for arguments description.
         #
         # Events:
