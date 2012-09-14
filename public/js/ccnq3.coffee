@@ -35,7 +35,9 @@ do (jQuery) ->
       # * `'success'`
       login: (username,password) ->
 
-        $.ccnq3.portal.extra_login.unshift (auth,next) ->
+        extra_login = [$.ccnq3.portal.extra_login...]
+
+        extra_login.unshift (auth,next) ->
           auth.notify 'Portal sign in.'
           $.ajax
             type: 'post'
@@ -56,7 +58,7 @@ do (jQuery) ->
 
         ee = new EventEmitter()
 
-        $.ccnq3.portal.extra_login.push ->
+        extra_login.push ->
           ee.emit 'success'
 
 
@@ -70,7 +72,7 @@ do (jQuery) ->
           first auth, ->
             process auth, what
 
-        process auth, [$.ccnq3.portal.extra_login...]
+        process auth, extra_login
         return ee
 
       #### `$.ccnq3.portal.logout()`
