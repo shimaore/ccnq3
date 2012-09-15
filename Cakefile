@@ -2,6 +2,7 @@ output_dir = './_site'
 fs = require 'fs'
 markdown = require 'github-flavored-markdown'
 coffeecup = require 'coffeecup'
+css = requite('coffee-css').compileObject
 coffeescript = require 'coffee-script'
 docco = require 'docco'
 
@@ -55,6 +56,10 @@ task 'docs', 'Rebuild the documentation', ->
       layout
         title: dest
         body: body
+        style: css
+          pre:
+            border: 'thin black'
+            backgroundColor: '#ccc'
 
 spawn = require('child_process').spawn
 run = (args...,cb) ->

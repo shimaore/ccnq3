@@ -22,6 +22,7 @@
     "github-flavored-markdown": "*"
   , "coffeecup": "*"
   , "coffee-script": "*"
+  , "coffee-css": "*"
   , "docco": "*"
   },
   "engines": { "node": ">=0.6.5", "coffee": ">=1.1.3" },
