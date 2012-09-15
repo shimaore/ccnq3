@@ -62,7 +62,7 @@ task 'docs', 'Rebuild the documentation', ->
             backgroundColor: '#f8f8f8'
             fontSize: '13px'
             lineHeight: '19px'
-            padding: '3px 5px'
+            padding: '1px 1px'
             margin: '3px 3px'
 
 spawn = require('child_process').spawn
