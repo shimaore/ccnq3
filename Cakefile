@@ -57,9 +57,9 @@ task 'docs', 'Rebuild the documentation', ->
         title: dest
         body: body
         style: css
-          pre:
-            border: 'thin black'
-            backgroundColor: '#ccc'
+          code:
+            border: 'solid thin #ccc'
+            backgroundColor: '#eee'
 
 spawn = require('child_process').spawn
 run = (args...,cb) ->
