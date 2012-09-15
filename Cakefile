@@ -2,7 +2,7 @@ output_dir = './_site'
 fs = require 'fs'
 markdown = require 'github-flavored-markdown'
 coffeecup = require 'coffeecup'
-css = requite('coffee-css').compileObject
+css = (o) -> require('ccss').compileObject o
 coffeescript = require 'coffee-script'
 docco = require 'docco'
 
