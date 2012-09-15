@@ -86,121 +86,103 @@ This operation will in most cases lead to loss of calls on call-processing serve
 
 The following applications are available:
 
-applications/host
------------------
+* applications/host
 
-The base host support application.
+  The base host support application.
 
-Install on: all servers.
+  Install on: all servers.
 
-Required: yes.
+  Required: yes.
 
-applications/usercode
----------------------
+* applications/usercode
 
-Support for applications in users' databases.
+  Support for applications in users' databases.
 
-Install on: the portal server.
+  Install on: the portal server.
 
-applications/provisioning
--------------------------
+* applications/provisioning
 
-Support for provisioning.
-Install on: the portal server.
+  Support for provisioning.
+  Install on: the portal server.
 
-applications/roles
-------------------
+* applications/roles
 
-Support for role-based authorization in the portal.
-Install on: the portal server.
+  Support for role-based authorization in the portal.
+  Install on: the portal server.
 
-applications/portal
--------------------
+* applications/portal
 
-Portal registration and login.
-Install on: the portal server.
+  Portal registration and login.
+  Install on: the portal server.
 
-applications/inbox
-------------------
+* applications/inbox
 
-The portal inbox.
-Install on: the portal server.
+  The portal inbox.
+  Install on: the portal server.
 
-application/web
----------------
+* application/web
 
-Web reverse proxy and static web server.
-Install on: the portal server.
+  Web reverse proxy and static web server.
+  Install on: the portal server.
 
-applications/cdrs
------------------
+* applications/cdrs
 
-A CDR aggregation application.
+  A CDR aggregation application.
 
-Install on: the server that will aggregate the CDRs.
+  Install on: the server that will aggregate the CDRs.
 
-applications/locations
-----------------------
+* applications/locations
 
-Registered endpoints location aggregation.
-Install on: the server that will aggregate the data.
+  Registered endpoints location aggregation.
+  Install on: the server that will aggregate the data.
 
-applications/dns
-----------------
+* applications/dns
 
-A database-driven DNS server.
+  A database-driven DNS server.
 
-Install on: a server running the ccnq3-dns package.
+  Install on: a server running the ccnq3-dns package.
 
-applications/freeswitch
------------------------
+* applications/freeswitch
 
-FreeSwitch support application.
-Install on: any server running FreeSwitch.
+  FreeSwitch support application.
+  Install on: any server running FreeSwitch.
 
-applications/opensips
----------------------
+* applications/opensips
 
-OpenSIPS support application.
-Install on: any server running OpenSIPS.
+  OpenSIPS support application.
+  Install on: any server running OpenSIPS.
 
-applications/traces
--------------------
+* applications/traces
 
-Support for portal access to local traces.
-Install on: servers with the ccnq3-traces package, typically OpenSIPS and FreeSwitch hosts.
+  Support for portal access to local traces.
+  Install on: servers with the ccnq3-traces package, typically OpenSIPS and FreeSwitch hosts.
 
-applications/voicemail
-----------------------
+* applications/voicemail
 
-FreeSwitch support for voicemail.
-Install on: a FreeSwitch server that will provide voicemail.
+  FreeSwitch support for voicemail.
+  Install on: a FreeSwitch server that will provide voicemail.
 
-applications/cnam-client (unstable)
-------------------------
+* applications/cnam-client (unstable)
 
-A CNAM client application.
+  A CNAM client application.
 
-Install on: a server running FreeSwitch client-side.
+  Install on: a server running FreeSwitch client-side.
 
-applications/registrant
------------------------
+* applications/registrant
 
-OpenSIPS server providing batch registration to an upstream server.
+  OpenSIPS server providing batch registration to an upstream server.
 
-Install on: a server running OpenSIPS; will start a separate OpenSIPS instance for client registration.
+  Install on: a server running OpenSIPS; will start a separate OpenSIPS instance for client registration.
 
-applications/emergency
-----------------------
+* applications/emergency
 
-An emergency call routing server.
+  An emergency call routing server.
 
-Install on: a server running OpenSIPS; will start a separate OpenSIPS instance for 302 emergency calls redirection.
+  Install on: a server running OpenSIPS; will start a separate OpenSIPS instance for 302 emergency calls redirection.
 
-applications/monitor
---------------------
+* applications/monitor
 
-Monitors the local host and pushes statistics about it into a CouchDB database.
+  Monitors the local host and pushes statistics about it into a CouchDB database.
 
 provisioning database
 =====================
