@@ -2,7 +2,7 @@ output_dir = './_site'
 fs = require 'fs'
 markdown = require 'github-flavored-markdown'
 coffeecup = require 'coffeecup'
-css = (o) -> require('ccss').compileObject o
+css = (o) -> require('ccss').compile o
 coffeescript = require 'coffee-script'
 docco = require 'docco'
 
@@ -60,8 +60,8 @@ task 'docs', 'Rebuild the documentation', ->
           code:
             border: '1px solid #ccc'
             backgroundColor: '#f8f8f8'
-            font-size: '13px'
-            line-height: '19px'
+            fontSize: '13px'
+            lineHeight: '19px'
             padding: '6px 10px'
 
 spawn = require('child_process').spawn
