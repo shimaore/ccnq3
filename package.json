@@ -19,7 +19,7 @@
     "ccnq3_config": ">=0.3.3"
   },
   "devDependencies": {
-    "markdown": "*"
+    "github-flavored-markdown": "*"
   , "coffeecup": "*"
   , "coffee-script": "*"
   , "docco": "*"

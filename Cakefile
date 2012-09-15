@@ -1,6 +1,6 @@
 output_dir = './_site'
 fs = require 'fs'
-markdown = require 'markdown'
+markdown = require 'github-flavored-markdown'
 coffeecup = require 'coffeecup'
 coffeescript = require 'coffee-script'
 docco = require 'docco'
@@ -21,7 +21,7 @@ task 'docs', 'Rebuild the documentation', ->
     fs.writeFileSync "./#{output_dir}/#{dest}.html",
       layout
         title: dest
-        body: markdown.markdown.toHTML fs.readFileSync file, 'utf8'
+        body: markdown.parse fs.readFileSync file, 'utf8'
         stylesheet: 'docco'
 
 spawn = require('child_process').spawn
