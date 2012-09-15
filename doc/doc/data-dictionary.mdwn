@@ -6,35 +6,27 @@ Conventions
 Database URI
 ------------
 
-In this document the term *URI of database* signifies a URI of some CouchDB database,
-and is always a string.
+In this document the term *URI of database* signifies a URI of some CouchDB database, and is always a string.
 
 These URIs might contain authentication usernames and passwords.
 
 Account
 -------
 
-In this document the term *account* refers to an opaque string
-used to authorize operations based on prefixes stored in the `roles`
-fields of a user account.
+In this document the term *account* refers to an opaque string used to authorize operations based on prefixes stored in the `roles` fields of a user account.
 
 Account-based roles follow the syntax
   (`access`|`update`) `:` operation `:` account
 where operations include replicating documents, granting authorization, etc.
 
-This allows you (assuming you provide your customers access to the embedded
-web portal) to create hierarchical access to information, for example along
-a carrier/reseller/customer model.
+This allows you (assuming you provide your customers access to the embedded web portal) to create hierarchical access to information, for example along a carrier/reseller/customer model.
 
-The account "" (the empty string), located at the root of the hierarchy, can be
-used to restrict access to provisioning data that should only be managed by
-system administrators. It is used in this manner in the following documentation.
+The account "" (the empty string), located at the root of the hierarchy, can be used to restrict access to provisioning data that should only be managed by system administrators. It is used in this manner in the following documentation.
 
 Applications
 ============
 
-Applications are modules inside the CCNQ3 system which may be added or removed on a server after installation of the Debian packages.
-Each application may come with database updates, new local processes, and sometimes offer remotely-accessible services.
+Applications are modules inside the CCNQ3 system which may be added or removed on a server after installation of the Debian packages.  Each application may come with database updates, new local processes, and sometimes offer remotely-accessible services.
 
 In a template CCNQ3 system, you would typically have two types of servers, _manager_ servers and _call-processing_ servers.
 A manager server would typically have the `ccnq3` package installed, and run the following applications:
@@ -843,14 +835,14 @@ an OpenSIPS server will accept any domain listed here.
 
 Example:
 
-        records: [
-          {class:'NS', value:'ns1.example.net.'}
-          {class:'NS', value:'ns2.example.net.'}
-          {prefix:'s1',value:'192.168.1.10'}
-          {prefix:'_sip._udp',class:'SRV',value:[20,7,5060,"sip1.example.net."]}
-          {class:"NAPTR",value:[20,10,'u','E2U+sip',"!^.*$!sip:foo@example.net!", ""]
+    records: [
+      {class:'NS', value:'ns1.example.net.'}
+      {class:'NS', value:'ns2.example.net.'}
+      {prefix:'s1',value:'192.168.1.10'}
+      {prefix:'_sip._udp',class:'SRV',value:[20,7,5060,"sip1.example.net."]}
+      {class:"NAPTR",value:[20,10,'u','E2U+sip',"!^.*$!sip:foo@example.net!", ""]
 
-        ]
+    ]
 
 By design "applications/dns" runs on port 53053. To allow remote hosts to access the application on port 53, install the ccnq3-dns package.
 
