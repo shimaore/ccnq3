@@ -246,7 +246,7 @@ your installation.
 
 *   `account`: ""    (the empty string)
 
-*   `updated_at: integer, update timestamp in ms [required]
+*   `updated_at`: integer, update timestamp in ms [required]
 
     `new Date().getTime()`  for example
 
