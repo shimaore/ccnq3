@@ -55,7 +55,6 @@ task 'docs', 'Rebuild the documentation', ->
       layout
         title: dest
         body: body
-        stylesheets: ['docco','ccnq3']
 
 spawn = require('child_process').spawn
 run = (args...,cb) ->
