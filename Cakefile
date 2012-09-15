@@ -58,8 +58,11 @@ task 'docs', 'Rebuild the documentation', ->
         body: body
         style: css
           code:
-            border: 'solid thin #ccc'
-            backgroundColor: '#eee'
+            border: '1px solid #ccc'
+            backgroundColor: '#f8f8f8'
+            font-size: '13px'
+            line-height: '19px'
+            padding: '6px 10px'
 
 spawn = require('child_process').spawn
 run = (args...,cb) ->
