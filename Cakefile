@@ -56,14 +56,7 @@ task 'docs', 'Rebuild the documentation', ->
       layout
         title: dest
         body: body
-        style: css
-          code:
-            border: '1px solid #ccc'
-            backgroundColor: '#f8f8f8'
-            fontSize: '13px'
-            lineHeight: '19px'
-            padding: '1px 1px'
-            margin: '3px 3px'
+        style: css require('./_layouts/default.css').css
 
 spawn = require('child_process').spawn
 run = (args...,cb) ->
