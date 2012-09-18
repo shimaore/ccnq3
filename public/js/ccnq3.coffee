@@ -1,6 +1,23 @@
 # Javascript Client API for CCNQ3
 # (c) 2012 Stephane Alnet
 
+# This module uses the EventEmitter pattern with two
+# possible events, `success` and `error`,
+# To use in your client-side code:
+#
+#     var ee = $.ccnq3.portal.logout();
+#     ee.on('success',function(){
+#       // log in was successful, do something useful
+#     });
+#     ee.on('error',function(error){
+#       // something went wrong, error may contain
+#       // an optional error message
+#     });
+#
+# Exceptions are the `login` function (which instead
+# might generate `notify` events as login progresses),
+# and the `profile` function which uses a regular callback.
+
 do (jQuery) ->
 
   $ = jQuery
@@ -88,7 +105,7 @@ do (jQuery) ->
           if data.ok
             ee.emit 'success'
           else
-            ee.emit 'error', data
+            ee.emit 'error', data.error
         return ee
 
       #### `$.ccnq3.portal.recover(email)`
@@ -109,7 +126,7 @@ do (jQuery) ->
             if data.ok
               ee.emit 'success'
             else
-              ee.emit 'error', data
+              ee.emit 'error', data.error
           error: -> ee.emit 'error'
         return ee
 
@@ -132,7 +149,7 @@ do (jQuery) ->
             if data.ok
               ee.emit 'success', data
             else
-              ee.emit 'error', data
+              ee.emit 'error', data.error
           error: -> ee.emit 'error'
         return ee
 
@@ -156,7 +173,7 @@ do (jQuery) ->
               if not data.error?
                 ee.emit 'success', data
               else
-                ee.emit 'error', data
+                ee.emit 'error', data.error
             error: -> ee.emit 'error'
           return ee
 
@@ -178,7 +195,7 @@ do (jQuery) ->
               if not data.error?
                 ee.emit 'success', data
               else
-                ee.emit 'error', data
+                ee.emit 'error', data.error
             error: -> ee.emit 'error'
           return ee
 
@@ -199,13 +216,16 @@ do (jQuery) ->
             data: {name,password}
             dataType:'json'
             success: (data) ->
-              if data.forbidden
-                ee.emit 'error', data
+              if data.forbidden?
+                ee.emit 'error', data.forbidden
+                return
+              if data.error?
+                ee.emit 'error', data.error
                 return
               if 200 <= data.status < 300
                 ee.emit 'success', data
                 return
-              ee.emit 'error', data
+              ee.emit 'error'
             error: -> ee.emit 'error'
           return ee
 
@@ -227,12 +247,12 @@ do (jQuery) ->
             dataType:'json'
             success: (data) ->
               if data.forbidden
-                ee.emit 'error', data
+                ee.emit 'error', data.forbidden
                 return
-              if not data.error?
-                ee.emit 'success'
-              else
-                ee.emit 'error', data
+              if data.error?
+                ee.emit 'error', data.error
+                return
+              ee.emit 'success'
             error: -> ee.emit 'error'
           return ee
 
@@ -251,13 +271,13 @@ do (jQuery) ->
               [user,operation,source,prefix].map(encodeURIComponent).join '/'
             dataType:'json'
             success: (data) ->
-              if data.forbidden
-                ee.emit 'error', data
+              if data.forbidden?
+                ee.emit 'error', data.forbidden
                 return
-              if not data.error?
-                ee.emit 'success'
-              else
-                ee.emit 'error', data
+              if data.error?
+                ee.emit 'error', data.error
+                return
+              ee.emit 'success'
             error: -> ee.emit 'error'
           return ee
 
@@ -329,6 +349,6 @@ do (jQuery) ->
             if data.ok
               ee.emit 'success'
             else
-              ee.emit 'error', data
+              ee.emit 'error', data.error ? data.forbidden
           error: -> ee.emit 'error'
         return ee
