@@ -15,8 +15,11 @@ do (jQuery) ->
   selector = '#host_record'
 
   all_apps = [
+    # Order is important here due to dependencies.
+
     # Required on all servers
     "applications/host"
+    "applications/monitor"
     # Applications for a manager
     "applications/usercode"
     "applications/provisioning"
@@ -34,6 +37,7 @@ do (jQuery) ->
     "applications/opensips"
     "applications/traces"
     # Applications for a server running FreeSwitch
+    "applications/cnam-client"
     "applications/voicemail"
     # Applications for a server running OpenSIPS
     "applications/registrant"
@@ -50,11 +54,13 @@ do (jQuery) ->
   host_tpl = $.compile_template ->
 
     _apps_description = {
+      # On all servers
+      "applications/host"           : "Host -- always turn it on"
+      "applications/monitor"        : "System monitoring -- recommended"
       # Applications for a manager
       "applications/usercode"       : "(Manager) usercode"
       "applications/provisioning"   : "(Manager) provisioning"
       "applications/roles"          : "(Manager) roles"
-      "applications/host"           : "Host -- always turn it on"
       "applications/portal"         : "(Manager) portal"
       "applications/inbox"          : "(Manager) inbox"
       "public"                      : "(Manager) public"
@@ -69,6 +75,7 @@ do (jQuery) ->
       "applications/traces"         : "Traces (requires ccnq3-traces package)"
       # Applications for a server running FreeSwitch
       "applications/voicemail"      : "Voicemail (requires FreeSwitch)"
+      "applications/cnam-client"    : "CNAM client (requires FreeSwitch)"
       # Applications for a server running OpenSIPS
       "applications/registrant"     : "Registrant (requires ccnq3-voice package)"
       "applications/emergency"      : "Emergency Router (requires ccnq3-voice package)"
