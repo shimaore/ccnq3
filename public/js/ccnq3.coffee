@@ -222,7 +222,7 @@ do (jQuery) ->
               if data.error?
                 ee.emit 'error', data.error
                 return
-              if 200 <= data.status < 300
+              if 200 <= data.status < 300 or data.status is 409
                 ee.emit 'success', data
                 return
               ee.emit 'error'
