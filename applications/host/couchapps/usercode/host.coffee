@@ -139,6 +139,12 @@ do (jQuery) ->
         class:'text'
         value:@sip_domain_name
 
+      for app in @_apps
+        checkbox
+          id:"selected_applications.#{app}"
+          title:_apps_description[app]
+          value: @applications? and app in @applications
+
       if @applications?
         if 'applications/freeswitch' in @applications
           radio
@@ -224,12 +230,6 @@ do (jQuery) ->
             title: 'Voicemail: Number domain (default: "local")'
             class:'url'
             value: @voicemail?.number_domain
-
-      for app in @_apps
-        checkbox
-          id:"selected_applications.#{app}"
-          title:_apps_description[app]
-          value: @applications? and app in @applications
 
       input type:'submit'
 
@@ -416,45 +416,23 @@ do (jQuery) ->
         grant_rights = ->
             # Grant the `host` right
             log "Updating server rights."
-            $.ajax
-              type: 'PUT'
-              url: '/ccnq3/roles/admin/grant/'+encodeURIComponent(username)+'/host'
-              dataType: 'json'
-              error: (status) ->
-                alert 'Updating server rights failed.'
-                log 'Updating server rights failed.'
-              success: (data) ->
-                if data.ok
-                  do cb
-                else
-                  log data.error ? data.forbidden
+            ee = $.ccnq3.admin.host username
+            ee.on 'error', (error) ->
+              alert 'Updating server rights failed.'
+              log "Updating server rights failed: #{error}"
+            ee.on 'success', cb
 
         ###
           Quite obviously this can only be ran by server-admins or update:_users: roles.
         ###
         log "Creating user record for #{username} with password #{password}."
 
-        $.ajax
-          type: 'POST'
-          url: '/ccnq3/roles/admin/adduser'
-          data:
-            password: password
-            name: username
-          dataType: 'json'
+        ee = $.ccnq3.admin.adduser username, password
+        ee.on 'error', (error) ->
+          alert 'Host signup failed.'
+          log "User record creation failed: #{error}"
 
-          error: ->
-            alert 'Host signup failed.'
-            log 'User record creation API failed.'
-
-          success: (data) ->
-            if data.forbidden
-              alert data.forbidden
-              log data.forbidden
-            else if (data.status >= 200 and data.status < 300) or data.status is 409
-              do grant_rights
-            else
-              alert 'Host signup failed.'
-              log 'User record creation failed.'
+        ee.on 'success', grant_rights
 
       @bind 'error.host', (notice) ->
         log "An error occurred: #{notice.error}"
