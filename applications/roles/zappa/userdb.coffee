@@ -27,11 +27,17 @@ Released under the AGPL3 license
 
     # Use the view to gather information about the requested user database.
     users_db.view 'replicate', 'userdb', qs: {key:JSON.stringify target_db_name}, (e,r,b) =>
+      if e? then return @send error:e
 
-      # Database is not needed
+      # Database is not (or no longer) needed
       if not b.rows? or b.rows.length <= 0
-        @send ok:true
+        # Remove the database
+        target_db.request.del (e,r,b) =>
+          if e? then return @send error:e
+          @send ok:true
+        return
 
+      # Database is needed
       readers_names = (row.value for row in b.rows)
 
       # Create the database
@@ -42,8 +48,7 @@ Released under the AGPL3 license
 
         # Restrict number of available past revisions.
         target_db.request.put '_revs_limit',body:"10", (e,r,b) =>
-          if e
-            return @send error:e
+          if e? then return @send error:e
 
           # Make sure the users can access it.
           target_db.request.get '_security', json:true, (e,r,b) =>
