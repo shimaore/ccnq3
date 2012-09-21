@@ -26,7 +26,7 @@ Released under the AGPL3 license
     users_db = pico config.users.couchdb_uri
 
     # Use the view to gather information about the requested user database.
-    users_db.view 'replicate', 'userdb', (e,r,b) =>
+    users_db.view 'replicate', 'userdb', qs: {key:JSON.stringify target_db_name}, (e,r,b) =>
 
       # Database is not needed
       if not b.rows? or b.rows.length <= 0
