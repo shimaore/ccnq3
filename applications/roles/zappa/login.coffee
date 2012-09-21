@@ -37,24 +37,14 @@
         if profile.error?
           auth.notify 'Could not access your profile.'
           return
-        auth.notify "Welcome"
-        $.ajax
-          url: profile.userdb_base_uri+'/'+profile.user_database
-          dataType: 'json'
-          cache: false
-          success: ->
-            # Database already exists.
-            next()
-          error: ->
-            # Attempt to create the database.
-            auth.notify "Welcome (creating your database)."
-            ee = $.ccnq3.roles.userdb profile.user_database
-            ee.on 'success', ->
-              auth.notify "Welcome (database created)."
-              next()
-            ee.on 'error', ->
-              auth.notify 'Could not create your database.'
-              return
+        # Update the user database
+        ee = $.ccnq3.roles.userdb profile.user_database
+        ee.on 'success', ->
+          auth.notify "Welcome."
+          next()
+        ee.on 'error', ->
+          auth.notify 'Could not create your database.'
+          return
 
     # Log into CouchDB so that we can access the user's database directly.
     extra_login.unshift (auth,next) ->
