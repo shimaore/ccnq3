@@ -3,6 +3,12 @@
 Released under the AGPL3 license
 ###
 
+#### portal/login.coffee
+#
+# This modules allows authentication for operations under the
+# `/ccnq3/portal` and `/ccnq3/roles` APIs as provided by the
+# default portal.
+
 @include = ->
 
   pico = require 'pico'
@@ -13,6 +19,7 @@ Released under the AGPL3 license
   require('ccnq3_config') (c) ->
     config = c
 
+  # Browser-based login.
   @post '/ccnq3/portal/login.json': ->
     username = @request.param 'username'
     if not username?
@@ -35,6 +42,7 @@ Released under the AGPL3 license
       @session.roles     = p.userCtx.roles
       return @send ok:true
 
+  # Browser-based logout.
   @get '/ccnq3/portal/logout.json': ->
     delete @session.logged_in
     return @send ok:true
