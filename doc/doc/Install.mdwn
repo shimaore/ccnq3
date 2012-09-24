@@ -41,9 +41,9 @@ See below for more information on `ccnq3_dns`.
 IPv6
 ====
 
-The Node.js packages downloaded during installation are downloaded from hosts that do not support IPv6 (for example github.com, the npm registry).
+The Node.js packages downloaded during installation are downloaded from hosts that do not support IPv6 (for example github.com, or the npm registry).
 
-Therefor installation and upgrades must currently be done with some kind of connectivity to the global IPv4 network.
+Therefor installation and upgrades _must_ currently be done with some kind of connectivity to the global IPv4 network.
 
 Add Repository
 ==============
@@ -54,8 +54,8 @@ Add
 
 to your existing /etc/apt/sources.list using the following commands:
 
-    aptitude install python-software-properties
-    REPOSITORY=${REPOSITORY:-debian.sotelips.net}
+    aptitude install -y python-software-properties
+    REPOSITORY=debian.sotelips.net
     apt-add-repository "deb http://${REPOSITORY}/shimaore shimaore main"
 
 Add Key
@@ -80,7 +80,7 @@ Update and upgrade your system:
 Start Installation
 ==================
 
-Finally start the installation
+Finally start the installation of CCNQ3 itself.
 
 "manager" host
 --------------
@@ -88,6 +88,9 @@ Finally start the installation
 The first host you will install is your "manager" host.
 
     aptitude -y install ccnq3-manager
+
+Make sure to locate and save the `CCNQ3 Master interface` URL printed
+at the end of the installation process.
 
 However, this package will overwrite any local CouchDB configuration.
 If you have an existing CouchDB/BigCouch installation you'd like to
