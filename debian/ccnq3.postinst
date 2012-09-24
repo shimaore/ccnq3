@@ -40,8 +40,8 @@ case "$1" in
     npm -g install coffee-script
     npm -g update coffee-script
     su -s /bin/sh -c "npm config set production true" $USER
-    su -s /bin/sh -c "(cd ${WORKDIR}/src && npm install)" $USER
-    su -s /bin/sh -c "(cd ${WORKDIR}/src && npm run-script updates)" $USER
+    (cd ${WORKDIR}/src && su -s /bin/sh -c "npm install" $USER)
+    (cd ${WORKDIR}/src && su -s /bin/sh -c "npm run-script updates" $USER)
 
   ;;
 

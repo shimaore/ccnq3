@@ -1,0 +1,9 @@
+Template: ccnq3/uri
+Type: text
+Description: The URL provided by the CCNQ3 management system.
+
+Template: ccnq3/admin_uri
+Type: text
+Description: URL with administrative access to the CouchDB database.
+  This URL must contain administrative login and passord, for example:
+    http://admin:password@host:5984

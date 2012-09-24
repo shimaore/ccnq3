@@ -4,10 +4,11 @@
 
 set -e
 export LANG=
-SRC=/opt/ccnq3/src
-DIR=/etc/ccnq3
+NAME=ccnq3
+SRC=/opt/$NAME/src
+DIR=/etc/$NAME
 CONF=${DIR}/host.json
-USER=ccnq3
+USER=$NAME
 # Apparently using /etc/couchdb/local.d/ccnq3 does not work.
 COUCHDB_CONFIG=/etc/couchdb/local.ini
 
@@ -26,7 +27,7 @@ if [ "x$1" == "x-h" ]; then
 fi
 
 if [ ! -d "${SRC}" ]; then
-  echo "ERROR: You must install the ccnq3 package before calling this script."
+  echo "ERROR: You must install the $NAME package before calling this script."
   exit 1
 fi
 

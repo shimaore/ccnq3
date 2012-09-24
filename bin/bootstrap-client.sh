@@ -4,15 +4,16 @@
 
 set -e
 export LANG=
-SRC=/opt/ccnq3/src
-DIR=/etc/ccnq3
+NAME=ccnq3
+SRC=/opt/$NAME/src
+DIR=/etc/$NAME
 CONF=${DIR}/host.json
-USER=ccnq3
+USER=$NAME
 # Apparently using /etc/couchdb/local.d/ccnq3 does not work.
 COUCHDB_CONFIG=/etc/couchdb/local.ini
 
 if [ ! -d "${SRC}" ]; then
-  echo "ERROR: You must install the ccnq3 package before calling this script."
+  echo "ERROR: You must install the $NAME package before calling this script."
   exit 1
 fi
 
@@ -32,7 +33,7 @@ echo "Re-configuring CouchDB on local host ${HOSTNAME}"
 # Double-enforce (currently having issues with this).
 killall couchdb beam.smp heart || echo OK
 
-CDB_DIR=/var/lib/couchdb/ccnq3
+CDB_DIR=/var/lib/couchdb/$NAME
 mkdir -p $CDB_DIR
 chmod 0755 $CDB_DIR
 chown couchdb.couchdb $CDB_DIR
@@ -63,4 +64,4 @@ chown couchdb.couchdb "${COUCHDB_CONFIG}"
 /etc/init.d/couchdb start
 
 export CDB_URI="http://127.0.0.1:5984"
-exec su -s /bin/bash -c "${SRC}/bootstrap.sh $1" "${USER}"
+exec su -s /bin/bash -c "${SRC}/bin/bootstrap.sh $1" "${USER}"

@@ -1,2 +1,1 @@
-bootstrap-local.sh /opt/ccnq3/src
 common/mediaproxy/install.sh /opt/ccnq3/src/common/mediaproxy

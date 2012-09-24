@@ -1,18 +1,18 @@
 {
   "name": "ccnq3_main",
-  "version": "0.0.1",
-  "description": "Web server for CCNQ3",
+  "version": "0.0.2",
+  "description": "Main application for CCNQ3",
   "keywords": "",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
   "config": {
     "file": "/etc/ccnq3/host.json"
   },
   "scripts": {
-    "start":  "./npm-apps.coffee start"
-  , "stop":   "./npm-apps.coffee stop"
-  , "updates": "./npm-apps.coffee install && ./npm-apps.coffee update && ./npm-apps.coffee run-script couchapps"
-  , "bootstrap": "./npm-apps.coffee run-script bootstrap"
-  , "compact": "./npm-apps.coffee run-script compact"
+    "start":  "./bin/npm-apps.coffee start"
+  , "stop":   "./bin/npm-apps.coffee stop"
+  , "updates": "./bin/npm-apps.coffee install && ./bin/npm-apps.coffee update && ./bin/npm-apps.coffee run-script couchapps"
+  , "bootstrap": "./bin/npm-apps.coffee run-script bootstrap"
+  , "compact": "./bin/npm-apps.coffee run-script compact"
   , "test": "coffeelint -r . ; find . -name '*.json' -exec jsonlint '{}' ';' >/dev/null"
   },
   "dependencies": {

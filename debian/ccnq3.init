@@ -12,19 +12,20 @@
 # Author: Stephane Alnet <stephane@shimaore.net>
 
 NAME=ccnq3
+USER=ccnq3
 SCRIPTNAME=/etc/init.d/$NAME
 WORKDIR=/opt/$NAME/src
 
 case "$1" in
   start)
-    (cd $WORKDIR && su -s /bin/sh -c './npm-apps.coffee start' ccnq3)
+    (cd $WORKDIR && su -s /bin/sh -c 'npm start' $USER)
   ;;
   stop)
-    (cd $WORKDIR && su -s /bin/sh -c './npm-apps.coffee stop ' ccnq3)
+    (cd $WORKDIR && su -s /bin/sh -c 'npm stop ' $USER)
   ;;
   restart)
-    (cd $WORKDIR && su -s /bin/sh -c './npm-apps.coffee stop' ccnq3)
-    (cd $WORKDIR && su -s /bin/sh -c './npm-apps.coffee start' ccnq3)
+    (cd $WORKDIR && su -s /bin/sh -c 'npm stop' $USER)
+    (cd $WORKDIR && su -s /bin/sh -c 'npm start' $USER)
   ;;
   *)
     echo "Usage: $SCRIPTNAME {start|stop|restart}" >&2

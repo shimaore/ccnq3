@@ -41,7 +41,8 @@ Create a managing user
 
      http://admin:XXXXX@vm1.phone.example.net:8080/_utils
 
-  Note: The full URL is provided by the bootstrap-manager script.
+  Note: The full URL is provided during the installation of the
+        `bootstrap-manager` package.
   Note: In the default setup you may indifferently use port 8080 or port 5984
         to access Futon and CouchDB. To access CouchDB programmatically you
         should use port 5984 to avoid a dependency on the web application.
@@ -203,8 +204,8 @@ Adding a new "voice" host
 * Then log into the host and run:
 
       cd /opt/ccnq3/src/
-      URI=   # URL from the provisioning portal (above).
-      sudo ./bootstrap-local.sh $URI
+      # Use the URL from the provisioning portal (above).
+      sudo aptitude install ccnq3-client
       # Just to make sure, restart ccnq3
       sudo /etc/init.d/ccnq3 restart
       # Normally freeswitch and opensips are still not running.

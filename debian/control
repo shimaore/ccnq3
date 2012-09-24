@@ -13,6 +13,40 @@ Recommends: monit, munin-node
 Suggests: ccnq-base (= ${binary:Version})
 Description: Installs the ccnq3 code in /opt/ccnq3/src
 
+Package: ccnq3-manager
+Architecture: all
+Depends: ccnq3
+Conflicts: ccnq3-client, ccnq3-manager-shared
+Description: Bootstrap the ccnq3 system in manager mode.
+  This package installs the ccnq3 system in manager mode by
+  overwriting the local system's CouchDB configugration.
+  .
+  Do NOT install this package if the CouchDB database is
+  shared with other applications besides ccnq3. Use the
+  ccnq3-manager-shared package in that case.
+
+Package: ccnq3-client
+Architecture: all
+Depends: ccnq3
+Conflicts: ccnq3-manager, ccnq3-manager-shared
+Description: Bootstrap the ccnq3 system in non-manager mode.
+  This package installs the ccnq3 system in non-manager mode by
+  overwriting the local system's CouchDB configugration.
+  .
+  This package will overwrite your existing CouchDB configuration
+  and is not compatible with other packages or applications using
+  CouchDB.
+
+Package: ccnq3-manager-shared
+Architecture: all
+Depends: ccnq3
+Conflicts: ccnq3-manager, ccnq3-client
+Description: Bootstrap the ccnq3 system in manager mode.
+  This package installs the ccnq3 system in manager mode while
+  allowing other applications to use CouchDB at the same time.
+  .
+  You will need admin access to the CouchDB database.
+
 Package: ccnq3-traces
 Architecture: all
 Depends:

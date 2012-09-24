@@ -149,33 +149,35 @@ Finally start the installation
 
 The first host you will install is your "manager" host.
 
-    aptitude -y install ccnq3
-    cd /opt/ccnq3/src
-    ./bootstrap-manager.sh
+    aptitude -y install ccnq3-manager
 
-If you have an existing CouchDB/BigCouch installation, use
+This package will overwrite any local CouchDB configuration.
 
-    cd /opt/ccnq3/src
-    export CDB_URI=http://admin:password@host:5984
-    su -s /bin/bash -c ./bootstrap.sh ccnq3
+However, if you have an existing CouchDB/BigCouch installation you'd like to
+re-use (located on the same host or on a different system), use
 
-instead.
+    aptitude -y install ccnq3-manager-shared
+
+instead. You will need to provide administrative access to that existing
+database via a URL such as `http://admin:password@host:5984`.
 
 Normally you should not run voice services on the manager,
 however if you intend to do so you will need to install
-the ccnq3-voice package as well.
+the `ccnq3-voice` package as well.
 
-Other (non-manager) hosts
--------------------------
+Client (non-manager) hosts
+--------------------------
 
 On a non-manager host you will use:
 
-    aptitude install ccnq3-voice
-    URI=http://...
-    cd /opt/ccnq3/src
-    ./bootstrap-local.sh $URI
+    aptitude install ccnq3-voice ccnq3-client
 
-where the URI is provided by the provisioning system.
+You will need to provide it the URI assigned by the provisioning system.
+(See the [provisioning] documentation for how to obtain that URI.)
+
+Installing the `ccnq3-client` package will overwrite any local CouchDB
+configuration. This package cannot be co-located with non-ccnq3 applications
+that might use CouchDB.
 
 If you need mediaproxy on that host, you must manually run
 
@@ -194,10 +196,19 @@ which uses a local DNS resolver or proxy. The host(s) that
 run the service must:
 
 - use non-local nameservers (in /etc/resolv.conf)
-- forward UDP port 53 to UDP port 53053 (the `ccnq3-dns` package does this).
+- forward UDP port 53 to UDP port 53053 (install the `ccnq3-dns` package).
 
-See [[provisioning]] for more information and follow-up steps.
+See [provisioning] for more information and follow-up steps.
 
+
+Automated (scripted) installation
+=================================
+
+You may provide the URI for `ccnq3-client` in `/etc/ccnq3/uri` before
+installing the package.
+
+You may provide the URI for `ccnq3-manager-shared` in `/etc/ccnq3/admin_uri`
+before installing the package.
 
 Tune-Up
 =======

@@ -507,8 +507,9 @@ do (jQuery) ->
           uri = doc.provisioning.host_couchdb_uri + '/' + id
           """
             <p><a href="#/host/#{id}">Edit</a></p>
-            <p>Bootstrap: Run on host "#{doc.host}" as root:</p>
+            <p>Bootstrap: Install the <tt>ccnq3-client</tt> package on
+            "#{doc.host}" with the following URI:</p>
             <pre>
-              cd /opt/ccnq3/src && ./bootstrap-local.sh '#{uri}'
+            #{uri}
             </pre>
           """
