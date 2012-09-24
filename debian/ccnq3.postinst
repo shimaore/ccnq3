@@ -37,11 +37,11 @@ case "$1" in
     chmod -R o-rwx ${ETCDIR}
 
     # Install other dependencies
-    npm -g install coffee-script
-    npm -g update coffee-script
+    npm -g install coffee-script || exit 1
+    npm -g update coffee-script || exit 1
     su -s /bin/sh -c "npm config set production true" $USER
-    (cd ${WORKDIR}/src && su -s /bin/sh -c "npm install" $USER)
-    (cd ${WORKDIR}/src && su -s /bin/sh -c "npm run-script updates" $USER)
+    (cd ${WORKDIR}/src && su -s /bin/sh -c "npm install" $USER) || exit 1
+    (cd ${WORKDIR}/src && su -s /bin/sh -c "npm run-script updates" $USER) || exit 1
 
   ;;
 
