@@ -102,4 +102,4 @@ npm start
 
 echo "Installation done."
 echo
-echo "Master interface: ${CDB_URI}/_utils/"
+echo "** CCNQ3 Master interface: ${CDB_URI}/_utils/"
