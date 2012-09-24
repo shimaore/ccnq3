@@ -52,22 +52,162 @@ Add
 
     deb http://debian.sotelips.net/shimaore shimaore main
 
-to your existing /etc/apt/sources.list
+to your existing /etc/apt/sources.list using the following commands:
 
+    aptitude install python-software-properties
     REPOSITORY=${REPOSITORY:-debian.sotelips.net}
-    tee -a /etc/apt/sources.list > /dev/null <<EOT
-    deb http://${REPOSITORY}/shimaore shimaore main
-    EOT
-
-Alternatively use
-
     apt-add-repository "deb http://${REPOSITORY}/shimaore shimaore main"
 
 Add Key
 =======
 
 Add the GPG key for stephane@shimaore.net, which is used
-to sign the "shimaore" distribution.
+to sign the "shimaore" distribution:
+
+    MAINTAINER='Stephane Alnet (Packaging) <stephane@shimaore.net>'
+    # You might need to run the following command twice the first time.
+    gpg --recv-keys "F24B9200"
+    gpg --armor --export "=${MAINTAINER}" | apt-key add -
+
+Update System, Install Packages
+===============================
+
+Update and upgrade your system:
+
+    aptitude update
+    aptitude -y dist-upgrade
+
+Start Installation
+==================
+
+Finally start the installation
+
+"manager" host
+--------------
+
+The first host you will install is your "manager" host.
+
+    aptitude -y install ccnq3-manager
+
+However, this package will overwrite any local CouchDB configuration.
+If you have an existing CouchDB/BigCouch installation you'd like to
+re-use (located on the same host or on a different system), use
+
+    aptitude -y install ccnq3-manager-shared
+
+instead. You will need to provide administrative access to that existing
+database via a URL such as `http://admin:password@host:5984`.
+
+Normally you should not run voice services on the manager,
+however if you intend to do so you will need to install
+the `ccnq3-voice` package as well.
+
+Client (non-manager) hosts
+--------------------------
+
+On a non-manager host you will use:
+
+    aptitude install ccnq3-voice ccnq3-client
+
+You will need to provide it the URI assigned by the provisioning system.
+(See the [provisioning] documentation for how to obtain that URI.)
+
+Installing the `ccnq3-client` package will overwrite any local CouchDB
+configuration. This package cannot be co-located with non-ccnq3 applications
+that might use CouchDB.
+
+If you need mediaproxy on that host, you _must_ manually run
+
+    cd /opt/ccnq3/src/common/mediaproxy
+    ./install.sh
+
+because of some important caveats regarding IPv6.
+
+Installation of CCNQ3 DNS server
+--------------------------------
+
+The CCNQ3 DNS server is a master-only DNS server that must be
+installed to provide inbound routing for numbers. We recommend
+you install that service on at least two physically independent
+servers for redundancy purposes.
+
+The CCNQ3 DNS server uses UDP port 53 and will conflict with any
+other application, such as another DNS server, which would use
+that port. Therefor make sure there are no other DNS resolver or proxy
+on the host where you install the CCNQ3 DNS server.
+
+Moreover you should not have the local host rely on the service provided
+by the CCNQ3 DNS server for its name resolution, since the service will
+not forward requests or provide recursive resolution.
+
+Therefor the host(s) that run the CCNQ3 DNS service _must_
+use non-local nameservers; make sure to configure those in `/etc/resolv.conf`.
+
+Additionally install the `ccnq3-dns` package on any host running the CCNQ3
+DNS server:
+
+    aptitude install ccnq3-dns
+
+This package will forward UDP port 53 to UDP port 53053 on the local host.
+
+Next steps
+----------
+
+The base system is installation is now complete.
+
+For more information and follow-up steps refer to the [provisioning] documentation.
+
+The following sections provide additional information but are not required.
+
+Automated (scripted) installation
+=================================
+
+You may provide the URI for `ccnq3-client` in `/etc/ccnq3/uri` before
+installing the package.
+
+You may provide the URI for `ccnq3-manager-shared` in `/etc/ccnq3/admin_uri`
+before installing the package.
+
+Tune-Up
+=======
+
+Additionally I recommend modifying the rsyslog configuration
+to either a centralized syslog server, or a smaller local
+configuration such as:
+
+    tee /etc/rsyslog.conf >/dev/null <<'EOT'
+    $ModLoad imuxsock # provides support for local system logging
+    $ModLoad imklog   # provides kernel logging support (previously done by rklogd)
+    $ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
+    $FileOwner root
+    $FileGroup adm
+    $FileCreateMode 0640
+    $DirCreateMode 0755
+    auth,authpriv.*             /var/log/auth.log
+    *.info;auth,authpriv.none  -/var/log/syslog
+    # Uncomment the following line to gather debug messages
+    # *.debug                  -/var/log/debug
+    EOT
+
+    /etc/init.d/rsyslog restart
+
+Alternative ways
+================
+
+Add repository
+--------------
+
+You may manually add the `shimaore` repository as follows:
+
+    REPOSITORY=${REPOSITORY:-debian.sotelips.net}
+    tee -a /etc/apt/sources.list > /dev/null <<EOT
+    deb http://${REPOSITORY}/shimaore shimaore main
+    EOT
+
+Add key
+-------
+
+You may manually install the proper GPG key as follows:
 
     apt-key add - <<'GPG'
     -----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -123,112 +263,3 @@ to sign the "shimaore" distribution.
     =+BNA
     -----END PGP PUBLIC KEY BLOCK-----
     GPG
-
-Alternatively retrieve the key then add it:
-
-    MAINTAINER='Stephane Alnet (Packaging) <stephane@shimaore.net>'
-    gpg --recv-keys "F24B9200"
-    gpg --armor --export "=${MAINTAINER}" | apt-key add -
-
-
-Update System, Install Packages
-===============================
-
-Once the above is done, update your system...
-
-    aptitude update
-    aptitude -y dist-upgrade
-
-Start Installation
-==================
-
-Finally start the installation
-
-"manager" host
---------------
-
-The first host you will install is your "manager" host.
-
-    aptitude -y install ccnq3-manager
-
-This package will overwrite any local CouchDB configuration.
-
-However, if you have an existing CouchDB/BigCouch installation you'd like to
-re-use (located on the same host or on a different system), use
-
-    aptitude -y install ccnq3-manager-shared
-
-instead. You will need to provide administrative access to that existing
-database via a URL such as `http://admin:password@host:5984`.
-
-Normally you should not run voice services on the manager,
-however if you intend to do so you will need to install
-the `ccnq3-voice` package as well.
-
-Client (non-manager) hosts
---------------------------
-
-On a non-manager host you will use:
-
-    aptitude install ccnq3-voice ccnq3-client
-
-You will need to provide it the URI assigned by the provisioning system.
-(See the [provisioning] documentation for how to obtain that URI.)
-
-Installing the `ccnq3-client` package will overwrite any local CouchDB
-configuration. This package cannot be co-located with non-ccnq3 applications
-that might use CouchDB.
-
-If you need mediaproxy on that host, you must manually run
-
-    cd /opt/ccnq3/src/common/mediaproxy
-    ./install.sh
-
-because of some important caveats regarding IPv6.
-
-Installation of `ccnq3_dns`
----------------------------
-
-`ccnq3_dns` is a master-only DNS server that must be
-installed to provide inbound routing for numbers.
-Since it uses port 53 it cannot be installed on any host
-which uses a local DNS resolver or proxy. The host(s) that
-run the service must:
-
-- use non-local nameservers (in /etc/resolv.conf)
-- forward UDP port 53 to UDP port 53053 (install the `ccnq3-dns` package).
-
-See [provisioning] for more information and follow-up steps.
-
-
-Automated (scripted) installation
-=================================
-
-You may provide the URI for `ccnq3-client` in `/etc/ccnq3/uri` before
-installing the package.
-
-You may provide the URI for `ccnq3-manager-shared` in `/etc/ccnq3/admin_uri`
-before installing the package.
-
-Tune-Up
-=======
-
-Additionally I recommend modifying the rsyslog configuration
-to either a centralized syslog server, or a smaller local
-configuration such as:
-
-    tee /etc/rsyslog.conf >/dev/null <<'EOT'
-    $ModLoad imuxsock # provides support for local system logging
-    $ModLoad imklog   # provides kernel logging support (previously done by rklogd)
-    $ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
-    $FileOwner root
-    $FileGroup adm
-    $FileCreateMode 0640
-    $DirCreateMode 0755
-    auth,authpriv.*             /var/log/auth.log
-    *.info;auth,authpriv.none  -/var/log/syslog
-    # Uncomment the following line to gather debug messages
-    # *.debug                  -/var/log/debug
-    EOT
-
-    /etc/init.d/rsyslog restart
