@@ -25,7 +25,7 @@ Released under the AGPL3 license
     delete uri.href
     delete uri.host
     session_db = pico url.format uri
-    session_db.request.get jar:false, json:true, (e,r,p) =>
+    session_db.request.get jar:false, json:true, (e,r,p) ->
       if e?
         return cb e
       if p.error
@@ -41,7 +41,7 @@ Released under the AGPL3 license
     if not password?
       return @send error:'Missing password'
 
-    couchdb_auth username, password, (e,u) ->
+    couchdb_auth username, password, (e,u) =>
       if e?
         @send error:e
       else
