@@ -39,7 +39,7 @@ if [ -e "${CONF}" ]; then
 fi
 
 HOSTNAME=`node -e 'console.log(require("os").hostname())'`
-INTERFACES=`./interfaces.coffee`
+INTERFACES=`$SRC/bin/interfaces.coffee`
 
 if [ "x$1" == "x" ]; then
 
