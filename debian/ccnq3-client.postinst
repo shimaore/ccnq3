@@ -9,7 +9,7 @@ URI="`cat $URI_FILE`"
 
 case "$1" in
   configure|upgrade)
-    (cd ${WORKDIR}/src && su -s /bin/sh -c "./bin/bootstrap-client.sh '$URI'" $USER)
+    cd ${WORKDIR}/src && ./bin/bootstrap-client.sh "$URI"
   ;;
 
   remove|purge)

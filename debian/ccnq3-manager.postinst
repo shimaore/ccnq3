@@ -10,7 +10,7 @@ SRC=git://stephane.shimaore.net/git/ccnq3.git
 
 case "$1" in
   configure|upgrade)
-    (cd ${WORKDIR}/src && su -s /bin/sh -c "./bin/bootstrap-manager.sh" $USER)
+    cd ${WORKDIR}/src && ./bin/bootstrap-manager.sh
   ;;
 
   remove|purge)
