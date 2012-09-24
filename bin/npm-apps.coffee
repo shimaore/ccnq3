@@ -5,6 +5,8 @@
 # Execute a given npm action (such as "install")
 # on all ccnq3 `applications` listed in `config.applications`.
 
+path = require 'path'
+
 finalize = ->
   console.log "Done."
 
@@ -23,7 +25,7 @@ child_process = require 'child_process'
 
 require('ccnq3_config') (config) ->
 
-  source = config.source ? __dirname
+  source = config.source ? path.join __dirname, '..'
 
   run = (applications) ->
       return finalize() unless applications?.length > 0
@@ -31,7 +33,7 @@ require('ccnq3_config') (config) ->
       return finalize() unless application?
 
       options =
-        cwd: "#{source}/#{application}"
+        cwd: path.join source, application
         stdio: ['ignore','pipe','pipe']
       npm = child_process.spawn npm_cmd, operation, options
       npm.stdout.on 'data', (data) -> process.stdout.write data
