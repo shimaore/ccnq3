@@ -71,10 +71,10 @@ exports.update_config = (password,config,cb) ->
 
   # Identically to what happens in ../couchapps/usercode/host.coffee when the
   # password is modified/set.
-  rewrite_host_couchdb_uri doc, doc.provisioning
-  rewrite_host_couchdb_uri doc, doc.logging
+  rewrite_host_couchdb_uri config, config.provisioning
+  rewrite_host_couchdb_uri config, config.logging
 
-  provisioning_db.put config, (e)->
+  provisioning.put config, (e)->
     if e?
       util.log util.inspect e
       throw "Creating provisioning record for #{username}"
