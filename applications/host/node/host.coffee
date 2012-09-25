@@ -8,6 +8,7 @@ Released under the AGPL3 license
 # Create a username for the new host's main process so that it can bootstrap its own installation.
 util = require 'util'
 crypto = require 'crypto'
+url = require 'url'
 
 make_id = (t,n) -> [t,n].join ':'
 
@@ -37,23 +38,40 @@ exports.create_user = (users_db,hostname,cb) ->
     cb? password
 
 
-exports.update_config = (provisioning_uri,provisioning_db,password,config,cb) ->
-  # config.type = "host"
-  # config.host = hostname
-  # config._id  = make_id 'host', hostname
+exports.update_config = (password,config,cb) ->
+  # Since we are on a manager host, provisioning.couchdb_uri should be available.
+  provisioning_uri = config.provisioning.couchdb_uri
+  provisioning = pico provisioning_uri
+
+  # The following are already done by bin/bootstrap.sh
+  #
+  #   config.type = "host"
+  #   config.host = hostname
+  #   config._id  = make_id 'host', hostname
+  #
+
+  # Compare with rewrite_host_couchdb_uri in ../couchapps/usercode/host.coffee
+  rewrite_host_couchdb_uri = (doc,field) ->
+
+    q = url.parse provisioning_uri
+    delete q.href
+    delete q.host
+    q.auth = "#{username}:#{password}"
+
+    field.host_couchdb_uri = url.format q
 
   username = host_username config.host
 
   # Update the provisioning URI to use the host's new username and password.
-  url = require 'url'
-  q = url.parse provisioning_uri
-  delete q.href
-  delete q.host
-  q.auth = "#{username}:#{password}"
-
-  config.provisioning ?= {}
-  config.provisioning.host_couchdb_uri = url.format q
+  config.provisioning.host_couchdb_uri = provisioning_uri
+  # FIXME: why does local_couchdb_uri (on the manager) need to have admin access?
+  # Possible answer: because it needs to install local _design documents.
   config.provisioning.local_couchdb_uri = provisioning_uri
+
+  # Identically to what happens in ../couchapps/usercode/host.coffee when the
+  # password is modified/set.
+  rewrite_host_couchdb_uri doc, doc.provisioning
+  rewrite_host_couchdb_uri doc, doc.logging
 
   provisioning_db.put config, (e)->
     if e?

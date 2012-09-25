@@ -23,6 +23,7 @@ do (jQuery) ->
     # Applications for a manager
     "applications/usercode"
     "applications/provisioning"
+    "applications/logging"
     "applications/roles"
     "applications/portal"
     "applications/inbox"
@@ -61,6 +62,7 @@ do (jQuery) ->
       "applications/usercode"       : "(Manager) usercode"
       "applications/provisioning"   : "(Manager) provisioning"
       "applications/roles"          : "(Manager) roles"
+      "applications/logging"        : "(Manager) logging"
       "applications/portal"         : "(Manager) portal"
       "applications/inbox"          : "(Manager) inbox"
       "public"                      : "(Manager) public"
@@ -102,6 +104,12 @@ do (jQuery) ->
         title: 'Local Provisioning database URI (CouchDB)'
         class:'url'
         value: @provisioning?.local_couchdb_uri
+
+      textbox
+        id:'logging.host_couchdb_uri'
+        title: 'Logging database URI (CouchDB)'
+        class:'required url'
+        value: @logging?.host_couchdb_uri ? (window.location.protocol + '//' + window.location.hostname + ':5984/logging') # FIXME
 
       textbox
         id:'interfaces.primary.ipv4'
@@ -235,11 +243,11 @@ do (jQuery) ->
 
       model = @createModel 'host'
 
-      rewrite_host_couchdb_uri = (doc) ->
+      rewrite_host_couchdb_uri = (doc,field) ->
         username = host_username doc.host
         password = doc.password
 
-        u = doc.provisioning.host_couchdb_uri.match ///
+        u = field.host_couchdb_uri.match ///
             ^
             (https?://)
             (?:[^@]*@)?
@@ -250,7 +258,7 @@ do (jQuery) ->
           alert 'Invalid provisioning URL'
           return
 
-        doc.provisioning.host_couchdb_uri = u[1] + encodeURIComponent(username) + ':' + encodeURIComponent(password) + '@' + u[2]
+        field.host_couchdb_uri = u[1] + encodeURIComponent(username) + ':' + encodeURIComponent(password) + '@' + u[2]
 
       initialize_password = (doc) ->
         ###
@@ -265,7 +273,8 @@ do (jQuery) ->
         ###
         doc.password = password
 
-        rewrite_host_couchdb_uri doc
+        rewrite_host_couchdb_uri doc, doc.provisioning
+        rewrite_host_couchdb_uri doc, doc.logging
 
       model.extend
         beforeSave: (doc) ->
@@ -328,7 +337,8 @@ do (jQuery) ->
           if not doc.password?
             initialize_password doc
           else
-            rewrite_host_couchdb_uri doc
+            rewrite_host_couchdb_uri doc, doc.provisioning
+            rewrite_host_couchdb_uri doc, doc.logging
 
           return doc
 

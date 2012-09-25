@@ -23,10 +23,7 @@ ccnq3_config (config) ->
 
     host.create_user users, hostname, (password) ->
 
-      provisioning_uri = config.provisioning.couchdb_uri
-      provisioning = pico provisioning_uri
-
-      host.update_config provisioning_uri, provisioning, password, config, (config) ->
+      host.update_config password, config, (config) ->
 
         ccnq3_config.update config
 

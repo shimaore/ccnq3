@@ -344,6 +344,15 @@ services, since configuration is read (in most cases) once at startup.
 
     * `couchdb_uri`: string; administrative access to the database where data is stored (this is only used to create the database and should only be present on the host running that database).
 
+*   `logging`:
+
+    This feature allows centralized logging from CCNQ3 hosts.
+    All logging is pushed into a single central CouchDB database; no local logging database is created.
+
+    * `couchdb_uri`: string, only on the manager server; the database (with admin access) where data should be stored.
+
+    * `host_couchdb_uri`: string, required; the database (with host access) where data should be stored
+
 * `replicate_interval`: integer; milliseconds [default: 5 minutes]
 
     Sometimes CouchDB replicate processes might die.

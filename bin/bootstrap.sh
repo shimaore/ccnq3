@@ -63,6 +63,7 @@ if [ "x$1" == "x" ]; then
     "applications/usercode"
   , "applications/provisioning"
   , "applications/roles"
+  , "applications/logging"
   , "applications/host"
   , "applications/portal"
   , "applications/inbox"
@@ -80,6 +81,7 @@ JSON
   # applications/usercode: creates the usercode database: must be first since all others depend on it
   # applications/provisioning: creates the provisioning database: must be second
   # applications/roles: updates the _users databases: must be third
+  # applications/logging: host pre-requires logging
   # applications/portal: portal pre-requires host
 
 else
