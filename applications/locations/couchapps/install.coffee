@@ -2,13 +2,13 @@
 
 pico = require 'pico'
 
-cfg = require 'ccnq3_config'
-cfg (config) ->
+ccnq3 = require 'ccnq3'
+ccnq3.config (config) ->
 
   # If the database already exists
   locations_uri = config.aggregate?.locations_uri
   if locations_uri
-    cfg.db.security locations_uri, 'locations', true
+    ccnq3.db.security locations_uri, 'locations', true
     return
 
   # Otherwise create the database
@@ -16,9 +16,9 @@ cfg (config) ->
   locations = pico locations_uri
   locations.create ->
 
-    cfg.db.security locations_uri, 'locations', true
+    ccnq3.db.security locations_uri, 'locations', true
 
     # Save the new URI in the configuration
     config.aggregate ?= {}
     config.aggregate.locations_uri = locations_uri
-    cfg.update config
+    ccnq3.config.update config

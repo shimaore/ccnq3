@@ -5,8 +5,8 @@ couchapp = require 'couchapp'
 push_script = (uri, script,cb) ->
   couchapp.createApp require("./#{script}"), uri, (app)-> app.push(cb)
 
-cfg = require 'ccnq3_config'
-cfg (config)->
+ccnq3 = require 'ccnq3'
+ccnq3.config (config)->
 
   users_uri = config.users.couchdb_uri
   push_script users_uri, 'main'
@@ -44,4 +44,4 @@ cfg (config)->
   config.mailer ?=
     sendmail: config.install?.mailer?.sendmail ? '/usr/sbin/sendmail'
 
-  cfg.update config
+  ccnq3.config.update config

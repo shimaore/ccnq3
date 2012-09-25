@@ -6,8 +6,8 @@ pico = require 'pico'
 push_script = (uri, script,cb) ->
   couchapp.createApp require("./#{script}"), uri, (app)-> app.push(cb)
 
-cfg = require 'ccnq3_config'
-cfg (config)->
+ccnq3 = require 'ccnq3'
+ccnq3.config (config)->
 
   usercode_uri = config.usercode.couchdb_uri
   push_script usercode_uri, 'usercode'
@@ -15,7 +15,7 @@ cfg (config)->
   # If the database already exists
   provisioning_uri = config.provisioning?.couchdb_uri
   if provisioning_uri
-    cfg.db.security provisioning_uri, 'provisioning', true
+    ccnq3.db.security provisioning_uri, 'provisioning', true
     push_script uri, 'main'   # Filter replication from source to user's databases.
     return
 
@@ -24,10 +24,10 @@ cfg (config)->
   provisioning = pico provisioning_uri
   provisioning.create ->
 
-    cfg.db.security provisioning_uri, 'provisioning', true
+    ccnq3.db.security provisioning_uri, 'provisioning', true
     push_script uri, 'main'   # Filter replication from source to user's databases.
 
     # Save the new URI in the configuration
     config.provisioning =
       couchdb_uri: provisioning_uri
-    cfg.update config
+    ccnq3.config.update config

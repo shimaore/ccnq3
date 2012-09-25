@@ -26,7 +26,7 @@ process_changes = (port,command,cfg) ->
       spawn '/usr/sbin/opensips', [ '-f', cfg ]
 
 
-require('ccnq3_config') (config) ->
+require('ccnq3').config (config) ->
 
   provisioning = pico config.provisioning.local_couchdb_uri
 

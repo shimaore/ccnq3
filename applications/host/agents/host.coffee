@@ -18,7 +18,7 @@ qs = require 'querystring'
 
 pico = require 'pico'
 
-require('ccnq3_config') (config) ->
+require('ccnq3').config (config) ->
 
   # Start replication
   if config.admin?.system

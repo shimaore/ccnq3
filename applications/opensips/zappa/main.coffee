@@ -10,7 +10,7 @@ request = require 'request'
 
 make_id = (t,n) -> [t,n].join ':'
 
-require('ccnq3_config') (config)->
+require('ccnq3').config (config)->
 
   config.opensips_proxy ?= {}
   config.opensips_proxy.port ?= 34340

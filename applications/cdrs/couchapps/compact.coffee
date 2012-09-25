@@ -2,7 +2,7 @@
 
 pico = require 'pico'
 
-require('ccnq3_config') (config) ->
+require('ccnq3').config (config) ->
 
   cdrs_uri = config.aggregate?.cdrs_uri
   if cdrs_uri?

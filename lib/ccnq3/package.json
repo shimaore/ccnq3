@@ -1,19 +1,19 @@
 {
-  "name": "ccnq3_config",
-  "version": "0.3.4",
-  "description": "CCNQ3 config access",
+  "name": "ccnq3",
+  "version": "0.3.5",
+  "description": "CCNQ3 tools",
   "keywords": "ccnq3",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
-  "main": "lib/ccnq3_config.js",
+  "main": "lib/ccnq3.js",
   "files": [
-    "lib/ccnq3_config.js"
+    "lib/ccnq3.js"
   ],
   "dependencies": {
     "pico": "*"
   },
   "scripts": {
-    "prepublish": "coffee -c lib/ccnq3_config.coffee"
-  , "postpublish": "rm -f lib/ccnq3_config.js"
+    "prepublish": "coffee -c lib/ccnq3.coffee"
+  , "postpublish": "rm -f lib/ccnq3.js"
   },
   "engines": { "node": ">=0.4.7" },
   "private": false,

@@ -7,8 +7,8 @@ push_script = (uri, script,cb) ->
   couchapp.createApp require("./#{script}"), uri, (app)-> app.push(cb)
 
 # Load Configuration
-cfg = require 'ccnq3_config'
-cfg (config) ->
+ccnq3 = require 'ccnq3'
+ccnq3.config (config) ->
 
   usercode_uri = config.usercode.couchdb_uri
   push_script usercode_uri, 'usercode'
@@ -61,4 +61,4 @@ cfg (config) ->
     replicate_uri: replicate_uri
     userdb_base_uri: userdb_base_uri
     public_userdb_base_uri: public_uri # FIXME
-  cfg.update config
+  ccnq3.config.update config

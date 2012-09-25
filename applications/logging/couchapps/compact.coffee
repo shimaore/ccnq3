@@ -2,7 +2,7 @@
 
 pico = require 'pico'
 
-require('ccnq3_config') (config) ->
+require('ccnq3').config (config) ->
 
   logging_uri = config.logging?.couchdb_uri
   if logging_uri?

@@ -2,13 +2,13 @@
 
 pico = require 'pico'
 
-cfg = require 'ccnq3_config'
-cfg (config) ->
+ccnq3 = require 'ccnq3'
+ccnq3.config (config) ->
 
   # If the database already exists
   monitor_uri = config.monitor?.couchdb_uri
   if monitor_uri
-    cfg.db.security monitor_uri, 'monitor', true
+    ccnq3.db.security monitor_uri, 'monitor', true
     return
 
   # Otherwise create the database (only on manager host)
@@ -17,9 +17,9 @@ cfg (config) ->
   monitor = pico monitor_uri
   monitor.create ->
 
-    cfg.db.security monitor_uri, 'monitor', true
+    ccnq3.db.security monitor_uri, 'monitor', true
 
     # Save the new URI in the configuration
     config.monitor =
       couchdb_uri: monitor_uri
-    cfg.update config
+    ccnq3.config.update config

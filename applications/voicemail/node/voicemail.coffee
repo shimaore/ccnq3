@@ -50,7 +50,7 @@ querystring = require 'querystring'
 
 messaging = require './messaging'
 
-require('ccnq3_config') (config)->
+require('ccnq3').config (config)->
 
   # esl.debug = true
 

@@ -16,7 +16,7 @@ Released under the AGPL3 license
   querystring = require 'querystring'
 
   config = null
-  require('ccnq3_config') (c) ->
+  require('ccnq3').config (c) ->
     config = c
 
   couchdb_auth = (username,password,cb) ->

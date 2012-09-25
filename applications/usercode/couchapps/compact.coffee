@@ -2,7 +2,7 @@
 
 pico = require 'pico'
 
-require('ccnq3_config') (config)->
+require('ccnq3').config (config)->
 
   usercode_uri = config.usercode.couchdb_uri
   usercode = pico usercode_uri

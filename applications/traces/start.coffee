@@ -13,7 +13,7 @@ default_filter = [
   'tcp portrange 15060-15299'
 ].join ' or '
 
-require('ccnq3_config') (config) ->
+require('ccnq3').config (config) ->
 
   return unless config.traces?.interfaces?.length > 0
 

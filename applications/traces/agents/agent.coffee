@@ -8,7 +8,7 @@ pico = require 'pico'
 
 trace_server = require './trace_server'
 
-require('ccnq3_config') (config) ->
+require('ccnq3').config (config) ->
 
   db = pico config.provisioning.host_couchdb_uri
 

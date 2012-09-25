@@ -3,16 +3,32 @@ pico = require 'pico'
 
 debug = false
 
+#### CCNQ3 Tools
+#
+
+#### ccnq3.make_id(type,name)
+#
+# Returns a proper CouchDB _id for a type and name.
+#
+make_id = (t,n) -> [t,n].join ':'
+
+exports.make_id = make_id
+
+#### Configuration management
+#
+# ccnq3.config manages configuration files for CCNQ3
+
 # Use a package-provided configuration file, if any.
 config_location = process.env.npm_package_config_file
-
-make_id = (t,n) -> [t,n].join ':'
 
 if not config_location?
   config_location = '/etc/ccnq3/host.json'
   util.log "NPM did not provide a config_file parameter, using #{config_location}." if debug
 
-# Attempt to retrieve the last configuration from the database.
+#### ccnq3.config(callback)
+#
+# Attempt to retrieve the last configuration from the database or the local copy.
+# The callback receives the configuration, or an empty hash if none can be retrieved.
 get = (cb)->
   util.log "Using #{config_location} as configuration file." if debug
   fs = require 'fs'
@@ -29,6 +45,12 @@ get = (cb)->
     # Callback
     cb config
 
+module.exports.config = get
+module.exports.config.location = config_location
+
+#### ccnq3.config.retrieve(config,callback)
+# Attempt to retrieve the configuration from the provisioning database.
+# The original config parameter is passed to the callback if the remote retrieval failed.
 retrieve = (config,cb) ->
   if not config.host? or not config.provisioning? or not config.provisioning.host_couchdb_uri?
     util.log "Information to retrieve remote configuration is not available."
@@ -45,22 +67,24 @@ retrieve = (config,cb) ->
       util.log "Retrieved live configuration." if debug
       cb p
 
+module.exports.config.retrieve = retrieve
+
+#### ccnq3.config.update(config)
+# Attempt to save the given configuration in the local storage.
 update = (content) ->
   util.log "Updating local configuration file." if debug
   fs = require 'fs'
   fs.writeFileSync config_location, JSON.stringify content
 
-module.exports = get
-module.exports.location = config_location
-module.exports.retrieve = retrieve
-module.exports.update = update
-module.exports.get = ->
-  console.warn "ccnq3_config.get(callback) is obsolete, use ccnq3_config(callback)."
-  get arguments...
+module.exports.config.update = update
 
-# Tools
+#### ccnq3.db
+#
 module.exports.db =
   # Update ACLs and code
+  #### ccnq3.db.security(db_uri,name,trust_hosts)
+  # Updates the security record for the given database, using the given name as the database type.
+  # Additionally, remote hosts are allowed to read/write the database if the `trust_hosts` flag is true.
   security: (uri,name,trust_hosts) ->
     db = pico uri
 

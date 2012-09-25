@@ -1,7 +1,7 @@
 @include = ->
 
   config = null
-  require('ccnq3_config') (c) ->
+  require('ccnq3').config (c) ->
     config = c
 
   request = require('request').defaults jar:false

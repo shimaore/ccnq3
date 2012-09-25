@@ -4,7 +4,7 @@
 # Released under the AGPL3 license
 ###
 
-require('ccnq3_config') (config)->
+require('ccnq3').config (config)->
 
   zappa = require 'zappajs'
   zappa.run config.portal.port, config.portal.hostname, ->

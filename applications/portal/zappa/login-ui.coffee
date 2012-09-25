@@ -6,7 +6,7 @@ Released under the AGPL3 license
 @include = ->
 
   config = null
-  require('ccnq3_config') (c) ->
+  require('ccnq3').config (c) ->
     config = c
 
   @coffee '/ccnq3/portal/login.js': ->

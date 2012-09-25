@@ -61,7 +61,7 @@ save_uri_as = (uri,file,cb)->
 pico = require 'pico'
 qs = require 'querystring'
 
-require('ccnq3_config') (config) ->
+require('ccnq3').config (config) ->
 
   # Aggregate back towards the main database if requested.
   require('./aggregate') config

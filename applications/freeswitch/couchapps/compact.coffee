@@ -2,7 +2,7 @@
 
 pico = require 'pico'
 
-require('ccnq3_config') (config) ->
+require('ccnq3').config (config) ->
 
   provisioning_uri = config.provisioning.local_couchdb_uri
   provisioning = pico provisioning_uri

@@ -10,8 +10,8 @@ host = require './host.coffee'
 pico = require 'pico'
 
 # Load Configuration
-ccnq3_config = require 'ccnq3_config'
-ccnq3_config (config) ->
+ccnq3 = require 'ccnq3'
+ccnq3.config (config) ->
 
   hostname = config.host
 
@@ -25,7 +25,7 @@ ccnq3_config (config) ->
 
       host.update_config password, config, (config) ->
 
-        ccnq3_config.update config
+        ccnq3.config.update config
 
   else
 

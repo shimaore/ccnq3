@@ -5,13 +5,13 @@
 
 pico = require 'pico'
 
-cfg = require 'ccnq3_config'
-cfg (config) ->
+ccnq3 = require 'ccnq3'
+ccnq3.config (config) ->
 
   # If the database already exists
   cdrs_uri = config.aggregate?.cdrs_uri
   if cdrs_uri
-    cfg.db.security cdrs_uri, 'cdrs', true
+    ccnq3.db.security cdrs_uri, 'cdrs', true
     return
 
   # Otherwise create the database
@@ -19,9 +19,9 @@ cfg (config) ->
   cdrs = pico cdrs_uri
   cdrs.create ->
 
-    cfg.db.security cdrs_uri, 'cdrs', true
+    ccnq3.db.security cdrs_uri, 'cdrs', true
 
     # Save the new URI in the configuration
     config.aggregate ?= {}
     config.aggregate.cdrs_uri = cdrs_uri
-    cfg.update config
+    ccnq3.config.update config

@@ -7,7 +7,7 @@ request = require 'request'
 fs = require 'fs'
 util = require 'util'
 
-require('ccnq3_config') (config) ->
+require('ccnq3').config (config) ->
   options = config.web?.options ? {}
   options.port ?= 8080
   require('zappajs').run options, ->
