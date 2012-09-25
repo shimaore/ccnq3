@@ -9,6 +9,7 @@ Released under the AGPL3 license
 util = require 'util'
 crypto = require 'crypto'
 url = require 'url'
+pico = require 'pico'
 
 make_id = (t,n) -> [t,n].join ':'
 
