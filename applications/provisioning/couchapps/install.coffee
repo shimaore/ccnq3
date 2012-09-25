@@ -15,7 +15,7 @@ cfg (config)->
   # If the database already exists
   provisioning_uri = config.provisioning?.couchdb_uri
   if provisioning_uri
-    cfg.security provisioning_uri, 'provisioning', true
+    cfg.db.security provisioning_uri, 'provisioning', true
     push_script uri, 'main'   # Filter replication from source to user's databases.
     return
 
@@ -24,7 +24,7 @@ cfg (config)->
   provisioning = pico provisioning_uri
   provisioning.create ->
 
-    cfg.security provisioning_uri, 'provisioning', true
+    cfg.db.security provisioning_uri, 'provisioning', true
     push_script uri, 'main'   # Filter replication from source to user's databases.
 
     # Save the new URI in the configuration

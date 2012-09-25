@@ -8,7 +8,7 @@ cfg (config) ->
   # If the database already exists
   monitor_uri = config.monitor?.couchdb_uri
   if monitor_uri
-    cfg.security monitor_uri, 'monitor', true
+    cfg.db.security monitor_uri, 'monitor', true
     return
 
   # Otherwise create the database (only on manager host)
@@ -17,7 +17,7 @@ cfg (config) ->
   monitor = pico monitor_uri
   monitor.create ->
 
-    cfg.security monitor_uri, 'monitor', true
+    cfg.db.security monitor_uri, 'monitor', true
 
     # Save the new URI in the configuration
     config.monitor =

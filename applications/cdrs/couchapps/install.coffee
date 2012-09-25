@@ -11,7 +11,7 @@ cfg (config) ->
   # If the database already exists
   cdrs_uri = config.aggregate?.cdrs_uri
   if cdrs_uri
-    cfg.security cdrs_uri, 'cdrs', true
+    cfg.db.security cdrs_uri, 'cdrs', true
     return
 
   # Otherwise create the database
@@ -19,7 +19,7 @@ cfg (config) ->
   cdrs = pico cdrs_uri
   cdrs.create ->
 
-    cfg.security cdrs_uri, 'cdrs', true
+    cfg.db.security cdrs_uri, 'cdrs', true
 
     # Save the new URI in the configuration
     config.aggregate ?= {}

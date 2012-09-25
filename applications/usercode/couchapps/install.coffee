@@ -12,7 +12,7 @@ cfg (config)->
 
   usercode_uri = config.usercode?.couchdb_uri
   if usercode_uri
-    cfg.security usercode_uri, 'usercode', false
+    cfg.db.security usercode_uri, 'usercode', false
     push_script uri, 'main'   # Filter replication from source to user's databases.
     return
 
@@ -21,7 +21,7 @@ cfg (config)->
   usercode = pico usercode_uri
   usercode.create ->
 
-    cfg.security usercode_uri, 'usercode', false
+    cfg.db.security usercode_uri, 'usercode', false
     push_script uri, 'main'   # Filter replication from source to user's databases.
 
     # Save the URI

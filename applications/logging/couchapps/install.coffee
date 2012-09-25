@@ -8,7 +8,7 @@ cfg (config) ->
   # If the database already exists
   logging_uri = config.logging?.couchdb_uri
   if logging_uri
-    cfg.security logging_uri, 'logging', true
+    cfg.db.security logging_uri, 'logging', true
     return
 
   # Otherwise create the database (only on manager host)
@@ -17,7 +17,7 @@ cfg (config) ->
   logging = pico logging_uri
   logging.create ->
 
-    cfg.security logging_uri, 'logging', true
+    cfg.db.security logging_uri, 'logging', true
 
     # Save the new URI in the configuration
     config.logging ?= {}
