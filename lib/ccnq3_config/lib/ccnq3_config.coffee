@@ -57,3 +57,24 @@ module.exports.update = update
 module.exports.get = ->
   console.warn "ccnq3_config.get(callback) is obsolete, use ccnq3_config(callback)."
   get arguments...
+
+# Tools
+module.exports.db =
+  # Update ACLs and code
+  security: (uri,name,trust_hosts) ->
+    db = pico uri
+
+    db.request.get '_security', json:true, (e,r,p)->
+      p.admins ||= {}
+      p.admins.roles ||= []
+      p.admins.roles.push("#{name}_admin") if p.admins.roles.indexOf("#{name}_admin") < 0
+
+      p.readers ||= {}
+      p.readers.roles ||= []
+      p.readers.roles.push("#{name}_writer") if p.readers.roles.indexOf("#{name}_writer") < 0
+      p.readers.roles.push("#{name}_reader") if p.readers.roles.indexOf("#{name}_reader") < 0
+      if trust_hosts
+        # Hosts have direct access to the database
+        p.readers.roles.push("host") if p.readers.roles.indexOf("host") < 0
+
+      db.request.put '_security', json:p
