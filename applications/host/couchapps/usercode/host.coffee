@@ -73,7 +73,7 @@ do (jQuery) ->
       "applications/dns"            : "CCNQ3 DNS (requires ccnq3-dns package)"
       # Applications for a server running ccnq3-voice
       "applications/freeswitch"     : "FreeSwitch (requires ccnq3-voice package)"
-      "applications/opensips"       : "OpenSIPS (requires ccqn3-voice package)"
+      "applications/opensips"       : "OpenSIPS (requires ccnq3-voice package)"
       "applications/traces"         : "Traces (requires ccnq3-traces package)"
       # Applications for a server running FreeSwitch
       "applications/voicemail"      : "Voicemail (requires FreeSwitch)"
