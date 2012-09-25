@@ -319,11 +319,13 @@ services, since configuration is read (in most cases) once at startup.
 
 *   `monitor`:
 
-    This feature is used on host running the `applications/monitor` service.
+    This feature is used on hosts running the `applications/monitor` service.
     All monitoring data is parsed and pushed into a CouchDB database at set intervals as a JSON record.
     For analysis, reporting, and graphing, use CouchDB and other tools.
 
-    * `host_couchdb_uri`: string, required; the database where data should be stored
+    * `couchdb_uri`: string, only on the manager server; the database (with admin access) where data should be stored.
+
+    * `host_couchdb_uri`: string, required; the database (with host access) where data should be stored
 
     * `interval`: integer; the interval in milliseconds between two runs of the data collection [default: 5 minutes]
 
