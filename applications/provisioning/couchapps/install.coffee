@@ -16,7 +16,7 @@ ccnq3.config (config)->
   provisioning_uri = config.provisioning?.couchdb_uri
   if provisioning_uri
     ccnq3.db.security provisioning_uri, 'provisioning', true
-    push_script uri, 'main'   # Filter replication from source to user's databases.
+    push_script provisioning_uri, 'main'   # Filter replication from source to user's databases.
     return
 
   # Otherwise create the database
@@ -25,7 +25,7 @@ ccnq3.config (config)->
   provisioning.create ->
 
     ccnq3.db.security provisioning_uri, 'provisioning', true
-    push_script uri, 'main'   # Filter replication from source to user's databases.
+    push_script provisioning_uri, 'main'   # Filter replication from source to user's databases.
 
     # Save the new URI in the configuration
     config.provisioning =

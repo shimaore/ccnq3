@@ -13,7 +13,7 @@ ccnq3.config (config)->
   usercode_uri = config.usercode?.couchdb_uri
   if usercode_uri
     ccnq3.db.security usercode_uri, 'usercode', false
-    push_script uri, 'main'   # Filter replication from source to user's databases.
+    push_script usercode_uri, 'main'   # Filter replication from source to user's databases.
     return
 
   # Create the usercode database.
@@ -22,7 +22,7 @@ ccnq3.config (config)->
   usercode.create ->
 
     ccnq3.db.security usercode_uri, 'usercode', false
-    push_script uri, 'main'   # Filter replication from source to user's databases.
+    push_script usercode_uri, 'main'   # Filter replication from source to user's databases.
 
     # Save the URI
     config.usercode =
