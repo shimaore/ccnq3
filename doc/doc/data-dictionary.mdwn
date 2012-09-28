@@ -651,7 +651,7 @@ Related: applications/registrant
 
     * `local_port`: integer, port where to send incoming calls
 
-    * `remote_ipv4`: string, upstream registrar
+    * `remote_ipv4`: string, default upstream registrar
 
     * `proxy_port`: integer, the port for this SIP service [default: 5070]
 
@@ -1015,6 +1015,8 @@ number (provisioning records)
 *   `registrant_password`: password for applications/registrant
 
     You must issue a `start` registrant command for the changes to be applied.
+
+*   `registrant_remote_ipv4`: remote server for applications/registrant
 
 *   `registrant_host`: host(s) where this registration should be effective
 
