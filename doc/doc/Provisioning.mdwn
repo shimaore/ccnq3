@@ -1,5 +1,5 @@
-Introduction
-============
+Introduction, Prerequisites
+===========================
 
 The following steps are currently not automated and might not be
 available in the portal. They must be performed after the steps in
@@ -37,6 +37,8 @@ and host `vm3` will be a carrier-side server.
 Create a managing user
 ======================
 
+FIXME: Script this!
+
 * Check that Futon is running on the server.
 
      http://admin:XXXXX@vm1.phone.example.net:8080/_utils
@@ -66,7 +68,8 @@ Create a managing user
 * Log into the web application to confirm it is working.
 
   Note: login will fail if you attempt to use e.g. an IP address instead of
-  the host name.
+  the host name. This is why a prerequisite was that the manager be
+  accessible through its hostname.
 
 * Logout from the web application.
 
@@ -97,7 +100,10 @@ Create a managing user
       "access:provisioning:",
       "update:provisioning:",
       "update:_users:",
-      "update:host:"
+      "update:host:",
+      "update:user_db:",
+      "access:_users:",
+      "access:traces:"
     ]
 
   (`confirmed` is a role added automatically the first time you log in,
