@@ -6,7 +6,7 @@ WORKDIR=/opt/${NAME}
 ETCDIR=/etc/${NAME}
 URI_FILE="$ETCDIR/uri"
 
-[ -x "$URI_FILE" ] || exit 1
+[ -e "$URI_FILE" ] || exit 1
 
 URI="`cat $URI_FILE`"
 
