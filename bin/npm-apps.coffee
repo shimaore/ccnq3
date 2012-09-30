@@ -34,7 +34,7 @@ require('ccnq3').config (config) ->
 
       options =
         cwd: path.join source, application
-        stdio: ['ignore','pipe','pipe']
+        stdio: ['ignore','pipe','pipe','ignore']
       npm = child_process.spawn npm_cmd, operation, options
       npm.stdout.on 'data', (data) -> process.stdout.write data
       npm.stderr.on 'data', (data) -> process.stderr.write data
