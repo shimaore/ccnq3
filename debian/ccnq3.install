@@ -2,4 +2,3 @@ applications /opt/ccnq3/src
 bin /opt/ccnq3/src
 package.json /opt/ccnq3/src
 public /opt/ccnq3/src
-common/monit/conf.d/* /etc/monit/conf.d
