@@ -10,8 +10,8 @@ ETCDIR=/etc/${NAME}
 
 case "$1" in
   configure|upgrade)
-    db_get ccnq3/admin_uri || exit 1
-    [ "x$RET" == "x" ] && exit 1
+    db_get ccnq3/admin_uri
+    [ -z "$RET" ] && exit 1
     (cd ${WORKDIR}/src && su -s /bin/sh -c "CDB_URI=\"$RET\" ./bin/bootstrap.sh" $USER)
   ;;
 

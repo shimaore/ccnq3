@@ -1,17 +1,16 @@
 #!/bin/sh
 # set -e
 
+. /usr/share/debconf/confmodule
+
 NAME=ccnq3
 WORKDIR=/opt/${NAME}
 ETCDIR=/etc/${NAME}
 
-# Source debconf library.
-. /usr/share/debconf/confmodule
-
 case "$1" in
   configure|upgrade)
-    db_get ccnq3/uri || exit 1
-    [ "x$RET" == "x" ] && exit 1
+    db_get ccnq3/uri
+    [ -z "$RET" ] && exit 1
     cd ${WORKDIR}/src && ./bin/bootstrap-client.sh "$RET"
   ;;
 
