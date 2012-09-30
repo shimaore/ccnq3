@@ -4,16 +4,18 @@
 NAME=ccnq3
 WORKDIR=/opt/${NAME}
 ETCDIR=/etc/${NAME}
-URI_FILE="$ETCDIR/admin_uri"
-URI="`cat $URI_FILE`"
+
+# Source debconf library.
+. /usr/share/debconf/confmodule
 
 case "$1" in
   configure|upgrade)
-    (cd ${WORKDIR}/src && su -s /bin/sh -c "CDB_URI=\"$URI\" ./bin/bootstrap.sh" $USER)
+    db_get ccnq3/admin_uri || exit 1
+    [ "x$RET" == "x" ] && exit 1
+    (cd ${WORKDIR}/src && su -s /bin/sh -c "CDB_URI=\"$RET\" ./bin/bootstrap.sh" $USER)
   ;;
 
   remove|purge)
-    rm -f "$URI_FILE"
   ;;
 
   abort-upgrade|abort-remove|abort-deconfigure)
