@@ -10,7 +10,7 @@ ETCDIR=/etc/${NAME}
 case "$1" in
   configure|upgrade)
     db_get ccnq3/uri
-    [ -z "$RET" ] && exit 1
+    if [ -z "$RET" ]; then db_reset ccnq3/uri; exit 1; fi
     cd ${WORKDIR}/src && ./bin/bootstrap-client.sh "$RET"
   ;;
 
