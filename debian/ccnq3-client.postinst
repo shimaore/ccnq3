@@ -11,6 +11,7 @@ ETCDIR=/etc/${NAME}
 case "$1" in
   configure|upgrade)
     db_get ccnq3/uri || exit 1
+    [ "x$RET" == "x" ] && exit 1
     cd ${WORKDIR}/src && ./bin/bootstrap-client.sh "$RET"
   ;;
 
