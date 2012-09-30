@@ -7,7 +7,7 @@ Depends:
   findutils, adduser, passwd,
   curl,
   daemon, bash, openssl,
-  nodejs (>=0.6.6), build-essential, python
+  nodejs (>=0.6.6), build-essential, python,
   couchdb (=1.2.0-4)
 Recommends: monit, munin-node
 Suggests: ccnq-base (= ${binary:Version})
