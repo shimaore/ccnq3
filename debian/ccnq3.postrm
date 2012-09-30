@@ -12,6 +12,7 @@ case "$1" in
   remove|purge|upgrade|failed-upgrade)
     find ${WORKDIR}/src -name node_modules -print0 | xargs -0 rm -rf
     # deluser $USER
+    # On purge: rm -r /etc/ccnq3 /opt/ccnq3 /var/lib/couchdb/ccnq3
   ;;
 
   abort-upgrade|abort-remove|abort-deconfigure)
