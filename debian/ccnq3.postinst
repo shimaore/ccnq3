@@ -45,9 +45,14 @@ case "$1" in
 
   ;;
 
-  remove|purge)
+  remove)
     rm -rf ${WORKDIR}/src
     # deluser $USER
+  ;;
+
+  purge)
+    rm -rf ${WORKDIR}/src
+    rm -f "$ETCDIR/host.json"
   ;;
 
   abort-upgrade|abort-remove|abort-deconfigure)
