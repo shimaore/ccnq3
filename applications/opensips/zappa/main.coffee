@@ -146,6 +146,7 @@ require('ccnq3').config (config)->
       if @body.query_type is 'insert' or @body.query_type is 'update'
 
         loc_db.rev doc._id, (h) =>
+          if not h? then return @send ""
           doc._rev = h.rev if h.rev?
           loc_db.put doc, (e,r,p) =>
             if e then return @send ""
@@ -155,7 +156,7 @@ require('ccnq3').config (config)->
       if @body.query_type is 'delete'
 
         loc_db.rev doc._id, (h) =>
-          if not h.rev? then return @send ""
+          if not h?.rev? then return @send ""
           doc._rev = h.rev
           loc_db.remove doc, (e) =>
             if e then return @send ""
