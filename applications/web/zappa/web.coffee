@@ -36,12 +36,10 @@ require('ccnq3').config (config) ->
         extra_login.push (auth,next) ->
           auth.notify 'Replicating provisioning data.'
           ee = $.ccnq3.roles.replicate.pull 'provisioning'
-          ee.on 'success', ->
-            auth.notify ''
-            next()
           ee.on 'error', ->
             auth.notify 'Provisioning replication failed.'
             return
+          next()
 
     @view 'default': ->
       div id:'menu_container'
