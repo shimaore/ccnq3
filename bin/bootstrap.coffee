@@ -43,7 +43,6 @@ run = ->
       provisioning:
         host_couchdb_uri: process.argv[2]
       applications: [
-        "applications/logging"
         "applications/monitor"
         "applications/host"
       ]

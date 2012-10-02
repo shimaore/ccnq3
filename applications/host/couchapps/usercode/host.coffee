@@ -21,8 +21,8 @@ do (jQuery) ->
     "applications/usercode"       # Must be first
     "applications/provisioning"   # Must be second
     "applications/roles"          # Must be third
-    # Required on all servers
     "applications/logging"
+    # Required on all servers
     "applications/monitor"
     "applications/host"
     # Applications for a manager
