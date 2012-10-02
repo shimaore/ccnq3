@@ -11,7 +11,7 @@ case "$1" in
   configure|upgrade)
     db_get ccnq3/uri
     if [ -z "$RET" ]; then db_reset ccnq3/uri; exit 1; fi
-    cd ${WORKDIR}/src && ./bin/bootstrap-client.sh "$RET"
+    cd ${WORKDIR}/src && ./bin/bootstrap-client.sh "$RET" 3<&-
   ;;
 
   remove|purge)
