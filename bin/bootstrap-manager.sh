@@ -66,4 +66,4 @@ chown couchdb.couchdb "${COUCHDB_CONFIG}"
 /etc/init.d/couchdb start
 
 export CDB_URI="http://admin:${ADMIN_PASSWORD}@${HOSTNAME}:5984"
-exec su -s /bin/bash -c "${SRC}/bin/bootstrap.sh" "${USER}"
+exec su -s /bin/bash -c "${SRC}/bin/bootstrap.coffee" "${USER}"

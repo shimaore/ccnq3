@@ -16,7 +16,9 @@
   , "test": "coffeelint -r . ; find . -name '*.json' -exec jsonlint '{}' ';' >/dev/null"
   },
   "dependencies": {
-    "ccnq3": ">=0.3.3"
+    "ccnq3": ">=0.3.7"
+  , "request": "*"
+  , "npm": "*"
   },
   "devDependencies": {
     "github-flavored-markdown": "*"
