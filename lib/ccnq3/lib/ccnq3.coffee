@@ -72,6 +72,9 @@ module.exports.config.retrieve = retrieve
 #### ccnq3.config.update(config)
 # Attempt to save the given configuration in the local storage.
 update = (content) ->
+  if not content?
+    util.log "Cannot update empty configuration."
+    return
   util.log "Updating local configuration file." if debug
   fs = require 'fs'
   fs.writeFileSync config_location, JSON.stringify content
