@@ -19,6 +19,7 @@
     "ccnq3": ">=0.3.7"
   , "request": "*"
   , "npm": "*"
+  , "password": "*"
   },
   "devDependencies": {
     "github-flavored-markdown": "*"

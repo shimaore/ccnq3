@@ -43,10 +43,12 @@ case "$1" in
     (cd ${WORKDIR}/src && su -s /bin/sh -c "npm install" $USER) || exit 1
     (cd ${WORKDIR}/src && su -s /bin/sh -c "npm run-script updates" $USER) || exit 1
 
+    ln -s /opt/ccnq3/src/bin/ccnq3 /usr/sbin/ccnq3
   ;;
 
   remove)
     rm -rf ${WORKDIR}/src
+    rm -f /usr/sbin/ccnq3
     # deluser $USER
   ;;
 

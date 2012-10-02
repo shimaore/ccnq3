@@ -1,0 +1,70 @@
+#!/usr/bin/env coffee
+
+ccnq3 = require 'ccnq3'
+request = require 'request'
+qs = require 'querystring'
+
+command = process.argv[2]
+args = process.argv.slice 3
+
+commands =
+  'uri': ->
+    ccnq3.config (config) ->
+      base_uri = config.admin?.couchdb_uri
+      if not base_uri?
+        console.log 'Admin access is not available on this host.'
+        return
+
+      console.log "#{base_uri}/_utils/"
+
+  'admin': (name) ->
+    ccnq3.config (config) ->
+      base_uri = config.admin?.couchdb_uri
+      if not base_uri?
+        console.log 'Admin access is not available on this host.'
+        return
+
+      if not config.users?.couchdb_uri?
+        console.log 'Users access is not available on this host.'
+        return
+
+      id = ccnq3.make_id 'org.couchdb.user', name
+      user_uri = "#{config.users.couchdb_uri}/#{qs.escape id}"
+      request user_uri, json:true, (e,r,doc) ->
+        if e
+          console.log 'No such user, please have the user register first.'
+          return
+
+        # generate a new password
+        password = require('password')(4)
+
+        doc.password = password
+        admin_access = [
+          "access:provisioning:"  # Pull provisioning database
+          "update:provisioning:"  # Push provisioning database
+          "update:_users:"        # Allows to create user records
+          "update:_users:"        # Allows to grant the role (via applications/roles/zappa/admin.coffee)
+          "update:host:"          # Role to add and modify hosts (servers)
+          "update:user_db:"       # Allows to grant this role to new "voicemail@" accounts. (Not required if not using voicemail.)
+          "access:_users:"        # Allows to grant this role to new "voicemail@" accounts. (Not required if not using voicemail.)
+          "access:traces:"        # Allows to grant the role to users who need to gather sniffer traces
+        ]
+        for role in admin_access
+          doc.roles.push role unless role in  doc.roles
+
+        request.put user_uri, json:doc, (e,r,b) ->
+          if e
+            console.log 'Could not modify the user record: '+e
+            return
+
+          uri = "#{base_uri}/config/admins/#{qs.escape(name)}"
+          request.put uri, password, (e,r,b) ->
+            if e
+              console.log 'Failed: '+e
+            else
+              console.log "Password: #{password}"
+
+if commands[command]?
+  commands[command] args...
+else
+  console.log "Unknown command #{command}"

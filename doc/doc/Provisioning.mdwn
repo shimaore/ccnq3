@@ -37,21 +37,6 @@ and host `vm3` will be a carrier-side server.
 Create a managing user
 ======================
 
-FIXME: Script this!
-
-* Check that Futon is running on the server.
-
-     http://admin:XXXXX@vm1.phone.example.net:8080/_utils
-
-  Note: The full URL is provided during the installation of the
-        `bootstrap-manager` package.
-  Note: In the default setup you may indifferently use port 8080 or port 5984
-        to access Futon and CouchDB. To access CouchDB programmatically you
-        should use port 5984 to avoid a dependency on the web application.
-
-* Click the "Logout" button on the Futon interface (in the bottom right
-  corner) and refuse to log back in.
-
 * Register on the web application.
 
      http://vm1.phone.example.net:8080/
@@ -71,46 +56,15 @@ FIXME: Script this!
   the host name. This is why a prerequisite was that the manager be
   accessible through its hostname.
 
+  Note: login will fail if the database is not accessible from your web browser.
+
 * Logout from the web application.
 
-* Go back to Futon and log in using the "admin" account.
+* At the command prompt on the manager server, run
 
-  Important note:
-  Make sure you are logged out, first (there is a "Logout" button in the bottom right).
-  Refuse to enter your password until you are first logged out.
-  (This is because the web application will have you logged in under your own username,
-  while you need to use the "admin" account for the following steps.)
+      /usr/sbin/ccnq3 admin <email>
 
-  Once logged out, log in using the admin account, then add
-
-      access:provisioning:  # Pull provisioning database
-      update:provisioning:  # Push provisioning database
-      update:_users:        # Allows to create user records
-      update:_users:        # Allows to grant the role (via applications/roles/zappa/admin.coffee)
-      update:host:          # Role to add and modify hosts (servers)
-      update:user_db:       # Allows to grant this role to new "voicemail@" accounts. (Not required if not using voicemail.)
-      access:_users:        # Allows to grant this role to new "voicemail@" accounts. (Not required if not using voicemail.)
-      access:traces:        # Allows to grant the role to users who need to gather sniffer traces
-
-  to the `roles` array of your user's record (in the `_users` database).
-  It should look something like this:
-
-    [
-      "confirmed",
-      "access:provisioning:",
-      "update:provisioning:",
-      "update:_users:",
-      "update:host:",
-      "update:user_db:",
-      "access:_users:",
-      "access:traces:"
-    ]
-
-  (`confirmed` is a role added automatically the first time you log in,
-  so it should already be present.)
-
-* Logout of Futon.
-
+  as root, replacing `<email>` with the email address you registered with.
 
 DNS
 ===
