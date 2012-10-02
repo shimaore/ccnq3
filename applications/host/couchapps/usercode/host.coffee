@@ -17,14 +17,15 @@ do (jQuery) ->
   all_apps = [
     # Order is important here due to dependencies.
 
-    # Required on all servers
-    "applications/host"
-    "applications/monitor"
     # Applications for a manager
-    "applications/usercode"
-    "applications/provisioning"
+    "applications/usercode"       # Must be first
+    "applications/provisioning"   # Must be second
+    "applications/roles"          # Must be third
+    # Required on all servers
     "applications/logging"
-    "applications/roles"
+    "applications/monitor"
+    "applications/host"
+    # Applications for a manager
     "applications/portal"
     "applications/inbox"
     "public"
