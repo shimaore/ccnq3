@@ -35,10 +35,6 @@ commands =
           console.log 'No such user, please have the user register first.'
           return
 
-        # generate a new password
-        password = require('password')(4)
-
-        doc.password = password
         admin_access = [
           "access:provisioning:"  # Pull provisioning database
           "update:provisioning:"  # Push provisioning database
@@ -57,12 +53,11 @@ commands =
             console.log 'Could not modify the user record: '+e
             return
 
-          uri = "#{base_uri}/config/admins/#{qs.escape(name)}"
-          request.put uri, password, (e,r,b) ->
-            if e
-              console.log 'Failed: '+e
-            else
-              console.log "Password: #{password}"
+          if not b.ok
+            console.log 'Could not modify the user record: '+b
+            return
+
+          console.log "User account was modified successfully."
 
 if commands[command]?
   commands[command] args...
