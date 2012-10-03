@@ -173,7 +173,7 @@ class Message
     @part = the_first_part
 
   msg_uri: ->
-    @db.prefix @id
+    @db.request.prefix @id
 
   # Record the current part
   start_recording: (call,cb) ->
