@@ -16,7 +16,7 @@
 
         $('#recover').dialog({ autoOpen: false, modal: true, resizable: false })
 
-        $('#recover_window').submit ->
+        $('#recover_window').submit (e)->
           $('#recover').dialog('open')
           return false
 
@@ -27,12 +27,10 @@
         $('#recover').submit ->
           $('#recover_error').html('')
           ee = $.ccnq3.portal.recover $('#recover_email').val()
-          ee.on 'success', ->
-            $('#recover_error').html('Operation failed')
           ee.on 'error', ->
-            $('#login_error').html('')
-            $('#login').dialog('close')
-            window.location.reload()
+            $('#recover_error').html('Operation failed')
+          ee.on 'success', ->
+            $('#recover').dialog('close')
           return false
 
 
