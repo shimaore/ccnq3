@@ -26,7 +26,7 @@ run = ->
   CONF = ccnq3.config.location
 
   if fs.existsSync CONF
-    console.log "ERROR: #{CONF} already exists."
+    console.log "Skipping configuration: #{CONF} already exists."
     return 1
 
   HOSTNAME=require("os").hostname()
