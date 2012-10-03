@@ -21,8 +21,15 @@ do (jQuery) ->
         select name:'inbox_sort', class:'inbox_sort', ->
           option value:'by_type', -> 'By type'
           option value:'by_date', -> 'By date'
+          option value:'hosts', -> 'Hosts'
+          option value:'endpoints', -> 'Endpoints'
+          option value:'numbers', -> 'Numbers'
+          option value:'rules', -> 'Rules'
+        span ' | Offset: '
         input name:'inbox_offset', class:'inbox_offset'
+        span ' | Shown: '
         span id:'inbox_shown_rows', class:'inbox_shown_rows'
+        span ' | Total: '
         span id:'inbox_total_rows', class:'inbox_total_rows'
       div class:'inbox_content'
 

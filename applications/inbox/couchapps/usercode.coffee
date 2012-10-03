@@ -15,6 +15,26 @@ ddoc =
 
 module.exports = ddoc
 
+ddoc.views.hosts =
+  map: p_fun (doc) ->
+    if doc.type is 'host'
+      emit doc.host, null
+
+ddoc.views.endpoints =
+  map: p_fun (doc) ->
+    if doc.type is 'endpoint'
+      emit doc.endpoint, null
+
+ddoc.views.numbers =
+  map: p_fun (doc) ->
+    if doc.type is 'number'
+      emit doc.number, null
+
+ddoc.views.rules =
+  map: p_fun (doc) ->
+    if doc.type is 'rule'
+      emit doc.rule, null
+
 ddoc.views.by_date =
   map: p_fun (doc) ->
     if doc.type? and doc.updated_at?
