@@ -93,15 +93,23 @@ Released under the AGPL3 license
 
       require('ccnq3').config (config)=>
 
+        username = @body.name
+        password = @body.password
+
+        if not username?
+          return @send error:'missing name'
+        if not password?
+          return @send error:'missing password'
+
         p =
-          _id: user_id @body.name
+          _id: user_id username
           type: 'user'
           roles: []
-          password: @body.password
-          name: @body.name
+          password: password
+          name: username
 
         users_db = pico config.users.couchdb_uri
-        users_db.put user_id(@body.name), json:p, (e,r,p) =>
+        users_db.put p, (e,r,p) =>
           @send status: r.statusCode, data: p
 
   # Grant right
