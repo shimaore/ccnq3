@@ -52,7 +52,7 @@ require('ccnq3').config (config) ->
     qs_host = qs.stringify key: JSON.stringify p.host
     provisioning.request.get "/_design/registrant/_view/registrant?#{qs_host}", json:true, (e,r,l) ->
       params.uac_entries = ("""
-        modparam("uac_registrant","uac","sip:#{row.value.registrant_remote_ipv4 ? p.registrant.remote_ipv4},,sip:00#{row.value.number}@#{row.value.registrant_remote_ipv4 ? p.registrant.remote_ipv4},,00#{row.value.number},#{row.value.password},sip:00#{row.value.number}@#{p.interfaces.primary.ipv4 ? p.host}:5070,,,")\n
+        modparam("uac_registrant","uac","sip:#{row.value.remote_ipv4 ? p.registrant.remote_ipv4},,sip:00#{row.value.number}@#{row.value.remote_ipv4 ? p.registrant.remote_ipv4},,00#{row.value.number},#{row.value.password},sip:00#{row.value.number}@#{p.interfaces.primary.ipv4 ? p.host}:5070,,,")\n
       """ for row in l.rows).join ''
 
       require("#{base_path}/compiler.coffee") params

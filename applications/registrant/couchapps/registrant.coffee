@@ -19,6 +19,7 @@ ddoc.views.registrant =
       value =
         number: doc.number
         password: doc.registrant_password
+        remote_ipv4: doc.registrant_remote_ipv4
       # registrant_host might be a string or an array of strings
       if typeof doc.registrant_host is 'string'
         emit doc.registrant_host, value
