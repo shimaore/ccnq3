@@ -199,136 +199,6 @@ do (jQuery) ->
             error: -> ee.emit 'error'
           return ee
 
-      admin:
-        #### `$.ccnq3.admin.adduser(name,password)`
-        # Create user with given `name` and `password`.
-        # Must be logged in with admin rights.
-        #
-        # Events:
-        #
-        # * `'success'`
-        # * `'error' {error|forbidden}`
-        adduser: (name,password) ->
-          ee = new EventEmitter()
-          $.ajax
-            type: 'post'
-            url: "/ccnq3/roles/admin/adduser"
-            data: {name,password}
-            dataType:'json'
-            success: (data) ->
-              if data.forbidden?
-                ee.emit 'error', data.forbidden
-                return
-              if data.error?
-                ee.emit 'error', data.error
-                return
-              if 200 <= data.status < 300 or data.status is 409
-                ee.emit 'success', data
-                return
-              ee.emit 'error'
-            error: -> ee.emit 'error'
-          return ee
-
-        #### `$.ccnq3.admin.grant(user,operation,source,prefix)`
-        # Grant rights to `user` for `operation` (`'update'` or
-        # `'access'`) for source (`'endpoint'`, etc.) on given
-        # account `prefix`.
-        #
-        # Events:
-        #
-        # * `'success'`
-        # * `'error'`
-        grant: (user,operation,source,prefix) ->
-          ee = new EventEmitter()
-          $.ajax
-            type: 'put'
-            url: "/ccnq3/roles/admin/grant/" +
-              [user,operation,source,prefix].map(encodeURIComponent).join '/'
-            dataType:'json'
-            success: (data) ->
-              if data.forbidden
-                ee.emit 'error', data.forbidden
-                return
-              if data.error?
-                ee.emit 'error', data.error
-                return
-              ee.emit 'success'
-            error: -> ee.emit 'error'
-          return ee
-
-        #### `$.ccnq3.admin.revoke(user,operation,source,prefix)`
-        # Revoke rights. See `grant` above for arguments description.
-        #
-        # Events:
-        #
-        # * `'success'`
-        # * `'error'`
-        revoke: (user,operation,source,prefix) ->
-          ee = new EventEmitter()
-          $.ajax
-            type: 'del'
-            url: "/ccnq3/roles/admin/grant/" +
-              [user,operation,source,prefix].map(encodeURIComponent).join '/'
-            dataType:'json'
-            success: (data) ->
-              if data.forbidden?
-                ee.emit 'error', data.forbidden
-                return
-              if data.error?
-                ee.emit 'error', data.error
-                return
-              ee.emit 'success'
-            error: -> ee.emit 'error'
-          return ee
-
-        #### `$.ccnq3.admin.host(user)`
-        # Internal use.
-        #
-        # Events:
-        #
-        # * `'success'`
-        # * `'error'`
-        host: (user) ->
-          ee = new EventEmitter()
-          $.ajax
-            type: 'put'
-            url: "/ccnq3/roles/admin/grant/#{encodeURIComponent user}/host"
-            dataType:'json'
-            success: (data) ->
-              if data.forbidden
-                ee.emit 'error', data
-                return
-              if data.ok
-                ee.emit 'success'
-              else
-                ee.emit 'error', data.error ? data.forbidden
-            error: -> ee.emit 'error'
-          return ee
-
-        #### `$.ccnq3.admin.confirm(user)`
-        # Internal use.
-        #
-        # Events:
-        #
-        # * `'success'`
-        # * `'error'`
-        confirm: (user) ->
-          ee = new EventEmitter()
-          $.ajax
-            type: 'put'
-            url: "/ccnq3/roles/admin/grant/#{encodeURIComponent user}/confirmed"
-            dataType:'json'
-            success: (data) ->
-              if data.forbidden
-                ee.emit 'error', data
-                return
-              if data.ok
-                ee.emit 'success'
-              else
-                ee.emit 'error', data.error ? data.forbidden
-            error: -> ee.emit 'error'
-          return ee
-
       #### `$.ccnq3.roles.userdb(name)`
       # Internal use.
       # Create user database `db`.
@@ -346,6 +216,136 @@ do (jQuery) ->
           dataType:'json'
           cache: false
           success: (data) ->
+            if data.ok
+              ee.emit 'success'
+            else
+              ee.emit 'error', data.error ? data.forbidden
+          error: -> ee.emit 'error'
+        return ee
+
+    admin:
+      #### `$.ccnq3.admin.adduser(name,password)`
+      # Create user with given `name` and `password`.
+      # Must be logged in with admin rights.
+      #
+      # Events:
+      #
+      # * `'success'`
+      # * `'error' {error|forbidden}`
+      adduser: (name,password) ->
+        ee = new EventEmitter()
+        $.ajax
+          type: 'post'
+          url: "/ccnq3/roles/admin/adduser"
+          data: {name,password}
+          dataType:'json'
+          success: (data) ->
+            if data.forbidden?
+              ee.emit 'error', data.forbidden
+              return
+            if data.error?
+              ee.emit 'error', data.error
+              return
+            if 200 <= data.status < 300 or data.status is 409
+              ee.emit 'success', data
+              return
+            ee.emit 'error'
+          error: -> ee.emit 'error'
+        return ee
+
+      #### `$.ccnq3.admin.grant(user,operation,source,prefix)`
+      # Grant rights to `user` for `operation` (`'update'` or
+      # `'access'`) for source (`'endpoint'`, etc.) on given
+      # account `prefix`.
+      #
+      # Events:
+      #
+      # * `'success'`
+      # * `'error'`
+      grant: (user,operation,source,prefix) ->
+        ee = new EventEmitter()
+        $.ajax
+          type: 'put'
+          url: "/ccnq3/roles/admin/grant/" +
+            [user,operation,source,prefix].map(encodeURIComponent).join '/'
+          dataType:'json'
+          success: (data) ->
+            if data.forbidden
+              ee.emit 'error', data.forbidden
+              return
+            if data.error?
+              ee.emit 'error', data.error
+              return
+            ee.emit 'success'
+          error: -> ee.emit 'error'
+        return ee
+
+      #### `$.ccnq3.admin.revoke(user,operation,source,prefix)`
+      # Revoke rights. See `grant` above for arguments description.
+      #
+      # Events:
+      #
+      # * `'success'`
+      # * `'error'`
+      revoke: (user,operation,source,prefix) ->
+        ee = new EventEmitter()
+        $.ajax
+          type: 'del'
+          url: "/ccnq3/roles/admin/grant/" +
+            [user,operation,source,prefix].map(encodeURIComponent).join '/'
+          dataType:'json'
+          success: (data) ->
+            if data.forbidden?
+              ee.emit 'error', data.forbidden
+              return
+            if data.error?
+              ee.emit 'error', data.error
+              return
+            ee.emit 'success'
+          error: -> ee.emit 'error'
+        return ee
+
+      #### `$.ccnq3.admin.host(user)`
+      # Internal use.
+      #
+      # Events:
+      #
+      # * `'success'`
+      # * `'error'`
+      host: (user) ->
+        ee = new EventEmitter()
+        $.ajax
+          type: 'put'
+          url: "/ccnq3/roles/admin/grant/#{encodeURIComponent user}/host"
+          dataType:'json'
+          success: (data) ->
+            if data.forbidden
+              ee.emit 'error', data
+              return
+            if data.ok
+              ee.emit 'success'
+            else
+              ee.emit 'error', data.error ? data.forbidden
+          error: -> ee.emit 'error'
+        return ee
+
+      #### `$.ccnq3.admin.confirm(user)`
+      # Internal use.
+      #
+      # Events:
+      #
+      # * `'success'`
+      # * `'error'`
+      confirm: (user) ->
+        ee = new EventEmitter()
+        $.ajax
+          type: 'put'
+          url: "/ccnq3/roles/admin/grant/#{encodeURIComponent user}/confirmed"
+          dataType:'json'
+          success: (data) ->
+            if data.forbidden
+              ee.emit 'error', data
+              return
             if data.ok
               ee.emit 'success'
             else
