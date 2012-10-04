@@ -96,6 +96,7 @@ do (jQuery) ->
         limit: current_limit()
       , insert_docs
 
+    ###
     @data 'changes', inbox_model.changes (results) =>
       content = @find('.inbox_content')
       for r in results
@@ -104,6 +105,7 @@ do (jQuery) ->
           return if r.deleted
           inbox_model.get r.id, (doc) ->
             content.prepend inbox_item doc
+    ###
 
     @find('.inbox_limit').change ->
       refill()
