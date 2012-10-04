@@ -21,6 +21,17 @@ cat js/jshash-2.2/sha1-min.js \
     js/ccnq3.js           \
   > js/default.js
 
+coffee -c couchapp/*.coffee
+cat couchapp/endpoint.js  \
+    couchapp/host.js      \
+    couchapp/number.js    \
+    couchapp/portal.js    \
+    couchapp/rule.js      \
+    couchapp/traces.js    \
+    couchapp/inbox.js     \
+    couchapp/web.js       \
+  > couchapp/default.js
+
 cat css/style.css         \
     css/jquery-ui.css     \
     css/datatables.css    \

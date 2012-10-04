@@ -26,7 +26,8 @@ require('ccnq3').config (config) ->
           '/ccnq3/portal/content'
         ]
 
-    # No site-specific login additions.
+    # /ccnq3/portal/content will eventually call back here
+    # (unless the user is logged in).
     @coffee '/login.js': ->
 
       $(document).ready ->
