@@ -1,3 +1,227 @@
+ccnq3 (0.0.58) UNRELEASED; urgency=low
+
+  * Updated to pico 0.0.15, using `compact` and `pico.log`
+  * Updated our SIP headers according to RFCs.
+  * Corrected name in couchdb monit file
+  * Initial code for applications/monitor
+  * Corrected translation for stat plugin
+  * monitor: Added vmstat
+  * Corrected path for traces in munin plugin
+  * Initial code for invite-analysis.
+  * Make npm-apps log asynchronously
+  * npm-apps: closing stdio to prevent blocking
+  * Only indicate error if one actually happened.
+  * Rewrote ccnq3-traces hourly cron as coffee-script.
+  * invite-analysis: use configuration, make sure `exec` does not block on stdin.
+  * moved invite-analysis.coffee
+  * Merged all sniffer trace analysis in packet_server.
+  * New (local) version of CouchDB package, trying to avoid startup issues
+  * Had to rebuild CouchDB once more. Also 1.2.0 is now in testing, so I should soon be able to stop using my own versions.
+  * Possible issue when passing empty to pico
+  * Fixed return params from .get.
+  * Updated dns server to use latest pico.
+  * Need stdio for child_processes
+  * More child_process stdio.
+  * And more child_process changes
+  * moved ccnq3-traces.cron.hourly so that it will work
+  * provided wrapper for ccnq3-traces.cron.hourly
+  * Forgot to make cron.hourly executable
+  * Made cron.hourly less verbose
+  * ccnq3_config: Removed unnecessary progress messages.
+  * npm publish ccqn3_config 0.2.8
+  * Fixed publication issues.
+  * Corrected typo
+  * monitor: corrected callback usage
+  * monitor: ready for usage
+  * prepaid: application was stashed away, so removed doc reference
+  * opensips: Added CCNQ3-Extra header
+  * monitor: corrected callback parameters
+  * documentation: minor update about `monitor`
+  * Made extra-info into a configurable item.
+  * Updated the data-dictionary documentation to clarify OpenSIPS configuration.
+  * Removed memcached from dependencies for ccnq3-opensips.
+  * Added /roles/admin/adduser to work with CouchDB 1.2
+  * fixed pico dependency (created bugs in loc_db)
+  * Added `since_name` where needed.
+  * Documentation correction.
+  * Updated pico version.
+  * Do not erroneously erase the configuration.
+  * Accepted BYE NLR for registrant model
+  * Trying to work around limitations on the other side.
+  * Update for registrant.
+  * No need to alert people if things fail.
+  * Documented cnam-client usage
+  * voicemail: Corrected @ passing.
+  * monit: do not attempt to restart CouchDB, this might lead to DB errors.
+  * Simplify [minor]
+  * FreeSwitch CDRs: do not replicate deleted records.
+  * monit: Changed to only alert when restart is needed.
+  * monit: set proper install path
+  * applications/monitor: moved to control-by-cake
+  * applications/monitor: used `host_couchdb_uri`, should be consistent with other modules.
+  * applications/monitor: Added creation of central repository.
+  * cdr: Added missing `p_fun`
+  * Sync'ed documentation for config parameters.
+  * ccqn3_config: README
+  * applications/traces: fixes for runtime
+  * applications/monitor: add invite-analysis plugin
+  * ccnq3_config: use config.file
+  * ccnq3_config: simplify
+  * ccnq3_config v0.3.0
+  * applied new `ccnq3_config` usage
+  * New pico package; update -> put, retrieve -> get.
+  * Fixed modules.exports vs exports (bad reference)
+  * publish version 0.3.1
+  * Corrected exports (again)
+  * ccnq3_config: v0.3.2
+  * pico API: plain .put -> .create
+  * Fix stray `get` and `put`
+  * OpenSIPS proxy: semantics changes, put the record instead of using (old) `update`. Assuming this was a mistake in existing code given that _rev is updated the line before but that plain `put` would not have been able to use it.
+  * Corrected for pico.request changes
+  * Updated to pico 0.1.x
+  * Publish ccnq3_config v0.3.3
+  * Updated to depend on ccnq3_config 0.3.3.
+  * Moved /u/ to /ccnq3/portal/ and /roles/ to /ccnq3/roles/
+  * Split non-UI and UI parts of the portal.
+  * Library for client-side manipulations.
+  * Update js/ccnq3 for docco.
+  * Docco docs.
+  * Cakefile for docs.
+  * Remainder of new _site stuff
+  * Pointed to new pages location
+  * Replaced coffeekup with coffeecup
+  * In prod, use sammy.min.js in default.js
+  * Doc: installation (minor)
+  * no need for ikiwiki
+  * ccnq3 js client: make sure we return the EventEmitter
+  * Corrected event name
+  * package: npm: set production=true
+  * portal: updated logout process
+  * portal: modified `extra_login`
+  * Minimize `auth` arg use.
+  * Allow for resubmission.
+  * Do not get rid of event emitter, this might prevent events from firing up.
+  * doc: CouchDB 1.2 no longer uses `password_sha1` and `salt`
+  * Simplified registration / portal requirements, only `email` is needed.
+  * portal/register: Added email format validation.
+  * Added Javascript API in doc.
+  * API Documentation: added details in some sections, some formatting.
+  * minor cleanup for docco
+  * Corrected name for $.ccnq3.roles.userdb
+  * Allow multiple login attempts on the same page.
+  * Upgraded jquery to 1.8.1
+  * Replaced plain markdown with github-flavord-markdown
+  * First attempt at ToC
+  * Shorten the ToC
+  * Use browser's stylesheet for now.
+  * doc: corrected syntax
+  * doc: CSS in Cakefile
+  * css update
+  * coffee-css -> ccss
+  * css update
+  * css
+  * Start reformatting for github-flavored-markdown.
+  * Fix CCS (somewhat)
+  * Added missing applications in host couchapp
+  * $.ccnq3: unify error reporting
+  * $.ccnq3.admin.adduser: do not report 409 error on account creation Error 409 means the account already exists. Note that registration does not use this method, so this modification is safe to do.
+  * host couchapp: use $.ccnq3
+  * opensips: reply with 486 (instead of 404) when the user is not registered.
+  * Add admin access to applications/web
+  * Security: only poll data for the proper database!
+  * Updated roles/userdb usage.
+  * Do not skip the database verification step at login.
+  * Added comments. (minor)
+  * First attempt to incorporate soft-Authorization.
+  * Startup and installation rewrite.
+  * Make sure npm-apps uses proper path.
+  * Corrected `this` in login
+  * Simplified instructions
+  * bootstrap-client and bootstrap-manager are meant to be ran by root
+  * Ensure installation fails if coffee-script cannot be installed, etc.
+  * Corrected path
+  * Documentation corrections.
+  * Highlight URI
+  * Added nanpa_routing.
+  * Add `security` in ccnq3_config
+  * publish version 0.3.4
+  * Updated monitor doc
+  * Initial use of the new `ccnq3_config.security`.
+  * Removed manager-only textbox.
+  * New applications/logging
+  * Corrected access to ccnq3.db.security
+  * Replaced ccnq3_config with ccnq3 package
+  * travis
+  * Per-number registrant domain
+  * Do not auto-install in monit/conf.d
+  * `node-waf` requires `python`, and some dependencies use `node-waf`.
+  * Fail ccnq3-client if URI file is missing.
+  * Break more on invalid config. Also make the config required.
+  * Made ccnq3 remove the configuration on purge.
+  * Provisioning doc update.
+  * Fixed control file syntax
+  * Corrected debconf scripting.
+  * Moved debian/templates around.
+  * postinst: make sure the value is present
+  * Updated ccnq3-manager-shared as well.
+  * Apparently debconf uses fd 3
+  * Changed to proper template type (?)
+  * Changed to proper template type, updated config/postinst
+  * Try reset.
+  * Do not wait for provisioning replication to complete (it might take a long time) before we finish logging in.
+  * Added preconditions.
+  * Replaced bootstrap.sh with bootstrap.coffee
+  * Properly order applications in web ui
+  * Updated ccnq3 lib: do not store `undefined` in host.json
+  * Trying to figure out why postinst does not finish now that debconf is in place.
+  * First attempt at cli tool.
+  * applications/logging is meant to be installed on the manager only.
+  * pico API changed
+  * compiled version, do not keep in git
+  * oops, forgot to update traces re: ccnq3_config
+  * Skipping is actually not an error, since the script is called during upgrade.
+  * cli: there is no need to make the user a system administrator
+  * Added options for inbox view.
+  * Updated jquery-ui
+  * Since we move along without waiting for completion, this will probably never complete OK.
+  * Corrected opensips configuration syntax
+  * Actually have OpenSIPS substitute the values.
+  * Corrected new feature (registrant remote_ipv4)
+  * Commented out the `_changes` follower -- this makes the interface unusable.
+  * shift: make sure we actually deliver what is documented.
+  * Might as well make this consistent.
+  * Better checks, plus call pico.put properly
+  * Updated to pico 0.0.15, using `compact` and `pico.log`
+  * Updated our SIP headers according to RFCs.
+  * Corrected name in couchdb monit file
+  * Initial code for applications/monitor
+  * Corrected translation for stat plugin
+  * monitor: Added vmstat
+  * Corrected path for traces in munin plugin
+  * Initial code for invite-analysis.
+  * Make npm-apps log asynchronously
+  * npm-apps: closing stdio to prevent blocking
+  * Only indicate error if one actually happened.
+  * Rewrote ccnq3-traces hourly cron as coffee-script.
+  * invite-analysis: use configuration, make sure `exec` does not block on stdin.
+  * moved invite-analysis.coffee
+  * Merged all sniffer trace analysis in packet_server.
+  * New (local) version of CouchDB package, trying to avoid startup issues
+  * Had to rebuild CouchDB once more. Also 1.2.0 is now in testing, so I should soon be able to stop using my own versions.
+  * Possible issue when passing empty to pico
+  * Updated dns server to use latest pico.
+  * Need stdio for child_processes
+  * More child_process stdio.
+  * And more child_process changes
+  * moved ccnq3-traces.cron.hourly so that it will work
+  * provided wrapper for ccnq3-traces.cron.hourly
+  * Forgot to make cron.hourly executable
+  * Made cron.hourly less verbose
+  * ccnq3_config: Removed unnecessary progress messages.
+  * npm publish ccqn3_config 0.2.8
+
+ -- Stephane Alnet <stephane@shimaore.net>  Thu, 04 Oct 2012 21:48:16 +0200
+
 ccnq3 (0.0.55) unstable; urgency=low
 
   * Corrected cache resolver reference in documentation.
