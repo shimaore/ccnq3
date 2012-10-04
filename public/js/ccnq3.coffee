@@ -236,7 +236,7 @@ do (jQuery) ->
         ee = new EventEmitter()
         $.ajax
           type: 'post'
-          url: "/ccnq3/roles/admin/adduser"
+          url: "/ccnq3/admin/adduser"
           data: {name,password}
           dataType:'json'
           success: (data) ->
@@ -266,7 +266,7 @@ do (jQuery) ->
         ee = new EventEmitter()
         $.ajax
           type: 'put'
-          url: "/ccnq3/roles/admin/grant/" +
+          url: "/ccnq3/admin/grant/" +
             [user,operation,source,prefix].map(encodeURIComponent).join '/'
           dataType:'json'
           success: (data) ->
@@ -291,7 +291,7 @@ do (jQuery) ->
         ee = new EventEmitter()
         $.ajax
           type: 'del'
-          url: "/ccnq3/roles/admin/grant/" +
+          url: "/ccnq3/admin/grant/" +
             [user,operation,source,prefix].map(encodeURIComponent).join '/'
           dataType:'json'
           success: (data) ->
@@ -316,7 +316,7 @@ do (jQuery) ->
         ee = new EventEmitter()
         $.ajax
           type: 'put'
-          url: "/ccnq3/roles/admin/grant/#{encodeURIComponent user}/host"
+          url: "/ccnq3/admin/grant/#{encodeURIComponent user}/host"
           dataType:'json'
           success: (data) ->
             if data.forbidden
@@ -340,7 +340,7 @@ do (jQuery) ->
         ee = new EventEmitter()
         $.ajax
           type: 'put'
-          url: "/ccnq3/roles/admin/grant/#{encodeURIComponent user}/confirmed"
+          url: "/ccnq3/admin/grant/#{encodeURIComponent user}/confirmed"
           dataType:'json'
           success: (data) ->
             if data.forbidden

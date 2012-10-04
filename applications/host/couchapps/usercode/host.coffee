@@ -380,7 +380,7 @@ do (jQuery) ->
           # Mark the user confirmed.
           $.ajax
             type: 'PUT'
-            url: '/ccnq3/roles/admin/grant/'+encodeURIComponent(username)+'/confirmed'
+            url: '/ccnq3/admin/grant/'+encodeURIComponent(username)+'/confirmed'
             dataType: 'json'
             success: (data) ->
               if not data.ok
@@ -390,7 +390,7 @@ do (jQuery) ->
               # Grant the user update:user_db: rights
               $.ajax
                 type: 'PUT'
-                url: '/ccnq3/roles/admin/grant/'+encodeURIComponent(username)+'/update/user_db' # No prefix
+                url: '/ccnq3/admin/grant/'+encodeURIComponent(username)+'/update/user_db' # No prefix
                 dataType: 'json'
                 success: (data) ->
                   if not data.ok

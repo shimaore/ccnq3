@@ -85,7 +85,7 @@ Released under the AGPL3 license
   # TODO GET /admin/grant/:user , using a user's "primary account" (the _users' record "account" field).
 
   # Create user
-  @post '/ccnq3/roles/admin/adduser': ->
+  @post '/ccnq3/admin/adduser': ->
     operation = 'update'
     source = '_users'
     prefix = ''
@@ -105,7 +105,7 @@ Released under the AGPL3 license
           @send status: r.statusCode, data: p
 
   # Grant right
-  @put '/ccnq3/roles/admin/grant/:user/:operation(update|access)/:source/:prefix?': ->
+  @put '/ccnq3/admin/grant/:user/:operation(update|access)/:source/:prefix?': ->
     operation = @params.operation
     source = @params.source
     prefix = @params.prefix ? ''
@@ -120,7 +120,7 @@ Released under the AGPL3 license
       cb(p)
 
   # Drop right
-  @del '/ccnq3/roles/admin/grant/:user/:operation(update|access)/:source/:prefix?': ->
+  @del '/ccnq3/admin/grant/:user/:operation(update|access)/:source/:prefix?': ->
     operation = @params.operation
     source = @params.source
     prefix = @params.prefix ? ''
@@ -135,7 +135,7 @@ Released under the AGPL3 license
       cb(p)
 
   # Host role
-  @put '/ccnq3/roles/admin/grant/:user/host': ->
+  @put '/ccnq3/admin/grant/:user/host': ->
     operation = 'update'
     source = 'host'
     prefix = ''
@@ -150,7 +150,7 @@ Released under the AGPL3 license
       cb(p)
 
   # Confirmed (necessary since system users cannot confirm).
-  @put '/ccnq3/roles/admin/grant/:user/confirmed': ->
+  @put '/ccnq3/admin/grant/:user/confirmed': ->
     operation = 'update'
     source = '_users'
     prefix = ''
