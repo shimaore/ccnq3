@@ -37,7 +37,7 @@ require('ccnq3').config (config) ->
           auth.notify 'Replicating provisioning data.'
           ee = $.ccnq3.roles.replicate.pull 'provisioning'
           ee.on 'error', ->
-            auth.notify 'Provisioning replication failed.'
+            auth.notify 'Provisioning replication pending.'
             return
           next()
 
