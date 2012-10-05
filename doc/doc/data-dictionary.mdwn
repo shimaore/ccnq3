@@ -913,6 +913,11 @@ endpoint (provisioning records)
 
 If the "challenge" configuration parameter is empty (the default), the domain name of the To: header (for REGISTER) or From: header (for other messages) is used as the challenge. In other words: normally the challenge should be the same as the domain name used for the endpoint.
 
+*   `bypass_from_auth`:  boolean
+    Applies to authorized calls coming from this endpoint.
+    If false (the default), the From username must equal the Authentication ID, otherwise the call is rejected.
+    If true, the From username is not checked. In this case you probably want to enable `check_from` (below) to ensure that the From username is valid.
+
 ### Static endpoint fields ###
 
 *   `user_ip`         string  Static endpoint's IP address [required for static endpoints]
