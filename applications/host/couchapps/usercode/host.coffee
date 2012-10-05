@@ -508,8 +508,7 @@ do (jQuery) ->
           return "Server #{doc.host}"
 
         form: (doc) ->
-          id = encodeURIComponent make_id 'host', doc.host
-          uri = doc.provisioning.host_couchdb_uri + '/' + id
+          uri = doc.provisioning.host_couchdb_uri
           """
             <p><a href="#/host/#{id}">Edit</a></p>
             <p>Bootstrap: Install the <tt>ccnq3-client</tt> package on
