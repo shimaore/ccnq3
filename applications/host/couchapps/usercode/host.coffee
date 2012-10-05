@@ -98,7 +98,7 @@ do (jQuery) ->
         id:'provisioning.host_couchdb_uri'
         title: 'Provisioning database URI (CouchDB)'
         class:'required url'
-        value: @provisioning?.host_couchdb_uri ? (window.location.protocol + '//' + window.location.hostname + ':5984/provisioning') # FIXME
+        value: @provisioning?.host_couchdb_uri ? (window.location.protocol + '//' + window.location.host + '/provisioning') # FIXME
 
       textbox
         id:'provisioning.local_couchdb_uri'
@@ -110,7 +110,13 @@ do (jQuery) ->
         id:'logging.host_couchdb_uri'
         title: 'Logging database URI (CouchDB)'
         class:'required url'
-        value: @logging?.host_couchdb_uri ? (window.location.protocol + '//' + window.location.hostname + ':5984/logging') # FIXME
+        value: @logging?.host_couchdb_uri ? (window.location.protocol + '//' + window.location.host + '/logging') # FIXME
+
+      textbox
+        id:'monitor.host_couchdb_uri'
+        title: 'Monitor database URI (CouchDB)'
+        class:'required url'
+        value: @monitor?.host_couchdb_uri ? (window.location.protocol + '//' + window.location.host + '/monitor') # FIXME
 
       textbox
         id:'interfaces.primary.ipv4'
