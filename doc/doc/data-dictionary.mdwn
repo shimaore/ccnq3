@@ -968,7 +968,8 @@ If the "challenge" configuration parameter is empty (the default), the domain na
 
 *   `outbound_route`: integer; route to use for outbound calls from this endpoint; if null, per-number outbound_route is used
 
-*   `check_from`      boolean If true, the call can only be placed if the endpoint for the number is the same as this endpoint. (Allows to restrict which caller_id is presented by an endpoint.)
+*   `check_from`      boolean
+    If true, the call can only be placed if the endpoint for the From username is the same as this endpoint.
 
 *   `dest_domain`     string  Override the destination domain
 
