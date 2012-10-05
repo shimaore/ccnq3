@@ -12,7 +12,7 @@ case "$1" in
   configure|upgrade)
     db_get ccnq3/admin_uri
     if [ -z "$RET" ]; then db_reset ccnq3/admin_uri; exit 1; fi
-    (cd ${WORKDIR}/src && su -s /bin/sh -c "CDB_URI=\"$RET\" ./bin/bootstrap.sh" $USER)
+    (cd ${WORKDIR}/src && su -s /bin/sh -c "CDB_URI=\"$RET\" ./bin/bootstrap.coffee" $USER)
   ;;
 
   remove|purge)
