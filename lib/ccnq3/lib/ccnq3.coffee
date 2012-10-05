@@ -1,5 +1,6 @@
 util = require 'util'
 pico = require 'pico'
+qs = require 'querystring'
 
 debug = false
 
@@ -68,6 +69,27 @@ retrieve = (config,cb) ->
       cb p
 
 module.exports.config.retrieve = retrieve
+
+#### ccnq3.config.attachment(config,name,callback(data))
+# Attempt to retrieve the attachment from the provisioning database.
+# The callback will receive null if the attachment could not be retrieved.
+attachment = (config,name,cb) ->
+  if not config.host? or not config.provisioning? or not config.provisioning.host_couchdb_uri?
+    util.log "Information to retrieve attachment is not available."
+    return cb null
+
+  username = make_id 'host', config.host
+  provisioning = pico config.provisioning.host_couchdb_uri
+  uri = ([username,name].map qs.escape).join '/'
+
+  provisioning.request.get uri, (e,r,p) ->
+    if e
+      util.log "Retrieving attachment #{uri} failed: #{util.inspect e}." if debug
+      cb null
+    else
+      cb p
+
+module.exports.config.attachment = attachment
 
 #### ccnq3.config.update(config)
 # Attempt to save the given configuration in the local storage.
