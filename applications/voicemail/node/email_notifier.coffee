@@ -7,6 +7,7 @@ mailer = require 'nodemailer'
 Milk = require 'milk'
 util = require 'util'
 qs = require 'querystring'
+path = require 'path'
 
 exports.notifier = (config) ->
 
@@ -40,6 +41,9 @@ exports.notifier = (config) ->
           file_name = 'voicemail_notification_with_attachment'
         language ?= 'en'
 
+        #### Templates
+
+        # Default templates
         template =
           subject: 'New message from {{caller_id}}'
           body: '''
@@ -49,33 +53,56 @@ exports.notifier = (config) ->
                   <p>You have a new message from {{caller_id}}
                 '''
 
-        # Taken from applications/portal/agent
-        if file_base?
-          for content in ['subject','body','html']
-            try
-              template[content] = fs.readFileSync file_base + file_name + '.' + language + '.' + content, 'utf8'
-        # /Taken
-        email_options =
-          sender: sender ? email
-          to: email
-          subject: Milk.render template.subject, msg
-          body: Milk.render template.body, msg
-          html: Milk.render template.html, msg
-          attachments: []
+        # Local templates
+        get_templates = (cb,contents = ['subject','body','html']) ->
+          if contents.length is 0
+            cb()
+            return
 
-        if attach and msg._attachments
-          # Alternatively, enumerate the part#{n}.#{extension} files? (FIXME?)
-          for name, data of msg._attachments
-            do (name,data) ->
-              # data fields might be: content_type, revpos, digest, length, stub:boolean
-              email_options.attachments.push {
-                fileName: name
-                streamSource: user_db.request.get qs.escape(msg_id) + '/' + qs.escape(name)
-                contentType: data.content_type
-              }
+          content = contents.shift()
+          uri_name = file_name + '.' + language + '.' + content
 
-        mailer.send_mail email_options, (err,status) ->
-          if err? or not status
-            return util.log util.inspect err
+          # Templates in the server configuration
+          ccnq3.config.attachment config, uri_name, (data) ->
+            if data?
+              template[content] = data
+              get_templates cb, contents
+              return
+
+            # Templates stored on the local filesystem
+            if file_base?
+              template[content] = fs.readFileSync path.join(file_base,uri_name) , 'utf8', (err,data) ->
+                if not err
+                  template[content] = data
+              get_templates cb, contents
+            return
+
+        #### Send email out
+        send_email = ->
+          email_options =
+            sender: sender ? email
+            to: email
+            subject: Milk.render template.subject, msg
+            body: Milk.render template.body, msg
+            html: Milk.render template.html, msg
+            attachments: []
+
+          if attach and msg._attachments
+            # Alternatively, enumerate the part#{n}.#{extension} files? (FIXME?)
+            for name, data of msg._attachments
+              do (name,data) ->
+                # data fields might be: content_type, revpos, digest, length, stub:boolean
+                email_options.attachments.push {
+                  fileName: name
+                  streamSource: user_db.request.get qs.escape(msg_id) + '/' + qs.escape(name)
+                  contentType: data.content_type
+                }
+
+          mailer.send_mail email_options, (err,status) ->
+            if err? or not status
+              return util.log util.inspect err
+
+        #### Get templates then send email
+        get_templates send_email
 
   return send_notification_to

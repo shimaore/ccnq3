@@ -721,17 +721,6 @@ This section specifies the parameters for applications/voicemail.
 
         On Unix this string must be terminated by a slash.
 
-        The notifier will attempt to append "voicemail_notification" or "voicemail_notification_with_attachment", then the user's language, then the component of the email message (subject, text body, or HTML body) and locate the appropriate files.
-        For example, for a notification without attachment using language 'en' the following suffix will be used:
-            voicemail_notification.en.subject, voicemail_notification.en.body, voicemail_notification.en.html
-
-        If present on the filesystem, the content of those files will be used as Milk templates.
-        The parameters will consist of the content of the voicemail message record.
-        Especially the following parameters are available:
-          caller_id
-          timestamp
-        (See the "voicemail records" section below.)
-
     * `callback`:  Configuration to allow users to call the number that left a voicemail message
 
       When sending to a proxy, make sure the voicemail server has a matching endpoint record with its "sbc" field set to type 10 so that it is authorized to pass charging information along.
@@ -742,6 +731,38 @@ This section specifies the parameters for applications/voicemail.
 
     * `notifier_port`: which local port to bind to for SIP MWI notifications [default: 7124]
 
+#### Voicemail notifications
+
+The notifier will first build filenames by concatenating "voicemail_notification" or "voicemail_notification_with_attachment", then the user's language, then the component of the email message (subject, text body, or HTML body).
+For example, for a notification without attachment using language 'en', the following filenames will be used:
+    voicemail_notification.en.subject, voicemail_notification.en.body, voicemail_notification.en.html
+
+The notifier will then try to locate those filenames.
+If the local host's configuration contains attachments with those filenames, these attachments will be used as templates.
+If not found as attachment, but present on the filesystem at the path specified by `file_base`, the content of those files will be used as templates.
+Otherwise default templates (in English) will be used.
+
+The templates are [Mustache](http://mustache.github.com/mustache.5.html) templates.
+The parameters for the template will consist of the content of the voicemail message record. (See the "voicemail records" section below.)
+
+Especially the following parameters are available:
+
+    caller_id
+    timestamp
+
+The default templates are:
+
+* `voicemail_notification.en.subject`, `voicemail_notification_with_attachment.en.subject`:
+
+      New message from {{caller_id}}
+
+* `voicemail_notification.en.body`, `voicemail_notification_with_attachment.en.body`:
+
+      You have a new message from {{caller_id}}
+
+* `voicemail_notification.en.html`, `voicemail_notification_with_attachment.en.html`:
+
+      <p>You have a new message from {{caller_id}}
 
 ### Specific to hosts running the cdrs (CDR aggregation) service. ###
 
