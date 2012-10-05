@@ -1422,6 +1422,8 @@ A user's voicemail settings are stored in this record.
 
     * `attach_message`: boolean; if true the voice message is sent along with the notification
 
+* `do_not_record`: boolean; if true, no voice messages are recorded, only the prompts are played
+
 *   `_attachments`:
 
     * `prompt.wav`  voicemail prompt

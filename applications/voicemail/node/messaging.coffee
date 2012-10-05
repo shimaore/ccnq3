@@ -39,7 +39,7 @@ make_cleanup = (fifo_path) ->
         # Remove the FIFO/file
         fs.unlink fifo_path, cb
 
- goodbye = (call) ->
+goodbye = (call) ->
   call.command 'phrase', 'voicemail_goodbye', hangup
 
 voicemail_fifo_path = ->
@@ -376,18 +376,25 @@ class User
   play_prompt: (call,cb) ->
     fifo_path = voicemail_fifo_path()
     @voicemail_settings call, (vm_settings) =>
+      next = (call) ->
+        if vm_settings.do_not_record
+          cb false
+        else
+          call.command 'phrase', 'voicemail_record_message', -> cb true
+
+      # User-specified prompt
       if vm_settings._attachments?["prompt.#{message_format}"]
         play_from_url call, fifo_path, @db_uri + "/voicemail_settings/prompt.#{message_format}", (error,call) ->
-          call.command 'phrase', 'voicemail_record_message', cb
+          next call
 
+      # User-specified name
       else if vm_settings._attachments?["name.#{message_format}"]
         play_from_url call, fifo_path, @db_uri + "/voicemail_settings/name.#{message_format}", (error,call) ->
-          call.command 'phrase', 'voicemail_unavailable', (call) ->
-            call.command 'phrase', 'voicemail_record_message', cb
+          call.command 'phrase', 'voicemail_unavailable', next
 
+      # Default prompt
       else
-        call.command 'phrase', "voicemail_play_greeting,#{@user}", (call) ->
-          call.command 'phrase', 'voicemail_record_message', cb
+        call.command 'phrase', "voicemail_play_greeting,#{@user}", next
 
   authenticate: (call,cb,attempts) ->
     attempts ?= 3
@@ -603,7 +610,11 @@ exports.record = (config,call,username) ->
 
     msg = new Message user, db_uri
     msg.create call, ->
-      user.play_prompt call, -> msg.start_recording call
+      user.play_prompt call, (do_recording) ->
+        if do_recording
+          msg.start_recording call
+        else
+          goodbye call
 
 exports.inbox = (config,call,username) ->
 
