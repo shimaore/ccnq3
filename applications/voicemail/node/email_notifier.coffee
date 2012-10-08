@@ -8,6 +8,7 @@ Milk = require 'milk'
 util = require 'util'
 qs = require 'querystring'
 path = require 'path'
+ccnq3 = require 'ccnq3'
 
 exports.notifier = (config) ->
 
