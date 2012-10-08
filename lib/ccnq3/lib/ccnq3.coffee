@@ -83,7 +83,7 @@ attachment = (config,name,cb) ->
   uri = ([username,name].map qs.escape).join '/'
 
   provisioning.request.get uri, (e,r,p) ->
-    if e
+    if e? or r.statusCode isnt 200
       util.log "Retrieving attachment #{uri} failed: #{util.inspect e}." if debug
       cb null
     else
