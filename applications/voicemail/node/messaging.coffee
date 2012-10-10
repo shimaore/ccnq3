@@ -559,7 +559,7 @@ class User
         if e
           return @change_password call
         vm_settings.pin = new_pin
-        @user_db.put vm_settings, (e) ->
+        @user_db.put vm_settings, (e) =>
           if e
             return @change_password call
           delete @vm_settings # remove memoized value
