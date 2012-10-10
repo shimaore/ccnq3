@@ -556,7 +556,7 @@ class User
       if new_pin?.length < min_pin_length
         return @change_password call
       @user_db.get 'voicemail_settings', (e,r,vm_settings) =>
-        if error
+        if e
           return @change_password call
         vm_settings.pin = new_pin
         @user_db.put vm_settings, (e) ->
