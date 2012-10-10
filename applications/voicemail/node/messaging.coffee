@@ -186,7 +186,7 @@ class Message
 
       fifo_path = "#{voicemail_dir}/#{@id}-part#{@part}.#{message_format}"
       upload_url = "#{@msg_uri()}/part#{@part}.#{message_format}?rev=#{b.rev}"
-      record_to_url call, fifo_path, upload_url, (error,call) ->
+      record_to_url call, fifo_path, upload_url, (error,call) =>
         if error?
           # FIXME Remove the attachment from the database?
           # request.del upload_url
@@ -222,7 +222,7 @@ class Message
 
   # Delete parts
   delete_parts: (cb) ->
-    @db.get @id, (e,r,b) ->
+    @db.get @id, (e,r,b) =>
       # Remove all attachments
       b._attachments = {}
       @db.put b, cb
@@ -240,7 +240,7 @@ class Message
       call.command 'play_and_get_digits', "1 1 1 15000 # phrase:voicemail_record_file_check:1:2:3 phrase:'invalid choice' choice \\d 3000", (call) =>
         switch call.body.variable_choice
           when "3"
-            @delete_parts ->
+            @delete_parts =>
               @part = the_first_part
               @start_recording call
           when "1"
@@ -287,7 +287,7 @@ class Message
       @notify_via_email()
 
     # Create new CDB record to hold the voicemail metadata
-    @db.put msg, (e) ->
+    @db.put msg, (e) =>
       if e
         util.log "Could not create #{@msg_uri()}"
         call.command 'phrase', 'vm_say,sorry', hangup
@@ -410,7 +410,7 @@ class User
           call.command 'phrase', 'voicemail_hello', cb
 
       if vm_settings.pin?
-        call.command 'play_and_get_digits', "4 10 1 15000 # phrase:'voicemail_enter_pass:#' phrase:'voicemail_fail_auth' pin \\d+ 3000", (call) ->
+        call.command 'play_and_get_digits', "4 10 1 15000 # phrase:'voicemail_enter_pass:#' phrase:'voicemail_fail_auth' pin \\d+ 3000", (call) =>
           if call.body.variable_pin is vm_settings.pin
             do wrap_cb
           else
