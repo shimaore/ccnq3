@@ -6,6 +6,16 @@
         <action function="play-file" data="misc/sorry.wav"/>
       </match>
     </input>
+    <input pattern="^too short$" break_on_match="true">
+      <match>
+        <action function="play-file" data="voicemail/vm-too-small.wav"/>
+      </match>
+    </input>
+    <input pattern="^thank you$" break_on_match="true">
+      <match>
+        <action function="play-file" data="ivr/ivr-thank_you_alt.wav"/>
+      </match>
+    </input>
   </macro>
 
   <macro name="voicemail_enter_id">

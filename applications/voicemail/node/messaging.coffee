@@ -554,7 +554,8 @@ class User
     call.command 'play_and_get_digits', "#{min_pin_length} 16 1 15000 # phrase:'voicemail_enter_pass:#' silence_stream://250 new_pin \\d+", (call) =>
       new_pin = call.body.variable_new_pin
       unless new_pin? and new_pin.length >= min_pin_length
-        return @change_password call
+        call.command 'phrase', 'vm_say,too short', (call) =>
+          @change_password call
       @user_db.get 'voicemail_settings', (e,r,vm_settings) =>
         if e
           return @change_password call
@@ -563,7 +564,8 @@ class User
           if e
             return @change_password call
           delete @vm_settings # remove memoized value
-          @main_menu call
+          call.command 'phrase', 'vm_say,thank you', (call) =>
+            @main_menu call
 
 
 ##
