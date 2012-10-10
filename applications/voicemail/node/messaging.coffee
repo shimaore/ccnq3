@@ -553,20 +553,20 @@ class User
   change_password: (call) ->
     call.command 'play_and_get_digits', "#{min_pin_length} 16 1 15000 # phrase:'voicemail_enter_pass:#' silence_stream://250 new_pin \\d+", (call) =>
       new_pin = call.body.variable_new_pin
-      unless new_pin? and new_pin.length >= min_pin_length
-        call.command 'phrase', 'vm_say,too short', (call) =>
-          @change_password call
-      @user_db.get 'voicemail_settings', (e,r,vm_settings) =>
-        if e
-          return @change_password call
-        vm_settings.pin = new_pin
-        @user_db.put vm_settings, (e) =>
+      if new_pin? and new_pin.length >= min_pin_length
+        @user_db.get 'voicemail_settings', (e,r,vm_settings) =>
           if e
             return @change_password call
-          delete @vm_settings # remove memoized value
-          call.command 'phrase', 'vm_say,thank you', (call) =>
-            @main_menu call
-
+          vm_settings.pin = new_pin
+          @user_db.put vm_settings, (e) =>
+            if e
+              return @change_password call
+            delete @vm_settings # remove memoized value
+            call.command 'phrase', 'vm_say,thank you', (call) =>
+              @main_menu call
+      else
+        call.command 'phrase', 'vm_say,too short', (call) =>
+          @change_password call
 
 ##
 # The callback will receive the CouchDB database URI for the user
