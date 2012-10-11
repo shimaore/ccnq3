@@ -515,12 +515,18 @@ do (jQuery) ->
 
         form: (doc) ->
           id = encodeURIComponent make_id 'host', doc.host
-          uri = doc.provisioning.host_couchdb_uri
-          """
-            <p><a href="#/host/#{id}">Edit</a></p>
-            <p>Bootstrap: Install the <tt>ccnq3-client</tt> package on
-            "#{doc.host}" with the following URI:</p>
-            <pre>
-            #{uri}
-            </pre>
-          """
+          if doc.admin?.system
+            """
+              <p><a href="#/host/#{id}">Edit</a></p>
+              <p>"#{doc.host}" is the system manager server.</p>
+            """
+          else
+            uri = doc.provisioning.host_couchdb_uri
+            """
+              <p><a href="#/host/#{id}">Edit</a></p>
+              <p>Bootstrap: Install the <tt>ccnq3-client</tt> package on
+              "#{doc.host}" with the following URI:</p>
+              <pre>
+              #{uri}
+              </pre>
+            """
