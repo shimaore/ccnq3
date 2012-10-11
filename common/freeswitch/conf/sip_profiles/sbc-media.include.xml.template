@@ -88,11 +88,11 @@
     <!--<param name="vad" value="both"/>-->
     <!--<param name="rtp-rewrite-timestamps" value="true"/>-->
 
-    <!--<param name="disable-rtp-auto-adjust" value="true"/>-->
+    <param name="disable-rtp-auto-adjust" value="true"/>
     <param name="auto-rtp-bugs" data="clear"/>
     <param name="rtp-autoflush-during-bridge" value="true"/>
     <param name="auto-jitterbuffer-msec" value="60"/>
-    <!--<param name="rtp-autofix-timing" value="false"/>-->
+    <param name="rtp-autofix-timing" value="false"/>
 
     <!-- <param name="bitpacking" value="aal2"/> -->
     <!-- <param name="suppress-cng" value="true"/> -->
