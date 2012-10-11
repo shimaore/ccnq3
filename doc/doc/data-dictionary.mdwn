@@ -382,6 +382,7 @@ Configuration options:
 
 *   `rtp_ip`: local IP to bind to for RTP [default: "auto"]
 *   `cdr_uri`: URI where the local CDRs should be written to [default: "http://127.0.0.1:5984/cdr"]
+*   `log_b_leg`: boolean; whether a CDR should be generated for the b-leg of a call [default: false, log only the a-leg]
 *   `cdr_aggregate_uri`: URI where the local CDRs should be replicated to [no default]
       Note: must contain authentication (for the local host).
 *   `sip_profiles`: {} of profiles descriptions:
