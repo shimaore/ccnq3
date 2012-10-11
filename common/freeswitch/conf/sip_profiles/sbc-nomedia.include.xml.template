@@ -28,7 +28,7 @@
     <!-- <param name="timer-T2" value="4000" /> -->
     <!-- <param name="timer-T4" value="4000" /> -->
 
-    <param name="user-agent-string" value="CCNQ nomedia $${direction}-$${profile_name}"/>
+    <param name="user-agent-string" value="ccnq3 nomedia $${direction}-$${profile_name}"/>
 
     <param name="dialplan" value="XML"/>
     <param name="context" value="$${direction}-$${profile_name}"/>

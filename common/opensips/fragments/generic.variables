@@ -55,5 +55,5 @@ dns_try_ipv6=yes
 
 mpath="${mpath}"
 
-server_header="Server: CCNQ3 Proxy"
-user_agent_header="User-Agent: CCNQ3 Proxy"
+server_header="Server: ccnq3 ${model} proxy"
+user_agent_header="User-Agent: ccnq3 ${model} proxy"
