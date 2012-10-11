@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  A simple redirect profile. Use it to pin a call through a FreeSwitch server.
+  Use this in conjunction with various sip_profiles to enforce media
+  translation, etc.
+-->
+
+<include>
+  <context name="ingress-$${profile_name}">
+
+    <extension name="unloop">
+      <condition field="${unroll_loops}" expression="^true$"/>
+      <condition field="${sip_looped_call}" expression="^true$">
+        <action application="deflect" data="${destination_number}"/>
+      </condition>
+    </extension>
+
+    <extension name="redirect">
+      <condition field="destination_number" expression="^(\d+)$">
+        <action application="set" data="progress_timeout=12"/>
+        <action application="set" data="call_timeout=300"/>
+        <action application="transfer" data="$1 XML ingress-$${profile_name}-send-call" />
+      </condition>
+    </extension>
+
+  </context>
+</include>
