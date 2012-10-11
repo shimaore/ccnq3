@@ -89,6 +89,7 @@ do (jQuery) ->
       @find('.inbox_offset').val() or defaults.offset
 
     refill = =>
+      @find('.inbox_content').html('Please wait...')
       inbox_model.view 'inbox/' + current_sort(),
         include_docs: true
         descending: sort_descending[current_sort()]
