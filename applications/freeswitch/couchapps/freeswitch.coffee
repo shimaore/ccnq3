@@ -184,8 +184,8 @@ ddoc.shows.freeswitch_local_json_cdr = p_fun (doc,req) ->
   log_b_leg = doc.log_b_leg ? false
 
   send """
-    <param name="url" value="#{cdr_uri}" />\n
-    <param name="cred" value="#{cred}" />\n
+    <param name="url" value="#{cdr_uri}" />
+    <param name="cred" value="#{cred}" />
     <param name="log-b-leg" value="#{log_b_leg}"/>
 
   """
