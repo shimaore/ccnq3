@@ -10,7 +10,7 @@
       </condition>
     </extension>
 
-    <X-PRE-PROCESS cmd="include" data="$${profile_type}-egress.xml.template"/>
+    <X-PRE-PROCESS cmd="include" data="client-sbc/$${profile_type}-egress.xml.template"/>
 
     <!-- Place the call -->
     <extension name="place-call">
@@ -58,7 +58,7 @@
       </condition>
     </extension>
 
-    <X-PRE-PROCESS cmd="include" data="$${profile_type}-ingress.xml.template"/>
+    <X-PRE-PROCESS cmd="include" data="client-sbc/$${profile_type}-ingress.xml.template"/>
 
     <!-- Place the call -->
     <extension name="default-ingress">
