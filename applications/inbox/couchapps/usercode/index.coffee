@@ -10,6 +10,8 @@ do (jQuery) ->
 
   $ = jQuery
 
+  log = (t) -> console.log t
+
   inbox_tpl = $.compile_template ->
     div class:'inbox', ->
       div class:'inbox_header', ->
@@ -48,14 +50,15 @@ do (jQuery) ->
     if type? and Inbox.registered(type)
       try
         d = new Date(doc.updated_at)
-        element = default_list_tpl
+        element = $ default_list_tpl
           type: type
           date: d.toLocaleDateString()
           time: d.toLocaleTimeString()
           list: Inbox.list type,doc
           form: Inbox.form type,doc
       catch error
-        console.log "Rendering #{type} failed: #{error}"
+        log "Rendering #{type} failed: #{error}"
+
       element.data 'doc', doc
       # Hide the body at startup
       element.children('.inbox_item_body').hide()
