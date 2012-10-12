@@ -1,3 +1,8 @@
 Template: ccnq3/uri
 Type: string
 Description: The URL provided by the CCNQ3 management system.
+
+Template: ccnq3/overwrite
+Type: boolean
+Default: false
+Description: The configuration file already exists, do you want to overwrite it?

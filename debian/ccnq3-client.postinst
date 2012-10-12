@@ -9,6 +9,8 @@ ETCDIR=/etc/${NAME}
 
 case "$1" in
   configure|upgrade)
+    db_get ccnq3/overwrite
+    if [ "$RET" = "true" ]; then rm -f $ETCDIR/host.json; fi
     db_get ccnq3/uri
     if [ -z "$RET" ]; then db_reset ccnq3/uri; exit 1; fi
     cd ${WORKDIR}/src && ./bin/bootstrap-client.sh "$RET" 3<&-
