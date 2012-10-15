@@ -16,6 +16,7 @@
         user_agent: 'string'
         socket: 'string'
         methods: 'int'
+        sip_instance: 'string'
       version:
         table_name: 'string'
         table_version: 'int'
