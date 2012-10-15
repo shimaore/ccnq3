@@ -185,12 +185,14 @@ for an entire system.
 It contains different types of records, which can be identified by their "type" field.
 The type is also the first part of the records' identifier, to avoid identifier collisions.
 
-host (aka config) provisioning records
---------------------------------------
+host (provisioning records)
+---------------------------
 
 The local configuration file for a host, normally found in
 `/etc/ccnq3/host.json`, is a copy of the `host` record for that
 specific server as found in the master CouchDB provisioning database.
+
+(In the code, this is referred to as the `config` object. This is the object managed by the `ccnq3.config` class.)
 
 There must be exactly one `host` record for each server in the system.
 Servers are identified by their (arbitrary) Fully Qualified Domain Name (FQDN).
