@@ -1196,9 +1196,8 @@ are used to route the call.
 
     The gateways and/or carriers specified in the rule are tried in the order given.
 
-The following output field is present in the call's CDR as "ccnq_attrs" on outbound calls.
-
-*   `attrs`: string, required; set it to anything you'd like, or "" (the empty string) if you do not use it.
+*   `attrs`: string [default: the empty string]
+    This output field is present in the call's CDR as "ccnq_attrs" on outbound calls.
 
 carrier (provisioning records)
 ------------------------------

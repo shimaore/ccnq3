@@ -129,6 +129,7 @@
           type: 2
       if n is 'dr_rules'
         hash.routeid ?= 0
+        hash.attrs ?= ""
       if n is 'dr_carriers'
         hash.id = 1
       if n is 'dr_gateways'
