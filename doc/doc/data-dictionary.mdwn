@@ -1200,10 +1200,6 @@ The following output field is present in the call's CDR as "ccnq_attrs" on outbo
 
 *   `attrs`: string, required; set it to anything you'd like, or "" (the empty string) if you do not use it.
 
-The following two (output) fields are required even though they are not currently used.
-
-*   `routeid`: 0   (the integer 0)
-
 carrier (provisioning records)
 ------------------------------
 
