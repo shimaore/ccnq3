@@ -1268,11 +1268,7 @@ Changes to rules, gateways, and carriers are not applied automatically. Use sip_
 
 *   `address`: the address of the gateway (IP, IP:port, etc.)
 
-The following fields are required even though they are not currently used.
-
-*   `gwtype`: 0   (the integer 0)
-
-The following fields are required, and might be used at your convenience, although we only test the values shown here.
+The following fields are optional.
 
 *   `probe_mode`: 0
 
@@ -1283,13 +1279,9 @@ The following fields are required, and might be used at your convenience, althou
 
 *   `strip`: 0
 
-The following fields are optional.
-
 *   `pri_prefix`:  string
 
 *   `attrs`: string; currently has a special meaning, do not use.
-
-*   `description`:  string
 
 location (provisioning records)
 -------------------------------
