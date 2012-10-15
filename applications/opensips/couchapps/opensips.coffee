@@ -87,11 +87,10 @@ ddoc.views.rules_by_host =
       emit doc.host, doc
     return
 
-# For completeness, not planning to use them at this time.
-ddoc.views.gwlists_by_host =
+ddoc.views.carriers_by_domain =
   map: p_fun (doc) ->
-    if doc.type? and doc.type is 'gw_list'
-      emit doc.host, doc
+    if doc.type? and doc.type is 'carrier'
+      emit doc.sip_domain_name, doc
     return
 
 ddoc.views.registrant_by_host =

@@ -20,29 +20,29 @@
         table_name: 'string'
         table_version: 'int'
       dr_gateways:
-        gwid: 'int'
+        gwid: 'string'
         type: 'int'
         address: 'string'
         strip: 'int'
         pri_prefix: 'string'
         attrs: 'string'
         probe_mode: 'int'
-        description: 'string'
       dr_rules:
         ruleid: 'int'
         # keys
         groupid: 'string'
         prefix: 'string'
+        timerec: 'string'
         priority: 'int'
         # others
-        timerec: 'string'
         routeid: 'string'
         gwlist: 'string'
         attrs: 'string'
-        description: 'string'
-      dr_gw_lists:
-        id:'int'
-        gwlist:'string'
+      dr_carriers:
+        carrierid: 'string'
+        gwlist: 'string'
+        flags: 'int'
+        attrs: 'string'
       dr_groups:
         username:'string'
         domain:'string'

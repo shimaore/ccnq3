@@ -214,9 +214,9 @@ require('ccnq3').config (config)->
 
       throw 'not handled'
 
-    @get '/dr_gw_lists/': -> # id,gwlist
+    @get '/dr_carriers/': -> # id,gwlist
       if not @query.k?
-        pipe_list_key @, 'dr_gw_lists', 'gwlists_by_host', config.host
+        pipe_list_key @, 'dr_carriers', 'carriers_by_domain', config.sip_domain_name
         return
 
       throw 'not handled'

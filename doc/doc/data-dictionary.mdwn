@@ -969,7 +969,9 @@ If the "challenge" configuration parameter is empty (the default), the domain na
 
 *   `dialog_timer`: integer; maximum call (dialog) duration (in seconds)
 
-*   `outbound_route`: integer; route to use for outbound calls from this endpoint; if null, per-number outbound_route is used
+*   `outbound_route`: integer; route to use for outbound calls from this endpoint; if null, per-number outbound_route is used. This is matched to a `rule` record's `group_id`.
+
+    Use `outbound_route` to allow some calls (e.g. emergency) and reject others.
 
 *   `check_from`      boolean
     If true, the call can only be placed if the endpoint for the From username is the same as this endpoint.
@@ -998,11 +1000,7 @@ If the "challenge" configuration parameter is empty (the default), the domain na
 
     Might be overriden by the calling number's location.
 
-*   `outbound_route`  integer An identifier for a rule record's group_id
-
 *   `src_disabled`    boolean All outbound calls are disabled.
-
-    Use outbound_route to allow some calls (e.g. emergency) and reject others.
 
 *   `user_force_mp`   boolean If true, attempt to force media_proxy insertion
 
@@ -1040,7 +1038,7 @@ number (provisioning records)
 
     These are used to build Carrier ENUM records.
 
-*   `outbound_route`: integer; allows to select a specific rule based on the rule's groupid
+*   `outbound_route`: integer; allows to select a specific rule based on the rule's groupid.
 
 *   `registrant_password`: password for applications/registrant
 
@@ -1125,20 +1123,22 @@ A local number may reject or accept calls from specific numbers.
 
 Either (or both) of `blacklist` and/or `whitelist` must be true for the matching action to be taken.
 
-rule (aka outbound_route) (provisioning records)
-------------------------------------------------
+rule (provisioning records)
+---------------------------
 
 Rules are used to route outbound calls in OpenSIPS.
 
 The selection part of the rule is first matched to select one rule out of all the available rules.
 
-Once that route is selected, the call is forwarded to the destination gateways for that rule.
+Once that route is selected, the call is forwarded to the destination gateways or carriers for that rule.
 
 Additionally the `attrs` field is available in the CDRs.
 This feature can be used for example to store rating information so that they do not need to be looked up again (using longest-prefix match) at rating time.
 
 Operational note:
-Changes to rules and gateways are not applied automatically. Use sip_commands.opensips = "reload routes" (or the equivalent portal action) to apply the changes.
+Changes to rules, gateways, and carriers are not applied automatically. Use sip_commands.opensips = "reload routes" (or the equivalent portal action) to apply the changes.
+
+Although `rules` are defined on a per-host basis, carriers and gateways are defined on a per-`sip_domain_name`-basis.
 
 ### Rule identifiers ###
 
@@ -1152,16 +1152,17 @@ Changes to rules and gateways are not applied automatically. Use sip_commands.op
 
 *   `host`: the host on which OpenSIPS is running and using this rule/outbound_route
 
-*   `ruleid`: integer; a unique ID for this rule (a sequential or random number)
+*   `ruleid`: integer; a unique ID for this rule (a sequential or random number).
 
-    The ruleid is used rather than a longer, composed key, which should have groupid, prefix, timerec, and priority.
+    The `ruleid` is used rather than a longer, composed key, which should combine `groupid`, `prefix`, `timerec`, and `priority`.
+    It is used for identification purposes only (not for routing calls).
 
 ### Rule selection ###
 
 The following four fields are used to select a rule.
 The set of applicable rules is narrowed down as each field is applied in order.
 
-*   `groupid`: integer; this is the "outbound_route" of the endpoint (or of the the number, if the endpoint does not provide an "outbound_route")
+*   `groupid`: integer; this is the `outbound_route` of the endpoint; or the `outbound_route` of the the number, if the endpoint does not provide an `outbound_route`.
 
      Although it seems OpenSIPS might support having one or more groupid for a given rule we currently do not support this option.
 
@@ -1173,9 +1174,7 @@ The set of applicable rules is narrowed down as each field is applied in order.
 
 At the end of the selection process, only one rule is selected.
 
-For the complete specification, see section *Routing Rule Processing* in <http://www.opensips.org/html/docs/modules/1.7.x/drouting.html>
-
-We use sort_order = 1, meaning that inside gwlist each semicolon delimits a group of gateways; each group contains a comma-delimited list of gateways. For each call, two gateways are selected at random in each group (groups are kept in the order they appear), and the call is then sequantially forked to each gateway.
+For the complete specification, see section *Routing Rule Processing* in <http://www.opensips.org/html/docs/modules/1.8.x/drouting.html>
 
 ### Rule output ###
 
@@ -1185,7 +1184,17 @@ are used to route the call, once a rule has been selected.
 The gateway list indicates which gateways (either "gateway" records or "egress_gwid" sip_profiles)
 are used to route the call.
 
-*   `gwlist`: string; a comma- and semicolon-separated list of gateways
+*   `gwlist`: string; a comma-separated list of gateways or carriers.
+
+    Carrier IDs must be prefixed with a `#`. Weight are assigned by following the `gwid` or `carrierid` with `=` and a numerical weight.
+
+    Examples:
+
+        "gw1,gw2,#car1"
+
+        "gw1=25,gw2=25,#car1=50"
+
+    The gateways and/or carriers specified in the rule are tried in the order given.
 
 The following output field is present in the call's CDR as "ccnq_attrs" on outbound calls.
 
@@ -1195,6 +1204,114 @@ The following two (output) fields are required even though they are not currentl
 
 *   `routeid`: 0   (the integer 0)
 
+carrier (provisioning records)
+------------------------------
+
+Carriers are used by the Least Cost Rules as targets for call routing.
+
+Operational note:
+Changes to rules, gateways, and carriers are not applied automatically. Use sip_commands.opensips = "reload routes" (or the equivalent portal action) to apply the changes.
+
+*   `_id`: type+":"+carrier
+
+*   `account`: ""    (the empty string)
+
+*   `type`: "carrier"
+
+*   `carrier`: sip_domain_name+":"+carrierid
+
+*   `sip_domain_name`: the `sip_domain_name` of the hosts on which OpenSIPS is running and using this carrier.
+
+*   `carrierid`: alphanumerical; a unique identifier for the carrier inside this `sip_domain_name`; used in the `gwlist` field of a `rule` record (prefixed with `#`).
+
+*   `gwlist`: the comma-separated list of `gwid` for the target gateways.
+
+    To assign weights to the gateways append `=` and a numerical weight after each `gwid`.
+
+    Examples:
+
+        `gw1,gw2,gw3`
+
+        `gw1=25,gw2=25,gw3=50`
+
+*   `flags`: 1
+
+    Although the following flags are supported; we recommend you set this field to integer `1`.
+
+    1 - use weights for sorting [default: use `gwlist` order]
+    2 - after sorting, use only the first gateway [default: try all gateways]
+    4 - disable this carrier
+
+The following fields are optional
+
+*   `attrs`:  string
+
+*   `description`:  string
+
+gateway (provisioning records)
+------------------------------
+
+Gateways are used by the Least Cost Rules as targets for call routing.
+
+You do not need to create gateway records for sip_profiles which have an `egress_gwid` field, these are created automatically using the host's `sip_domain_name` and the `egress_gwid`. (They will not show up in the database but will be accessible to all the OpenSIPS hosts within that sip_domain_name.)
+This feature means that you normally should not have to manually create `gateway`-type records for Least Cost Routing, since all the interesting records should be created automatically.
+
+However you will have to create gateway records for calls to servers in a different `sip_domain_name` such as voicemail servers or emergency servers.
+
+Operational note:
+Changes to rules, gateways, and carriers are not applied automatically. Use sip_commands.opensips = "reload routes" (or the equivalent portal action) to apply the changes.
+
+*   `_id`: type+":"+gateway
+
+*   `account`: ""    (the empty string)
+
+*   `type`: "gateway"
+
+*   `gateway`: sip_domain_name+":"+gwid
+
+*   `sip_domain_name`: the sip_domain_name of the hosts on which OpenSIPS is running and using this gateway.
+
+*   `gwid`: alphanumerical; a unique identifier for the gateway inside this sip_domain_name; used in the `gwlist` field of a `rule` record or in the `gwlist` field of a `carrier` record.
+
+*   `address`: the address of the gateway (IP, IP:port, etc.)
+
+The following fields are required even though they are not currently used.
+
+*   `gwtype`: 0   (the integer 0)
+
+The following fields are required, and might be used at your convenience, although we only test the values shown here.
+
+*   `probe_mode`: 0
+
+    The following modes are available:
+      0: no probing
+      1: probing only when disabled (however our scripts do not use dr_disable())
+      2: probing at all times
+
+*   `strip`: 0
+
+The following fields are optional.
+
+*   `pri_prefix`:  string
+
+*   `attrs`: string; currently has a special meaning, do not use.
+
+*   `description`:  string
+
+location (provisioning records)
+-------------------------------
+
+*   `_id`: type+":"+location
+
+*   `account`: string
+
+*   `type`: "location"
+
+*   `location`:  string; a unique identifier for this location
+
+*   `routing_data`:  string; specific to the emergency routing system used
+
+    In France this would be the INSEE code of the commune.
 
 emergency (provisioning records)
 --------------------------------
@@ -1225,68 +1342,6 @@ These records are used by the `applications/emergency` application.
 
     The `emergency_domain` used is the one found in the `endpoint` record for the host that sent the INVITE message to
     the emergency server.
-
-gateway (provisioning records)
-------------------------------
-
-Gateways are used by the Least Cost Rules as targets for call routing.
-
-You do not need to create gateway records for sip_profiles which have an `egress_gwid` field, these are created automatically using the host's `sip_domain_name` and the `egress_gwid`. (They will not show up in the database but will be accessible to all the OpenSIPS hosts within that sip_domain_name.)
-This feature means that you normally should not have to manually create `gateway`-type records for Least Cost Routing, since all the interesting records should be created automatically.
-
-However you will have to create gateway records for calls that to servers in a different `sip_domain_name` such as voicemail servers or emergency servers.
-
-Changes to rules and gateways are not applied automatically. Use sip_commands.opensips = "reload routes" (or the equivalent portal action) to apply the changes.
-
-
-*   `_id`: type+":"+gateway
-
-*   `account`: ""    (the empty string)
-
-*   `type`: "gateway"
-
-*   `gateway`: sip_domain_name+":"+gwid
-
-*   `sip_domain_name`: the sip_domain_name of the hosts on which OpenSIPS is running and using this gateway
-
-*   `gwid`: integer; a unique identifier for the gateway inside this sip_domain_name; used in the "gwlist" field of the "rule" record
-
-*   `address`: the address of the gateway (IP, IP:port, etc.)
-
-The following fields are required even though they are not currently used.
-
-*   `gwtype`: 0   (the integer 0)
-
-The following fields are required, and might be used at your convenience, although we only test the values shown here.
-
-*   `probe_mode`: 0
-
-    The following modes are available:
-      0: no probing
-      1: probing only when disabled (however our scripts do not use dr_disable())
-      2: probing at all times
-
-*   `strip`: 0
-
-The following fields are optional
-
-*   `pri_prefix`:  string
-
-*   `description`:  string
-
-## location (provisioning records)
-
-*   `_id`: type+":"+location
-
-*   `account`: string
-
-*   `type`: "location"
-
-*   `location`:  string; a unique identifier for this location
-
-*   `routing_data`:  string; specific to the emergency routing system used
-
-    In France this would be the INSEE code of the commune.
 
 
 _users database
