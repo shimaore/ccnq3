@@ -235,7 +235,7 @@ require('ccnq3').config (config)->
         versions =
           location: 1007
           subscriber: 7
-          dr_gateways: 4
+          dr_gateways: 5
           dr_rules: 3
 
         return "int\n#{versions[@query.v]}\n"

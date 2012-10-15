@@ -21,6 +21,7 @@
         table_name: 'string'
         table_version: 'int'
       dr_gateways:
+        id: 'int'
         gwid: 'string'
         type: 'int'
         address: 'string'
@@ -126,6 +127,7 @@
           attribute: hash.type
           type: 2
       if n is 'dr_gateways'
+        hash.id = 1
         hash.type = hash.gwtype
       if n is 'dr_groups'
         hash.groupid = hash.outbound_route # alternatively set the "drg_grpid_col" parameter to "outbound_route"
