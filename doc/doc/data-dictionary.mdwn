@@ -1229,19 +1229,17 @@ Changes to rules, gateways, and carriers are not applied automatically. Use sip_
 
         `gw1=25,gw2=25,gw3=50`
 
-*   `flags`: 1
+The following fields are optional.
 
-    Although the following flags are supported; we recommend you set this field to integer `1`.
+*   `flags`: integer [default: 1]
+
+    The following flags are supported; you normally do not need to modify the default.
 
     1 - use weights for sorting [default: use `gwlist` order]
     2 - after sorting, use only the first gateway [default: try all gateways]
     4 - disable this carrier
 
-The following fields are optional
-
 *   `attrs`:  string
-
-*   `description`:  string
 
 gateway (provisioning records)
 ------------------------------

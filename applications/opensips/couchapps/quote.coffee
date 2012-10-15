@@ -131,7 +131,9 @@
         hash.routeid ?= 0
         hash.attrs ?= ""
       if n is 'dr_carriers'
-        hash.id = 1
+        hash.id ?= 1
+        hash.flags ?= 1
+        hash.attrs ?= ""
       if n is 'dr_gateways'
         hash.id = 1
         hash.type = hash.gwtype
