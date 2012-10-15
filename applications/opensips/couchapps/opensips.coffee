@@ -93,3 +93,29 @@ ddoc.views.gwlists_by_host =
     if doc.type? and doc.type is 'gw_list'
       emit doc.host, doc
     return
+
+ddoc.views.registrant_by_host =
+  map: p_fun (doc) ->
+
+    if doc.type? and doc.type is 'number' and doc.registrant_password? and doc.registrant_host?
+      value =
+        registrar: "sip:#{doc.registrant_remote_ipv4}"
+        # proxy: null
+        aor: "sip:00#{doc.number}@#{doc.registrant_remote_ipv4}"
+        # third_party_registrant: null
+        username: "00#{doc.number}"
+        password: doc.registrant_password
+        # binding_URI: "sip:00#{doc.number}@#{p.interfaces.primary.ipv4 ? p.host}:5070"
+        # binding_params: null
+        # expiry: null
+        # forced_socket: null
+
+      hosts = doc.registrant_host
+      if typeof hosts is 'string'
+        hosts = [hosts]
+
+      for host in hosts
+        value.binding_URI = "sip:00#{doc.number}@#{host}:5070"
+        emit host, value
+
+    return

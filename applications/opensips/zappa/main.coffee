@@ -221,6 +221,13 @@ require('ccnq3').config (config)->
 
       throw 'not handled'
 
+    @get '/registrant/': ->
+      if not @query.k?
+        pipe_list_key @, 'registrant', 'registrant_by_host', config.host
+        return
+
+      throw 'not handled'
+
     @get '/version/': ->
       if @query.k is 'table_name' and @query.c is 'table_version'
 

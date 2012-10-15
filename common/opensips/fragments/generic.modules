@@ -68,6 +68,7 @@ loadmodule "rr.so"
 loadmodule "maxfwd.so"
 loadmodule "uri.so"
 loadmodule "textops.so"
+loadmodule "sipmsgops.so"
 
 # -- signaling --
 loadmodule "signaling.so"
