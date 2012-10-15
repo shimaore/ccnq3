@@ -37,9 +37,9 @@ exports.notifier = (config) ->
 
       send_email_notification = (email,attach,language,msg) ->
         if attach
-          file_name = 'voicemail_notification'
-        else
           file_name = 'voicemail_notification_with_attachment'
+        else
+          file_name = 'voicemail_notification'
         language ?= 'en'
 
         #### Templates
