@@ -41,6 +41,7 @@
         gwlist: 'string'
         attrs: 'string'
       dr_carriers:
+        id: 'int'
         carrierid: 'string'
         gwlist: 'string'
         flags: 'int'
@@ -126,6 +127,8 @@
           value: hash
           attribute: hash.type
           type: 2
+      if n is 'dr_carriers'
+        hash.id = 1
       if n is 'dr_gateways'
         hash.id = 1
         hash.type = hash.gwtype
