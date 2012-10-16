@@ -16,6 +16,7 @@
   , "bootstrap": "./node/host_cli.coffee"
   , "couchapps": "cd couchapps && ./install.coffee"
   , "preinstall": "coffee -c couchapps/*/*.coffee"
+  , "compact": "cd couchapps && ./compact.coffee"
 }
 , "dependencies": {
     "couchapp": "*"
