@@ -82,7 +82,17 @@
         user_agent:'string'
         socket:'string'
         methods:'int'
-
+      registrant:
+        registrar:'string'
+        proxy:'string'
+        aor:'string'
+        third_party_registrant:'string'
+        username:'string'
+        password:'string'
+        binding_URI:'string'
+        binding_params:'string'
+        expiry:'int'
+        force_socket:'string'
 
     quoted_value = (t,x) ->
       # No value: no quoting.
