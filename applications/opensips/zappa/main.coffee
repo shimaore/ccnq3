@@ -237,6 +237,7 @@ require('ccnq3').config (config)->
           subscriber: 7
           dr_gateways: 5
           dr_rules: 3
+          registrant: 1
 
         return "int\n#{versions[@query.v]}\n"
 
