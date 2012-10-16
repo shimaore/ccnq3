@@ -148,8 +148,8 @@
         hash.attrs ?= ""
       if n is 'dr_gateways'
         hash.id ?= 1
-        hash.type = hash.gwtype
         hash.gwtype ?= 0
+        hash.type = hash.gwtype
         hash.probe_mode ?= 0
         hash.strip ?= 0
       if n is 'dr_groups'
