@@ -10,5 +10,4 @@ require('ccnq3').config (config) ->
 
   provisioning_uri = config.provisioning.local_couchdb_uri
   provisioning = pico provisioning_uri
-  provisioning.create ->
-    push_script provisioning_uri, 'dns'
+  push_script provisioning_uri, 'dns'

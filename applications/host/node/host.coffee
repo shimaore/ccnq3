@@ -67,6 +67,8 @@ exports.update_config = (password,config,cb) ->
   config.provisioning.host_couchdb_uri = provisioning_uri
   # FIXME: why does local_couchdb_uri (on the manager) need to have admin access?
   # Possible answer: because it needs to install local _design documents.
+  # (Other hosts don't have this issue because their local_couchdb_uri is by
+  # default in admin-party mode.)
   config.provisioning.local_couchdb_uri = provisioning_uri
 
   # Identically to what happens in ../couchapps/usercode/host.coffee when the

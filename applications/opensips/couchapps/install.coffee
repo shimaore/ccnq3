@@ -13,8 +13,7 @@ require('ccnq3').config (config)->
   # Install the views so that opensips-proxy might work.
   provisioning_uri = config.provisioning.local_couchdb_uri
   provisioning = pico provisioning_uri
-  provisioning.create ->
-    push_script provisioning_uri, 'opensips'
+  push_script provisioning_uri, 'opensips'
 
   # Create this database (local to the host, normally)
   location_uri = config.opensips_proxy?.usrloc_uri ? 'http://127.0.0.1:5984/location'

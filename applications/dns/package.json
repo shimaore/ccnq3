@@ -11,7 +11,6 @@
     "start": "daemon -n ccnq3_dns -o daemon.debug -D \"`pwd`/node\" -r -- ./server.coffee"
   , "stop":  "daemon -n ccnq3_dns -o daemon.debug --stop"
   , "couchapps": "cd couchapps && ./install.coffee"
-  , "compact": "cd couchapps && ./compact.coffee"
   },
   "dependencies": {
     "ccnq3": ">=0.3.3"

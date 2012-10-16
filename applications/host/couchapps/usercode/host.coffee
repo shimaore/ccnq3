@@ -24,7 +24,7 @@ do (jQuery) ->
     "applications/logging"
     # Required on all servers
     "applications/monitor"
-    "applications/host"
+    "applications/host"           # Creates provisioning.local_couchdb_uri
     # Applications for a manager
     "applications/portal"
     "applications/inbox"
