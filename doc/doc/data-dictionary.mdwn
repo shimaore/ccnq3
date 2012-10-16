@@ -1169,9 +1169,9 @@ The set of applicable rules is narrowed down as each field is applied in order.
 
 *   `prefix`: string; the routing (destination number) prefix (might be ""), longest-prefix match
 
-*   `timerec`: string; a time specification
+*   `timerec`: string; a time specification [optional; defaults to ""]
 
-*   `priority`: integer; ruleset ordering criteria (within the groupid and prefix, for matching timerecs, the rule with the highest priority is chosen)
+*   `priority`: integer; ruleset ordering criteria (within the groupid and prefix, for matching `timerec`s, the rule with the highest priority is chosen) [optional; defaults to 1]
 
 At the end of the selection process, only one rule is selected.
 

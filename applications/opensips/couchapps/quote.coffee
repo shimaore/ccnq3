@@ -139,6 +139,8 @@
           type: 2
       if n is 'dr_rules'
         hash.routeid ?= 0
+        hash.timerec ?= ""
+        hash.priority ?= 1
         hash.attrs ?= ""
       if n is 'dr_carriers'
         hash.id ?= 1
