@@ -198,7 +198,7 @@ require('ccnq3').config (config)->
 
     @get '/dr_rules/': -> # ?c=ruleid,groupid,prefix,timerec,priority,routeid,gwlist,attrs
       if not @query.k?
-        pipe_list_key @, 'dr_rules', 'rules_by_host', config.host
+        pipe_list_key @, 'dr_rules', 'rules_by_domain', config.sip_domain_name
         return
 
       throw 'not handled'
@@ -216,7 +216,7 @@ require('ccnq3').config (config)->
 
     @get '/dr_carriers/': -> # id,gwlist
       if not @query.k?
-        pipe_list_key @, 'dr_carriers', 'carriers_by_domain', config.sip_domain_name
+        pipe_list_key @, 'dr_carriers', 'carriers_by_host', config.host
         return
 
       throw 'not handled'

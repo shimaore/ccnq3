@@ -81,16 +81,16 @@ ddoc.views.gateways_by_domain =
 
     return
 
-ddoc.views.rules_by_host =
+ddoc.views.rules_by_domain =
   map: p_fun (doc) ->
     if doc.type? and doc.type is 'rule'
-      emit doc.host, doc
+      emit doc.sip_domain_name, doc
     return
 
-ddoc.views.carriers_by_domain =
+ddoc.views.carriers_by_host =
   map: p_fun (doc) ->
     if doc.type? and doc.type is 'carrier'
-      emit doc.sip_domain_name, doc
+      emit doc.host, doc
     return
 
 ddoc.views.registrant_by_host =

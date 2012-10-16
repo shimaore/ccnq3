@@ -1138,7 +1138,8 @@ This feature can be used for example to store rating information so that they do
 Operational note:
 Changes to rules, gateways, and carriers are not applied automatically. Use sip_commands.opensips = "reload routes" (or the equivalent portal action) to apply the changes.
 
-Although `rules` are defined on a per-host basis, carriers and gateways are defined on a per-`sip_domain_name`-basis.
+Although `rule`s and `gateway`s are defined on a per-`sip_domain_name` basis, carriers defined on a per-`host` basis.
+This allows you do have domain-generic routes and gateways, but each host can route to a preferred set of gateways (e.g. closest-gateway first) if desired. In that last case, make sure you assign higher weights to the preferred gateways for each `carrier`.
 
 ### Rule identifiers ###
 
@@ -1148,9 +1149,9 @@ Although `rules` are defined on a per-host basis, carriers and gateways are defi
 
 *   `type`: "rule"
 
-*   `rule`: host+":"+ruleid
+*   `rule`: sip_domain_name+":"+ruleid
 
-*   `host`: the host on which OpenSIPS is running and using this rule/outbound_route
+*   `sip_domain_name`: the `sip_domain_name` of the hosts on which OpenSIPS is running and using this rule/outbound_route
 
 *   `ruleid`: integer; a unique ID for this rule (a sequential or random number).
 
@@ -1213,9 +1214,9 @@ Changes to rules, gateways, and carriers are not applied automatically. Use sip_
 
 *   `type`: "carrier"
 
-*   `carrier`: sip_domain_name+":"+carrierid
+*   `carrier`: host+":"+carrierid
 
-*   `sip_domain_name`: the `sip_domain_name` of the hosts on which OpenSIPS is running and using this carrier.
+*   `host`: string; the `host` on which OpenSIPS is running and using this carrier.
 
 *   `carrierid`: alphanumerical; a unique identifier for the carrier inside this `sip_domain_name`; used in the `gwlist` field of a `rule` record (prefixed with `#`).
 
@@ -1235,7 +1236,7 @@ The following fields are optional.
 
     The following flags are supported; you normally do not need to modify the default.
 
-    1 - use weights for sorting [default: use `gwlist` order]
+    1 - use weights for sorting [the default; if set to 0, uses `gwlist` order]
     2 - after sorting, use only the first gateway [default: try all gateways]
     4 - disable this carrier
 
