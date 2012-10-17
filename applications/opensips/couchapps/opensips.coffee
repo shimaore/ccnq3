@@ -119,7 +119,7 @@ ddoc.views.registrant_by_host =
         value.binding_URI = "sip:00#{doc.number}@#{host}:5070"
         emit host, value
 
-    if doc.type? and doc.type is 'host' and 'applications/registrant' in doc.applications
+    if doc.type? and doc.type is 'host' and doc.applications.indexOf('applications/registrant') >= 0
       # Make sure these records show up at the top
       emit '!', host:host, registrant:doc.registrant, interfaces:doc.interfaces
 
