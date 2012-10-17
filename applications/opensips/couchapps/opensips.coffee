@@ -121,7 +121,7 @@ ddoc.views.registrant_by_host =
 
     if doc.type? and doc.type is 'host' and doc.applications.indexOf('applications/registrant') >= 0
       # Make sure these records show up at the top
-      emit '!', host:host, registrant:doc.registrant, interfaces:doc.interfaces
+      emit '!', host:doc.host, registrant:doc.registrant, interfaces:doc.interfaces
 
     return
 
@@ -142,7 +142,7 @@ ddoc.lists.registrant = p_fun (head,req) ->
       if row.key is '!'
         hosts[row.value.host] = row.value
       else
-        host = row.key
+        host = row.value.host
         ipv4 = hosts[host]?.interfaces?.primary?.ipv4
         if ipv4?
           row.value.binding_URI.replace host, ipv4
