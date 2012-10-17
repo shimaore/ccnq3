@@ -654,8 +654,6 @@ Related: applications/registrant
 
     * `local_port`: integer, port where to send incoming calls
 
-    * `remote_ipv4`: string, default upstream registrar
-
     * `proxy_port`: integer, the port for this SIP service [default: 5070]
 
 *   `sip_commands.registrant`: string
