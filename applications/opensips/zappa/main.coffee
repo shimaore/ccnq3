@@ -105,6 +105,15 @@ require('ccnq3').config (config)->
     pipe_list_key = (that,t,view,key,format='format') ->
       _list_key that, config.provisioning.local_couchdb_uri, t, view, key, format
 
+    _list_keys = (that,base,t,view,key,format) ->
+      startkey = """["#{key}"]"""
+      endkey   = """["#{key}",{}]"""
+      loc = "#{base}/_design/opensips/_list/#{format}/#{view}?t=#{t}&c=#{qs.escape that.query.c}&startkey=#{qs.escape startkey}&endkey=#{qs.escape endkey}"
+      _request that, loc
+
+    pipe_list_keys = (that,t,view,key,format='format') ->
+      _list_keys that, config.provisioning.local_couchdb_uri, t, view, key, format
+
 
     # Action!
     @get '/subscriber/': -> # auth_table
@@ -223,7 +232,7 @@ require('ccnq3').config (config)->
 
     @get '/registrant/': ->
       if not @query.k?
-        pipe_list_key @, 'registrant', 'registrant_by_host', config.host, 'registrant'
+        pipe_list_keys @, 'registrant', 'registrant_by_host', config.host, 'registrant'
         return
 
       throw 'not handled'

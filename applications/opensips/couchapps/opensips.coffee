@@ -117,11 +117,11 @@ ddoc.views.registrant_by_host =
 
       for host in hosts
         value.binding_URI = "sip:00#{doc.number}@#{host}:5070"
-        emit host, value
+        emit [host,1], value
 
     if doc.type? and doc.type is 'host' and doc.applications.indexOf('applications/registrant') >= 0
       # Make sure these records show up at the top
-      emit '!', host:doc.host, registrant:doc.registrant, interfaces:doc.interfaces
+      emit [doc.host,0], interfaces:doc.interfaces
 
     return
 
@@ -139,12 +139,12 @@ ddoc.lists.registrant = p_fun (head,req) ->
   hosts = {}
   while row = getRow()
     do (row) ->
-      if row.key is '!'
-        hosts[row.value.host] = row.value
+      host =row.key[0]
+      if row.value.interfaces?
+        hosts[host] = row.value
       else
-        host = row.value.host
-        ipv4 = hosts[host]?.interfaces?.primary?.ipv4
+        ipv4 = hosts[host]?.interfaces.primary?.ipv4
         if ipv4?
-          row.value.binding_URI.replace host, ipv4
+          row.value.binding_URI = row.value.binding_URI.replace host, ipv4
         send quote.value_line types, t, row.value, columns
   return # KeepMe!
