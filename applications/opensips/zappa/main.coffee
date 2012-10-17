@@ -97,13 +97,13 @@ require('ccnq3').config (config)->
     pipe_loc_list = (that,t,view) ->
       _list that, config.opensips_proxy.usrloc_uri, t, view
 
-    _list_key = (that,base,t,view,key) ->
+    _list_key = (that,base,t,view,key,format) ->
       key = "\"#{key}\""
-      loc = "#{base}/_design/opensips/_list/format/#{view}?t=#{t}&c=#{qs.escape that.query.c}&key=#{qs.escape key}"
+      loc = "#{base}/_design/opensips/_list/#{format}/#{view}?t=#{t}&c=#{qs.escape that.query.c}&key=#{qs.escape key}"
       _request that, loc
 
-    pipe_list_key = (that,t,view,key) ->
-      _list_key that, config.provisioning.local_couchdb_uri, t, view, key
+    pipe_list_key = (that,t,view,key,format='format') ->
+      _list_key that, config.provisioning.local_couchdb_uri, t, view, key, format
 
 
     # Action!
@@ -223,7 +223,7 @@ require('ccnq3').config (config)->
 
     @get '/registrant/': ->
       if not @query.k?
-        pipe_list_key @, 'registrant', 'registrant_by_host', config.host
+        pipe_list_key @, 'registrant', 'registrant_by_host', config.host, 'registrant'
         return
 
       throw 'not handled'

@@ -93,6 +93,8 @@ ddoc.views.carriers_by_host =
       emit doc.host, doc
     return
 
+## Registrant view and list
+
 ddoc.views.registrant_by_host =
   map: p_fun (doc) ->
 
@@ -117,4 +119,32 @@ ddoc.views.registrant_by_host =
         value.binding_URI = "sip:00#{doc.number}@#{host}:5070"
         emit host, value
 
+    if doc.type? and doc.type is 'host' and 'applications/registrant' in doc.applications
+      # Make sure these records show up at the top
+      emit '!', host:host, registrant:doc.registrant, interfaces:doc.interfaces
+
     return
+
+ddoc.lists.registrant = p_fun (head,req) ->
+  quote = require 'lib/quote'
+  start {
+    headers:
+      'Content-Type': 'text/plain'
+  }
+  t = req.query.t
+  c = req.query.c
+  types = quote.column_types[t]
+  columns = c.split ','
+  send quote.first_line(types,columns)
+  hosts = {}
+  while row = getRow()
+    do (row) ->
+      if row.key is '!'
+        hosts[row.value.host] = row.value
+      else
+        host = row.key
+        ipv4 = hosts[host]?.interfaces?.primary?.ipv4
+        if ipv4?
+          row.value.binding_URI.replace host, ipv4
+        send quote.value_line types, t, row.value, columns
+  return # KeepMe!
