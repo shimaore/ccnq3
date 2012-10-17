@@ -92,7 +92,7 @@
         binding_URI:'string'
         binding_params:'string'
         expiry:'int'
-        force_socket:'string'
+        forced_socket:'string'
 
     quoted_value = (t,x) ->
       # No value: no quoting.
