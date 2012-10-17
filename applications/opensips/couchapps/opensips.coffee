@@ -108,7 +108,7 @@ ddoc.views.registrant_by_host =
         password: doc.registrant_password
         # binding_URI: "sip:00#{doc.number}@#{p.interfaces.primary.ipv4 ? p.host}:5070"
         # binding_params: null
-        # expiry: null
+        expiry: doc.registrant_expiry ? 3600
         # forced_socket: null
 
       hosts = doc.registrant_host
