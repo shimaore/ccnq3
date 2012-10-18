@@ -45,17 +45,19 @@ ddoc.lists.format = p_fun (head,req) ->
     headers:
       'Content-Type': 'text/plain'
   }
-  if not head.total_rows
-    send ''
-    return
   t = req.query.t
   c = req.query.c
   types = quote.column_types[t]
   columns = c.split ','
-  send quote.first_line(types,columns)
+  started = false
   while row = getRow()
     do (row) ->
+      if not started
+        send quote.first_line(types,columns)
+        started = true
       send quote.value_line types, t, row.value, columns
+  if not started
+    send ''
   return # KeepMe!
 
 ddoc.views.gateways_by_domain =
@@ -135,10 +137,13 @@ ddoc.lists.registrant = p_fun (head,req) ->
   c = req.query.c
   types = quote.column_types[t]
   columns = c.split ','
-  send quote.first_line(types,columns)
   hosts = {}
+  started = false
   while row = getRow()
     do (row) ->
+      if not started
+        send quote.first_line(types,columns)
+        started = true
       host =row.key[0]
       if row.value.interfaces?
         hosts[host] = row.value
@@ -147,4 +152,6 @@ ddoc.lists.registrant = p_fun (head,req) ->
         if ipv4?
           row.value.binding_URI = row.value.binding_URI.replace host, ipv4
         send quote.value_line types, t, row.value, columns
+  if not started
+    send ''
   return # KeepMe!
