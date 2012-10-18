@@ -3,6 +3,6 @@
     <X-PRE-PROCESS cmd="include" data="../local-json_cdr.xml" />
     <param name="auth-scheme" value="basic" />
     <param name="encode-values" value="false" />
-    <param name="log-dir" value="/opt/freeswitch/log" />
+    <param name="log-dir" value="/opt/ccnq3/freeswitch/cdr" />
   </settings>
 </configuration>

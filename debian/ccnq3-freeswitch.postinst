@@ -16,6 +16,7 @@ case "$1" in
     CONF=$WORKDIR/freeswitch/conf
     VOICEMAIL=$WORKDIR/freeswitch/messages
     LOG=/opt/freeswitch/log
+    CDR=$WORKDIR/freeswitch/cdr
 
     # allow access to configuration directories
     if [ "`getent group $GROUP | cut -d : -f 4`" != "$USER" ]; then
@@ -37,6 +38,10 @@ case "$1" in
     mkdir -p $VOICEMAIL
     chown -R freeswitch.$GROUP $VOICEMAIL
     chmod g+w $VOICEMAIL # allow access to voicemail directory
+
+    mkdir -p $CDR
+    chown -R freeswitch.$GROUP $CDR
+    chmod g+w $CDR # allow access to cdr directory
 
     ###
     # These do not restart FreeSwitch and OpenSIPS with the new configurations,
