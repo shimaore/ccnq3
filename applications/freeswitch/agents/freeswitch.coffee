@@ -119,3 +119,6 @@ require('ccnq3').config (config) ->
       hostname: config.host
 
   db.monitor options, handler
+
+# Start the CDR swiper
+require './cdr-swiper'
