@@ -1,5 +1,0 @@
-Documentation for CCNQ3.
-
-* [[Install]]
-* [[Provisioning]]
-* [[data-dictionary]]
