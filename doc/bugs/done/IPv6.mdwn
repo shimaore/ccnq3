@@ -1,5 +1,0 @@
-1. Due to npm limitations and github/npmregistry not being available over IPv6, installation must use IPv4.
-2. Due to Node.js URL parsing bug, use host names (DNS) instead of IPv6 IP Addresses for configuration of the system. [OBSOLETE]
-
-#1 is outside our control, therefor not a bug, but a documentable limitation. A possible workaround would be to provide pre-compiled node_modules in the Debian packages.
-#2 is actually a non-issue -- we now enforce the use of names and provide a database-driven DNS server.

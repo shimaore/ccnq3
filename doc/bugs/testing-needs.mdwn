@@ -1,7 +1,0 @@
-Do some testing with
-   http://code.google.com/p/sipvicious/source/browse/trunk/svwar.py
-(also look into http://blog.sipvicious.org/ for other ideas)
-to see which mitigation strategies are best.
-
-This is also a strong argument for having OpenSIPS as the choke server
-even if having FreeSwitch directly on the frontline would seem OK.

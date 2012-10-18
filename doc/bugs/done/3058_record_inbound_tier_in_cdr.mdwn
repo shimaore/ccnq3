@@ -1,9 +1,0 @@
-= Record inbound tier in CDR =
-
-We need new accounting for inbound calls so that we can record the inbound tier at the time the call record is created.
-
-Proposed solution:
-- inject account numbers (FQ, hence tiers) at the carrier-sbc (could also have routing done there in that case)
-  Update: this is the accepted solution, the "account" field should be used to track for example inbound tier.
-
-[[bugs/done]]
