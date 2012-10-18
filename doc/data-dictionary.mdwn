@@ -404,7 +404,7 @@ Configuration options:
 
         Note: port numbers must be in the range 5060 to 5299 or 15060 to 15299 to be compatible with the "traces" application.
 
-        Note: look in doc/doc/port-numbers.mdwn for port numbers conventions.
+        Note: look in doc/port-numbers.mdwn for port numbers conventions.
 
         Note: egress_gwid must be unique amongst all gateway IDs, including the ones in "gateway"-type records.
 
