@@ -122,3 +122,6 @@ require('ccnq3').config (config) ->
 
 # Start the CDR swiper
 require './cdr-swiper'
+
+# Start the CDR cleaner
+require './cdr-cleaner'
