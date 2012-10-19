@@ -165,7 +165,7 @@ ddoc.shows.freeswitch_local_json_cdr = p_fun (doc,req) ->
   start
     'Content-Type': 'text/xml'
 
-  cdr_uri = doc.cdr_uri ? 'http://127.0.0.1:5984/cdr'
+  cdr_uri = doc.cdr_uri
 
   # Parse for password
   if m = cdr_uri.match /^(https?:\/\/)([^@\/]+)@(.+)$/

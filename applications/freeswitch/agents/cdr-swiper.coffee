@@ -48,7 +48,10 @@ require('ccnq3').config (config) ->
 
   # We attemtpt to push the CDRs to config.cdr_uri, the same location
   # FreeSwitch's mod_json_cdr is configured to use.
-  cdr_uri = config.cdr_uri ? 'http://127.0.0.1:5984/cdr'
+  cdr_uri = config.cdr_uri
+  if not cdr_uri?
+    console.log "cdr-swiper: no cdr_uri, skipping"
+    return
   db = pico cdr_uri
 
   # We can find the files by going over the directory that

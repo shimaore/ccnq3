@@ -14,10 +14,13 @@ pico = require 'pico'
 qs = require 'querystring'
 
 run = (config) ->
-  local_uri = config.cdr_uri ? 'http://127.0.0.1:5984/cdr'
-  central_uri = config.cdr_aggregate_uri
+  local_uri = config.cdr_uri
+  if not local_uri?
+    console.log "cdr-cleaner: no cdr_uri, skipping"
+    return
 
   # Before doing any checks, ensure we are actually replicating.
+  central_uri = config.cdr_aggregate_uri
   if not central_uri?
     console.log "Not replicating, skipping"
     return

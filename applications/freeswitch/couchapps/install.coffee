@@ -12,7 +12,8 @@ require('ccnq3').config (config) ->
   provisioning = pico provisioning_uri
   push_script provisioning_uri, 'freeswitch'
 
-  cdr_uri = config.cdr_uri ? 'http://127.0.0.1:5984/cdr'
-  cdr = pico cdr_uri
-  cdr.create ->
-    push_script cdr_uri, 'cdr'
+  cdr_uri = config.cdr_uri
+  if cdr_uri?
+    cdr = pico cdr_uri
+    cdr.create ->
+      push_script cdr_uri, 'cdr'
