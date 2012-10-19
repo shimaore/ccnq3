@@ -190,3 +190,21 @@ ddoc.shows.freeswitch_local_json_cdr = p_fun (doc,req) ->
 
   """
   return {}
+
+ddoc.shows.freeswitch_local_modules = p_fun (doc,req) ->
+
+  # Send out content
+  start
+    'Content-Type': 'text/xml'
+
+  send "<include>\n"
+  send "<!-- #{doc._id} #{doc._rev} -->\n"
+
+  if doc.cdr_uri?
+    send """
+      <load module="mod_json_cdr"/>
+
+    """
+
+  send "\n</include>"
+  return {}
