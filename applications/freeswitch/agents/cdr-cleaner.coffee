@@ -46,12 +46,15 @@ run = (config) ->
         return
 
       # b.results is an array of {seq,id,changes:[{rev}]}
-      keys = b.results.map (r) -> r.id
+      # Only keep CDRs
+      keys = (r.id for r in b.results when r.id[0] isnt '_')
+
       # Attempt to locate our local changes in the central database.
       central.post '_all_docs', json:{keys}, (e,r,b) ->
         if e?
           console.log "Error: #{e}"
           return
+
         # The rows should be returned in the same order at the keys.
         if b.rows?
           # Build a bulk-delete document using the information found in the
@@ -72,6 +75,7 @@ run = (config) ->
             #   local.del "#{qs.escape row.id}?rev=#{qs.escape row.value.rev}"
             # over a large number of records.
             docs[i] = _id:row.id, _rev:row.value.rev, _deleted:true
+            i++
 
           local.post '_bulk_docs', json:{docs}, (e,r,b) ->
             if e? or not b?
