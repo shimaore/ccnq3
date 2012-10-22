@@ -14,7 +14,7 @@ X-CCNQ3-Attrs
   Proprietary header storing Least Cost Route data.
   Set by a routing proxy for the purpose of passing information about the
   selected route and prefix to a downstream element. Information is then
-  inserted in CDRs.
+  inserted in CDRs as `variables.ccnq_attrs`.
 
 X-CCNQ3-Emergency-Key
   Proprietary header storing an invalid emergency key.
@@ -34,7 +34,7 @@ X-CCNQ3-MediaProxy
 
 X-CCNQ3-Extra
   Proprietary header providing extraneous information, typically to track
-  end-user properties in CDRs.
+  end-user properties in CDRs as `variables.ccnq_extra`.
   In the `complete` opensips model, the content of this field can be configured
   by modifying the `lineside_extra_info` opensips configuration item.
 

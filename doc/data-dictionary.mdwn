@@ -515,6 +515,8 @@ Configuration options:
 
     * `lineside_extra_info`: OpenSIPS string containing variables to include in a `X-CCNQ3-Extra` header.
 
+        The output is recorded in CDRs in the `variables.ccnq_extra` field.
+
         In the `complete` model it defaults to "$pr $si $sp -> $Ri $Rp $json(src_endpoint/endpoint) $au $ad $ar $ci $ru $fu $tu $ua".
         Other models do not use the `X-CCNQ3-Extra` header.
 
@@ -1200,7 +1202,7 @@ are used to route the call.
     The gateways and/or carriers specified in the rule are tried in the order given.
 
 *   `attrs`: string [default: the empty string]
-    This output field is present in the call's CDR as "ccnq_attrs" on outbound calls.
+    This output field is present in the call's CDR as `variables.ccnq_attrs` on outbound calls.
 
 carrier (provisioning records)
 ------------------------------
