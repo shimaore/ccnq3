@@ -513,10 +513,10 @@ Configuration options:
 
         If this parameter is not defined, forwarding of message waiting indication (MWI) via SUBSCRIBE and NOTIFY messages will not work.
 
-    * `lineside_extra_info`: OpenSIPS string containing variables to include in a `CCNQ3-Extra` header.
+    * `lineside_extra_info`: OpenSIPS string containing variables to include in a `X-CCNQ3-Extra` header.
 
         In the `complete` model it defaults to "$pr $si $sp -> $Ri $Rp $json(src_endpoint/endpoint) $au $ad $ar $ci $ru $fu $tu $ua".
-        Other models do not use the `CCNQ3-Extra` header.
+        Other models do not use the `X-CCNQ3-Extra` header.
 
     There are plenty other OpenSIPS configuration parameters; all of them can be modified via the database.
     The list of parameters can be found in the source code, in the JSON configuration files under `common/opensips/`.
