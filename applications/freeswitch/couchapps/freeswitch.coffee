@@ -165,6 +165,9 @@ ddoc.shows.freeswitch_local_json_cdr = p_fun (doc,req) ->
   start
     'Content-Type': 'text/xml'
 
+  if not doc.cdr_uri
+    return {}
+
   cdr_uri = doc.cdr_uri
 
   # Parse for password
