@@ -973,7 +973,7 @@ If the "challenge" configuration parameter is empty (the default), the domain na
 
 *   `outbound_route`: integer; route to use for outbound calls from this endpoint; if null, per-number outbound_route is used. This is matched to a `rule` record's `group_id`.
 
-    Use `outbound_route` to allow some calls (e.g. emergency) and reject others.
+    Use `outbound_route` to allow some calls (e.g. emergency) and reject others, or route dialplan-specific numbers (e.g. voicemail access).
 
 *   `check_from`      boolean
     If true, the call can only be placed if the endpoint for the From username is the same as this endpoint.
@@ -1040,7 +1040,9 @@ number (provisioning records)
 
     These are used to build Carrier ENUM records.
 
-*   `outbound_route`: integer; allows to select a specific rule based on the rule's groupid.
+*   `outbound_route`: integer; allows to select a specific `rule` based on the rule's `groupid`.
+
+    For a global number this indicates the LCR route that will be selected to route the call out.
 
 *   `registrant_password`: password for applications/registrant
 
@@ -1060,6 +1062,10 @@ Please note that for a number to use the registrant function, both `registrant_p
 ### Local-number properties ###
 
 *   `endpoint` [required]
+
+*   `outbound_route`: integer; allows to select a specific `rule` based on the rule's `groupid`.
+
+    For a local number this is used to define the local dialplan.
 
 *   `location`:  string; the location identifier for this specific number (used for emergency location services)
 
