@@ -36,6 +36,7 @@ exports.notifier = (config) ->
             send_email_notification msg,
               email: email
               do_not_record: b.do_not_record
+              send_then_delete: b.send_then_delete
               attach: params.attach_message
               language: b.language
 
@@ -109,6 +110,11 @@ exports.notifier = (config) ->
           mailer.send_mail email_options, (err,status) ->
             if err? or not status
               return util.log util.inspect err
+            # Delete record if all data has been emailed.
+            if (opts.attach or opts.do_not_record) and opts.send_then_delete
+              userdb.remove msg, (e,r,b) ->
+                if e?
+                  return util.log util.inspect e
 
         #### Get templates then send email
         get_templates send_email

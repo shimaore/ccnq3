@@ -1512,6 +1512,10 @@ A user's voicemail settings are stored in this record.
 
 * `do_not_record`: boolean; if true, no voice messages are recorded, only the prompts are played
 
+* `send_then_delete`: boolean; if true, the message is removed after an email is sent, as long as the email contains the message as attachments (`attach_message` is true) or no message was recorded (`do_not_record` is true).
+
+  If neither `attach_message` or `send_then_delete` is true, this option is ignored.
+
 *   `_attachments`:
 
     * `prompt.wav`  voicemail prompt
