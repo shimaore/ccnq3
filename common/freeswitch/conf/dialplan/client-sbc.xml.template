@@ -71,6 +71,7 @@
         <action application="set" data="force_transfer_context=refer-$${profile_name}"/>
         <action application="set" data="sip_contact_user=${ccnq_from_e164}"/>
         <action application="set" data="sip_cid_type=pid"/>
+        <action application="set" data="sip_h_X-CCNQ3-Number-Domain=$${number_domain}" />
         <action application="transfer" data="$1 XML ingress-$${profile_name}-send-call"/>
       </condition>
     </extension>

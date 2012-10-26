@@ -10,6 +10,9 @@ X-CCNQ3-Location
 X-CCNQ3-Routing
   Proprietary header storing emergency routing data.
 
+X-CCNQ3-Number-Domain
+  Proprietary header storing local numbers' `number_domain` (inbound client-sbc only).
+
 X-CCNQ3-Attrs
   Proprietary header storing Least Cost Route data.
   Set by a routing proxy for the purpose of passing information about the
