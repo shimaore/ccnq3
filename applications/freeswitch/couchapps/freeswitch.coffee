@@ -125,7 +125,6 @@ ddoc.shows.freeswitch_local_conf = p_fun (doc,req) ->
     """
 
   for profile_name, profile of doc.sip_profiles
-    send_call_to = profile.send_call_to ? 'socket'
     send """
 
       <X-PRE-PROCESS cmd="set" data="profile_name=#{profile_name}"/>
@@ -136,7 +135,7 @@ ddoc.shows.freeswitch_local_conf = p_fun (doc,req) ->
       <X-PRE-PROCESS cmd="set" data="default_language=#{profile.default_language ? doc.voicemail?.default_language ? 'en'}"/>
 
       <X-PRE-PROCESS cmd="include" data="dialplan/#{profile.handler}.xml.template"/>
-      <X-PRE-PROCESS cmd="include" data="dialplan/send-call-to-#{send_call_to}.xml.template"/>
+      <X-PRE-PROCESS cmd="include" data="dialplan/send-call-to-#{profile.send_call_to ? 'socket'}.xml.template"/>
 
       """
 
