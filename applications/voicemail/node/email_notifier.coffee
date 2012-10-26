@@ -33,17 +33,21 @@ exports.notifier = (config) ->
         user_db.get 'voicemail_settings', (e,r,b) ->
           return unless b.email_notifications
           for email, params of b.email_notifications
-            send_email_notification email, b.do_not_record, params.attach_message, b.language, msg
+            send_email_notification msg,
+              email: email
+              do_not_record: b.do_not_record
+              attach: params.attach_message
+              language: b.language
 
-      send_email_notification = (email,do_not_record,attach,language,msg) ->
-        if attach
+      send_email_notification = (msg,opts) ->
+        if opts.attach
           file_name = 'voicemail_notification_with_attachment'
         else
-          if do_not_record
+          if opts.do_not_record
             file_name = 'voicemail_notification_do_not_record'
           else
             file_name = 'voicemail_notification'
-        language ?= 'en'
+        opts.language ?= 'en'
 
         #### Templates
 
@@ -64,7 +68,7 @@ exports.notifier = (config) ->
             return
 
           content = contents.shift()
-          uri_name = file_name + '.' + language + '.' + content
+          uri_name = file_name + '.' + opts.language + '.' + content
 
           # Templates in the server configuration
           ccnq3.config.attachment config, uri_name, (data) ->
@@ -84,14 +88,14 @@ exports.notifier = (config) ->
         #### Send email out
         send_email = ->
           email_options =
-            sender: sender ? email
-            to: email
+            sender: sender ? opts.email
+            to: opts.email
             subject: Milk.render template.subject, msg
             body: Milk.render template.body, msg
             html: Milk.render template.html, msg
             attachments: []
 
-          if attach and msg._attachments
+          if opts.attach and msg._attachments
             # Alternatively, enumerate the part#{n}.#{extension} files? (FIXME?)
             for name, data of msg._attachments
               do (name,data) ->
