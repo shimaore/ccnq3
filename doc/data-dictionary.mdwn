@@ -970,6 +970,10 @@ If the "challenge" configuration parameter is empty (the default), the domain na
 
 ### Outbound call routing (src_endpoint)
 
+*   `number_domain`: string; the local number's `number_domain` [default: the proxy's `number_domain`]
+
+    Used to locate a local number's record.
+
 *   `dialog_timer`: integer; maximum call (dialog) duration (in seconds)
 
 *   `outbound_route`: integer; route to use for outbound calls from this endpoint; if null, per-number outbound_route is used. This is matched to a `rule` record's `group_id`.
