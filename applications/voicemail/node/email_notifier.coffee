@@ -33,13 +33,16 @@ exports.notifier = (config) ->
         user_db.get 'voicemail_settings', (e,r,b) ->
           return unless b.email_notifications
           for email, params of b.email_notifications
-            send_email_notification email, params.attach_message, b.language, msg
+            send_email_notification email, b.do_not_record, params.attach_message, b.language, msg
 
-      send_email_notification = (email,attach,language,msg) ->
+      send_email_notification = (email,do_not_record,attach,language,msg) ->
         if attach
           file_name = 'voicemail_notification_with_attachment'
         else
-          file_name = 'voicemail_notification'
+          if do_not_record
+            file_name = 'voicemail_notification_do_not_record'
+          else
+            file_name = 'voicemail_notification'
         language ?= 'en'
 
         #### Templates

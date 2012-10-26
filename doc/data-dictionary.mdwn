@@ -741,8 +741,8 @@ This section specifies the parameters for applications/voicemail.
 
 #### Voicemail notifications
 
-The notifier will first build filenames by concatenating "voicemail_notification" or "voicemail_notification_with_attachment", then the user's language, then the component of the email message (subject, text body, or HTML body).
-For example, for a notification without attachment using language 'en', the following filenames will be used:
+The notifier will first build filenames by concatenating `voicemail_notification`, `voicemail_notification_with_attachment`, or `voicemail_notification_do_not_record`, then the user's language, then the component of the email message (subject, text body, or HTML body).
+For example, for a notification without attachment nor `do_not_record` flag, using language 'en', the following filenames will be used:
     voicemail_notification.en.subject, voicemail_notification.en.body, voicemail_notification.en.html
 
 The notifier will then try to locate those filenames.
