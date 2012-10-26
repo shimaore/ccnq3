@@ -1033,7 +1033,7 @@ number (provisioning records)
 
       For global numbers (between a carrier-sbc and a client-sbc), formatted as "E.164-without-plus".
 
-      For client-side local-numbers, a locally-formatted number @ the server's "number_domain".
+      For client-side local-numbers, a locally-formatted number @ the client-sbc's `number_domain`.
 
 ### Global-number properties ###
 
