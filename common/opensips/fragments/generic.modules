@@ -59,7 +59,7 @@ if use_shorter_fr_timer
 end if use_shorter_fr_timer
 
 if not use_shorter_fr_timer
-  modparam("tm", "fr_timer", 6)
+  modparam("tm", "fr_timer", 4)
 end if not use_shorter_fr_timer
 
 

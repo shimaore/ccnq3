@@ -24,7 +24,7 @@
     <!--<param name="disable-naptr" value="false" />-->
 
     <!-- <param name="timer-T1" value="500" /> -->
-    <!-- <param name="timer-T1X64" value="32000" /> -->
+    <param name="timer-T1X64" value="2000" />
     <param name="timer-T2" value="2000" />
     <!-- <param name="timer-T4" value="4000" /> -->
 
