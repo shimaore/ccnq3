@@ -379,7 +379,7 @@ Configuration options:
     This should be the "cluster name" for servers running similar
     configurations. This is used by applications/dns to create
     SRV records for these services. This is also used by applications/opensips
-    to create gateway entries for the egress_gwid in those domains/clusters.
+    to create gateway entries for the `egress_gwid` in those domains/clusters.
     Finally, this is the domain name accepted by OpenSIPS servers in that cluster.
 
 *   `rtp_ip`: local IP to bind to for RTP [default: "auto"]
@@ -402,13 +402,13 @@ Configuration options:
         * `egress_sip_ip`: which IP (v4,v6) to bind for egress processing [default: ingress_sip_ip]
         * `egress_sip_port`: which port to bind for egress processing [default: 10000+ingress_sip_port; in the range 15060 to 15299]
         * `egress_acl`: [] of CIDR records "ip/masklen" source IPs allowed for the egress processing
-        * `egress_gwid`: optional; a (unique) gateway id or name to be used in routing rules
+        * `egress_gwid`: optional; a (unique) alphanumerical gateway id or name to be used in routing rules.
 
         Note: port numbers must be in the range 5060 to 5299 or 15060 to 15299 to be compatible with the "traces" application.
 
         Note: look in doc/port-numbers.mdwn for port numbers conventions.
 
-        Note: egress_gwid must be unique amongst all gateway IDs, including the ones in "gateway"-type records.
+        Note: `egress_gwid` must be unique amongst all gateway IDs, including the ones in "gateway"-type records.
 
       * Dialplan data
         * `handler`: dialplan template name (e.g. "client-sbc", "voicemail")
@@ -1283,6 +1283,8 @@ Changes to rules, gateways, and carriers are not applied automatically. Use sip_
 *   `sip_domain_name`: the sip_domain_name of the hosts on which OpenSIPS is running and using this gateway.
 
 *   `gwid`: alphanumerical; a unique identifier for the gateway inside this sip_domain_name; used in the `gwlist` field of a `rule` record or in the `gwlist` field of a `carrier` record.
+
+    *Alphanumerical* means the `gwid` (or `egress_gwid` for that matter) must only contain the following ASCII characters: `a` through `z`, `A` through `Z`, `0` through `9`, and the underscore `_`. Any other character in a gateway id will cause OpenSIPS to crash.
 
 *   `address`: the address of the gateway (IP, IP:port, etc.)
 
