@@ -12,6 +12,7 @@
 # database, it also exists on the central database.
 pico = require 'pico'
 qs = require 'querystring'
+util = require 'util'
 
 run = (config) ->
   local_uri = config.cdr_uri
