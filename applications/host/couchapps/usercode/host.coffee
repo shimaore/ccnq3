@@ -22,6 +22,7 @@ do (jQuery) ->
     "applications/provisioning"   # Must be second
     "applications/roles"          # Must be third
     "applications/logging"
+    "applications/couch_daemon"
     # Required on all servers
     "applications/monitor"
     "applications/host"           # Creates provisioning.local_couchdb_uri
@@ -64,6 +65,7 @@ do (jQuery) ->
       "applications/provisioning"   : "(Manager) provisioning"
       "applications/roles"          : "(Manager) roles"
       "applications/logging"        : "(Manager) logging"
+      "applications/couch_daemon"   : "(Manager) extra provisioning API"
       "applications/portal"         : "(Manager) portal"
       "applications/inbox"          : "(Manager) inbox"
       "public"                      : "(Manager) public"

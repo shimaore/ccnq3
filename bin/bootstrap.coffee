@@ -80,6 +80,7 @@ run = ->
         "applications/web"
         "applications/cdrs"
         "applications/locations"
+        "applications/couch_daemon"
       ]
       source: SRC
       account: ""
