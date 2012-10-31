@@ -24,21 +24,23 @@ require('ccnq3').config (config)->
 
     column_types =
       location:
+        # keys
         username:'string'
-        domain:'string'
         contact:'string'
-        received:'string'
-        path:'string'
+        callid:'string'
+        domain:'string'
+        # non-keys
         expires:'date'
         q:'double'
-        callid:'string'
         cseq:'int'
-        last_modified:'date'
         flags:'int'
         cflags:'int'
         user_agent:'string'
+        received:'string'
+        path:'string'
         socket:'string'
         methods:'int'
+        last_modified:'date'
 
     unquote_value = (t,x) ->
 
@@ -151,6 +153,9 @@ require('ccnq3').config (config)->
       # Note: this allows for easy retrieval, but only one location can be stored.
       # Use "callid" as an extra key parameter otherwise.
       doc._id = "#{doc.username}@#{doc.domain}"
+
+      update_doc = unquote_params(@body.uk,@body.uv,'location')
+      doc[k] = v for k,v of update_doc
 
       if @body.query_type is 'insert' or @body.query_type is 'update'
 
