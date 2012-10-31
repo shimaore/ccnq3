@@ -125,86 +125,87 @@ ddoc.views.names =
 
         domain = doc.sip_domain_name
 
-        if doc.sip_profiles?
+        if domain?
+          if doc.sip_profiles?
 
-          for name, _ of doc.sip_profiles
-            do (name,_) ->
-              if _.ingress_sip_ip?
+            for name, _ of doc.sip_profiles
+              do (name,_) ->
+                if _.ingress_sip_ip?
 
-                fqdn = name+'.'+domain
+                  fqdn = name+'.'+domain
 
-                # different profiles with the same name in the same domain are reputed to be the
-                # same (i.e. equivalent routes in a cluster).
-                # Note: SRV records must use names. So if ip_to_name does not have a mapping we
-                # use the host name and assume the best.
-                # (Also, ingress_sip_ip and egress_sip_ip are
-                # supposed to be local addresses, so if the "interfaces" field is populated properly
-                # this shouldn't be an issue.)
+                  # different profiles with the same name in the same domain are reputed to be the
+                  # same (i.e. equivalent routes in a cluster).
+                  # Note: SRV records must use names. So if ip_to_name does not have a mapping we
+                  # use the host name and assume the best.
+                  # (Also, ingress_sip_ip and egress_sip_ip are
+                  # supposed to be local addresses, so if the "interfaces" field is populated properly
+                  # this shouldn't be an issue.)
 
-                _sip_udp = '_sip._udp.'
+                  _sip_udp = '_sip._udp.'
 
-                emit domain,
-                  prefix:_sip_udp+'ingress-'+name
-                  class:'SRV'
-                  value:[
-                    10
-                    10
-                    _.ingress_sip_port
-                    ip_to_name[_.ingress_sip_ip] ? doc.host
-                  ]
-                # UDP NAPTR
-                emit domain,
-                  prefix: 'ingress-'+name
-                  class:'NAPTR'
-                  value: [
-                    10
-                    10
-                    's' # output is domain-name with SRV records (see rfc3404)
-                    'SIP+D2U' # SIP over UDP (rfc3263)
-                    ''
-                    _sip_udp+'ingress-'+fqdn
-                  ]
+                  emit domain,
+                    prefix:_sip_udp+'ingress-'+name
+                    class:'SRV'
+                    value:[
+                      10
+                      10
+                      _.ingress_sip_port
+                      ip_to_name[_.ingress_sip_ip] ? doc.host
+                    ]
+                  # UDP NAPTR
+                  emit domain,
+                    prefix: 'ingress-'+name
+                    class:'NAPTR'
+                    value: [
+                      10
+                      10
+                      's' # output is domain-name with SRV records (see rfc3404)
+                      'SIP+D2U' # SIP over UDP (rfc3263)
+                      ''
+                      _sip_udp+'ingress-'+fqdn
+                    ]
 
-                emit domain,
-                  prefix:_sip_udp+'egress-'+name
-                  class:'SRV'
-                  value:[
-                    10
-                    10
-                    _.egress_sip_port ? _.ingress_sip_port+10000
-                    ip_to_name[_.egress_sip_ip ? _.ingress_sip_ip ] ? doc.host
-                  ]
-                emit domain,
-                  prefix: 'egress-'+name
-                  class:'NAPTR'
-                  value: [
-                    10
-                    10
-                    's' # output is domain-name with SRV records (see rfc3404)
-                    'SIP+D2U' # SIP over UDP (rfc3263)
-                    ''
-                    _sip_udp+'egress-'+fqdn
-                  ]
+                  emit domain,
+                    prefix:_sip_udp+'egress-'+name
+                    class:'SRV'
+                    value:[
+                      10
+                      10
+                      _.egress_sip_port ? _.ingress_sip_port+10000
+                      ip_to_name[_.egress_sip_ip ? _.ingress_sip_ip ] ? doc.host
+                    ]
+                  emit domain,
+                    prefix: 'egress-'+name
+                    class:'NAPTR'
+                    value: [
+                      10
+                      10
+                      's' # output is domain-name with SRV records (see rfc3404)
+                      'SIP+D2U' # SIP over UDP (rfc3263)
+                      ''
+                      _sip_udp+'egress-'+fqdn
+                    ]
 
-        if doc.opensips?
-          # FIXME detect whether proxy_ip is v4 or v6
-          # and use A or AAAA accordingly
-          # Note: if proxy_ip is not specified, opensips will be
-          #       available on all interfaces. Pick the primary
-          #       one for the public A record, in that case.
-          if doc.opensips.proxy_ip? or primary_v4?
+          if doc.opensips?
+            # FIXME detect whether proxy_ip is v4 or v6
+            # and use A or AAAA accordingly
+            # Note: if proxy_ip is not specified, opensips will be
+            #       available on all interfaces. Pick the primary
+            #       one for the public A record, in that case.
+            if doc.opensips.proxy_ip? or primary_v4?
+              emit domain,
+                class:'A'
+                value: doc.opensips.proxy_ip ? primary_v4
             emit domain,
-              class:'A'
-              value: doc.opensips.proxy_ip ? primary_v4
-          emit domain,
-            prefix:'_sip._udp'
-            class:'SRV'
-            value:[
-              10
-              10
-              doc.opensips.proxy_port ? 5060
-              ip_to_name[doc.opensips.proxy_ip] ? doc.host
-            ]
+              prefix:'_sip._udp'
+              class:'SRV'
+              value:[
+                10
+                10
+                doc.opensips.proxy_port ? 5060
+                ip_to_name[doc.opensips.proxy_ip] ? doc.host
+              ]
 
         # if 'applications/dns' in doc.applications
 
