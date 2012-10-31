@@ -59,7 +59,7 @@ require_valid_user = true
 level = error
 
 [httpd_global_handlers]
-_ccnq3 = {couch_httpd_proxy, handle_proxy_req, <<"http://127.0.0.1:35984">>}
+_ccnq3 = {couch_httpd_proxy, handle_proxy_req, <<"http://127.0.0.1:35984/_ccnq3">>}
 
 [admins]
 admin = ${ADMIN_PASSWORD}
