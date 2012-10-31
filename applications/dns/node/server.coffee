@@ -30,6 +30,7 @@ configure = (db,server) ->
       for rec in b.rows ? []
         do (rec) ->
           domain = rec.key
+          return unless domain?
           zone = zones.get_zone(domain) ? zones.add_zone new Zone domain, {}
           zone.add_record rec.value
 
