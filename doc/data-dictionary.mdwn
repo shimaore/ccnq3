@@ -1249,13 +1249,15 @@ Changes to rules, gateways, and carriers are not applied automatically. Use sip_
 
 The following fields are optional.
 
-*   `flags`: integer [default: 1]
+*   `flags`: integer [default: 0]
 
     The following flags are supported; you normally do not need to modify the default.
 
-    1 - use weights for sorting [the default; if set to 0, uses `gwlist` order]
-    2 - after sorting, use only the first gateway [default: try all gateways]
-    4 - disable this carrier
+    1 - if set, use weights for sorting; if not set [default], uses `gwlist` order
+    2 - if set, after sorting, use only the first gateway; if not set [default], after sorting, try all gateways
+    4 - if set, disable this carrier; if not set [default], enable this carrier
+
+    (Add the numerical values of the flags if multiple are set.)
 
 *   `attrs`:  string
 
