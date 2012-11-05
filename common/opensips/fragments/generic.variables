@@ -57,3 +57,7 @@ mpath="${mpath}"
 
 server_header="Server: ccnq3 ${model} proxy"
 user_agent_header="User-Agent: ccnq3 ${model} proxy"
+
+if sip_domain_name
+alias=${sip_domain_name}
+end if sip_domain_name
