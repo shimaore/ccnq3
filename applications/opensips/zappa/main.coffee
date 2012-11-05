@@ -154,8 +154,9 @@ require('ccnq3').config (config)->
       # Use "callid" as an extra key parameter otherwise.
       doc._id = "#{doc.username}@#{doc.domain}"
 
-      update_doc = unquote_params(@body.uk,@body.uv,'location')
-      doc[k] = v for k,v of update_doc
+      if @body.uk?
+        update_doc = unquote_params(@body.uk,@body.uv,'location')
+        doc[k] = v for k,v of update_doc
 
       if @body.query_type is 'insert' or @body.query_type is 'update'
 
