@@ -8,7 +8,7 @@
   @put '/_ccnq3/voicemail/:number@:number_domain', ->
 
     if not @req.user?
-      return @json error:"Not authorized (probably a bug)"
+      return @failure error:"Not authorized (probably a bug)"
 
     vm = @body
 
@@ -19,7 +19,7 @@
 
     id = "number:#{@params.number}@#{@params.number_domain}"
     provisioning.retrieve id, (e,r,local_number) =>
-      if e? then return @json error:e, when:"retrieving #{id}"
+      if e? then return @failure error:e, when:"retrieving #{id}"
 
       # Typically user_database will be a UUID
       user_database = local_number.user_database
@@ -27,14 +27,14 @@
         user_database = uuid.v4()
         local_number.user_database = user_database
         provisioning.update local_number, (e) =>
-          if e? then return @json error:e, when:"local_number #{id}"
+          if e? then return @failure error:e, when:"local_number #{id}"
           do step2
       else
         do step2
 
       step2 = =>
         if not user_database.match /^u[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
-          return @json error:"Invalid db name #{user_database}"
+          return @failure error:"Invalid db name #{user_database}"
         target_db_uri = config.users.userdb_base_uri + '/' + user_database
         target_db = pico target_db_uri, @req.user, @req.pass
 
@@ -42,7 +42,7 @@
 
         # Use the view to gather information about the requested user database.
         users_db.view 'replicate', 'userdb', qs: {key:JSON.stringify user_database}, (e,r,b) =>
-          if e? then return @json error:e, when:"view users for #{user_database}"
+          if e? then return @failure error:e, when:"view users for #{user_database}"
 
           readers_names = (row.value for row in b.rows)
 
@@ -54,11 +54,11 @@
 
             # Restrict number of available past revisions.
             target_db.request.put '_revs_limit',body:"10", (e,r,b) =>
-              if e? then return @json error:e, when:"set revs_limit for #{user_database}"
+              if e? then return @failure error:e, when:"set revs_limit for #{user_database}"
 
               # Make sure the users can access it.
               target_db.request.get '_security', json:true, (e,r,b) =>
-                if e? then return @json error:e, when:"retrieve security object for #{user_database}"
+                if e? then return @failure error:e, when:"retrieve security object for #{user_database}"
 
                 b.readers ?= {}
 
@@ -66,7 +66,7 @@
                 b.readers.roles = [ 'update:user_db:' ] # e.g. voicemail
 
                 target_db.request.put '_security', json:b, (e,r,b) =>
-                  if e? then return @json error:e, when:"update security object for #{user_database}"
+                  if e? then return @failure error:e, when:"update security object for #{user_database}"
 
                   # Create the voicemail_settings record
                   target_db.get 'voicemail_settings', (e,r,vm_settings) =>
@@ -76,7 +76,7 @@
                     else
                       vm_settings[k] = v for k,v of vm when not k.match /^_/
                     target_db.update vm_settings, (e) =>
-                      if e? then return @json error:e, when:"update voicemail_settings for #{user_database}"
-                      @json
+                      if e? then return @failure error:e, when:"update voicemail_settings for #{user_database}"
+                      @success
                         ok:true
                         user_database:user_database

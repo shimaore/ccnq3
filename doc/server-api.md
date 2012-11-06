@@ -10,10 +10,8 @@ The API uses JSON for all data transfer. The `Content-Type` header, if present, 
 Authentication is done by submitting a `Auth:` header with each request. The username and passwords are checked against CouchDB.
 This is currently a server-to-server API. Session are not supported.
 
-A 200 OK code is sent whenever the transport was successful. However application errors might still occur.
-
-The application was successful if the operation returned a JSON body containing the `ok` field set to `true`.
-The application encountered an error if the operation returned a JSON body containing an `error` field.
+The application was successful if the response status was `200`. In this case the `ok` field of the JSON response wil be set to `true`.
+Otherwise the operation failed, and more information might be available in the JSON response, especially in the (optional) `error` and `when` fields.
 
 Voicemail box creation
 ----------------------
@@ -23,4 +21,6 @@ Voicemail box creation
 * Input Body: a `vm_settings` record.
   If no `user_database` field is present in the body, a new one will be added.
 
-* Output Body: In case of success, a JSON hash with two fields: `ok` set to `true` and `user_database` set to the name of the user database.
+* Output Body:
+  `ok`: `true`
+  `user_database`: set to the name of the user database.

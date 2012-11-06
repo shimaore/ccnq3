@@ -27,7 +27,16 @@
     req.user = user
     req.pass = pass
 
+  @helper
+    failure: (o) ->
+      res.statusCode = 500
+      @json o
+
+    success: (o) ->
+      o.ok = true
+      @json o
+
   @get '/_ccnq3', ->
-    @send ok:true
+    @json ok:true
 
   @include './voicemail.coffee'
