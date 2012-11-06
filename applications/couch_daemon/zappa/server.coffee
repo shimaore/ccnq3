@@ -2,5 +2,5 @@
 
 port = 35984
 
-require('zappajs') port, ->
+require('zappajs') port, disable_io:true, ->
   @include './content.coffee'

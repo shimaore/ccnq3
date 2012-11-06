@@ -1,6 +1,6 @@
 @include = ->
 
-  @use 'bodyParser', 'cookieParser'
+  @use 'bodyParser'
 
   # This is modeled after connect/lib/middleware/basicAuth.js
   utils = require('connect').utils
@@ -26,10 +26,11 @@
 
     req.user = user
     req.pass = pass
+    do next
 
   @helper
     failure: (o) ->
-      res.statusCode = 500
+      @res.statusCode = 500
       @json o
 
     success: (o) ->

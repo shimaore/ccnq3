@@ -19,7 +19,7 @@ Voicemail box creation
     PUT /_ccnq3/voicemail/:number@:number_domain
 
 * Input Body: a `vm_settings` record.
-  If no `user_database` field is present in the body, a new one will be added.
+  If no `user_database` field is present in the record for the local number, a new one will be added.
 
 * Output Body:
   `ok`: `true`

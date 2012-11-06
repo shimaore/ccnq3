@@ -18,19 +18,8 @@
     provisioning = pico config.provisioning.couchdb_uri, @req.user, @req.pass
 
     id = "number:#{@params.number}@#{@params.number_domain}"
-    provisioning.retrieve id, (e,r,local_number) =>
+    provisioning.get id, (e,r,local_number) =>
       if e? then return @failure error:e, when:"retrieving #{id}"
-
-      # Typically user_database will be a UUID
-      user_database = local_number.user_database
-      if not user_database?
-        user_database = uuid.v4()
-        local_number.user_database = user_database
-        provisioning.update local_number, (e) =>
-          if e? then return @failure error:e, when:"local_number #{id}"
-          do step2
-      else
-        do step2
 
       step2 = =>
         if not user_database.match /^u[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
@@ -75,8 +64,18 @@
                       vm_settings._id = 'voicemail_settings'
                     else
                       vm_settings[k] = v for k,v of vm when not k.match /^_/
-                    target_db.update vm_settings, (e) =>
+                    target_db.put vm_settings, (e) =>
                       if e? then return @failure error:e, when:"update voicemail_settings for #{user_database}"
                       @success
                         ok:true
-                        user_database:user_database
+
+       # Typically user_database will be a UUID
+      user_database = local_number.user_database
+      if not user_database?
+        user_database = 'u'+uuid.v4()
+        local_number.user_database = user_database
+        provisioning.put local_number, (e) =>
+          if e? then return @failure error:e, when:"local_number #{id}"
+          do step2
+      else
+        do step2
