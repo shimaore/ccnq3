@@ -24,3 +24,10 @@ Voicemail box creation
 * Output Body:
   `ok`: `true`
   `user_database`: set to the name of the user database.
+
+This operation will:
+* locate the local number's record
+* if a `user_database` field is present, it will be used; otherwise a new one will be assigned
+* the database will be created
+* if any user is using this database, they will be authorized for read/write
+* a `voicemail_settings` record is created inside the databse, with its content set or updated to the fields provided in the body of the `PUT` request.
