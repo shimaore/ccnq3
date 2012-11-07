@@ -16,7 +16,7 @@
 #
 
 #
-# For OpenSIPS 1.6.3
+# For OpenSIPS 1.8.1
 #
 
 # What IP address to listen onto; no statement == listen on all interfaces
