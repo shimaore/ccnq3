@@ -10,6 +10,7 @@
     "accounting",
     "registrant",
     "invite",
+    "forwarder",
     "loose-route",
     "non-loose-route-registrant"
   ],
