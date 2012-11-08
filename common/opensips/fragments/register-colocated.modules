@@ -17,9 +17,9 @@
 ## This needs to be re-done since it is a co-located registrar.
 
 loadmodule "registrar.so"
-modparam("registrar", "min_expires", 60)
-modparam("registrar", "max_expires", 3600)
-modparam("registrar", "default_expires", 300)
+modparam("registrar", "min_expires", ${min_expires})
+modparam("registrar", "max_expires", ${max_expires})
+modparam("registrar", "default_expires", ${default_expires})
 # Append Branches is the default
 # modparam("registrar", "append_branches", 1)
 # No more than 10 contacts per AOR

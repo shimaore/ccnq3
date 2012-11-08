@@ -51,5 +51,9 @@
   "number_domain": "local",
   "voicemail_notifier": "",
 
+  "default_expires": 3600,
+  "min_expires": 300,
+  "max_expires": 7200,
+
   "ok":true
 }
