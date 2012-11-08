@@ -13,6 +13,7 @@
   , "zappajs": ">=0.4.12"
   , "node-uuid": ">=1.4.0"
   , "connect": ">=2.6.1"
+  , "request": "*"
   }
 , "scripts": {
     "start": "daemon -n ccnq3_couch_daemon -o daemon.debug -D \"`pwd`/zappa\" -r -- ./server.coffee"

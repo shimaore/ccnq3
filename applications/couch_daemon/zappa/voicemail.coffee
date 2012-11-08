@@ -2,6 +2,7 @@
 
   pico = require 'pico'
   uuid = require 'node-uuid'
+  request = require 'request'
   config = null
   require('ccnq3').config (c) -> config = c
 
@@ -66,7 +67,20 @@
                       vm_settings[k] = v for k,v of vm when not k.match /^_/
                     target_db.put vm_settings, (e) =>
                       if e? then return @failure error:e, when:"update voicemail_settings for #{user_database}"
-                      @success {user_database}
+
+                      # Replicate the design documents
+                      replication_req =
+                        method: 'POST'
+                        uri: config.users.replicate_uri
+                        json:
+                          source: 'usercode'
+                          target: user_database
+                          filter: "replicate/user_pull" # Found in the userdb
+                          query_params:
+                            ctx: JSON.stringify ctx
+                      request replication_req, (e,r,json) =>
+                        if e? then return @failure error:e, when:"replicate design documents into #{user_database}"
+                        @success {user_database}
 
        # Typically user_database will be a UUID
       user_database = local_number.user_database
