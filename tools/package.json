@@ -1,0 +1,20 @@
+{
+  "name": "ccnq3_tools",
+  "version": "0.0.1",
+  "description": "Tools for CCNQ3",
+  "keywords": "",
+  "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
+  "config": {
+    "file": "/etc/ccnq3/host.json"
+  },
+  "scripts": {
+  },
+  "dependencies": {
+    "ccnq3": ">=0.3.7"
+  , "request": "*"
+  , "byline": "*"
+  , "pico": "*"
+  },
+  "private": true,
+  "ok": true
+}
