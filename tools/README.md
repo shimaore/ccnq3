@@ -3,6 +3,8 @@ CCNQ3 Tools
 
 Some tools to simplify management of a ccnq3 system.
 
+Unless otherwise noted these tools are to be used on a management server, under the `ccnq3` user. (Either use `su -s /bin/bash ccnq3`, or preceed each command with `sudo -u ccnq3`.)
+
 rules.coffee
 ------------
 
