@@ -2,7 +2,6 @@
 
   pico = require 'pico'
   uuid = require 'node-uuid'
-  request = require 'request'
   config = null
   require('ccnq3').config (c) -> config = c
 
@@ -17,6 +16,7 @@
 
     # Note: couchdb_uri is only present on a manager host.
     provisioning = pico config.provisioning.couchdb_uri, @req.user, @req.pass
+    replicate = pico config.users.replicate_uri, @req.user, @req.pass
 
     id = "number:#{@params.number}@#{@params.number_domain}"
     provisioning.get id, (e,r,local_number) =>
@@ -69,16 +69,11 @@
                       if e? then return @failure error:e, when:"update voicemail_settings for #{user_database}"
 
                       # Replicate the design documents
-                      replication_req =
-                        method: 'POST'
-                        uri: config.users.replicate_uri
-                        json:
-                          source: 'usercode'
-                          target: user_database
-                          filter: "replicate/user_pull" # Found in the userdb
-                          query_params:
-                            ctx: JSON.stringify ctx
-                      request replication_req, (e,r,json) =>
+                      p =
+                        source: 'usercode'
+                        target: user_database
+                        filter: "replicate/user_pull"
+                      replicate.request.post json:p, (e,r,json) =>
                         if e? then return @failure error:e, when:"replicate design documents into #{user_database}"
                         @success {user_database}
 
