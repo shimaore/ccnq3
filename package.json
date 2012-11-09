@@ -3,6 +3,12 @@
   "version": "0.0.2",
   "description": "Main application for CCNQ3",
   "keywords": "",
+  "homepage": "https://github.com/shimaore/ccnq3",
+  "bugs": { "url": "https://github.com/shimaore/ccnq3/issues" },
+  "repository": {
+    "type": "git"
+  , "url": "git://github.com/shimaore/ccnq3.git"
+  },
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
   "config": {
     "file": "/etc/ccnq3/host.json"
