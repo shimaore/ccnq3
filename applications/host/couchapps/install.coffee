@@ -16,9 +16,7 @@ require('ccnq3').config (config) ->
   if provisioning_uri?
     push_script provisioning_uri, 'main'
 
-  # This is redundant with what host_cli does, but is consistent with
-  # how this is done for other databases.
-  if config.provisioning?.local_couchdb_uri?
-    local_provisioning_uri = config.provisioning.local_couchdb_uri
-    local_provisioning = pico provisioning_uri
+  local_provisioning_uri = config.provisioning?.local_couchdb_uri
+  if local_provisioning_uri?
+    local_provisioning = pico local_provisioning_uri
     local_provisioning.create ->
