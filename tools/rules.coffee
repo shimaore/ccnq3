@@ -54,8 +54,7 @@ ccnq3.config (config) ->
           return
         if b.rows?
           for row in b.rows
-            k = row.prefix
-            existing_rule[k] = _rev:row.value._rev, ruleid:row.ruleid
+            existing_rule[row.prefix] = _rev:row.value._rev, ruleid:row.ruleid
             new_ruleid = row.ruleid if row.ruleid > new_ruleid
           console.log "Received #{b.rows.length} rules."
         do run
@@ -97,7 +96,7 @@ ccnq3.config (config) ->
     prefix = o.prefix
     if existing_rule[prefix]?
       console.log "Updating rule for prefix #{prefix}"
-      {_rev,ruleid} = existing_rule[k]
+      {_rev,ruleid} = existing_rule[prefix]
     else
       console.log "Creating rule for prefix #{prefix}"
       ruleid = new_ruleid++
@@ -122,4 +121,4 @@ ccnq3.config (config) ->
       attrs: o.attrs
 
     }
-    delete existing_rule[k]
+    delete existing_rule[prefix]
