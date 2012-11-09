@@ -37,7 +37,7 @@ ccnq3.config (config) ->
         by_id:
           map: fun (doc) ->
             if doc.sip_domain_name? and doc.groupid?
-              emit [doc.sip_domain_name,doc.groupid], rev:doc._rev, ruleid:doc.ruleid
+              emit [doc.sip_domain_name,doc.groupid], rev:doc._rev, ruleid:doc.ruleid, prefix:doc.prefix
 
     db.put '_design/update_rules', json:design, (e,r,b) ->
       if e
