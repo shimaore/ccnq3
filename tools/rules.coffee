@@ -37,7 +37,7 @@ ccnq3.config (config) ->
         by_id:
           map: fun (doc) ->
             if doc.sip_domain_name? and doc.groupid?
-              emit [doc.sip_domain_name,doc.groupid], null
+              emit [doc.sip_domain_name,doc.groupid], rev:doc._rev, ruleid:doc.ruleid
 
     db.put '_design/update_rules', json:design, (e,r,b) ->
       if e
@@ -57,8 +57,8 @@ ccnq3.config (config) ->
           console.dir error:b, when:'put update_rules'
           return
         for row in b.rows
-          existing_rule[row.prefix] = _rev:row.value._rev, ruleid:row.ruleid
-          new_ruleid = row.ruleid if row.ruleid > new_ruleid
+          existing_rule[row.value.prefix] = _rev:row.value.rev, ruleid:row.value.ruleid
+          new_ruleid = row.value.ruleid if row.value.ruleid > new_ruleid
         console.log "Ruleset had #{b.rows.length} rules."
         do run
 
