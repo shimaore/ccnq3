@@ -103,8 +103,7 @@ ccnq3.config (config) ->
       {_rev,ruleid} = existing_rule[prefix]
     else
       console.log "Creating rule for prefix #{prefix}"
-      ruleid = new_ruleid++
-      _rev = null
+      ruleid = ++new_ruleid
 
     rule = [sip_domain_name,ruleid].join ':'
     _id = [type,rule].join ':'
