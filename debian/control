@@ -5,7 +5,7 @@ Package: ccnq3
 Architecture: all
 Depends:
   findutils, adduser, passwd,
-  curl,
+  curl, psmisc,
   daemon, bash, openssl,
   nodejs (>=0.6.6), build-essential, python,
   couchdb (=1.2.0-4)
