@@ -56,7 +56,9 @@ ccnq3.config (config) ->
           for row in b.rows
             existing_rule[row.prefix] = _rev:row.value._rev, ruleid:row.ruleid
             new_ruleid = row.ruleid if row.ruleid > new_ruleid
-          console.log "Received #{b.rows.length} rules."
+          console.log "Ruleset had #{b.rows.length} rules."
+        else
+          console.log "Creating new ruleset."
         do run
 
   post = db.post '_bulk_docs', json: true, (e,r,b) ->
@@ -70,22 +72,22 @@ ccnq3.config (config) ->
   run = ->
     columns = []
     input = byline process.stdin
-    line = 0
+    n = 0
     input.on 'data', (line) ->
-      if line is 0
+      if n is 0
         emit_stream.emit 'data', '{"docs":['
       else
         [prefix,gwlist,attrs]= line.split /;/
         emit_rule {prefix,gwlist,attrs}
 
-      line++
+      n++
 
     input.on 'end', ->
       for key, data of existing_rule
         emit_stream.emit 'data', JSON.stringify {_id:data.id,_rev:data._rev,_deleted:true}
       emit_stream.emit 'data', ']}'
       emit_stream.emit 'end'
-      console.log "Read #{line} lines of input."
+      console.log "Read #{n} lines of input."
 
   first_time = true
   emit_rule = (o) ->
