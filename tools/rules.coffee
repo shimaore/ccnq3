@@ -23,9 +23,10 @@ ccnq3.config (config) ->
   existing_rule = {}
   new_ruleid = 0
 
-  db.get '_design/update_rules', (e,r,b) ->
-    if e then throw e
-    if b.error then throw new Error b.error
+  db.get '_design/update_rules', json:true, (e,r,b) ->
+    if e
+      console.dir error:e, when:'get update_rules'
+      return
     design =
       _id: '_design/update_rules'
       _rev: b._rev
@@ -35,20 +36,27 @@ ccnq3.config (config) ->
             if doc.sip_domain_name? and doc.groupid?
               emit [doc.sip_domain_name,doc.groupid], null
 
-    db.put design, (e,r,b) ->
-      if e then throw e
-      if b.error then throw new Error b.error
+    db.put '_design/update_rules', json:design, (e,r,b) ->
+      if e
+        console.dir error:e, when:'put update_rules'
+        return
+      if b.error
+        console.dir error:b, when:'put update_rules'
+        return
 
       view_key = qs.escape JSON.stringify [sip_domain_name,groupid]
 
       db.get '_design/update_rules/_view/by_id?key=#{view_key}"', json:true, (e,r,b) ->
-        if e then throw e
-        if b.error then throw new Error b.error
-        for row in b.rows
-          k = row.prefix
-          existing_rule[k] = _rev:row.value._rev, ruleid:row.ruleid
-          new_ruleid = row.ruleid if row.ruleid > new_ruleid
-          do run
+        if e
+          console.dir error:e, when:'get view by_id'
+          return
+        if b.rows?
+          for row in b.rows
+            k = row.prefix
+            existing_rule[k] = _rev:row.value._rev, ruleid:row.ruleid
+            new_ruleid = row.ruleid if row.ruleid > new_ruleid
+          console.log "Received #{b.rows.length} rules."
+        do run
 
   post = db.post '_bulk_docs', json: true, (e,r,b) ->
     console.dir {e,b}
