@@ -76,9 +76,9 @@ ccnq3.config (config) ->
     input.on 'data', (line) ->
       if n is 0
         emit_stream.emit 'data', '{"docs":['
-      else
-        [prefix,gwlist,attrs]= line.split /;/
-        emit_rule {prefix,gwlist,attrs}
+
+      [prefix,gwlist,attrs]= line.split /;/
+      emit_rule {prefix,gwlist,attrs}
 
       n++
 
@@ -89,7 +89,7 @@ ccnq3.config (config) ->
         d++
       emit_stream.emit 'data', ']}'
       emit_stream.emit 'end'
-      console.log "Added or updated #{n} rules, deleted #{d} old rules."
+      console.log "Requested: add or update #{n} rules, delete #{d} old rules."
 
   first_time = true
   emit_rule = (o) ->
