@@ -12,6 +12,7 @@ pico = require 'pico'
 ccnq3 = require 'ccnq3'
 stream = require 'stream'
 qs = require 'querystring'
+fun = (f) -> '('+f+')'
 
 sip_domain_name = process.argv[2]
 groupid = process.argv[3]
@@ -34,7 +35,7 @@ ccnq3.config (config) ->
       _rev: b._rev
       views:
         by_id:
-          map: (doc) ->
+          map: fun (doc) ->
             if doc.sip_domain_name? and doc.groupid?
               emit [doc.sip_domain_name,doc.groupid], null
 
@@ -42,30 +43,30 @@ ccnq3.config (config) ->
       if e
         console.dir error:e, when:'put update_rules'
         return
-      if b.error
+      if b.error or not b.ok
         console.dir error:b, when:'put update_rules'
         return
 
       view_key = qs.escape JSON.stringify [sip_domain_name,groupid]
 
-      db.get '_design/update_rules/_view/by_id?key=#{view_key}"', json:true, (e,r,b) ->
+      db.get "_design/update_rules/_view/by_id?key=#{view_key}", json:true, (e,r,b) ->
         if e
           console.dir error:e, when:'get view by_id'
           return
-        if b.rows?
-          for row in b.rows
-            existing_rule[row.prefix] = _rev:row.value._rev, ruleid:row.ruleid
-            new_ruleid = row.ruleid if row.ruleid > new_ruleid
-          console.log "Ruleset had #{b.rows.length} rules."
-        else
-          console.log "Creating new ruleset."
+        if b.error
+          console.dir error:b, when:'put update_rules'
+          return
+        for row in b.rows
+          existing_rule[row.prefix] = _rev:row.value._rev, ruleid:row.ruleid
+          new_ruleid = row.ruleid if row.ruleid > new_ruleid
+        console.log "Ruleset had #{b.rows.length} rules."
         do run
 
   post = db.post '_bulk_docs', json: true, (e,r,b) ->
     if e
       console.dir error:e, when:'bulk docs'
       return
-    console.log "Pushed #{b.rows ? 'no'} rows."
+    console.log "Pushed #{b.length ? 'no'} rows."
   emit_stream = new stream()
   emit_stream.pipe post
 
