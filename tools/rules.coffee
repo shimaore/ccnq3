@@ -24,6 +24,8 @@ ccnq3.config (config) ->
   new_ruleid = 0
 
   db.get '_design/update_rules', (e,r,b) ->
+    if e then throw e
+    if b.error then throw new Error b
     design =
       _id: '_design/update_rules'
       _rev: b._rev
@@ -33,13 +35,15 @@ ccnq3.config (config) ->
             if doc.sip_domain_name? and doc.groupid?
               emit [doc.sip_domain_name,doc.groupid], null
 
-    db.put design, (e) ->
+    db.put design, (e,r,b) ->
       if e then throw e
+      if b.error then throw new Error b
 
       view_key = qs.escape JSON.stringify [sip_domain_name,groupid]
 
       db.get '_design/update_rules/_view/by_id?key=#{view_key}"', json:true, (e,r,b) ->
         if e then throw e
+        if b.error then throw new Error b
         for row in b.rows
           k = row.prefix
           existing_rule[k] = _rev:row.value._rev, ruleid:row.ruleid
