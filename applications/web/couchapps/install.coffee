@@ -8,4 +8,4 @@ push_script = (uri, script,cb) ->
 require('ccnq3').config (config)->
 
   usercode_uri = config.usercode.couchdb_uri
-  push_script usercode_uri, 'usercode'
+  push_script usercode_uri, 'usercode', ->
