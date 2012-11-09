@@ -23,14 +23,15 @@ ccnq3.config (config) ->
   existing_rule = {}
   new_ruleid = 0
 
-  db.get '_design/update_rules', (e,r,design) ->
-    design ?=
+  db.get '_design/update_rules', (e,r,b) ->
+    design =
       _id: '_design/update_rules'
-    design.views =
-      by_id:
-        map: (doc) ->
-          if doc.sip_domain_name? and doc.groupid?
-            emit [doc.sip_domain_name,doc.groupid], null
+      _rev: b._rev
+      views:
+        by_id:
+          map: (doc) ->
+            if doc.sip_domain_name? and doc.groupid?
+              emit [doc.sip_domain_name,doc.groupid], null
 
     db.put design, (e) ->
       if e then throw e
