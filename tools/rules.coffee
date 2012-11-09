@@ -59,7 +59,10 @@ ccnq3.config (config) ->
         do run
 
   post = db.post '_bulk_docs', json: true, (e,r,b) ->
-    console.dir {e,b}
+    if e
+      console.dir error:e, when:'bulk docs'
+      return
+    console.log "Pushed #{b.rows ? 'no'} rows."
   emit_stream = new stream()
   emit_stream.pipe post
 
