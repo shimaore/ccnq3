@@ -16,6 +16,8 @@ qs = require 'querystring'
 sip_domain_name = process.argv[2]
 groupid = process.argv[3]
 
+console.log "Started for sip_domain_name #{sip_domain_name} groupid #{groupid}"
+
 ccnq3.config (config) ->
   db_uri = config.provisioning.couchdb_uri
   db = pico.request db_uri
@@ -69,21 +71,22 @@ ccnq3.config (config) ->
   run = ->
     columns = []
     input = byline process.stdin
-    first_line = true
+    line = 0
     input.on 'data', (line) ->
-      if first_line
+      if line is 0
         emit_stream.emit 'data', '{"docs":['
       else
         [prefix,gwlist,attrs]= line.split /;/
         emit_rule {prefix,gwlist,attrs}
 
-      first_line = false
+      line++
 
     input.on 'end', ->
       for key, data of existing_rule
         emit_stream.emit 'data', JSON.stringify {_id:data.id,_rev:data._rev,_deleted:true}
       emit_stream.emit 'data', ']}'
       emit_stream.emit 'end'
+      console.log "Read #{line} lines of input."
 
   first_time = true
   emit_rule = (o) ->
