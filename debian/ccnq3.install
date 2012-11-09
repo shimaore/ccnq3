@@ -1,4 +1,5 @@
 applications /opt/ccnq3/src
 bin /opt/ccnq3/src
 package.json /opt/ccnq3/src
+README.md /opt/ccnq3/src
 public /opt/ccnq3/src
