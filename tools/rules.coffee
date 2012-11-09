@@ -83,11 +83,13 @@ ccnq3.config (config) ->
       n++
 
     input.on 'end', ->
+      d = 0
       for key, data of existing_rule
         emit_stream.emit 'data', JSON.stringify {_id:data.id,_rev:data._rev,_deleted:true}
+        d++
       emit_stream.emit 'data', ']}'
       emit_stream.emit 'end'
-      console.log "Read #{n} lines of input."
+      console.log "Added or updated #{n} rules, deleted #{d} old rules."
 
   first_time = true
   emit_rule = (o) ->
