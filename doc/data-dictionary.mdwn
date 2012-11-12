@@ -735,9 +735,9 @@ This section specifies the parameters for applications/voicemail.
 
       When sending to a proxy, make sure the voicemail server has a matching endpoint record with its "sbc" field set to type 10 so that it is authorized to pass charging information along.
 
-      * `profile`   "ingress-#{profile_name}" or "egress-#{profile_name}"
+      * `profile`   "ingress-#{profile_name}" or "egress-#{profile_name}", an existing `sip_profile` to use to dial out.
 
-      * `domain`    the domain name where the message should be sent to
+      * `domain`    the domain name where the call should be sent to.
 
     * `notifier_port`: which local port to bind to for SIP MWI notifications [default: 7124]
 
