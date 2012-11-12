@@ -81,6 +81,7 @@ run = ->
         "applications/cdrs"
         "applications/locations"
         "applications/couch_daemon"
+        "applications/voicemail-store"
       ]
       source: SRC
       account: ""
