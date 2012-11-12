@@ -980,9 +980,9 @@ If the "challenge" configuration parameter is empty (the default), the domain na
 
 *   `dialog_timer`: integer; maximum call (dialog) duration (in seconds)
 
-*   `outbound_route`: integer; route to use for outbound calls from this endpoint; if null, per-number outbound_route is used. This is matched to a `rule` record's `group_id`.
+*   `outbound_route`: integer; default route to use for outbound calls from this endpoint. [required; no defaults]
 
-    Use `outbound_route` to allow some calls (e.g. emergency) and reject others, or route dialplan-specific numbers (e.g. voicemail access).
+    A per-number `outbound_route` might be specified to override the endpoint's `outbound_route`.
 
 *   `check_from`      boolean
     If true, the call can only be placed if the endpoint for the From username is the same as this endpoint.
@@ -1053,6 +1053,8 @@ number (provisioning records)
 
     For a global number this indicates the LCR route that will be selected to route the call out.
 
+    If a number has no `outbound_route` specified, the `outbound_route` of the endpoint (sending SBC) is used as a fallback.
+
 *   `registrant_password`: password for applications/registrant
 
     You must issue a `start` registrant command for the changes to be applied.
@@ -1074,7 +1076,9 @@ Please note that for a number to use the registrant function, both `registrant_p
 
 *   `outbound_route`: integer; allows to select a specific `rule` based on the rule's `groupid`.
 
-    For a local number this is used to define the local dialplan.
+    For a local number this is used to define the local dialplan, including call restrictions, access to voicemail and services, ...
+
+    If a number has no `outbound_route` specified, the `outbound_route` of the endpoint is used as a fallback.
 
 *   `location`:  string; the location identifier for this specific number (used for emergency location services)
 
@@ -1182,7 +1186,9 @@ This allows you do have domain-generic routes and gateways, but each host can ro
 The following four fields are used to select a rule.
 The set of applicable rules is narrowed down as each field is applied in order.
 
-*   `groupid`: integer; this is the `outbound_route` of the endpoint; or the `outbound_route` of the the number, if the endpoint does not provide an `outbound_route`.
+*   `groupid`: integer; this is the `outbound_route` of the number or endpoint.
+
+    See the specific rules under _global number_ and _local number_.
 
      Although it seems OpenSIPS might support having one or more groupid for a given rule we currently do not support this option.
 
