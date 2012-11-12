@@ -980,9 +980,9 @@ If the "challenge" configuration parameter is empty (the default), the domain na
 
 *   `dialog_timer`: integer; maximum call (dialog) duration (in seconds)
 
-*   `outbound_route`: integer; default route to use for outbound calls from this endpoint. [required; no defaults]
+*   `outbound_route`: integer
 
-    A per-number `outbound_route` might be specified to override the endpoint's `outbound_route`.
+    See the description under *Rule (provisioning record)*.
 
 *   `check_from`      boolean
     If true, the call can only be placed if the endpoint for the From username is the same as this endpoint.
@@ -1053,7 +1053,9 @@ number (provisioning records)
 
     For a global number this indicates the LCR route that will be selected to route the call out.
 
-    If a number has no `outbound_route` specified, the `outbound_route` of the endpoint (sending SBC) is used as a fallback.
+    If a number has no `outbound_route`, the `outbound_route` of the endpoint (sending SBC) is used.
+    If the number and the endpoint both have `outbound_route`, the two rule sets are used in order.
+    See additional information in *Rule (provisioning record)*.
 
 *   `registrant_password`: password for applications/registrant
 
@@ -1078,7 +1080,9 @@ Please note that for a number to use the registrant function, both `registrant_p
 
     For a local number this is used to define the local dialplan, including call restrictions, access to voicemail and services, ...
 
-    If a number has no `outbound_route` specified, the `outbound_route` of the endpoint is used as a fallback.
+    If a number has no `outbound_route`, the `outbound_route` of the endpoint is used.
+    If the number and the endpoint both have `outbound_route`, the two rule sets are tried in order.
+    See additional information in *Rule (provisioning record)*.
 
 *   `location`:  string; the location identifier for this specific number (used for emergency location services)
 
@@ -1151,18 +1155,37 @@ rule (provisioning records)
 
 Rules are used to route outbound calls in OpenSIPS.
 
-The selection part of the rule is first matched to select one rule out of all the available rules.
+### Which rule sets are selected ###
 
-Once that route is selected, the call is forwarded to the destination gateways or carriers for that rule.
+When a call has to be routed towards a trunk, one or two rule sets might be applied:
 
-Additionally the `attrs` field is available in the CDRs.
-This feature can be used for example to store rating information so that they do not need to be looked up again (using longest-prefix match) at rating time.
+* the rule set indicated by the `outbound_route` of the `number`, if any;
+* the rule set indicated by the `outbound_route` of the `endpoint`, if any.
 
-Operational note:
-Changes to rules, gateways, and carriers are not applied automatically. Use sip_commands.opensips = "reload routes" (or the equivalent portal action) to apply the changes.
+If no `outbound_route` is provided, or both rule sets are unable to route the call (no matching prefix, etc.), the call is rejected with `404 User Not Found` (local number) or `502 No Route` (global number).
+
+The first matching rule selected (either from the number's `outbound_route` rule-set, or from the endpoint's `outbound_route` rule-set) is used to route the call.
+
+### How rules are matched ###
+
+Out of all the rules in a rule set, at most one will eventually be selected.
+
+The selection criterias are described under *Rule selection* below.
+
+### How routing is done ###
+
+Once a rule is selected, the call is forwarded to the destination gateway(s) or carrier(s) for that rule.
+
+Carrier's names are pre-pended with a hash `#` sign, while gateway names are inserted as-is, separated by comma `,`. (But remember that carrier and gateway names must be alphanumeric.)
 
 Although `rule`s and `gateway`s are defined on a per-`sip_domain_name` basis, carriers defined on a per-`host` basis.
 This allows you do have domain-generic routes and gateways, but each host can route to a preferred set of gateways (e.g. closest-gateway first) if desired. In that last case, make sure you assign higher weights to the preferred gateways for each `carrier`.
+
+The `attrs` field of the selected rule is made available in the CDRs.
+This feature can be used for example to store rating information so that they do not need to be looked up again (using longest-prefix match) at rating time.
+
+Operational note:
+Changes to rules, gateways, and carriers are not applied automatically. Use `sip_commands.opensips = "reload routes"`` (or the equivalent portal action) to apply the changes.
 
 ### Rule identifiers ###
 
@@ -1186,11 +1209,9 @@ This allows you do have domain-generic routes and gateways, but each host can ro
 The following four fields are used to select a rule.
 The set of applicable rules is narrowed down as each field is applied in order.
 
-*   `groupid`: integer; this is the `outbound_route` of the number or endpoint.
+*   `groupid`: integer; this is the `outbound_route` of the number or endpoint. All rules with the same `groupid` constitute a rule set.
 
-    See the specific rules under _global number_ and _local number_.
-
-     Although it seems OpenSIPS might support having one or more groupid for a given rule we currently do not support this option.
+    Although it seems OpenSIPS might support having one or more groupid for a given rule we currently do not support this option.
 
 *   `prefix`: string; the routing (destination number) prefix (might be ""), longest-prefix match
 
@@ -1198,17 +1219,15 @@ The set of applicable rules is narrowed down as each field is applied in order.
 
 *   `priority`: integer; ruleset ordering criteria (within the groupid and prefix, for matching `timerec`s, the rule with the highest priority is chosen) [optional; defaults to 1]
 
-At the end of the selection process, only one rule is selected.
+At the end of the selection process, at most one rule is selected from the rule set.
 
 For the complete specification, see section *Routing Rule Processing* in <http://www.opensips.org/html/docs/modules/1.8.x/drouting.html>
 
 ### Rule output ###
 
-The following fields are the output of the selection process, and
-are used to route the call, once a rule has been selected.
+The following fields are the output of the selection process, and are used to route the call, once a rule has been selected.
 
-The gateway list indicates which gateways (either `gateway` records or `egress_gwid` sip_profiles)
-are used to route the call.
+The gateway list indicates which gateways (either `gateway` records or `egress_gwid` sip_profiles) are used to route the call.
 
 *   `gwlist`: string; a comma-separated list of gateways or carriers.
 
