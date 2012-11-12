@@ -12,10 +12,10 @@ task 'docs', 'Rebuild the documentation', ->
   layout = coffeecup.compile fs.readFileSync './_layouts/layout.coffee', 'utf8'
 
   docs =
-    index: './doc/index.mdwn'
-    install: './doc/Install.mdwn'
-    provisioning: './doc/Provisioning.mdwn'
-    specs: './doc/data-dictionary.mdwn'
+    index: './doc/index.md'
+    install: './doc/Install.md'
+    provisioning: './doc/Provisioning.md'
+    specs: './doc/data-dictionary.md'
 
   make_name = (t) ->
     t = t.trim().toLowerCase()

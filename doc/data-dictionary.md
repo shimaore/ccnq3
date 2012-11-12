@@ -406,7 +406,7 @@ Configuration options:
 
         Note: port numbers must be in the range 5060 to 5299 or 15060 to 15299 to be compatible with the "traces" application.
 
-        Note: look in doc/port-numbers.mdwn for port numbers conventions.
+        Note: look in doc/port-numbers.md for port numbers conventions.
 
         Note: `egress_gwid` must be unique amongst all gateway IDs, including the ones in "gateway"-type records.
 
@@ -941,12 +941,6 @@ If the "challenge" configuration parameter is empty (the default), the domain na
 
 ### Inbound call routing (dst_endpoint) ###
 
-*   `dest_domain`     string  Override the destination domain with this value
-
-    Overrides user_srv and user_via
-
-    Probably obsolete, do not use.
-
 *   `dst_disabled`    boolean If true, calls towards this endpoint are blocked
 
 *   `strip_digit`     boolean If true, remove the first digit of the destination username
@@ -987,12 +981,6 @@ If the "challenge" configuration parameter is empty (the default), the domain na
 *   `check_from`      boolean
     If true, the call can only be placed if the endpoint for the From username is the same as this endpoint.
 
-*   `dest_domain`     string  Override the destination domain
-
-    Overrides user_srv and user_via
-
-    Probably obsolete, do not use.
-
 *   `sbc`             integer This endpoint is an outbound SBC that sends calls to us towards a carrier.
 
     Our own outbound SBCs
@@ -1014,13 +1002,6 @@ If the "challenge" configuration parameter is empty (the default), the domain na
 *   `src_disabled`    boolean All outbound calls are disabled.
 
 *   `user_force_mp`   boolean If true, attempt to force media_proxy insertion
-
-*   `allow_onnet`     boolean Obsolete; ccnq3 is not designed for allow_onnet.
-
-    For allow_onnet to work you need to create separate "number" records for the client-side numbers so that the local OpenSIPS knows how to route them.
-    Routing can be done via a CFA, pointing e.g. to the ingress side of an open (inbound) carrier-sbc.
-
-    Support for this feature might be removed at any time, do not depend on it.
 
 *   `emergency_domain`: string
 

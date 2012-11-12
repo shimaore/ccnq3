@@ -21,4 +21,4 @@ Installation, Documentation
 ===========================
 
   See <http://shimaore.github.com/ccnq3/_site/>
-  or read doc/doc/Install.mdwn
+  or read doc/Install.mdwn
