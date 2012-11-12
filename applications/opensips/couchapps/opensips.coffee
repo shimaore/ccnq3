@@ -141,9 +141,6 @@ ddoc.lists.registrant = p_fun (head,req) ->
   started = false
   while row = getRow()
     do (row) ->
-      if not started
-        send quote.first_line(types,columns)
-        started = true
       host =row.key[0]
       if row.value.interfaces?
         hosts[host] = row.value
@@ -151,6 +148,9 @@ ddoc.lists.registrant = p_fun (head,req) ->
         ipv4 = hosts[host]?.interfaces.primary?.ipv4
         if ipv4?
           row.value.binding_URI = row.value.binding_URI.replace host, ipv4
+        if not started
+          send quote.first_line(types,columns)
+          started = true
         send quote.value_line types, t, row.value, columns
   if not started
     send ''
