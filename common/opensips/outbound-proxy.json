@@ -49,6 +49,7 @@
   "sort_order": 1,
 
   "nanpa_routing": false,
+  "use_registrant": false,
 
   "ok":true
 }
