@@ -548,11 +548,13 @@ Related: applications/registrant
 
 *   `registrant`:
 
-    * `local_ipv4`: string, IP where to send incoming calls
+    * `local_ipv4`: string, IP where to send incoming calls (generally the local server)
 
-    * `local_port`: integer, port where to send incoming calls
+    * `local_port`: integer, port where to send incoming calls (generally, the port of the local `sip_profile` that accepts those calls)
 
     * `proxy_port`: integer, the port for this SIP service [default: 5070]
+
+    * `source_ip`: string, IP to send outbound calls from (generally the public IP of the local server)
 
 *   `sip_commands.registrant`: string
 
