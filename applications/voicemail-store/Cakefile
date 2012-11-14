@@ -9,7 +9,7 @@ task 'start', ->
     '-r'
     '-D', process.cwd()+'/agents'
     '--'
-    './voicemail.coffee'
+    './agent.coffee'
   ], stdio:'ignore'
   server.on 'exit', (code) ->
     console.log 'Failed' if code
