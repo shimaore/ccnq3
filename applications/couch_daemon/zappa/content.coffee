@@ -38,6 +38,6 @@
       @json o
 
   @get '/_ccnq3', ->
-    @json ok:true
+    @success welcome:'ccnq3'
 
   @include './voicemail.coffee'

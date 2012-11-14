@@ -42,6 +42,7 @@
               vm_settings[k] = v for k,v of vm when not k.match /^_/
             target_db.put vm_settings, (e) =>
               if e? then return @failure error:e, when:"update voicemail_settings for #{user_database}"
+              @success {user_database}
 
        # Typically user_database will be a UUID
       user_database = local_number.user_database
