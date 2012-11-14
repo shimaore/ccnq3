@@ -87,7 +87,7 @@ Finally start the installation of CCNQ3 itself.
 
 The first host you will install is your "manager" host.
 
-    aptitude -y install ccnq3-manager
+    aptitude -y install ccnq3-manager ccnq3-web
 
 Make sure to locate and save the `CCNQ3 Master interface` URL printed
 at the end of the installation process.
@@ -96,7 +96,7 @@ However, this package will overwrite any local CouchDB configuration.
 If you have an existing CouchDB/BigCouch installation you'd like to
 re-use (located on the same host or on a different system), use
 
-    aptitude -y install ccnq3-manager-shared
+    aptitude -y install ccnq3-manager-shared ccnq3-web
 
 instead. You will need to provide administrative access to that existing
 database via a URL such as `http://admin:password@host:5984`.
