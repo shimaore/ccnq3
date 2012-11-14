@@ -932,6 +932,8 @@ number (provisioning records)
 
 *   `registrant_expiry`: integer, expiry parameter, in seconds [default: 3600, one hour]
 
+*   `registrant_realm`: string; the `realm` used to authenticate outbound calls through the registrant server.
+
 Please note that for a number to use the registrant function, both `registrant_password` and `registrant_host` must be specified.
 
 
