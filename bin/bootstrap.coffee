@@ -68,16 +68,16 @@ run = ->
         couchdb_uri: CDB_URI
         system: true
       applications: [
-        "applications/usercode"
+        # "applications/usercode"
         "applications/provisioning"
-        "applications/roles"
+        # "applications/roles"
         "applications/logging"
         "applications/monitor"
         "applications/host"
-        "applications/portal"
-        "applications/inbox"
-        "public"
-        "applications/web"
+        # "applications/portal"
+        # "applications/inbox"
+        # "public"
+        # "applications/web"
         "applications/cdrs"
         "applications/locations"
         "applications/couch_daemon"

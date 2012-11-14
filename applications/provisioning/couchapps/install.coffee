@@ -9,8 +9,9 @@ push_script = (uri, script,cb) ->
 ccnq3 = require 'ccnq3'
 ccnq3.config (config)->
 
-  usercode_uri = config.usercode.couchdb_uri
-  push_script usercode_uri, 'usercode'
+  usercode_uri = config.usercode?.couchdb_uri
+  if usercode_uri?
+    try push_script usercode_uri, 'usercode'
 
   # If the database already exists
   provisioning_uri = config.provisioning?.couchdb_uri

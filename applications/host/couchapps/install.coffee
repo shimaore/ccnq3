@@ -10,7 +10,7 @@ require('ccnq3').config (config) ->
 
   usercode_uri = config.usercode?.couchdb_uri
   if usercode_uri?
-    push_script usercode_uri, 'usercode'
+    try push_script usercode_uri, 'usercode'
 
   provisioning_uri = config.provisioning?.couchdb_uri
   if provisioning_uri?

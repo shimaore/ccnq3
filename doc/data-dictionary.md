@@ -10,19 +10,6 @@ In this document the term *URI of database* signifies a URI of some CouchDB data
 
 These URIs might contain authentication usernames and passwords.
 
-Account
--------
-
-In this document the term *account* refers to an opaque string used to authorize operations based on prefixes stored in the `roles` fields of a user account.
-
-Account-based roles follow the syntax
-  (`access`|`update`) `:` operation `:` account
-where operations include replicating documents, granting authorization, etc.
-
-This allows you (assuming you provide your customers access to the embedded web portal) to create hierarchical access to information, for example along a carrier/reseller/customer model.
-
-The account "" (the empty string), located at the root of the hierarchy, can be used to restrict access to provisioning data that should only be managed by system administrators. It is used in this manner in the following documentation.
-
 Applications
 ============
 
@@ -32,14 +19,7 @@ In a template CCNQ3 system, you would typically have two types of servers, _mana
 A manager server would typically have the `ccnq3` package installed, and run the following applications:
 
     # Core database management
-    applications/usercode
     applications/provisioning
-    # Portal
-    applications/roles
-    applications/portal
-    applications/inbox
-    public
-    applications/web
     # Aggregation
     applications/cdrs
     applications/locations
@@ -66,9 +46,6 @@ Moreover all servers, regardless of intended purpose, must run the following app
 
 Some of these applications are automatically installed. For example, a `manager` host (created using the `bootstrap-manager` script) will have most services enabled except the aggregation services. Removing automatically-installed applications in this case will lead to loss of functionality or breakage.
 
-You may add or remove applications using the web portal.
-However at this time the portal does not allow for application-specific parameters to be configured; this must be done manually in the CouchDB provisioning database.
-
 After adding or removing one or more applications on a given host, you must run
 
     aptitude reinstall ccnq3
@@ -86,36 +63,9 @@ The following applications are available:
 
   Required: yes.
 
-* applications/usercode
-
-  Support for applications in users' databases.
-
-  Install on: the portal server.
-
 * applications/provisioning
 
   Support for provisioning.
-  Install on: the portal server.
-
-* applications/roles
-
-  Support for role-based authorization in the portal.
-  Install on: the portal server.
-
-* applications/portal
-
-  Portal registration and login.
-  Install on: the portal server.
-
-* applications/inbox
-
-  The portal inbox.
-  Install on: the portal server.
-
-* application/web
-
-  Web reverse proxy and static web server.
-  Install on: the portal server.
 
 * applications/cdrs
 
@@ -146,7 +96,7 @@ The following applications are available:
 
 * applications/traces
 
-  Support for portal access to local traces.
+  Support for access to local traces.
   Install on: servers with the ccnq3-traces package, typically OpenSIPS and FreeSwitch hosts.
 
 * applications/voicemail
@@ -231,7 +181,6 @@ As suggested above, the `host` record for a particuler server is referred to as 
 All the fields in this section are pre-populated by the installation scripts.
 There is no reason to change them after the initial installation of a server.
 Only the `applications` array will need to be expanded.
-This can be easily done using the web portal.
 
 Installation caveat: `provisioning.host_couchdb_uri` might need to be fixed if the system cannot guess
 your installation.
@@ -243,8 +192,6 @@ your installation.
 *   `updated_at`: integer, update timestamp in ms [required]
 
     `new Date().getTime()`  for example
-
-    This field is automatically managed by the web portal when it is used to modify a host record.
 
 *   `type`: "host"
 
@@ -285,9 +232,6 @@ services, since configuration is read (in most cases) once at startup.
 
         [ "applications/host", "applications/traces", "applications/freeswitch" ]
 
-*   `usercode`:
-    * `couchdb_uri`: URI of the usercode database (with database admin authentication) [used by couchapps to install their applications]
-
 *   `provisioning`:
     * `couchdb_uri`: URI of the provisioning database (with database admin authentication) [used by couchapps apps to insert new applications]
 
@@ -312,11 +256,7 @@ services, since configuration is read (in most cases) once at startup.
 
     This feature is used to force re-installation of the corresponding databases (for example to change the URI)
 
-    * `usercode`:
-      * `couchdb_uri`
     * `provisioning`:
-      * `couchdb_uri`
-    * `users`:
       * `couchdb_uri`
 
 *   `monitor`:
@@ -533,57 +473,6 @@ Configuration options:
 
       One of:
         "reload routes"         [apply "rule" or "gateway" record changes]
-
-### Specific to hosts running the portal (or its back-end). ###
-
-To enable the portal service:
-
-1. configure the fields in this section
-2. add "applications/portal" to the applications field [and restart ccqn3]
-
-Note: this service is enabled by default on the manager host.
-You should not have to modify these settings.
-
-
-*   `portal`:
-    * `port`: integer (8765)
-    * `hostname`:  string ("127.0.0.1")
-
-*   `session`:
-    * `secret`:  string; must be a random string
-    * `couchdb_uri`:  public URI used to create CouchDB sessions (must end with "/_session"; no authentication in the URI)
-
-    * `memcached_store`: if present, a memcached store is used for session storage.
-        Must contain the required data for `new MemcachedStore`.
-    * `redis_store`: if present, a redis store is used for session storage.
-        Must contain the require data for `new RedisStore`.
-
-*   `users`:
-    * `couchdb_uri`: URI of the _users database (with database admin authentication)
-    * `replicate_uri`: URI for "/_replicate" (with database admin authentication)
-    * `userdb_base_uri`: base URI of the various users' databases (with server admin authentication, used to create the databases)
-    * `public_userdb_base_uri`: public base URI of the various users' databases (no authentication! given out to the users)
-    * `logged_in_after_initial_registration`: if true, new users will be automatically logged in. (Not recommended, should go through email verification step.)
-
-*   `mailer`:     Used as the configuration for the node-mailer package.
-    Required for applications/portal and applications/voicemail to send out email notifications.
-    * `sendmail`: "/usr/sbin/sendmail"
-    * `SMTP`: null
-
-*   `mail_password`:
-
-    * `sender_local_part`: string [default: "support"]; The mail_password agent will send emails from  sender_local_part+"@"+domain (where domain is the user's record's "domain" field).
-
-    * `file_base`: string; a prefix used to locate the format files used by the email notifier.
-
-      On Unix the string must finish with a slash.
-
-      The notifier will try to append `portal_password.subject`, `portal_password.body`, `portal_password.html` to compose the email subject, text body and HTML body, respectively. If one of the files is missing, a default is used.
-
-      The files must contain Milk templates. The template will receive in particular the following parameters:
-      - domain: the web domain used to create the account
-      - name: the username
-      - password: the password
 
 ### Specific to hosts running SIP traces. ###
 
@@ -807,16 +696,6 @@ on the source host, set "opensips_proxy.usrloc_aggregate_uri" to http://host%40s
 *   `aggregate`
 
     * `locations_uri`
-
-### Specific to hosts running the web service ###
-
-*   `web`:
-    * `options`:
-        * `port`    Web service port number [default: 8080]
-        * `host`    hostname or IP to bind to [default: none, meaning all interfaces]
-        * `https`
-            * `key`   key in PEM format
-            * `cert`  certificate in PEM format
 
 ### Specific to hosts running the CNAM-client ###
 
@@ -1166,7 +1045,7 @@ The `attrs` field of the selected rule is made available in the CDRs.
 This feature can be used for example to store rating information so that they do not need to be looked up again (using longest-prefix match) at rating time.
 
 Operational note:
-Changes to rules, gateways, and carriers are not applied automatically. Use `sip_commands.opensips = "reload routes"`` (or the equivalent portal action) to apply the changes.
+Changes to rules, gateways, and carriers are not applied automatically. Use `sip_commands.opensips = "reload routes"`` to apply the changes.
 
 ### Rule identifiers ###
 
@@ -1231,7 +1110,7 @@ carrier (provisioning records)
 Carriers are used by the Least Cost Rules as targets for call routing.
 
 Operational note:
-Changes to rules, gateways, and carriers are not applied automatically. Use sip_commands.opensips = "reload routes" (or the equivalent portal action) to apply the changes.
+Changes to rules, gateways, and carriers are not applied automatically. Use sip_commands.opensips = "reload routes" to apply the changes.
 
 *   `_id`: type+":"+carrier
 
@@ -1280,7 +1159,7 @@ This feature means that you normally should not have to manually create `gateway
 However you will have to create gateway records for calls to servers in a different `sip_domain_name` such as voicemail servers or emergency servers.
 
 Operational note:
-Changes to rules, gateways, and carriers are not applied automatically. Use sip_commands.opensips = "reload routes" (or the equivalent portal action) to apply the changes.
+Changes to rules, gateways, and carriers are not applied automatically. Use sip_commands.opensips = "reload routes" to apply the changes.
 
 *   `_id`: type+":"+gateway
 
@@ -1364,45 +1243,6 @@ _users database
 
 The _users database is CouchDB's standard authentication database.
 
-user records
-------------
-
-This is a standard CouchDB _users record with some additions.
-You normally do not need to manipulate these records directly;
-using the registration and password recovery options of the web portal will do this for you.
-
-The `profile` hash is returned by a GET /ccnq3/portal/profile.json once logged-in.
-
-The `name` field is normally the user's main email address (at least that's what the registration code assumes); servers and applications will also have _users records so that they can remotely access the main database.
-
-The `roles` hash can also be manipulated using the REST API in applications/roles.
-
-*   `_id`: "org.couchdb.user:"+name
-*   `type`: "user"
-*   `name`:  string; the username
-*   `password`:  string (write-only, cannot be retrieved)
-*   `user_database`:  string; the name of the user's own CouchDB instance
-*   `roles`: [] of string
-*   `domain`:  string; name of the domain used at registration time
-*   `profile`:
-
-    The default `profile` record contains the user's registration data along with user-accessible data
-    that allows it to connect to its private database (user database).
-
-    This record is returned by the `GET /ccnq3/portal/profile.json` portal API to a logged-in user.
-
-    Suggested content:
-
-    * `name`:  string; user's full name
-    * `email`:  string or array of strings; email or email addresses for this user
-    * `phone`:  string; phone number for this user
-
-    Other information may be stored but should not be relied upon.
-
-    * `userdb_base_uri`:  base URI (to which the user_database is concatenated)
-    * `user_name`: name
-    * `user_database`: user_database
-
 host records
 ------------
 
@@ -1420,21 +1260,9 @@ Servers should have the `host` role assigned.
 * `_id`: "org.couchd.user:"+name
 * `type`: "user"
 * `name`: "host@" + hostname
-* `password_sha`
-* `salt`
+* `password`
 * `roles`: ["host"]
 
-
-usercode database
-=================
-
-This database should only contain design documents which are replicated into each user's private database when the user logs in.
-
-Usercode documents are normally installed automatically by the applications that require or provide them.
-
-Developper note:
-The default portal application locates usable design documents inside a user database by looking for an `index.html` attachment. The presence of this attachment indicates the design document is an application. The application is activated by running its `index.js` attachment.
-In the source code these *usercode applications* are located in `applications/*/couchapps/usercode/`.
 
 endpoint-location database
 ==========================
@@ -1478,32 +1306,15 @@ Information stored by the server to manage the registration
 user database
 =============
 
-Each user registered in the web portal is assigned a private *user database*.
+Each user is assigned a private *user database*.
 
 > Usage note: *user databases* are named using the convention "u"+UUID.
 > If your application creates user databases make sure to follow that convention as well.
 >
 > Additionally, note that a single user database may be shared by multiple users.
-> The web portal will always create a new user database for each registered user,
-> but your application may do things differently.
-
-A *user database* contains records replicated from the _users database,
-the usercode database, the provisioning database. These replicated records
-may also be replicated back (using the replicate API provided by applications/roles).
-Replication in both directions is restricted to records the user is authorized to
-access and/or update.
-
-Records replicated to/from other databases are documented as part of that database's documentation.
-
-A *user database* may additionally contain records which are never replicated to or from other databases.
-These records are described below.
-
-An application should create the database (server-side or client-side) using the `PUT /ccnq3/roles/userdb/{user_database}` portal API for a logged-in user.
-The default portal will create the *user database* for a given user the first time the user logs in (by calling `PUT /ccnq3/roles/userdb/{user_database}`).
 
 An application may create the database itself (server-side) using the standard CouchDB API, if it has database-level administrative access.
 However databases created that way are world-readable; it is your responsability to ensure that the database will get proper security tokens.
-Therefor we recommend to directly use the `PUT /ccnq3/roles/userdb/{user_database}` API to make sure the database has the proper security tokens.
 
 voicemail_settings record
 -------------------------
@@ -1569,133 +1380,3 @@ CouchDB API
 -----------
 
 The CouchDB API is available to a server-side or client-side application.
-
-It may be accessed directly (typically on port 5984) or via the web application (typically on port 8080).
-
-Portal API
-----------
-
-The following REST URIs are provided by the portal API.
-
-Operational note: Both `applications/portal` and `applications/roles` must be activated on the portal server.
-
-The first API call should always be to the login application; session credentials are stored in a cookie on the client.
-
-*   `POST /ccnq3/portal/login.json`
-
-    Logs in to the portal.
-
-    Parameters: `username`, `password`
-
-    Returns: {"ok":true} upon success, otherwise {"error":"error text"}
-
-    Javascript API: `$.ccnq3.portal.login(username,password)`
-
-*   `POST /ccnq3/portal/logout.json`
-
-    Logs out from the portal.
-
-    Returns: {"ok":true}
-
-    Javascript API: `$.ccnq3.portal.logout()`
-
-*   `GET /ccnq3/portal/profile.json`
-
-    Validates and returns the user's profile information.
-
-    Validation means the `confirmed` role is added to the user's roles.
-
-    Returns: a JSON record containing:
-
-    * `email`:  string or array of strings; email or email addresses for this user
-      (The initial value for this field is the email address provided at registration time.)
-    * `user_name`: string; session username
-    * `userdb_base_uri`: string; base URI (to which the user_database is concatenated)
-    * `user_database`: string; user_database
-    * any other fields provide at registration time (or later).
-
-    Javascript API: `$.ccnq3.portal.profile(function(profile){})`
-
-*   `POST /ccnq3/portal/recover.json`
-
-    Triggers an email to the user with a new password.
-
-    (The trigger is conveyed by the addition of ``"send_password":true` to the user's record.)
-
-    Parameters: `email`
-
-    Returns: either {"ok":true} or {"error":"error text"}
-
-    Javascript API: `$.ccnq3.portal.recover(email)`
-
-*   `PUT /ccnq3/portal/register.json`
-
-    Creates a new user record.
-
-    The username is assumed to be the `email` field of the submitted body.
-
-    An error will occur if the username already exists.
-
-    The user will automatically receive an email containing a new password.
-
-    Parameters: `email`
-
-    Returns:  either {"ok":true} or {"error":"error text"}
-
-    Javascript API: `$.ccnq3.portal.register({email,...})`
-
-*   `PUT /ccnq3/roles/userdb/{user_database}`
-
-    Creates a user's database, if any user is registered to use it.
-
-    Returns: either {"ok":true} or {"error":"error text"}
-
-    Application note:
-    This API is available to allow a logged-in user to request its own database be created.
-    It might also be used by a third party to create the database as well.
-
-    Caveat:
-    The API will return {"ok":true} if the database is not assigned to any user (and skip the actual database creation).
-
-    Javascript API: `$.ccnq3.roles.userdb(user_db)`
-
-*   `POST /ccnq3/roles/replicate/push/{target}`
-
-    Replicates from the user's database into the main database indicated by `target`.
-
-    Returns: CouchDB json response or an {"error":} record.
-
-    Javascript API: `$.ccnq3.roles.push(target)`
-
-*   `POST /ccnq3/roles/replicate/pull/{source}`
-
-    Replicates from a main database indicated by `source` into the user's database.
-
-    Returns: CouchDB json response or an {"error":} record.
-
-    Javascript API: `$.ccnq3.roles.pull(source)`
-
-*   `GET /ccnq3/roles/traces/{host}/{port}`
-
-    Proxies data from an (internal) host and port.
-
-    This operation is only available to users having the `access:traces:` role.
-
-    Due to security concerns this role should be restricted to system administrators.
-
-    Caveat: This API might be removed at any time, do not depend on it.
-
-Web Application
----------------
-
-The web application automatically provides unified access to:
-
-* the portal application, including the Portal API described above and other portal documents;
-
-* specific CouchDB APIs: `_session`, `_users`, `provisioning`, `cdr`, user databases, and other utilities;
-
-* the `public` static files;
-
-* a default application to bootstrap the portal.
-
-It is available on TCP port 8080 on the host on which `applications/web` is active.

@@ -1,4 +1,8 @@
 pico = require 'pico'
+couchapp = require 'couchapp'
+
+push_script = (uri, script,cb) ->
+  couchapp.createApp require("./#{script}"), uri, (app)-> app.push(cb)
 
 config = null
 require('ccnq3').config (c) -> config = c
@@ -47,10 +51,8 @@ module.exports = (doc) ->
         target_db.request.put '_security', json:b, (e,r,b) =>
           if e? then return failure error:e, when:"update security object for #{user_database}"
 
-      # Replicate the design documents
-      p =
-        source: 'usercode'
-        target: user_database
-        filter: "replicate/user_pull"
-      replicate.request.post json:p, (e,r,json) =>
-        if e? then return failure error:e, when:"replicate design documents into #{user_database}"
+      # Install the design documents
+      try
+        push_script target_db_uri, 'usercode'
+      catch e
+        return failure error:e, when:"replicate design documents into #{user_database}"
