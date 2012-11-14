@@ -10,7 +10,6 @@
   "scripts": {
     "couchapps": "cd couchapps && coffee install.coffee"
   , "compact": "cd couchapps && coffee compact.coffee"
-  , "preinstall": "coffee -c couchapps/*/*.coffee"
   },
   "dependencies": {
     "couchapp": "*"
