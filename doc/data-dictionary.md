@@ -886,6 +886,7 @@ If the "challenge" configuration parameter is empty (the default), the domain na
 
     This domain is used when an outbound-proxy sends a query to an emergency server.
     The emergency server will use this domain in its 302 Redirect response to the outbound-proxy.
+    (Configure this field in the endpoints that are defined for the outbound proxies.)
 
 
 number (provisioning records)
