@@ -11,8 +11,7 @@
     "registrant",
     "invite",
     "forwarder",
-    "loose-route",
-    "non-loose-route-registrant"
+    "loose-route"
   ],
 
   "opensips_base_lib": ".",
@@ -29,8 +28,7 @@
 
   "proxy_ip": "",
   "proxy_port": 5060,
-  "internal_ip": "",
-  "external_ip": "",
+  "source_ip": "",
 
   "local_port": 5064,
 

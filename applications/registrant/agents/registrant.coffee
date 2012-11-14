@@ -45,9 +45,7 @@ require('ccnq3').config (config) ->
 
     params.opensips_base_lib = base_path
 
-    # Where do we send INVITE messages?
-    params.local_ipv4 = p.registrant.local_ipv4
-    params.local_port = p.registrant.local_port
+    params[k] = p.registrant[k] for own k of p.registrant
 
     qs_host = qs.stringify key: JSON.stringify p.host
 
