@@ -14,6 +14,8 @@ stream = require 'stream'
 qs = require 'querystring'
 fun = (f) -> '('+f+')'
 
+debug = false
+
 sip_domain_name = process.argv[2]
 groupid = process.argv[3]
 
@@ -100,10 +102,10 @@ ccnq3.config (config) ->
     type = 'rule'
     prefix = o.prefix
     if existing_rule[prefix]?
-      console.log "Updating rule for prefix #{prefix}"
+      console.log "Updating rule for prefix #{prefix}" if debug
       {_rev,ruleid} = existing_rule[prefix]
     else
-      console.log "Creating rule for prefix #{prefix}"
+      console.log "Creating rule for prefix #{prefix}" if debug
       ruleid = ++new_ruleid
 
     rule = [sip_domain_name,ruleid].join ':'
