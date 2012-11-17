@@ -25,6 +25,7 @@ class Bulk
   constructor: (@db) ->
     @line = 0
     @stream = null
+    @blocks = 0
 
   submit: (cb) ->
     @stream.emit 'data', ']}'
@@ -34,11 +35,13 @@ class Bulk
   emit: (l,cb) ->
     # Start new bulk block
     if @line is 0
+      @blocks++
+      console.log "Starting block #{@blocks}." if debug
       post = @db.post '_bulk_docs', json: true, (e,r,b) ->
         if e
           console.dir error:e, when:'bulk docs'
           return
-        console.log "Pushed #{b.length ? 'no'} rows."
+        console.log "Pushed #{b.length ? 'no'} rows in block #{@blocks}."
       @stream = new stream()
       @stream.pipe post
 
@@ -118,6 +121,7 @@ ccnq3.config (config) ->
       for key of existing_rule
         keys[d] = key
         d++
+      console.log "Starting to delete #{d} old rules."
       purge = ->
         if d is 0
           bulk.emit null, ->
