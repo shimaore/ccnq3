@@ -37,7 +37,7 @@ class Bulk
     if @line is 0
       @blocks++
       console.log "Starting block #{@blocks}." if debug
-      post = @db.post '_bulk_docs', json: true, (e,r,b) ->
+      post = @db.post '_bulk_docs', json: true, (e,r,b) =>
         if e
           console.dir error:e, when:'bulk docs'
           return
