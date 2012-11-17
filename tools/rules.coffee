@@ -31,6 +31,7 @@ class Bulk
     @stream.emit 'data', ']}'
     @line = 0
     @stream.emit 'end', cb
+    @stream = null
     return
 
   emit: (l,cb) ->
