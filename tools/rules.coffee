@@ -38,12 +38,13 @@ class Bulk
     # Start new bulk block
     if @line is 0
       @blocks++
+      block = @blocks
       console.log "Starting block #{@blocks}." if debug
-      post = @db.post '_bulk_docs', json: true, (e,r,b) =>
+      post = @db.post '_bulk_docs', json: true, (e,r,b) ->
         if e
           console.dir error:e, when:'bulk docs'
           return
-        console.log "Pushed #{b.length ? 'no'} rows in block #{@blocks}."
+        console.log "Pushed #{b.length ? 'no'} rows in block #{block}."
       @stream = new stream()
       @stream.pipe post
 
