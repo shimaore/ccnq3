@@ -26,12 +26,12 @@ class Bulk
     @line = 0
     @stream = null
 
-  submit: ->
+  submit: (cb) ->
     @stream.emit 'data', ']}'
-    @stream.emit 'end'
     @line = 0
+    @stream.emit 'end', cb
 
-  emit: (l) ->
+  emit: (l,cb) ->
     # Start new bulk block
     if @line is 0
       post = @db.post '_bulk_docs', json: true, (e,r,b) ->
@@ -52,7 +52,9 @@ class Bulk
 
     # End of bulk block
     if @line is 1000 or not l?
-      @submit()
+      @submit cb
+    else
+      do cb
 
 ccnq3.config (config) ->
   db_uri = config.provisioning.couchdb_uri
@@ -105,19 +107,29 @@ ccnq3.config (config) ->
     n = 0
     input.on 'data', (line) ->
       [prefix,gwlist,attrs]= line.split /;/
-      emit_rule {prefix,gwlist,attrs}
-
+      input.pause()
+      emit_rule {prefix,gwlist,attrs}, ->
+        input.resume()
       n++
 
     input.on 'end', ->
       d = 0
-      for key, data of existing_rule
-        bulk.emit 'data', {_id:data.id,_rev:data._rev,_deleted:true}
+      keys = []
+      for key of existing_rule
+        keys[d] = key
         d++
-      bulk.emit()
-      console.log "Requested: add or update #{n} rules, delete #{d} old rules."
+      purge = ->
+        if d is 0
+          bulk.emit null, ->
+            console.log "Requested: add or update #{n} rules, delete #{d} old rules."
+        else
+          d--
+          key = keys[d]
+          data = existing_rule[key]
+          bulk.emit {_id:data.id,_rev:data._rev,_deleted:true}, purge
+      do purge
 
-  emit_rule = (o) ->
+  emit_rule = (o,cb) ->
     type = 'rule'
     prefix = o.prefix
     if existing_rule[prefix]?
@@ -130,6 +142,7 @@ ccnq3.config (config) ->
     rule = [sip_domain_name,ruleid].join ':'
     _id = [type,rule].join ':'
 
+    delete existing_rule[prefix]
     bulk.emit {
 
       _id
@@ -145,5 +158,4 @@ ccnq3.config (config) ->
       gwlist: o.gwlist
       attrs: o.attrs
 
-    }
-    delete existing_rule[prefix]
+    }, cb
