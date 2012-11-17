@@ -46,7 +46,7 @@ class Bulk
 
     # Emit line
     if l?
-      @stream.emit 'data', ",\n" if line isnt 0
+      @stream.emit 'data', ",\n" if @line isnt 0
       @stream.emit 'data', JSON.stringify l
       line++
 
