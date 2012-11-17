@@ -21,9 +21,44 @@ groupid = process.argv[3]
 
 console.log "Started for sip_domain_name #{sip_domain_name} groupid #{groupid}"
 
+class Bulk
+  constructor: (@db) ->
+    @line = 0
+    @stream = null
+
+  submit: ->
+    @stream.emit 'data', ']}'
+    @stream.emit 'end'
+    @line = 0
+
+  emit: (l) ->
+    # Start new bulk block
+    if @line is 0
+      post = @db.post '_bulk_docs', json: true, (e,r,b) ->
+        if e
+          console.dir error:e, when:'bulk docs'
+          return
+        console.log "Pushed #{b.length ? 'no'} rows."
+      @stream = new stream()
+      @stream.pipe post
+
+      @stream.emit 'data', '{"docs":[\n'
+
+    # Emit line
+    if l?
+      @stream.emit 'data', ",\n" if line isnt 0
+      @stream.emit 'data', JSON.stringify l
+      line++
+
+    # End of bulk block
+    if @line is 1000 or not l?
+      @submit()
+
 ccnq3.config (config) ->
   db_uri = config.provisioning.couchdb_uri
   db = pico.request db_uri
+
+  bulk = new Bulk db
 
   existing_rule = {}
   new_ruleid = 0
@@ -64,22 +99,11 @@ ccnq3.config (config) ->
         console.log "Ruleset had #{b.rows.length} rules."
         do run
 
-  post = db.post '_bulk_docs', json: true, (e,r,b) ->
-    if e
-      console.dir error:e, when:'bulk docs'
-      return
-    console.log "Pushed #{b.length ? 'no'} rows."
-  emit_stream = new stream()
-  emit_stream.pipe post
-
   run = ->
     columns = []
     input = byline process.stdin
     n = 0
     input.on 'data', (line) ->
-      if n is 0
-        emit_stream.emit 'data', '{"docs":['
-
       [prefix,gwlist,attrs]= line.split /;/
       emit_rule {prefix,gwlist,attrs}
 
@@ -88,17 +112,12 @@ ccnq3.config (config) ->
     input.on 'end', ->
       d = 0
       for key, data of existing_rule
-        emit_stream.emit 'data', JSON.stringify {_id:data.id,_rev:data._rev,_deleted:true}
+        bulk.emit 'data', {_id:data.id,_rev:data._rev,_deleted:true}
         d++
-      emit_stream.emit 'data', ']}'
-      emit_stream.emit 'end'
+      bulk.emit()
       console.log "Requested: add or update #{n} rules, delete #{d} old rules."
 
-  first_time = true
   emit_rule = (o) ->
-    emit_stream.emit 'data', ",\n" unless first_time
-    first_time = false
-
     type = 'rule'
     prefix = o.prefix
     if existing_rule[prefix]?
@@ -111,7 +130,7 @@ ccnq3.config (config) ->
     rule = [sip_domain_name,ruleid].join ':'
     _id = [type,rule].join ':'
 
-    emit_stream.emit 'data', JSON.stringify {
+    bulk.emit {
 
       _id
       _rev
