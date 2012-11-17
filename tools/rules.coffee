@@ -31,6 +31,7 @@ class Bulk
     @stream.emit 'data', ']}'
     @line = 0
     @stream.emit 'end', cb
+    return
 
   emit: (l,cb) ->
     # Start new bulk block
@@ -58,6 +59,7 @@ class Bulk
       @submit cb
     else
       do cb
+    return
 
 ccnq3.config (config) ->
   db_uri = config.provisioning.couchdb_uri
@@ -110,12 +112,14 @@ ccnq3.config (config) ->
     n = 0
     input.on 'data', (line) ->
       [prefix,gwlist,attrs]= line.split /;/
+      n++
       input.pause()
       emit_rule {prefix,gwlist,attrs}, ->
         input.resume()
-      n++
+      return
 
     input.on 'end', ->
+      console.log "End of input stream"
       d = 0
       keys = []
       for key of existing_rule
@@ -132,6 +136,7 @@ ccnq3.config (config) ->
           data = existing_rule[key]
           bulk.emit {_id:data.id,_rev:data._rev,_deleted:true}, purge
       do purge
+      return
 
   emit_rule = (o,cb) ->
     type = 'rule'
@@ -163,3 +168,4 @@ ccnq3.config (config) ->
       attrs: o.attrs
 
     }, cb
+    return
