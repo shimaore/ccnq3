@@ -48,7 +48,7 @@ class Bulk
     if l?
       @stream.emit 'data', ",\n" if @line isnt 0
       @stream.emit 'data', JSON.stringify l
-      line++
+      @line++
 
     # End of bulk block
     if @line is 1000 or not l?
