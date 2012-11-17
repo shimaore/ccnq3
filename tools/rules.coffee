@@ -57,7 +57,7 @@ class Bulk
       @line++
 
     # End of bulk block
-    if @line is 1000 or not l?
+    if @line is 10000 or not l?
       @submit cb
     else
       do cb
@@ -107,13 +107,14 @@ ccnq3.config (config) ->
           new_ruleid = row.value.ruleid if row.value.ruleid > new_ruleid
         console.log "Ruleset had #{b.rows.length} rules."
         do run
+        return
 
   run = ->
     columns = []
     input = byline process.stdin
     n = 0
     input.on 'data', (line) ->
-      [prefix,gwlist,attrs]= line.split /;/
+      [prefix,gwlist,attrs] = line.split /;/
       n++
       input.pause()
       emit_rule {prefix,gwlist,attrs}, ->
