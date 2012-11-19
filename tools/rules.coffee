@@ -30,7 +30,9 @@ class Bulk
   submit: (cb) ->
     @stream.emit 'data', ']}'
     @line = 0
-    @stream.emit 'end', cb
+    console.log "Oops, duplicate finalization" if @finally?
+    @finally = cb
+    @stream.emit 'end'
     @stream = null
     return
 
@@ -40,11 +42,15 @@ class Bulk
       @blocks++
       block = @blocks
       console.log "Starting block #{@blocks}." if debug
-      post = @db.post '_bulk_docs', json: true, (e,r,b) ->
+      post = @db.post '_bulk_docs', json: true, (e,r,b) =>
         if e
           console.dir error:e, when:'bulk docs'
           return
         console.log "Pushed #{b.length ? 'no'} rows in block #{block}."
+        console.log "Missing callback at end" if not @finally?
+        do @finally
+        delete @finally
+        return
       @stream = new stream()
       @stream.pipe post
 
