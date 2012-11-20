@@ -47,11 +47,12 @@ class Bulk
       @blocks++
       block = @blocks
       console.log "Starting block #{@blocks}." if debug
-      post = @db.post '_bulk_docs', json: true, (e,r,b) =>
+      post = @db.post '_bulk_docs', json: true
+      post.on 'end', (e) =>
         if e
           console.dir error:e, when:'bulk docs'
           return
-        console.log "Pushed #{b.length ? 'no'} rows in block #{block}."
+        console.log "Submitted block #{block}."
         the_cb = @finally
         delete @finally
         do the_cb
