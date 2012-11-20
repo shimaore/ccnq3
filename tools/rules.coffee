@@ -6,7 +6,6 @@
 # The input lines must contain semicolon-separated
 #     prefix;gwlist;attrs
 
-request = require 'request'
 byline = require 'byline'
 pico = require 'pico'
 ccnq3 = require 'ccnq3'
@@ -26,18 +25,24 @@ class Bulk
     @line = 0
     @stream = null
     @blocks = 0
+    @queue = []
 
   submit: (cb) ->
     @stream.emit 'data', ']}'
     @line = 0
-    console.log "Oops, duplicate finalization" if @finally?
     @finally = cb
     @stream.emit 'end'
     @stream = null
     return
 
   emit: (l,cb) ->
-    # Start new bulk block
+    # Enqueue the data
+    if l?
+      @queue.push l
+    # Wait until the current submission is over to submit a new one
+    if @finally
+      return
+    # Start of a new bulk block
     if @line is 0
       @blocks++
       block = @blocks
@@ -47,23 +52,23 @@ class Bulk
           console.dir error:e, when:'bulk docs'
           return
         console.log "Pushed #{b.length ? 'no'} rows in block #{block}."
-        console.log "Missing callback at end" if not @finally?
-        do @finally
+        the_cb = @finally
         delete @finally
+        do the_cb
         return
       @stream = new stream()
       @stream.pipe post
 
       @stream.emit 'data', '{"docs":[\n'
 
-    # Emit line
-    if l?
+    # Flush the queue
+    while @queue.length
       @stream.emit 'data', ",\n" if @line isnt 0
-      @stream.emit 'data', JSON.stringify l
+      @stream.emit 'data', JSON.stringify @queue.shift()
       @line++
 
     # End of bulk block
-    if @line is 10000 or not l?
+    if @line >= 10000 or not l?
       @submit cb
     else
       do cb
