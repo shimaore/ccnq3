@@ -52,7 +52,7 @@ class Bulk
         if e
           console.dir error:e, when:'bulk docs'
           return
-        console.log "Submitted block #{block}."
+        console.log "Submitted block #{block} (queue depth: #{@queue.length})."
         the_cb = @finally
         delete @finally
         do the_cb
