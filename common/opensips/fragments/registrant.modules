@@ -1,5 +1,4 @@
 loadmodule "uac_auth.so"
-${registrant_auth}
 
 loadmodule "b2b_entities.so"
 modparam("b2b_entities", "b2b_username_avp","$(avp(b2b_username))")
