@@ -49,20 +49,12 @@ require('ccnq3').config (config) ->
 
     qs_host = qs.stringify key: JSON.stringify p.host
 
-    # Compute registrant_auth out of all the global numbers.
-    provisioning.view 'registrant', 'auth', (e,r,p) ->
-      registrant_auth = ''
-      if p.rows?
-        for row in p.rows
-          registrant_auth += row.value
-        params.registrant_auth = registrant_auth
+    # Build the configuration file.
+    require("#{base_path}/compiler.coffee") params
 
-      # Build the configuration file.
-      require("#{base_path}/compiler.coffee") params
-
-      # Process any MI commands
-      if p.sip_commands?.registrant?
-        process_changes params.mi_port, p.sip_commands.registrant, params.runtime_opensips_cfg
+    # Process any MI commands
+    if p.sip_commands?.registrant?
+      process_changes params.mi_port, p.sip_commands.registrant, params.runtime_opensips_cfg
 
   # At startup, use the current document.
   handler config
