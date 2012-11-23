@@ -1,12 +1,12 @@
 loadmodule "uac_auth.so"
 
 loadmodule "b2b_entities.so"
-modparam("b2b_entities", "b2b_username_avp","$(avp(b2b_username))")
-modparam("b2b_entities", "b2b_realm_avp","$(avp(b2b_realm))")
-modparam("b2b_entities", "b2b_password_avp","$(avp(b2b_password))")
 
 loadmodule "b2b_logic.so"
 modparam("b2b_logic", "b2bl_from_spec_param", "$var(b2bl_from)")
+modparam("b2b_logic", "b2b_username_avp","$(avp(b2b_username))")
+modparam("b2b_logic", "b2b_realm_avp","$(avp(b2b_realm))")
+modparam("b2b_logic", "b2b_password_avp","$(avp(b2b_password))")
 
 loadmodule "uac_registrant.so"
 modparam("uac_registrant","hash_size",${uac_hash_size})
