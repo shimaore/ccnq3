@@ -115,8 +115,9 @@ ccnq3.config (config) ->
           console.dir error:b, when:'put update_rules'
           return
         for row in b.rows
-          existing_rule[row.value.prefix] = _rev:row.value.rev, ruleid:row.value.ruleid
-          new_ruleid = row.value.ruleid if row.value.ruleid > new_ruleid
+          ruleid = parseInt row.value.ruleid
+          existing_rule[row.value.prefix] = _rev:row.value.rev, ruleid:ruleid
+          new_ruleid = ruleid if ruleid > new_ruleid
         console.log "Ruleset had #{b.rows.length} rules."
         do run
         return
