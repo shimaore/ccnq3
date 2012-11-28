@@ -142,14 +142,16 @@ ccnq3.config (config) ->
         keys[d] = key
         d++
       console.log "Starting to delete #{d} old rules."
+      q = 0
       purge = ->
         if d is 0
           bulk.emit null, ->
-            console.log "Requested: add or update #{n} rules, delete #{d} old rules."
+            console.log "Requested: add or update #{n} rules, delete #{q} old rules."
         else
           d--
           key = keys[d]
           data = existing_rule[key]
+          q++
           bulk.emit {_id:data.id,_rev:data._rev,_deleted:true}, purge
       do purge
       return
