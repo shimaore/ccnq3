@@ -75,15 +75,15 @@ require('ccnq3').config (config)->
             # Keep the call opened for a little while.
             seconds = 1000
             setTimeout (-> call.exit()), 20*seconds
-          messaging.record config, call, user, number_domain
+          messaging.record config, call, user
 
       when 'inbox'
         util.log "Inbox for #{user}@#{number_domain}"
-        messaging.inbox config, call, user, number_domain
+        messaging.inbox config, call, user
 
       when 'main'
         util.log "Main for #{user}@#{number_domain}"
-        messaging.main config, call, user, number_domain
+        messaging.main config, call, user
 
       else
         # FIXME say something
