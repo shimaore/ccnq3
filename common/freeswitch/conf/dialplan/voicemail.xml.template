@@ -8,6 +8,7 @@
         <action application="answer"/>
         <action application="set" data="vm_user=$1"/>
         <action application="set" data="vm_mode=inbox" />
+        <action application="set" data="number_domain=sip_h_X-CCNQ3-Number-Domain" />
         <action application="set" data="playback_terminator=#"/>
         <action application="socket" data="127.0.0.1:$${voicemail_port} async full"/>
       </condition>
@@ -19,6 +20,7 @@
         <action application="answer"/>
         <action application="set" data="vm_user=$1"/>
         <action application="set" data="vm_mode=main" />
+        <action application="set" data="number_domain=sip_h_X-CCNQ3-Number-Domain" />
         <action application="set" data="playback_terminator=#"/>
         <action application="socket" data="127.0.0.1:$${voicemail_port} async full"/>
       </condition>
@@ -29,6 +31,7 @@
         <action application="answer"/>
         <action application="set" data="vm_user=$1" />
         <action application="set" data="vm_mode=record" />
+        <action application="set" data="number_domain=sip_h_X-CCNQ3-Number-Domain" />
         <action application="set" data="playback_terminator=#"/>
         <action application="socket" data="127.0.0.1:$${voicemail_port} async full"/>
       </condition>
@@ -43,6 +46,7 @@
         <action application="answer"/>
         <action application="set" data="vm_user=$1"/>
         <action application="set" data="vm_mode=inbox" />
+        <action application="set" data="number_domain=sip_h_X-CCNQ3-Number-Domain" />
         <action application="set" data="playback_terminator=#"/>
         <action application="socket" data="127.0.0.1:$${voicemail_port} async full"/>
       </condition>

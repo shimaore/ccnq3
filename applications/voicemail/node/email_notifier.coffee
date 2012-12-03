@@ -17,8 +17,8 @@ exports.notifier = (config) ->
 
   file_base = config.voicemail.file_base
 
-  send_notification_to = (number,msg_id) ->
-    number_domain = config.voicemail.number_domain ? 'local'
+  send_notification_to = (number,number_domain,msg_id) ->
+    number_domain = number_domain or config.voicemail.number_domain ? 'local'
 
     provisioning_db = pico config.provisioning.local_couchdb_uri
     provisioning_db.get "number:#{number}@#{number_domain}", (e,r,b) ->

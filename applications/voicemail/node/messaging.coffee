@@ -295,10 +295,10 @@ class Message
       cb call
 
   notify: ->
-    exports.notifier @user.user
+    exports.notifier @user.user, @user.number_domain
 
   notify_via_email: ->
-    exports.email_notifier @user.user, @id
+    exports.email_notifier @user.user, @user.number_domain, @id
 
   remove: (call,cb) ->
     @db.get @id, (e,r,b) =>
@@ -356,7 +356,7 @@ class Message
 
 class User
 
-  constructor: (@db_uri,@user,@account) ->
+  constructor: (@db_uri,@user,@account,@number_domain) ->
     @user_db = pico @db_uri
 
   voicemail_settings: (call,cb) ->
@@ -591,7 +591,7 @@ locate_user = (config,call,number,cb,attempts) ->
   if attempts <= 0
     return goodbye call
 
-  number_domain = config.voicemail.number_domain ? 'local'
+  number_domain = call.body.variable_number_domain or config.voicemail.number_domain ? 'local'
 
   provisioning_db = pico config.provisioning.local_couchdb_uri
   provisioning_db.get "number:#{number}@#{number_domain}", (e,r,b) ->
@@ -604,7 +604,7 @@ locate_user = (config,call,number,cb,attempts) ->
     # So we got a user document. Let's locate their user database.
     # userdb_base_uri must contain authentication elements (e.g. "voicemail" user+pass)
     db_uri = config.voicemail.userdb_base_uri + '/' + b.user_database
-    cb db_uri, new User db_uri, number, b.account
+    cb db_uri, new User db_uri, number, b.account, number_domain
 
 exports.record = (config,call,username) ->
 
