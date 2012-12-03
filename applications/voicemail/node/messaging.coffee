@@ -366,7 +366,7 @@ class User
 
     @user_db.get 'voicemail_settings', (e,r,vm_settings) =>
       if e
-        util.log "VM Box for #{@user} is not available from #{@db_uri}."
+        util.log "VM Box for #{@user}@#{@number_domain} is not available from #{@db_uri}."
         call.command 'phrase', 'vm_say,sorry', hangup
         return
       else
