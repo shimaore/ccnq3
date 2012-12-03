@@ -64,25 +64,26 @@ require('ccnq3').config (config)->
     # The XML dialplan provides us with the username
     # and already answer()ed the call.
     user  = call.body.variable_vm_user
+    number_domain = call.body.variable_number_domain
     mode  = call.body.variable_vm_mode
 
     switch mode
       when 'record'
-        util.log "Record for #{user}"
+        util.log "Record for #{user}@#{number_domain}"
         call.linger ->
           call.register_callback 'esl_linger', ->
             # Keep the call opened for a little while.
             seconds = 1000
             setTimeout (-> call.exit()), 20*seconds
-          messaging.record config, call, user
+          messaging.record config, call, user, number_domain
 
       when 'inbox'
-        util.log "Inbox for #{user}"
-        messaging.inbox config, call, user
+        util.log "Inbox for #{user}@#{number_domain}"
+        messaging.inbox config, call, user, number_domain
 
       when 'main'
-        util.log "Main for #{user}"
-        messaging.main config, call, user
+        util.log "Main for #{user}@#{number_domain}"
+        messaging.main config, call, user, number_domain
 
       else
         # FIXME say something

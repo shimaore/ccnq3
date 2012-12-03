@@ -591,7 +591,10 @@ locate_user = (config,call,number,cb,attempts) ->
   if attempts <= 0
     return goodbye call
 
-  number_domain = call.body.variable_number_domain or config.voicemail.number_domain ? 'local'
+  number_domain = call.body.variable_number_domain
+  if not number_domain
+    number_domain = config.voicemail.number_domain ? 'local'
+    console.log "WARNING: No user_domain specified, using configured #{number_domain} instead."
 
   provisioning_db = pico config.provisioning.local_couchdb_uri
   provisioning_db.get "number:#{number}@#{number_domain}", (e,r,b) ->
