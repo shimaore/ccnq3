@@ -11,8 +11,7 @@ Requirements
 Base system
 -----------
 
-Your base system should be a current Debian/testing system.
-Other systems might work but are not supported.
+Your base system _must_ be a current Debian/testing system.
 
 Hostnames and DNS
 -----------------
