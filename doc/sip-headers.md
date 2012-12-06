@@ -11,7 +11,8 @@ X-CCNQ3-Routing
   Proprietary header storing emergency routing data.
 
 X-CCNQ3-Number-Domain
-  Proprietary header storing local numbers' `number_domain` (inbound client-sbc only).
+  Proprietary header storing local numbers' `number_domain`, set by an inbound client-sbc or a client-side proxy.
+  This value is used for example by the voicemail system to locate the actual destination of a call.
 
 X-CCNQ3-Attrs
   Proprietary header storing Least Cost Route data.

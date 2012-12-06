@@ -601,7 +601,9 @@ This section specifies the parameters for applications/voicemail.
 
     * `default_language`: language used if none is specified in the sip_profile [default: 'en']
 
-    * `number_domain`: string; a domain used to identify local numbers [default: "local"]
+    * `number_domain`: string; the default `number_domain` used to identify local numbers if none is available in the call [default: "local"]
+
+      Normally the `number_domain` is passed along with an incoming call to the voicemail server. If for some reason it is not available, this value is used instead.
 
     * `record_streaming`: boolean;
         if true stream recording of messages (only available with non-encapsulated formats such as "PCMU")
