@@ -7,15 +7,17 @@ Depends:
   findutils, adduser, passwd,
   curl, psmisc,
   daemon, bash, openssl,
-  nodejs (>=0.6.6), build-essential, python,
-  couchdb (=1.2.0-4)
+  nodejs (>=0.6.6), build-essential, python
 Recommends: monit, munin-node
 Suggests: ccnq-base (= ${binary:Version})
 Description: Installs the ccnq3 code in /opt/ccnq3/src
 
 Package: ccnq3-manager
 Architecture: all
-Depends: ccnq3
+Depends:
+  ccnq3,
+  couchdb (=1.2.0-4),
+  rabbitmq-server
 Conflicts: ccnq3-client, ccnq3-manager-shared
 Description: Bootstrap the ccnq3 system in manager mode.
   This package installs the ccnq3 system in manager mode by
@@ -27,7 +29,9 @@ Description: Bootstrap the ccnq3 system in manager mode.
 
 Package: ccnq3-client
 Architecture: all
-Depends: ccnq3
+Depends:
+  ccnq3,
+  couchdb (=1.2.0-4)
 Conflicts: ccnq3-manager, ccnq3-manager-shared
 Description: Bootstrap the ccnq3 system in non-manager mode.
   This package installs the ccnq3 system in non-manager mode by
@@ -43,9 +47,9 @@ Depends: ccnq3
 Conflicts: ccnq3-manager, ccnq3-client
 Description: Bootstrap the ccnq3 system in manager mode.
   This package installs the ccnq3 system in manager mode while
-  allowing other applications to use CouchDB at the same time.
+  allowing other applications to use CouchDB or RabbitMQ at the same time.
   .
-  You will need admin access to the CouchDB database.
+  You will need admin access to the CouchDB database and the RabbitMQ server.
 
 Package: ccnq3-traces
 Architecture: all
