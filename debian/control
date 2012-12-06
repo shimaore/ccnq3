@@ -61,15 +61,6 @@ Depends:
 Recommends: ccnq3-munin-traces
 Description: Installs the SIP traces in /opt/ccnq3/traces
 
-Package: ccnq-base
-Architecture: all
-Depends:
-  git-core, etckeeper,
-  ntp, monit, watchdog, nullmailer,
-  psmisc, dnsutils, netcat, netcat6, mtr-tiny, tshark, ngrep,
-  less, bash-completion, bzip2, curl, rsync
-Description: Tools and Best Practices the maintainer finds useful
-
 Package: ccnq3-dns
 Architecture: all
 Depends: ccnq3 (= ${binary:Version}), iptables
