@@ -60,6 +60,8 @@ class Bulk
       @stream = new stream()
       @stream.pipe post
 
+      post.pipe process.stdout
+
       @stream.emit 'data', '{"docs":[\n'
 
     # Flush the queue
