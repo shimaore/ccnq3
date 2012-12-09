@@ -18,14 +18,32 @@ opensips_command = (port,command) ->
     #       to declare the UDP session over with.
     client.close()
 
+# OpenSIPS registrant service management
+service = null
+kill_service = ->
+  service.kill 'SIGKILL'
+  service = null
+stop_service = ->
+  opensips_command port, ":kill:\n"
+  if service?
+    setTimeout kill_service, 4000
+start_service = ->
+  if service?
+    console.log "WARNING in start_service: service already running?"
+  service = spawn '/usr/sbin/opensips', [ '-f', cfg ]
+
 process_changes = (port,command,cfg) ->
   switch command
     when 'stop'
-      opensips_command port, ":kill:\n"
+      do stop_service
     when 'start'
-      spawn '/usr/sbin/opensips', [ '-f', cfg ]
+      do start_service
+    when 'restart'
+      do stop_service
+      setTimeout start_service, 5000
 
 
+# Agent main process
 require('ccnq3').config (config) ->
 
   provisioning = pico config.provisioning.local_couchdb_uri
