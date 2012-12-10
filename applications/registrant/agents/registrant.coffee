@@ -23,16 +23,17 @@ service = null
 kill_service = ->
   service.kill 'SIGKILL'
   service = null
-stop_service = ->
-  opensips_command port, ":kill:\n"
-  if service?
-    setTimeout kill_service, 4000
-start_service = ->
-  if service?
-    console.log "WARNING in start_service: service already running?"
-  service = spawn '/usr/sbin/opensips', [ '-f', cfg ]
 
 process_changes = (port,command,cfg) ->
+  stop_service = ->
+    opensips_command port, ":kill:\n"
+    if service?
+      setTimeout kill_service, 4000
+  start_service = ->
+    if service?
+      console.log "WARNING in start_service: service already running?"
+    service = spawn '/usr/sbin/opensips', [ '-f', cfg ]
+
   switch command
     when 'stop'
       do stop_service
