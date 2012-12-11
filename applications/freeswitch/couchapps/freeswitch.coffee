@@ -109,7 +109,7 @@ ddoc.shows.freeswitch_local_vars = p_fun (doc,req) ->
   if doc.sip_variables?
     for name, value of doc.sip_variables
       send """
-        <X-PRE-PROCESS cmd="set" data="#{name}=#{value}"/>
+        <X-PRE-PROCESS cmd="set" data="#{name}=#{value}"/>\n
         """
   send "\n</include>"
   return {}
