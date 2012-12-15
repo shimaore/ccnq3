@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <document type="freeswitch/xml">
   <X-PRE-PROCESS cmd="include" data="vars.xml"/>
+  <X-PRE-PROCESS cmd="include" data="carrier-vars.xml"/>
   <X-PRE-PROCESS cmd="include" data="local-vars.xml"/>
 
   <section name="configuration" description="Various Configuration">
