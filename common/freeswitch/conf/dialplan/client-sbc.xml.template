@@ -10,6 +10,7 @@
       </condition>
     </extension>
 
+    <X-PRE-PROCESS cmd="include" data="carrier-egress.xml.template"/>
     <X-PRE-PROCESS cmd="include" data="client-sbc/$${profile_type}-egress.xml.template"/>
 
     <!-- Place the call -->
@@ -58,6 +59,7 @@
       </condition>
     </extension>
 
+    <X-PRE-PROCESS cmd="include" data="carrier-ingress.xml.template"/>
     <X-PRE-PROCESS cmd="include" data="client-sbc/$${profile_type}-ingress.xml.template"/>
 
     <!-- Place the call -->
