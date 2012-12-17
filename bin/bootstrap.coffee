@@ -14,6 +14,20 @@ Usage:
 fs = require 'fs'
 npm = require 'npm'
 ccnq3 = require 'ccnq3'
+url = require 'url'
+
+make_amqp_uri = (uri) ->
+  u = url.parse uri
+  delete u.href
+  u.protocol = 'amqp'
+  delete u.host
+  delete u.port
+  delete u.pathname
+  delete u.search
+  delete u.path
+  delete u.query
+  delete u.hash
+  url.format u
 
 run = ->
 
@@ -35,15 +49,21 @@ run = ->
   if process.argv[2]?
 
     # Non-manager installation
+    cdb_uri = process.argv[2]
 
-    # FIXME: Parse process.argv[2] to build an amqp: URI.
+    if not cdb_uri?
+      console.log "ERROR: You must provide CDB_URI."
+      return 1
+
+    amqp_uri = make_amqp_uri cdb_uri
 
     config =
       _id: ccnq3.make_id "host", HOSTNAME
       type: "host"
       host: HOSTNAME
+      amqp_uri: amqp_uri
       provisioning:
-        host_couchdb_uri: process.argv[2]
+        host_couchdb_uri: cdb_uri
       applications: [
         "applications/monitor"
         "applications/host"
@@ -56,24 +76,21 @@ run = ->
   else
 
     # Manager installation
-    if not process.env.CDB_URI?
+    cdb_uri = process.env.CDB_URI
+
+    if not cdb_uri?
       console.log "ERROR: You must provide CDB_URI."
       return 1
 
-    if not process.env.AMQP_URI?
-      console.log "ERROR: You must provide AMQP_URI."
-      return 1
-
-    CDB_URI = process.env.CDB_URI
-    AMQP_URI = process.env.AMQP_URI
+    amqp_uri = make_amqp_uri cdb_uri
 
     config =
       _id: ccnq3.make_id "host", HOSTNAME
       type: "host"
       host: HOSTNAME
       admin:
-        couchdb_uri: CDB_URI
-        amqp_uri: AMQP_URI
+        couchdb_uri: cdb_uri
+        amqp_uri: amqp_uri
         system: true
       applications: [
         # "applications/usercode"

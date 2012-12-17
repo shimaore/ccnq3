@@ -91,7 +91,8 @@ rabbitmqctl delete_user guest
 # Add an `admin` user back in
 rabbitmqctl add_user admin "${ADMIN_PASSWORD}"
 
-tee "${RABBITMQ_CONFIG}" <<EOT >/dev/null
+grep -q ssl_listeners "${RABBITMQ_CONFIG}" || \
+tee -a "${RABBITMQ_CONFIG}" <<EOT >/dev/null
 %% Enable the following section to use SSL.
 %
 % [
@@ -102,7 +103,5 @@ tee "${RABBITMQ_CONFIG}" <<EOT >/dev/null
 %   ]}
 % ].
 EOT
-
-export AMQP_URI="amqp://admin:${ADMIN_PASSWORD}@${HOSTNAME}"
 
 exec su -s /bin/bash -c "${SRC}/bin/bootstrap.coffee" "${USER}"
