@@ -63,6 +63,16 @@ _ccnq3 = {couch_httpd_proxy, handle_proxy_req, <<"http://127.0.0.1:35984/_ccnq3"
 
 [admins]
 admin = ${ADMIN_PASSWORD}
+
+## Enable the following sections to use SSL (on port 6984 by default).
+#
+#[daemons]
+#httpsd = {couch_httpd, start_link, [https]}
+#
+#[ssl]
+#cert_file = /etc/couchdb/cert.pem
+#key_file = /etc/couchdb/key.pem
+#
 EOT
 chown couchdb.couchdb "${COUCHDB_CONFIG}"
 
