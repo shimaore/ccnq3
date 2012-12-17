@@ -11,6 +11,7 @@ CONF=${DIR}/host.json
 USER=$NAME
 # Apparently using /etc/couchdb/local.d/ccnq3 does not work.
 COUCHDB_CONFIG=/etc/couchdb/local.ini
+RABBITMQ_CONFIG=/etc/rabbitmq/rabbitmq.config
 
 if [ ! -d "${SRC}" ]; then
   echo "ERROR: You must install the $NAME package before calling this script."
@@ -25,6 +26,8 @@ if [ -e "${CONF}" ]; then
 fi
 
 HOSTNAME=`hostname`
+
+# ----------- CouchDB ---------- #
 
 echo "Re-configuring CouchDB on local host ${HOSTNAME}"
 
@@ -79,4 +82,27 @@ chown couchdb.couchdb "${COUCHDB_CONFIG}"
 /etc/init.d/couchdb start
 
 export CDB_URI="http://admin:${ADMIN_PASSWORD}@${HOSTNAME}:5984"
+
+# -------- RabbitMQ ---------- #
+
+# Delete the default `guest` user.
+rabbitmqctl delete_user guest
+
+# Add an `admin` user back in
+rabbitmqctl add_user admin "${ADMIN_PASSWORD}"
+
+tee "${RABBITMQ_CONFIG}" <<EOT >/dev/null
+%% Enable the following section to use SSL.
+%
+% [
+%   {rabbit, [
+%     {ssl_listeners, [5671]},
+%     {ssl_options, [{certfile,"/etc/rabbitmq/cert.pem"},
+%                    {keyfile,"/etc/rabbitmq/key.pem"}]}
+%   ]}
+% ].
+EOT
+
+export AMQP_URI="amqp://admin:${ADMIN_PASSWORD}@${HOSTNAME}"
+
 exec su -s /bin/bash -c "${SRC}/bin/bootstrap.coffee" "${USER}"

@@ -26,6 +26,8 @@ fi
 
 HOSTNAME=`hostname`
 
+# --------- CouchDB --------- #
+
 echo "Re-configuring CouchDB on local host ${HOSTNAME}"
 
 # Install default config file
@@ -64,4 +66,9 @@ chown couchdb.couchdb "${COUCHDB_CONFIG}"
 /etc/init.d/couchdb start
 
 export CDB_URI="http://127.0.0.1:5984"
+
+# ---------- RabbitMQ --------- #
+
+# Not installed locally.
+
 exec su -s /bin/bash -c "${SRC}/bin/bootstrap.coffee $1" "${USER}"

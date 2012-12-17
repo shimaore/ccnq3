@@ -1,8 +1,10 @@
 #!/bin/sh
 ### BEGIN INIT INFO
 # Provides:          ccnq3
-# Required-Start:    $local_fs couchdb
+# Required-Start:    $local_fs
+# Should-Start:      couchdb rabbitmq-server
 # Required-Stop:     $local_fs
+# Should-Stop:       couchdb rabbitmq-server
 # X-Start-Before:    opensips freeswitch
 # X-Stop-After:      opensips freeswitch
 # Default-Start:     2 3 4 5

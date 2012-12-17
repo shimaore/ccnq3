@@ -36,6 +36,8 @@ run = ->
 
     # Non-manager installation
 
+    # FIXME: Parse process.argv[2] to build an amqp: URI.
+
     config =
       _id: ccnq3.make_id "host", HOSTNAME
       type: "host"
@@ -58,7 +60,12 @@ run = ->
       console.log "ERROR: You must provide CDB_URI."
       return 1
 
+    if not process.env.AMQP_URI?
+      console.log "ERROR: You must provide AMQP_URI."
+      return 1
+
     CDB_URI = process.env.CDB_URI
+    AMQP_URI = process.env.AMQP_URI
 
     config =
       _id: ccnq3.make_id "host", HOSTNAME
@@ -66,6 +73,7 @@ run = ->
       host: HOSTNAME
       admin:
         couchdb_uri: CDB_URI
+        amqp_uri: AMQP_URI
         system: true
       applications: [
         # "applications/usercode"
