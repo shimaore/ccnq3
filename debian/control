@@ -92,6 +92,7 @@ Package: ccnq3-opensips
 Architecture: all
 Depends: ccnq3 (= ${binary:Version}),
   opensips (=1.8.1-3), opensips-dbhttp-module, opensips-json-module, opensips-b2bua-module,
+  opensips-rabbitmq-module, opensips-http-modules, opensips-redis-module,
   netcat,
   mediaproxy-dispatcher (>= 2.5.2-20120112)
 Recommends: ccnq3-munin-opensips
