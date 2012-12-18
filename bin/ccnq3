@@ -126,7 +126,7 @@ commands =
       config.source ?= SRC
       config.account ?= ""
       config.update_at ?= 0
-      config.interfaces ?= require('./bin/interfaces')()
+      config.interfaces ?= require('./interfaces')()
 
       # Manager host
       if config.admin?.couchdb_uri
@@ -237,6 +237,7 @@ run = ->
     console.log "Available commands:"
     for c of command
       console.log "  #{c}"
+    return 1
 
   if commands[command]?
     commands[command] args...
