@@ -1,12 +1,64 @@
 #!/bin/sh
 # set -e
 
-NAME=ccnq3
+. /usr/share/debconf/confmodule
+
+NAME="`ccnq3 'get name'`"
 USER=$NAME
 
 case "$1" in
   configure|upgrade)
-    ccnq3 'root bootstrap manager' || exit 1
+
+    HOSTNAME="`ccnq3 'get hostname'`"
+
+    # ----------- CouchDB ---------- #
+
+    COUCHDB_CONFIG=/etc/couchdb/local.ini
+    CDB_DIR=/var/lib/couchdb/$NAME
+
+    if egrep -q '^admin' ${COUCHDB_CONFIG}; then
+      echo "CouchDB already configured."
+    else
+      echo "Re-configuring CouchDB"
+
+      # Using 128 or higher does not work.
+      ADMIN_PASSWORD=`openssl rand 64 -hex`
+
+      mkdir -p $CDB_DIR && chmod 0755 $CDB_DIR && chown couchdb.couchdb $CDB_DIR || exit 1
+
+      # Apparently using /etc/couchdb/local.d/ccnq3 does not work.
+      cp "`ccnq3 'get config source'`/manager.ini" "${COUCHDB_CONFIG}"
+      sed -i -e "s/CDB_DIR/${CDB_DIR}" "${COUCHDB_CONFIG}"
+      sed -i -e "s/ADMIN_PASSWORD/${ADMIN_PASSWORD}" "${COUCHDB_CONFIG}"
+      chown couchdb.couchdb "${COUCHDB_CONFIG}"
+
+      su -s /bin/sh -c "ccnq3 'set admin uri' 'http://admin:${ADMIN_PASSWORD}@${HOSTNAME}:5984'" $USER
+
+      /etc/init.d/couchdb restart
+
+    fi
+
+    # -------- RabbitMQ ---------- #
+
+    RABBITMQ_CONFIG=/etc/rabbitmq/rabbitmq.config
+    if grep -q 'ssl_listeners' ${RABBITMQ_CONFIG}; then
+      echo 'RabbitMQ already configured.'
+    else
+      # Delete the default `guest` user.
+      rabbitmqctl delete_user guest
+
+      # Add an `admin` user back in
+      rabbitmqctl add_user admin "${ADMIN_PASSWORD}"
+
+      cp "`ccnq3 'get config source'`/rabbitmq.config" ${RABBITMQ_CONFIG}
+
+      su -s /bin/sh -c "ccnq3 'set admin amqp' 'amqp://admin:${ADMIN_PASSWORD}@${HOSTNAME}'" $USER
+
+      /etc/init.d/rabbitmq-server restart
+
+    fi
+
+    # Generic
     su -s /bin/sh -c "ccnq3 defaults"  $USER || exit 1
     su -s /bin/sh -c "ccnq3 bootstrap" $USER || exit 1
   ;;

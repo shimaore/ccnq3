@@ -3,7 +3,7 @@
 
 . /usr/share/debconf/confmodule
 
-NAME=ccnq3
+NAME="`ccnq3 'get name'`"
 USER=$NAME
 
 case "$1" in
@@ -15,7 +15,25 @@ case "$1" in
     if [ -z "$RET" ]; then db_reset ccnq3/uri; exit 1; fi
     su -s /bin/sh -c "ccnq3 'set host uri' '$RET'" $USER || exit 1
 
-    ccnq3 'root bootstrap client'  || exit 1
+    # --------- CouchDB --------- #
+
+    COUCHDB_CONFIG=/etc/couchdb/local.ini
+    CDB_DIR=/var/lib/couchdb/$NAME
+    if grep -q '"party"-mode' ${COUCHDB_CONFIG}; then
+      echo 'CouchDB already configured.'
+    else
+      echo 'Re-configuring CouchDB.'
+
+      mkdir -p $CDB_DIR && chmod 0755 $CDB_DIR && chown couchdb.couchdb $CDB_DIR || exit 1
+
+      # Apparently using /etc/couchdb/local.d/ccnq3 does not work.
+      cp "`ccnq3 'get config source'`/client.ini" $COUCHDB_CONFIG || exit 1
+      sed -i -e "s/CDB_DIR/${CDB_DIR}/" $COUCHDB_CONFIG
+      chown couchdb.couchdb "${COUCHDB_CONFIG}"
+
+      /etc/init.d/couchdb restart
+    fi
+
     su -s /bin/sh -c "ccnq3 defaults"   $USER || exit 1
     su -s /bin/sh -c "ccnq3 bootstrap"  $USER || exit 1
   ;;
