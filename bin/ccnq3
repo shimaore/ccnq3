@@ -124,9 +124,10 @@ commands =
       config.type ?= 'host'
       config.host ?= HOSTNAME
       config.source ?= SRC
-      config.account ?= ""
-      config.update_at ?= 0
       config.interfaces ?= require('./interfaces')()
+
+      config.account ?= ""
+      config.updated_at ?= 0
 
       # Manager host
       if config.admin?.couchdb_uri
@@ -148,7 +149,7 @@ commands =
 
       config.applications ?= []
       for app in apps
-        if not app in config.applications
+        unless app in config.applications
           config.applications.push app
 
       # Save
