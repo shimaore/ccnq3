@@ -28,7 +28,7 @@ case "$1" in
 
       # Apparently using /etc/couchdb/local.d/ccnq3 does not work.
       cp "`ccnq3 'get config source'`/bin/client.ini" $COUCHDB_CONFIG || exit 1
-      sed -i -e "s/CDB_DIR/${CDB_DIR}/" $COUCHDB_CONFIG
+      sed -i -e "s/NAME/${NAME}/" $COUCHDB_CONFIG
       chown couchdb.couchdb "${COUCHDB_CONFIG}"
 
       su -s /bin/sh -c "ccnq3 'set local uri' 'http://127.0.0.1:5984/provisioning'" $USER || exit 1
