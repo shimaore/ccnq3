@@ -1,34 +1,24 @@
 #!/usr/bin/env bash
 # (c) 2011 Stephane Alnet
-# License: APGL3+
 
 set -e
 export LANG=
-NAME=ccnq3
-SRC=/opt/$NAME/src
-DIR=/etc/$NAME
-CONF=${DIR}/host.json
-USER=$NAME
-# Apparently using /etc/couchdb/local.d/ccnq3 does not work.
-COUCHDB_CONFIG=/etc/couchdb/local.ini
+NAME="`ccnq3 'get name'`"
+CONF="`ccnq3 'get config location'`"
 
-if [ ! -d "${SRC}" ]; then
+if [ -z "${CONF}" ]; then
   echo "ERROR: You must install the $NAME package before calling this script."
   exit 1
 fi
-
-cd "$SRC"
 
 if [ -e "${CONF}" ]; then
   echo "ERROR: $CONF already exists."
   exit 1
 fi
 
-HOSTNAME=`hostname`
-
 # --------- CouchDB --------- #
 
-echo "Re-configuring CouchDB on local host ${HOSTNAME}"
+echo "Re-configuring CouchDB"
 
 # Install default config file
 /etc/init.d/couchdb stop
@@ -40,6 +30,8 @@ mkdir -p $CDB_DIR
 chmod 0755 $CDB_DIR
 chown couchdb.couchdb $CDB_DIR
 
+# Apparently using /etc/couchdb/local.d/ccnq3 does not work.
+COUCHDB_CONFIG=/etc/couchdb/local.ini
 tee "${COUCHDB_CONFIG}" <<EOT >/dev/null
 ;
 ; A configuration file for a local-only, "party"-mode CouchDB instance.
@@ -65,10 +57,6 @@ chown couchdb.couchdb "${COUCHDB_CONFIG}"
 
 /etc/init.d/couchdb start
 
-export CDB_URI="http://127.0.0.1:5984"
-
 # ---------- RabbitMQ --------- #
 
 # Not installed locally.
-
-exec su -s /bin/bash -c "${SRC}/bin/bootstrap.coffee $1" "${USER}"

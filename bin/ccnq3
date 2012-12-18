@@ -1,24 +1,170 @@
 #!/usr/bin/env coffee
 
-ccnq3 = require 'ccnq3'
-request = require 'request'
-qs = require 'querystring'
+NAME='ccnq3'
+SRC="/opt/#{NAME}/src"
 
-command = process.argv[2]
-args = process.argv.slice 3
+qs = require 'querystring'
+url = require 'url'
+{ spawn } = require 'child_process'
+
+# Chicken and egg: we need to be able to locate the `ccnq3` module.
+# But `config.source` might override our choice.
+# FIXME: Read the configuration file once (using only `fs`) to access the value
+# of `config.source`, then chdir to it.
+process.chdir SRC
+ccnq3 = require 'ccnq3'
+
+default_apps = [
+  "applications/monitor"
+  "applications/host"
+]
+
+manager_apps = [
+  "applications/provisioning"
+  "applications/logging"
+  "applications/monitor"
+  "applications/host"
+  "applications/cdrs"
+  "applications/locations"
+  "applications/couch_daemon"
+  "applications/voicemail-store"
+]
 
 commands =
-  'uri': ->
+  'get admin uri': ->
     ccnq3.config (config) ->
       base_uri = config.admin?.couchdb_uri
       if not base_uri?
         console.log 'Admin access is not available on this host.'
-        return
+        return 1
 
       console.log "#{base_uri}/_utils/"
+    return
+
+  'get name': ->
+    console.log NAME
+    return
+
+  'get hostname': ->
+    console.log require('os').hostname()
+    return
+
+  'get config location': ->
+    console.log ccnq3.config.location
+    return
+
+  'set admin uri': (uri) ->
+    ccnq3.config (config) ->
+      config.admin ?= {}
+      config.admin.couchdb_uri = uri
+      config.admin.system = true
+
+      # Save
+      ccnq3.config.update config
+    return
+
+  'set admin amqp': (uri) ->
+    ccnq3.config (config) ->
+      config.admin ?= {}
+      config.admin.amqp_uri = uri
+
+      # Save
+      ccnq3.config.update config
+    return
+
+  'set host uri': (uri) ->
+    if not uri?
+      console.log 'URI parameter is required.'
+      return 1
+
+    ccnq3.config (config) ->
+      config.provisioning ?= {}
+      config.provisioning.host_couchdb_uri = uri
+
+      info = url.parse uri
+      # Default auth info
+      config.auth ?= u.auth
+      # Default AMQP info
+      amqp_info =
+        protocol: 'amqp'
+        hostname: u.hostname
+        auth: config.auth
+      config.amqp_uri ?= url.format amqp_info
+
+      # Save
+      ccnq3.config.update config
+    return
+
+  'bootstrap': ->
+    ccnq3.config (config) ->
+      if config.source
+        SRC = config.source
+      process.chdir SRC
+
+      npm = require 'npm'
+      npm.load {}, (er) ->
+        if er
+          process.exit 1
+        npm.commands['run-script'] ['updates'], (er) ->
+          if er
+            process.exit 1
+
+          # Do not restart just yet.
+          console.log "Bootstrap local host"
+          npm.commands['run-script'] ['bootstrap'], (er) ->
+            if er
+              process.exit 1
+    return
+
+  'defaults': ->
+    ccnq3.config (config) ->
+      if config.source
+        SRC = config.source
+      process.chdir SRC
+
+      HOSTNAME = require('os').hostname()
+
+      # Common parameters
+      config._id ?= ccnq3.make_id "host", HOSTNAME
+      config.type ?= 'host'
+      config.host ?= HOSTNAME
+      config.source ?= SRC
+      config.account ?= ""
+      config.update_at ?= 0
+      config.interfaces ?= require('./bin/interfaces')()
+
+      # Manager host
+      if config.admin?.couchdb_uri
+        cdb_uri = config.admin.couchdb_uri
+        cdb_info = url.parse cdb_uri
+        # Default auth info
+        config.admin.auth ?= u.auth
+        # Default AMQP info
+        amqp_info =
+          protocol: 'amqp'
+          hostname: u.hostname
+          auth: config.admin.auth
+        config.admin.amqp_uri ?= url.format amqp_info
+        config.provisioning ?= {}
+        config.provisioning.host_couchdb_uri ?= cdb_uri
+        apps = manager_apps
+      else
+        apps = default_app
+
+      for app in apps
+        if not app in config.applications
+          config.applications.push app
+
+      # Save
+      ccnq3.config.update config
+    return
 
   'admin': (name) ->
     ccnq3.config (config) ->
+      if config.source
+        SRC = config.source
+      process.chdir SRC
+
       base_uri = config.admin?.couchdb_uri
       if not base_uri?
         console.log 'Admin access is not available on this host.'
@@ -30,6 +176,7 @@ commands =
 
       id = ccnq3.make_id 'org.couchdb.user', name
       user_uri = "#{config.users.couchdb_uri}/#{qs.escape id}"
+      request = require 'request'
       request user_uri, json:true, (e,r,doc) ->
         if e
           console.log 'No such user, please have the user register first.'
@@ -58,8 +205,45 @@ commands =
             return
 
           console.log "User account was modified successfully."
+    return
 
-if commands[command]?
-  commands[command] args...
-else
-  console.log "Unknown command #{command}"
+  'root bootstrap client': ->
+    ccnq3.config (config) ->
+      if config.source
+        SRC = config.source
+
+      spawn "./bootstrap-client.sh",
+        cwd: SRC
+        stdio: ['ignore','ignore','ignore','ignore']
+
+  'root bootstrap manager': ->
+    ccnq3.config (config) ->
+      if config.source
+        SRC = config.source
+
+      spawn "./bootstrap-manager.sh",
+        cwd: SRC
+        stdio: ['ignore','ignore','ignore','ignore']
+
+
+run = ->
+
+  command = process.argv[2]
+  args = process.argv.slice 3
+
+  # Do not run as root.
+  if process.getuid() is 0
+    if not command.match /^root /
+      # This will fail if the installation was not done properly.
+      # (Which is OK.)
+      process.setuid NAME
+
+  if commands[command]?
+    commands[command] args...
+  else
+    console.log "Unknown command #{command}"
+    return 1
+
+sync_exit = run()
+if sync_exit?
+  process.exit sync_exit

@@ -2,3 +2,4 @@ applications /opt/ccnq3/src
 bin /opt/ccnq3/src
 package.json /opt/ccnq3/src
 README.md /opt/ccnq3/src
+bin/ccnq3 /usr/bin/ccnq3

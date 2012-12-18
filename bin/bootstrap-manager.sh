@@ -1,35 +1,25 @@
 #!/usr/bin/env bash
-# (c) 2011 Stephane Alnet
-# License: APGL3+
 
 set -e
 export LANG=
-NAME=ccnq3
-SRC=/opt/$NAME/src
-DIR=/etc/$NAME
-CONF=${DIR}/host.json
-USER=$NAME
-# Apparently using /etc/couchdb/local.d/ccnq3 does not work.
-COUCHDB_CONFIG=/etc/couchdb/local.ini
-RABBITMQ_CONFIG=/etc/rabbitmq/rabbitmq.config
+NAME="`ccnq3 'get name'`"
+CONF="`ccnq3 'get config location'`"
 
-if [ ! -d "${SRC}" ]; then
+if [ -z "${CONF}" ]; then
   echo "ERROR: You must install the $NAME package before calling this script."
   exit 1
 fi
-
-cd "$SRC"
 
 if [ -e "${CONF}" ]; then
   echo "ERROR: $CONF already exists."
   exit 1
 fi
 
-HOSTNAME=`hostname`
+HOSTNAME="`ccnq3 'get hostname'`"
 
 # ----------- CouchDB ---------- #
 
-echo "Re-configuring CouchDB on local host ${HOSTNAME}"
+echo "Re-configuring CouchDB"
 
 # Using 128 or higher does not work.
 ADMIN_PASSWORD=`openssl rand 64 -hex`
@@ -44,6 +34,8 @@ mkdir -p $CDB_DIR
 chmod 0755 $CDB_DIR
 chown couchdb.couchdb $CDB_DIR
 
+# Apparently using /etc/couchdb/local.d/ccnq3 does not work.
+COUCHDB_CONFIG=/etc/couchdb/local.ini
 tee "${COUCHDB_CONFIG}" <<EOT >/dev/null
 [couchdb]
 ; Avoid issues with databases disappearing when CouchDB upgrades.
@@ -79,9 +71,9 @@ admin = ${ADMIN_PASSWORD}
 EOT
 chown couchdb.couchdb "${COUCHDB_CONFIG}"
 
-/etc/init.d/couchdb start
+ccnq3 'set admin uri' "http://admin:${ADMIN_PASSWORD}@${HOSTNAME}:5984"
 
-export CDB_URI="http://admin:${ADMIN_PASSWORD}@${HOSTNAME}:5984"
+/etc/init.d/couchdb start
 
 # -------- RabbitMQ ---------- #
 
@@ -91,6 +83,9 @@ rabbitmqctl delete_user guest
 # Add an `admin` user back in
 rabbitmqctl add_user admin "${ADMIN_PASSWORD}"
 
+ccnq3 'set admin amqp' "amqp://admin:${ADMIN_PASSWORD}@${HOSTNAME}"
+
+RABBITMQ_CONFIG=/etc/rabbitmq/rabbitmq.config
 grep -q ssl_listeners "${RABBITMQ_CONFIG}" || \
 tee -a "${RABBITMQ_CONFIG}" <<EOT >/dev/null
 %% Enable the following section to use SSL.
@@ -103,5 +98,3 @@ tee -a "${RABBITMQ_CONFIG}" <<EOT >/dev/null
 %   ]}
 % ].
 EOT
-
-exec su -s /bin/bash -c "${SRC}/bin/bootstrap.coffee" "${USER}"

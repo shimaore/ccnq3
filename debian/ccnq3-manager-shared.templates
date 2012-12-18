@@ -4,6 +4,12 @@ Description: URL with administrative access to the CouchDB database.
   This URL must contain administrative login and passord, for example:
     http://admin:password@host:5984
 
+Template: ccnq3/amqp_uri
+Type: string
+Description: URL with administrative access to an AMQP server.
+  This URL must contain administrative login and passord, for example:
+    amqp://admin:password@host
+
 Template: ccnq3/overwrite
 Type: boolean
 Default: false

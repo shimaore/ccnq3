@@ -1,20 +1,22 @@
 #!/bin/sh
 # set -e
 
-NAME=ccnq3
-WORKDIR=/opt/${NAME}
-ETCDIR=/etc/${NAME}
-
 # Source debconf library.
 . /usr/share/debconf/confmodule
 
 case "$1" in
   configure|upgrade)
     db_get ccnq3/overwrite
-    if [ "$RET" = "true" ]; then rm -f $ETCDIR/host.json; fi
+    if [ "$RET" = "true" ]; then rm -f "`ccnq3 'get config location'`"; fi
     db_get ccnq3/admin_uri
     if [ -z "$RET" ]; then db_reset ccnq3/admin_uri; exit 1; fi
-    (cd ${WORKDIR}/src && su -s /bin/sh -c "CDB_URI=\"$RET\" ./bin/bootstrap.coffee" $USER)
+    ccnq3 'set admin uri' "$RET"
+    db_get ccnq3/amqp_uri
+    if [ -z "$RET" ]; then db_reset ccnq3/amqp_uri; exit 1; fi
+    ccnq3 'set admin amqp' "$RET"
+
+    ccnq3 defaults
+    ccnq3 bootstrap
   ;;
 
   remove|purge)

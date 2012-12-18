@@ -10,7 +10,7 @@ SRC=git://stephane.shimaore.net/git/ccnq3.git
 
 case "$1" in
   configure|upgrade)
-    cd ${WORKDIR}/src && ./bin/bootstrap-manager.sh
+    ccnq3 'root bootstrap manager' && ccnq3 defaults && ccnq3 bootstrap
   ;;
 
   remove|purge)

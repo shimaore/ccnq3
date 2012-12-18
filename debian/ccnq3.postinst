@@ -44,7 +44,6 @@ case "$1" in
     (cd ${WORKDIR}/src && su -s /bin/sh -c "npm run-script updates" $USER) || exit 1
 
     rm -f /usr/sbin/ccnq3
-    ln -s /opt/ccnq3/src/bin/ccnq3 /usr/sbin/ccnq3
   ;;
 
   remove)
