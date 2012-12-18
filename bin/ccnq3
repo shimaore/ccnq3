@@ -142,8 +142,6 @@ commands =
           hostname: cdb_info.hostname
           auth: config.admin.auth
         config.admin.amqp_uri ?= url.format amqp_info
-        config.provisioning ?= {}
-        config.provisioning.host_couchdb_uri ?= cdb_uri + '/provisioning'
         apps = manager_apps
       else
         apps = default_apps

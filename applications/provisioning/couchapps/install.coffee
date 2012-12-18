@@ -33,3 +33,6 @@ ccnq3.config (config)->
     config.provisioning ?= {}
     config.provisioning.couchdb_uri = provisioning_uri
     ccnq3.config.update config
+
+    # Save the local host's (=manager) record in the newly-created database.
+    provisioning.put config
