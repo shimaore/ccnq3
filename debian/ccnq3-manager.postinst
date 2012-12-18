@@ -54,7 +54,7 @@ case "$1" in
       sed -i -e "s/^admin =.*$/admin = ${ADMIN_PASSWORD}/" "${COUCHDB_CONFIG}"
       chown couchdb.couchdb "${COUCHDB_CONFIG}"
 
-      /etc/init.d/couchdb restart
+      /etc/init.d/couchdb start
 
     fi
 

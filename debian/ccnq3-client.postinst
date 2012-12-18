@@ -35,7 +35,7 @@ case "$1" in
       chown couchdb.couchdb "${COUCHDB_CONFIG}"
 
       su -s /bin/sh -c "ccnq3 'set local uri' 'http://127.0.0.1:5984/provisioning'" $USER || exit 1
-      /etc/init.d/couchdb restart
+      /etc/init.d/couchdb start
     fi
 
     su -s /bin/sh -c "ccnq3 defaults"   $USER || exit 1
