@@ -27,7 +27,7 @@ case "$1" in
       mkdir -p $CDB_DIR && chmod 0755 $CDB_DIR && chown couchdb.couchdb $CDB_DIR || exit 1
 
       # Apparently using /etc/couchdb/local.d/ccnq3 does not work.
-      cp "`ccnq3 'get config source'`/client.ini" $COUCHDB_CONFIG || exit 1
+      cp "`ccnq3 'get config source'`/bin/client.ini" $COUCHDB_CONFIG || exit 1
       sed -i -e "s/CDB_DIR/${CDB_DIR}/" $COUCHDB_CONFIG
       chown couchdb.couchdb "${COUCHDB_CONFIG}"
 

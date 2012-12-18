@@ -27,12 +27,12 @@ case "$1" in
       mkdir -p $CDB_DIR && chmod 0755 $CDB_DIR && chown couchdb.couchdb $CDB_DIR || exit 1
 
       # Apparently using /etc/couchdb/local.d/ccnq3 does not work.
-      cp "`ccnq3 'get config source'`/manager.ini" "${COUCHDB_CONFIG}"
+      cp "`ccnq3 'get config source'`/bin/manager.ini" "${COUCHDB_CONFIG}"
       sed -i -e "s/CDB_DIR/${CDB_DIR}" "${COUCHDB_CONFIG}"
       sed -i -e "s/ADMIN_PASSWORD/${ADMIN_PASSWORD}" "${COUCHDB_CONFIG}"
       chown couchdb.couchdb "${COUCHDB_CONFIG}"
 
-      su -s /bin/sh -c "ccnq3 'set admin uri' 'http://admin:${ADMIN_PASSWORD}@${HOSTNAME}:5984'" $USER
+      su -s /bin/sh -c "ccnq3 'set admin uri' 'http://admin:${ADMIN_PASSWORD}@${HOSTNAME}:5984'" $USER || exit 1
 
       /etc/init.d/couchdb restart
 
@@ -50,9 +50,9 @@ case "$1" in
       # Add an `admin` user back in
       rabbitmqctl add_user admin "${ADMIN_PASSWORD}"
 
-      cp "`ccnq3 'get config source'`/rabbitmq.config" ${RABBITMQ_CONFIG}
+      cp "`ccnq3 'get config source'`/bin/rabbitmq.config" ${RABBITMQ_CONFIG}
 
-      su -s /bin/sh -c "ccnq3 'set admin amqp' 'amqp://admin:${ADMIN_PASSWORD}@${HOSTNAME}'" $USER
+      su -s /bin/sh -c "ccnq3 'set admin amqp' 'amqp://admin:${ADMIN_PASSWORD}@${HOSTNAME}'" $USER || exit 1
 
       /etc/init.d/rabbitmq-server restart
 

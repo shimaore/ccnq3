@@ -30,7 +30,7 @@ commands =
     ccnq3.config (config) ->
       base_uri = config.admin?.couchdb_uri
       if not base_uri?
-        console.log 'Admin access is not available on this host.'
+        console.error 'Admin access is not available on this host.'
         return 1
 
       console.log "#{base_uri}/_utils/"
@@ -125,7 +125,6 @@ commands =
             process.exit 1
 
           # Do not restart just yet.
-          console.log "Bootstrap local host"
           npm.commands['run-script'] ['bootstrap'], (er) ->
             if er
               process.exit 1
@@ -184,11 +183,11 @@ commands =
 
       base_uri = config.admin?.couchdb_uri
       if not base_uri?
-        console.log 'Admin access is not available on this host.'
+        console.error 'Admin access is not available on this host.'
         return
 
       if not config.users?.couchdb_uri?
-        console.log 'Users access is not available on this host.'
+        console.error 'Users access is not available on this host.'
         return
 
       id = ccnq3.make_id 'org.couchdb.user', name
@@ -196,7 +195,7 @@ commands =
       request = require 'request'
       request user_uri, json:true, (e,r,doc) ->
         if e
-          console.log 'No such user, please have the user register first.'
+          console.error 'No such user, please have the user register first.'
           return
 
         admin_access = [
@@ -214,14 +213,14 @@ commands =
 
         request.put user_uri, json:doc, (e,r,b) ->
           if e
-            console.log 'Could not modify the user record: '+e
+            console.error 'Could not modify the user record: '+e
             return
 
           if not b.ok
-            console.log 'Could not modify the user record: '+b
+            console.error 'Could not modify the user record: '+b
             return
 
-          console.log "User account was modified successfully."
+          console.warn "User account was modified successfully."
     return
 
   'root bootstrap client': ->
@@ -234,7 +233,7 @@ commands =
         stdio: ['ignore','ignore','ignore','ignore']
       c.on 'exit', (code) ->
         if code
-          console.log "Failed."
+          console.error "Failed."
           process.exit 1
 
   'root bootstrap manager': ->
@@ -247,7 +246,7 @@ commands =
         stdio: ['ignore','ignore','ignore','ignore']
       c.on 'exit', (code) ->
         if code
-          console.log "Failed."
+          console.error "Failed."
           process.exit 1
 
 
@@ -257,15 +256,15 @@ run = ->
   args = process.argv.slice 3
 
   if not command?
-    console.log "Available commands:"
+    console.info "Available commands:"
     for c of commands
-      console.log "  #{c}"
+      console.info "  #{c}"
     return 1
 
   if commands[command]?
     commands[command] args...
   else
-    console.log "Unknown command #{command}"
+    console.error "Unknown command #{command}"
     return 1
 
 sync_exit = run()
