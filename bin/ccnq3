@@ -144,8 +144,9 @@ commands =
         config.provisioning.host_couchdb_uri ?= cdb_uri
         apps = manager_apps
       else
-        apps = default_app
+        apps = default_apps
 
+      config.applications ?= []
       for app in apps
         if not app in config.applications
           config.applications.push app
