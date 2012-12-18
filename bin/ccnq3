@@ -150,7 +150,7 @@ commands =
       config.updated_at ?= 0
 
       # Manager host
-      if config.admin?.couchdb_uri
+      if config.admin?.system
         cdb_uri = config.admin.couchdb_uri
         cdb_info = url.parse cdb_uri
         # Default auth info
