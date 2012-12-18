@@ -35,4 +35,4 @@ ccnq3.config (config)->
     ccnq3.config.update config
 
     # Save the local host's (=manager) record in the newly-created database.
-    provisioning.put config
+    provisioning.update config, ->
