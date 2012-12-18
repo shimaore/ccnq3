@@ -60,6 +60,8 @@ commands =
       config.admin ?= {}
       config.admin.couchdb_uri = uri
       config.admin.system = true
+      config.users ?= {}
+      config.users.couchdb_uri ?= uri + '/_users'
 
       # Save
       ccnq3.config.update config
@@ -161,7 +163,7 @@ commands =
           auth: config.admin.auth
         config.admin.amqp_uri ?= url.format amqp_info
         config.provisioning ?= {}
-        config.provisioning.host_couchdb_uri ?= cdb_uri
+        config.provisioning.host_couchdb_uri ?= cdb_uri + '/provisioning'
         apps = manager_apps
       else
         apps = default_apps
