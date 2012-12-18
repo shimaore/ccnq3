@@ -24,7 +24,7 @@
       step2 = =>
         if not user_database.match /^u[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
           return @failure error:"Invalid db name #{user_database}"
-        target_db_uri = config.users.userdb_base_uri + '/' + user_database
+        target_db_uri = config.voicemail.userdb_base_uri + '/' + user_database
         target_db = pico target_db_uri, @req.user, @req.pass
 
         # Create the database

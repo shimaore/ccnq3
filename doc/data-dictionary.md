@@ -223,6 +223,9 @@ services, since configuration is read (in most cases) once at startup.
     * `couchdb_uri`: server admin URI
     * `system`: true   (indicates this host is the one that should do system updates)
 
+*   `users`:
+    * `couchdb_uri`: `_users` database admin URI
+
 *   `applications`: [] of strings, list of applications that need to be installed
 
     These are simply relative paths to the matching "package" for that application.

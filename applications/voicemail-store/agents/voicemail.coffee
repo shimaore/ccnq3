@@ -18,11 +18,11 @@ module.exports = (doc) ->
   if not user_database.match /^u[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
     return failure error:"Invalid db name #{user_database}"
 
-  target_db_uri = config.users.userdb_base_uri + '/' + user_database
+  target_db_uri = config.voicemail.userdb_base_uri + '/' + user_database
   target_db = pico target_db_uri
 
   users_db = pico config.users.couchdb_uri
-  users_db.view 'replicate', 'userdb', qs: {key:JSON.stringify user_database}, (e,r,b) =>
+  users_db.view 'voicemail-store', 'userdb', qs: {key:JSON.stringify user_database}, (e,r,b) =>
     if e? then return failure error:e, when:"view users for #{user_database}"
 
     readers_names = (row.value for row in b.rows)
