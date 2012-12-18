@@ -60,7 +60,7 @@ case "$1" in
 
     # Generic
     su -s /bin/sh -c "ccnq3 defaults"  $USER || exit 1
-    su -s /bin/sh -c "ccnq3 bootstrap" $USER 3<&- || exit 1
+    su -s /bin/sh -c "ccnq3 bootstrap" $USER || exit 1
   ;;
 
   remove|purge)
