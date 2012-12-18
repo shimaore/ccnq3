@@ -207,7 +207,7 @@ commands =
       if config.source
         SRC = config.source
 
-      spawn "./bin/bootstrap-client.sh", [],
+      spawn "#{SRC}/bin/bootstrap-client.sh", [],
         cwd: SRC
         stdio: ['ignore','ignore','ignore','ignore']
 
@@ -216,7 +216,7 @@ commands =
       if config.source
         SRC = config.source
 
-      spawn "./bin/bootstrap-manager.sh", [],
+      spawn "#{SRC}/bin/bootstrap-manager.sh", [],
         cwd: SRC
         stdio: ['ignore','ignore','ignore','ignore']
 
