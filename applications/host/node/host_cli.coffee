@@ -29,4 +29,6 @@ ccnq3.config (config) ->
 
   else
 
+    # Non-manager host
+
     pico(config.provisioning.local_couchdb_uri).create ->

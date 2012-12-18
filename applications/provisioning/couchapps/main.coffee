@@ -23,7 +23,7 @@ ddoc.validate_doc_update = p_fun (newDoc, oldDoc, userCtx) ->
   if not user_is('provisioning_writer') and not user_is('_admin')
     throw forbidden:"Not authorized to write in this database, roles = #{userCtx.roles?.join(",")}."
 
-# Filter replication towards the user database.
+# Filter replication towards the user's database.
 ddoc.filters.user_pull = p_fun (doc, req) ->
 
   # Only replicate provisioning documents.
