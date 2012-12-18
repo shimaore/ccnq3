@@ -21,6 +21,10 @@ case "$1" in
     else
       echo "Re-configuring CouchDB"
 
+      /etc/init.d/couchdb stop 3<&-
+      # Still having issues reliably stopping couchdb.
+      killall couchdb heart
+
       # Using 128 or higher does not work.
       ADMIN_PASSWORD=`openssl rand 64 -hex`
 
@@ -34,7 +38,7 @@ case "$1" in
 
       su -s /bin/sh -c "ccnq3 'set admin uri' 'http://admin:${ADMIN_PASSWORD}@${HOSTNAME}:5984'" $USER || exit 1
 
-      /etc/init.d/couchdb restart
+      /etc/init.d/couchdb restart 3<&-
 
     fi
 
@@ -50,7 +54,8 @@ case "$1" in
       # Add an `admin` user back in
       rabbitmqctl add_user admin "${ADMIN_PASSWORD}"
 
-      cp "`ccnq3 'get config source'`/bin/rabbitmq.config" ${RABBITMQ_CONFIG}
+      # FIXME the template is not formatted properly
+      # cp "`ccnq3 'get config source'`/bin/rabbitmq.config" ${RABBITMQ_CONFIG}
 
       su -s /bin/sh -c "ccnq3 'set admin amqp' 'amqp://admin:${ADMIN_PASSWORD}@${HOSTNAME}'" $USER || exit 1
 
