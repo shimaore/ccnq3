@@ -15,7 +15,7 @@ case "$1" in
     if [ -z "$RET" ]; then db_reset ccnq3/uri; exit 1; fi
     ccnq3 'set host uri' "$RET"
 
-    ccnq3 'root bootstrap client' && ccnq3 defaults && ccnq3 bootstrap
+    ccnq3 'root bootstrap client' && ccnq3 defaults && ccnq3 bootstrap || exit 1
   ;;
 
   remove|purge)

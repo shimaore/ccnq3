@@ -234,6 +234,7 @@ run = ->
       # This will fail if the installation was not done properly.
       # (Which is OK.)
       process.setuid NAME
+      process.env.HOME = SRC
 
   if not command?
     console.log "Available commands:"
