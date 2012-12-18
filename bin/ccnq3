@@ -48,6 +48,13 @@ commands =
     console.log ccnq3.config.location
     return
 
+  'get config source': ->
+    ccnq3.config (config) ->
+      if config.source
+        SRC = config.source
+      console.log SRC
+    return
+
   'set admin uri': (uri) ->
     ccnq3.config (config) ->
       config.admin ?= {}

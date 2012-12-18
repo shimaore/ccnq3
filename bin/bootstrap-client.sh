@@ -4,59 +4,28 @@
 set -e
 export LANG=
 NAME="`ccnq3 'get name'`"
-CONF="`ccnq3 'get config location'`"
-
-if [ -z "${CONF}" ]; then
-  echo "ERROR: You must install the $NAME package before calling this script."
-  exit 1
-fi
-
-if [ -e "${CONF}" ]; then
-  echo "ERROR: $CONF already exists."
-  exit 1
-fi
 
 # --------- CouchDB --------- #
 
-echo "Re-configuring CouchDB"
-
-# Install default config file
-/etc/init.d/couchdb stop
-# Double-enforce (currently having issues with this).
-killall couchdb beam.smp heart || echo OK
-
-CDB_DIR=/var/lib/couchdb/$NAME
-mkdir -p $CDB_DIR
-chmod 0755 $CDB_DIR
-chown couchdb.couchdb $CDB_DIR
-
-# Apparently using /etc/couchdb/local.d/ccnq3 does not work.
 COUCHDB_CONFIG=/etc/couchdb/local.ini
-tee "${COUCHDB_CONFIG}" <<EOT >/dev/null
-;
-; A configuration file for a local-only, "party"-mode CouchDB instance.
-;
-[couchdb]
-; Avoid issues with databases disappearing when CouchDB upgrades.
-database_dir = ${CDB_DIR}
-view_index_dir = ${CDB_DIR}
+CDB_DIR=/var/lib/couchdb/$NAME
+if grep -q '"party"-mode' ${COUCHDB_CONFIG}; then
+  echo 'CouchDB already configured.'
+else
+  echo 'Re-configuring CouchDB.'
 
-[httpd]
-port = 5984
-bind_address = 127.0.0.1
+  /etc/init.d/couchdb stop
+  # Double-enforce (currently having issues with this).
+  killall couchdb beam.smp heart || echo OK
 
-[couch_httpd_auth]
-require_valid_user = false
+  mkdir -p $CDB_DIR
+  chmod 0755 $CDB_DIR
+  chown couchdb.couchdb $CDB_DIR
 
-[log]
-level = error
+  # Apparently using /etc/couchdb/local.d/ccnq3 does not work.
+  cp "`ccnq3 'get config source'`/client.ini" $COUCHDB_CONFIG
+  sed -i -e "s/CDB_DIR/${CDB_DIR}/" $COUCHDB_CONFIG
+  chown couchdb.couchdb "${COUCHDB_CONFIG}"
 
-[admins]
-EOT
-chown couchdb.couchdb "${COUCHDB_CONFIG}"
-
-/etc/init.d/couchdb start
-
-# ---------- RabbitMQ --------- #
-
-# Not installed locally.
+  /etc/init.d/couchdb start
+fi
