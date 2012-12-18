@@ -24,19 +24,19 @@ config_location = process.env.npm_package_config_file
 
 if not config_location?
   config_location = '/etc/ccnq3/host.json'
-  util.log "NPM did not provide a config_file parameter, using #{config_location}." if debug
+  util.error "NPM did not provide a config_file parameter, using #{config_location}." if debug
 
 #### ccnq3.config(callback)
 #
 # Attempt to retrieve the last configuration from the database or the local copy.
 # The callback receives the configuration, or an empty hash if none can be retrieved.
 get = (cb)->
-  util.log "Using #{config_location} as configuration file." if debug
+  util.error "Using #{config_location} as configuration file." if debug
   fs = require 'fs'
   try
     fs_config = JSON.parse fs.readFileSync config_location, 'utf8'
   catch error
-    util.log "Reading #{config_location}: #{util.inspect error}"
+    util.error "Reading #{config_location}: #{util.inspect error}"
     return cb {}
   rev = fs_config?._rev
   retrieve fs_config, (config) ->
@@ -54,7 +54,7 @@ module.exports.config.location = config_location
 # The original config parameter is passed to the callback if the remote retrieval failed.
 retrieve = (config,cb) ->
   if not config.host? or not config.provisioning? or not config.provisioning.host_couchdb_uri?
-    util.log "Information to retrieve remote configuration is not available."
+    util.error "Information to retrieve remote configuration is not available."
     return cb config
 
   username = make_id 'host', config.host
@@ -62,10 +62,10 @@ retrieve = (config,cb) ->
 
   provisioning.get username, (e,r,p) ->
     if e
-      util.log "Retrieving live configuration failed: #{util.inspect e}; using file-based configuration instead."
+      util.error "Retrieving live configuration failed: #{util.inspect e}; using file-based configuration instead."
       cb config
     else
-      util.log "Retrieved live configuration." if debug
+      util.error "Retrieved live configuration." if debug
       cb p
 
 module.exports.config.retrieve = retrieve
@@ -75,7 +75,7 @@ module.exports.config.retrieve = retrieve
 # The callback will receive null if the attachment could not be retrieved.
 attachment = (config,name,cb) ->
   if not config.host? or not config.provisioning? or not config.provisioning.host_couchdb_uri?
-    util.log "Information to retrieve attachment is not available."
+    util.error "Information to retrieve attachment is not available."
     return cb null
 
   username = make_id 'host', config.host
@@ -84,7 +84,7 @@ attachment = (config,name,cb) ->
 
   provisioning.request.get uri, (e,r,p) ->
     if e? or r.statusCode isnt 200
-      util.log "Retrieving attachment #{uri} failed: #{util.inspect e}." if debug
+      util.error "Retrieving attachment #{uri} failed: #{util.inspect e}." if debug
       cb null
     else
       cb p
@@ -95,9 +95,9 @@ module.exports.config.attachment = attachment
 # Attempt to save the given configuration in the local storage.
 update = (content) ->
   if not content?
-    util.log "Cannot update empty configuration."
+    util.error "Cannot update empty configuration."
     return
-  util.log "Updating local configuration file." if debug
+  util.error "Updating local configuration file." if debug
   fs = require 'fs'
   fs.writeFileSync config_location, JSON.stringify content
 

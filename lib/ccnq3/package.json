@@ -1,6 +1,6 @@
 {
   "name": "ccnq3",
-  "version": "0.3.10",
+  "version": "0.3.11",
   "description": "CCNQ3 tools",
   "keywords": ["ccnq3"],
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
