@@ -9,7 +9,8 @@ USER=$NAME
 case "$1" in
   configure|upgrade)
 
-    if egrep -q '^admin' ${COUCHDB_CONFIG}; then
+    COUCHDB_CONFIG=/etc/couchdb/local.ini
+    if egrep -q '^admin =' ${COUCHDB_CONFIG}; then
       echo "CouchDB and RabbitMQ already configured."
     else
       # Using 128 or higher does not work.
@@ -35,7 +36,6 @@ case "$1" in
 
       # ----------- CouchDB ---------- #
 
-      COUCHDB_CONFIG=/etc/couchdb/local.ini
       CDB_DIR=/var/lib/couchdb/$NAME
 
       echo "Re-configuring CouchDB"
