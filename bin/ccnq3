@@ -112,27 +112,6 @@ commands =
       ccnq3.config.update config
     return
 
-  'bootstrap': ->
-    ccnq3.config (config) ->
-      if config.source
-        SRC = config.source
-      process.chdir SRC
-
-      npm = require 'npm'
-      npm.load {}, (er) ->
-        if er
-          process.exit 1
-        npm.commands['run-script'] ['updates'], (er) ->
-          if er
-            process.exit 1
-
-          # Do not restart just yet.
-          npm.commands['run-script'] ['bootstrap'], (er) ->
-            if er
-              process.exit 1
-            console.log "bootstrap done"
-    return
-
   'defaults': ->
     ccnq3.config (config) ->
       if config.source

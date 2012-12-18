@@ -21,7 +21,9 @@ case "$1" in
     su -s /bin/sh -c "ccnq3 'set admin amqp' '$RET'" $USER || exit 1
 
     su -s /bin/sh -c "ccnq3 defaults"                $USER || exit 1
-    su -s /bin/sh -c "ccnq3 bootstrap"               $USER || exit 1
+    (cd "`ccnq3 'get config source'`" && \
+      npm run-script updates && \
+      npm run-script bootstrap ) || exit 1
   ;;
 
   remove|purge)

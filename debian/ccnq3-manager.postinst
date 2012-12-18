@@ -27,12 +27,7 @@ case "$1" in
       rabbitmqctl delete_user admin
       rabbitmqctl add_user admin "${ADMIN_PASSWORD}"
 
-      # FIXME the template is not formatted properly
-      # cp "`ccnq3 'get config source'`/bin/rabbitmq.config" ${RABBITMQ_CONFIG}
-
       su -s /bin/sh -c "ccnq3 'set admin amqp' 'amqp://admin:${ADMIN_PASSWORD}@${HOSTNAME}'" $USER || exit 1
-
-      /etc/init.d/rabbitmq-server restart
 
       # ----------- CouchDB ---------- #
 
@@ -60,7 +55,9 @@ case "$1" in
 
     # Generic
     su -s /bin/sh -c "ccnq3 defaults"  $USER || exit 1
-    su -s /bin/sh -c "ccnq3 bootstrap" $USER || exit 1
+    (cd "`ccnq3 'get config source'`" && \
+      npm run-script updates && \
+      npm run-script bootstrap ) || exit 1
   ;;
 
   remove|purge)
