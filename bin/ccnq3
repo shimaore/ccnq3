@@ -207,7 +207,7 @@ commands =
       if config.source
         SRC = config.source
 
-      spawn "./bin/bootstrap-client.sh",
+      spawn "./bin/bootstrap-client.sh", [],
         cwd: SRC
         stdio: ['ignore','ignore','ignore','ignore']
 
@@ -216,7 +216,7 @@ commands =
       if config.source
         SRC = config.source
 
-      spawn "./bin/bootstrap-manager.sh",
+      spawn "./bin/bootstrap-manager.sh", [],
         cwd: SRC
         stdio: ['ignore','ignore','ignore','ignore']
 
@@ -232,6 +232,11 @@ run = ->
       # This will fail if the installation was not done properly.
       # (Which is OK.)
       process.setuid NAME
+
+  if not command?
+    console.log "Available commands:"
+    for c of command
+      console.log "  #{c}"
 
   if commands[command]?
     commands[command] args...
