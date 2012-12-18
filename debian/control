@@ -91,7 +91,7 @@ Description: Dependencies for a server running voice traffic
 Package: ccnq3-opensips
 Architecture: all
 Depends: ccnq3 (= ${binary:Version}),
-  opensips (=1.8.2-1), opensips-dbhttp-module, opensips-json-module, opensips-b2bua-module,
+  opensips (=1.8.2-2), opensips-dbhttp-module, opensips-json-module, opensips-b2bua-module,
   opensips-rabbitmq-module, opensips-http-modules, opensips-redis-module,
   netcat,
   mediaproxy-dispatcher (>= 2.5.2-20120112)
