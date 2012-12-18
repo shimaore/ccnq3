@@ -133,11 +133,11 @@ commands =
         cdb_uri = config.admin.couchdb_uri
         cdb_info = url.parse cdb_uri
         # Default auth info
-        config.admin.auth ?= u.auth
+        config.admin.auth ?= cdb_info.auth
         # Default AMQP info
         amqp_info =
           protocol: 'amqp'
-          hostname: u.hostname
+          hostname: cdb_info.hostname
           auth: config.admin.auth
         config.admin.amqp_uri ?= url.format amqp_info
         config.provisioning ?= {}
