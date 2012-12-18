@@ -7,8 +7,11 @@
 
 path = require 'path'
 
+npm_cmd = '/usr/bin/npm'
+operation = process.argv.slice(2)
+
 finalize = ->
-  console.log "Done."
+  console.log "npm-apps #{operation}: Done."
 
 log = (application,error) ->
   console.log """
@@ -17,9 +20,6 @@ log = (application,error) ->
   if error
     finalize = ->
       throw new Error "#{application} reported an error."
-
-npm_cmd = '/usr/bin/npm'
-operation = process.argv.slice(2)
 
 child_process = require 'child_process'
 
