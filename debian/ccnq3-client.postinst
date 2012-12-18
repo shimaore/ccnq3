@@ -24,7 +24,7 @@ case "$1" in
     else
       echo 'Re-configuring CouchDB.'
 
-      /etc/init.d/couchdb stop 3<&-
+      /etc/init.d/couchdb stop
       killall couchdb heart
 
       mkdir -p $CDB_DIR && chmod 0755 $CDB_DIR && chown couchdb.couchdb $CDB_DIR || exit 1
@@ -35,7 +35,7 @@ case "$1" in
       chown couchdb.couchdb "${COUCHDB_CONFIG}"
 
       su -s /bin/sh -c "ccnq3 'set local uri' 'http://127.0.0.1:5984/provisioning'" $USER || exit 1
-      /etc/init.d/couchdb restart 3<&-
+      /etc/init.d/couchdb restart
     fi
 
     su -s /bin/sh -c "ccnq3 defaults"   $USER || exit 1

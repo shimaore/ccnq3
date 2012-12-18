@@ -40,7 +40,7 @@ case "$1" in
 
       echo "Re-configuring CouchDB"
 
-      /etc/init.d/couchdb stop 3<&-
+      /etc/init.d/couchdb stop
       # Still having issues reliably stopping couchdb.
       killall couchdb heart
 
@@ -54,7 +54,7 @@ case "$1" in
       sed -i -e "s/^admin =.*$/admin = ${ADMIN_PASSWORD}/" "${COUCHDB_CONFIG}"
       chown couchdb.couchdb "${COUCHDB_CONFIG}"
 
-      /etc/init.d/couchdb restart 3<&-
+      /etc/init.d/couchdb restart
 
     fi
 
