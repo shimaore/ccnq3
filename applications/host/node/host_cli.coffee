@@ -20,7 +20,7 @@ ccnq3.config (config) ->
 
   if config.admin?.system
     # Manager host
-    users = pico config.users.couchdb_uri
+    users_db = pico config.users.couchdb_uri
 
     username = host_username hostname
     password = sha1_hex "a"+Math.random()
