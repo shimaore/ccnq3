@@ -130,6 +130,7 @@ commands =
           npm.commands['run-script'] ['bootstrap'], (er) ->
             if er
               process.exit 1
+            console.log "bootstrap done"
     return
 
   'defaults': ->
