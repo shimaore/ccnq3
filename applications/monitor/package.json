@@ -15,6 +15,7 @@
   "dependencies": {
     "ccnq3": ">=0.3.4"
   , "pico": ">=0.1.0"
+  , "couchapp": "*"
   , "pkginfo": "*"
   },
 

@@ -17,18 +17,19 @@ ccnq3.config (config)->
   provisioning_uri = config.provisioning?.couchdb_uri
   if provisioning_uri
     ccnq3.db.security provisioning_uri, 'provisioning', true
-    push_script provisioning_uri, 'main'   # Filter replication from source to user's databases.
+    push_script provisioning_uri, 'main'
     return
 
   # Otherwise create the database
+  return unless config.install?.provisioning?.couchdb_uri? or config.admin?.couchdb_uri?
   provisioning_uri = config.install?.provisioning?.couchdb_uri ? config.admin.couchdb_uri + '/provisioning'
   provisioning = pico provisioning_uri
   provisioning.create ->
 
     ccnq3.db.security provisioning_uri, 'provisioning', true
-    push_script provisioning_uri, 'main'   # Filter replication from source to user's databases.
+    push_script provisioning_uri, 'main'
 
     # Save the new URI in the configuration
-    config.provisioning =
-      couchdb_uri: provisioning_uri
+    config.provisioning ?= {}
+    config.provisioning.couchdb_uri = provisioning_uri
     ccnq3.config.update config

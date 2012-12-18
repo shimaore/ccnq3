@@ -1,12 +1,3 @@
-###
-(c) 2010 Stephane Alnet
-Released under the Affero GPL3 license or above
-###
-
-# Install:
-#   coffee -c replicate.coffee
-#   couchapp push replcate.js http://127.0.0.1:5984/db
-
 p_fun = (f) -> '('+f+')'
 
 ddoc =
