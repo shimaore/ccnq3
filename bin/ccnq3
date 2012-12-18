@@ -7,11 +7,6 @@ qs = require 'querystring'
 url = require 'url'
 { spawn } = require 'child_process'
 
-# Chicken and egg: we need to be able to locate the `ccnq3` module.
-# But `config.source` might override our choice.
-# FIXME: Read the configuration file once (using only `fs`) to access the value
-# of `config.source`, then chdir to it.
-process.chdir SRC
 ccnq3 = require 'ccnq3'
 
 default_apps = [
@@ -212,7 +207,7 @@ commands =
       if config.source
         SRC = config.source
 
-      spawn "./bootstrap-client.sh",
+      spawn "./bin/bootstrap-client.sh",
         cwd: SRC
         stdio: ['ignore','ignore','ignore','ignore']
 
@@ -221,7 +216,7 @@ commands =
       if config.source
         SRC = config.source
 
-      spawn "./bootstrap-manager.sh",
+      spawn "./bin/bootstrap-manager.sh",
         cwd: SRC
         stdio: ['ignore','ignore','ignore','ignore']
 
