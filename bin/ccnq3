@@ -209,18 +209,26 @@ commands =
       if config.source
         SRC = config.source
 
-      spawn "#{SRC}/bin/bootstrap-client.sh", [],
+      c = spawn "#{SRC}/bin/bootstrap-client.sh", [],
         cwd: SRC
         stdio: ['ignore','ignore','ignore','ignore']
+      c.on 'exit', (code) ->
+        if code
+          console.log "Failed."
+          process.exit 1
 
   'root bootstrap manager': ->
     ccnq3.config (config) ->
       if config.source
         SRC = config.source
 
-      spawn "#{SRC}/bin/bootstrap-manager.sh", [],
+      c = spawn "#{SRC}/bin/bootstrap-manager.sh", [],
         cwd: SRC
         stdio: ['ignore','ignore','ignore','ignore']
+      c.on 'exit', (code) ->
+        if code
+          console.log "Failed."
+          process.exit 1
 
 
 run = ->
@@ -228,17 +236,9 @@ run = ->
   command = process.argv[2]
   args = process.argv.slice 3
 
-  # Do not run as root.
-  if process.getuid() is 0
-    if not command.match /^root /
-      # This will fail if the installation was not done properly.
-      # (Which is OK.)
-      process.setuid NAME
-      process.env.HOME = SRC
-
   if not command?
     console.log "Available commands:"
-    for c of command
+    for c of commands
       console.log "  #{c}"
     return 1
 

@@ -2,15 +2,13 @@
 # set -e
 
 NAME=ccnq3
-USER=ccnq3
-GROUP=daemon
-WORKDIR=/opt/${NAME}
-ETCDIR=/etc/${NAME}
-SRC=git://stephane.shimaore.net/git/ccnq3.git
+USER=$NAME
 
 case "$1" in
   configure|upgrade)
-    ccnq3 'root bootstrap manager' && ccnq3 defaults && ccnq3 bootstrap || exit 1
+    ccnq3 'root bootstrap manager' || exit 1
+    su -s /bin/sh -c "ccnq3 defaults"  $USER || exit 1
+    su -s /bin/sh -c "ccnq3 bootstrap" $USER || exit 1
   ;;
 
   remove|purge)

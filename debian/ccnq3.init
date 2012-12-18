@@ -16,18 +16,18 @@
 NAME=ccnq3
 USER=ccnq3
 SCRIPTNAME=/etc/init.d/$NAME
-WORKDIR=/opt/$NAME/src
+SRCDIR=/opt/$NAME/src
 
 case "$1" in
   start)
-    (cd $WORKDIR && su -s /bin/sh -c 'npm start' $USER)
+    (cd $SRCDIR && su -s /bin/sh -c 'npm start' $USER)
   ;;
   stop)
-    (cd $WORKDIR && su -s /bin/sh -c 'npm stop ' $USER)
+    (cd $SRCDIR && su -s /bin/sh -c 'npm stop ' $USER)
   ;;
   restart)
-    (cd $WORKDIR && su -s /bin/sh -c 'npm stop' $USER)
-    (cd $WORKDIR && su -s /bin/sh -c 'npm start' $USER)
+    (cd $SRCDIR && su -s /bin/sh -c 'npm stop' $USER)
+    (cd $SRCDIR && su -s /bin/sh -c 'npm start' $USER)
   ;;
   *)
     echo "Usage: $SCRIPTNAME {start|stop|restart}" >&2

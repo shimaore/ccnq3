@@ -1,6 +1,9 @@
 #!/bin/sh
 # set -e
 
+NAME=ccnq3
+USER=$NAME
+
 # Source debconf library.
 . /usr/share/debconf/confmodule
 
@@ -8,15 +11,17 @@ case "$1" in
   configure|upgrade)
     db_get ccnq3/overwrite
     if [ "$RET" = "true" ]; then rm -f "`ccnq3 'get config location'`"; fi
+
     db_get ccnq3/admin_uri
     if [ -z "$RET" ]; then db_reset ccnq3/admin_uri; exit 1; fi
-    ccnq3 'set admin uri' "$RET"
+    su -s /bin/sh -c "ccnq3 'set admin uri' '$RET'"  $USER || exit 1
+
     db_get ccnq3/amqp_uri
     if [ -z "$RET" ]; then db_reset ccnq3/amqp_uri; exit 1; fi
-    ccnq3 'set admin amqp' "$RET"
+    su -s /bin/sh -c "ccnq3 'set admin amqp' '$RET'" $USER || exit 1
 
-    ccnq3 defaults
-    ccnq3 bootstrap
+    su -s /bin/sh -c "ccnq3 defaults"                $USER || exit 1
+    su -s /bin/sh -c "ccnq3 bootstrap"               $USER || exit 1
   ;;
 
   remove|purge)
