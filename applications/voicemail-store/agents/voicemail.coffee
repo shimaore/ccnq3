@@ -13,8 +13,6 @@ module.exports = (doc) ->
 
   user_database = doc.user_database
 
-  replicate = pico config.users.replicate_uri
-
   id = "number:#{doc.number}"
 
   if not user_database.match /^u[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/

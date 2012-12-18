@@ -44,7 +44,7 @@
               if e? then return @failure error:e, when:"update voicemail_settings for #{user_database}"
               @success {user_database}
 
-       # Typically user_database will be a UUID
+      # Typically user_database will be a UUID
       user_database = local_number.user_database
       if not user_database?
         user_database = 'u'+uuid.v4()
