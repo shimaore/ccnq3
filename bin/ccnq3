@@ -97,6 +97,19 @@ commands =
       ccnq3.config.update config
     return
 
+  'set local uri': (uri) ->
+    if not uri?
+      console.log 'URI parameter is required.'
+      return 1
+
+    ccnq3.config (config) ->
+      config.provisioning ?= {}
+      config.provisioning.local_couchdb_uri = uri
+
+      # Save
+      ccnq3.config.update config
+    return
+
   'bootstrap': ->
     ccnq3.config (config) ->
       if config.source

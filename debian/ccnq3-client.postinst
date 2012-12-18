@@ -31,6 +31,7 @@ case "$1" in
       sed -i -e "s/CDB_DIR/${CDB_DIR}/" $COUCHDB_CONFIG
       chown couchdb.couchdb "${COUCHDB_CONFIG}"
 
+      su -s /bin/sh -c "ccnq3 'set local uri' 'http://127.0.0.1:5984/provisioning'" $USER || exit 1
       /etc/init.d/couchdb restart
     fi
 
