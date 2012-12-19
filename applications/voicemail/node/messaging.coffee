@@ -582,6 +582,7 @@ locate_user = (config,call,number,cb,attempts) ->
   message_playback_streaming = config.voicemail.playback_streaming if config.voicemail.playback_streaming?
   message_format = config.voicemail.message_format if config.voicemail.format?
   the_last_part = config.voicemail.max_parts if config.voicemail.max_parts?
+  min_pin_length = config.voicemail.min_pin_length if config.voicemail.min_pin_length?
 
   if config.voicemail.callback
     callback_profile = config.voicemail.callback.profile

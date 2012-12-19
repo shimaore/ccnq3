@@ -603,6 +603,8 @@ This section specifies the parameters for applications/voicemail.
 
     * `max_duration`: integer, optional; the maximal duration for a voicemail fragment [default: 300]
 
+    * `min_pin_length`: integer, optional; the minimum length for the PIN (password) [default: 6]
+
     * `default_language`: language used if none is specified in the sip_profile [default: 'en']
 
     * `number_domain`: string; the default `number_domain` used to identify local numbers if none is available in the call [default: "local"]
