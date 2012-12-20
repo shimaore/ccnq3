@@ -48,7 +48,6 @@
   "cache_cleanup": 30,
   "cache_timeout": 45,
 
-  "number_domain": "local",
   "voicemail_notifier": "",
 
   "default_expires": 3600,
