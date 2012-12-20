@@ -526,7 +526,7 @@
         <action function="phrase" phrase="say-number" data="$1"/>
       </match>
     </input>
-    <input pattern="^([123][2-9])$" break_on_match="true">
+    <input pattern="^([123][0-9])$" break_on_match="true">
       <match>
         <action function="phrase" phrase="say-number" data="$1"/>
       </match>
