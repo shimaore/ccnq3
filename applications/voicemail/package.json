@@ -18,6 +18,7 @@
   , "esl": ">=0.2.19"
   , "milk": ">=1.2.0"
   , "nodemailer": ">=0.3.6"
+  , "timezone": "*"
   }
 , "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" }
 , "private": true

@@ -5,7 +5,7 @@
 util = require 'util'
 pico = require 'pico'
 request = require 'request'
-
+tz = require 'timezone'
 fs = require 'fs'
 child_process = require 'child_process'
 
@@ -163,6 +163,8 @@ exports.email_notifier = ->
 
 min_pin_length = 6
 
+default_timezone = null
+
 class Message
 
   ##
@@ -260,7 +262,8 @@ class Message
       if e or not b?
         util.log "play_enveloppe: Missing #{@id}"
         return
-      call.command 'play_and_get_digits', "1 1 1 1000 # phrase:'message received:#{index+1}:#{b.caller_id}:#{b.timestamp}' silence_stream://250 choice \\d 1000", (call) ->
+      user_timestamp = @user.time b.timestamp
+      call.command 'play_and_get_digits', "1 1 1 1000 # phrase:'message received:#{index+1}:#{b.caller_id}:#{user_timestamp}' silence_stream://250 choice \\d 1000", (call) ->
         if call.body.variable_choice?
           cb call, call.body.variable_choice
         else
@@ -372,6 +375,21 @@ class User
       else
         @vm_settings = vm_settings # Memoize
         cb vm_settings
+
+  # Convert a timestamp (ISO string) to a local timestamp (ISO string)
+  time: (t) ->
+    timezone = @vm_settings.timezone ? default_timezone
+    tz_mod = null
+    if timezone?
+      try
+        tz_mod = require "timezone/#{timezone}"
+      catch e
+        console.error "Error loading timezone/#{timezone}"
+        tz_mod = null
+    if tz_mod?
+      tz t, timezone, tz_mod, '%FT%T%z'
+    else
+      t.toJSON()
 
   play_prompt: (call,cb) ->
     fifo_path = voicemail_fifo_path()
@@ -587,6 +605,9 @@ locate_user = (config,call,number,cb,attempts) ->
   if config.voicemail.callback
     callback_profile = config.voicemail.callback.profile
     callback_domain = config.voicemail.callback.domain
+
+  if config.voicemail.timezone
+    default_timezone = config.voicemail.timezone
 
   attempts ?= 3
   if attempts <= 0
