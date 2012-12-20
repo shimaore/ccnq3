@@ -389,7 +389,7 @@ class User
     if tz_mod?
       tz t, timezone, tz_mod, '%FT%T%z'
     else
-      t.toJSON()
+      t
 
   play_prompt: (call,cb) ->
     fifo_path = voicemail_fifo_path()
