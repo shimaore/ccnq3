@@ -479,7 +479,7 @@
     </input>
 
     <!-- we recorded these specially. YMMV -->
-    <input pattern="^(21|71|91)" break_on_match="true">
+    <input pattern="^(11|21|71|91)" break_on_match="true">
       <match>
         <action function="play-file" data="digits/$1.wav"/>
       </match>
