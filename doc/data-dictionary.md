@@ -1070,14 +1070,17 @@ Changes to rules, gateways, and carriers are not applied automatically. Use `sip
 
 *   `type`: "rule"
 
-*   `rule`: sip_domain_name+":"+ruleid
+*   `rule`:
 
-*   `sip_domain_name`: the `sip_domain_name` of the hosts on which OpenSIPS is running and using this rule/outbound_route
+    Either, if no `timerec` field is present:
 
-*   `ruleid`: integer; a unique ID for this rule (a sequential or random number).
+        sip_domain_name+":"+groupid+":"+prefix
 
-    The `ruleid` is used rather than a longer, composed key, which should combine `groupid`, `prefix`, `timerec`, and `priority`.
-    It is used for identification purposes only (not for routing calls).
+    or, if a `timerec` field is present:
+
+        sip_domain_name+":"+groupid+":"+prefix+":"+timerec+":"+priority
+
+*   `sip_domain_name`: the `sip_domain_name` of the hosts on which OpenSIPS is running and using this rule/`outbound_route`
 
 ### Rule selection ###
 
