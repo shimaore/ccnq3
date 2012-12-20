@@ -607,6 +607,8 @@ This section specifies the parameters for applications/voicemail.
 
     * `default_language`: language used if none is specified in the sip_profile [default: 'en']
 
+    * `timezone`: timezone used if none is specified in the user's `voicemail_settings` [default: UTC]
+
     * `number_domain`: string; the default `number_domain` used to identify local numbers if none is available in the call [default: "local"]
 
       Normally the `number_domain` is passed along with an incoming call to the voicemail server. If for some reason it is not available, this value is used instead.
@@ -1341,6 +1343,8 @@ A user's voicemail settings are stored in this record.
     If no "pin" is specified then no authentication is required to access the voicemail box.
 
 *   `language`: language string for this user's voicemail
+
+*   `timezone`: timezone string for this user's voicemail
 
 *   `email_notifications`: hash; the key is the target email address; the values should be a hash containing:
 
