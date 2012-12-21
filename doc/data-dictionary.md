@@ -272,7 +272,13 @@ your installation.
 
 *   `amqp`
 
-    Either a string (URI) or an object (host,port,login,password,vhost) giving access to an AMQP server.
+    An object providing connection information to an AMQP server.
+
+    * `host` [required]
+    * `port` [optional]
+    * `login` [required]
+    * `password` [required]
+    * `vhost` [required, must be `/ccnq3`]
 
     (Under development) AMQP is used to forward logging data, send command to servers (replaces the obsolete `sip_commands` and `traces.run`) and retrieve data (traces, registrant).
 
