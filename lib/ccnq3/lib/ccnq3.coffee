@@ -16,22 +16,18 @@ debug = false
 
 # config.amqp might be a amqp[s] URI or any of the structures amqp.createConnection might accept.
 amqp = (cb) ->
-  # Memoize / avoid duplicates
-  if module.exports.amqp.connection?
-    cb module.exports.amqp.connection
-  else
-    # Try to build a new connection based on the configuration.
-    get (config) ->
-      if config.amqp?
-        if typeof config.amqp is 'string'
-          connection = require('amqp').createConnection {url: config.amqp}
-        else
-          connection = require('amqp').createConnection config.amqp
-        module.exports.amqp.connection = connection
-        connection.on 'ready', ->
-          cb? connection
+  # Try to build a new connection based on the configuration.
+  get (config) ->
+    if config.amqp?
+      if typeof config.amqp is 'string'
+        connection = require('amqp').createConnection {url: config.amqp}
       else
-        cb? null
+        connection = require('amqp').createConnection config.amqp
+      module.exports.amqp.connection = connection
+      connection.on 'ready', ->
+        cb? connection
+    else
+      cb? null
   return
 
 module.exports.amqp = amqp
@@ -50,6 +46,7 @@ log = (msg) ->
           exchange.publish 'log', {msg}
         else
           exchange.publish 'log', msg
+        connection.end()
     else
       if typeof msg is 'string'
         util.error msg
