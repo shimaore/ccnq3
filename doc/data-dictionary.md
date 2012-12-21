@@ -145,6 +145,11 @@ The following applications are available:
   FreeSwitch support for voicemail.
   Install on: a FreeSwitch server that will provide voicemail.
 
+* applications/voicemail-store
+
+  Database support for voicemail.
+  Install on: a server with direct access to the users databases.
+
 * applications/cnam-client (unstable)
 
   A CNAM client application.
