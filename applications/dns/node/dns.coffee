@@ -125,9 +125,12 @@ class Response
         return unless zone?
 
         old_cb = cb
-        cb = => zone.find "A", name, (d) =>
-          @add_additional d
-          old_cb()
+        cb = =>
+          zone.find "A", name, (d) =>
+            @add_additional d
+            zone.find "AAAA", name, (d) =>
+              @add_additional d
+              old_cb()
     cb()
 
   add_soa_to_authoritative: (cb) ->
