@@ -172,6 +172,14 @@ The following applications are available:
 
   Monitors the local host and pushes statistics about it into a CouchDB database.
 
+* applications/couchdb_daemon
+
+  Provided the extended API (see below *Extended API*) embedded in the central CouchDB database.
+
+  Install on: the central CoudhDB server.
+
+  See the file `bin/manager.ini` for how to embed within CouchDB. (The embedding is done automatically if the manager server is also the CouchDB server.)
+
 provisioning database
 =====================
 
