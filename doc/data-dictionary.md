@@ -675,6 +675,16 @@ The default templates are:
 
       <p>You have a new message from {{caller_id}}
 
+### Specific to hosts running the voicemail-store ###
+
+The `voicemail-store` service must be ran on a manager host.
+
+The service is responsible for managing the user databases (see below the section about *user database*) that store individual voicemail messages and need to be created correctly for that purpose.
+
+*   `voicemail`
+
+    * `userdb_base_uri`: base URI (with admin access) where to create the users' databases.
+
 ### Specific to hosts running the cdrs (CDR aggregation) service. ###
 
 To activate the CDR aggregation service:
@@ -1259,7 +1269,7 @@ These records are used by the `applications/emergency` application.
 _users database
 ===============
 
-The _users database is CouchDB's standard authentication database.
+The `_users` database is CouchDB's standard authentication database.
 
 host records
 ------------
@@ -1281,6 +1291,12 @@ Servers should have the `host` role assigned.
 * `password`
 * `roles`: ["host"]
 
+Other records
+-------------
+
+Regular `_user` record may also contain:
+
+* `user_database`: the name of a *user database* this user has access to. (These are maintained by the `voicemail-store` application.)
 
 endpoint-location database
 ==========================
@@ -1407,6 +1423,8 @@ Extended API
 Integrated with CouchDB is a set of ccnq3-specific APIs accessible using the same URI as the CouchDB instance on the manager host.
 Make sure `applications/couchdb_daemon` is enabled for these APIs to be available via CouchDB.
 
+The API calls are authentified using the Basic Authentication header and regular CouchDB username and password (the content of the authentication header is used by the APIs to authenticate their calls to CouchDB).
+
 This API offers the following functions:
 
 ### Test
@@ -1422,3 +1440,5 @@ This API offers the following functions:
   The PUT body is merged with any `voicemail_settings` document in the local number's `user_database`.
 
   Return a JSON content with a `user_database` field on success.
+
+  Note: `applications/voicemail-store` must be installed for the user database to be properly initialized.
