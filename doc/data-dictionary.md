@@ -270,6 +270,12 @@ your installation.
     random IPv6 address is selected, from the ones present in the
     "interfaces" records.
 
+*   `amqp`
+
+    Either a string (URI) or an object (host,port,login,password,vhost) giving access to an AMQP server.
+
+    (Under development) AMQP is used to forward logging data, send command to servers (replaces the obsolete `sip_commands` and `traces.run`) and retrieve data (traces, registrant).
+
 Changing any of the following settings would require to restart the matching
 services, since configuration is read (in most cases) once at startup.
 
@@ -279,6 +285,8 @@ services, since configuration is read (in most cases) once at startup.
 
 *   `users`:
     * `couchdb_uri`: `_users` database admin URI
+
+    Normally only present on the manager server and a voicemail-store server.
 
 *   `applications`: [] of strings, list of applications that need to be installed
 
@@ -309,12 +317,30 @@ services, since configuration is read (in most cases) once at startup.
 
       Must have db admin access to the database (so that applications can push their design documents).
 
+### Other generic sections
+
 *   `install`: (normally not defined)
 
     This feature is used to force re-installation of the corresponding databases (for example to change the URI)
 
     * `provisioning`:
       * `couchdb_uri`
+
+* `replicate_interval`: integer; milliseconds [default: 5 minutes]
+
+    Sometimes CouchDB replicate processes might die.
+    An automated process will restart them at `replicate_interval` milliseconds.
+
+*   `logging`:
+
+    This feature allows centralized logging from CCNQ3 hosts.
+    All logging is pushed into a single central CouchDB database; no local logging database is created.
+
+    * `couchdb_uri`: string, only on the manager server; the database (with admin access) where data should be stored.
+
+    * `host_couchdb_uri`: string, required; the database (with host access) where data should be stored
+
+### When running `applications/monitor`
 
 *   `monitor`:
 
@@ -342,20 +368,6 @@ services, since configuration is read (in most cases) once at startup.
       * `vmstat`: `/proc/vmstat` data
 
     * `couchdb_uri`: string; administrative access to the database where data is stored (this is only used to create the database and should only be present on the host running that database).
-
-*   `logging`:
-
-    This feature allows centralized logging from CCNQ3 hosts.
-    All logging is pushed into a single central CouchDB database; no local logging database is created.
-
-    * `couchdb_uri`: string, only on the manager server; the database (with admin access) where data should be stored.
-
-    * `host_couchdb_uri`: string, required; the database (with host access) where data should be stored
-
-* `replicate_interval`: integer; milliseconds [default: 5 minutes]
-
-    Sometimes CouchDB replicate processes might die.
-    An automated process will restart them at `replicate_interval` milliseconds.
 
 ### Specific to hosts running FreeSwitch ###
 
