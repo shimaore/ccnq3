@@ -42,10 +42,14 @@ module.exports.amqp = amqp
 log = (msg) ->
   amqp (connection) ->
     if connection?
-      if typeof msg is 'string'
-        connection.exchange().publish 'log', {msg}
-      else
-        connection.exchange().publish 'log', msg
+      options =
+        type: 'fanout'
+        durable: true
+      connection.exchange defaultExchangeName, options, (exchange) ->
+        if typeof msg is 'string'
+          exchange.publish 'log', {msg}
+        else
+          exchange.publish 'log', msg
     else
       if typeof msg is 'string'
         util.error msg
