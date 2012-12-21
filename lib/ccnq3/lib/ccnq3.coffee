@@ -33,6 +33,7 @@ amqp = (cb) ->
           cb? connection
       else
         cb? null
+  return
 
 module.exports.amqp = amqp
 
@@ -50,6 +51,7 @@ log = (msg) ->
         util.error msg
       else
         util.error util.inspect msg
+  return
 
 module.exports.log = log
 
