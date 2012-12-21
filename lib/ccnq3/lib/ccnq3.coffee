@@ -4,6 +4,55 @@ qs = require 'querystring'
 
 debug = false
 
+#### ccnq3.amqp
+
+# The default exchange for this application is called `ccnq3`.
+# For example:
+#
+#     require('ccnq3').amqp (connection) ->
+#       exchange = connection.exchange()
+#       exchange.publish 'log', {error:"boo"}
+#
+defaultExchangeName = 'ccnq3'
+
+# config.amqp might be a amqp[s] URI or any of the structures amqp.createConnection might accept.
+amqp = (cb) ->
+  # Memoize / avoid duplicates
+  if module.exports.amqp.connection?
+    cb module.exports.amqp.connection
+  else
+    # Try to build a new connection based on the configuration.
+    get (config) ->
+      if config.amqp?
+        if typeof config.amqp is 'string'
+          connection = require('amqp').createConnection {url: config.amqp}, {defaultExchangeName}
+        else
+          connection = require('amqp').createConnection config.amqp, {defaultExchangeName}
+        module.exports.amqp.connection = connection
+        connection.on 'ready', ->
+          cb? connection
+      else
+        cb? null
+
+module.exports.amqp = amqp
+
+#### ccnq3.log(msg)
+# Logs a message or object to AMQP (if available) or to stderr.
+log = (msg) ->
+  amqp (connection) ->
+    if connection?
+      if typeof msg is 'string'
+        connection.exchange().publish 'log', {msg}
+      else
+        connection.exchange().publish 'log', msg
+    else
+      if typeof msg is 'string'
+        util.error msg
+      else
+        util.error util.inspect msg
+
+module.exports.log = log
+
 #### CCNQ3 Tools
 #
 

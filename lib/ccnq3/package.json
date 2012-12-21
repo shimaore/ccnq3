@@ -1,6 +1,6 @@
 {
   "name": "ccnq3",
-  "version": "0.3.11",
+  "version": "0.4.0",
   "description": "CCNQ3 tools",
   "keywords": ["ccnq3"],
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
@@ -10,6 +10,7 @@
   ],
   "dependencies": {
     "pico": "*"
+  , "amqp": "*"
   },
   "scripts": {
     "prepublish": "coffee -c lib/ccnq3.coffee"
