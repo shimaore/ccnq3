@@ -45,6 +45,7 @@ log = (msg) ->
       options =
         type: 'fanout'
         durable: true
+        autoDelete: false
       connection.exchange defaultExchangeName, options, (exchange) ->
         if typeof msg is 'string'
           exchange.publish 'log', {msg}
