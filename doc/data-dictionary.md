@@ -10,6 +10,47 @@ In this document the term *URI of database* signifies a URI of some CouchDB data
 
 These URIs might contain authentication usernames and passwords.
 
+### On the manager server
+
+The manager server uses direclty the central CouchDB database.
+
+### On non-manager servers
+
+Other servers use a local-only CouchDB instance (replicated from the central CouchDB database) for any read-access to the provisioning database, and to store some local values (CDRs, location information for a registration server).
+
+These non-manager servers might also write data back to the central CouchDB database either as replication (for example to aggregate the CDRs in the `cdrs` database, or the location information in the `locations` database), or for logging purposes (the `logging` and `monitor` databases for example).
+
+Authentication
+--------------
+
+In CouchDB, authentication is provided by the `_users` database for normal users; by the configuration system (section `admins`) for administrative users.
+
+### On the manager server
+
+On the manager server, most access will be done using an `admin` account. (Admin accounts normally do not show up in the `_users` database, their authentication is managed separately.)
+
+The only exceptions are the `provisiong.host_couchdb_uri` which is required to use a `host@`+host-name username, and other URIs which _must not_ have authentication tokens, such as `session.couchdb_uri` (in the ccnq3-web project).
+
+### On non-manager servers
+
+Non-manager host use a local-only, non-authenticated CouchDB instance for all real-time accesses. No username is required to access the databases on that local CouchDB server. No administrative account is created either (the database is said to be in "Admin Party Mode").
+
+For example, `provisioning.local_couchdb_uri` is simply `http://127.0.0.1:5984/provisioning`, `cdr_uri` is `http://127.0.0.1:5984/cdr`.
+
+On the other hand, when accessing the central CouchDB database (normally located on the manager server, or on some other central server), non-manager hosts should _never_ use an `admin` account; the following two types of accounts (which must be created in that central CouchBD database) are recommended:
+
+* For each `host`, a user named `host@`+host-name with its roles set (at least) to `["host"]`.
+
+  This should be used for any URI where the host needs access to the central CouchDB database (e.g. for replication of the provisioning database, or to upload CDRs, locations, logging data, etc.).
+
+  Use this username in fields such as `provisioning.host_couchdb_uri`, `opensips_proxy.usrloc_aggregate_uri`, `cdr_aggregate_uri`, `logging.host_couchdb_uri`, `monitor.host_couchdb_uri`.
+
+* For each 'voicemail' server, a user named `voicemail@`+host-name with the roles set (at least) to `["update:user_db:","access:_users:"]`. (Notice the extra colon `:` at the end of each value.)
+
+  This should be used for any URI related to `applications/voicemail`, to allow the voicemail server to manipulate the databases where messages are stored (hence `update:user_db`) and query for databases linked to a specific user (hence `access:_users:`).
+
+  Use this username in fields such as `voicemail.userdb_base_uri`.
+
 Applications
 ============
 
@@ -1269,7 +1310,11 @@ These records are used by the `applications/emergency` application.
 _users database
 ===============
 
-The `_users` database is CouchDB's standard authentication database.
+The `_users` database is CouchDB's standard authentication and authorization database.
+
+Authentication is provided by setting the `password` field in a user record.
+
+Authorization is provided by setting the `roles` field in a user record.
 
 host records
 ------------
@@ -1290,6 +1335,22 @@ Servers should have the `host` role assigned.
 * `name`: "host@" + hostname
 * `password`
 * `roles`: ["host"]
+
+voicemail records
+-----------------
+
+These records are used to allow voicemail servers access to:
+
+* read and update voicemail settings and voicemail messages in a *user database*;
+* read the `_users` database to list `user_database` fields.
+
+Their `_users` profile is as follows:
+
+* `_id`: "org.couchd.user:"+name
+* `type`: "user"
+* `name`: "voicemail@" + hostname
+* `password`
+* `roles`: ["update:user_db:","access:_users:"]
 
 Other records
 -------------
