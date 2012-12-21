@@ -24,8 +24,12 @@ case "$1" in
       # Add an `admin` user back in
       rabbitmqctl delete_user admin
       rabbitmqctl add_user admin "${ADMIN_PASSWORD}"
+      rabbitmqctl set_user_tags admin administrator
+      rabbitmqctl add_vhost /ccnq3
+      # Permissions: configure resources, write resources, read resources
+      rabbitmqctl set_permissions -p /ccnq3 admin ".*" ".*" ".*"
 
-      su -s /bin/sh -c "ccnq3 'set admin amqp' 'amqp://admin:${ADMIN_PASSWORD}@${HOSTNAME}'" $USER || exit 1
+      su -s /bin/sh -c "ccnq3 'set admin amqp' 'amqp://admin:${ADMIN_PASSWORD}@${HOSTNAME}/ccnq3'" $USER || exit 1
 
       # ----------- CouchDB ---------- #
 
@@ -50,6 +54,9 @@ case "$1" in
       /etc/init.d/couchdb start
 
     fi
+
+    ## This will enable the web interface on port 55672
+    # rabbitmq-plugins enable rabbitmq_management
 
     # Generic
     su -s /bin/sh -c "ccnq3 defaults"  $USER || exit 1

@@ -10,10 +10,9 @@ debug = false
 # For example:
 #
 #     require('ccnq3').amqp (connection) ->
-#       exchange = connection.exchange()
+#       exchange = connection.exchange 'logging'
 #       exchange.publish 'log', {error:"boo"}
 #
-defaultExchangeName = 'ccnq3'
 
 # config.amqp might be a amqp[s] URI or any of the structures amqp.createConnection might accept.
 amqp = (cb) ->
@@ -25,9 +24,9 @@ amqp = (cb) ->
     get (config) ->
       if config.amqp?
         if typeof config.amqp is 'string'
-          connection = require('amqp').createConnection {url: config.amqp}, {defaultExchangeName}
+          connection = require('amqp').createConnection {url: config.amqp}
         else
-          connection = require('amqp').createConnection config.amqp, {defaultExchangeName}
+          connection = require('amqp').createConnection config.amqp
         module.exports.amqp.connection = connection
         connection.on 'ready', ->
           cb? connection
@@ -46,7 +45,7 @@ log = (msg) ->
         type: 'fanout'
         durable: true
         autoDelete: false
-      connection.exchange defaultExchangeName, options, (exchange) ->
+      connection.exchange 'logging', options, (exchange) ->
         if typeof msg is 'string'
           exchange.publish 'log', {msg}
         else
