@@ -203,32 +203,6 @@ commands =
           console.warn "User account was modified successfully."
     return
 
-  'root bootstrap client': ->
-    ccnq3.config (config) ->
-      if config.source
-        SRC = config.source
-
-      c = spawn "#{SRC}/bin/bootstrap-client.sh", [],
-        cwd: SRC
-        stdio: ['ignore','ignore','ignore','ignore']
-      c.on 'exit', (code) ->
-        if code
-          console.error "Failed."
-          process.exit 1
-
-  'root bootstrap manager': ->
-    ccnq3.config (config) ->
-      if config.source
-        SRC = config.source
-
-      c = spawn "#{SRC}/bin/bootstrap-manager.sh", [],
-        cwd: SRC
-        stdio: ['ignore','ignore','ignore','ignore']
-      c.on 'exit', (code) ->
-        if code
-          console.error "Failed."
-          process.exit 1
-
 
 run = ->
 
