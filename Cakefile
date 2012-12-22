@@ -7,7 +7,6 @@ coffeescript = require 'coffee-script'
 docco = require 'docco'
 
 task 'docs', 'Rebuild the documentation', ->
-  docco.document ['./public/js/ccnq3.coffee'], output: output_dir
 
   layout = coffeecup.compile fs.readFileSync './_layouts/layout.coffee', 'utf8'
 
