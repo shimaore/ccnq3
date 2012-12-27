@@ -33,6 +33,118 @@
 
 <!-- Verify that the called number follows the proper format -->
 
+<!-- international numbers embedded inside the National numbering plan -->
+<!-- decision ARCEP 06-0720 -->
+<extension name="cleanup-called-fixes-mayotte">
+  <condition field="destination_number" expression="^(0|\+33)(26[29].*)$">
+    <action application="set" data="ccnq_to_e164=262$2"/>
+    <action application="transfer" data="call"/>
+  </condition>
+</extension>
+
+<extension name="cleanup-called-mobiles-mayotte">
+  <condition field="destination_number" expression="^(0|\+33)(639.*)$">
+    <action application="set" data="ccnq_to_e164=262$2"/>
+    <action application="transfer" data="call"/>
+  </condition>
+</extension>
+
+<!-- decision ARCEP 06-0535 + 00-0536-->
+<extension name="cleanup-called-mobiles-guadeloupe">
+  <condition field="destination_number" expression="^(0|\+33)(690.*)$">
+    <action application="set" data="ccnq_to_e164=590$2"/>
+    <action application="transfer" data="call"/>
+  </condition>
+</extension>
+
+<extension name="cleanup-called-mobiles-reunion">
+  <condition field="destination_number" expression="^(0|\+33)(692.*)$">
+    <action application="set" data="ccnq_to_e164=262$2"/>
+    <action application="transfer" data="call"/>
+  </condition>
+</extension>
+
+<extension name="cleanup-called-mobiles-guyane">
+  <condition field="destination_number" expression="^(0|\+33)(694.*)$">
+    <action application="set" data="ccnq_to_e164=594$2"/>
+    <action application="transfer" data="call"/>
+  </condition>
+</extension>
+
+<extension name="cleanup-called-mobiles-martinique">
+  <condition field="destination_number" expression="^(0|\+33)(696.*)$">
+    <action application="set" data="ccnq_to_e164=596$2"/>
+    <action application="transfer" data="call"/>
+  </condition>
+</extension>
+
+<!-- other, fixes -->
+<extension name="cleanup-called-fixes-guadeloupe">
+  <condition field="destination_number" expression="^(0|\+33)(590.*)$">
+    <action application="set" data="ccnq_to_e164=590$2"/>
+    <action application="transfer" data="call"/>
+  </condition>
+</extension>
+
+<extension name="cleanup-called-fixes-reunion">
+  <condition field="destination_number" expression="^(0|\+33)(262.*)$">
+    <action application="set" data="ccnq_to_e164=262$2"/>
+    <action application="transfer" data="call"/>
+  </condition>
+</extension>
+
+<extension name="cleanup-called-fixes-guyane">
+  <condition field="destination_number" expression="^(0|\+33)(594.*)$">
+    <action application="set" data="ccnq_to_e164=594$2"/>
+    <action application="transfer" data="call"/>
+  </condition>
+</extension>
+
+<extension name="cleanup-called-fixes-martinique">
+  <condition field="destination_number" expression="^(0|\+33)(596.*)$">
+    <action application="set" data="ccnq_to_e164=596$2"/>
+    <action application="transfer" data="call"/>
+  </condition>
+</extension>
+
+<!-- actually fixes and mobiles are mixed. Also the international dialplan is different, see http://www.itu.int/oth/T02020000B2/en -->
+<extension name="cleanup-called-fixes-stpierre">
+  <condition field="destination_number" expression="^(0|\+33)(508.*)$">
+    <action application="set" data="ccnq_to_e164=$2"/>
+    <action application="transfer" data="call"/>
+  </condition>
+</extension>
+
+<!-- ARCEP 04-0847 -->
+<extension name="cleanup-called-nongeo-guadeloupe">
+  <condition field="destination_number" expression="^(0|\+33)(876[01].*)$">
+    <action application="set" data="ccnq_to_e164=590$2"/>
+    <action application="transfer" data="call"/>
+  </condition>
+</extension>
+
+<extension name="cleanup-called-nongeo-reunion">
+  <condition field="destination_number" expression="^(0|\+33)(876[23].*)$">
+    <action application="set" data="ccnq_to_e164=262$2"/>
+    <action application="transfer" data="call"/>
+  </condition>
+</extension>
+
+<extension name="cleanup-called-nongeo-guyane">
+  <condition field="destination_number" expression="^(0|\+33)(876[4].*)$">
+    <action application="set" data="ccnq_to_e164=594$2"/>
+    <action application="transfer" data="call"/>
+  </condition>
+</extension>
+
+<extension name="cleanup-called-nongeo-martinique">
+  <condition field="destination_number" expression="^(0|\+33)(876[67].*)$">
+    <action application="set" data="ccnq_to_e164=596$2"/>
+    <action application="transfer" data="call"/>
+  </condition>
+</extension>
+
+
 <!-- geographic, non-geographic, mobile, or service -->
 <extension name="cleanup-called-1">
   <condition field="destination_number" expression="^(0|\+33)([123456789][0-9]{8})$">
