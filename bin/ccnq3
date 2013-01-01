@@ -26,6 +26,13 @@ manager_apps = [
 ]
 
 commands =
+  'show log': ->
+    ccnq3.amqp (c) ->
+      c.queue 'cli', (q) ->
+        q.bind 'logging', '#'
+        q.subscribe (m) ->
+          console.log m.msg ? util.inspect m
+
   'get admin uri': ->
     ccnq3.config (config) ->
       base_uri = config.admin?.couchdb_uri

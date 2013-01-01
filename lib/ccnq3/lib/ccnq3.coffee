@@ -53,6 +53,13 @@ log = (msg) ->
       else
         util.error util.inspect msg
   return
+#
+# To retrieve messages from AMQP:
+#   ccnq3.amqp (c) ->
+#     c.queue 'my-queue', (q) ->
+#       q.bind 'logging', '#'
+#       q.subscribe (m) ->
+#         console.log m.msg ? util.inspect m
 
 module.exports.log = log
 
