@@ -5,6 +5,7 @@
 # at set intervals.
 
 pico = require 'pico'
+ccnq3 = require 'ccnq3'
 
 default_plugins = [
   'os'
@@ -39,7 +40,7 @@ get_data = (plugins,cb) ->
 
   get_data_of 0, {}, cb
 
-require('ccnq3').config (config) ->
+ccnq3.config (config) ->
 
   plugins = config.monitor?.plugins ? default_plugins
   db = config.monitor?.host_couchdb_uri
@@ -57,10 +58,10 @@ require('ccnq3').config (config) ->
         data._id = [ hostname, now.toJSON() ] .join ' '
         db.put data, (e) ->
           if e?
-            console.dir e
+            ccnq3.log e
 
     setInterval run, interval
     run()
 
   else
-    console.log "Missing configuration, not starting the monitor service."
+    ccnq3.log "Missing configuration, not starting the monitor service."

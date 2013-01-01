@@ -1,13 +1,14 @@
 pico = require 'pico'
 couchapp = require 'couchapp'
+ccnq3 = require 'ccnq3'
 
 push_script = (uri, script,cb) ->
   couchapp.createApp require("./#{script}"), uri, (app)-> app.push(cb)
 
 config = null
-require('ccnq3').config (c) -> config = c
+ccnq3.config (c) -> config = c
 
-failure = (o) -> console.dir o
+failure = (o) -> ccnq3.log o
 
 module.exports = (doc) ->
 

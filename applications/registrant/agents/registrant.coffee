@@ -5,6 +5,7 @@ qs = require 'querystring'
 util = require 'util'
 pico = require 'pico'
 spawn = require('child_process').spawn
+ccnq3 = require('ccnq3')
 
 dgram = require 'dgram'
 opensips_command = (port,command) ->
@@ -31,7 +32,7 @@ process_changes = (port,command,cfg) ->
       setTimeout kill_service, 4000
   start_service = ->
     if service?
-      console.log "WARNING in start_service: service already running?"
+      ccnq3.log "WARNING in start_service: service already running?"
     service = spawn '/usr/sbin/opensips', [ '-f', cfg ]
 
   switch command
@@ -45,7 +46,7 @@ process_changes = (port,command,cfg) ->
 
 
 # Agent main process
-require('ccnq3').config (config) ->
+ccnq3.config (config) ->
 
   provisioning = pico config.provisioning.local_couchdb_uri
 

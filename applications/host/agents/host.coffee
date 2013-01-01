@@ -17,12 +17,13 @@ handler = require './handlers'
 qs = require 'querystring'
 
 pico = require 'pico'
+ccnq3 = require 'ccnq3'
 
-require('ccnq3').config (config) ->
+ccnq3.config (config) ->
 
   # Start replication
   if config.admin?.system
-    console.log "Not replicating from manager"
+    ccnq3.log "Not replicating from manager"
   else
     source_uri = config.provisioning.host_couchdb_uri
     target_uri = config.provisioning.local_couchdb_uri

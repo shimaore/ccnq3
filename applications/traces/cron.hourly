@@ -3,13 +3,14 @@
 fs = require 'fs'
 path = require 'path'
 spawn = require('child_process').spawn
+ccnq3 = require 'ccnq3'
 
 default_workdir = '/opt/ccnq3/traces'
 default_ringsize = 50
 
 debug = false
 
-require('ccnq3').config (config) ->
+ccnq3.config (config) ->
 
   return unless config.traces?.interfaces?.length > 0
 
@@ -26,7 +27,7 @@ require('ccnq3').config (config) ->
         ind[intf].push {name,time,comp}
 
     if debug
-      console.log JSON.stringify ind, '  '
+      ccnq3.log JSON.stringify ind, '  '
 
     for intf, files of ind
 
@@ -37,7 +38,7 @@ require('ccnq3').config (config) ->
         a = files.shift()
         full = path.join trace_dir, a.name
         if debug
-          console.log "unlink #{full}"
+          ccnq3.log "unlink #{full}"
         else
           fs.unlink full
       files.pop() # remove current file
@@ -46,6 +47,6 @@ require('ccnq3').config (config) ->
           return if a.comp
           full = path.join trace_dir, a.name
           if debug
-            console.log "gzip #{full}"
+            ccnq3.log "gzip #{full}"
           else
             spawn '/bin/gzip', [full], stdio:'ignore'
