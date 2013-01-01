@@ -85,7 +85,7 @@ commands =
 
   'set host uri': (uri) ->
     if not uri?
-      console.log 'URI parameter is required.'
+      console.error 'URI parameter is required.'
       return 1
 
     ccnq3.config (config) ->
@@ -108,7 +108,7 @@ commands =
 
   'set local uri': (uri) ->
     if not uri?
-      console.log 'URI parameter is required.'
+      console.error 'URI parameter is required.'
       return 1
 
     ccnq3.config (config) ->
