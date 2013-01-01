@@ -31,7 +31,7 @@ commands =
       c.queue 'cli', (q) ->
         q.bind 'logging', '#'
         q.subscribe (m) ->
-          console.log m.msg ? util.inspect m
+          console.dir m
 
   'get admin uri': ->
     ccnq3.config (config) ->
