@@ -7,6 +7,8 @@ USER=$NAME
 case "$1" in
   configure|upgrade)
 
+    HOSTNAME="`ccnq3 'get hostname'`"
+
     COUCHDB_CONFIG=/etc/couchdb/local.ini
     if egrep -q '^admin =' ${COUCHDB_CONFIG}; then
       echo "CouchDB and RabbitMQ already configured."
@@ -14,7 +16,6 @@ case "$1" in
       # Using 128 or higher does not work.
       ADMIN_PASSWORD=`openssl rand 32 -hex`
 
-      HOSTNAME="`ccnq3 'get hostname'`"
 
       # -------- RabbitMQ ---------- #
 

@@ -239,6 +239,10 @@ commands =
     return
 
   'add host': (hostname) ->
+    if not hostname?
+      console.error 'Hostname is required.'
+      return 1
+
     ccnq3.config (config) ->
       if config.source
         SRC = config.source
