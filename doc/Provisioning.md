@@ -1,70 +1,50 @@
-Introduction, Prerequisites
-===========================
-
-The following steps are currently not automated and might not be
-available in the portal. They must be performed after the steps in
-the [[Install]], which documents how to install the packages and
-bootstrap the installation on the manager server.
-
-It is important that the manager server be accessible to you via its
-hostname (for example by adding a record for it your local `/etc/hosts` file)
-because the installation scripts cannot guess how you might access it
-(for example via a VPN or SSH port redirection).
-
-Note: Once you will have enabled `ccnq3_dns` and will be using the DNS
-services provided by the system you should be able to remove the entry
-in your `/etc/hosts` file, assuming you can get to the host using the
-information available in public DNS.
-
-
 Naming conventions in this document
 ===================================
 
-In this document we will assume that your main domain for installation
-is `phone.example.net`. IP Addresses are assigned from a block in RFC5737.
+In this document we will assume that your main domain for installation is `phone.example.net`. IP Addresses are assigned from a block in RFC5737 as follows:
 
     vm1.phone.example.net  198.51.100.51
     vm2.phone.example.net  198.51.100.52
     vm3.phone.example.net  198.51.100.53
 
-We will use two SIP domains, `a.phone.example.net` for client-side,
-and `trunk.phone.example.net` for the carrier-side.
+We will use two SIP domains, `a.phone.example.net` for client-side, and `trunk.phone.example.net` for the carrier-side.
 
-Host `vm1` will be the manager host; host `vm2` will be a client-side server,
-and host `vm3` will be a carrier-side server.
+Host `vm1` will be the manager host; host `vm2` will be a client-side server, and host `vm3` will be a carrier-side server.
 
+Prerequisites
+=============
+
+The following steps must be performed after the steps in [the installation document](install), which explains how to install the packages and bootstrap the servers.
+
+Running as user `ccnq3`
+-----------------------
+
+Some commands must be issued as user `ccnq3`. You can either do:
+
+    sudo -u ccnq3   <command>
+
+or run a shell as the `ccnq3` user and type the commands in that shell:
+
+    su -s /bin/bash ccnq3
 
 Create a managing user
-======================
+----------------------
 
-* Register on the web application.
+We recommend you use your email address as identifier for the CouchDB database.
 
-     http://vm1.phone.example.net:8080/
+Run the following commands as user `ccnq3`, replacing `bob@example.net` and `my_password` with your email address and the password you would like to use to access CouchDB, respectively:
 
-* Password will come via email; make sure nullmailer and the upstream
-  MTA are able to forward emails.
+    ccnq3 'add user' bob@example.net my_password
+    ccnq3 'admin' bob@example.net
 
-  Note: configure the upstream MTA in /etc/nullmailer/remotes if you haven't
-        done so during the installation the nullmailer package.
+Accessing the CouchDB interface
+-------------------------------
 
-  After you register,
-  use "Recover password" until you receive the notification email.
+CouchDB provides a web interface on port 5984 on your manager host. The `Futon` database manager is available as `/_utils/` on that web server.
 
-* Log into the web application to confirm it is working.
+For example:
 
-  Note: login will fail if you attempt to use e.g. an IP address instead of
-  the host name. This is why a prerequisite was that the manager be
-  accessible through its hostname.
-
-  Note: login will fail if the database is not accessible from your web browser.
-
-* Logout from the web application.
-
-* At the command prompt on the manager server, run
-
-      /usr/sbin/ccnq3 admin <email>
-
-  as root, replacing `<email>` with the email address you registered with.
+    http://vm1.example.net:5984/_utils/
 
 DNS
 ===
@@ -85,24 +65,21 @@ These hosts will require no further changes related to DNS.
 Hosts running the `ccnq3_dns` service
 -------------------------------------
 
-Optimally you should select a pair of servers to run the `ccnq3_dns` service. These servers
-will not be able to run bind9, so they must rely on (at least two) other servers (preferably
-in the CCNQ3 system) to provide them with DNS service. Their /etc/resolv.conf file should
-therefor contain the IP addresses for these two (or more) servers.
+The environment contains a dynamic, database-driven, DNS service which must be enabled on at least one host. These DNS-serving hosts must be configured with the `applications/dns` application. Additionally, the `ccnq3-dns` package must installed on these DNS-serving hosts.
 
-On these servers you should also install the ccnq3-dns package:
-
-    aptitude install -q -y ccnq3-dns
+See the [installation documentation](installation) for more details on how to configure these servers.
 
 Domains to be created
 ---------------------
 
-You must create two records in the provisioning database (using Futon):
+Most DNS entries are dynamically created based on the configuration stored in the CouchDB database.
 
-* one record for the main domain "phone.example.net"
-* one record for the subdomain "enum.phone.example.net"
+However you must manually create two records in the provisioning database:
 
-These records should be layed out as follows:
+* one record for the main domain `phone.example.net`
+* one record for the subdomain `enum.phone.example.net`
+
+Using `Futon`, insert two records layed out as follows:
 
     {
       "_id":"domain:phone.example.net",
@@ -126,66 +103,76 @@ These records should be layed out as follows:
 
 Notes:
 
-* Any host with applications/dns running should be listed as NS.
-* No account field, so these records won't be picked-up for replication.
+* Any DNS-serving host, with `applications/dns` listed as an application, should be listed as `NS`.
 
+Add a new "voice" host
+======================
 
-Adding a new "voice" host
-=========================
+* On the manager server, run the following command as `ccnq3` to add an entry for host `vm2.phone.example.net`:
 
-* Install the "ccnq3-voice" package on the host.
-* Log into the web application and go to Provisioning/New host;
-* Add a record for one host, e.g. vm2.phone.example.net
-* Enter the appropriate IP addresses, enter a SIP domain (cluster domain).
-* Select the proper applications for the host.
-* Submit.
+    ccnq3 'add host' vm2.phone.example.net
 
-* Click on the new record to open it, copy the "bootstrap" command.
-* Logout from the portal.
+* Using `Futon`, in the database 'provisioning', locate the record for `host:vm2.phone.example.net` and open it. Switch to the `Source` tab, and in that record, copy the value for `host_couchdb_uri` inside `provisioning`.
 
-* Go back to the admin login for Futon;
-  (make sure you are logged out first -- use the Logout button)
+* On the host, install the `ccnq3-client` package. During the installation process you will be asked to provide the URL you copied in the previous step.
 
-* In the database "provisioning" locate the new host's record and
-  modify or add the following fields:
+* After the packages are installed, on the host, as the `ccnq3` user do:
 
-      opensips:
-        {
-          "model": "complete"
-        }
-      traces:
-        {
-          "interfaces": [
-            "eth0",
-            "eth1"
-          ]
-        }
+      cat /etc/ccnq3/host.json
 
-* Then log into the host and run:
+  Copy the output of the command (starting with `{` and ending with `}`).
 
-      cd /opt/ccnq3/src/
-      # Use the URL from the provisioning portal (above).
-      sudo aptitude install ccnq3-client
-      # Just to make sure, restart ccnq3
-      sudo /etc/init.d/ccnq3 restart
-      # Normally freeswitch and opensips are still not running.
+* Using `Futon`, paste the JSON record copied in the previous step into the `Source` tab for that host's record. Click `Save Document`.
+
+* In the host document, switch to the `Fields` tab, click `Add Field`, enter `sip_domain_name` for the field and `a.phone.example.net` for the value.
+
+* Still in the `Field` tab, the `applications` array should be extended to read (in that order):
+
+      [
+        "applications/host",
+        "applications/freeswitch",
+        "applications/opensips",
+        "applications/traces"
+      ]
+
+* `Add Field` named `opensips` with its value set to:
+
+      {
+        "model": "complete"
+      }
+
+* `Add Field` named `traces` with its value set to:
+
+      {
+        "interfaces": [ "eth0" ]
+      }
+
+  (assuming the main interface is called `eth0`).
+
+* Click on `Save Document`.
+
+* On the host, run as `root`:
+
+      sudo aptitude install ccnq3-voice
+      sudo aptitude reinstall ccnq3
+      # Normally at this point, freeswitch and opensips are still not running.
       sudo /etc/init.d/opensips start
       sudo /etc/init.d/freeswitch start
 
-* Currently all FreeSwitch changes can be triggered from CouchDB
-  (using the appropriate `sip_commands` if needed) or (which is
-  equivalent) from the web portal.
+Add a registering endpoint record to test the new setup
+=======================================================
 
-  OpenSIPS configuration changes require a restart of OpenSIPS
-  (but there are only a few parameters that would require this).
+* Using `Futon`, open the database `provisioning`, click `New Document`, switch to the `Source` tab and enter:
 
-* Add a registering endpoint record to test the new setup.
-
-   Register Usermame: 0976543210@a.phone.example.net
-   Register Password: XXXX
-   Account: test
-   Location: home
-   Outbound Route: 1
+      {
+        "_id": "endpoint:0976543210@a.phone.example.net",
+        "type": "endpoint",
+        "endpoint": "0976543210@a.phone.example.net",
+        "password": "72hbh8fjwjhb",
+        "ha1": "ae4fe3b1f2ca4b7a33a2f77fc5b15d11",
+        "ha1b": "eabda99f11ae85b840597275b1cc962d",
+        "account": "test"
+      }
 
 * Test registration.
 
@@ -262,12 +249,7 @@ Finishing configuring the hosts
       }
 
 
-* To apply the changes:
-
-  Logout of Futon, login to the portal,
-  open the host record and select "reload sofia",
-  submit, re-open the host record ("No FreeSwitch changes" should be selected)
-  and re-submit.
+* To apply the changes: run the `reload sofia` FreeSwitch command.
 
 * You'll also need an endpoint to identify the client-sbc with the
   carrier-side proxy.
@@ -397,4 +379,4 @@ Further Reading
 
 This document is meant to help you bootstrap your provisioning.
 
-A complete provisioning documentation is available in [[data-dictionary]].
+The complete provisioning documentation is available in [the specifications](specs).
