@@ -3,7 +3,7 @@
 NAME='ccnq3'
 SRC="/opt/#{NAME}/src"
 
-qs = require 'querystring'
+{ escape } = require 'querystring'
 url = require 'url'
 { spawn } = require 'child_process'
 
@@ -24,6 +24,54 @@ manager_apps = [
   "applications/couch_daemon"
   "applications/voicemail-store"
 ]
+
+# Set defaults, assuming _only_ locally-available information.
+set_defaults = (prov_doc,hostname) ->
+    # Common parameters
+    prov_doc._id ?= ccnq3.make_id 'host', hostname
+    prov_doc.type ?= 'host'
+    prov_doc.host ?= hostname
+    prov_doc.interfaces ?= {}
+
+    prov_doc.account ?= ''
+    prov_doc.updated_at ?= new Date().getTime()
+
+    if prov_doc.admin?.system
+      # --  Manager host  -- #
+      apps = manager_apps
+
+      # This _has_ to be present on a Manager.
+      admin_info = url.parse prov_doc.admin.couchdb_uri
+
+      # Default auth info
+      prov_doc.admin.auth ?= admin_info.auth
+
+      # Default AMQP info
+      vhost = NAME
+      amqp_info =
+        protocol: 'amqp'
+        hostname: admin_info.hostname
+        auth:     prov_doc.admin.auth
+        pathname: '/' + escape vhost
+      prov_doc.admin.amqp ?= url.format amqp_info
+
+      # Default AMQP Management info
+      amqp_mgmt =
+        protocol: 'http'
+        hostname: admin_info.hostname
+        port:     55672
+        auth:     prov_doc.admin.auth
+        pathname: '/api'
+      prov_doc.admin.amqp_mgmt ?= url.format amqp_mgmt
+    else
+      # --  Non-manager host  -- #
+      apps = default_apps
+
+    prov_doc.applications ?= []
+    for app in apps
+      unless app in prov_doc.applications
+        prov_doc.applications.push app
+
 
 commands =
   'show log': ->
@@ -62,6 +110,7 @@ commands =
       console.log SRC
     return
 
+  ## -- Used on a manager during postinst -- ##
   'set admin uri': (uri) ->
     ccnq3.config (config) ->
       config.admin ?= {}
@@ -77,12 +126,13 @@ commands =
   'set admin amqp': (uri) ->
     ccnq3.config (config) ->
       config.admin ?= {}
-      config.admin.amqp_uri = uri
+      config.admin.amqp = uri
 
       # Save
       ccnq3.config.update config
     return
 
+  ## -- Used on a client during postinst -- ##
   'set host uri': (uri) ->
     if not uri?
       console.error 'URI parameter is required.'
@@ -94,13 +144,15 @@ commands =
 
       info = url.parse uri
       # Default auth info
-      config.auth ?= u.auth
+      config.auth ?= info.auth
       # Default AMQP info
+      vhost = NAME
       amqp_info =
         protocol: 'amqp'
-        hostname: u.hostname
+        hostname: info.hostname
         auth: config.auth
-      config.amqp_uri ?= url.format amqp_info
+        pathname: '/' + escape vhost
+      config.amqp ?= url.format amqp_info
 
       # Save
       ccnq3.config.update config
@@ -119,7 +171,7 @@ commands =
       ccnq3.config.update config
     return
 
-  'defaults': ->
+  'set local defaults': ->
     ccnq3.config (config) ->
       if config.source
         SRC = config.source
@@ -128,35 +180,10 @@ commands =
       HOSTNAME = require('os').hostname()
 
       # Common parameters
-      config._id ?= ccnq3.make_id "host", HOSTNAME
-      config.type ?= 'host'
-      config.host ?= HOSTNAME
       config.source ?= SRC
       config.interfaces ?= require('./interfaces')()
 
-      config.account ?= ""
-      config.updated_at ?= 0
-
-      # Manager host
-      if config.admin?.system
-        cdb_uri = config.admin.couchdb_uri
-        cdb_info = url.parse cdb_uri
-        # Default auth info
-        config.admin.auth ?= cdb_info.auth
-        # Default AMQP info
-        amqp_info =
-          protocol: 'amqp'
-          hostname: cdb_info.hostname
-          auth: config.admin.auth
-        config.admin.amqp_uri ?= url.format amqp_info
-        apps = manager_apps
-      else
-        apps = default_apps
-
-      config.applications ?= []
-      for app in apps
-        unless app in config.applications
-          config.applications.push app
+      set_defaults config, HOSTNAME
 
       # Save
       ccnq3.config.update config
@@ -168,48 +195,26 @@ commands =
         SRC = config.source
       process.chdir SRC
 
-      base_uri = config.admin?.couchdb_uri
-      if not base_uri?
-        console.error 'Admin access is not available on this host.'
-        return
-
       if not config.users?.couchdb_uri?
         console.error 'Users access is not available on this host.'
         return
 
-      id = ccnq3.make_id 'org.couchdb.user', name
-      user_uri = "#{config.users.couchdb_uri}/#{qs.escape id}"
-      request = require 'request'
-      request user_uri, json:true, (e,r,doc) ->
+      admin_access = [
+        "access:provisioning:"  # Pull provisioning database
+        "update:provisioning:"  # Push provisioning database
+        "update:_users:"        # Allows to create user records
+        "update:_users:"        # Allows to grant the role (via applications/roles/zappa/admin.coffee)
+        "update:host:"          # Role to add and modify hosts (servers)
+        "update:user_db:"       # Allows to grant this role to new "voicemail@" accounts. (Not required if not using voicemail.)
+        "access:_users:"        # Allows to grant this role to new "voicemail@" accounts. (Not required if not using voicemail.)
+        "access:traces:"        # Allows to grant the role to users who need to gather sniffer traces
+      ]
+
+      ccnq3.db.add_roles config.users.couchdb_uri, name, admin_access, (e) ->
         if e
-          console.error 'No such user, please have the user register first.'
-          return
-
-        admin_access = [
-          "access:provisioning:"  # Pull provisioning database
-          "update:provisioning:"  # Push provisioning database
-          "update:_users:"        # Allows to create user records
-          "update:_users:"        # Allows to grant the role (via applications/roles/zappa/admin.coffee)
-          "update:host:"          # Role to add and modify hosts (servers)
-          "update:user_db:"       # Allows to grant this role to new "voicemail@" accounts. (Not required if not using voicemail.)
-          "access:_users:"        # Allows to grant this role to new "voicemail@" accounts. (Not required if not using voicemail.)
-          "access:traces:"        # Allows to grant the role to users who need to gather sniffer traces
-        ]
-        for role in admin_access
-          doc.roles.push role unless role in  doc.roles
-
-        request.put user_uri, json:doc, (e,r,b) ->
-          if e
-            console.error 'Could not modify the user record: '+e
-            return
-
-          if not b.ok
-            console.error 'Could not modify the user record: '+b
-            return
-
-          console.warn "User account was modified successfully."
-    return
-
+          console.error 'Could not update the user record: '+e
+        else
+          console.warn 'User account was updated successfully.'
 
 run = ->
 

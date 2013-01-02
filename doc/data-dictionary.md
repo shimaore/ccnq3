@@ -272,13 +272,7 @@ your installation.
 
 *   `amqp`
 
-    An object providing connection information to an AMQP server.
-
-    * `host` [required]
-    * `port` [optional]
-    * `login` [required]
-    * `password` [required]
-    * `vhost` [required, must be `ccnq3`]
+    AMQP URI with access for the local host, complete with `ccnq3` vhost. (Similar authentication as `provisioning.host_couchdb_uri`.)
 
     (Under development) AMQP is used to forward logging data, send command to servers (replaces the obsolete `sip_commands` and `traces.run`) and retrieve data (traces, registrant).
 
@@ -286,7 +280,9 @@ Changing any of the following settings would require to restart the matching
 services, since configuration is read (in most cases) once at startup.
 
 *   `admin`:   (only present for bootstrap-system hosts normally; there's no reason to modify these)
-    * `couchdb_uri`: server admin URI
+    * `couchdb_uri`: server admin URI [required for a Manager host]
+    * `amqp`: amqp admin URI (with `/ccnq3` path to access the `ccnq3` vhost)
+    * `amqp_mgmt`: http(s) admin URI for API access (with `/api` path included)
     * `system`: true   (indicates this host is the one that should do system updates)
 
 *   `users`:
@@ -308,7 +304,7 @@ services, since configuration is read (in most cases) once at startup.
 
       Normally only present on a manager host (and only used by installation scripts)
 
-    * `host_couchdb_uri`: URI of the provisioning database (read-only) [allows access to the main provisioning database from any host]
+    * `host_couchdb_uri`: URI of the provisioning database (read-only), allows access to the main provisioning database from any host. [required for a non-Manager host]
 
       This URI is used as the source for replication of the provisioning database onto a non-manager host
       Replication will work better if this URI points directly to CouchDB (rather than a reverse proxy, for example).

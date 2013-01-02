@@ -56,10 +56,11 @@ case "$1" in
     fi
 
     ## This will enable the web interface on port 55672
-    # rabbitmq-plugins enable rabbitmq_management
+    rabbitmq-plugins enable rabbitmq_management
 
     # Generic
-    su -s /bin/sh -c "ccnq3 defaults"  $USER || exit 1
+    su -s /bin/sh -c "ccnq3 'set local defaults'"  $USER || exit 1
+    su -s /bin/sh -c "ccnq3 'add host' ${HOSTNAME}"  $USER || exit 1
     (cd "`ccnq3 'get config source'`" && \
       npm run-script updates && \
       npm run-script bootstrap ) || exit 1
