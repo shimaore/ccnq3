@@ -80,6 +80,7 @@ commands =
         q.bind 'logging', '#'
         q.subscribe (m) ->
           console.dir m
+    return
 
   'get admin uri': ->
     ccnq3.config (config) ->
@@ -232,6 +233,7 @@ commands =
           console.error 'Could not update the user record: '+e
         else
           console.warn 'User account was updated successfully.'
+    return
 
   'add host': (hostname) ->
     ccnq3.config (config) ->
