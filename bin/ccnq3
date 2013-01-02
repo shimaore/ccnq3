@@ -264,7 +264,7 @@ commands =
           console.log "Assuming user #{host_user} wasn't registered."
           new_password = hex_sha1 "a"+Math.random()
           user_doc =
-            name: host_id
+            name: host_user
             password: new_password
 
         user_doc.roles ?= []
@@ -335,7 +335,7 @@ commands =
           prov_doc.logging ?= {}
 
           prov_doc.logging.host_couchdb_uri ?=
-            if config.logging.host_couchdb_uri?
+            if config.logging?.host_couchdb_uri?
               make_host_uri config.logging.host_couchdb_uri
             else
               make_host_uri config.admin.couchdb_uri, '/logging'
@@ -343,7 +343,7 @@ commands =
           prov_doc.monitor ?= {}
 
           prov_doc.monitor.host_couchdb_uri ?=
-            if config.monitor.host_couchdb_uri?
+            if config.monitor?.host_couchdb_uri?
               make_host_uri config.monitor.host_couchdb_uri
             else
               make_host_uri config.admin.couchdb_uri, '/monitor'
