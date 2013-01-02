@@ -9,7 +9,7 @@
     "lib/ccnq3.js"
   ],
   "dependencies": {
-    "pico": "*"
+    "pico": ">=0.1.9"
   , "amqp": "*"
   },
   "scripts": {
