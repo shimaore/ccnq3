@@ -233,6 +233,135 @@ commands =
         else
           console.warn 'User account was updated successfully.'
 
+  'add host': (hostname) ->
+    ccnq3.config (config) ->
+      if config.source
+        SRC = config.source
+      process.chdir SRC
+
+      base_uri = config.admin?.couchdb_uri
+      if not base_uri?
+        console.error 'Admin access is not available on this host.'
+        return
+
+      if not config.users?.couchdb_uri?
+        console.error 'Users access is not available on this host.'
+        return
+
+      # Take care of the setup in the _users database.
+      user_db = pico config.users.couchdb_uri
+      host_user = 'host@' + hostname
+      user_db.get.user host_user, (e,r,user_doc) ->
+        new_password = null
+        if e or not user_doc._rev?
+          # Assume the user wasn't registered
+          new_password = hex_sha1 "a"+Math.random()
+          user_doc =
+            name: host_id
+            password: new_password
+
+        user_doc.roles ?= []
+        user_doc.roles.push 'host' unless 'host' in user_doc.roles
+
+        user_db.put.user user_doc, (e) ->
+          if e
+            console.error e
+            return
+
+        # Take care of the setup in the provisioning database.
+        _id = ccnq3.make_id 'host', hostname
+        prov_db = pico config.admin.couchdb_uri
+        prov_db.get _id, (e,r,prov_doc) ->
+          if e or not prov_doc?._rev?
+            # Assume new record
+            prov_doc = {}
+
+          make_host_uri = (cdb_uri,pathname) ->
+            cdb_info = url.parse cdb_uri
+            host_info =
+              protocol: cdb_info.protocol
+              auth:     prov_doc.auth
+              hostname: cdb_info.hostnane
+              port:     cdb_info.port
+              pathname: cdb_info.pathname ? pathname
+            url.format host_info
+
+          # --  Compute new prov_doc.auth  --
+
+          if new_password?
+            prov_doc.password = new_password  # legacy
+            prov_doc.auth = host_user + ':' + new_password
+            # FIXME This will go very bad if prov_doc.provisioning.host_couchdb_uri, etc.
+            # already exist. We really ought to update all those records.
+
+          # Former code used `password` only. Really we need both fields, it's so much
+          # simpler to deal with. So migrate the record.
+          if prov_doc.password? and not prov_doc.auth?
+            prov_doc.auth = host_user + ':' + prov_doc.password
+            # FIXME Same as above, there's no obligation that the URIs match.
+            # At least we should indicate that there's a discrepancy.
+
+          # The Official Way: export from provisioning.host_couchdb_uri.
+          if not prov_doc.password? and not prov_doc.auth? and prov_doc?.provisioning?.host_couchdb_uri?
+            prov_info = url.parse prov_doc.provisioning.host_couchdb_uri
+            prov_doc.auth = prov_info.auth
+            # This will break happily if you use ':' in your passwords.
+            # So stick to our automagically-generated SHA1 passwords.
+            prov_doc.password = prov_doc.auth.split(/:/)[1]
+
+          set_defaults prov_doc, hostname
+
+          prov_doc.provisioning ?= {}
+
+          prov_doc.provisioning.host_couchdb_uri ?= make_host_uri config.admin.couchdb_uri
+
+          # Default AMQP info
+          prov_info = url.parse prov_doc.provisioning.host_couchdb_uri
+          vhost = NAME
+          amqp_info =
+            protocol: 'amqp'
+            hostname: prov_info.hostname
+            auth:     prov_doc.auth
+            pathname: '/' + escape vhost
+          config.amqp ?= url.format amqp_info
+
+          prov_doc.logging ?= {}
+
+          prov_doc.logging.host_couchdb_uri ?=
+            if config.logging.host_couchdb_uri?
+              make_host_uri config.logging.host_couchdb_uri
+            else
+              make_host_uri config.admin.couchdb_uri, '/logging'
+
+          prov_doc.monitor ?= {}
+
+          prov_doc.monitor.host_couchdb_uri ?=
+            if config.monitor.host_couchdb_uri?
+              make_host_uri config.monitor.host_couchdb_uri
+            else
+              make_host_uri config.admin.couchdb_uri, '/monitor'
+
+          prov_doc.provisioning.local_couchdb_uri ?= 'http://127.0.0.1:5984/provisioning'
+
+          # Register with RabbitMQ
+          amqp_mgmt = pico.request config.admin.amqp_mgmt
+          amqp_user_info =
+            password: prov_doc.password
+            tags: ""
+          amqp_mgmt.put "/users/#{escape host_user}", json:amqp_user_info, (e,r) ->
+            unless 200 <= r.statusCode < 300
+              ccnq3.log "Could not create AMQP user: #{e}"
+            # FIXME get the vhost from the amqp URI.
+            user_vhost = NAME
+            amqp_permissions =
+              configure: ".*"
+              write: ".*"
+              read: ".*"
+            amqp_mgmt.put "/permissions/#{escape user_vhost}/#{escape host_user}", json:amqp_permissions, (e,r) ->
+              unless 200 <= r.statusCode < 300
+                ccnq3.log "Could not create AMQP user: #{e}"
+
+
 run = ->
 
   command = process.argv[2]
