@@ -253,7 +253,7 @@ commands =
       # Take care of the setup in the _users database.
       user_db = pico config.users.couchdb_uri
       host_user = 'host@' + hostname
-      user_db.get.user host_user, (e,r,user_doc) ->
+      user_db.get_user host_user, (e,r,user_doc) ->
         new_password = null
         if e or not user_doc._rev?
           console.log "Assuming user #{host_user} wasn't registered."
@@ -265,7 +265,7 @@ commands =
         user_doc.roles ?= []
         user_doc.roles.push 'host' unless 'host' in user_doc.roles
 
-        user_db.put.user user_doc, (e) ->
+        user_db.put_user user_doc, (e) ->
           if e
             console.error e
             process.exit 1
