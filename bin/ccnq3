@@ -254,7 +254,7 @@ commands =
       user_db.get.user host_user, (e,r,user_doc) ->
         new_password = null
         if e or not user_doc._rev?
-          # Assume the user wasn't registered
+          console.log "Assuming user #{host_user} wasn't registered."
           new_password = hex_sha1 "a"+Math.random()
           user_doc =
             name: host_id
@@ -266,14 +266,14 @@ commands =
         user_db.put.user user_doc, (e) ->
           if e
             console.error e
-            return
+            process.exit 1
 
         # Take care of the setup in the provisioning database.
         _id = ccnq3.make_id 'host', hostname
         prov_db = pico config.admin.couchdb_uri
         prov_db.get _id, (e,r,prov_doc) ->
           if e or not prov_doc?._rev?
-            # Assume new record
+            console.log "Assuming new record for user #{host_user}"
             prov_doc = {}
 
           make_host_uri = (cdb_uri,pathname) ->
@@ -345,12 +345,17 @@ commands =
 
           # Register with RabbitMQ
           amqp_mgmt = pico.request config.admin.amqp_mgmt
+          if not amqp_mgmt?
+            console.error "Missing admin.amqp_mgmt configuration parameter."
+            process.exit 1
+
           amqp_user_info =
             password: prov_doc.password
             tags: ""
           amqp_mgmt.put "/users/#{escape host_user}", json:amqp_user_info, (e,r) ->
             unless 200 <= r.statusCode < 300
-              ccnq3.log "Could not create AMQP user: #{e}"
+              console.error "Could not create AMQP user: #{e}"
+              process.exit 1
             # FIXME get the vhost from the amqp URI.
             user_vhost = NAME
             amqp_permissions =
@@ -359,7 +364,8 @@ commands =
               read: ".*"
             amqp_mgmt.put "/permissions/#{escape user_vhost}/#{escape host_user}", json:amqp_permissions, (e,r) ->
               unless 200 <= r.statusCode < 300
-                ccnq3.log "Could not create AMQP user: #{e}"
+                console.error "Could not create AMQP user: #{e}"
+                process.exit 1
 
 
 run = ->
