@@ -1,9 +1,7 @@
 Conventions
 ===========
 
-Most commands on this page must be ran as root. The only exception
-would be the `gpg` commands; in that case make sure you
-run `apt-key` as root.
+Most commands on this page must be ran as root. The only exception would be the `gpg` commands; in that case make sure you run `apt-key` as root.
 
 Requirements
 ============
@@ -21,8 +19,7 @@ Hostnames for the different servers MUST be:
 1. FQDN (e.g. "server.example.com", not "server")
 2. Valid DNS names (that resolve using A and/or AAAA queries)
 
-These are both required to ensure clients can properly access
-the server.
+These are both required to ensure clients can properly access the server.
 
 Note: compare the output of
 
@@ -32,10 +29,7 @@ Note: compare the output of
 
 to make sure they all report the name you expect.
 
-Note: ccnq3 contains a DNS server package that will automatically
-provide proper records for all servers configured in the system,
-so this requirement can be met relatively easily.
-See below for more information on `ccnq3_dns`.
+Note: ccnq3 contains a DNS server package that will automatically provide proper records for all servers configured in the system, so this requirement can be met relatively easily.  See below for more information on `ccnq3_dns`.
 
 IPv6
 ====
@@ -60,8 +54,7 @@ to your existing /etc/apt/sources.list using the following commands:
 Add Key
 =======
 
-Add the GPG key for stephane@shimaore.net, which is used
-to sign the "shimaore" distribution:
+Add the GPG key for stephane@shimaore.net, which is used to sign the "shimaore" distribution:
 
     MAINTAINER='Stephane Alnet (Packaging) <stephane@shimaore.net>'
     # You might need to run the following command twice the first time.
@@ -88,21 +81,15 @@ The first host you will install is your "manager" host.
 
     aptitude -y install ccnq3-manager ccnq3-web
 
-Make sure to locate and save the `CCNQ3 Master interface` URL printed
-at the end of the installation process.
+Make sure to locate and save the `CCNQ3 Master interface` URL printed at the end of the installation process.
 
-However, this package will overwrite any local CouchDB configuration.
-If you have an existing CouchDB/BigCouch installation you'd like to
-re-use (located on the same host or on a different system), use
+However, this package will overwrite any local CouchDB configuration.  If you have an existing CouchDB/BigCouch installation you'd like to re-use (located on the same host or on a different system), use
 
     aptitude -y install ccnq3-manager-shared ccnq3-web
 
-instead. You will need to provide administrative access to that existing
-database via a URL such as `http://admin:password@host:5984`.
+instead. You will need to provide administrative access to that existing database via a URL such as `http://admin:password@host:5984`.
 
-Normally you should not run voice services on the manager,
-however if you intend to do so you will need to install
-the `ccnq3-voice` package as well.
+Normally you should not run voice services on the manager, however if you intend to do so you will need to install the `ccnq3-voice` package as well.
 
 Client (non-manager) hosts
 --------------------------
@@ -111,12 +98,9 @@ On a non-manager host you will use:
 
     aptitude install ccnq3-voice ccnq3-client
 
-You will need to provide it the URI assigned by the provisioning system.
-(See the [provisioning] documentation for how to obtain that URI.)
+You will need to provide it the URI assigned by the provisioning system.  (See the [provisioning] documentation for how to obtain that URI.)
 
-Installing the `ccnq3-client` package will overwrite any local CouchDB
-configuration. This package cannot be co-located with non-ccnq3 applications
-that might use CouchDB.
+Installing the `ccnq3-client` package will overwrite any local CouchDB configuration. This package cannot be co-located with non-ccnq3 applications that might use CouchDB.
 
 If you need mediaproxy on that host, you _must_ manually run
 
@@ -128,25 +112,15 @@ because of some important caveats regarding IPv6.
 Installation of CCNQ3 DNS server
 --------------------------------
 
-The CCNQ3 DNS server is a master-only DNS server that must be
-installed to provide inbound routing for numbers. We recommend
-you install that service on at least two physically independent
-servers for redundancy purposes.
+The CCNQ3 DNS server is a master-only DNS server that must be installed to provide inbound routing for numbers. We recommend you install that service on at least two physically independent servers for redundancy purposes.
 
-The CCNQ3 DNS server uses UDP port 53 and will conflict with any
-other application, such as another DNS server, which would use
-that port. Therefor make sure there are no other DNS resolver or proxy
-on the host where you install the CCNQ3 DNS server.
+The CCNQ3 DNS server uses UDP port 53 and will conflict with any other application, such as another DNS server, which would use that port. Therefor make sure there are no other DNS resolver or proxy on the host where you install the CCNQ3 DNS server.
 
-Moreover you should not have the local host rely on the service provided
-by the CCNQ3 DNS server for its name resolution, since the service will
-not forward requests or provide recursive resolution.
+Moreover you should not have the local host rely on the service provided by the CCNQ3 DNS server for its name resolution, since the service will not forward requests or provide recursive resolution.
 
-Therefor the host(s) that run the CCNQ3 DNS service _must_
-use non-local nameservers; make sure to configure those in `/etc/resolv.conf`.
+Therefor the host(s) that run the CCNQ3 DNS service _must_ use non-local nameservers; make sure to configure those in `/etc/resolv.conf`.
 
-Additionally install the `ccnq3-dns` package on any host running the CCNQ3
-DNS server:
+Additionally install the `ccnq3-dns` package on any host running the CCNQ3 DNS server:
 
     aptitude install ccnq3-dns
 
@@ -164,18 +138,14 @@ The following sections provide additional information but are not required.
 Automated (scripted) installation
 =================================
 
-You may provide the URI for `ccnq3-client` in `/etc/ccnq3/uri` before
-installing the package.
+You may provide the URI for `ccnq3-client` in `/etc/ccnq3/uri` before installing the package.
 
-You may provide the URI for `ccnq3-manager-shared` in `/etc/ccnq3/admin_uri`
-before installing the package.
+You may provide the URI for `ccnq3-manager-shared` in `/etc/ccnq3/admin_uri` before installing the package.
 
 Tune-Up
 =======
 
-Additionally I recommend modifying the rsyslog configuration
-to either a centralized syslog server, or a smaller local
-configuration such as:
+Additionally I recommend modifying the rsyslog configuration to either a centralized syslog server, or a smaller local configuration such as:
 
     tee /etc/rsyslog.conf >/dev/null <<'EOT'
     $ModLoad imuxsock # provides support for local system logging
