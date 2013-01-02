@@ -189,6 +189,23 @@ commands =
       ccnq3.config.update config
     return
 
+  'add user': (name,password) ->
+    ccnq3.config (config) ->
+      if config.source
+        SRC = config.source
+      process.chdir SRC
+
+      if not config.users?.couchdb_uri?
+        console.error 'Users access is not available on this host.'
+        return
+
+      ccnq3.db.add_user config.users.couchdb_uri, name, password, (e) ->
+        if e
+          console.error 'Could not update the user record: '+e
+        else
+          console.warn 'User account was updated successfully.'
+    return
+
   'admin': (name) ->
     ccnq3.config (config) ->
       if config.source
