@@ -1,7 +1,7 @@
 Conventions
 ===========
 
-Most commands must be ran as root. The only exception
+Most commands on this page must be ran as root. The only exception
 would be the `gpg` commands; in that case make sure you
 run `apt-key` as root.
 
