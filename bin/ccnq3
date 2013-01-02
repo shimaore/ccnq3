@@ -72,6 +72,9 @@ set_defaults = (prov_doc,hostname) ->
       unless app in prov_doc.applications
         prov_doc.applications.push app
 
+hex_sha1 = (v) ->
+  crypto = require 'crypto'
+  crypto.createHash('sha1').update(v).digest('hex')
 
 commands =
   'show log': ->
