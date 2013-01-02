@@ -79,11 +79,11 @@ A call-processing server would typically have the `ccnq3-voice` package installe
 
 Finally, at least two servers (for redundancy purposes) must have the `ccnq3-dns` package installed, and run the following application:
 
-    application/dns
+    applications/dns
 
 Moreover all servers, regardless of intended purpose, must run the following application:
 
-    application/host
+    applications/host
 
 Some of these applications are automatically installed. For example, a `manager` host (created using the `bootstrap-manager` script) will have most services enabled except the aggregation services. Removing automatically-installed applications in this case will lead to loss of functionality or breakage.
 
