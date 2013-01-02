@@ -191,18 +191,18 @@ ccnq3.db =
 
   add_user: (uri,name,password,cb) ->
     db = pico uri
-    db.get.user name, (e,r,user_doc) ->
+    db.get_user name, (e,r,user_doc) ->
 
       if e or not user_doc?._rev?
         user_doc = {name}
 
       user_doc.password = password if password?
 
-      db.put.user user_doc, cb
+      db.put_user user_doc, cb
 
   add_roles: (uri,name,roles,cb) ->
     db = pico uri
-    db.get.user name, (e,r,user_doc) ->
+    db.get_user name, (e,r,user_doc) ->
 
       if e or not user_doc?._rev?
         user_doc = {name}
@@ -211,4 +211,4 @@ ccnq3.db =
       for role in roles
         user_doc.roles.push role unless role in user_doc.roles
 
-      db.put.user user_doc, cb
+      db.put_user user_doc, cb
