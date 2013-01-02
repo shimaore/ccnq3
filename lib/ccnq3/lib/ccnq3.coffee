@@ -4,6 +4,8 @@ qs = require 'querystring'
 
 debug = false
 
+ccnq3 = modules.exports
+
 #### ccnq3.amqp
 
 # The default exchange for this application is called `ccnq3`.
@@ -23,14 +25,14 @@ amqp = (cb) ->
         connection = require('amqp').createConnection {url: config.amqp}
       else
         connection = require('amqp').createConnection config.amqp
-      module.exports.amqp.connection = connection
+      ccnq3.amqp.connection = connection
       connection.on 'ready', ->
         cb? connection
     else
       cb? null
   return
 
-module.exports.amqp = amqp
+ccnq3.amqp = amqp
 
 #### ccnq3.log(msg)
 # Logs a message or object to AMQP (if available) or to stderr.
@@ -61,7 +63,7 @@ log = (msg) ->
 #       q.subscribe (m) ->
 #         console.log m.msg ? util.inspect m
 
-module.exports.log = log
+ccnq3.log = log
 
 #### CCNQ3 Tools
 #
@@ -72,7 +74,7 @@ module.exports.log = log
 #
 make_id = (t,n) -> [t,n].join ':'
 
-exports.make_id = make_id
+ccnq3.make_id = make_id
 
 #### Configuration management
 #
@@ -105,8 +107,8 @@ get = (cb)->
     # Callback
     cb config
 
-module.exports.config = get
-module.exports.config.location = config_location
+ccnq3.config = get
+ccnq3.location = config_location
 
 #### ccnq3.config.retrieve(config,callback)
 # Attempt to retrieve the configuration from the provisioning database.
@@ -127,7 +129,7 @@ retrieve = (config,cb) ->
       util.error "Retrieved live configuration." if debug
       cb p
 
-module.exports.config.retrieve = retrieve
+ccnq3.config.retrieve = retrieve
 
 #### ccnq3.config.attachment(config,name,callback(data))
 # Attempt to retrieve the attachment from the provisioning database.
@@ -148,7 +150,7 @@ attachment = (config,name,cb) ->
     else
       cb p
 
-module.exports.config.attachment = attachment
+ccnq3.config.attachment = attachment
 
 #### ccnq3.config.update(config)
 # Attempt to save the given configuration in the local storage.
@@ -160,11 +162,11 @@ update = (content) ->
   fs = require 'fs'
   fs.writeFileSync config_location, JSON.stringify content
 
-module.exports.config.update = update
+ccnq3.config.update = update
 
 #### ccnq3.db
 #
-module.exports.db =
+ccnq3.db =
   # Update ACLs and code
   #### ccnq3.db.security(db_uri,name,trust_hosts)
   # Updates the security record for the given database, using the given name as the database type.
