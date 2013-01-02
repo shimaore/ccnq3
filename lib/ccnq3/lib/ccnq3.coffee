@@ -4,7 +4,7 @@ qs = require 'querystring'
 
 debug = false
 
-ccnq3 = modules.exports
+ccnq3 = module.exports
 
 #### ccnq3.amqp
 
