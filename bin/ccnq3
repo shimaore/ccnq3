@@ -248,6 +248,8 @@ commands =
         console.error 'Users access is not available on this host.'
         return
 
+      pico = require 'pico'
+
       # Take care of the setup in the _users database.
       user_db = pico config.users.couchdb_uri
       host_user = 'host@' + hostname
@@ -366,6 +368,7 @@ commands =
               unless 200 <= r.statusCode < 300
                 console.error "Could not create AMQP user: #{e}"
                 process.exit 1
+    return
 
 
 run = ->

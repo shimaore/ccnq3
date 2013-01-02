@@ -25,6 +25,7 @@
     "ccnq3": ">=0.4.8"
   , "request": "*"
   , "npm": "*"
+  , "pico": ">=0.1.10"
   },
   "devDependencies": {
     "github-flavored-markdown": "*"
