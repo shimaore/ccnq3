@@ -31,6 +31,13 @@ to make sure they all report the name you expect.
 
 Note: ccnq3 contains a DNS server package that will automatically provide proper records for all servers configured in the system, so this requirement can be met relatively easily.  See below for more information on `ccnq3_dns`.
 
+Required Services
+-----------------
+
+You MUST have a reliable clock on the system. This is necessary to do proper billing and greatly facilitates troubleshooting. Therefor:
+
+    aptitude install ntp ntpdate
+
 IPv6
 ====
 
