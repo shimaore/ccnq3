@@ -1,1 +1,2 @@
 common/munin/plugins/freeswitch* /usr/share/munin/plugins
+common/munin/plugin-conf.d/ccnq3-munin-freeswitch /etc/munin/plugin-conf.d

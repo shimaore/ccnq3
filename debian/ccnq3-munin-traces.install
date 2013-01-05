@@ -1,1 +1,2 @@
 common/munin/plugins/dumpcap* /usr/share/munin/plugins
+common/munin/plugin-conf.d/ccnq3-munin-traces /etc/munin/plugin-conf.d
