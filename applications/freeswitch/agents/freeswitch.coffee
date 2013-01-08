@@ -85,8 +85,15 @@ require('ccnq3').config (config) ->
       for show, file of files
         do (show,file)->
           expected++
-          save_uri_as "#{config.provisioning.local_couchdb_uri}/_design/freeswitch/_show/#{show}/#{host_uri}", file,  ->
-            util.log "Updated #{file}"
+          save_uri_as "#{config.provisioning.local_couchdb_uri}/_design/freeswitch/_show/#{show}/#{host_uri}", file,  (e,r) ->
+            if e?
+              util.error "Error when updating #{file}: error=#{e}"
+              return
+            if r?.statusCode isnt 200
+              util.error "Error when updating #{file}: statusCode=#{r.statusCode}"
+              return
+            else
+              util.log "Updated #{file}"
             if --expected is 0 then cb?()
 
     # 1b. Apply configuration changes
