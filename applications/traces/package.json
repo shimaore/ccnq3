@@ -8,7 +8,7 @@
     "file": "/etc/ccnq3/host.json"
   },
   "scripts": {
-    "start": "./start.coffee; daemon -n ccnq3_trace_server -o daemon.debug -D \"`pwd`/agents\" -r -- ./agent.coffee"
+    "start": "./start.coffee; daemon -n ccnq3_trace_server -o daemon.debug -D \"`pwd`/agents\" -r -- ./couch_agent.coffee"
   , "stop": "./stop.coffee; daemon -n ccnq3_trace_server -o daemon.debug --stop"
   },
   "dependencies": {
