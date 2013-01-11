@@ -391,6 +391,7 @@ run = ->
       console.info "  #{c}"
     return 1
 
+  command = command.replace /_/g, ' '
   if commands[command]?
     commands[command] args...
   else
