@@ -39,6 +39,7 @@ case "$1" in
     mkdir -p ${ETCDIR}
     chown -R $USER:$GROUP ${ETCDIR}
     chmod -R o-rwx ${ETCDIR}
+    chmod u+s ${ETCDIR}
 
     # Install other dependencies
     npm -g install coffee-script || exit 1
