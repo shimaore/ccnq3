@@ -557,6 +557,8 @@ To start traces:
 Installation note: this is not enabled by default even after you install the ccnq3-traces package.
 You must specify which interfaces will be used for traces by using the `traces.interfaces` array.
 
+Configuration:
+
 *   `traces`:
 
     * `interfaces`: [] of interfaces names
@@ -577,8 +579,7 @@ To obtain data from the trace files, use the AMQP bus with exchange `traces` and
     * `days_ago`    integer; only lookup for this number of days ago (0 = today)
     * `format`      string; either 'pcap' or 'json'
 
-    * `respond_via` string: either "couch" (the default) or "amqp". Note that some responses may be too large for AMQP, so use CouchDB preferably.
-    * `trace`       string: when using `respond_via` `couch`, the desired document key. (The document type will be set to `trace` and the document `_id` will be set to `trace:` + this field.) This value must be unique.
+    * `reference`   string: the desired response reference.
     * `upload_uri`  URI: when using `respond_via` `couch`, the database URI to use instead of the configured value.
 
 If `format` is `json, the JSON ouput will be an array of hash record; the records might contain the following fields:
@@ -606,13 +607,18 @@ If `format` is `json, the JSON ouput will be an array of hash record; the record
   `sip.contact.addr`
   `sip.User-Agent`
 
-When using `respond_via` `couch`, the JSON output is stored in a field called `packets`.
+The response are stored in the CouchDB specified by `upload_uri`. The record will contain:
 
-If `format` is `pcap`, you will be able to obtain the entire trace content as a PCAP document.
 
-When using `respond_via` `couch`, the PCAP output is attached to the CouchDB document as `packets.pcap`.
+    * `_id`: type + `:` + reference + `:` + host
+    * `type`: "trace"
+    * `host`: the host on which the query was ran
+    * `packets`: the array of packets (JSON output specified above) [if format is `json`]
+    * and all other fields in the AMQP request.
 
-Application note: this type of request is highly CPU intensive for the target host. It is only meant as a troubleshooting tool for administrators, not as a generically available service. Use the cdr database to obtain per-call information as a generic service.
+If `format` is `pcap`, the PCAP output is attached to the CouchDB document as `packets.pcap`.
+
+Application note: this type of request is highly CPU intensive for the target hosts. It is only meant as a troubleshooting tool for administrators, not as a generically available service. Use the cdr database to obtain per-call information as a generic service.
 
 Caveat: Since the trace files are rotated to not exceed a given disk space, it is possible that a trace might not be found even though a call was placed.
 
@@ -1533,3 +1539,9 @@ This API offers the following functions:
   Return a JSON content with a `user_database` field on success.
 
   Note: `applications/voicemail-store` must be installed for the user database to be properly initialized.
+
+### Trace request
+
+`PUT /_ccnq3/traces`
+
+  Publish a trace request in the AMQP bus; the body of the HTTP request will be used as the AMQP request body.
