@@ -95,6 +95,19 @@ commands =
       console.log "#{base_uri}/_utils/"
     return
 
+  'create admin password': ->
+    ccnq3.config (config) ->
+      config.admin ?= {}
+      if not config.admin.password?
+        crypto.randomBytes 32, (e,buf) ->
+          if e then throw e
+          config.admin.password = buf.toString 'hex'
+          ccnq3.config.update config
+          console.log config.admin.password
+      else
+        console.log config.admin.password
+      return
+
   'get name': ->
     console.log NAME
     return

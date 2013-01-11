@@ -9,57 +9,6 @@ case "$1" in
 
     HOSTNAME="`ccnq3 'get hostname'`"
 
-    COUCHDB_CONFIG=/etc/couchdb/local.ini
-    if egrep -q '^admin =' ${COUCHDB_CONFIG}; then
-      echo "CouchDB and RabbitMQ already configured."
-    else
-      # Using 128 or higher does not work.
-      ADMIN_PASSWORD=`openssl rand 32 -hex`
-
-
-      # -------- RabbitMQ ---------- #
-
-      # Delete the default `guest` user.
-      rabbitmqctl delete_user guest
-
-      # Add an `admin` user back in
-      rabbitmqctl delete_user admin
-      rabbitmqctl add_user admin "${ADMIN_PASSWORD}"
-      rabbitmqctl set_user_tags admin administrator
-      rabbitmqctl add_vhost ccnq3
-      # Permissions: configure resources, write resources, read resources
-      rabbitmqctl set_permissions -p ccnq3 admin ".*" ".*" ".*"
-
-      su -s /bin/sh -c "ccnq3 'set admin amqp' 'amqp://admin:${ADMIN_PASSWORD}@${HOSTNAME}/ccnq3'" $USER || exit 1
-
-      # ----------- CouchDB ---------- #
-
-      CDB_DIR=/var/lib/couchdb/$NAME
-
-      echo "Re-configuring CouchDB"
-
-      /etc/init.d/couchdb stop
-      # Still having issues reliably stopping couchdb.
-      killall couchdb heart
-
-      mkdir -p $CDB_DIR && chmod 0755 $CDB_DIR && chown couchdb.couchdb $CDB_DIR || exit 1
-
-      su -s /bin/sh -c "ccnq3 'set admin uri' 'http://admin:${ADMIN_PASSWORD}@${HOSTNAME}:5984'" $USER || exit 1
-
-      # Apparently using /etc/couchdb/local.d/ccnq3 does not work.
-      cp "`ccnq3 'get config source'`/bin/manager.ini" "${COUCHDB_CONFIG}"
-      sed -i -e "s/NAME/${NAME}/" "${COUCHDB_CONFIG}"
-      sed -i -e "s/^admin =.*$/admin = ${ADMIN_PASSWORD}/" "${COUCHDB_CONFIG}"
-      chown couchdb.couchdb "${COUCHDB_CONFIG}"
-
-      /etc/init.d/couchdb start
-
-    fi
-
-    ## This will enable the web interface on port 55672
-    rabbitmq-plugins enable rabbitmq_management
-
-    # Generic
     su -s /bin/sh -c "ccnq3 'set local defaults'"  $USER || exit 1
     su -s /bin/sh -c "ccnq3 'add host' ${HOSTNAME}"  $USER || exit 1
     (cd "`ccnq3 'get config source'`" && \

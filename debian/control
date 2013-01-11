@@ -15,9 +15,7 @@ Description: Installs the ccnq3 code in /opt/ccnq3/src
 Package: ccnq3-manager
 Architecture: all
 Depends:
-  ccnq3,
-  couchdb (=1.2.0-4),
-  rabbitmq-server
+  ccnq3, ccnq3-couchdb, ccnq3-rabbitmq-server
 Conflicts: ccnq3-client, ccnq3-manager-shared
 Description: Bootstrap the ccnq3 system in manager mode.
   This package installs the ccnq3 system in manager mode by
@@ -26,6 +24,20 @@ Description: Bootstrap the ccnq3 system in manager mode.
   Do NOT install this package if the CouchDB database is
   shared with other applications besides ccnq3. Use the
   ccnq3-manager-shared package in that case.
+
+Package: ccnq3-couchdb
+Architecture: all
+Depends: ccnq3, couchdb (=1.2.0-4)
+Description: Installs CouchDB for CCNQ3
+  Configure CouchDB the same way CCNQ3 does on a manager server,
+  but does not set up the CCNQ3 applications.
+
+Package: ccnq3-rabbitmq-server
+Architecture: all
+Depends: ccnq3, rabbitmq-server
+Description: Installs RabbitMQ for CCNQ3
+  Configure RabbitMQ the same way CCNQ3 does on a manager server,
+  but does not set up the CCNQ3 applications.
 
 Package: ccnq3-client
 Architecture: all
