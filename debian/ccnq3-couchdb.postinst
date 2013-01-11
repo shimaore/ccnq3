@@ -16,7 +16,7 @@ case "$1" in
     else
       echo "Configuring CouchDB."
 
-      ADMIN_PASSWORD="`su -s /bin/sh -c 'ccnq3 create_admin_password' $USER`"
+      ADMIN_PASSWORD="`ccnq3 create_admin_password`"
 
       COUCHDB_CONFIG=/etc/couchdb/local.ini
       CDB_DIR=/var/lib/couchdb/$NAME
@@ -28,7 +28,7 @@ case "$1" in
 
       mkdir -p $CDB_DIR && chmod 0755 $CDB_DIR && chown couchdb.couchdb $CDB_DIR || exit 1
 
-      su -s /bin/sh -c "ccnq3 set_admin_uri 'http://admin:${ADMIN_PASSWORD}@${HOSTNAME}:5984'" $USER || exit 1
+      ccnq3 set_admin_uri 'http://admin:${ADMIN_PASSWORD}@${HOSTNAME}:5984' || exit 1
 
       # Apparently using /etc/couchdb/local.d/ccnq3 does not work.
       cp "`ccnq3 get_config_source`/bin/manager.ini" "${COUCHDB_CONFIG}"
