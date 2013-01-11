@@ -1,4 +1,5 @@
-# (c) 2012 Stephane Alnet
+#
+# OBSOLETE
 #
 http = require 'http'
 json_pipe = require './json_pipe'

@@ -274,7 +274,7 @@ your installation.
 
     AMQP URI with access for the local host, complete with `ccnq3` vhost. (Similar authentication as `provisioning.host_couchdb_uri`.)
 
-    (Under development) AMQP is used to forward logging data, send command to servers (replaces the obsolete `sip_commands` and `traces.run`) and retrieve data (traces, registrant).
+    (Under development) AMQP is used to forward logging data, send command to servers (replaces the obsolete `sip_commands`) and retrieve data (registrant).
 
 Changing any of the following settings would require to restart the matching
 services, since configuration is read (in most cases) once at startup.
@@ -560,58 +560,61 @@ You must specify which interfaces will be used for traces by using the `traces.i
 *   `traces`:
 
     * `interfaces`: [] of interfaces names
+    * `upload_uri`: for `respond_via` == `couch`, the URI for the database that will receive the trace documents. (We recommend you use the `logging` database for this purpose.)
 
-    There's no reason to modify the following parameters for traces.
+    There's no reason to modify the following parameters.
 
     * `filesize`: integer, maximum size of the sniffer traces (in ko) [default: 10000]
     * `ringsize`: integer, maximum number of sniffer trace files [default: 50]
     * `workdir`: string, directory used to store the traces [default: "/opt/ccnq3/traces"]
     * `filter`: string, pcap filter for traces [default: ports used by ccnq3 applications]
 
-    To obtain data from the trace files, use `traces.run`.
+To obtain data from the trace files, use the AMQP bus with exchange `traces` and topic `request`. The body of the request must be a JSON object with the following properties:
 
-    * `run`: {} of traces to run; the index is the TCP port number; content:
+    * `to_user`     string; To username (destination number)
+    * `from_user`   string; From username (calling number)
+    * `call_id`     string; Call-ID
+    * `days_ago`    integer; only lookup for this number of days ago (0 = today)
+    * `format`      string; either 'pcap' or 'json'
 
-        * `to_user`     string; To username (destination number)
-        * `from_user`   string; From username (calling number)
-        * `call_id`     string; Call-ID
-        * `days_ago`    integer; only lookup for this number of days ago (0 = today)
-        * `format`      string; either 'pcap' or 'json'
+    * `respond_via` string: either "couch" (the default) or "amqp". Note that some responses may be too large for AMQP, so use CouchDB preferably.
+    * `trace`       string: when using `respond_via` `couch`, the desired document key. (The document type will be set to `trace` and the document `_id` will be set to `trace:` + this field.) This value must be unique.
+    * `upload_uri`  URI: when using `respond_via` `couch`, the database URI to use instead of the configured value.
 
-        For each entry in `traces.run`, a single-shot web server will be started on the specified port number.
-        That server will send back either a JSON or a PCAP document which will contain packets found
-        in the available trace files on the server.
-        (Since the trace files are rotated to not exceed a given disk space, it is possible that a
-        trace might not be found even though a call was placed.)
+If `format` is `json, the JSON ouput will be an array of hash record; the records might contain the following fields:
 
-        The JSON ouput is an array of hash record; the records might contain the following fields:
-            "frame.time"
-            "ip.version"
-            "ip.dsfield.dscp"
-            "ip.src"
-            "ip.dst"
-            "ip.proto"
-            "udp.srcport"
-            "udp.dstport"
-            "sip.Call-ID"
-            "sip.Request-Line"
-            "sip.Method"
-            "sip.r-uri.user"
-            "sip.r-uri.host"
-            "sip.r-uri.port"
-            "sip.Status-Line"
-            "sip.Status-Code"
-            "sip.to.user"
-            "sip.from.user"
-            "sip.From"
-            "sip.To"
-            "sip.contact.addr"
-            "sip.User-Agent"
-        To obtain the complete data use the PCAP download.
+  `frame.time`
+  `ip.version`
+  `ip.dsfield.dscp`
+  `ip.src`
+  `ip.dst`
+  `ip.proto`
+  `udp.srcport`
+  `udp.dstport`
+  `sip.Call-ID`
+  `sip.Request-Line`
+  `sip.Method`
+  `sip.r-uri.user`
+  `sip.r-uri.host`
+  `sip.r-uri.port`
+  `sip.Status-Line`
+  `sip.Status-Code`
+  `sip.to.user`
+  `sip.from.user`
+  `sip.From`
+  `sip.To`
+  `sip.contact.addr`
+  `sip.User-Agent`
 
-        Application note: this type of request is highly CPU intensive for the target host.
-        It is only meant as a troubleshooting tool for administrators, not as a generically available service.
-        Use the cdr database to obtain per-call information as a generic service.
+When using `respond_via` `couch`, the JSON output is stored in a field called `packets`.
+
+If `format` is `pcap`, you will be able to obtain the entire trace content as a PCAP document.
+
+When using `respond_via` `couch`, the PCAP output is attached to the CouchDB document as `packets.pcap`.
+
+Application note: this type of request is highly CPU intensive for the target host. It is only meant as a troubleshooting tool for administrators, not as a generically available service. Use the cdr database to obtain per-call information as a generic service.
+
+Caveat: Since the trace files are rotated to not exceed a given disk space, it is possible that a trace might not be found even though a call was placed.
 
 ### Specific to hosts running as registrants. ###
 

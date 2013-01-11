@@ -7,7 +7,7 @@ ccnq3.amqp (c) ->
     c.queue 'trace-requests', (q) ->
       q.bind e, 'request'
       q.subscribe (doc) ->
-        switch doc.respond_via
+        switch doc.respond_via ? 'couch'
           when 'amqp'
             require('./trace_amqp') config, doc
           when 'http'

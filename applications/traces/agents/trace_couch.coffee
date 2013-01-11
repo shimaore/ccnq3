@@ -5,6 +5,7 @@
 #
 # This allows for storage of large responses (a potential issue with AMQP).
 
+ccnq3 = require 'ccnq3'
 pico = require 'pico'
 json_gather = require './json_gather'
 trace = require './trace'
@@ -14,6 +15,9 @@ module.exports = (config,doc) ->
 
   dest = pico doc.upload_uri ? config.traces.upload_uri
   self = trace config, doc
+
+  doc.type = 'trace'
+  doc._id = ccnq3.make_id doc.type, doc.trace
 
   switch doc.format
     when 'json'

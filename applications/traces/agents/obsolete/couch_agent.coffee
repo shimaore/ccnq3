@@ -1,8 +1,7 @@
 #!/usr/bin/env coffee
 #
-## The host records in the provisioning database may contain
-# attachment scripts, whose job it is to maintain
-# invariants inside the given host.
+# OBSOLETE
+#
 
 pico = require 'pico'
 

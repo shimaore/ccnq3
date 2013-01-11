@@ -1,4 +1,5 @@
-# (c) 2012 Stephane Alnet
+#
+# OBSOLETE
 #
 ccnq3 = require 'ccnq3'
 json_pipe = require './json_pipe'
