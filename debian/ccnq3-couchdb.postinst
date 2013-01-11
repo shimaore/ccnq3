@@ -11,6 +11,8 @@ case "$1" in
 
     HOSTNAME="`ccnq3 get_hostname`"
 
+    COUCHDB_CONFIG=/etc/couchdb/local.ini
+
     if egrep -q '^admin =' ${COUCHDB_CONFIG}; then
       echo "CouchDB already configured."
     else
@@ -18,7 +20,6 @@ case "$1" in
 
       ADMIN_PASSWORD="`ccnq3 create_admin_password`"
 
-      COUCHDB_CONFIG=/etc/couchdb/local.ini
       CDB_DIR=/var/lib/couchdb/$NAME
 
       # Stop CouchDB.
