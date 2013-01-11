@@ -13,11 +13,14 @@ qs = require 'querystring'
 
 module.exports = (config,doc) ->
 
+  return unless doc.reference?
+
   dest = pico doc.upload_uri ? config.traces.upload_uri
   self = trace config, doc
 
   doc.type = 'trace'
-  doc._id = ccnq3.make_id doc.type, doc.trace
+  doc.host = config.host
+  doc._id = ccnq3.make_id doc.type, doc.reference, doc.host
 
   switch doc.format
     when 'json'

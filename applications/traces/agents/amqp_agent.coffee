@@ -1,16 +1,14 @@
 #!/usr/bin/env coffee
 
 ccnq3 = require 'ccnq3'
+trace_couch = require './trace_couch'
+
+config = null
+ccnq3.config (c) -> config = c
 
 ccnq3.amqp (c) ->
   c.exchange 'traces', {type:'topic',durable:true}, (e) ->
     c.queue 'trace-requests', (q) ->
       q.bind e, 'request'
       q.subscribe (doc) ->
-        switch doc.respond_via ? 'couch'
-          when 'amqp'
-            require('./trace_amqp') config, doc
-          when 'http'
-            require('./trace_server') config, doc.port, doc
-          when 'couch'
-            require('./trace_couch') config, doc
+        trace_couch config, doc
