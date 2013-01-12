@@ -1,0 +1,43 @@
+[ GithubUser
+    { githubOwnerAvatarUrl = "https://secure.gravatar.com/avatar/225be288d441538373324ad642b0a35b?d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png"
+    , githubOwnerLogin = "reutopiaer"
+    , githubOwnerUrl = "https://api.github.com/users/reutopiaer"
+    , githubOwnerId = 759279
+    , githubOwnerGravatarId = "225be288d441538373324ad642b0a35b"
+    }
+, GithubUser
+    { githubOwnerAvatarUrl = "https://secure.gravatar.com/avatar/556ac295be4e9930f9020c7941b281ea?d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png"
+    , githubOwnerLogin = "ThePontus"
+    , githubOwnerUrl = "https://api.github.com/users/ThePontus"
+    , githubOwnerId = 1275441
+    , githubOwnerGravatarId = "556ac295be4e9930f9020c7941b281ea"
+    }
+, GithubUser
+    { githubOwnerAvatarUrl = "https://secure.gravatar.com/avatar/5b8c6fac3c1fecc69468c57f813d7bf3?d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png"
+    , githubOwnerLogin = "shimaore"
+    , githubOwnerUrl = "https://api.github.com/users/shimaore"
+    , githubOwnerId = 55340
+    , githubOwnerGravatarId = "5b8c6fac3c1fecc69468c57f813d7bf3"
+    }
+, GithubUser
+    { githubOwnerAvatarUrl = "https://secure.gravatar.com/avatar/8943a0e2d07a213a92d5ed3ca0339201?d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png"
+    , githubOwnerLogin = "beres"
+    , githubOwnerUrl = "https://api.github.com/users/beres"
+    , githubOwnerId = 163695
+    , githubOwnerGravatarId = "8943a0e2d07a213a92d5ed3ca0339201"
+    }
+, GithubUser
+    { githubOwnerAvatarUrl = "https://secure.gravatar.com/avatar/8ad9f63b9bd8e84da55eb083d25344db?d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png"
+    , githubOwnerLogin = "themgt"
+    , githubOwnerUrl = "https://api.github.com/users/themgt"
+    , githubOwnerId = 254128
+    , githubOwnerGravatarId = "8ad9f63b9bd8e84da55eb083d25344db"
+    }
+, GithubUser
+    { githubOwnerAvatarUrl = "https://secure.gravatar.com/avatar/f884002d7c4aabf18f867f6b4adba1e6?d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png"
+    , githubOwnerLogin = "abpin"
+    , githubOwnerUrl = "https://api.github.com/users/abpin"
+    , githubOwnerId = 440059
+    , githubOwnerGravatarId = "f884002d7c4aabf18f867f6b4adba1e6"
+    }
+]
