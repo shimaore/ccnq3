@@ -31,17 +31,6 @@ case "$1" in
 
       ccnq3 set_admin_uri "http://admin:${ADMIN_PASSWORD}@${HOSTNAME}:5984" || exit 1
 
-      # This service can only run on the CouchDB server.
-      ccnq3 add_local_service applications/couch_daemon || exit 1
-      # These services only contain a `couchapp` subdirectory and only affect CouchDB.
-      # They do not start local services or servers.
-      ccnq3 add_local_service applications/provisioning || exit 1
-      ccnq3 add_local_service applications/logging      || exit 1
-      ccnq3 add_local_service applications/cdrs         || exit 1
-      ccnq3 add_local_service applications/locations    || exit 1
-      # This service starts a local service but it only affects CouchDB.
-      ccnq3 add_local_service applications/voicemail-store || exit 1
-
       # Apparently using /etc/couchdb/local.d/ccnq3 does not work.
       cp "`ccnq3 get_config_source`/bin/manager.ini" "${COUCHDB_CONFIG}"
       sed -i -e "s/NAME/${NAME}/" "${COUCHDB_CONFIG}"
@@ -51,6 +40,18 @@ case "$1" in
       # Re-start CouchDB.
       /etc/init.d/couchdb start
     fi
+
+    # This service can only run on the CouchDB server.
+    ccnq3 add_local_service applications/couch_daemon || exit 1
+    # These services only contain a `couchapp` subdirectory and only affect CouchDB.
+    # They do not start local services or servers.
+    ccnq3 add_local_service applications/provisioning || exit 1
+    ccnq3 add_local_service applications/logging      || exit 1
+    ccnq3 add_local_service applications/cdrs         || exit 1
+    ccnq3 add_local_service applications/locations    || exit 1
+    # This service starts a local service but it only affects CouchDB.
+    ccnq3 add_local_service applications/voicemail-store || exit 1
+
   ;;
 
   remove|purge)
