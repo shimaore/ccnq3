@@ -15,14 +15,13 @@ default_apps = [
   "applications/host"
 ]
 
+# This is the list of apps listed in debian/ccnq3-couchdb.postinst
 manager_apps = [
+  "applications/couch_daemon"
   "applications/provisioning"
   "applications/logging"
-  "applications/monitor"
-  "applications/host"
   "applications/cdrs"
   "applications/locations"
-  "applications/couch_daemon"
   "applications/voicemail-store"
 ]
 
@@ -33,13 +32,16 @@ set_defaults = (prov_doc,hostname) ->
     prov_doc.type ?= 'host'
     prov_doc.host ?= hostname
     prov_doc.interfaces ?= {}
+    prov_doc.applications ?= []
 
     prov_doc.account ?= ''
     prov_doc.updated_at ?= new Date().getTime()
 
     if prov_doc.admin?.system
       # --  Manager host  -- #
-      apps = manager_apps
+      for app in manager_apps
+        unless app in prov_doc.applications
+          prov_doc.applications.push app
 
       # This _has_ to be present on a Manager.
       admin_info = url.parse prov_doc.admin.couchdb_uri
@@ -64,12 +66,8 @@ set_defaults = (prov_doc,hostname) ->
         auth:     prov_doc.admin.auth
         pathname: '/api'
       prov_doc.admin.amqp_mgmt ?= url.format amqp_mgmt
-    else
-      # --  Non-manager host  -- #
-      apps = default_apps
 
-    prov_doc.applications ?= []
-    for app in apps
+    for app in default_apps
       unless app in prov_doc.applications
         prov_doc.applications.push app
 

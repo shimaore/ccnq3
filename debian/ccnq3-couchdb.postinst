@@ -39,6 +39,8 @@ case "$1" in
       ccnq3 add_local_service applications/logging      || exit 1
       ccnq3 add_local_service applications/cdrs         || exit 1
       ccnq3 add_local_service applications/locations    || exit 1
+      # This service starts a local service but it only affects CouchDB.
+      ccnq3 add_local_service applications/voicemail-store || exit 1
 
       # Apparently using /etc/couchdb/local.d/ccnq3 does not work.
       cp "`ccnq3 get_config_source`/bin/manager.ini" "${COUCHDB_CONFIG}"
