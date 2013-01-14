@@ -16,6 +16,16 @@
   </condition>
 </extension>
 
+<!-- Privacy: id or other requested privacy -->
+<extension name="cleanup-caller-id-privacy" continue="true">
+  <condition field="destination_number" expression="^call"/>
+  <condition field="${privacy_hide_number}" expression="true">
+    <action application="privacy" data="full"/>
+    <action application="set" data="effective_caller_id_name=_undef_"/>
+    <action application="set" data="effective_caller_id_number=anonymous"/>
+    <action application="set" data="origination_privacy=screen+hide_name+hide_number"/>
+  </condition>
+</extension>
 
 <!-- to: US number -->
 <extension name="cleanup-called-1">
