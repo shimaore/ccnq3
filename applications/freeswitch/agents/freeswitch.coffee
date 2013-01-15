@@ -53,8 +53,22 @@ process_changes = (commands) ->
 request = require 'request'
 fs = require 'fs'
 save_uri_as = (uri,file,cb)->
-  fs.unlink file # According to default installation scheme, we can write to the directory but not necessarily to the files
-  request(uri,cb).pipe(fs.createWriteStream(file))
+  request uri, (e,r,b) ->
+    if e?
+      util.error "Error when updating #{file}: error=#{e}"
+      return
+    if r?.statusCode isnt 200
+      util.error "Error when updating #{file}: statusCode=#{r.statusCode}"
+      return
+    # According to default installation scheme, we can write to the directory but not necessarily to the files.
+    fs.unlink file, ->
+      # Ignore unlink error, since the file might not have been there in the first place.
+      # Write content to file
+      fs.writeFile file, b, (e) ->
+        if e?
+          util.error "Error when updating #{file}: error=#{e}"
+          return
+        do cb
 
 # Main
 
@@ -85,15 +99,7 @@ require('ccnq3').config (config) ->
       for show, file of files
         do (show,file)->
           expected++
-          save_uri_as "#{config.provisioning.local_couchdb_uri}/_design/freeswitch/_show/#{show}/#{host_uri}", file,  (e,r) ->
-            if e?
-              util.error "Error when updating #{file}: error=#{e}"
-              return
-            if r?.statusCode isnt 200
-              util.error "Error when updating #{file}: statusCode=#{r.statusCode}"
-              return
-            else
-              util.log "Updated #{file}"
+          save_uri_as "#{config.provisioning.local_couchdb_uri}/_design/freeswitch/_show/#{show}/#{host_uri}", file,  ->
             if --expected is 0 then cb?()
 
     # 1b. Apply configuration changes
