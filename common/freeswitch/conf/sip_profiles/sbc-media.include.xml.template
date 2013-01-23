@@ -106,7 +106,7 @@
     <!-- Codec -->
     <param name="inbound-codec-prefs" value="$${global_codec_prefs}"/>
     <param name="outbound-codec-prefs" value="$${global_codec_prefs}"/>
-    <param name="inbound-codec-negotiation" value="greedy"/>
+    <param name="inbound-codec-negotiation" value="scrooge"/>
 
     <!-- DTMF -->
     <param name="dtmf-type" value="rfc2833"/>
