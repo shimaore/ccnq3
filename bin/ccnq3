@@ -273,7 +273,11 @@ commands =
 
       base_uri = config.admin?.couchdb_uri
       if not base_uri?
-        console.error 'Admin access is not available on this host.'
+        console.error 'CouchDB admin access is not available on this host.'
+        return
+
+      if not config.admin?.amqp_mgmt?
+        console.error 'AMQP admin access is not available on this host.'
         return
 
       if not config.users?.couchdb_uri?
@@ -304,10 +308,10 @@ commands =
 
         # Take care of the setup in the provisioning database.
         _id = ccnq3.make_id 'host', hostname
-        prov_db = pico config.admin.couchdb_uri
+        prov_db = pico base_uri
         prov_db.get _id, (e,r,prov_doc) ->
-          if e or not prov_doc?._rev?
-            console.log "Assuming new record for user #{host_user}"
+          if not prov_doc?._rev?
+            console.log "Assuming new record for user #{host_user} (#{e})"
             prov_doc = {}
 
           make_host_uri = (cdb_uri,pathname) ->
@@ -379,14 +383,14 @@ commands =
 
           # Register with RabbitMQ
           amqp_mgmt = pico.request config.admin.amqp_mgmt
-          if not amqp_mgmt?
-            console.error "Missing admin.amqp_mgmt configuration parameter."
-            process.exit 1
 
           amqp_user_info =
             password: prov_doc.password
             tags: ""
           amqp_mgmt.put "/users/#{escape host_user}", json:amqp_user_info, (e,r) ->
+            if e?
+              console.error "Could not create AMQP user: #{e}"
+              process.exit 1
             unless 200 <= r.statusCode < 300
               console.error "Could not create AMQP user: #{e}"
               process.exit 1
