@@ -381,6 +381,9 @@ commands =
 
           prov_doc.provisioning.local_couchdb_uri ?= 'http://127.0.0.1:5984/provisioning'
 
+          # save in provisioning db
+          prov_db.put prov_doc
+
           # Register with RabbitMQ
           amqp_mgmt = pico.request config.admin.amqp_mgmt
 
@@ -392,7 +395,7 @@ commands =
               console.error "Could not create AMQP user: #{e}"
               process.exit 1
             unless 200 <= r.statusCode < 300
-              console.error "Could not create AMQP user: #{e}"
+              console.error "Could not create AMQP user: #{r.statusCode}"
               process.exit 1
             # FIXME get the vhost from the amqp URI.
             user_vhost = NAME
