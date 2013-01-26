@@ -105,7 +105,7 @@ get = (cb)->
   # happen because the user manually edited the file, the disk is full,
   # permissions are incorrect, etc.
   # It's better to just fail in that case.
-  fs_content = JSON.parse fs.readFileSync config_location, 'utf8'
+  fs_config = JSON.parse fs.readFileSync config_location, 'utf8'
   rev = fs_config?._rev
   retrieve fs_config, (config) ->
     # Save any new revision locally
