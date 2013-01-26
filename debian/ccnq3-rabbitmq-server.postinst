@@ -28,7 +28,7 @@ case "$1" in
       # Permissions: configure resources, write resources, read resources
       rabbitmqctl set_permissions -p ccnq3 admin ".*" ".*" ".*"
 
-      ccnq3 'set admin amqp' 'amqp://admin:${ADMIN_PASSWORD}@${HOSTNAME}/ccnq3' || exit 1
+      ccnq3 'set admin amqp' "amqp://admin:${ADMIN_PASSWORD}@${HOSTNAME}/ccnq3" || exit 1
 
     fi
 
