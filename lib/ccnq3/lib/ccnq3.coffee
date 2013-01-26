@@ -94,11 +94,18 @@ if not config_location?
 get = (cb)->
   util.error "Using #{config_location} as configuration file." if debug
   fs = require 'fs'
-  try
-    fs_config = JSON.parse fs.readFileSync config_location, 'utf8'
-  catch error
-    util.error "Reading #{config_location}: #{util.inspect error}"
+  # It's OK for the local file to not exist.
+  # In that case we do not try to save an empty configuration.
+  if not fs.existsSync config_location
+    util.error "No #{config_location}, assuming empty file."
     return cb {}
+  # However if the file is present but not readable, or its content
+  # is mangled, we will make wrong assumptions about it (like overwriting
+  # its content with defaults, resetting passwords, etc.). This may
+  # happen because the user manually edited the file, the disk is full,
+  # permissions are incorrect, etc.
+  # It's better to just fail in that case.
+  fs_content = JSON.parse fs.readFileSync config_location, 'utf8'
   rev = fs_config?._rev
   retrieve fs_config, (config) ->
     # Save any new revision locally
