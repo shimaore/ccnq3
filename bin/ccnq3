@@ -311,8 +311,8 @@ commands =
         prov_db = pico base_uri
         prov_db.get _id, (e,r,prov_doc) ->
           if not prov_doc?._rev?
-            console.log "Assuming new record for user #{host_user} (#{e})"
-            prov_doc = {}
+            console.log "Assuming new record for _id #{_id} (#{e})"
+            prov_doc = { _id }
 
           make_host_uri = (cdb_uri,pathname) ->
             cdb_info = url.parse cdb_uri
