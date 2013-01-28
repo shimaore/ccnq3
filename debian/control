@@ -27,7 +27,7 @@ Description: Bootstrap the ccnq3 system in manager mode.
 
 Package: ccnq3-couchdb
 Architecture: all
-Depends: ccnq3, couchdb (=1.2.0-5)
+Depends: ccnq3, couchdb (=1.2.1-1)
 Description: Installs CouchDB for CCNQ3
   Configure CouchDB the same way CCNQ3 does on a manager server,
   but does not set up the CCNQ3 applications.
@@ -43,7 +43,7 @@ Package: ccnq3-client
 Architecture: all
 Depends:
   ccnq3,
-  couchdb (=1.2.0-5)
+  couchdb (=1.2.1-1)
 Conflicts: ccnq3-manager, ccnq3-manager-shared
 Description: Bootstrap the ccnq3 system in non-manager mode.
   This package installs the ccnq3 system in non-manager mode by
