@@ -272,8 +272,7 @@ commands =
         SRC = config.source
       process.chdir SRC
 
-      base_uri = config.admin?.couchdb_uri
-      if not base_uri?
+      if not config.admin?.couchdb_uri?
         console.error 'CouchDB admin access is not available on this host.'
         return
 
@@ -283,6 +282,10 @@ commands =
 
       if not config.users?.couchdb_uri?
         console.error 'Users access is not available on this host.'
+        return
+
+      if not config.provisioning?.couchdb_uri?
+        console.error 'Provisioning acces is not available on this host.'
         return
 
       pico = require 'pico'
@@ -309,7 +312,7 @@ commands =
 
         # Take care of the setup in the provisioning database.
         _id = ccnq3.make_id 'host', hostname
-        prov_db = pico base_uri
+        prov_db = pico config.provisioning.couchdb_uri
         prov_db.get _id, (e,r,prov_doc) ->
           unless prov_doc?._rev?
             console.log "Assuming new record for _id #{_id} (#{inspect e})"
