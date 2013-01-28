@@ -7,6 +7,7 @@ SRC="/opt/#{NAME}/src"
 url = require 'url'
 { spawn } = require 'child_process'
 crypto = require 'crypto'
+{ inspect } = require 'util'
 
 ccnq3 = require 'ccnq3'
 
@@ -228,7 +229,7 @@ commands =
 
       ccnq3.db.add_user config.users.couchdb_uri, name, password, (e) ->
         if e
-          console.error 'Could not update the user record: '+e
+          console.error "Could not update the user record: #{inspect e}"
         else
           console.warn 'User account was updated successfully.'
     return
@@ -256,7 +257,7 @@ commands =
 
       ccnq3.db.add_roles config.users.couchdb_uri, name, admin_access, (e) ->
         if e
-          console.error 'Could not update the user record: '+e
+          console.error "Could not update the user record: #{inspect e}"
         else
           console.warn 'User account was updated successfully.'
     return
@@ -303,7 +304,7 @@ commands =
 
         user_db.put_user user_doc, (e) ->
           if e
-            console.error e
+            console.error inspect e
             process.exit 1
 
         # Take care of the setup in the provisioning database.
@@ -311,7 +312,7 @@ commands =
         prov_db = pico base_uri
         prov_db.get _id, (e,r,prov_doc) ->
           unless prov_doc?._rev?
-            console.log "Assuming new record for _id #{_id} (#{e})"
+            console.log "Assuming new record for _id #{_id} (#{inspect e})"
             prov_doc = { _id }
 
           make_host_uri = (cdb_uri,pathname) ->
@@ -384,7 +385,7 @@ commands =
           # save in provisioning db
           prov_db.put prov_doc, (e,r) ->
             if e?
-              console.error "Could not create record for _id #{_id}: #{e}"
+              console.error "Could not create record for _id #{_id}: #{inspect e}"
               process.exit 1
 
           # Register with RabbitMQ
@@ -395,7 +396,7 @@ commands =
             tags: ""
           amqp_mgmt.put "/users/#{escape host_user}", json:amqp_user_info, (e,r) ->
             if e?
-              console.error "Could not create AMQP user: #{e}"
+              console.error "Could not create AMQP user: #{inspect e}"
               process.exit 1
             unless 200 <= r.statusCode < 300
               console.error "Could not create AMQP user: #{r.statusCode}"
@@ -408,7 +409,7 @@ commands =
               read: ".*"
             amqp_mgmt.put "/permissions/#{escape user_vhost}/#{escape host_user}", json:amqp_permissions, (e,r) ->
               unless 200 <= r.statusCode < 300
-                console.error "Could not create AMQP user: #{e}"
+                console.error "Could not create AMQP user: #{inspect e}"
                 process.exit 1
     return
 
