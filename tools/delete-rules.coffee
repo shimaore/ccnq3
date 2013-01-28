@@ -14,7 +14,7 @@ fun = (f) -> '('+f+')'
 debug = true
 
 sip_domain_name = process.argv[2]
-groupid = process.argv[3]
+groupid = parseInt process.argv[3]
 batch_size = 10000
 
 console.log "Started for sip_domain_name #{sip_domain_name} groupid #{groupid}"
@@ -34,7 +34,7 @@ ccnq3.config (config) ->
         by_id:
           map: fun (doc) ->
             if doc.sip_domain_name? and doc.groupid? and not doc._deleted
-              emit [doc.sip_domain_name,doc.groupid], rev:doc._rev, ruleid:doc.ruleid, prefix:doc.prefix
+              emit [doc.sip_domain_name,parseInt doc.groupid], rev:doc._rev, ruleid:doc.ruleid, prefix:doc.prefix
 
     db.put '_design/update_rules', json:design, (e,r,b) ->
       if e

@@ -16,7 +16,7 @@ fun = (f) -> '('+f+')'
 debug = false
 
 sip_domain_name = process.argv[2]
-groupid = process.argv[3]
+groupid = parseInt process.argv[3]
 
 console.log "Started for sip_domain_name #{sip_domain_name} groupid #{groupid}"
 
@@ -84,7 +84,6 @@ ccnq3.config (config) ->
   bulk = new Bulk db
 
   existing_rule = {}
-  new_ruleid = null
 
   db.get '_design/update_rules', json:true, (e,r,b) ->
     if e
@@ -97,12 +96,7 @@ ccnq3.config (config) ->
         by_id:
           map: fun (doc) ->
             if doc.sip_domain_name? and doc.groupid?
-              emit [doc.sip_domain_name,doc.groupid], rev:doc._rev, ruleid:doc.ruleid, prefix:doc.prefix
-        max_id:
-          map: fun (doc) ->
-            if doc.sip_domain_name? and doc.groupid?
-              emit doc.sip_domain_name, doc.ruleid
-          reduce: '_stats'
+              emit [doc.sip_domain_name,parseInt doc.groupid], rev:doc._rev, ruleid:doc.ruleid, prefix:doc.prefix
 
     db.put '_design/update_rules', json:design, (e,r,b) ->
       if e
@@ -126,17 +120,8 @@ ccnq3.config (config) ->
           existing_rule[row.value.prefix] = _rev:row.value.rev, ruleid:ruleid
         console.log "Ruleset had #{b.rows.length} rules."
 
-        view_key = qs.escape JSON.stringify sip_domain_name
-        db.get "_design/update_rules/_view/max_id?key=#{view_key}&reduce=true", json:true, (e,r,b) ->
-          if e
-            console.dir error:e, when:'get view max_id'
-          if b.error
-            console.dir error:b, when:'get view max_id'
-            return
-          new_ruleid = b.rows[0].value.max
-
-          do run
-          return
+        do run
+        return
 
   run = ->
     columns = []
@@ -180,7 +165,7 @@ ccnq3.config (config) ->
       {_rev,ruleid} = existing_rule[prefix]
     else
       console.log "Creating rule for prefix #{prefix}" if debug
-      ruleid = ++new_ruleid
+      ruleid = [groupid,prefix].join ':'
 
     rule = [sip_domain_name,ruleid].join ':'
     _id = [type,rule].join ':'
