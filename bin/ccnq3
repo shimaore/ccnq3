@@ -310,7 +310,7 @@ commands =
         _id = ccnq3.make_id 'host', hostname
         prov_db = pico base_uri
         prov_db.get _id, (e,r,prov_doc) ->
-          if not prov_doc?._rev?
+          unless prov_doc?._rev?
             console.log "Assuming new record for _id #{_id} (#{e})"
             prov_doc = { _id }
 
@@ -382,7 +382,10 @@ commands =
           prov_doc.provisioning.local_couchdb_uri ?= 'http://127.0.0.1:5984/provisioning'
 
           # save in provisioning db
-          prov_db.put prov_doc
+          prov_db.put prov_doc, (e,r) ->
+            if e?
+              console.error "Could not create record for _id #{_id}: #{e}"
+              process.exit 1
 
           # Register with RabbitMQ
           amqp_mgmt = pico.request config.admin.amqp_mgmt
