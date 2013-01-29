@@ -83,6 +83,7 @@ ccnq3.config (config) ->
 
   bulk = new Bulk db
 
+  # A prefix-to-{_rev,rule} mapping
   existing_rule = {}
 
   db.get '_design/update_rules', json:true, (e,r,b) ->
@@ -96,7 +97,7 @@ ccnq3.config (config) ->
         by_id:
           map: fun (doc) ->
             if doc.sip_domain_name? and doc.groupid?
-              emit [doc.sip_domain_name,parseInt doc.groupid], rev:doc._rev, ruleid:doc.ruleid, prefix:doc.prefix
+              emit [doc.sip_domain_name,parseInt doc.groupid], rev:doc._rev, rule:doc.rule, prefix:doc.prefix
 
     db.put '_design/update_rules', json:design, (e,r,b) ->
       if e
@@ -116,8 +117,7 @@ ccnq3.config (config) ->
           console.dir error:b, when:'get view by_id'
           return
         for row in b.rows
-          ruleid = parseInt row.value.ruleid
-          existing_rule[row.value.prefix] = _rev:row.value.rev, ruleid:ruleid
+          existing_rule[row.value.prefix] = _rev:row.value.rev, rule:row.value.rule
         console.log "Ruleset had #{b.rows.length} rules."
 
         do run
@@ -152,8 +152,10 @@ ccnq3.config (config) ->
           d--
           key = keys[d]
           data = existing_rule[key]
+          type = 'rule'
+          _id = [type,data.rule].join ':'
           q++
-          bulk.emit {_id:data.id,_rev:data._rev,_deleted:true}, purge
+          bulk.emit {_id,_rev:data._rev,_deleted:true}, purge
       do purge
       return
 
@@ -162,12 +164,11 @@ ccnq3.config (config) ->
     prefix = o.prefix
     if existing_rule[prefix]?
       console.log "Updating rule for prefix #{prefix}" if debug
-      {_rev,ruleid} = existing_rule[prefix]
+      {_rev,rule} = existing_rule[prefix]
     else
       console.log "Creating rule for prefix #{prefix}" if debug
-      ruleid = [groupid,prefix].join ':'
+      rule = [sip_domain_name,groupid,prefix].join ':'
 
-    rule = [sip_domain_name,ruleid].join ':'
     _id = [type,rule].join ':'
 
     delete existing_rule[prefix]
@@ -178,7 +179,6 @@ ccnq3.config (config) ->
       type
       rule
       sip_domain_name
-      ruleid
 
       groupid
       prefix
