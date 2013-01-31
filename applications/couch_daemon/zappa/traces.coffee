@@ -18,4 +18,6 @@
           exchange.publish 'request', @body
           connection.end()
           @success body
+      else
+        @failure error:"No connection to AMQP server."
     return
