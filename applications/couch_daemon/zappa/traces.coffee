@@ -17,4 +17,5 @@
         connection.exchange 'traces', options, (exchange) ->
           exchange.publish 'request', @body
           connection.end()
+          @success body
     return

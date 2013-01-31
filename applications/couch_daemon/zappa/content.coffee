@@ -41,3 +41,4 @@
     @success welcome:'ccnq3'
 
   @include './voicemail.coffee'
+  @include './traces.coffee'
