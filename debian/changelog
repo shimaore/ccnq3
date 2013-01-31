@@ -1,5 +1,6 @@
-ccnq3 (0.0.58) UNRELEASED; urgency=low
+ccnq3 (0.0.58) unstable; urgency=low
 
+  [ Stephane Alnet ]
   * Updated to pico 0.0.15, using `compact` and `pico.log`
   * Updated our SIP headers according to RFCs.
   * Corrected name in couchdb monit file
@@ -219,8 +220,616 @@ ccnq3 (0.0.58) UNRELEASED; urgency=low
   * Made cron.hourly less verbose
   * ccnq3_config: Removed unnecessary progress messages.
   * npm publish ccqn3_config 0.2.8
+  * Added `do_not_record` flag (#7)
+  * ccnq3.config: Add `attachment` method.
+  * Load templates from attachments
+  * Oops: provisioning.host_couchdb_uri must point to the database itself.
+  * ccnq3-manager-shared: point the installer to the proper script
+  * Host provisioning: do not default the port to 5984.
+  * Restored id, it's needed in the output.
+  * Make monitor and logging accessible through applications/web
+  * Use the Authentication-ID to locate the endpoint on registration.
+  * Added `bypass_from_auth` on registration endpoints.
+  * documentation update: checking From does not ensure the caller-id will match.
+  * Corrected endpoint_key for new check_from code.
+  * Added missing require
+  * publish version 0.3.8
+  * Updated dependency (trying to get access to ccnq3.config.attachment)
+  * Need to check status
+  * publish version 0.3.9
+  * Updated dependency level
+  * fixed varname #18
+  * check this
+  * Validate that a pin is present
+  * corrected prompt name (#18)
+  * More progress info on change_password
+  * check this
+  * Changing code logic to ensure we get what we want.
+  * backport of production settings
+  * Tweaking based on ccnq2 production templates
+  * Unify user-agent/server strings
+  * Ported ccnq2 'redirect' dialplan template.
+  * Fixed typo
+  * inbox: Added 'Please wait' message
+  * Added log_b_leg parameter
+  * format
+  * Revert 7e0a214e248994bbfa46b72262382c5c4fe6fccd , add log() call
+  * inbox for host: show something useful for the manager server
+  * Move client-sbc templates to make things more explicit.
+  * debian: Added possibility to overwrite the configuration file.
 
- -- Stephane Alnet <stephane@shimaore.net>  Thu, 04 Oct 2012 21:48:16 +0200
+  [ ThePontus ]
+  * Corrected templates used for email_notifications (#24) github issue #24
+
+  [ Stephane Alnet ]
+  * opensips1.8: first attempt
+  * doc: Simplified title for section `host`, clarified meaning.
+  * Dependency on opensips 1.8.1
+  * `localcache` renamed `cachedb_local`
+  * Opensips1.8: drouting initial migration
+  * opensips1.8: Schema update for usrloc
+  * opensips1.8: schema dr_gateways
+  * opensips1.8: schema dr_carriers
+  * removed unused `routeid` and provided default
+  * dr_rules: default empty attrs
+  * dr_carriers: provide defaults
+  * dr_gateways: provide defaults
+  * If host_cli.coffee creates the local provisioning database, it better make sure it gets compacted.
+  * Added support for UPDATE [RFC3311]
+  * After migration of _design/registrant into the provisioning code, all that was left was creation and check of the local provisioning database. However this is handled by applications/host, so there is no need to duplicate it here.
+  * Clarified that application/host is responsible for the management of `provisioning.local_couchdb_uri` and the associated database.
+  * Corrected opensips syntax for db_url in registrant
+  * Added opensips table version for registrant
+  * Need datatypes for registrant.
+  * registrant: ensure we have all the data we need.
+  * Changed assignements for `rule` and `carrier`.
+  * rules: Provide defaults for `timerec` and `priority`.
+  * Corrected assignment order so that default takes action.
+  * Registrant (ovh) needs IP, not hostname.
+  * registrant: Corrected field name
+  * We're actually not pushing coffeescript, and __indexOf is missing.
+  * registrant: get the proper values from the host document, and retrieve them properly in the list!
+  * doc: registrant.remote_ipv4 is not longer supported.
+  * registrant: properly sort keys
+  * Added expiry, with default.
+  * Set a higher default expiry on registrant.
+  * CDR-swiper: change location of backup cdr storage
+  * CDR-swiper, doc: import example JSON CDR
+  * CDR-swiper: initial code (#5)
+  * It appears gwid's might be strings.
+  * Removed 'doc/bugs'.
+  * Cleaned up doc/
+  * Second set of clean up
+  * doc/upgrade: initial version
+  * Properly format responses to opensips http module in all cases
+  * cdr-cleaner: initial code (#4)
+  * Not longer provide a default for `cdr_uri`
+  * Added README.md
+  * Made sure that no CDRs are generated (on the local disk!) if no `cdr_uri` is present.
+  * cdr-cleaner: do not attempt to remove non-copied documents
+  * Anything above 2s for T2 for internal/upstream servers is way too long.
+  * doc/outbound routing
+  * Changed CCNQ3-* headers to X-CCNQ3-* headers.
+  * Actually collect requested headers in `ccnq_extra` and `ccnq_attrs` to unify API.
+  * Ensure the operation doesn't generate invalid XML.
+  * Clarified that `outbound_route` can be used for a global or a local number.
+  * Simplify
+  * Add `X-CCNQ3-Number-Domain` header at the client-sbc in order to allow multiple number domains per OpenSIPS client-side proxy.
+  * Handle the new X-CCNQ3-Number-Domain header set by client-sbc.
+  * Removed obsolete code.
+  * Add support for per-endpoint `number_domain`.
+  * Updated proxy `number_domain` documentation to reflect new role.
+  * Added some troubleshooting data for line-side `number_domain` selection.
+  * Provide a different email message for `do_not_record` users. (#27)
+  * Rewrote options for `send_email_notifications`
+  * voicemail notifcations: Added option `send_then_delete` (#21)
+  * Give more aggressive values to T1X64.
+  * Clarified documentation on valid gateway ID names.
+  * get_redirects: do not attempt to log.
+  * cdr-cleaner: fix dependency
+  * Removed ck-specific templates.
+  * Added generic, model template for E.164 carrier interface.
+  * opensips/zappa: fix pico API changes for .rev
+  * opensips/zappa: OpenSIPS 1.8 changed the behavior for location updates.
+  * userdb: do not remove a user-db even if no _users record point to it. The database might be used by other applications (such as voicemail).
+  * couchdb_daemon: initial code
+  * couch_daemon: manage through daemon. The original plan was to manage through CouchDB (os_daemon) but there might be issues during initial install with CouchDB not being able to start the server and I'd rather avoid those.
+  * couch_daemon: made server executable
+  * Added _ccnq3 to applications/web
+  * Corrected path in couchdb config. CouchDB rewrites the path by removing the matching prefix, so we need to add it back.
+  * Defaulted carrier flags to 0. Using the default order makes more sense, since the whole point of having these records is to allow per-host ordering of gateways so that a gateway on the same host is chosen first.
+  * Do not emit invalid dns view records.
+  * (Minimally) Protect against invalid view records.
+  * do not crash on delete or insert..
+  * Attempt to work around extraneous Route: headers (set e.g. by CSipSimple) which have ;lr and the local host
+  * API: be explicit about json results
+  * Server API (/_ccnq3) documentation (initial)
+  * Made HTTP and application behavior consistent.
+  * Corrected voicemail api
+  * oops, corrected success return value
+  * voicemail API: gave more details about what is being done
+  * just syncing
+  * opensips: print SIP message on its own line.
+  * registrant: trying to fix opensips code
+  * tools (first one)
+  * tools are to be ran as `ccnq3`.
+  * replicate design docs into voicemail db
+  * need auth
+  * quote parameters in opensips.cfg
+  * Added configurable expires values; provided higher default
+  * Added README.md to quiet npm
+  * Added links in main package.json
+  * Make inbox useful: show hosts by default.
+  * Package `psmisc` is required because the bootstrap=client.sh script uses `killall`.
+  * create local_provisioning -- this is actually not redundant since host_cli might fail
+  * Added list of supported opensips models.
+  * a callback is required
+  * Just keep the _rev
+  * better error reporting
+  * proper error reporting
+  * better error reporting
+  * better error reporting
+  * better reporting
+  * explicit index
+  * avoid collision
+  * report deleted rules
+  * Properly handle first
+  * do not put null _rev; ruleid must be larger than previous ones
+  * fixes!
+  * fixes!
+  * fixes!
+  * applications/voicemail-store (initial)
+  * Remove duplicate code from voicemail API.
+  * do_routing(): use number's then endpoint's.
+  * minor|look
+  * minor doc corrections for callback
+  * Documentation: trying to present a meaningful description of the routing process.
+  * Got rid of `mdwn` extensions.
+  * UAC support in registrant.
+  * Corrected output in case we actually do not emit data lines
+  * Why? Oh why? We get a 404 on a first-time insert, and that's just fine.
+  * Added `do_not_record` flag (#7)
+  * ccnq3.config: Add `attachment` method.
+  * Load templates from attachments
+  * Oops: provisioning.host_couchdb_uri must point to the database itself.
+  * ccnq3-manager-shared: point the installer to the proper script
+  * Host provisioning: do not default the port to 5984.
+  * Restored id, it's needed in the output.
+  * Make monitor and logging accessible through applications/web
+  * Use the Authentication-ID to locate the endpoint on registration.
+  * Added `bypass_from_auth` on registration endpoints.
+  * documentation update: checking From does not ensure the caller-id will match.
+  * Corrected endpoint_key for new check_from code.
+  * Added missing require
+  * publish version 0.3.8
+  * Updated dependency (trying to get access to ccnq3.config.attachment)
+  * Need to check status
+  * publish version 0.3.9
+  * Updated dependency level
+  * fixed varname #18
+  * check this
+  * Validate that a pin is present
+  * corrected prompt name (#18)
+  * More progress info on change_password
+  * check this
+  * Changing code logic to ensure we get what we want.
+  * backport of production settings
+  * Tweaking based on ccnq2 production templates
+  * Unify user-agent/server strings
+  * Ported ccnq2 'redirect' dialplan template.
+  * Fixed typo
+  * inbox: Added 'Please wait' message
+  * Added log_b_leg parameter
+  * format
+  * Revert 7e0a214e248994bbfa46b72262382c5c4fe6fccd , add log() call
+  * inbox for host: show something useful for the manager server
+  * Move client-sbc templates to make things more explicit.
+  * debian: Added possibility to overwrite the configuration file.
+
+  [ ThePontus ]
+  * Corrected templates used for email_notifications (#24) github issue #24
+
+  [ Stephane Alnet ]
+  * opensips1.8: first attempt
+  * doc: Simplified title for section `host`, clarified meaning.
+  * Dependency on opensips 1.8.1
+  * `localcache` renamed `cachedb_local`
+  * Opensips1.8: drouting initial migration
+  * opensips1.8: Schema update for usrloc
+  * opensips1.8: schema dr_gateways
+  * opensips1.8: schema dr_carriers
+  * removed unused `routeid` and provided default
+  * dr_rules: default empty attrs
+  * dr_carriers: provide defaults
+  * dr_gateways: provide defaults
+  * If host_cli.coffee creates the local provisioning database, it better make sure it gets compacted.
+  * Added support for UPDATE [RFC3311]
+  * After migration of _design/registrant into the provisioning code, all that was left was creation and check of the local provisioning database. However this is handled by applications/host, so there is no need to duplicate it here.
+  * Clarified that application/host is responsible for the management of `provisioning.local_couchdb_uri` and the associated database.
+  * Corrected opensips syntax for db_url in registrant
+  * Added opensips table version for registrant
+  * Need datatypes for registrant.
+  * registrant: ensure we have all the data we need.
+  * Changed assignements for `rule` and `carrier`.
+  * rules: Provide defaults for `timerec` and `priority`.
+  * Added `do_not_record` flag (#7)
+  * ccnq3.config: Add `attachment` method.
+  * Load templates from attachments
+  * Oops: provisioning.host_couchdb_uri must point to the database itself.
+  * ccnq3-manager-shared: point the installer to the proper script
+  * Host provisioning: do not default the port to 5984.
+  * Restored id, it's needed in the output.
+  * Make monitor and logging accessible through applications/web
+  * Use the Authentication-ID to locate the endpoint on registration.
+  * Added `bypass_from_auth` on registration endpoints.
+  * documentation update: checking From does not ensure the caller-id will match.
+  * Corrected endpoint_key for new check_from code.
+  * Added missing require
+  * publish version 0.3.8
+  * Updated dependency (trying to get access to ccnq3.config.attachment)
+  * Need to check status
+  * publish version 0.3.9
+  * Updated dependency level
+  * fixed varname #18
+  * check this
+  * Validate that a pin is present
+  * corrected prompt name (#18)
+  * More progress info on change_password
+  * check this
+  * Changing code logic to ensure we get what we want.
+  * backport of production settings
+  * Tweaking based on ccnq2 production templates
+  * Unify user-agent/server strings
+  * Ported ccnq2 'redirect' dialplan template.
+  * Fixed typo
+  * inbox: Added 'Please wait' message
+  * Added log_b_leg parameter
+  * format
+  * Revert 7e0a214e248994bbfa46b72262382c5c4fe6fccd , add log() call
+  * inbox for host: show something useful for the manager server
+  * Move client-sbc templates to make things more explicit.
+  * debian: Added possibility to overwrite the configuration file.
+
+  [ ThePontus ]
+  * Corrected templates used for email_notifications (#24) github issue #24
+
+  [ Stephane Alnet ]
+  * opensips1.8: first attempt
+  * doc: Simplified title for section `host`, clarified meaning.
+  * Dependency on opensips 1.8.1
+  * `localcache` renamed `cachedb_local`
+  * Opensips1.8: drouting initial migration
+  * opensips1.8: Schema update for usrloc
+  * opensips1.8: schema dr_gateways
+  * opensips1.8: schema dr_carriers
+  * removed unused `routeid` and provided default
+  * dr_rules: default empty attrs
+  * dr_carriers: provide defaults
+  * dr_gateways: provide defaults
+  * If host_cli.coffee creates the local provisioning database, it better make sure it gets compacted.
+  * Added support for UPDATE [RFC3311]
+  * After migration of _design/registrant into the provisioning code, all that was left was creation and check of the local provisioning database. However this is handled by applications/host, so there is no need to duplicate it here.
+  * Clarified that application/host is responsible for the management of `provisioning.local_couchdb_uri` and the associated database.
+  * Corrected opensips syntax for db_url in registrant
+  * Added opensips table version for registrant
+  * Need datatypes for registrant.
+  * registrant: ensure we have all the data we need.
+  * Changed assignements for `rule` and `carrier`.
+  * rules: Provide defaults for `timerec` and `priority`.
+  * Corrected assignment order so that default takes action.
+  * Registrant (ovh) needs IP, not hostname.
+  * registrant: Corrected field name
+  * We're actually not pushing coffeescript, and __indexOf is missing.
+  * registrant: get the proper values from the host document, and retrieve them properly in the list!
+  * doc: registrant.remote_ipv4 is not longer supported.
+  * registrant: properly sort keys
+  * Added expiry, with default.
+  * Set a higher default expiry on registrant.
+  * CDR-swiper: change location of backup cdr storage
+  * CDR-swiper, doc: import example JSON CDR
+  * CDR-swiper: initial code (#5)
+  * It appears gwid's might be strings.
+  * Removed 'doc/bugs'.
+  * Cleaned up doc/
+  * Second set of clean up
+  * doc/upgrade: initial version
+  * Properly format responses to opensips http module in all cases
+  * cdr-cleaner: initial code (#4)
+  * Not longer provide a default for `cdr_uri`
+  * Added README.md
+  * Made sure that no CDRs are generated (on the local disk!) if no `cdr_uri` is present.
+  * cdr-cleaner: do not attempt to remove non-copied documents
+  * Anything above 2s for T2 for internal/upstream servers is way too long.
+  * doc/outbound routing
+  * Changed CCNQ3-* headers to X-CCNQ3-* headers.
+  * Actually collect requested headers in `ccnq_extra` and `ccnq_attrs` to unify API.
+  * Ensure the operation doesn't generate invalid XML.
+  * Clarified that `outbound_route` can be used for a global or a local number.
+  * Simplify
+  * Add `X-CCNQ3-Number-Domain` header at the client-sbc in order to allow multiple number domains per OpenSIPS client-side proxy.
+  * Handle the new X-CCNQ3-Number-Domain header set by client-sbc.
+  * Removed obsolete code.
+  * Add support for per-endpoint `number_domain`.
+  * Updated proxy `number_domain` documentation to reflect new role.
+  * Added some troubleshooting data for line-side `number_domain` selection.
+  * Provide a different email message for `do_not_record` users. (#27)
+  * Rewrote options for `send_email_notifications`
+  * voicemail notifcations: Added option `send_then_delete` (#21)
+  * Give more aggressive values to T1X64.
+  * Clarified documentation on valid gateway ID names.
+  * get_redirects: do not attempt to log.
+  * cdr-cleaner: fix dependency
+  * Removed ck-specific templates.
+  * Added generic, model template for E.164 carrier interface.
+  * opensips/zappa: fix pico API changes for .rev
+  * opensips/zappa: OpenSIPS 1.8 changed the behavior for location updates.
+  * userdb: do not remove a user-db even if no _users record point to it. The database might be used by other applications (such as voicemail).
+  * couchdb_daemon: initial code
+  * couch_daemon: manage through daemon. The original plan was to manage through CouchDB (os_daemon) but there might be issues during initial install with CouchDB not being able to start the server and I'd rather avoid those.
+  * couch_daemon: made server executable
+  * Added _ccnq3 to applications/web
+  * Corrected path in couchdb config. CouchDB rewrites the path by removing the matching prefix, so we need to add it back.
+  * Defaulted carrier flags to 0. Using the default order makes more sense, since the whole point of having these records is to allow per-host ordering of gateways so that a gateway on the same host is chosen first.
+  * Do not emit invalid dns view records.
+  * (Minimally) Protect against invalid view records.
+  * do not crash on delete or insert..
+  * Attempt to work around extraneous Route: headers (set e.g. by CSipSimple) which have ;lr and the local host
+  * API: be explicit about json results
+  * Server API (/_ccnq3) documentation (initial)
+  * Made HTTP and application behavior consistent.
+  * Corrected voicemail api
+  * oops, corrected success return value
+  * voicemail API: gave more details about what is being done
+  * just syncing
+  * opensips: print SIP message on its own line.
+  * registrant: trying to fix opensips code
+  * tools (first one)
+  * tools are to be ran as `ccnq3`.
+  * replicate design docs into voicemail db
+  * need auth
+  * quote parameters in opensips.cfg
+  * Added configurable expires values; provided higher default
+  * Added README.md to quiet npm
+  * Added links in main package.json
+  * Make inbox useful: show hosts by default.
+  * Package `psmisc` is required because the bootstrap=client.sh script uses `killall`.
+  * create local_provisioning -- this is actually not redundant since host_cli might fail
+  * Added list of supported opensips models.
+  * a callback is required
+  * Just keep the _rev
+  * better error reporting
+  * proper error reporting
+  * better error reporting
+  * better error reporting
+  * better reporting
+  * explicit index
+  * avoid collision
+  * report deleted rules
+  * Properly handle first
+  * do not put null _rev; ruleid must be larger than previous ones
+  * fixes!
+  * fixes!
+  * fixes!
+  * applications/voicemail-store (initial)
+  * Remove duplicate code from voicemail API.
+  * do_routing(): use number's then endpoint's.
+  * minor|look
+  * minor doc corrections for callback
+  * Documentation: trying to present a meaningful description of the routing process.
+  * Got rid of `mdwn` extensions.
+  * UAC support in registrant.
+  * Corrected output in case we actually do not emit data lines
+  * Why? Oh why? We get a 404 on a first-time insert, and that's just fine.
+  * OpenSIPS fixes for registrant.
+  * Update doc ref (minor)
+  * Cleanup SIP headers before sending outside.
+  * Removed old docs
+  * Removed all portal/web/inbox/usercode/roles/public
+  * Added code to compensate
+  * `public` was moved
+  * Need to update installation instructions.
+  * Properly start the voicemail-store agent
+  * Corrected, documented, API
+  * (minor) doc update on `emergency_domain`
+  * no longer handling usercode
+  * opensips registrant changes
+  * Properly renamed registrant components.
+  * other adaptations to registrant code changes
+  * doc updates for registrant
+  * Added `registrant_realm` and configured registrant authentication.
+  * Corrected opensips syntax.
+  * Update dependencies & versions
+  * little debug
+  * tools/rule: new bulk splitter
+  * fix typo
+  * fix typo
+  * made async
+  * more progress data in tools/rules
+  * fixed this
+  * Trying to fix unclean end
+  * Trying to fix unclean end
+  * Trying to fix unclean end
+  * Trying to fix unclean end
+  * Proper serialization
+  * work around byline module not actually pausing
+  * problem with `request` and a mix of pipe/non-pipe?
+  * report queue depth
+  * testing b2b_entities avp-based authentication
+  * we need the registrant realm to auth
+  * force installation of the cli
+  * support for registrant outbound calls
+  * updated dependency for registrant dependencies
+  * Moved nanpa_routing out, replaced with optional route call
+  * make sure ruleid is an integer, not a string
+  * tools: report the actual number of deleted rules
+  * new tool: delete-rules
+  * Outbound-proxy may have very large routing tables.
+  * opensips_http_db: moving to zappajs 0.4
+  * cleanup outbound calls
+  * Clarify Debian version requirements (#37)
+  * Attempt to automatically transfer Number-Domain information.
+  * Corrections for #37
+  * Voicemail: provide more information about number_domain being used.
+  * Voicemail: more details
+  * oops, revert
+  * X-CCNQ3-Number-Domain is now set by inbound-sbc and client-side proxy. (#35)
+  * Clearly delineated CouchDB dependency (client and manager, but not manager-shared). Added RabbitMQ dependency for upcoming development.
+  * Removed ccnq-base, split into separate project.
+  * rule_id must be unique accross all rules in the domain
+  * debug!
+  * Bumped-up OpenSIPS memory.
+  * Better registrant server management
+  * registrant: proper code context
+  * freeswitch agent: avoid duplicate slash
+  * properly formatted
+  * Include carrier-vars.xml to provide carrier- (installation-)wide defaults (e.g. in an installation package).
+  * Added carrier-(in|e)gress templates (e.g. for codec manipulation).
+  * Document how to add SSL support to CouchDB.
+  * Add RabbitMQ as a dependency.
+  * OpenSIPS introspection modules.
+  * Build AMQP URI from CouchDB URI (at least for bootstrap).
+  * Clarifications.
+  * Unified how manager-side databases are handled.
+  * Updated keywords for ccnq3.
+  * testing with newer version of opensips
+  * Opensips -> 1.8.2-2
+  * Rely on the `ccnq3` CLI.
+  * reverted to installing a link, it works better.
+  * spawn usage
+  * require() is relative to the script, not the cwd
+  * Use absolute path.
+  * Corrected varname
+  * Corrected varname; defaulted config.applications
+  * not getting applications
+  * Issues when switching from root to ccnq3 user: HOME is invalid (probably others).
+  * Better capture error codes
+  * Tried to make bootstrap-*.sh scripts idempotent.
+  * Moved bootstrap-*.sh into their respective .postinst files.
+  * Nobody was setting local_couchdb_uri anymore?
+  * lib/ccnq3: very bad idea to log to stdout.
+  * Test for actual system flag presence.
+  * Installer fixes
+  * Cannot used `sed` to subsitute slashes. Overwrite admin password.
+  * Removed cruft
+  * Do not depend on functionality that was migrated to the portal.
+  * Provides defaults for users.couchdb_uri and provisioning.host_couchdb_uri on a manager system.
+  * couchdb/rabbitmd -- Erlang is a pain to deal with.
+  * Reconfigure RabbitMQ and CouchDB at once.
+  * Maybe this doesn't work.
+  * Oops
+  * I can't remember why 3<&- was needed.
+  * More information, thank you.
+  * Still can't remember, but it didn't help here.
+  * Again.
+  * Expanding
+  * Password doesn't work.
+  * Not needed.
+  * The local provisioning record for the manager cannot be saved until the provisioning database is created (by applications/provisioning).
+  * Simplified local.ini
+  * Actually simplify this by using pico.update.
+  * Corrected varname
+  * Made min_pin_length into a config parameter.
+  * Do not provide a (wrong) number_domain if none is available.
+  * Added timezone support for voicemail announcements.
+  * Need to be able to say "onze"
+  * Added documentation for voicemail timezone
+  * Fixed @user.time: the input is already a string.
+  * Simplified how rule IDs are assigned.
+  * Need all days!
+  * Messages are calls to the voicemail system which contain actual audio content. (#41)
+  * applications/dns: We ought to return v4 and v6 additional records.
+  * Documented voicemail-store options.
+  * Augmented documentation on CouchDB authentication and authorization (both standard and ccnq3-specific).
+  * Add applications/voicemail-store in list of applications.
+  * Added documentation for applications/couchdb_daemon
+  * lib/ccnq3: initial amqp support
+  * Added documentation for AMQP. Marked less-common options as such.
+  * publish version 0.4.1
+  * lib/ccnq3: explicitely return nothing
+  * Durable exchange
+  * No auto-delete exchange
+  * Changing exchanges
+  * Do not persist connections by default -- the application will not end if the connection is never closed.
+  * Prefer the object form for connection.
+  * No longer taking care of the web portal here.
+  * Remove link
+  * Bootstrap code was moved to the debian postinst files.
+  * France dialplan: trying to deal with the national madness
+  * AMQP: If the URI says 'amqp://host:port/ccnq3' then the vhost is `ccnq3`.
+  * Show how to retrieve messages from the `logging` exchange.
+  * Using `ccnq3.log` where it makes sense.
+  * Correcting `console.log` to `console.error` where needed.
+  * simplify: ccnq3 just console.dir()s the message
+  * lib/ccnq3: simplify code, using `ccnq3` as alias for `module.exports`
+  * lib/ccnq3: `ccnq3.db.add_user`, `ccnq3.db.add_roles`
+  * publish version 0.4.7
+  * bin/ccnq3: `set local defaults` shares common code; use new ccnq3 APIs.
+  * bin/ccnq3: `add user`
+  * bin/ccnq3: `add host`
+  * Corrected typo
+  * publish version 0.4.8
+  * Updated rev
+  * bin/ccnq3: Better progress data
+  * bin/ccnq3: base corrections
+  * lib/ccnq3: pico updates
+  * publish version 0.4.9
+  * bin/ccnq3: pico updates
+  * bin/ccnq3: kind of annoying this way
+  * bin/ccnq3: provide hex_sha1
+  * bin/ccnq3: more fixes
+  * manager.postinst: make sure the hostname is available
+  * doc: qualify "run as root"
+  * doc: reformat installation doc for github markdown.
+  * doc: use the new bin/ccnq3 functionality rather than the (unmaintained) portal.
+  * doc: corrected typos in applications names.
+  * munin: corrected traces path for dumpcap_reasons_abs
+  * munin-plugins: provide proper context
+  * installation: you really should run NTP.
+  * readme updated
+  * freeswitch/agent: report errors and do not process commands in case of failure (first attempt at #42
+  * applications/traces: renamed agent -> couch_agent
+  * applications/traces: split the server code between trace-specific and web-specific; introduced amqp_agent.
+  * traces: implemented trace_couch
+  * traces: default to AMQP request / CouchDB response.
+  * traces: not trying to keep old retrieval methods
+  * traces: added couchdb_daemon proxy
+  * bin/ccnq3: allow to use underscore instead of space in command names
+  * bin/ccnq3: install as setuid ccnq3, accessible to users in group `ccnq3`
+  * split ccnq3-manager package, so that the CouchDB and RabbitMQ configurations can be replicated on another server (e.g. to help bootstrap a `shared` host).
+  * bin/ccnq3 is now setuid and will-do-the-right-thing when ran as root.
+  * corrected variable location
+  * Need to expand variables.
+  * Setting ccnq3 setuid was not enough; enforcing differently.
+  * bin/ccnq3: make sure crypto is available everywhere
+  * FreeSwitch templates: Privacy overwrite at the carrier/consumer interface.
+  * ccnq3: 'add_local_service' to enable services during postinst.
+  * ccnq3-couchdb: add default services!
+  * ccnq3-couchdb: make it consistent with bin/ccnq3
+  * ccnq3-couchdb: moved add_local_service calls outside of the initial installation
+  * freeswitch: do not attempt to overwrite target unless we got valid data (#42)
+  * Refuse ptime negotiation.
+  * Switching to Debian-maintained CouchDB 1.2.0-5.
+  * updated agent!
+  * bin: better error handling in add_host
+  * Properly set rabbitmq URI
+  * lib: working around potential hazards
+  * lib: corrected varname
+  * bin: save in add_host
+  * CVEs!
+  * deb: nodejs 0.8.18 ... I'm pretty sure we're using newer APIs than 0.6.
+  * Properly initialize prov_doc
+  * pico requires callbacks
+  * ccnq3: better error reporting
+  * ccnq3: use proper URI for new host record creation.
+  * tools/rules: enforce specs: groupid is integer; rule format.
+  * tools/rules: enforce specs: groupid is integer; rule format.
+  * tools/rules: conversely, `ruleid` is not specified. Use `rule` as the ID.
+  * lib: pretty-print the configuration file
+  * lib: publish 0.4.12
+  * In a manager, host_couchdb_uri will not be available.
+  * bin: force slashes in amqp URI.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Fri, 01 Feb 2013 00:20:00 +0100
 
 ccnq3 (0.0.55) unstable; urgency=low
 
