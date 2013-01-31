@@ -57,6 +57,7 @@ set_defaults = (prov_doc,hostname) ->
         hostname: admin_info.hostname
         auth:     prov_doc.admin.auth
         pathname: '/' + escape vhost
+        slashes:  true
       prov_doc.admin.amqp ?= url.format amqp_info
 
       # Default AMQP Management info
