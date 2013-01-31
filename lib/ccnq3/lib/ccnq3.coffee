@@ -167,7 +167,7 @@ update = (content) ->
     return
   util.error "Updating local configuration file." if debug
   fs = require 'fs'
-  fs.writeFileSync config_location, JSON.stringify content
+  fs.writeFileSync config_location, JSON.stringify content, null, 2
 
 ccnq3.config.update = update
 
