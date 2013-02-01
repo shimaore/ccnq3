@@ -40,5 +40,12 @@
   @get '/_ccnq3', ->
     @success welcome:'ccnq3'
 
-  @include './voicemail.coffee'
-  @include './traces.coffee'
+  fs = require 'fs'
+  path = require 'path'
+  fs.readdir './include', (err,names) =>
+    return if err
+    for name in names
+      if name.match /\.coffee$/
+        @include path.join './include', name
+
+  return
