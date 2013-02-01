@@ -8,13 +8,13 @@
     if not @req.user?
       return @failure error:"Not authorized (probably a bug)"
 
-    ccnq3.amqp (connection) ->
+    ccnq3.amqp (connection) =>
       if connection?
         options =
           type: 'topic'
           durable: true
           autoDelete: true
-        connection.exchange 'traces', options, (exchange) ->
+        connection.exchange 'traces', options, (exchange) =>
           exchange.publish 'request', @body
           connection.end()
           @success body
