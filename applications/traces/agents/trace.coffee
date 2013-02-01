@@ -2,6 +2,7 @@
 #
 fs = require 'fs'
 packet_server = require './packet_server'
+wireshark_date = require './wireshark_date'
 
 ## Host trace server
 
