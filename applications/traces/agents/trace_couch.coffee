@@ -20,13 +20,15 @@ module.exports = (config,doc) ->
 
   doc.type = 'trace'
   doc.host = config.host
-  doc._id = ccnq3.make_id doc.type, doc.reference, doc.host
+  doc._id = [doc.type, doc.reference, doc.host].join ':'
 
   switch doc.format
     when 'json'
       json_gather self, (packets) ->
         doc.packets = packets
-        dest.put doc
+        dest.put doc, (e) ->
+          if e?
+            console.log e
     when 'pcap'
       dest.put doc, (e,r,b) ->
         if b?.rev?
