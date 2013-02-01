@@ -23,6 +23,7 @@ module.exports = ->
           address = _.address
           t = result[intf] ? {}
 
+          # FIXME: Skip local addresses (127/8, fe80::, etc.)
           # Another address for the same interface+family
           if t[family]?
             t.next ?= 0

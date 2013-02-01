@@ -1,0 +1,2 @@
+Agent should be able to start / stop freeswitch using our own directories.
+Modify installer so that the default Freeswitch (using /opt/freeswitch/conf etc.) does not start.
