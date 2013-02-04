@@ -1,2 +1,3 @@
 #!/bin/sh
-exec /opt/ccnq3/src/applications/traces/cron.hourly
+SRC="`ccnq3 get_config_source`"
+exec "${SRC}/applications/traces/cron.hourly"

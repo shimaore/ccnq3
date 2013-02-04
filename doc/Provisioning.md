@@ -1,5 +1,12 @@
-Naming conventions in this document
-===================================
+About
+=====
+
+This document is a quick guide meant to show you how to bootstrap your system. It runs you through the tools available to manually edit records.
+
+It is however your responsability to write a proper provisioning front-end for your administrative users and your customers. CCNQ3 only provides the API.
+
+Example layout
+--------------
 
 In this document we will assume that your main domain for installation is `phone.example.net`. IP Addresses are assigned from a block in RFC5737 as follows:
 
@@ -11,21 +18,39 @@ We will use two SIP domains, `a.phone.example.net` for client-side, and `trunk.p
 
 Host `vm1` will be the manager host; host `vm2` will be a client-side server, and host `vm3` will be a carrier-side server.
 
-Prerequisites
-=============
+Note: In a realistic deployment at least the two voice servers would be duplicated to provide redundancy.
 
-The following steps must be performed after the steps in [the installation document](install), which explains how to install the packages and bootstrap the servers.
+Conventions in this document
+============================
 
 Running as user `ccnq3`
 -----------------------
 
-Some commands must be issued as user `ccnq3`. You can either do:
+The `ccnq3` commands must be issued as user `ccnq3`. You can either do:
 
     sudo -u ccnq3   <command>
 
 or run a shell as the `ccnq3` user and type the commands in that shell:
 
     su -s /bin/bash ccnq3
+
+Accessing the CouchDB interface `Futon`
+---------------------------------------
+
+CouchDB provides a web interface. The `Futon` database manager is available as `/_utils/` on the server that runs your master CouchDB service.
+
+For example:
+
+    http://vm1.example.net:5984/_utils/
+
+If you installed SSL for CouchDB, use instead:
+
+    https://vm1.example.net:6984/_utils/
+
+Prerequisites
+=============
+
+The following steps must be performed after the steps in [the installation document](install), which explains how to install the packages and bootstrap the servers.
 
 Create a managing user
 ----------------------
@@ -36,15 +61,6 @@ Run the following commands as user `ccnq3`, replacing `bob@example.net` and `my_
 
     ccnq3 'add user' bob@example.net my_password
     ccnq3 'admin' bob@example.net
-
-Accessing the CouchDB interface
--------------------------------
-
-CouchDB provides a web interface on port 5984 on your manager host. The `Futon` database manager is available as `/_utils/` on that web server.
-
-For example:
-
-    http://vm1.example.net:5984/_utils/
 
 DNS
 ===
@@ -79,7 +95,9 @@ However you must manually create two records in the provisioning database:
 * one record for the main domain `phone.example.net`
 * one record for the subdomain `enum.phone.example.net`
 
-Using `Futon`, insert two records layed out as follows:
+Using `Futon`, insert two records layed out as follows into the `provisioning` database. To do so, open `Futon`, open the `provisioning` database, then click `New document`. In the new document, switch to the `Source` tab, double-click the content and paste the record content. Once done, click `Save document`.
+
+Record #1:
 
     {
       "_id":"domain:phone.example.net",
@@ -89,6 +107,8 @@ Using `Futon`, insert two records layed out as follows:
         {"class":"NS","value":"vm1.phone.example.net"}
       ]
     }
+
+Record #2:
 
     {
       "_id":"domain:enum.phone.example.net",
@@ -103,30 +123,34 @@ Using `Futon`, insert two records layed out as follows:
 
 Notes:
 
-* Any DNS-serving host, with `applications/dns` listed as an application, should be listed as `NS`.
+* Any DNS-serving host, with `applications/dns` listed as an application, should be listed as `NS`. In a realistic deployment you MUST have more than one such host.
 
 Add a new "voice" host
 ======================
 
-* On the manager server, run the following command as `ccnq3` to add an entry for host `vm2.phone.example.net`:
+* On the manager server, run the following command as user `ccnq3` to add an entry for host `vm2.phone.example.net`:
 
-    ccnq3 'add host' vm2.phone.example.net
+      ccnq3 'add host' vm2.phone.example.net
 
-* Using `Futon`, in the database 'provisioning', locate the record for `host:vm2.phone.example.net` and open it. Switch to the `Source` tab, and in that record, copy the value for `host_couchdb_uri` inside `provisioning`.
+  (You may run the script multiple times.)
+
+  The script will print out the `Host CouchDB URI`. Copy that value.
 
 * On the host, install the `ccnq3-client` package. During the installation process you will be asked to provide the URL you copied in the previous step.
 
-* After the packages are installed, on the host, as the `ccnq3` user do:
+* After the packages are installed, on the new host, as the `ccnq3` user do:
 
       cat /etc/ccnq3/host.json
 
-  Copy the output of the command (starting with `{` and ending with `}`).
+  Copy the output of the command (a JSON record starting with `{` and ending with `}`).
 
-* Using `Futon`, paste the JSON record copied in the previous step into the `Source` tab for that host's record. Click `Save Document`.
+* Using `Futon`, open the `provisioning` database. In the `Jump to:` field, type `host:` followed by the hostname, and Enter to open that record.
+  In the record, switch to the `Source` tab, double-click the JSON source content, and paste the JSON record you copied in the previous step.
+  Click `Save Document`.
 
-* In the host document, switch to the `Fields` tab, click `Add Field`, enter `sip_domain_name` for the field and `a.phone.example.net` for the value.
+* Still in the host document, switch to the `Fields` tab, click `Add Field`, enter `sip_domain_name` for the field and `a.phone.example.net` for the value.
 
-* Still in the `Field` tab, the `applications` array should be extended to read (in that order):
+* Still in the `Field` tab, the `applications` array should be extended to contain at least (in the following order):
 
       [
         "applications/host",
@@ -178,6 +202,8 @@ Add a registering endpoint record to test the new setup
 
 Finishing configuring the hosts
 ===============================
+
+*FIXME* These might be outdated. Refer to [the specifications](specs) for current data.
 
 * Here are example records for the "client-sbc" host and the "carrier-side sbc" host.
 
@@ -274,11 +300,10 @@ Finishing configuring the hosts
     Mostly used to allow/deny destinations.
 
        {
-        "_id":"rule:vm2.phone.example.net:1",
-        "account":"",
+        "_id":"rule:vm2.phone.example.net:1:",
         "type":"rule",
+        "rule":"vm2.phone.example.net:1:",
         "host":"vm2.phone.example.net",
-        "ruleid":1,
 
         "groupid":1,
         "prefix":"",
@@ -293,11 +318,10 @@ Finishing configuring the hosts
     Used for LCR routing.
 
       {
-        "_id":"rule:vm3.phone.example.net:1",
+        "_id":"rule:vm3.phone.example.net:1:",
         "type":"rule",
-        "rule":"vm3.phone.example.net:1",
+        "rule":"vm3.phone.example.net:1:",
         "host":"vm3.phone.example.net",
-        "ruleid":1,
 
         "groupid":1,
         "prefix":"",
@@ -328,10 +352,8 @@ Number
 There are two types of "number" records. Both types must be provisioned for
 a number to be fully provisioned.
 
-Unqualified (global) number records are used by the carrier-side SBCs to
-know which cluster will handle an incoming number.
-These "number" records populate Carrier ENUM for inbound routing and CDR
-generation.
+Unqualified (global) number records are used by the carrier-side SBCs to know which cluster will handle an incoming number.
+These "number" records populate Carrier ENUM for inbound routing and CDR generation.
 The number is expressed in E.164 format without a "+" sign.
 
     {
@@ -343,12 +365,9 @@ The number is expressed in E.164 format without a "+" sign.
       "inbound_uri":"sip:33976543210@ingress-test.a.phone.example.net"
     }
 
-Qualified (local) number records are used by a client-side SBC to
-know which endpoint will handle an incoming number.
-They may also contain additional information such as the location of that
-specific number (for the purpose of emergency call routing).
-Since the default value for OpenSIPS' `number_domain` is `local`, the
-name after the @ sign will generally be `local`.
+Qualified (local) number records are used by a client-side SBC to know which endpoint will handle an incoming number.
+They may also contain additional information such as the location of that specific number (for the purpose of emergency call routing).
+Since the default value for OpenSIPS' `number_domain` is `local`, the name after the @ sign will generally be `local`.
 
     {
       "_id":"number:0976543210@local",

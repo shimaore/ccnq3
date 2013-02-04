@@ -98,6 +98,51 @@ instead. You will need to provide administrative access to that existing databas
 
 Normally you should not run voice services on the manager, however if you intend to do so you will need to install the `ccnq3-voice` package as well.
 
+Securing services on the manager host
+-------------------------------------
+
+You should use HTTPS and AMQPS services instead of the default, HTTP and AMQP services.
+
+To enable HTTPS on CouchDB, add the following to `/etc/couchdb/local.ini` and make sure the SSL certificate and private key are available as `/etc/couchdb/cert.pem` and `/etc/couchdb/key.pem`, respectively:
+
+    [daemons]
+    httpsd = {couch_httpd, start_link, [https]}
+
+    [ssl]
+    cert_file = /etc/couchdb/cert.pem
+    key_file = /etc/couchdb/key.pem
+
+Then restart CouchDB (as root):
+
+    /etc/init.d/couchdb restart
+
+This will enable HTTPS access on port 6984. (HTTP access is still available on port 5984 but we recommend you do not use it.)
+Make sure to update the URIs in the `provisioning` `host` records to point to the HTTPS URI (`https://....:6984/provisiong` instead of `http://...:5984/provisioning`, etc.).
+
+To enable AMQPS and HTTPS on RabbitMQ, add the following to `/etc/rabbitmq/rabbitmq.config` and make sure the SSL certificate, private key, and CA certificate are available as `/etc/rabbitmq/cert.pem`, `/etc/rabbitmq/key.pem`, and `/etc/rabbitmq/cacert.pem`, respectively:
+
+    [
+      {rabbit, [
+        {ssl_listeners, [5671]},
+        {ssl_options, [{certfile,"/etc/rabbitmq/cert.pem"},
+                       {keyfile, "/etc/rabbitmq/key.pem"}]}
+      ]},
+      {rabbitmq_management, [
+        {listener, [
+          {port, 55672},
+          {ssl, true},
+          {ssl_opts, [
+            {cacertfile, "/etc/rabbitmq/cacert.pem"},
+            {certfile,   "/etc/rabbitmq/cert.pem"},
+            {keyfile,    "/etc/rabbitmq/key.pem"}
+          ]}
+        ]}
+      ]}
+    ].
+
+This will enable AMQPS access on port 5671, and replace the management HTTP on port 55672 with HTTPS access on the same port. (AMQP access is still available on port 5672 but we recommend you do not use it.)
+Make sure to update the URIs in the `provisioning` `host` records to point to the AMQPS URI (`amqps://....:5671/ccnq3` instead of `amqp://..../ccnq3`) and HTTPS URI (`https://....:55672/` instead of `http://....:55672/`).
+
 Client (non-manager) hosts
 --------------------------
 
@@ -111,7 +156,7 @@ Installing the `ccnq3-client` package will overwrite any local CouchDB configura
 
 If you need mediaproxy on that host, you _must_ manually run
 
-    cd /opt/ccnq3/src/common/mediaproxy
+    cd "`ccnq3 get_config_source`/common/mediaproxy"
     ./install.sh
 
 because of some important caveats regarding IPv6.

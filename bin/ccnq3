@@ -1,22 +1,53 @@
 #!/usr/bin/env coffee
 
+#### The `ccnq3` script.
+#
+# This script is provided to ease some operations when deploying
+# CCNQ3. It SHOULD normally be ran as the CCNQ3 user, which is
+# by convention `ccnq3`. For example, if your system uses `sudo`, you
+# might do:
+#
+#     sudo -u ccnq3  ccnq3 'show log'
+#
+# Commands might be provided either as strings-with-spaces (as shown above),
+# or as strings-with-underscores; the same command might be written:
+#
+#     sudo -u ccnq3  ccnq3 show_log
+
+#### Defaults
 NAME='ccnq3'
+# `SRC` is the default installation path. It is saved as `config.src`.
 SRC="/opt/#{NAME}/src"
 
+#### Libraries
 { escape } = require 'querystring'
 url = require 'url'
 { spawn } = require 'child_process'
 crypto = require 'crypto'
 { inspect } = require 'util'
 
+# The `ccnq3` library provides common access to the CCNQ3 configuration,
+# the CCNQ3 AMQP server, and other shared tools.
 ccnq3 = require 'ccnq3'
 
+#### Applications
+#
+# All servers SHOULD be running the `monitor` and the `host` applications.
+# The `host` applications is especially important because it provides shared
+# provisioning.
 default_apps = [
   "applications/monitor"
   "applications/host"
 ]
 
-# This is the list of apps listed in debian/ccnq3-couchdb.postinst
+# Manager servers are normally co-located with the master CouchDB database.
+# The `provisioning`, `logging`, `cdrs`, `locations`, and `voicemail-store`
+# applications may however be ran on non co-located manager servers. The
+# `couch_daemon` application SHOULD be ran on a CouchDB server since it is
+# meant to be embedded with CouchDB -- although you might embed it with a local
+# HTTP proxy as well.
+#
+# This is the list of applications installed by debian/ccnq3-couchdb.postinst
 manager_apps = [
   "applications/couch_daemon"
   "applications/provisioning"
@@ -26,7 +57,13 @@ manager_apps = [
   "applications/voicemail-store"
 ]
 
-# Set defaults, assuming _only_ locally-available information.
+#### `set_defaults`
+# When installing or re-installing a host, it is necessary to set some
+# initial, common parameters.
+# This function set those default fields, assuming _only_ locally-available
+# information -- which means that it can be used during bootstrap time, even
+# if the CouchDB `provisioning` database is not available.
+
 set_defaults = (prov_doc,hostname) ->
     # Common parameters
     prov_doc._id ?= ccnq3.make_id 'host', hostname
@@ -44,13 +81,16 @@ set_defaults = (prov_doc,hostname) ->
         unless app in prov_doc.applications
           prov_doc.applications.push app
 
-      # This _has_ to be present on a Manager.
+      # `admin.couchdb_uri` _has_ to be present on a Manager.
       admin_info = url.parse prov_doc.admin.couchdb_uri
 
-      # Default auth info
+      # Default auth info is extracted from `admin.couchdb_uri`.
       prov_doc.admin.auth ?= admin_info.auth
 
-      # Default AMQP info
+      # Default AMQP access is created using the same.
+      # (The AMQP and CouchDB servers are assumed to be co-located,
+      # which is the case if you install the `ccnq3-manager` package.
+      # Manually modify the `admin.amqp` field if this is not true.)
       vhost = NAME
       amqp_info =
         protocol: 'amqp'
@@ -60,7 +100,7 @@ set_defaults = (prov_doc,hostname) ->
         slashes:  true
       prov_doc.admin.amqp ?= url.format amqp_info
 
-      # Default AMQP Management info
+      # Default AMQP Management info, created using the same.
       amqp_mgmt =
         protocol: 'http'
         hostname: admin_info.hostname
@@ -69,6 +109,7 @@ set_defaults = (prov_doc,hostname) ->
         pathname: '/api'
       prov_doc.admin.amqp_mgmt ?= url.format amqp_mgmt
 
+    # Always (re-)inject the default applications.
     for app in default_apps
       unless app in prov_doc.applications
         prov_doc.applications.push app
@@ -77,6 +118,9 @@ hex_sha1 = (v) ->
   crypto.createHash('sha1').update(v).digest('hex')
 
 commands =
+  #### show log
+  # Connects to the AMQP `logging` exchange and prints out log data.
+  # (This data is provided through the `ccnq3.log()` function.)
   'show log': ->
     ccnq3.amqp (c) ->
       c.queue 'cli', (q) ->
@@ -85,6 +129,12 @@ commands =
           console.dir m
     return
 
+  #### get admin uri
+  # Returns the URI that should be used to connect (with administrative priviledges)
+  # to the master CouchDB database.
+  # Use with care -- this should not be used except to attempt to fix issues with
+  # the server or databases. For regular provisioning access, CCNQ3 provides multiple
+  # levels of authorization which are better suited.
   'get admin uri': ->
     ccnq3.config (config) ->
       base_uri = config.admin?.couchdb_uri
@@ -95,6 +145,8 @@ commands =
       console.log "#{base_uri}/_utils/"
     return
 
+  #### create admin password
+  # Used during provisioning to create a random `admin.password` field.
   'create admin password': ->
     ccnq3.config (config) ->
       config.admin ?= {}
@@ -108,18 +160,29 @@ commands =
         console.log config.admin.password
       return
 
+  #### get name
+  # Returns the application names (`ccnq3`).
   'get name': ->
     console.log NAME
     return
 
+  #### get hostname
+  # Returns the local hostname. (Based on the installation
+  # instructions, this SHOULD be the host FQDN.)
   'get hostname': ->
     console.log require('os').hostname()
     return
 
+  #### get config location
+  # Returns the location of the local configuration file.
   'get config location': ->
     console.log ccnq3.config.location
     return
 
+  #### get config source
+  # Returns the base directory for the packages code.
+  # Always use `ccnq3 get_config_source` instead of assuming
+  # `/opt/ccnq3/src'.
   'get config source': ->
     ccnq3.config (config) ->
       if config.source
@@ -127,7 +190,13 @@ commands =
       console.log SRC
     return
 
-  ## -- Used on a manager during postinst -- ##
+  #### set admin uri
+  # Parameter: new administrative URI
+  #
+  # Used by a manager host during post-installation in order to save
+  # the proper `admin.couchdb_uri` and generate `users.couchdb_uri`.
+  # The `admin.system` boolean is also set to `true` to indicate that
+  # this host is a manager.
   'set admin uri': (uri) ->
     ccnq3.config (config) ->
       config.admin ?= {}
@@ -140,6 +209,11 @@ commands =
       ccnq3.config.update config
     return
 
+  #### set admin amqp
+  # Parameter: AMQP/AMQPS URI with admin authorization
+  #
+  # Used by a manager host during post-installation in order to save
+  # the proper `admin.amqp`.
   'set admin amqp': (uri) ->
     ccnq3.config (config) ->
       config.admin ?= {}
@@ -149,7 +223,13 @@ commands =
       ccnq3.config.update config
     return
 
-  ## -- Used on a client during postinst -- ##
+  #### set host uri
+  # Parameter: HTTP/HTTPS URI to the provisioning database, with host authorization.
+  #
+  # Used on a client during post-installation in order to save
+  # the proper `provisioning.host_couchdb_uri` and generate a
+  # default `amqp` value. (Manually update the `amqp` configuration
+  # value if needed.)
   'set host uri': (uri) ->
     if not uri?
       console.error 'URI parameter is required.'
@@ -175,6 +255,11 @@ commands =
       ccnq3.config.update config
     return
 
+  #### set local uri
+  # Parameter: local HTTP URI pointing to the local replica of the provisioning database.
+  #
+  # Used by the client post-installation script to set the
+  # local couchdb URI.
   'set local uri': (uri) ->
     if not uri?
       console.error 'URI parameter is required.'
@@ -188,6 +273,10 @@ commands =
       ccnq3.config.update config
     return
 
+  #### set local defaults
+  # Might be used on any server to re-set the default parameters.
+  # Overwrite the hostname, interfaces.
+  # (See above the description of `set_defaults`.)
   'set local defaults': ->
     ccnq3.config (config) ->
       if config.source
@@ -206,6 +295,10 @@ commands =
       ccnq3.config.update config
     return
 
+  #### add local service
+  # Parameter: service name to be added (e.g. `applications/host`).
+  #
+  # Add an entry in the `applications` array.
   'add local service': (name) ->
     ccnq3.config (config) ->
       if config.source
@@ -218,6 +311,13 @@ commands =
 
       ccnq3.config.update config
 
+  #### add user
+  # Parameters:
+  #   username
+  #   password
+  #
+  # Add a new user to the CouchDB database.
+  # FIXME: Add the same user to the AMQP server.
   'add user': (name,password) ->
     ccnq3.config (config) ->
       if config.source
@@ -235,6 +335,12 @@ commands =
           console.warn 'User account was updated successfully.'
     return
 
+  #### admin
+  # Parameter: username
+  #
+  # Mark the username as a CCNQ3 administrative user.
+  # Note: This is the proper way to give a user administrative access to the
+  # CCNQ3 system. This does not give them administrative access to CouchDB.
   'admin': (name) ->
     ccnq3.config (config) ->
       if config.source
@@ -263,6 +369,11 @@ commands =
           console.warn 'User account was updated successfully.'
     return
 
+  #### add host
+  # Parameter: hostname (FQDN)
+  #
+  # Ran on a manager server, generates proper records and authentication for the given
+  # hostname.
   'add host': (hostname) ->
     if not hostname?
       console.error 'Hostname is required.'
@@ -358,6 +469,8 @@ commands =
 
           prov_doc.provisioning.host_couchdb_uri ?= make_host_uri config.admin.couchdb_uri
 
+          console.log "Host CouchDB URI is: #{prov_doc.provisioning.host_couchdb_uri}"
+
           # Default AMQP info
           prov_info = url.parse prov_doc.provisioning.host_couchdb_uri
           vhost = NAME
@@ -417,6 +530,7 @@ commands =
                 process.exit 1
     return
 
+#### main
 
 run = ->
 
