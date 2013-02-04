@@ -1,7 +1,7 @@
 #!/bin/sh
 
-NAME=ccnq3
-USER=ccnq3
-WORKDIR=/opt/${NAME}
+NAME=`ccnq3 get_name`
+USER=$NAME
+SRC="`ccnq3 get_config_source`"
 
-(cd ${WORKDIR}/src && su -s /bin/sh -c "npm run-script compact" $USER)
+cd "$SRC" && exec su -s /bin/sh -c "exec npm run-script compact" $USER
