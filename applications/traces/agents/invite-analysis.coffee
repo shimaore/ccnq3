@@ -12,7 +12,6 @@ analyze = (interfaces,find_time,ngrep_filter)->
 
   self = packet_server
     interfaces: config.traces.interfaces
-    format: 'json'
     trace_dir: config.traces?.workdir ? default_workdir
     find_filter: "-newermt '#{find_time}'"
     ngrep_filter: ngrep_filter

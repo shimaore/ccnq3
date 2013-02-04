@@ -50,11 +50,13 @@ module.exports = (config,doc) ->
   tshark_filter = tshark_filter.join ' && '
 
   options =
-    interfaces: config.traces.interfaces
-    format: doc.format
+    interface: doc.interface
     trace_dir: config.traces?.workdir ? default_workdir
     # find_filter is left empty
     ngrep_filter: ngrep_filter
     tshark_filter: tshark_filter
 
-  packet_server options
+  if doc.reference?
+    options.pcap = options.trace_dir+'/.tmp.'+doc.reference+'.pcap'
+
+  [ packet_server(options), options.pcap ]

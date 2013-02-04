@@ -48,27 +48,20 @@ tshark_line_parser = (t) ->
   return result
 
 # Options are:
-#   interfaces
 #   interface
-#   format        'pcap' or 'json'
 #   trace_dir
 #   find_filter
 #   ngrep_filter
 #   tshark_filter
+#   pcap          if provided, a PCAP filename
 #
 # Returned object is an EventEmitter;
-# in json mode it will trigger three event types:
+# it will trigger three event types:
 #   .on 'data', (data) ->
-#   .on 'end', () ->
-#   .on 'close', () ->
-# in pcap mode it will trigger three event type:
-#   .on 'pipe', (stream,intf) ->
 #   .on 'end', () ->
 #   .on 'close', () ->
 
 module.exports = (options) ->
-
-  return unless options.interface? or options.interfaces?.length > 0
 
   self = new events.EventEmitter
 
@@ -111,34 +104,24 @@ module.exports = (options) ->
     """
 
     ## Select the proper packets
-    switch options.format
+    if options.pcap?
+      tshark_command = """
+        nice tshark -r "#{fh}" -R '#{options.tshark_filter}' -nltad -T fields #{tshark_fields} -P -w "#{options.pcap}"
+      """
+    else
+      tshark_command = """
+        nice tshark -r "#{fh}" -R '#{options.tshark_filter}' -nltad -T fields #{tshark_fields}
+      """
 
-      when 'json'
-        tshark_command = """
-          nice tshark -r "#{fh}" -R '#{options.tshark_filter}' -nltad -T fields #{tshark_fields}
-        """
-
-        # stream is tshark.stdout
-        tshark_pipe = (stream) ->
-          linestream = byline stream
-          linestream.on 'data', (line) ->
-            data = tshark_line_parser line
-            data.intf = intf
-            self.emit 'data', data
-          linestream.on 'end', ->
-            self.end()
-
-      when 'pcap'
-        tshark_command = """
-          nice tshark -r "#{fh}" -R '#{options.tshark_filter}' -w - | gzip
-        """
-
-        # stream is tshark.stdout
-        tshark_pipe = (stream) ->
-          # Pipe the output of tshark to the client.
-          self.pipe stream
-          stream.on 'end', ->
-            self.end()
+    # stream is tshark.stdout
+    tshark_pipe = (stream) ->
+      linestream = byline stream
+      linestream.on 'data', (line) ->
+        data = tshark_line_parser line
+        data.intf = intf
+        self.emit 'data', data
+      linestream.on 'end', ->
+        self.end()
 
     # Fork the find/mergecap/ngrep pipe.
     pcap = exec pcap_command,
@@ -166,9 +149,6 @@ module.exports = (options) ->
 
       tshark_pipe tshark.stdout
 
-  if options.interfaces?
-    for intf in options.interfaces
-      run intf
-  else
-    run options.interface
+  run options.interface
+
   return self
