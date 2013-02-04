@@ -10,8 +10,6 @@
 
     request = @body
 
-    if not request.format?
-      return @failure error:"Request must contain `format` field."
     if not request.reference?
       return @failure error:"Request must contain `reference` field."
 
