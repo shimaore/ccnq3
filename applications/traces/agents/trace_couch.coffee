@@ -33,4 +33,7 @@ module.exports = (config,doc) ->
       dest.put doc, (e,r,b) ->
         if b?.rev?
           self.on 'pipe', (stream) ->
-            stream.pipe dest.request.put "#{qs.escape doc._id}/packets.pcap?rev=#{b.rev}"
+            stream.pipe dest.request.put "#{qs.escape doc._id}/packets.pcap?rev=#{b.rev}",
+              headers:
+                'Content-Type': 'application/vnd.tcpdump.pcap'
+                'Content-Encoding': 'gzip'

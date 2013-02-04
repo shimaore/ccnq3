@@ -8,8 +8,7 @@ wireshark_date = require './wireshark_date'
 
 default_workdir = '/opt/ccnq3/traces'
 
-# The server filters and formats the trace, and starts a one-time
-# web server that will output the data.
+# The server filters and formats the trace.
 module.exports = (config,doc) ->
 
   console.dir doc: doc

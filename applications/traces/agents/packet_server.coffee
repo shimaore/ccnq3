@@ -72,6 +72,30 @@ module.exports = (options) ->
 
   self = new events.EventEmitter
 
+  self.end = ->
+    was = self._ended
+    self._ended = true
+    if not was
+      self.emit 'end'
+    return
+
+  self.close = ->
+    self.end()
+    was = self._closed
+    self._closed = true
+    if not was
+      self.emit 'close'
+    return
+
+  self.pipe = (s) ->
+    if self._ended or self._closed
+      console.error 'pipe: self already ended or closed'
+    if self._pipe
+      console.error 'pipe: self already piped'
+    self._pipe = s
+    self.emit 'pipe', s
+    return
+
   run = (intf) ->
 
     # We _have_ to use a file because tshark cannot read from a pipe/fifo/stdin.
@@ -102,7 +126,7 @@ module.exports = (options) ->
             data.intf = intf
             self.emit 'data', data
           linestream.on 'end', ->
-            self.emit 'end'
+            self.end()
 
       when 'pcap'
         tshark_command = """
@@ -112,9 +136,9 @@ module.exports = (options) ->
         # stream is tshark.stdout
         tshark_pipe = (stream) ->
           # Pipe the output of tshark to the client.
-          self.emit 'pipe', stream, intf
+          self.pipe stream
           stream.on 'end', ->
-            self.emit 'end'
+            self.end()
 
     # Fork the find/mergecap/ngrep pipe.
     pcap = exec pcap_command,
@@ -127,7 +151,7 @@ module.exports = (options) ->
         # Remove the temporary (pcap) file
         fs.unlink fh
         # The response is complete
-        self.emit 'close', intf
+        self.close()
         return
 
       tshark = exec tshark_command,
@@ -138,7 +162,7 @@ module.exports = (options) ->
         # Remove the temporary (pcap) file, it's not needed anymore.
         fs.unlink fh
         # The response is complete
-        self.emit 'close', intf
+        self.close()
 
       tshark_pipe tshark.stdout
 

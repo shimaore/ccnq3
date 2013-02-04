@@ -10,3 +10,5 @@ module.exports = (self,cb) ->
 
   self.on 'end', ->
     cb res
+
+  return
