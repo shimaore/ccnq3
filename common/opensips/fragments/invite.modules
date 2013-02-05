@@ -36,7 +36,7 @@ loadmodule "dialog.so"
 modparam("dialog", "enable_stats", 1) # default 1
 
 # Dialog matching
-modparam("dialog", "rr_param", "did") # default did
+modparam("dialog", "rr_param", "dlg") # default did
 modparam("dialog", "dlg_match_mode", 1) # default 0 (match on rr_param only); 1 = match on rr_param, use SIP (RFC3261) matching as fallback
 
 # timeout/BYE
@@ -45,6 +45,8 @@ modparam("dialog", "default_timeout", ${dialog_timeout}) # default 43200 (12h)
 modparam("dialog", "timeout_avp", "$avp(dialog_timer)")
 modparam("dialog", "dlg_extra_hdrs", "X-CCNQ3-Reason: Call too long\r\n")
 
+modparam("dialog", "profiles_with_value", "endpoint ; number ; account")
+# modparam("dialog", "cachedb_url", "redis://127.0.0.1")
 
 modparam("dialog", "db_mode", 0) # No database of dialogs
 
