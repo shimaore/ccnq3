@@ -72,3 +72,14 @@ loadmodule "sipmsgops.so"
 
 # -- signaling --
 loadmodule "signaling.so"
+
+if rate_limit
+  loadmodule "ratelimit.so"
+  modparam("ratelimit", "timer_interval", ${rate_limit_interval})
+  modparam("ratelimit", "default_algorithm", "RED")
+  if rate_limit_cache
+    # e.g. "redis://127.0.0.1/"
+    modparam("ratelimit", "cachedb_url", "${rate_limit_cache}")
+    modparam("ratelimit", "db_prefix", "ratelimit_")
+  end if rate_limit_cache
+end if rate_limit
