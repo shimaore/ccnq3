@@ -1,6 +1,6 @@
 if rate_limit_invite
   loadmodule "pike.so"
-  modparam("pike", "sampling_time_unit", 10)
+  modparam("pike", "sampling_time_unit", ${rate_limit_interval})
   modparam("pike", "reqs_density_per_unit", ${rate_limit_invite})
   modparam("pike", "remove_latency", ${rate_limit_latency})
 end if rate_limit_invite
