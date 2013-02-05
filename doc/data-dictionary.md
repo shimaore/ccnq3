@@ -536,6 +536,10 @@ Configuration options:
         In the `complete` model it defaults to "$pr $si $sp -> $Ri $Rp $json(src_endpoint/endpoint) $au $ad $ar $ci $ru $fu $tu $ua".
         Other models do not use the `X-CCNQ3-Extra` header.
 
+    * `rate_limit_invite`: integer; maximum number of new INVITE messages that might be received from any given IP address over a period of 10s. [default: 1000 for outbound-proxy; 50 for client-side proxy.]
+
+       New dialogs may start to be rejected between 5 and 15 cps with the default value of 50.
+
     There are plenty other OpenSIPS configuration parameters; all of them can be modified via the database.
     The list of parameters can be found in the source code, in the JSON configuration files under `common/opensips/`.
     However in normal operation there is no reason to modify parameters except for those listed above.

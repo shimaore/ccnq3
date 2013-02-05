@@ -54,5 +54,8 @@
   "min_expires": 300,
   "max_expires": 7200,
 
+  "rate_limit_invite": 50,
+  "rate_limit_latency": 60,
+
   "ok":true
 }

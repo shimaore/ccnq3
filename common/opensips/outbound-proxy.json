@@ -50,5 +50,7 @@
 
   "use_registrant": false,
 
+  "rate_limit_invite": 1000,
+
   "ok":true
 }
