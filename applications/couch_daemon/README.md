@@ -5,7 +5,7 @@ This application provides the *Extended API* embedded in the central CouchDB
 database.
 
 It is meant to provide API (REST/JSON) calls. In order to keep performance and
-stability at reasonable levels, it SHOULD NOT contain static content (web
+stability at reasonable levels, it SHOULD NOT serve static content (web
 pages, etc.); these should be part of your management website, not part of
 CCNQ3.
 

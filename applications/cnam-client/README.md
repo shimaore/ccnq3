@@ -1,3 +1,7 @@
+A CNAM Query application
+
+Install on: a server running FreeSwitch client-side.
+
 Usage:
 
       <action application="set" data="socket_resume=true"/>

@@ -16,20 +16,20 @@ The manager server uses direclty the central CouchDB database.
 
 ### On non-manager servers
 
-Other servers use a local-only CouchDB instance (replicated from the central CouchDB database) for any read-access to the provisioning database, and to store some local values (CDRs, location information for a registration server).
+Other servers use a local-only CouchDB instance (replicated from the central CouchDB database) for any read-access to the provisioning database, and other local CouchDB instances to store some local values (CDRs, location information for a registration server).
 
-These non-manager servers might also write data back to the central CouchDB database either as replication (for example to aggregate the CDRs in the `cdrs` database, or the location information in the `locations` database), or for logging purposes (the `logging` and `monitor` databases for example).
+These non-manager servers might also write data back to the central CouchDB database either using replication (for example to aggregate the CDRs in the `cdrs` database, or the location information in the `locations` database), or directly, for logging purposes (the `logging` and `monitor` databases for example).
 
 Authentication
 --------------
 
-In CouchDB, authentication is provided by the `_users` database for normal users; by the configuration system (section `admins`) for administrative users.
+In CouchDB, authentication is customarily provided by the `_users` database for most users; and by the configuration system (section `admins`) for administrative users.
 
 ### On the manager server
 
-On the manager server, most access will be done using an `admin` account. (Admin accounts normally do not show up in the `_users` database, their authentication is managed separately.)
+On the manager server, most access will be done using an `admin` account, since the manager will need to update database views, create new databases, etc.
 
-The only exceptions are the `provisiong.host_couchdb_uri` which is required to use a `host@`+host-name username, and other URIs which _must not_ have authentication tokens, such as `session.couchdb_uri` (in the ccnq3-web project).
+The `provisiong.host_couchdb_uri` parameter is required to use a `host@`+hostname username.
 
 ### On non-manager servers
 
@@ -37,15 +37,17 @@ Non-manager host use a local-only, non-authenticated CouchDB instance for all re
 
 For example, `provisioning.local_couchdb_uri` is simply `http://127.0.0.1:5984/provisioning`, `cdr_uri` is `http://127.0.0.1:5984/cdr`.
 
-On the other hand, when accessing the central CouchDB database (normally located on the manager server, or on some other central server), non-manager hosts should _never_ use an `admin` account; the following two types of accounts (which must be created in that central CouchBD database) are recommended:
+On the other hand, when accessing the central CouchDB database (normally located on the manager server, or on some other central server), non-manager hosts should _never_ use an `admin` account. Instead, the following types of accounts are recommended.
 
-* For each `host`, a user named `host@`+host-name with its roles set (at least) to `["host"]`.
+* For each `host`, a user named `host@`+hostname with its roles set (at least) to `["host"]`.
+
+  This user will be created automatically when using the `ccnq3 add_host` command.
 
   This should be used for any URI where the host needs access to the central CouchDB database (e.g. for replication of the provisioning database, or to upload CDRs, locations, logging data, etc.).
 
   Use this username in fields such as `provisioning.host_couchdb_uri`, `opensips_proxy.usrloc_aggregate_uri`, `cdr_aggregate_uri`, `logging.host_couchdb_uri`, `monitor.host_couchdb_uri`.
 
-* For each 'voicemail' server, a user named `voicemail@`+host-name with the roles set (at least) to `["update:user_db:","access:_users:"]`. (Notice the extra colon `:` at the end of each value.)
+* For each 'voicemail' server, a user named `voicemail@`+hostname with the roles set (at least) to `["update:user_db:","access:_users:"]`. (Notice the extra colon `:` at the end of each value.)
 
   This should be used for any URI related to `applications/voicemail`, to allow the voicemail server to manipulate the databases where messages are stored (hence `update:user_db`) and query for databases linked to a specific user (hence `access:_users:`).
 
@@ -56,26 +58,11 @@ Applications
 
 Applications are modules inside the CCNQ3 system which may be added or removed on a server after installation of the Debian packages.  Each application may come with database updates, new local processes, and sometimes offer remotely-accessible services.
 
-In a template CCNQ3 system, you would typically have two types of servers, _manager_ servers and _call-processing_ servers.
-A manager server would typically have the `ccnq3` package installed, and run the following applications:
+In a typical CCNQ3 system, you would have two types of servers, _manager_ servers and _call-processing_ (non-manager) servers.
 
-    # Core database management
-    applications/provisioning
-    # Aggregation
-    applications/cdrs
-    applications/locations
+A manager server would typically have the `ccnq3-manager` package installed, which will select a default set of applications suitable for a manager.
 
-A call-processing server would typically have the `ccnq3-voice` package installed, and run the following applications:
-
-    # Applications for a server running ccnq3-voice
-    applications/freeswitch
-    applications/opensips
-    applications/traces
-    # Additional applications for a server running FreeSwitch
-    applications/voicemail
-    # Additional applications for a server running OpenSIPS
-    applications/registrant
-    applications/emergency
+A call-processing server would typically have the `ccnq3-client` package installed, which will select a default set of application suitable for a non-manager.
 
 Finally, at least two servers (for redundancy purposes) must have the `ccnq3-dns` package installed, and run the following application:
 
@@ -85,106 +72,20 @@ Moreover all servers, regardless of intended purpose, must run the following app
 
     applications/host
 
-Some of these applications are automatically installed. For example, a `manager` host (created using the `bootstrap-manager` script) will have most services enabled except the aggregation services. Removing automatically-installed applications in this case will lead to loss of functionality or breakage.
+Some of these applications are automatically installed. For example, a `manager` host (using the `ccnq3-manager` Debian package) will have most services enabled except the aggregation services. Removing automatically-installed applications in this case will lead to loss of functionality or breakage.
 
 After adding or removing one or more applications on a given host, you must run
 
     aptitude reinstall ccnq3
 
 on that host to ensure that the proper dependencies are updated.
-This operation will in most cases lead to loss of calls on call-processing servers.
 
-The following applications are available:
-
-* applications/host
-
-  The base host support application.
-
-  Install on: all servers.
-
-  Required: yes.
-
-* applications/provisioning
-
-  Support for provisioning.
-
-* applications/cdrs
-
-  A CDR aggregation application.
-
-  Install on: the server that will aggregate the CDRs.
-
-* applications/locations
-
-  Registered endpoints location aggregation.
-  Install on: the server that will aggregate the data.
-
-* applications/dns
-
-  A database-driven DNS server.
-
-  Install on: a server running the ccnq3-dns package.
-
-* applications/freeswitch
-
-  FreeSwitch support application.
-  Install on: any server running FreeSwitch.
-
-* applications/opensips
-
-  OpenSIPS support application.
-  Install on: any server running OpenSIPS.
-
-* applications/traces
-
-  Support for access to local traces.
-  Install on: servers with the ccnq3-traces package, typically OpenSIPS and FreeSwitch hosts.
-
-* applications/voicemail
-
-  FreeSwitch support for voicemail.
-  Install on: a FreeSwitch server that will provide voicemail.
-
-* applications/voicemail-store
-
-  Database support for voicemail.
-  Install on: a server with direct access to the users databases.
-
-* applications/cnam-client (unstable)
-
-  A CNAM client application.
-
-  Install on: a server running FreeSwitch client-side.
-
-* applications/registrant
-
-  OpenSIPS server providing batch registration to an upstream server.
-
-  Install on: a server running OpenSIPS; will start a separate OpenSIPS instance for client registration.
-
-* applications/emergency
-
-  An emergency call routing server.
-
-  Install on: a server running OpenSIPS; will start a separate OpenSIPS instance for 302 emergency calls redirection.
-
-* applications/monitor
-
-  Monitors the local host and pushes statistics about it into a CouchDB database.
-
-* applications/couchdb_daemon
-
-  Provided the extended API (see below *Extended API*) embedded in the central CouchDB database.
-
-  Install on: the central CoudhDB server.
-
-  See the file `bin/manager.ini` for how to embed within CouchDB. (The embedding is done automatically if the manager server is also the CouchDB server.)
+Operational Note: This last operation will in most cases lead to loss of calls on call-processing servers and should only be applied during off-hours maintenance.
 
 provisioning database
 =====================
 
-The provisioning database contains the master copy of all provisioning information
-for an entire system.
+The provisioning database contains the master copy of all provisioning information for an entire system.
 
 It contains different types of records, which can be identified by their "type" field.
 The type is also the first part of the records' identifier, to avoid identifier collisions.
@@ -192,9 +93,7 @@ The type is also the first part of the records' identifier, to avoid identifier 
 host (provisioning records)
 ---------------------------
 
-The local configuration file for a host, normally found in
-`/etc/ccnq3/host.json`, is a copy of the `host` record for that
-specific server as found in the master CouchDB provisioning database.
+The local configuration file for a host, normally found in `/etc/ccnq3/host.json`, is a copy of the `host` record for that specific server as found in the master CouchDB provisioning database.
 
 (In the code, this is referred to as the `config` object. This is the object managed by the `ccnq3.config` class.)
 
@@ -213,16 +112,12 @@ Most changes in `host` records might require you to:
 
         aptitude reinstall ccnq3
 
-    This is especially true when adding an application, so that
-    the proper dependencies might be installed for the new application.
+    This is especially true when adding an application, so that the proper dependencies might be installed for the new application.
 
-However this does not apply to commands (such as the ones in `sip_commands`),
-which are executed immediately.
+However this does not apply to commands (such as the ones in `sip_commands`), which are executed immediately.
 
 Operational note:
-In a lot of cases, restarting, reinstalling, or submitting commands
-will cause calls to disconnect. These operations are best used during
-dedicated maintenance windows and should be avoided during production use.
+In a lot of cases, restarting, reinstalling, or submitting commands will cause calls to disconnect. These operations are best used during dedicated maintenance windows and should be avoided during production use.
 
 Currently the main freeswitch, opensips, and medaproxy processes are not started by ccnq3.
 These processes might be controlled using their respective /etc/init.d/ scripts.
@@ -257,8 +152,7 @@ your installation.
     * `ipv4`: IP (if interface supports v4)
     * `ipv6`: IP (if interface supports v6)
 
-    The keys of the records in the `interfaces` hash must be unique, so they cannot just be the interface's name,
-    since an interface may have multiple v4 or v6 IP addresses.
+    The keys of the records in the `interfaces` hash must be unique, so they cannot just be the interface's name, since an interface may have multiple v4 or v6 IP addresses.
 
     The key `primary` has a special meaning (see next item).
 
@@ -266,9 +160,7 @@ your installation.
     `interfaces.primary.ipv6`
 
     If present, these are selected as the addresses for the host itself.
-    Otherwise a random non-private IPv4 address is selected, and a
-    random IPv6 address is selected, from the ones present in the
-    "interfaces" records.
+    Otherwise a random non-private IPv4 address is selected, and a random IPv6 address is selected, from the ones present in the "interfaces" records.
 
 *   `amqp`
 
@@ -276,8 +168,7 @@ your installation.
 
     (Under development) AMQP is used to forward logging data, send command to servers (replaces the obsolete `sip_commands`) and retrieve data (registrant).
 
-Changing any of the following settings would require to restart the matching
-services, since configuration is read (in most cases) once at startup.
+Changing any of the following settings would require to restart the matching services, since configuration is read (in most cases) once at startup.
 
 *   `admin`:   (only present for bootstrap-system hosts normally; there's no reason to modify these)
     * `couchdb_uri`: server admin URI [required for a Manager host]
@@ -387,10 +278,7 @@ Configuration options:
 
 *   `sip_domain_name`:  string (required); FQDN accepted by the server
 
-    This should be the "cluster name" for servers running similar
-    configurations. This is used by applications/dns to create
-    SRV records for these services. This is also used by applications/opensips
-    to create gateway entries for the `egress_gwid` in those domains/clusters.
+    This should be the "cluster name" for servers running similar configurations. This is used by `applications/dns` to create SRV records for these services. This is also used by `applications/opensips` to create gateway entries for the `egress_gwid` in those domains/clusters.
     Finally, this is the domain name accepted by OpenSIPS servers in that cluster.
 
 *   `rtp_ip`: local IP to bind to for RTP [default: "auto"]
@@ -417,7 +305,7 @@ Configuration options:
 
         Note: port numbers must be in the range 5060 to 5299 or 15060 to 15299 to be compatible with the "traces" application.
 
-        Note: look in doc/port-numbers.md for port numbers conventions.
+        Note: look in `doc/port-numbers.md` for port numbers conventions.
 
         Note: `egress_gwid` must be unique amongst all gateway IDs, including the ones in "gateway"-type records.
 
@@ -575,18 +463,17 @@ Configuration:
     * `workdir`: string, directory used to store the traces [default: "/opt/ccnq3/traces"]
     * `filter`: string, pcap filter for traces [default: ports used by ccnq3 applications]
 
-To obtain data from the trace files, use the AMQP bus with exchange `traces` and topic `request`. The body of the request must be a JSON object with the following properties:
+To obtain data from the trace files, use the AMQP bus with exchange `traces` and topic `request`. (Or use the Extended API operations that acts as a proxy for it.) The body of the request must be a JSON object with the following properties:
 
     * `to_user`     string; To username (destination number)
     * `from_user`   string; From username (calling number)
     * `call_id`     string; Call-ID
     * `days_ago`    integer; only lookup for this number of days ago (0 = today)
-    * `format`      string; either 'pcap' or 'json'
 
     * `reference`   string: the desired response reference.
     * `upload_uri`  URI: when using `respond_via` `couch`, the database URI to use instead of the configured value.
 
-If `format` is `json, the JSON ouput will be an array of hash record; the records might contain the following fields:
+The JSON ouput will contain an array of hash record named `packets`; the records might contain the following fields:
 
   `frame.time`
   `ip.version`
@@ -613,18 +500,17 @@ If `format` is `json, the JSON ouput will be an array of hash record; the record
 
 The response are stored in the CouchDB specified by `upload_uri`. The record will contain:
 
-
     * `_id`: type + `:` + reference + `:` + host
     * `type`: "trace"
     * `host`: the host on which the query was ran
     * `packets`: the array of packets (JSON output specified above) [if format is `json`]
     * and all other fields in the AMQP request.
 
-If `format` is `pcap`, the PCAP output is attached to the CouchDB document as `packets.pcap`.
+The PCAP output is attached to the CouchDB document as a file named `packets.pcap`.
 
 Application note: this type of request is highly CPU intensive for the target hosts. It is only meant as a troubleshooting tool for administrators, not as a generically available service. Use the cdr database to obtain per-call information as a generic service.
 
-Caveat: Since the trace files are rotated to not exceed a given disk space, it is possible that a trace might not be found even though a call was placed.
+Caveat: Since the trace files on the various hosts are rotated to not exceed a given disk space, it is possible that a trace might not be found even though a call was placed.
 
 ### Specific to hosts running as registrants. ###
 
