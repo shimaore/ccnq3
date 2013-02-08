@@ -435,7 +435,7 @@ commands =
             host_info =
               protocol: cdb_info.protocol
               auth:     prov_doc.auth
-              hostname: cdb_info.hostnane
+              hostname: cdb_info.hostname
               port:     cdb_info.port
               pathname: cdb_info.pathname ? pathname
             url.format host_info
