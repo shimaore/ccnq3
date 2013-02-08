@@ -1396,42 +1396,4 @@ Each new voicemail message is stored in an individual voicemail record.
 
     The filename extension depends on the voicemail server's `format` setting. It defaults to `wav`.
 
-API
-===
 
-CouchDB API
------------
-
-The native CouchDB API is available to a server-side or client-side application.
-
-Extended API
-------------
-
-Integrated with CouchDB is a set of ccnq3-specific APIs accessible using the same URI as the CouchDB instance on the manager host.
-Make sure `applications/couchdb_daemon` is enabled for these APIs to be available via CouchDB.
-
-The API calls are authentified using the Basic Authentication header and regular CouchDB username and password (the content of the authentication header is used by the APIs to authenticate their calls to CouchDB).
-
-This API offers the following functions:
-
-### Test
-
-`GET /_ccnq3`
-
-### Voicemail box creation
-
-`PUT /_ccnq3/voicemail/:local_number`
-
-  Create a voicemail box for the specified local number, if none exist.
-
-  The PUT body is merged with any `voicemail_settings` document in the local number's `user_database`.
-
-  Return a JSON content with a `user_database` field on success.
-
-  Note: `applications/voicemail-store` must be installed for the user database to be properly initialized.
-
-### Trace request
-
-`PUT /_ccnq3/traces`
-
-  Publish a trace request in the AMQP bus; the body of the HTTP request will be used as the AMQP request body.
