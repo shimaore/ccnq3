@@ -69,7 +69,6 @@ set_defaults = (prov_doc,hostname) ->
     prov_doc._id ?= ccnq3.make_id 'host', hostname
     prov_doc.type ?= 'host'
     prov_doc.host ?= hostname
-    prov_doc.interfaces ?= {}
     prov_doc.applications ?= []
 
     prov_doc.account ?= ''
