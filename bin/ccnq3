@@ -432,6 +432,7 @@ commands =
 
           make_host_uri = (cdb_uri,pathname) ->
             cdb_info = url.parse cdb_uri
+            delete cdb_info.pathname if cdb_info.pathname is '/'
             host_info =
               protocol: cdb_info.protocol
               auth:     prov_doc.auth
@@ -467,7 +468,14 @@ commands =
 
           prov_doc.provisioning ?= {}
 
-          prov_doc.provisioning.host_couchdb_uri ?= make_host_uri config.admin.couchdb_uri
+          prov_doc.provisioning.host_couchdb_uri ?=
+            if config.provisioning?.host_couchdb_uri?
+              make_host_uri config.provisioning.host_couchdb_uri
+            else
+              if config.provisioning?.couchdb_uri?
+                make_host_uri config.provisioning.couchdb_uri
+              else
+                make_host_uri config.admin.couchdb_uri, '/provisioning'
 
           console.log "Host CouchDB URI is: #{prov_doc.provisioning.host_couchdb_uri}"
 
@@ -487,7 +495,10 @@ commands =
             if config.logging?.host_couchdb_uri?
               make_host_uri config.logging.host_couchdb_uri
             else
-              make_host_uri config.admin.couchdb_uri, '/logging'
+              if config.logging?.couchdb_uri?
+                make_host_uri config.logging.couchdb_uri
+              else
+                make_host_uri config.admin.couchdb_uri, '/logging'
 
           prov_doc.monitor ?= {}
 
@@ -495,7 +506,10 @@ commands =
             if config.monitor?.host_couchdb_uri?
               make_host_uri config.monitor.host_couchdb_uri
             else
-              make_host_uri config.admin.couchdb_uri, '/monitor'
+              if config.monitor?.couchdb_uri?
+                make_host_uri config.monitor.couchdb_uri
+              else
+                make_host_uri config.admin.couchdb_uri, '/monitor'
 
           prov_doc.provisioning.local_couchdb_uri ?= 'http://127.0.0.1:5984/provisioning'
 
