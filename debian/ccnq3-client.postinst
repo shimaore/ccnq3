@@ -44,8 +44,8 @@ case "$1" in
       /etc/init.d/couchdb start
     fi
 
-    su -s /bin/sh -c "ccnq3 'set local defaults'"   $USER || exit 1
-    (cd "`ccnq3 'get config source'`" && \
+    su -s /bin/sh -c "ccnq3 set_local_defaults"   $USER || exit 1
+    (cd "`ccnq3 get_config_source`" && \
       npm run-script updates && \
       npm run-script bootstrap ) || exit 1
   ;;
