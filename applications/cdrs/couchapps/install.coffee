@@ -17,6 +17,7 @@ ccnq3.config (config) ->
   if cdrs_uri
     ccnq3.db.security cdrs_uri, 'cdrs', true
     push_script cdrs_uri, 'main'
+    push_script cdrs_uri, 'addon'
     return
 
   # Otherwise create the database
