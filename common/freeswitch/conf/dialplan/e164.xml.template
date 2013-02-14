@@ -39,6 +39,7 @@
 
         <action application="set" data="progress_timeout=12"/>
         <action application="set" data="call_timeout=300"/>
+        <action application="set" data="sip_wait_for_aleg_ack=true"/>
         <action application="export" data="t38_passthru=true"/>
       </condition>
     </extension>
@@ -90,6 +91,7 @@
 
         <action application="set" data="progress_timeout=12"/>
         <action application="set" data="call_timeout=300"/>
+        <action application="set" data="sip_wait_for_aleg_ack=true"/>
         <action application="export" data="t38_passthru=true"/>
       </condition>
     </extension>
