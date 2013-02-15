@@ -40,6 +40,8 @@
   @get '/_ccnq3', ->
     @success welcome:'ccnq3'
 
+  @set views: 'include'
+
   fs = require 'fs'
   path = require 'path'
   fs.readdir './include', (err,names) =>
