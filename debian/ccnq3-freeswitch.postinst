@@ -15,7 +15,7 @@ case "$1" in
     ###
     CONF=$WORKDIR/freeswitch/conf
     VOICEMAIL=$WORKDIR/freeswitch/messages
-    LOG=/opt/freeswitch/log
+    LOG=/var/log/freeswitch
     CDR=$WORKDIR/freeswitch/cdr
 
     # allow access to configuration directories
@@ -26,9 +26,8 @@ case "$1" in
     # Startup parameters
     DEFAULTS=/etc/default/freeswitch
     DB=/dev/shm/freeswitch
-    sed -i -e 's/^FREESWITCH_ENABLED=.*$/FREESWITCH_ENABLED="true"/'              $DEFAULTS
-    sed -i -e '/^FREESWITCH_PARAMS=/ d' $DEFAULTS
-    echo "FREESWITCH_PARAMS=\"-nc -nonat -nonatmap -conf $CONF -log $LOG -db $DB\"" >> $DEFAULTS
+    sed -i -e '/^DAEMON_OPTS=/ d' $DEFAULTS
+    echo "DAEMON_OPTS=\"-nc -nonat -nonatmap -conf $CONF -log $LOG -db $DB\"" >> $DEFAULTS
 
     # Default configuration
     mkdir -p $CONF
