@@ -130,7 +130,7 @@ Add a new "voice" host
 
 * On the manager server, run the following command as user `ccnq3` to add an entry for host `vm2.phone.example.net`:
 
-      ccnq3 'add host' vm2.phone.example.net
+      ccnq3 add_host vm2.phone.example.net
 
   (You may run the script multiple times.)
 
