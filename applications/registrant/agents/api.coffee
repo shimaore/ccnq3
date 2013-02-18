@@ -35,6 +35,16 @@ process_command = (port,command,cfg) ->
         process_command p.mi_port, 'start', p.runtime_opensips_cfg
         cb?()
 
+  restart:
+    description: 'Restart the registrant OpenSIPS process'
+    category: 'registrant'
+    do: (cb) ->
+      ccnq3.config (p) ->
+        if not p.registrant? then return
+        p = require('./params') p
+        process_command p.mi_port, 'restart', p.runtime_opensips_cfg
+        cb?()
+
   stop:
     description: 'Stop the registrant OpenSIPS process'
     category: 'registrant'
