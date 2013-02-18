@@ -148,11 +148,20 @@ Client (non-manager) hosts
 
 On a non-manager host you will use:
 
-    aptitude install ccnq3-voice ccnq3-client
+    aptitude install ccnq3-client
 
 You will need to provide it the URI assigned by the provisioning system.  (See the [provisioning] documentation for how to obtain that URI.)
 
 Installing the `ccnq3-client` package will overwrite any local CouchDB configuration. This package cannot be co-located with non-ccnq3 applications that might use CouchDB.
+
+Client hosts with voice services
+--------------------------------
+
+After you complete the steps above for a client host, install:
+
+    aptitude install ccnq3-voice
+
+This will install OpenSIPS, FreeSwitch, etc.
 
 If you need mediaproxy on that host, you _must_ manually run
 
