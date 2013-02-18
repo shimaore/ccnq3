@@ -48,6 +48,7 @@ case "$1" in
     (cd "`ccnq3 get_config_source`" && \
       npm run-script updates && \
       npm run-script bootstrap ) || exit 1
+    echo "$NAME client configured."
   ;;
 
   remove|purge)
