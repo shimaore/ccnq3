@@ -1,3 +1,170 @@
+ccnq3 (0.0.59~31.gbpfed787) UNRELEASED; urgency=low
+
+  ** SNAPSHOT build @fed7871844cc55cc3fd847a104e19fb9df4f33ea **
+
+  [ Stephane Alnet (Packaging) ]
+  ** SNAPSHOT build @b866b259c77fdd600db691da8556aabe7052c224 **
+
+  * UNRELEASED
+
+  [ Stephane Alnet ]
+  * couchdb_daemon: include traces
+
+  [ Stephane Alnet (Packaging) ]
+
+  [ Stephane Alnet ]
+  * couchdb_daemon/traces: report errors
+
+  [ Stephane Alnet (Packaging) ]
+
+  [ Stephane Alnet ]
+  * couchdb_daemon/traces: properly keep the zappa object in view.
+
+  [ Stephane Alnet (Packaging) ]
+
+  [ Stephane Alnet ]
+  * couch_daemon/traces: corrected server
+  * traces: corrected issues in trace_couch handler
+  * TODOs
+
+  [ Stephane Alnet (Packaging) ]
+
+  [ Stephane Alnet ]
+  * traces: create one queue per client
+
+  [ Stephane Alnet (Packaging) ]
+
+  [ Stephane Alnet ]
+  * couch_daemon: dynamically load `include` zappajs modules.
+
+  [ Stephane Alnet (Packaging) ]
+
+  [ Stephane Alnet ]
+  * couch_daemon: dynamically load `include` zappajs modules.
+
+  [ Stephane Alnet (Packaging) ]
+
+  [ Stephane Alnet ]
+  * couch_daemon: dynamically load `include` zappajs modules.
+
+  [ Stephane Alnet (Packaging) ]
+
+  [ Stephane Alnet ]
+  * couch_daemon: dynamically load `include` zappajs modules.
+
+  [ Stephane Alnet (Packaging) ]
+
+  [ Stephane Alnet ]
+  * couch_daemon: dynamically load `include` zappajs modules.
+
+  [ Stephane Alnet (Packaging) ]
+
+  [ Stephane Alnet ]
+  * traces: oops, was missing `wireshark_date`
+
+  [ Stephane Alnet (Packaging) ]
+
+  [ Stephane Alnet ]
+  * Documentation
+  * Use configuration instead of absolute values.
+
+  [ Stephane Alnet (Packaging) ]
+
+  [ Stephane Alnet ]
+  * traces: correcting issues with lack of `end` on process termination.
+  * traces: record JSON and PCAP in the same document.
+
+  [ Stephane Alnet (Packaging) ]
+
+  [ Stephane Alnet ]
+  * couch_daemon: traces no longer requires format.
+
+  [ Stephane Alnet (Packaging) ]
+
+  [ Stephane Alnet ]
+  * Implemented pike part of rate-limiting (#33)
+  * Made "rate_limit_interval" into a variable
+  * Rate limit per endpoint or number (#33)
+  * Initial attempt at max_channels (#23)
+
+  [ Stephane Alnet (Packaging) ]
+
+  [ Stephane Alnet ]
+  * Split applications doc out of data-dictionary.
+  * Split API and applications documentation out of data-dictionary.
+  * ccnq3: Corrected field name.
+
+  [ Stephane Alnet (Packaging) ]
+
+  [ Stephane Alnet ]
+  * ccnq3: Corrected field name.
+
+  [ Stephane Alnet (Packaging) ]
+
+  [ Stephane Alnet ]
+  * bin: use fallbacks more efficiently
+
+  [ Stephane Alnet (Packaging) ]
+
+  [ Stephane Alnet ]
+  * ccnq3-client: check for fqdn
+  * bin: do not create empty `interfaces`, it will prevent local script to insert them.
+
+  [ Stephane Alnet (Packaging) ]
+
+  [ Stephane Alnet ]
+  * packaging: simplify calling bin/ccnq3 from postinst
+
+  [ Stephane Alnet (Packaging) ]
+
+  [ Stephane Alnet ]
+  * cdr addon handler
+
+  [ Stephane Alnet (Packaging) ]
+
+  [ Stephane Alnet ]
+  * sip_wait_for_aleg_ack
+  * Set views for zappa apps.
+
+  [ Stephane Alnet (Packaging) ]
+
+  [ Stephane Alnet ]
+  * split ccnq3-client vs ccnq3-voice installation
+  * npm-apps: force exit on successful termination
+  * freeswitch: 1.2.x Debian packages have new layout
+
+  [ Stephane Alnet (Packaging) ]
+
+  [ Stephane Alnet ]
+  * doc: use simplified syntax
+  * freeswitch: remove unnecessary/commented modules
+  * mediaproxy: automatically enable IPv4 forwarding
+
+  [ Stephane Alnet (Packaging) ]
+
+  [ Stephane Alnet ]
+  * freeswitch: adapt startup locations to 1.2.x
+
+  [ Stephane Alnet (Packaging) ]
+
+  [ Stephane Alnet ]
+  * Explicit
+  * scripts: simplify calling of `ccnq3` CLI
+
+  [ Stephane Alnet (Packaging) ]
+
+  [ Stephane Alnet ]
+  * trying to work around blocking postinst
+
+  [ Stephane Alnet (Packaging) ]
+
+  [ Stephane Alnet ]
+  * debian: added db_stop, should help with hanging postinst
+
+  [ Stephane Alnet (Packaging) ]
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Fri, 01 Feb 2013 00:23:21 +0100
+
 ccnq3 (0.0.58) unstable; urgency=low
 
   [ Stephane Alnet ]
