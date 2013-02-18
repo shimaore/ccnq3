@@ -1,3 +1,9 @@
+ccnq3 (0.0.65) unstable; urgency=low
+
+  * registrant: split out opensips_command
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Mon, 18 Feb 2013 16:44:12 +0100
+
 ccnq3 (0.0.64) unstable; urgency=low
 
   * registrant: log event
