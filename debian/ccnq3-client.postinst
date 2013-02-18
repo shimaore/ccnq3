@@ -9,17 +9,17 @@ USER=$NAME
 case "$1" in
   configure|upgrade)
 
-    if [ "`hostname`" != "`hostname --fqdn`" ]; then
-      echo "Hostname is not FQDN. Please correct."
-      exit 1
-    fi
-
     db_get ccnq3/overwrite
     if [ "$RET" = "true" ]; then rm -f "`ccnq3 get_config_location`"; fi
 
     db_get ccnq3/uri
     if [ -z "$RET" ]; then db_reset ccnq3/uri; exit 1; fi
     su -s /bin/sh -c "ccnq3 set_host_uri '$RET'" $USER || exit 1
+
+    if [ "`hostname`" != "`hostname --fqdn`" ]; then
+      echo "Local hostname is not FQDN. Please correct."
+      exit 1
+    fi
 
     # --------- CouchDB --------- #
 
