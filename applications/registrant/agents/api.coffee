@@ -1,6 +1,7 @@
 { spawn } = require 'child_process'
 ccnq3 = require 'ccnq3'
 opensips_command = require './opensips-command'
+params = require './params'
 
 service = null
 kill_service = ->
@@ -33,7 +34,7 @@ process_command = (port,command,cfg) ->
     do: (cb) ->
       ccnq3.config (p) ->
         if not p.registrant? then return
-        p = require('./params') p
+        p = params p
         process_command p.mi_port, 'start', p.runtime_opensips_cfg
         cb?()
 
@@ -43,7 +44,7 @@ process_command = (port,command,cfg) ->
     do: (cb) ->
       ccnq3.config (p) ->
         if not p.registrant? then return
-        p = require('./params') p
+        p = params p
         process_command p.mi_port, 'restart', p.runtime_opensips_cfg
         cb?()
 
@@ -53,6 +54,6 @@ process_command = (port,command,cfg) ->
     do: (cb) ->
       ccnq3.config (p) ->
         if not p.registrant? then return
-        p = require('./params') p
+        p = params p
         process_command p.mi_port, 'stop', p.runtime_opensips_cfg
         cb?()
