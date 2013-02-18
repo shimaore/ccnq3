@@ -1,3 +1,10 @@
+ccnq3 (0.0.63) unstable; urgency=low
+
+  * registrant: migrate param code out
+  * registrant: split api
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Mon, 18 Feb 2013 16:10:52 +0100
+
 ccnq3 (0.0.62) unstable; urgency=low
 
   * bin, fix: corrected the proper username
