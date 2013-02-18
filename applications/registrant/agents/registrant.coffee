@@ -1,11 +1,8 @@
 #!/usr/bin/env coffee
 
-fs = require 'fs'
-qs = require 'querystring'
-util = require 'util'
 pico = require 'pico'
-spawn = require('child_process').spawn
-ccnq3 = require('ccnq3')
+ccnq3 = require 'ccnq3'
+{api} = require './api'
 
 dgram = require 'dgram'
 opensips_command = (port,command) ->
@@ -18,31 +15,6 @@ opensips_command = (port,command) ->
     # FIXME the proper way to do so is to collect it then implement a timeout (say 1s)
     #       to declare the UDP session over with.
     client.close()
-
-# OpenSIPS registrant service management
-service = null
-kill_service = ->
-  service.kill 'SIGKILL'
-  service = null
-
-process_changes = (port,command,cfg) ->
-  stop_service = ->
-    opensips_command port, ":kill:\n"
-    if service?
-      setTimeout kill_service, 4000
-  start_service = ->
-    if service?
-      ccnq3.log "WARNING in start_service: service already running?"
-    service = spawn '/usr/sbin/opensips', [ '-f', cfg ]
-
-  switch command
-    when 'stop'
-      do stop_service
-    when 'start'
-      do start_service
-    when 'restart'
-      do stop_service
-      setTimeout start_service, 5000
 
 
 # Agent main process
@@ -64,7 +36,7 @@ ccnq3.config (config) ->
 
     # Process any MI commands
     if p.sip_commands?.registrant?
-      process_changes params.mi_port, p.sip_commands.registrant, params.runtime_opensips_cfg
+      api[p.sip_commands.registrant]?.do()
 
   # At startup, use the current document.
   handler config
