@@ -57,17 +57,7 @@ ccnq3.config (config) ->
     base_path = "./opensips"
     model = 'registrant'
 
-    params = {}
-    for _ in ['default.json',"#{model}.json"]
-      do (_) ->
-        data = JSON.parse fs.readFileSync "#{base_path}/#{_}"
-        params[k] = data[k] for own k of data
-
-    params.opensips_base_lib = base_path
-
-    params[k] = p.registrant[k] for own k of p.registrant
-
-    qs_host = qs.stringify key: JSON.stringify p.host
+    params = require('./params') p
 
     # Build the configuration file.
     require("#{base_path}/compiler.coffee") params
