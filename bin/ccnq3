@@ -240,8 +240,9 @@ commands =
 
       info = url.parse uri
       username = info.auth.split(/:/)[0]
-      if username isnt config.host
-        console.error "URI is for a different host (#{username}) instead of the local host (#{config.host})."
+      local_username = "host@#{config.host}"
+      if username isnt local_username
+        console.error "URI is for a different host (#{username}) instead of the local host (#{local_username})."
         process.exit 1
 
       # Default auth info
