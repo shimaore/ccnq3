@@ -36,11 +36,11 @@ case "$1" in
       mkdir -p $CDB_DIR && chmod 0755 $CDB_DIR && chown couchdb.couchdb $CDB_DIR || exit 1
 
       # Apparently using /etc/couchdb/local.d/ccnq3 does not work.
-      cp "`ccnq3 'get config source'`/bin/client.ini" $COUCHDB_CONFIG || exit 1
+      cp "`ccnq3 get_config_source`/bin/client.ini" $COUCHDB_CONFIG || exit 1
       sed -i -e "s/NAME/${NAME}/" $COUCHDB_CONFIG
       chown couchdb.couchdb "${COUCHDB_CONFIG}"
 
-      su -s /bin/sh -c "ccnq3 'set local uri' 'http://127.0.0.1:5984/provisioning'" $USER || exit 1
+      su -s /bin/sh -c "ccnq3 set_local_uri 'http://127.0.0.1:5984/provisioning'" $USER || exit 1
       /etc/init.d/couchdb start
     fi
 
