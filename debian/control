@@ -113,7 +113,23 @@ Description: Dependencies for a server running OpenSIPS in CCNQ3
 Package: ccnq3-freeswitch
 Architecture: all
 Depends: ccnq3 (= ${binary:Version}),
-  freeswitch (>=1.0.head~git.master.20120103)
+  freeswitch (= ${freeswitch:Version}),
+  freeswitch-sysvinit (= ${freeswitch:Version}),
+  freeswitch-mod-console (= ${freeswitch:Version}),
+  freeswitch-mod-event-socket (= ${freeswitch:Version}),
+  freeswitch-mod-sofia (= ${freeswitch:Version}),
+  freeswitch-mod-loopback (= ${freeswitch:Version}),
+  freeswitch-mod-commands (= ${freeswitch:Version}),
+  freeswitch-mod-db (= ${freeswitch:Version}),
+  freeswitch-mod-hash (= ${freeswitch:Version}),
+  freeswitch-mod-dptools (= ${freeswitch:Version}),
+  freeswitch-mod-enum (= ${freeswitch:Version}),
+  freeswitch-mod-dialplan-xml (= ${freeswitch:Version}),
+  freeswitch-mod-spandsp (= ${freeswitch:Version}),
+  freeswitch-mod-sndfile (= ${freeswitch:Version}),
+  freeswitch-mod-native-file (= ${freeswitch:Version}),
+  freeswitch-mod-tone-stream (= ${freeswitch:Version}),
+  freeswitch-mod-json-cdr (= ${freeswitch:Version})
 Recommends: ccnq3-munin-freeswitch
 Description: Dependencies for a server running FreeSwitch in CCNQ3
 
