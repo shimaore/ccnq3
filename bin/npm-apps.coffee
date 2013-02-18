@@ -12,6 +12,7 @@ operation = process.argv.slice(2)
 
 finalize = ->
   console.log "npm-apps #{operation}: Done."
+  process.exit()
 
 log = (application,error) ->
   console.log """
