@@ -1,3 +1,9 @@
+ccnq3 (0.0.62) unstable; urgency=low
+
+  * bin, fix: corrected the proper username
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Mon, 18 Feb 2013 15:27:23 +0100
+
 ccnq3 (0.0.61) unstable; urgency=low
 
   * Document MediaProxy restart (mediaproxy-relay may not start at once because IPv4 forwarding might not have been enabled)
