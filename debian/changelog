@@ -1,8 +1,9 @@
 ccnq3 (0.0.64) unstable; urgency=low
 
+  * registrant: log event
   * registrant: reimplement restart
 
- -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Mon, 18 Feb 2013 16:32:52 +0100
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Mon, 18 Feb 2013 16:35:24 +0100
 
 ccnq3 (0.0.63) unstable; urgency=low
 
