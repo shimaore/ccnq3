@@ -12,15 +12,9 @@
     <load module="mod_dptools"/>
     <load module="mod_enum"/>
 
-    <!-- <load module="mod_fsv"/> --> <!-- Video recording -->
-
-    <!-- <load module="mod_expr"/> -->
-    <!-- <load module="mod_fifo"/> -->
-
     <load module="mod_dialplan_xml"/>
 
     <load module="mod_spandsp"/>
-    <load module="mod_h26x"/>
 
     <load module="mod_sndfile"/> <!-- required to read the wav files -->
     <load module="mod_native_file"/>
