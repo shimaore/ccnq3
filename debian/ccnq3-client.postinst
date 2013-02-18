@@ -16,6 +16,8 @@ case "$1" in
     if [ -z "$RET" ]; then db_reset ccnq3/uri; exit 1; fi
     su -s /bin/sh -c "ccnq3 set_host_uri '$RET'" $USER || exit 1
 
+    db_stop
+
     if [ "`hostname`" != "`hostname --fqdn`" ]; then
       echo "Local hostname is not FQDN. Please correct."
       exit 1

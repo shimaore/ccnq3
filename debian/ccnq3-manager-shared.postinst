@@ -20,6 +20,8 @@ case "$1" in
     if [ -z "$RET" ]; then db_reset ccnq3/amqp_uri; exit 1; fi
     su -s /bin/sh -c "ccnq3 'set admin amqp' '$RET'" $USER || exit 1
 
+    db_stop
+
     su -s /bin/sh -c "ccnq3 'set local defaults'"    $USER || exit 1
     su -s /bin/sh -c "ccnq3 'add host' ${HOSTNAME}"  $USER || exit 1
     (cd "`ccnq3 'get config source'`" && \
