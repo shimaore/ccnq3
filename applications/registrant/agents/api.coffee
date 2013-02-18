@@ -1,4 +1,6 @@
 { spawn } = require 'child_process'
+ccnq3 = require 'ccnq3'
+opensips_command = require './opensips-command'
 
 service = null
 kill_service = ->
