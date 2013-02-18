@@ -36,7 +36,10 @@ ccnq3.config (config) ->
 
     # Process any MI commands
     if p.sip_commands?.registrant?
-      api[p.sip_commands.registrant]?.do()
+      r = api[p.sip_commands.registrant]
+      if r?
+        ccnq3.log r.description
+        r.do()
 
   # At startup, use the current document.
   handler config
