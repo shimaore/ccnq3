@@ -182,6 +182,9 @@ Add a new "voice" host
       # Normally at this point, freeswitch and opensips are still not running.
       sudo /etc/init.d/opensips start
       sudo /etc/init.d/freeswitch start
+      # If running MediaProxy:
+      sudo /etc/init.d/mediaproxy-dispatcher restart
+      sudo /etc/init.d/mediaproxy-relay restart
 
 Add a registering endpoint record to test the new setup
 =======================================================
