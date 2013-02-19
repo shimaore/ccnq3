@@ -1,3 +1,10 @@
+ccnq3 (0.0.67) unstable; urgency=low
+
+  * e164 model: corrections
+  * e164: be liberal in what you accept
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 19 Feb 2013 18:22:39 +0100
+
 ccnq3 (0.0.66) unstable; urgency=low
 
   * registrant: factorized module use
