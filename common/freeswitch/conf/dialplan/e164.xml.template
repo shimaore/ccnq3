@@ -54,7 +54,7 @@
     <!--
     <extension name="egress-emergency">
       <condition field="${ccnq_account}" expression="^.+$" />
-      <condition field="${ccnq_to_e164}" expression="^(911|112)$">
+      <condition field="${ccnq_to_e164}" expression="^(1911|112)$">
         <action application="set" data="ccnq_called=$1"/>
         <action application="set" data="ccnq_routing=${sip_h_x-ccnq3-routing}"/>
         <action application="set" data="sip_contact_user=+${ccnq_routing}"/>
@@ -88,6 +88,8 @@
         <action application="set" data="ccnq_direction=ingress"/>
         <action application="set" data="ccnq_profile=$${profile_name}"/>
         <action application="set" data="ccnq_from_e164=${caller_id_number}"/>
+
+        <action application="set" data="sip_cid_type=pid"/>
 
         <action application="set" data="progress_timeout=12"/>
         <action application="set" data="call_timeout=300"/>
