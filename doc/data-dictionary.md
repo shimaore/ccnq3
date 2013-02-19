@@ -316,7 +316,7 @@ Configuration options:
       * For handler="client-sbc"
         * `type`: dialplan profile type (e.g. "usa", "france")
         * `send_call_to`: where to send the calls ("socket", "bridge") [default: "socket"]
-        * `ingress_target`: domain where to send ingress calls
+        * `ingress_target`: domain where to send ingress calls [default: the `sip_domain_name` of the host]
         * `number_domain`: for inbound calls, how to locate the local numbers in the proxy [default: "local"]
 
       * For handler on one of the carrier-sbc's

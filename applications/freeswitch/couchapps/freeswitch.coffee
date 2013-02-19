@@ -129,7 +129,7 @@ ddoc.shows.freeswitch_local_conf = p_fun (doc,req) ->
 
       <X-PRE-PROCESS cmd="set" data="profile_name=#{profile_name}"/>
       <X-PRE-PROCESS cmd="set" data="profile_type=#{profile.type}"/>
-      <X-PRE-PROCESS cmd="set" data="ingress_target=#{profile.ingress_target}"/>
+      <X-PRE-PROCESS cmd="set" data="ingress_target=#{profile.ingress_target ? doc.sip_domain_name}"/>
       <X-PRE-PROCESS cmd="set" data="egress_target=#{profile.egress_target}"/>
       <X-PRE-PROCESS cmd="set" data="enum_root=#{profile.enum_root}"/>
       <X-PRE-PROCESS cmd="set" data="default_language=#{profile.default_language ? doc.voicemail?.default_language ? 'en'}"/>
