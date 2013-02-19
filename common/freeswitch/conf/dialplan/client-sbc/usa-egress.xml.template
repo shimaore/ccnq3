@@ -41,7 +41,7 @@
 
 <!-- special numbers -->
 <extension name="cleanup-called-3">
-  <condition field="destination_number" expression="^([2-9]11)$">
+  <condition field="destination_number" expression="^\+?1?([2-9]11)$">
     <action application="set" data="ccnq_to_e164=1$1"/>
     <action application="transfer" data="call"/>
   </condition>
