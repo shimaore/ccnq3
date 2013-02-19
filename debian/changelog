@@ -1,3 +1,11 @@
+ccnq3 (0.0.66) unstable; urgency=low
+
+  * registrant: factorized module use
+  * dialplan: be liberal in what you accept
+  * freeswitch/client-sbc: ingress_target will default to sip_domain_name, which is normally the case on a client-side SBC
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 19 Feb 2013 12:06:22 +0100
+
 ccnq3 (0.0.65) unstable; urgency=low
 
   * registrant: split out opensips_command
