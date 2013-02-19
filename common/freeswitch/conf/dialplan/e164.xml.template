@@ -99,14 +99,14 @@
     </extension>
 
     <extension name="cleanup-caller-id" continue="true">
-      <condition field="caller_id_number" expression="^\+(\d+)$">
+      <condition field="caller_id_number" expression="^\+?(\d+)$">
         <action application="set" data="effective_caller_id_number=$1"/>
         <action application="set" data="ccnq_from_e164=$1"/>
       </condition>
     </extension>
 
     <extension name="default-ingress">
-      <condition field="destination_number" expression="^\+(\d+)$">
+      <condition field="destination_number" expression="^\+?(\d+)$">
         <action application="set" data="ccnq_to_e164=$1"/>
         <action application="enum" data="${ccnq_to_e164} $${enum_root}"/>
         <action application="set" data="ccnq_account=${enum_route_2}"/>
