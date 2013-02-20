@@ -10,6 +10,7 @@
 
 module.exports = ->
   interfaces = require('os').networkInterfaces()
+  {v4_loopback,v6_linklocal} = require './classify-ip'
 
   result = {}
 
@@ -23,7 +24,13 @@ module.exports = ->
           address = _.address
           t = result[intf] ? {}
 
-          # FIXME: Skip local addresses (127/8, fe80::, etc.)
+          # Skip local addresses (127/8, fe80::, etc.)
+          switch family
+            when 'ipv4'
+              return if v4_loopback address
+            when 'ipv6'
+              return if v6_linklocal address
+
           # Another address for the same interface+family
           if t[family]?
             t.next ?= 0
