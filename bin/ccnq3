@@ -107,11 +107,31 @@ set_defaults = (prov_doc,hostname) ->
         auth:     prov_doc.admin.auth
         pathname: '/api'
       prov_doc.admin.amqp_mgmt ?= url.format amqp_mgmt
+    else
+      set_amqp prov_doc
 
     # Always (re-)inject the default applications.
     for app in default_apps
       unless app in prov_doc.applications
         prov_doc.applications.push app
+
+set_amqp = (config) ->
+  uri = config.provisioning?.host_couchdb_uri
+  return unless uri?
+
+  info = url.parse uri
+
+  # Default auth info
+  config.auth ?= info.auth
+
+  # Default AMQP info
+  vhost = NAME
+  amqp_info =
+    protocol: 'amqp'
+    hostname: info.hostname
+    auth: config.auth
+    pathname: '/' + escape vhost
+  config.amqp ?= url.format amqp_info
 
 hex_sha1 = (v) ->
   crypto.createHash('sha1').update(v).digest('hex')
@@ -245,16 +265,7 @@ commands =
         console.error "URI is for a different host (#{username}) instead of the local host (#{local_username})."
         process.exit 1
 
-      # Default auth info
-      config.auth ?= info.auth
-      # Default AMQP info
-      vhost = NAME
-      amqp_info =
-        protocol: 'amqp'
-        hostname: info.hostname
-        auth: config.auth
-        pathname: '/' + escape vhost
-      config.amqp ?= url.format amqp_info
+      set_amqp config
 
       # Save
       ccnq3.config.update config
@@ -485,14 +496,7 @@ commands =
           console.log "Host CouchDB URI is: #{prov_doc.provisioning.host_couchdb_uri}"
 
           # Default AMQP info
-          prov_info = url.parse prov_doc.provisioning.host_couchdb_uri
-          vhost = NAME
-          amqp_info =
-            protocol: 'amqp'
-            hostname: prov_info.hostname
-            auth:     prov_doc.auth
-            pathname: '/' + escape vhost
-          config.amqp ?= url.format amqp_info
+          set_amqp prov_doc
 
           prov_doc.logging ?= {}
 
