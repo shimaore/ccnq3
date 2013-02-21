@@ -122,6 +122,9 @@ module.exports = (options) ->
         self.emit 'data', data
       linestream.on 'end', ->
         self.end()
+      linestream.on 'error', ->
+        console.log "Linestream error"
+        seld.end()
 
     # Fork the find/mergecap/ngrep pipe.
     pcap = exec pcap_command,
