@@ -1,3 +1,9 @@
+ccnq3 (0.0.72) unstable; urgency=low
+
+  * debian: corrected in-file changes
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Thu, 21 Feb 2013 19:04:32 +0100
+
 ccnq3 (0.0.71) unstable; urgency=low
 
   * debian: corrected regexp in mediaproxy-relay postinst.
