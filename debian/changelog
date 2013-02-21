@@ -1,3 +1,10 @@
+ccnq3 (0.0.69) unstable; urgency=low
+
+  * traces: better options for `find` and `xargs`
+  * traces: handle errors on pipe
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Thu, 21 Feb 2013 18:32:29 +0100
+
 ccnq3 (0.0.68) unstable; urgency=low
 
   * bin: factorized set_amqp (and auth)
