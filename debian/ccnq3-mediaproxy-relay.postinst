@@ -16,7 +16,7 @@ case "$1" in
       else
         # Replace current Debian default if present
         if egrep -q '^# *net.ipv4.ip_forward *= *1' $CONF; then
-          sed -i -e 's/^# *net.ipv4.ip_forward *= *1/net.ipv4.ip_forward=1' $CONF
+          sed -i -e 's/^# *net.ipv4.ip_forward *= *1/net.ipv4.ip_forward=1/' $CONF
         else
           echo "net.ipv4.ip_forward=1" | tee -a $CONF >/dev/null
         fi
