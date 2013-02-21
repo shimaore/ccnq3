@@ -522,6 +522,10 @@ commands =
 
           prov_doc.provisioning.local_couchdb_uri ?= 'http://127.0.0.1:5984/provisioning'
 
+          prov_doc.traces ?= {}
+
+          prov_doc.traces.upload_uri ?= prov_doc.logging.host_couchdb_uri
+
           # save in provisioning db
           prov_db.put prov_doc, (e,r) ->
             if e?
