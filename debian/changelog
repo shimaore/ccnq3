@@ -1,3 +1,9 @@
+ccnq3 (0.0.71) unstable; urgency=low
+
+  * debian: corrected regexp in mediaproxy-relay postinst.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Thu, 21 Feb 2013 18:59:56 +0100
+
 ccnq3 (0.0.70) unstable; urgency=low
 
   * bin: provide default traces upload_uri
