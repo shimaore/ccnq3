@@ -18,6 +18,8 @@ statm_fields = 'size resident share text lib data dirty'.split /\s+/
       get = (n) ->
         try
           fs.readFileSync("/proc/#{p}/#{n}", 'utf8').replace /\n$/, ''
+        catch e
+          ''
 
       get_cmdline = (n) ->
         cmdline = get(n).split /\u0000/
@@ -26,7 +28,7 @@ statm_fields = 'size resident share text lib data dirty'.split /\s+/
       get_line = (n,f) ->
         l = get(n).split /\s+/
         r = {}
-        r[key] = l[i] 
+        r[key] = l[i]
         for key, i in f
           v = parseInt l[i]
           r[key] = u.value l[i]
