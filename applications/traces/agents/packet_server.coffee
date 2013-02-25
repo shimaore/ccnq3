@@ -132,8 +132,8 @@ module.exports = (options) ->
 
     # Wait for the pcap_command to terminate.
     pcap.on 'exit', (code) ->
+      console.dir on:'exit', code:code, pcap_command:pcap_command
       if code isnt 0
-        console.dir on:'exit', code:code, pcap_command:pcap_command
         # Remove the temporary (pcap) file
         fs.unlink fh
         # The response is complete
