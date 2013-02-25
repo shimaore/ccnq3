@@ -1,3 +1,10 @@
+ccnq3 (0.0.75) unstable; urgency=low
+
+  * opensips: Cannot modify doc in view: modifying in post-process
+  * monitor/plugins: process data might no longer be available
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Mon, 25 Feb 2013 12:59:43 +0100
+
 ccnq3 (0.0.74) unstable; urgency=low
 
   * Changes in Node.js? fs.readFileSync apparently doesn't return a string (or coffee.compile doesn't support getting a buffer anymore)
