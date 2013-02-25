@@ -21,7 +21,7 @@ coffee = require 'coffee-script'
 
 module.exports = ddoc
 
-ddoc.lib.quote =  coffee.compile fs.readFileSync './quote.coffee'
+ddoc.lib.quote =  coffee.compile ''+fs.readFileSync './quote.coffee'
 
 ddoc.shows.format = p_fun (doc,req) ->
   quote = require 'lib/quote'
