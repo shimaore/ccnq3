@@ -1,3 +1,9 @@
+ccnq3 (0.0.76) unstable; urgency=low
+
+  * traces: log commands for better troubleshooting
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Mon, 25 Feb 2013 14:36:50 +0100
+
 ccnq3 (0.0.75) unstable; urgency=low
 
   * opensips: Cannot modify doc in view: modifying in post-process
