@@ -86,7 +86,6 @@ ddoc.views.gateways_by_domain =
 ddoc.views.rules_by_domain =
   map: p_fun (doc) ->
     if doc.type? and doc.type is 'rule'
-      doc.ruleid = 1
       emit doc.sip_domain_name, doc
     return
 
