@@ -1,3 +1,9 @@
+ccnq3 (0.0.73) unstable; urgency=low
+
+  * opensips requires a ruleid field!
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Mon, 25 Feb 2013 12:10:30 +0100
+
 ccnq3 (0.0.72) unstable; urgency=low
 
   * debian: corrected in-file changes
