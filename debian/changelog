@@ -1,3 +1,9 @@
+ccnq3 (0.0.77) unstable; urgency=low
+
+  * opensips: reduce amount of errors logged
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 26 Feb 2013 10:53:13 +0100
+
 ccnq3 (0.0.76) unstable; urgency=low
 
   * traces: log commands for better troubleshooting
