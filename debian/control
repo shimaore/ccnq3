@@ -97,7 +97,7 @@ Depends: ccnq3-traces (= ${binary:Version}),
   ccnq3-munin-opensips (= ${binary:Version}),
   ccnq3-munin-freeswitch (= ${binary:Version})
 Description: Dependencies for a server running voice traffic
-  Install this package on any host that will be running voice traffic
+  Install this meta-package on any host that will be running voice traffic
   inside a ccnq3 system.
 
 Package: ccnq3-opensips
