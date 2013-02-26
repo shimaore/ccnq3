@@ -19,7 +19,7 @@ case "$1" in
     sed -i -e 's/RUN_OPENSIPS=no/RUN_OPENSIPS=yes/' $DEFAULTS
     # Required for outbound-proxy, at least.
     sed -i -e 's/S_MEMORY=.*/S_MEMORY=1024/' $DEFAULTS
-    sed -i -e 's/P_MEMORY=.*/P_MEMORY=128/' $DEFAULTS
+    sed -i -e 's/P_MEMORY=.*/P_MEMORY=256/' $DEFAULTS
     grep -q TZ=UTC /etc/default/opensips || echo 'TZ=UTC' | tee -a $DEFAULTS > /dev/null
 
     # Replace the default configuration.
