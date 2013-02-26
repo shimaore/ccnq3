@@ -1,3 +1,9 @@
+ccnq3 (0.0.81) unstable; urgency=low
+
+  * opensips: syntax fixes
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 26 Feb 2013 11:47:33 +0100
+
 ccnq3 (0.0.80) unstable; urgency=low
 
   * ccnq3-voice: should be a metapackage
