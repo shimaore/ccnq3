@@ -1,3 +1,10 @@
+ccnq3 (0.0.79) unstable; urgency=low
+
+  * opensips: Allow to store ~ 1M routes.
+  * opensips: force progress on opensips drouting bootup
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 26 Feb 2013 11:27:47 +0100
+
 ccnq3 (0.0.77) unstable; urgency=low
 
   * opensips: reduce amount of errors logged
