@@ -1,3 +1,10 @@
+ccnq3 (0.0.84) unstable; urgency=low
+
+  * bin: do not set `ccnq3` setuid -- rely on /etc/ccnq3 to be properly configured.
+  * bin: run set_local_defaults twice
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Wed, 27 Feb 2013 11:49:45 +0100
+
 ccnq3 (0.0.83) unstable; urgency=low
 
   * lib: corrected name of parameter for ccnq3.config.location!
