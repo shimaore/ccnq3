@@ -1,3 +1,12 @@
+ccnq3 (0.0.83) unstable; urgency=low
+
+  * lib: corrected name of parameter for ccnq3.config.location!
+  * lib: version 0.4.13 published
+  * updated dependency
+  * By the time set_local_uri is called, config.host has most probably not been set.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Wed, 27 Feb 2013 11:26:12 +0100
+
 ccnq3 (0.0.82) unstable; urgency=low
 
   * Removed extraneous 100.
