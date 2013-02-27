@@ -50,6 +50,9 @@ case "$1" in
     (cd "`ccnq3 get_config_source`" && \
       npm run-script updates && \
       npm run-script bootstrap ) || exit 1
+    # Run it a second time -- the scripts might have downloaded a different version.
+    # FIXME: Replace this with a push of the new data (e.g. via AMQP).
+    su -s /bin/sh -c "ccnq3 set_local_defaults"   $USER || exit 1
     echo "$NAME client configured."
   ;;
 
