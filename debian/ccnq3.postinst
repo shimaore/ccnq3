@@ -53,7 +53,7 @@ case "$1" in
     ln -s $BIN /usr/bin/ccnq3
 
     chgrp $GROUP $BIN
-    chmod 04750 $BIN
+    chmod 0755 $BIN
   ;;
 
   remove)
