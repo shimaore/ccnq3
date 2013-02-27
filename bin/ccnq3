@@ -57,6 +57,9 @@ manager_apps = [
   "applications/voicemail-store"
 ]
 
+# The local hostname.
+HOSTNAME = require('os').hostname()
+
 #### `set_defaults`
 # When installing or re-installing a host, it is necessary to set some
 # initial, common parameters.
@@ -260,7 +263,7 @@ commands =
 
       info = url.parse uri
       username = info.auth.split(/:/)[0]
-      local_username = "host@#{config.host}"
+      local_username = "host@#{HOSTNAME}"
       if username isnt local_username
         console.error "URI is for a different host (#{username}) instead of the local host (#{local_username})."
         process.exit 1
@@ -298,8 +301,6 @@ commands =
       if config.source
         SRC = config.source
       process.chdir SRC
-
-      HOSTNAME = require('os').hostname()
 
       # Common parameters
       config.source ?= SRC
