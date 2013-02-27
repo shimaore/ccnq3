@@ -9,6 +9,7 @@ USER=$NAME
 case "$1" in
   configure|upgrade)
 
+    db_reset ccnq3/overwrite
     db_get ccnq3/overwrite
     if [ "$RET" = "true" ]; then rm -f "`ccnq3 get_config_location`"; fi
 
