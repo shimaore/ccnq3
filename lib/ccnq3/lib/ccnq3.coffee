@@ -115,7 +115,7 @@ get = (cb)->
     cb config
 
 ccnq3.config = get
-ccnq3.location = config_location
+ccnq3.config.location = config_location
 
 #### ccnq3.config.retrieve(config,callback)
 # Attempt to retrieve the configuration from the provisioning database.
