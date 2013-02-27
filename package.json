@@ -22,7 +22,7 @@
   , "test": "coffeelint -r . ; find . -name '*.json' -exec jsonlint '{}' ';' >/dev/null"
   },
   "dependencies": {
-    "ccnq3": ">=0.4.9"
+    "ccnq3": ">=0.4.13"
   , "request": "*"
   , "npm": "*"
   , "pico": ">=0.1.10"
