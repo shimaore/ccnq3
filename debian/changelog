@@ -1,3 +1,9 @@
+ccnq3 (0.0.85) unstable; urgency=low
+
+  * debian: overwrite should always be defaulted
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Wed, 27 Feb 2013 12:28:05 +0100
+
 ccnq3 (0.0.84) unstable; urgency=low
 
   * bin: do not set `ccnq3` setuid -- rely on /etc/ccnq3 to be properly configured.
