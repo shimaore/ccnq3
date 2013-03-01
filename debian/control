@@ -9,7 +9,12 @@ Depends:
   daemon, bash, openssl,
   nodejs (>=0.8.18), build-essential, python
 Recommends: monit, munin-node, ntp, ntpdate
-Description: Installs the ccnq3 code in /opt/ccnq3/src
+Description: ccnq3 -- a SIP SoftSwitch for ISPs
+  This package install the base ccnq3 code in /opt/ccnq3/src
+  .
+  To build a working system you need to install one of
+  ccnq3-manager or ccnq3-client, and additionally install
+  ccnq3-voice on call-handling systems.
 
 Package: ccnq3-manager
 Architecture: all
@@ -20,23 +25,23 @@ Description: Bootstrap the ccnq3 system in manager mode.
   This package installs the ccnq3 system in manager mode by
   overwriting the local system's CouchDB configugration.
   .
-  Do NOT install this package if the CouchDB database is
-  shared with other applications besides ccnq3. Use the
-  ccnq3-manager-shared package in that case.
+  Do NOT install this package if the CouchDB or the RabbitMQ
+  servers must be shared with other applications besides ccnq3.
+  Use the ccnq3-manager-shared package in that case.
 
 Package: ccnq3-couchdb
 Architecture: all
 Depends: ccnq3, couchdb (=1.2.1-1)
 Description: Installs CouchDB for CCNQ3
-  Configure CouchDB the same way CCNQ3 does on a manager server,
-  but does not set up the CCNQ3 applications.
+  This package will configure CouchDB for a CCNQ3 manager server,
+  but will not set up the CCNQ3 applications.
 
 Package: ccnq3-rabbitmq-server
 Architecture: all
 Depends: ccnq3, rabbitmq-server
 Description: Installs RabbitMQ for CCNQ3
-  Configure RabbitMQ the same way CCNQ3 does on a manager server,
-  but does not set up the CCNQ3 applications.
+  This package will configure RabbitMQ for a CCNQ3 manager server,
+  but will not set up the CCNQ3 applications.
 
 Package: ccnq3-client
 Architecture: all
@@ -84,7 +89,7 @@ Description: Allows the ccnq3_dns service to be available on port 53
   a different forwarding solution), for example because you want to run both
   inbound_enum and a caching DNS server (such as bind9) on a server; in that
   case you should not install this package. The ccnq3_dns service will
-  still start, since it is part of the ccnq3 package.
+  still start (on port 53053), since it is part of the ccnq3 package.
 
 Package: ccnq3-voice
 Architecture: all
@@ -95,7 +100,7 @@ Depends: ccnq3-traces (= ${binary:Version}),
   ccnq3-munin-traces (= ${binary:Version}),
   ccnq3-munin-opensips (= ${binary:Version}),
   ccnq3-munin-freeswitch (= ${binary:Version})
-Description: Dependencies for a server running voice traffic
+Description: Dependencies for a server running voice traffic (meta-package)
   Install this meta-package on any host that will be running voice traffic
   inside a ccnq3 system.
 
