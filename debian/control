@@ -19,7 +19,9 @@ Description: ccnq3 -- a SIP SoftSwitch for ISPs
 Package: ccnq3-manager
 Architecture: all
 Depends:
-  ccnq3, ccnq3-couchdb, ccnq3-rabbitmq-server
+  ccnq3 (= ${binary:Version}),
+  ccnq3-couchdb (= ${binary:Version}),
+  ccnq3-rabbitmq-server (= ${binary:Version})
 Conflicts: ccnq3-client, ccnq3-manager-shared
 Description: Bootstrap the ccnq3 system in manager mode.
   This package installs the ccnq3 system in manager mode by
@@ -31,14 +33,18 @@ Description: Bootstrap the ccnq3 system in manager mode.
 
 Package: ccnq3-couchdb
 Architecture: all
-Depends: ccnq3, couchdb (=1.2.1-1)
+Depends:
+  ccnq3 (= ${binary:Version}),
+  couchdb (=1.2.1-1)
 Description: Installs CouchDB for CCNQ3
   This package will configure CouchDB for a CCNQ3 manager server,
   but will not set up the CCNQ3 applications.
 
 Package: ccnq3-rabbitmq-server
 Architecture: all
-Depends: ccnq3, rabbitmq-server
+Depends:
+  ccnq3 (= ${binary:Version}),
+  rabbitmq-server
 Description: Installs RabbitMQ for CCNQ3
   This package will configure RabbitMQ for a CCNQ3 manager server,
   but will not set up the CCNQ3 applications.
@@ -46,7 +52,7 @@ Description: Installs RabbitMQ for CCNQ3
 Package: ccnq3-client
 Architecture: all
 Depends:
-  ccnq3,
+  ccnq3 (= ${binary:Version}),
   couchdb (=1.2.1-1)
 Conflicts: ccnq3-manager, ccnq3-manager-shared
 Description: Bootstrap the ccnq3 system in non-manager mode.
@@ -59,7 +65,7 @@ Description: Bootstrap the ccnq3 system in non-manager mode.
 
 Package: ccnq3-manager-shared
 Architecture: all
-Depends: ccnq3
+Depends: ccnq3 (= ${binary:Version})
 Conflicts: ccnq3-manager, ccnq3-client
 Description: Bootstrap the ccnq3 system in manager mode.
   This package installs the ccnq3 system in manager mode while
