@@ -9,7 +9,6 @@ Depends:
   daemon, bash, openssl,
   nodejs (>=0.8.18), build-essential, python
 Recommends: monit, munin-node, ntp, ntpdate
-Suggests: ccnq-base (= ${binary:Version})
 Description: Installs the ccnq3 code in /opt/ccnq3/src
 
 Package: ccnq3-manager
