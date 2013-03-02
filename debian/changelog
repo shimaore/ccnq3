@@ -1,3 +1,11 @@
+ccnq3 (0.0.86) unstable; urgency=low
+
+  * debian: ccnq-base no longer exists here
+  * debian: trying to provide better package descriptions
+  * debian: better interlock of ccnq3 packages versions
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Sat, 02 Mar 2013 09:52:38 +0100
+
 ccnq3 (0.0.85) unstable; urgency=low
 
   * debian: overwrite should always be defaulted
