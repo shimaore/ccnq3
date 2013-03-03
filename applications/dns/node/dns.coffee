@@ -5,6 +5,7 @@
 #
 dgram = require('dgram')
 ndns = require('./ndns')
+shuffle = require './shuffle'
 _ = require("underscore")
 
 dotize = (domain) ->
@@ -111,7 +112,7 @@ class Response
 
   add_ns_records: (cb) ->
     @zone.select_class "NS", (d) =>
-      @add_authoritative d
+      @add_authoritative shuffle d
       cb()
 
   add_additionals: (cb) ->
@@ -127,9 +128,9 @@ class Response
         old_cb = cb
         cb = =>
           zone.find "A", name, (d) =>
-            @add_additional d
+            @add_additional shuffle d
             zone.find "AAAA", name, (d) =>
-              @add_additional d
+              @add_additional shuffle d
               old_cb()
     cb()
 
@@ -151,6 +152,8 @@ class Response
 
       # No CNAME, lookup record
       @zone.select @type, @name, (d) =>
+        if @type is 'NS' or @type is 'A' or @type is 'AAAA'
+          shuffle d
         if @add_answer d
           if @type == "NS"
             finalize()
