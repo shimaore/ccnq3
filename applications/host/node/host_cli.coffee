@@ -43,4 +43,8 @@ ccnq3.config (config) ->
 
     # Non-manager host
 
-    pico(config.provisioning.local_couchdb_uri).create ->
+    local_provisioning_uri = config.provisioning.local_couchdb_uri
+    local_provisioning = pico local_provisioning_uri
+    local_provisioning.create ->
+      local_provisioning.request.put '_revs_limit',body:"10", (e,r,b) =>
+        if e? then console.dir failure error:e, when:"set revs_limit for #{local_provisioning_uri}"

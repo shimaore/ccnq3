@@ -21,3 +21,5 @@ require('ccnq3').config (config)->
   location.create ->
     push_script location_uri, 'opensips' # for CommonJS
     push_script location_uri, 'location'
+    location.request.put '_revs_limit',body:"10", (e,r,b) =>
+      if e? then console.dir failure error:e, when:"set revs_limit for #{location_uri}"
