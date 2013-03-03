@@ -33,7 +33,7 @@ ccnq3.config (config) ->
       return
     target_uri = config.provisioning.local_couchdb_uri
     if target_uri?
-      pico.replicate source_uri, target_uri, config.replicate_interval
+      pico.replicate source_uri, target_uri, config.replicate_interval, 'host/replication'
     else
       ccnq3.log "Missing provisioning.local_couchdb_uri, not replicating."
 

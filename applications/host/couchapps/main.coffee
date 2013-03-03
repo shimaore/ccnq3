@@ -18,3 +18,6 @@ module.exports = ddoc
 
 ddoc.filters.hostname = p_fun (doc,req) ->
   return doc.type is 'host' and doc.host is req.query.hostname
+
+ddoc.filters.replication = p_fun (doc,req) ->
+  return not doc.id.match /^_design/
