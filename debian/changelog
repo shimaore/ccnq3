@@ -1,3 +1,14 @@
+ccnq3 (0.0.87) unstable; urgency=low
+
+  * debian: save a tree, clean the cache
+  * host: filter provisioning replication to not include design documents
+  * restrict number of revisions on (non-logging) databases
+  * compact_design!
+  * provisioning replication: locate provisioning documents properly
+  * dns: shuffle responses for A, AAAA, and NS
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Mon, 04 Mar 2013 00:30:18 +0100
+
 ccnq3 (0.0.86) unstable; urgency=low
 
   * debian: ccnq-base no longer exists here
