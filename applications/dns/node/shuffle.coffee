@@ -1,6 +1,7 @@
 random = -> Math.random()
 
 shuffle = (a) ->
+  return a unless a? and a.length?
   i = a.length
   return a if i is 0
   while --i
@@ -25,5 +26,6 @@ test = ->
   assert sum_2 > 1, "sum_2 is only #{sum_0}"
 
   assert shuffle([]).length is 0, "empty array shuffled wrong"
+  assert shuffle(null) is null, "null should shuffle OK"
 
 # do test
