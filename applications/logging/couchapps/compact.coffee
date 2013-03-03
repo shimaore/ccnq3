@@ -8,3 +8,4 @@ require('ccnq3').config (config) ->
   if logging_uri?
     logging = pico logging_uri
     logging.compact pico.log
+    logging.compact_design 'replicate', pico.log

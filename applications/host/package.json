@@ -21,7 +21,7 @@
     "couchapp": "*"
   , "ccnq3": ">=0.3.3"
   , "coffee-script": ">=1.1.2"
-  , "pico": ">=0.1.0"
+  , "pico": ">=0.1.13"
   }
 , "engines": {
     "node": ">=0.4.7"

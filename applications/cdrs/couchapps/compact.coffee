@@ -8,3 +8,5 @@ require('ccnq3').config (config) ->
   if cdrs_uri?
     cdrs = pico cdrs_uri
     cdrs.compact pico.log
+    cdrs.compact_design 'replicate', pico.log
+    cdrs.compact_design 'addon', pico.log

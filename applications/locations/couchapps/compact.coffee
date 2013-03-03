@@ -8,3 +8,4 @@ require('ccnq3').config (config) ->
   if locations_uri?
     locations = pico locations_uri
     locations.compact pico.log
+    locations.compact_design 'replicate', pico.log

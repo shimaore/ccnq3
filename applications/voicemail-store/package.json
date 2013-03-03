@@ -8,14 +8,15 @@
     "file": "/etc/ccnq3/host.json"
   },
   "scripts": {
-    "couchapps": "cd couchapps && coffee install.coffee",
-    "start": "cake start"
+    "couchapps": "cd couchapps && coffee install.coffee"
+  , "compact": "cd couchapps && ./compact.coffee"
+  , "start": "cake start"
   , "stop":  "cake stop"
   },
   "dependencies": {
     "ccnq3": ">=0.3.4"
   , "couchapp": "*"
-  , "pico": ">=0.1.0"
+  , "pico": ">=0.1.13"
   , "pkginfo": "*"
   },
 

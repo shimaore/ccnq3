@@ -8,3 +8,4 @@ require('ccnq3').config (config)->
     provisioning_uri = config.provisioning.local_couchdb_uri
     provisioning = pico provisioning_uri
     provisioning.compact pico.log
+    provisioning.compact_design 'host', pico.log
