@@ -1,3 +1,9 @@
+ccnq3 (0.0.88) unstable; urgency=low
+
+  * dns: shuffle should handle invalid input better
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Mon, 04 Mar 2013 00:40:30 +0100
+
 ccnq3 (0.0.87) unstable; urgency=low
 
   * debian: save a tree, clean the cache
