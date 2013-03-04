@@ -20,6 +20,7 @@
       <condition field="destination_number" expression="^(\d+)$">
         <action application="set" data="progress_timeout=12"/>
         <action application="set" data="call_timeout=300"/>
+        <action application="export" data="sip_wait_for_aleg_ack=true"/>
         <action application="transfer" data="$1 XML ingress-$${profile_name}-send-call" />
       </condition>
     </extension>
