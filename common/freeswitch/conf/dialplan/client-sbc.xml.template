@@ -23,7 +23,7 @@
         <action application="set" data="progress_timeout=12"/>
         <action application="set" data="call_timeout=300"/>
         <action application="export" data="t38_passthru=true"/>
-        <action application="set" data="sip_wait_for_aleg_ack=true"/>
+        <action application="export" data="sip_wait_for_aleg_ack=true"/>
         <action application="set" data="ccnq_account=${url_decode(${regex(${sip_h_p-charge-info}|sip:([^@]+)@|%1)})}"/>
         <action application="set" data="effective_caller_id_number=${ccnq_from_e164}"/>
    <!-- <action application="set" data="effective_caller_id_name=_undef_"/> -->
@@ -71,7 +71,7 @@
         <action application="set" data="progress_timeout=12"/>
         <action application="set" data="call_timeout=300"/>
         <action application="export" data="t38_passthru=true"/>
-        <action application="set" data="sip_wait_for_aleg_ack=true"/>
+        <action application="export" data="sip_wait_for_aleg_ack=true"/>
         <action application="set" data="force_transfer_context=refer-$${profile_name}"/>
         <action application="set" data="sip_contact_user=${ccnq_from_e164}"/>
         <action application="set" data="sip_cid_type=pid"/>
