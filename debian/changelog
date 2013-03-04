@@ -1,3 +1,9 @@
+ccnq3 (0.0.89) unstable; urgency=low
+
+  * FS: it appears sip_wait_for_aleg_ack needs to be set on the B leg
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Mon, 04 Mar 2013 17:56:53 +0100
+
 ccnq3 (0.0.88) unstable; urgency=low
 
   * dns: shuffle should handle invalid input better
