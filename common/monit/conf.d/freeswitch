@@ -1,4 +1,4 @@
-check process freeswitch with pidfile /opt/freeswitch/run/freeswitch.pid
+check process freeswitch with pidfile /var/log/freeswitch/freeswitch.pid
    group voice
    start program = "/etc/init.d/freeswitch start"
    stop  program = "/etc/init.d/freeswitch stop"
@@ -8,7 +8,7 @@ check process freeswitch with pidfile /opt/freeswitch/run/freeswitch.pid
    depends on freeswitch_bin
    depends on freeswitch_rc
 
-check file freeswitch_bin with path /opt/freeswitch/bin/freeswitch
+check file freeswitch_bin with path /usr/bin/freeswitch
    group voice
 
 check file freeswitch_rc with path /etc/init.d/freeswitch
