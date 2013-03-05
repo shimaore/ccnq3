@@ -44,7 +44,7 @@ case "$1" in
     # Install other dependencies
     npm -g install coffee-script || exit 1
     npm -g update coffee-script || exit 1
-    su -s /bin/sh -c "npm config set production true" $USER
+    su -s /bin/sh -l -c "npm config set production true" $USER || exit 1
     (cd ${WORKDIR}/src && su -s /bin/sh -c "npm install" $USER) || exit 1
     (cd ${WORKDIR}/src && su -s /bin/sh -c "npm run-script updates" $USER) || exit 1
     (cd ${WORKDIR}/src && su -s /bin/sh -c "npm cache clean" $USER) || exit 1
