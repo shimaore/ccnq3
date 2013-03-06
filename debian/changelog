@@ -1,3 +1,12 @@
+ccnq3 (0.0.90) unstable; urgency=low
+
+  * FS: Add sip_wait_for_aleg_ack on redirect example as well.
+  * debian: `npm_conf` does chown which breaks under `sh` without `-l`
+  * monit: updated paths for freeswitch
+  * debian: added `update` and `push` option to init.d
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Wed, 06 Mar 2013 15:44:44 +0100
+
 ccnq3 (0.0.89) unstable; urgency=low
 
   * FS: it appears sip_wait_for_aleg_ack needs to be set on the B leg
