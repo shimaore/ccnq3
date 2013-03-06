@@ -74,7 +74,6 @@ set_defaults = (prov_doc,hostname) ->
     prov_doc.host ?= hostname
     prov_doc.applications ?= []
 
-    prov_doc.account ?= ''
     prov_doc.updated_at ?= new Date().getTime()
 
     if prov_doc.admin?.system
