@@ -29,8 +29,14 @@ case "$1" in
     (cd $SRCDIR && su -s /bin/sh -c 'npm stop' $USER)
     (cd $SRCDIR && su -s /bin/sh -c 'npm start' $USER)
   ;;
+  update)
+    (cd $SRCDIR && su -s /bin/sh -c 'npm run-script updates' $USER)
+  ;;
+  push)
+    (cd $SRCDIR && su -s /bin/sh -c './bin/npm-apps.coffee run-script couchapps' $USER)
+  ;;
   *)
-    echo "Usage: $SCRIPTNAME {start|stop|restart}" >&2
+    echo "Usage: $SCRIPTNAME {start|stop|restart|update|push}" >&2
     exit 1
   ;;
 esac

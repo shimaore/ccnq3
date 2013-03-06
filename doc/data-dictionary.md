@@ -76,7 +76,7 @@ Some of these applications are automatically installed. For example, a `manager`
 
 After adding or removing one or more applications on a given host, you must run
 
-    aptitude reinstall ccnq3
+    /etc/init.d/ccnq3 update
 
 on that host to ensure that the proper dependencies are updated.
 
@@ -100,19 +100,18 @@ The local configuration file for a host, normally found in `/etc/ccnq3/host.json
 There must be exactly one `host` record for each server in the system.
 Servers are identified by their (arbitrary) Fully Qualified Domain Name (FQDN).
 
-Most changes in `host` records might require you to:
+Some changes in `host` records might require you to:
 
 *   either restart the ccnq3 processes to apply the changes:
 
+        /etc/init.d/ccnq3 push
         /etc/init.d/ccnq3 restart
 
     (This should be sufficient in most cases.)
 
-*   in some cases reinstall the ccnq3 package:
+*   if you added a new application:
 
-        aptitude reinstall ccnq3
-
-    This is especially true when adding an application, so that the proper dependencies might be installed for the new application.
+        /etc/init.d/ccnq3 update
 
 However this does not apply to commands (such as the ones in `sip_commands`), which are executed immediately.
 
