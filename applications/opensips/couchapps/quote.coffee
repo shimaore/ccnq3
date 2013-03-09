@@ -139,7 +139,7 @@
           type: 2
       if n is 'dr_rules'
         hash.ruleid ?= 1
-        hash.routeid ?= 0
+        hash.routeid ?= ""
         hash.timerec ?= ""
         hash.priority ?= 1
         hash.attrs ?= ""
