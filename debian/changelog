@@ -1,3 +1,10 @@
+ccnq3 (0.0.91) unstable; urgency=low
+
+  * bin: do not insert empty account
+  * routeid points to a route number
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Sat, 09 Mar 2013 10:51:27 +0100
+
 ccnq3 (0.0.90) unstable; urgency=low
 
   * FS: Add sip_wait_for_aleg_ack on redirect example as well.
