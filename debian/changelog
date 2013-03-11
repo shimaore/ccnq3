@@ -1,3 +1,9 @@
+ccnq3 (0.0.95) unstable; urgency=low
+
+  * cdrs: The value must be a number.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Mon, 11 Mar 2013 23:05:15 +0100
+
 ccnq3 (0.0.94) unstable; urgency=low
 
   * cdrs: install the stats code...
