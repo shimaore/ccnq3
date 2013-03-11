@@ -13,7 +13,7 @@ ddoc =
         direction = doc.variables.ccnq_direction
         profile = doc.variables.ccnq_profile
         cause = doc.variables.proto_specific_hangup_cause
-        emit [hour,direction,profile,cause], doc.mbillsec
+        emit [hour,direction,profile,cause], doc.mbillsec ? 0
         return
       reduce: '_stats'
 
