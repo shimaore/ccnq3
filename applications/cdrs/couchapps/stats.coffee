@@ -12,7 +12,7 @@ ddoc =
         hour = doc.variables.start_stamp.substr 0, 13
         direction = doc.variables.ccnq_direction
         profile = doc.variables.ccnq_profile
-        cause = doc.variables.proto_specific_hangup_cause
+        cause = doc.variables.proto_specific_hangup_cause ? doc.variables.last_bridge_proto_specific_hangup_cause
         emit [hour,direction,profile,cause], doc.mbillsec ? 0
         return
       reduce: '_stats'
