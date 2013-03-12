@@ -1,3 +1,9 @@
+ccnq3 (0.0.97) unstable; urgency=low
+
+  * opensips: progress on 408!
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 12 Mar 2013 17:39:56 +0100
+
 ccnq3 (0.0.96) unstable; urgency=low
 
   * cdrs/stats: try to gather more hangup_cause
