@@ -102,4 +102,4 @@ minute = 60*1000
 
 require('ccnq3').config (config) ->
   do_run = -> run config
-  setInterval do_run, config.cdr_cleanup_interval ? 5*minute
+  setInterval do_run, config.cdr_cleanup_interval ? 11*minute

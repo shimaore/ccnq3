@@ -67,7 +67,7 @@ require('ccnq3').config (config) ->
   # then re-read at regular intervals.
   if config.cdr_swipe ? true
     read_all()
-    setInterval read_all, config.cdr_swipe_interval ? 5*minute
+    setInterval read_all, config.cdr_swipe_interval ? 13*minute
 
   # We can also find files by monitoring the directory for changes,
   # so that we have a chance to retry right behind mod_json_cdr.
