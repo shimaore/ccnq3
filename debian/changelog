@@ -1,3 +1,9 @@
+ccnq3 (0.0.98) unstable; urgency=low
+
+  * freeswitch: make the cleaner and the swiper start at relatively-prime intervals
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 12 Mar 2013 21:59:28 +0100
+
 ccnq3 (0.0.97) unstable; urgency=low
 
   * opensips: progress on 408!
