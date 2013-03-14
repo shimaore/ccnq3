@@ -424,7 +424,7 @@ commands =
       user_db.get_user host_user, (e,r,user_doc) ->
         new_password = null
         if e or not user_doc._rev?
-          console.log "Assuming user #{host_user} wasn't registered."
+          console.log "[ Assuming user #{host_user} wasn't registered. ]"
           new_password = hex_sha1 "a"+Math.random()
           user_doc =
             name: host_user
@@ -443,7 +443,7 @@ commands =
         prov_db = pico config.provisioning.couchdb_uri
         prov_db.get _id, (e,r,prov_doc) ->
           unless prov_doc?._rev?
-            console.log "Assuming new record for _id #{_id} (#{inspect e})"
+            console.log "[ Assuming new record for _id #{_id} (#{inspect e}) ]"
             prov_doc = { _id }
 
           make_host_uri = (cdb_uri,pathname) ->
