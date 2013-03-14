@@ -7,7 +7,7 @@ fi
 
 if [[ $# -eq 1 ]] && [[ $1 == 'config' ]]; then
   cat <<EOT ;
-graph_title Channels used
+graph_title Calls
 graph_args -l 0
 graph_vlabel active calls
 graph_category voice
