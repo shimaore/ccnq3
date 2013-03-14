@@ -1,3 +1,11 @@
+ccnq3 (0.0.99) unstable; urgency=low
+
+  * debian: Prevent issue where installation keeps failing.
+  * munin: our FS deployment doesn't provide sqlite DB anymore; using the CLI to get what we want.
+  * bin: minor comment change
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Thu, 14 Mar 2013 19:42:04 +0100
+
 ccnq3 (0.0.98) unstable; urgency=low
 
   * freeswitch: make the cleaner and the swiper start at relatively-prime intervals
