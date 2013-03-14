@@ -168,6 +168,6 @@ Description: munin modules for ccnq3-opensips
 Package: ccnq3-munin-freeswitch
 Architecture: all
 Depends: munin-node, ccnq3-freeswitch (= ${binary:Version}),
-  bash, sqlite3
+  bash, awk
 Description: munin modules for ccnq3-freeswitch
   Provides the freeswitch_channels munin plugin.

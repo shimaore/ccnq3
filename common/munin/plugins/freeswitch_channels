@@ -1,8 +1,4 @@
 #!/bin/bash
-# (c) 2011 Stephane Alnet
-# License: AGPL3+
-
-FS_DB=/dev/shm/core.db
 
 if [[ $# -eq 1 ]] && [[ $1 == 'autoconf' ]]; then
         echo "yes"
@@ -13,40 +9,50 @@ if [[ $# -eq 1 ]] && [[ $1 == 'config' ]]; then
   cat <<EOT ;
 graph_title Channels used
 graph_args -l 0
-graph_vlabel active channels
+graph_vlabel active calls
 graph_category voice
-sofia_channels_ACTIVE.label SIP active
-sofia_channels_ACTIVE.max 50000
-sofia_channels_ACTIVE.min 0
-sofia_channels_ACTIVE.draw AREA
-sofia_channels_DOWN.label SIP down
-sofia_channels_DOWN.max 50000
-sofia_channels_DOWN.min 0
-sofia_channels_DOWN.draw STACK
-sofia_channels_EARLY.label SIP early
-sofia_channels_EARLY.max 50000
-sofia_channels_EARLY.min 0
-sofia_channels_EARLY.draw STACK
-sofia_channels_HELD.label SIP held
-sofia_channels_HELD.max 50000
-sofia_channels_HELD.min 0
-sofia_channels_HELD.draw STACK
-sofia_channels_RINGING.label SIP ringing
-sofia_channels_RINGING.max 50000
-sofia_channels_RINGING.min 0
-sofia_channels_RINGING.draw AREA
-sofia_calls_in.label SIP incoming calls
-sofia_calls_in.max 25000
-sofia_calls_in.min 0
-sofia_calls_in.draw LINE2
-sofia_calls_out.label SIP outgoing calls
-sofia_calls_out.max 25000
-sofia_calls_out.min 0
-sofia_calls_out.draw LINE2
+sofia_calls_ACTIVE.label SIP active
+sofia_calls_ACTIVE.max 50000
+sofia_calls_ACTIVE.min 0
+sofia_calls_ACTIVE.draw AREA
+sofia_calls_DOWN.label SIP down
+sofia_calls_DOWN.max 50000
+sofia_calls_DOWN.min 0
+sofia_calls_DOWN.draw STACK
+sofia_calls_EARLY.label SIP early
+sofia_calls_EARLY.max 50000
+sofia_calls_EARLY.min 0
+sofia_calls_EARLY.draw STACK
+sofia_calls_HELD.label SIP held
+sofia_calls_HELD.max 50000
+sofia_calls_HELD.min 0
+sofia_calls_HELD.draw STACK
+sofia_calls_RINGING.label SIP ringing
+sofia_calls_RINGING.max 50000
+sofia_calls_RINGING.min 0
+sofia_calls_RINGING.draw AREA
+sofia_calls.label SIP calls
+sofia_calls.max 25000
+sofia_calls.min 0
+sofia_calls.draw LINE2
 EOT
   exit
 fi
 
-sqlite3 "$FS_DB" "SELECT 'sofia_channels_'||callstate||'.value '||COUNT(1) FROM channels WHERE name LIKE 'sofia%' GROUP BY callstate"
-# sqlite3 "$FS_DB" "SELECT 'sofia_calls_in.value '||COUNT(1) FROM calls WHERE caller_chan_name LIKE 'sofia%'"
-# sqlite3 "$FS_DB" "SELECT 'sofia_calls_out.value '||COUNT(1) FROM calls WHERE callee_chan_name LIKE 'sofia%'"
+fs_cli -p CCNQ -x 'show calls' | awk '
+BEGIN { active = down = early = held = ringing = total = 0 }
+/,ACTIVE,/ { active++ }
+/,DOWN,/   { down++ }
+/,EARLY,/  { early++ }
+/,HELD,/   { held++ }
+/,RINGING,/ { ringing++ }
+/ total./  { total = $1 }
+END {
+  print "sofia_calls_ACTIVE.value " active
+  print "sofia_calls_DOWN.value " down
+  print "sofia_calls_EARLY.value " early
+  print "sofia_calls_HELD.value " held
+  print "sofia_calls_RINGING.value " ringing
+  print "sofia_calls.value " total
+}
+'
