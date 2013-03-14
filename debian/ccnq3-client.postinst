@@ -14,8 +14,18 @@ case "$1" in
     if [ "$RET" = "true" ]; then rm -f "`ccnq3 get_config_location`"; fi
 
     db_get ccnq3/uri
-    if [ -z "$RET" ]; then db_reset ccnq3/uri; exit 1; fi
-    su -s /bin/sh -c "ccnq3 set_host_uri '$RET'" $USER || exit 1
+    if [ -z "$RET" ]; then
+      db_reset ccnq3/uri;
+      db_stop;
+      exit 1;
+    fi
+    if su -s /bin/sh -c "ccnq3 set_host_uri '$RET'" $USER; then
+      echo;
+    else
+      db_reset ccnq3/uri;
+      db_stop;
+      exit 1;
+    fi
 
     db_stop
 
