@@ -1,3 +1,9 @@
+ccnq3 (0.0.101) unstable; urgency=low
+
+  * traces: support short SIP header names
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Fri, 15 Mar 2013 15:02:44 +0100
+
 ccnq3 (0.0.100) unstable; urgency=low
 
   * munin/FS: changed label
