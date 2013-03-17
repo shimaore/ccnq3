@@ -26,3 +26,23 @@ ddoc.filters.replication = p_fun (doc,req) ->
   if doc._id.match /^_design/
     return false
   return true
+
+ddoc.filters.skip_rules = p_fun (doc,req) ->
+  # Only replicate provisioning documents.
+  if not doc.type?
+    return false
+  if doc.type is 'rule'
+    return false
+  if doc._id.match /^_design/
+    return false
+  return true
+
+ddoc.filters.local_rules = p_fun (doc,req) ->
+  # Only replicate provisioning documents.
+  if not doc.type?
+    return false
+  if doc.type is 'rule'
+    return doc.sip_domain_name is req.query.sip_domain_name
+  if doc._id.match /^_design/
+    return false
+  return true

@@ -33,7 +33,10 @@ ccnq3.config (config) ->
       return
     target_uri = config.provisioning.local_couchdb_uri
     if target_uri?
-      pico.replicate source_uri, target_uri, config.replicate_interval, 'host/replication'
+      filter = config.provisioning.filter ? 'host/replication'
+      filter_params =
+          sip_domain_name: config.sip_domain_name
+      pico.replicate source_uri, target_uri, config.replicate_interval, filter, filter_params
     else
       ccnq3.log "Missing provisioning.local_couchdb_uri, not replicating."
 

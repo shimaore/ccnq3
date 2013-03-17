@@ -209,6 +209,16 @@ Changing any of the following settings would require to restart the matching ser
 
       Must have db admin access to the database (so that applications can push their design documents).
 
+    * `filter`: Filter that controls which data gets replicated into `local_couchdb_uri` [default: `host/replication`]
+
+      If `local_couchdb_uri` is not defined, no replication happens. However sometimes you do not need to replicate the entire provisioning database since it can grow very large. `filter` allows you to control which documents are replicated.
+
+      The following filters are available:
+
+      * `host/replication` (the default) will replicate all provisioning documents;
+      * `host/local_rules` will replicate all provisioning documents except for rules, in which case it will only replicate `rule` documents which match the local `sip_domain_name`;
+      * `host/skip_rules` will replicate all provisioning documents except for rules.
+
 ### Other generic sections
 
 *   `install`: (normally not defined)
