@@ -171,7 +171,7 @@ or
 
     aptitude install ccnq3-voice-opensips
 
-If you need mediaproxy on that host, you _must_ manually run
+If you need mediaproxy on a host running OpenSIPS, you _must_ manually run
 
     cd "`ccnq3 get_config_source`/common/mediaproxy"
     ./install.sh
