@@ -106,9 +106,45 @@ Depends: ccnq3-traces (= ${binary:Version}),
   ccnq3-munin-traces (= ${binary:Version}),
   ccnq3-munin-opensips (= ${binary:Version}),
   ccnq3-munin-freeswitch (= ${binary:Version})
-Description: Dependencies for a server running voice traffic (meta-package)
+Conflicts: ccnq3-voice-freeswitch, ccnq3-voice-opensips
+Description: Meta-package for a ccnq3 system running voice traffic
   Install this meta-package on any host that will be running voice traffic
   inside a ccnq3 system.
+  .
+  You should install one of ccnq3-voice (both OpenSIPS and FreeSwitch),
+  ccnq3-voice-freeswitch (only FreeSwitch), or ccnq3-voice-opensips
+  (only OpenSIPS).
+
+Package: ccnq3-voice-freeswitch
+Architecture: all
+Depends: ccnq3-traces (= ${binary:Version}),
+  ccnq3-freeswitch (= ${binary:Version}),
+  ccnq3-munin-traces (= ${binary:Version}),
+  ccnq3-munin-freeswitch (= ${binary:Version})
+Conflicts: ccnq3-voice, ccnq3-voice-opensips
+Description: Meta-package for a ccnq3 system running only FreeSwitch
+  Install this meta-package on any host that will be running FreeSwitch
+  (but not OpenSIPS) inside a ccnq3 system.
+  .
+  You should install one of ccnq3-voice (both OpenSIPS and FreeSwitch),
+  ccnq3-voice-freeswitch (only FreeSwitch), or ccnq3-voice-opensips
+  (only OpenSIPS).
+
+Package: ccnq3-voice-opensips
+Architecture: all
+Depends: ccnq3-traces (= ${binary:Version}),
+  ccnq3-opensips (= ${binary:Version}),
+  ccnq3-mediaproxy-relay (= ${binary:Version}),
+  ccnq3-munin-traces (= ${binary:Version}),
+  ccnq3-munin-opensips (= ${binary:Version})
+Conflicts: ccnq3-voice, ccnq3-voice-freeswitch
+Description: Meta-package for a ccnq3 system running only OpenSIPS
+  Install this meta-package on any host that will be running OpenSIPS
+  (but not FreeSwitch) inside a ccnq3 system.
+  .
+  You should install one of ccnq3-voice (both OpenSIPS and FreeSwitch),
+  ccnq3-voice-freeswitch (only FreeSwitch), or ccnq3-voice-opensips
+  (only OpenSIPS).
 
 Package: ccnq3-opensips
 Architecture: all
@@ -118,7 +154,7 @@ Depends: ccnq3 (= ${binary:Version}),
   netcat,
   mediaproxy-dispatcher (>= 2.5.2-20120112)
 Recommends: ccnq3-munin-opensips
-Description: Dependencies for a server running OpenSIPS in CCNQ3
+Description: OpenSIPS dependencies for CCNQ3
 
 Package: ccnq3-freeswitch
 Architecture: all
@@ -141,13 +177,13 @@ Depends: ccnq3 (= ${binary:Version}),
   freeswitch-mod-tone-stream (= ${freeswitch:Version}),
   freeswitch-mod-json-cdr (= ${freeswitch:Version})
 Recommends: ccnq3-munin-freeswitch
-Description: Dependencies for a server running FreeSwitch in CCNQ3
+Description: FreeSwitch dependencies for CCNQ3
 
 Package: ccnq3-mediaproxy-relay
 Architecture: all
 Depends: ccnq3 (= ${binary:Version}),
   mediaproxy-relay (>= 2.5.2-20120112), conntrack
-Description: Dependencies for a server running mediaproxy-relay in CCNQ3
+Description: mediaproxy-relay dependencies for CCNQ3
   Note that this depends on a mediaproxy version that can only handle local
   mediaproxy-dispatcher.
 

@@ -161,7 +161,15 @@ After you complete the steps above for a client host, install:
 
     aptitude install ccnq3-voice
 
-This will install OpenSIPS, FreeSwitch, etc.
+This will install OpenSIPS, FreeSwitch, and their dependencies.
+
+Alternatively, if you'd rather install OpenSIPS and FreeSwitch on different hosts, do:
+
+    aptitude install ccnq3-voice-freeswitch
+
+or
+
+    aptitude install ccnq3-voice-opensips
 
 If you need mediaproxy on that host, you _must_ manually run
 
