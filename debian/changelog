@@ -1,3 +1,10 @@
+ccnq3 (0.0.103) unstable; urgency=low
+
+  * debian: New packages to simplify installation of FreeSwitch-only or
+    OpenSIPS-only systems.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Sun, 17 Mar 2013 11:36:27 +0100
+
 ccnq3 (0.0.102) unstable; urgency=low
 
   * provisioning replication: add `filter` configuration item.
