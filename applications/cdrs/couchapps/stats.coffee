@@ -13,7 +13,7 @@ ddoc =
         direction = doc.variables.ccnq_direction
         profile = doc.variables.ccnq_profile
         cause = doc.variables.proto_specific_hangup_cause ? doc.variables.last_bridge_proto_specific_hangup_cause
-        emit [hour,direction,profile,cause], doc.variables.billsec ? 0
+        emit [hour,direction,profile,cause], parseInt doc.variables.billsec ? 0
         return
       reduce: '_stats'
     account_monitor:
@@ -22,7 +22,7 @@ ddoc =
         account = doc.variables.ccnq_account
         direction = doc.variables.ccnq_direction
         hour = doc.variables.start_stamp.substr 0, 13
-        emit [hour,direction,account], doc.variables.billsec ? 0
+        emit [hour,direction,account], parseInt doc.variables.billsec ? 0
         return
       reduce: p_fun (key,values,rereduce) ->
         result =
