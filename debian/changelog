@@ -1,3 +1,9 @@
+ccnq3 (0.0.104) unstable; urgency=low
+
+  * stats: add per-account hourly success rate, duration, call attempts
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Mon, 18 Mar 2013 19:16:25 +0100
+
 ccnq3 (0.0.103) unstable; urgency=low
 
   * debian: New packages to simplify installation of FreeSwitch-only or
