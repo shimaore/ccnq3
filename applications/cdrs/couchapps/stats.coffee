@@ -39,6 +39,6 @@ ddoc =
             result.attempts += v.attempts
             result.success += v.success
             result.duration += v.duration
-        return results
+        return result
 
 module.exports = ddoc
