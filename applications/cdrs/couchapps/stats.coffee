@@ -19,7 +19,7 @@ ddoc =
     account_monitor:
       map: p_fun (doc) ->
         return unless doc.variables?
-        account = doc.ccnq_account
+        account = doc.variables.ccnq_account
         direction = doc.variables.ccnq_direction
         hour = doc.variables.start_stamp.substr 0, 13
         emit [hour,direction,account], doc.mbillsec ? 0
