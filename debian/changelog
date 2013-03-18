@@ -1,3 +1,9 @@
+ccnq3 (0.0.107) unstable; urgency=low
+
+  * stats: proper reduce function
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Mon, 18 Mar 2013 20:59:13 +0100
+
 ccnq3 (0.0.106) unstable; urgency=low
 
   * Oops, try again: proper variable name.
