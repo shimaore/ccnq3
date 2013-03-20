@@ -30,7 +30,7 @@ case "$1" in
     (cd $SRCDIR && su -s /bin/sh -c 'npm start' $USER)
   ;;
   update)
-    (cd $SRCDIR && su -s /bin/sh -c 'npm run-script updates' $USER)
+    (cd $SRCDIR && su -s /bin/sh -l -c 'npm run-script updates' $USER)
   ;;
   push)
     (cd $SRCDIR && su -s /bin/sh -c './bin/npm-apps.coffee run-script couchapps' $USER)
