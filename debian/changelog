@@ -1,3 +1,10 @@
+ccnq3 (0.0.111) unstable; urgency=low
+
+  * oops: `failure` is not defined
+  * init: `updates` might run `chown`.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Wed, 20 Mar 2013 23:53:25 +0100
+
 ccnq3 (0.0.110) unstable; urgency=low
 
   * stats: convert from string
