@@ -17,6 +17,8 @@ trace_field_names = [
   "ip.proto"
   "udp.srcport"
   "udp.dstport"
+  "tcp.srcport"
+  "tcp.dstport"
   "sip.Call-ID"
   "sip.Request-Line"
   "sip.Method"
