@@ -1,3 +1,9 @@
+ccnq3 (0.0.114) unstable; urgency=low
+
+  * replication should include deletions
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Fri, 22 Mar 2013 17:31:54 +0100
+
 ccnq3 (0.0.113) unstable; urgency=low
 
   * trace: added TCP ports
