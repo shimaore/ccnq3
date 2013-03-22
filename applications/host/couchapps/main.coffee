@@ -20,6 +20,9 @@ ddoc.filters.hostname = p_fun (doc,req) ->
   return doc.type is 'host' and doc.host is req.query.hostname
 
 ddoc.filters.replication = p_fun (doc,req) ->
+  # Always replicate deletions
+  if doc._deleted? and doc._deleted
+    return true
   # Only replicate provisioning documents.
   if not doc.type?
     return false
@@ -28,6 +31,9 @@ ddoc.filters.replication = p_fun (doc,req) ->
   return true
 
 ddoc.filters.skip_rules = p_fun (doc,req) ->
+  # Always replicate deletions
+  if doc._deleted? and doc._deleted
+    return true
   # Only replicate provisioning documents.
   if not doc.type?
     return false
@@ -38,6 +44,9 @@ ddoc.filters.skip_rules = p_fun (doc,req) ->
   return true
 
 ddoc.filters.local_rules = p_fun (doc,req) ->
+  # Always replicate deletions
+  if doc._deleted? and doc._deleted
+    return true
   # Only replicate provisioning documents.
   if not doc.type?
     return false
