@@ -13,6 +13,7 @@ task 'docs', 'Rebuild the documentation', ->
   docs =
     index: './doc/index.md'
     install: './doc/Install.md'
+    upgrade: './doc/upgrade.md'
     provisioning: './doc/Provisioning.md'
     specs: './doc/data-dictionary.md'
 
