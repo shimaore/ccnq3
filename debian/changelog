@@ -1,3 +1,11 @@
+ccnq3 (0.0.115) unstable; urgency=low
+
+  * Delay restart of ccnq3
+  * Bump Debian compat level.
+  * Reviewed the upgrade doc; added it to the main list.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Sat, 23 Mar 2013 07:02:44 +0100
+
 ccnq3 (0.0.114) unstable; urgency=low
 
   * replication should include deletions
