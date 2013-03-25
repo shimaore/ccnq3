@@ -594,13 +594,15 @@ commands =
       for task in b
         do (task) ->
           return unless type is 'replication'
-          return unless b.source_seq? and b.checkpointed_source_seq? and b.target? and b.source?
-          behind = b.source_seq - b.checkpointed_source_seq
-          name = if source.match /^http/ then b.target else b.source
+          return unless task.source_seq? and task.checkpointed_source_seq? and task.target? and task.source?
+          behind = task.source_seq - task.checkpointed_source_seq
+          name = if task.source.match /^http/ then task.target else task.source
           console.log """
-            couchdb_replication_#{name}_progress.value #{b.progress}"
+            couchdb_replication_#{name}_progress.value #{task.progress}"
             couchdb_replication_#{name}_behind.value #{behind}
           """
+
+    return
 
 #### main
 
