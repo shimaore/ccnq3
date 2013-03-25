@@ -1,3 +1,9 @@
+ccnq3 (0.0.124) unstable; urgency=low
+
+  * couchdb_daemon: don't disable Socket.IO.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Mon, 25 Mar 2013 22:44:48 +0100
+
 ccnq3 (0.0.123) unstable; urgency=low
 
   * couchdb_daemon: set `zappa_prefix`
