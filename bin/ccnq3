@@ -25,6 +25,7 @@ url = require 'url'
 { spawn } = require 'child_process'
 crypto = require 'crypto'
 { inspect } = require 'util'
+pico = require 'pico'
 
 # The `ccnq3` library provides common access to the CCNQ3 configuration,
 # the CCNQ3 AMQP server, and other shared tools.
@@ -415,8 +416,6 @@ commands =
       if not config.provisioning?.couchdb_uri?
         console.error 'Provisioning acces is not available on this host.'
         return
-
-      pico = require 'pico'
 
       # Take care of the setup in the _users database.
       user_db = pico config.users.couchdb_uri
