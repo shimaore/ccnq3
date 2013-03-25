@@ -3,9 +3,16 @@
 # `config.cdr_uri ? http://127.0.0.1:5984/cdr`, into the central database,
 # found in `cdr_aggregate_uri`, we purge the local records.
 
-# We check every 5 minutes for changes, compare with the central database,
+# We check every N minutes for changes, compare with the central database,
 # and remove from the local database if found centrally.
 #
+# A minute is 60000 milliseconds
+minute = 60*1000
+# Default cleanup interval
+default_cleanup_interval = 17*minute
+
+bulk_size = 10000
+
 
 # Note: we do not perform a revision check. CDRs are normally generated
 # once and not modified. We only check whether if an ID exist on the local
@@ -41,7 +48,7 @@ run = (config) ->
 
     # Retrieve local changes since the last checkpoint, and try to locate them
     # in the central database.
-    local.get "_changes?since=#{last_checkpoint}", json:true, (e,r,b) ->
+    local.get "_changes?since=#{last_checkpoint}&limit=#{bulk_size}", json:true, (e,r,b) ->
       if e or not b.results
         console.log "Getting _changes failed"
         return
@@ -97,9 +104,6 @@ run = (config) ->
                     """
             return
 
-# A minute is 60000 milliseconds
-minute = 60*1000
-
 require('ccnq3').config (config) ->
   do_run = -> run config
-  setInterval do_run, config.cdr_cleanup_interval ? 11*minute
+  setInterval do_run, config.cdr_cleanup_interval ? default_cleanup_interval
