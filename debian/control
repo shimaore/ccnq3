@@ -211,6 +211,6 @@ Description: munin modules for ccnq3-freeswitch
 
 Package: ccnq3-munin-couchdb
 Architecture: all
-Depends: munin-node, ccnq3-couchdb (= ${binary:Version})
-Description: munin modules for ccnq3-couchdb
+Depends: munin-node, ccnq3-client (= ${binary:Version})
+Description: munin modules for CouchDB in ccnq3-client
   Provides the couchdb munin plugin.
