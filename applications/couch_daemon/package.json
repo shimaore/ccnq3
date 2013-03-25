@@ -10,7 +10,7 @@
 , "dependencies": {
     "ccnq3": ">=0.3.4"
   , "pico": ">=0.1.3"
-  , "zappajs": ">=0.4.12"
+  , "zappajs": ">=0.4.20"
   , "node-uuid": ">=1.4.0"
   , "connect": ">=2.6.1"
   }

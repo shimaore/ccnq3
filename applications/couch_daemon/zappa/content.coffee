@@ -41,6 +41,7 @@
     @success welcome:'ccnq3'
 
   @set views: 'include'
+  @set zappa_prefix: '/_ccnq3/zappa'
 
   fs = require 'fs'
   path = require 'path'
