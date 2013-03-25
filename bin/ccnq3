@@ -588,17 +588,17 @@ commands =
       return
 
     couch = pico.request 'http://127.0.0.1:5984'
-    couch '/_active_tasks', json:true, (e,r,b) ->
+    couch '_active_tasks', json:true, (e,r,b) ->
       if e? or not b?
         return
       for task in b
         do (task) ->
-          return unless type is 'replication'
+          return unless task.type is 'replication'
           return unless task.source_seq? and task.checkpointed_source_seq? and task.target? and task.source?
           behind = task.source_seq - task.checkpointed_source_seq
           name = if task.source.match /^http/ then task.target else task.source
           console.log """
-            couchdb_replication_#{name}_progress.value #{task.progress}"
+            couchdb_replication_#{name}_progress.value #{task.progress}
             couchdb_replication_#{name}_behind.value #{behind}
           """
 
