@@ -1,3 +1,9 @@
+ccnq3 (0.0.121) unstable; urgency=low
+
+  * bin/ccnq3: corrected URL, varname, and formatting
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Mon, 25 Mar 2013 16:07:29 +0100
+
 ccnq3 (0.0.120) unstable; urgency=low
 
   * bin/ccnq3: corrected munin code
