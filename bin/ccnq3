@@ -557,6 +557,52 @@ commands =
                 process.exit 1
     return
 
+  'munin couchdb': (that) ->
+    if that is 'config'
+      console.log '''
+        graph_title CouchDB Replication
+        graph_args -l 0
+        graph_vlabel Progress
+        graph_category couchdb
+
+        couchdb_replication_cdrs_progress.label CDRs (Progress)
+        couchdb_replication_cdrs_progress.info Progress of CDRs replication
+        couchdb_replication_cdrs_progress.colour ff2020
+        couchdb_replication_cdrs_progress.max 100
+        couchdb_replication_cdrs_progress.min 0
+        couchdb_replication_cdrs_progress.draw LINE1
+        couchdb_replication_provisioning_progress.label Provisioning (Progress)
+        couchdb_replication_provisioning_progress.info Progress of provisioning replication
+        couchdb_replication_provisioning_progress.colour 20ff20
+        couchdb_replication_provisioning_progress.max 100
+        couchdb_replication_provisioning_progress.min 0
+        couchdb_replication_provisioning_progress.draw LINE1
+        couchdb_replication_cdrs_behind.label CDRs (Behind)
+        couchdb_replication_cdrs_behind.info Number of missing CDR records still to be replicated
+        couchdb_replication_cdrs_behind.colour ffa0a0
+        couchdb_replication_cdrs_behind.draw AREA
+        couchdb_replication_provisioning_behind.label Provisioning (Behind)
+        couchdb_replication_provisioning_behind.info Number of missing provisioning records still to be replicated
+        couchdb_replication_provisioning_behind.colour a0ffa0
+        couchdb_replication_provisioning_behind.draw AREA
+      '''
+      return
+
+    couch = pico.request 'http://127.0.0.1:5984'
+    couch '/_active_tasks', json:true, (e,r,b) ->
+      if e? or not b?
+        return
+      for task in b
+        do (task) ->
+          return unless type is 'replication'
+          return unless b.source_seq? and b.checkpointed_source_seq? and b.target? and b.source?
+          behind = b.source_seq - b.checkpointed_source_seq
+          name = if source.match /^http/ then b.target else b.source
+          console.log """
+            couchdb_replication_#{name}_progress.value #{b.progress}"
+            couchdb_replication_#{name}_behind.value #{behind}
+          """
+
 #### main
 
 run = ->

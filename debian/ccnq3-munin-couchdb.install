@@ -1,0 +1,2 @@
+common/munin/plugins/couchdb* /usr/share/munin/plugins
+common/munin/plugin-conf.d/ccnq3-munin-couchdb /etc/munin/plugin-conf.d

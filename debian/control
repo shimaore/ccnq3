@@ -36,6 +36,7 @@ Architecture: all
 Depends:
   ccnq3 (= ${binary:Version}),
   couchdb (=1.2.1-1)
+Recommends: ccnq3-munin-couchdb
 Description: Installs CouchDB for CCNQ3
   This package will configure CouchDB for a CCNQ3 manager server,
   but will not set up the CCNQ3 applications.
@@ -207,3 +208,9 @@ Depends: munin-node, ccnq3-freeswitch (= ${binary:Version}),
   bash, awk
 Description: munin modules for ccnq3-freeswitch
   Provides the freeswitch_channels munin plugin.
+
+Package: ccnq3-munin-couchdb
+Architecture: all
+Depends: munin-node, ccnq3-couchdb (= ${binary:Version})
+Description: munin modules for ccnq3-couchdb
+  Provides the couchdb munin plugin.
