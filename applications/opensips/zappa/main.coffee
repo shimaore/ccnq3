@@ -125,7 +125,8 @@ require('ccnq3').config (config)->
         pipe_req @, 'subscriber', make_id('endpoint',"#{username}@#{domain}")
         return
 
-      throw 'not handled'
+      util.error "subscriber: not handled: #{@query.k}"
+      @send ""
 
     @get '/location/': -> # usrloc_table
 
@@ -142,7 +143,8 @@ require('ccnq3').config (config)->
         pipe_loc_list @, 'usrloc', 'location/all' # Can't use _all_docs
         return
 
-      throw 'not handled'
+      util.error "location: not handled: #{@query.k}"
+      @send ""
 
     pico = require 'pico'
     loc_db = pico config.opensips_proxy.usrloc_uri
@@ -177,7 +179,8 @@ require('ccnq3').config (config)->
             @send ""
         return
 
-      throw "not handled #{util.inspect @}"
+      util.error "location: not handled: #{util.inspect @req}"
+      @send ""
 
     @get '/avpops/': ->
 
@@ -191,31 +194,24 @@ require('ccnq3').config (config)->
         pipe_req @, 'avpops', make_id(attribute,"#{username}@#{domain}")
         return
 
-      throw 'not handled'
-
+      util.error "avpops: not handled: #{@query.k}"
+      @send ""
 
     @get '/dr_gateways/': ->
       if not @query.k?
         pipe_list_key @, 'dr_gateways', 'gateways_by_domain', config.sip_domain_name
         return
-      ###
-      my %attrs = ();
-      $attrs{realm}    = $uac_realm if defined($uac_realm) && $uac_realm ne '';
-      $attrs{user}     = $uac_user  if defined($uac_user ) && $uac_user  ne '';
-      $attrs{pass}     = $uac_pass  if defined($uac_pass ) && $uac_pass  ne '';
-      $attrs{force_mp} = $force_mp  if defined($force_mp ) && $force_mp  ne '';
 
-      my $attrs = join(';', map { "$_=$attrs{$_}" } keys(%attrs) );
-      ###
-
-      throw 'not handled'
+      util.error "dr_gateways: not handled: #{@query.k}"
+      @send ""
 
     @get '/dr_rules/': -> # ?c=ruleid,groupid,prefix,timerec,priority,routeid,gwlist,attrs
       if not @query.k?
         pipe_list_key @, 'dr_rules', 'rules_by_domain', config.sip_domain_name
         return
 
-      throw 'not handled'
+      util.error "dr_rules: not handled: #{@query.k}"
+      @send ""
 
     @get '/dr_groups/': ->
 
@@ -226,21 +222,24 @@ require('ccnq3').config (config)->
         pipe_req @, 'dr_groups', make_id('number',username)
         return
 
-      throw 'not handled'
+      util.error "dr_groups: not handled: #{@query.k}"
+      @send ""
 
     @get '/dr_carriers/': -> # id,gwlist
       if not @query.k?
         pipe_list_key @, 'dr_carriers', 'carriers_by_host', config.host
         return
 
-      throw 'not handled'
+      util.error "dr_carriers: not handled: #{@query.k}"
+      @send ""
 
     @get '/registrant/': ->
       if not @query.k?
         pipe_list_keys @, 'registrant', 'registrant_by_host', config.host, 'registrant'
         return
 
-      throw 'not handled'
+      util.error "registrant: not handled: #{@query.k}"
+      @send ""
 
     @get '/version/': ->
       if @query.k is 'table_name' and @query.c is 'table_version'
@@ -255,4 +254,5 @@ require('ccnq3').config (config)->
 
         return "int\n#{versions[@query.v]}\n"
 
-      throw 'not handled'
+      util.error "version" not handled: #{util.inspect @req}"
+      @send ""
