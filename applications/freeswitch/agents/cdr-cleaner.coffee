@@ -89,7 +89,7 @@ run = (config) ->
             if e? or not b?
               console.log "Failed to run bulk update"
               return
-            for row, i in b.rows
+            for row, i in b
               if row.error or i is b.length-1
                 # When we fail we save the new checkpoint
                 # When we're done we save the new checkpoint
