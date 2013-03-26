@@ -48,14 +48,20 @@ run = (config) ->
     # Retrieve local changes since the last checkpoint, and try to locate them
     # in the central database.
     bulk_size = config.cdr_cleanup_size ? default_bulk_size
-    local.get "_changes?since=#{last_checkpoint}&limit=#{bulk_size}", json:true, (e,r,b) ->
+    local.get "_changes?since=#{last_checkpoint}&limit=#{bulk_size}&style=main_only", json:true, (e,r,b) ->
       if e or not b.results
         console.log "Getting _changes failed"
         return
 
       # b.results is an array of {seq,id,changes:[{rev}]}
       # Only keep CDRs
-      keys = (r.id for r in b.results when r.id[0] isnt '_')
+      keys = []
+      revs = {}
+      seqs = {}
+      for s in b.results when s.id[0] isnt '_'
+        keys.push s.id
+        revs[s.id] = s.changes[0].rev
+        seqs[s.id] = s.seq
 
       # Attempt to locate our local changes in the central database.
       central.post '_all_docs', json:{keys}, (e,r,b) ->
@@ -70,21 +76,17 @@ run = (config) ->
           docs = []
           i = 0
 
-          # We stop as soon as a document is missing, so that we can keep
-          # data in `keys` aligned all the way to the end.
-          while i < b.rows.length and b.rows[i].id?
+          for row in b.rows when row.id?
             # If found, "id" will be present, along with "value", which
             # contains {rev}.
             # If deleted, "value" will also contain {deleted}.
             # If not found "error" will be present.
             # In all cases, "key" is present.
-            row = b.rows[i]
-            # The following line will do a bulk-delete, i.e. a job similar to
-            #   local.del "#{qs.escape row.id}?rev=#{qs.escape row.value.rev}"
-            # over a large number of records.
-            docs[i] = _id:row.id, _rev:row.value.rev, _deleted:true
-            i++
+            docs.push _id:row.id, _rev:revs[row.id], _deleted:true
 
+          # The following line will do a bulk-delete, i.e. a job similar to
+          #   local.del "#{qs.escape row.id}?rev=#{qs.escape row.value.rev}"
+          # over a large number of records.
           local.post '_bulk_docs', json:{docs}, (e,r,b) ->
             if e? or not b?
               console.log "Failed to run bulk update"
@@ -92,11 +94,11 @@ run = (config) ->
             for row, i in b
               if row.error or i is b.length-1
                 # When we fail we save the new checkpoint
+                console.log "Failed: #{row.reason}" if row.error
                 # When we're done we save the new checkpoint
 
-                # The following line is why `keys`, `docs`, and the
-                # output of `_bulk_docs` must all be indexed the same.
-                checkpoint = keys[i].seq
+                checkpoint = seqs[row.id]
+                console.log "checkpoint is #{checkpoint}"
                 local.put checkpoint_path, json:{_rev,checkpoint}, (e,r,b) ->
                   if e? or not b.ok
                     console.log """
