@@ -39,12 +39,12 @@ run = (config) ->
   # in the local database that we were able to validate in the central
   # database and then remove in the local database.
   checkpoint_path = "_local/cdr-cleanup-checkpoint"
-  local.get checkpoint_path, json:true, (e,r,ck) ->
-    ck ?= {}
-    if e or not ck.checkpoint?
+  local.get checkpoint_path, json:true, (e,r,b) ->
+    if e or not b?.checkpoint?
       last_checkpoint = 1
     else
-      last_checkpoint = ck.checkpoint
+      last_checkpoint = b.checkpoint
+    _rev = b?._rev
 
     # Retrieve local changes since the last checkpoint, and try to locate them
     # in the central database.
@@ -97,8 +97,8 @@ run = (config) ->
 
                 # The following line is why `keys`, `docs`, and the
                 # output of `_bulk_docs` must all be indexed the same.
-                ck.checkpoint = keys[i].seq
-                local.put checkpoint_path, json:ck, (e,r,b) ->
+                checkpoint = keys[i].seq
+                local.put checkpoint_path, json:{_rev,checkpoint}, (e,r,b) ->
                   if e? or not b.ok
                     console.log """
                       Failed to save the new checkpoint: #{util.inspect b}
