@@ -254,5 +254,5 @@ require('ccnq3').config (config)->
 
         return "int\n#{versions[@query.v]}\n"
 
-      util.error "version" not handled: #{util.inspect @req}"
+      util.error "version not handled: #{util.inspect @req}"
       @send ""
