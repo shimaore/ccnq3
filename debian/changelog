@@ -1,3 +1,9 @@
+ccnq3 (0.0.125) unstable; urgency=low
+
+  * cdr-cleaner: add `size` configuration item, document configuration.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 26 Mar 2013 09:47:28 +0100
+
 ccnq3 (0.0.124) unstable; urgency=low
 
   * couchdb_daemon: don't disable Socket.IO.
