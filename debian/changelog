@@ -1,3 +1,9 @@
+ccnq3 (0.0.127) unstable; urgency=low
+
+  * Do not attempt to replicate if not requested to.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 26 Mar 2013 10:12:12 +0100
+
 ccnq3 (0.0.126) unstable; urgency=low
 
  -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 26 Mar 2013 10:06:32 +0100
