@@ -1,12 +1,8 @@
-ccnq3 (0.0.130) unstable; urgency=low
+ccnq3 (0.0.131) unstable; urgency=low
 
- -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 26 Mar 2013 23:34:35 +0100
+  * cdr-cleaner: got it
 
-ccnq3 (0.0.129) unstable; urgency=low
-
-  * again
-
- -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 26 Mar 2013 23:07:55 +0100
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Wed, 27 Mar 2013 00:44:41 +0100
 
 ccnq3 (0.0.128) unstable; urgency=low
 
