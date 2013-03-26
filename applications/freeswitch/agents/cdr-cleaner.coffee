@@ -25,7 +25,6 @@ run = (config) ->
     console.log "cdr-cleaner: no cdr_uri, skipping"
     return
 
-
   # Before doing any checks, ensure we are actually replicating.
   central_uri = config.cdr_aggregate_uri
   if not central_uri?
@@ -90,8 +89,8 @@ run = (config) ->
             if e? or not b?
               console.log "Failed to run bulk update"
               return
-            for row, i in b
-              if b.error or i is b.length-1
+            for row, i in b.rows
+              if row.error or i is b.length-1
                 # When we fail we save the new checkpoint
                 # When we're done we save the new checkpoint
 
@@ -103,6 +102,7 @@ run = (config) ->
                     console.log """
                       Failed to save the new checkpoint: #{util.inspect b}
                     """
+                return
             return
 
 require('ccnq3').config (config) ->
