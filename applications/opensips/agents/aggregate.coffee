@@ -6,6 +6,8 @@ pico = require 'pico'
 
 replicate = (config) ->
 
+  return unless config.opensips_proxy?.usrloc_aggregate_uri?
+
   # Replicate the local "location" database
   source_uri = config.opensips_proxy?.usrloc_uri ? 'http://127.0.0.1:5984/location'
   # into the global one
