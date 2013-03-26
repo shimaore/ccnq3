@@ -371,6 +371,9 @@ Configuration options:
 
     These should also show up in CDRs. FIXME confirm this is the case
 
+*   `cdr_cleanup_interval`: interval (in milliseconds) at which to run the cdr cleaner process (which removes CDRs that have been aggregated to the central `cdrs` database from the local database) [default: 17 minutes]
+*   `cdr_cleanup_size`: number of records to process at each run [default: 10000]
+
 ### Specific to hosts running OpenSIPS. ###
 
 To add an OpenSIPS host:

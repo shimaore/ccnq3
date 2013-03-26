@@ -10,9 +10,7 @@
 minute = 60*1000
 # Default cleanup interval
 default_cleanup_interval = 17*minute
-
-bulk_size = 10000
-
+default_bulk_size = 10000
 
 # Note: we do not perform a revision check. CDRs are normally generated
 # once and not modified. We only check whether if an ID exist on the local
@@ -26,6 +24,7 @@ run = (config) ->
   if not local_uri?
     console.log "cdr-cleaner: no cdr_uri, skipping"
     return
+
 
   # Before doing any checks, ensure we are actually replicating.
   central_uri = config.cdr_aggregate_uri
@@ -48,6 +47,7 @@ run = (config) ->
 
     # Retrieve local changes since the last checkpoint, and try to locate them
     # in the central database.
+    bulk_size = config.cdr_cleanup_size ? default_bulk_size
     local.get "_changes?since=#{last_checkpoint}&limit=#{bulk_size}", json:true, (e,r,b) ->
       if e or not b.results
         console.log "Getting _changes failed"
