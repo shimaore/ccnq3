@@ -1,3 +1,9 @@
+ccnq3 (0.0.128) unstable; urgency=low
+
+  * attempt to better handle _local vars
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 26 Mar 2013 22:58:28 +0100
+
 ccnq3 (0.0.127) unstable; urgency=low
 
   * Do not attempt to replicate if not requested to.
