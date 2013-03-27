@@ -58,7 +58,7 @@ run = (config) ->
       keys = []
       revs = {}
       seqs = {}
-      for s in b.results when s.id[0] isnt '_'
+      for s in b.results when s.id[0] isnt '_' and not s.deleted
         keys.push s.id
         revs[s.id] = s.changes[0].rev
         seqs[s.id] = s.seq
