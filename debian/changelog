@@ -1,3 +1,9 @@
+ccnq3 (0.0.132) unstable; urgency=low
+
+  * cdr-cleaner: do not over-delete
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Wed, 27 Mar 2013 21:09:01 +0100
+
 ccnq3 (0.0.131) unstable; urgency=low
 
   * cdr-cleaner: got it
