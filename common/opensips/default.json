@@ -59,5 +59,7 @@
   "rate_limit_latency": 60,
   "rate_limit": false,
 
+  "dlg_match_mode": 1,
+
   "ok":true
 }

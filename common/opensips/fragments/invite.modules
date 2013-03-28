@@ -37,7 +37,7 @@ modparam("dialog", "enable_stats", 1) # default 1
 
 # Dialog matching
 modparam("dialog", "rr_param", "dlg") # default did
-modparam("dialog", "dlg_match_mode", 1) # default 0 (match on rr_param only); 1 = match on rr_param, use SIP (RFC3261) matching as fallback
+modparam("dialog", "dlg_match_mode", ${dlg_match_mode}) # default 0 (match on rr_param only); 1 = match on rr_param, use SIP (RFC3261) matching as fallback
 
 # timeout/BYE
 modparam("dialog", "default_timeout", ${dialog_timeout}) # default 43200 (12h)
