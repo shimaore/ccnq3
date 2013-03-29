@@ -1,6 +1,6 @@
 # (c) 2012 Stephane Alnet
 #
-exec = require('child_process').exec
+{exec,spawn} = require('child_process')
 fs = require 'fs'
 byline = require 'byline'
 events = require 'events'
@@ -35,7 +35,10 @@ trace_field_names = [
   "sip.User-Agent"
 ]
 
-tshark_fields = ('-e '+f for f in trace_field_names).join ' '
+tshark_fields = []
+for f in trace_field_names
+  tshark_fields.push '-e'
+  tshark_fields.push f
 
 tshark_line_parser = (t) ->
   return if not t?
@@ -107,13 +110,13 @@ module.exports = (options) ->
 
     ## Select the proper packets
     if options.pcap?
-      tshark_command = """
-        nice tshark -r "#{fh}" -R '#{options.tshark_filter}' -nltad -T fields #{tshark_fields} -P -w "#{options.pcap}"
-      """
+      tshark_command = [
+        'tshark', '-r', fh, '-R', options.tshark_filter, '-nltad', '-T', 'fields', tshark_fields..., '-P', '-w', options.pcap
+      ]
     else
-      tshark_command = """
-        nice tshark -r "#{fh}" -R '#{options.tshark_filter}' -nltad -T fields #{tshark_fields}
-      """
+      tshark_command = [
+        'tshark', '-r', fh, '-R', options.tshark_filter, '-nltad', '-T', 'fields', tshark_fields...
+      ]
 
     # stream is tshark.stdout
     tshark_pipe = (stream) ->
@@ -142,7 +145,7 @@ module.exports = (options) ->
         self.close()
         return
 
-      tshark = exec tshark_command,
+      tshark = spawn 'nice', tshark_command,
         stdio: ['ignore','pipe','ignore']
 
       tshark.on 'exit', (code) ->
