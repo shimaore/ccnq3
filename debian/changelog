@@ -1,3 +1,9 @@
+ccnq3 (0.0.135) unstable; urgency=low
+
+  * cdr-cleaner: more progress info, better handling of degenerate cases
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Sat, 30 Mar 2013 17:22:12 +0100
+
 ccnq3 (0.0.134) unstable; urgency=low
 
   * traces: do not use `exec` where you meant `spawn`
