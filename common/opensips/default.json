@@ -60,6 +60,7 @@
   "rate_limit": false,
 
   "dlg_match_mode": 1,
+  "fix_invalid_dialogs": false,
 
   "ok":true
 }
