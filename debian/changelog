@@ -1,3 +1,9 @@
+ccnq3 (0.0.136) unstable; urgency=low
+
+  * opensips: allow to replace invalid dialog rejection with `fix_route_dialog()`
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Sun, 31 Mar 2013 23:53:11 +0200
+
 ccnq3 (0.0.135) unstable; urgency=low
 
   * cdr-cleaner: more progress info, better handling of degenerate cases
