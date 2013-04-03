@@ -1,3 +1,9 @@
+ccnq3 (0.0.137) unstable; urgency=low
+
+  * Node.js: 0.8.22
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Wed, 03 Apr 2013 14:46:15 +0200
+
 ccnq3 (0.0.136) unstable; urgency=low
 
   * opensips: allow to replace invalid dialog rejection with `fix_route_dialog()`
