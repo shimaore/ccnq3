@@ -1,3 +1,11 @@
+ccnq3 (0.0.138) unstable; urgency=low
+
+  * opensips: catch errors
+  * doc: add header to make file look nicer when processed
+  * opensips: `dst_domain` avp is not used (esp. not set) anywhere.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Thu, 04 Apr 2013 22:16:16 +0200
+
 ccnq3 (0.0.137) unstable; urgency=low
 
   * Node.js: 0.8.22
