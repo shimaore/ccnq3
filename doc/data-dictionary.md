@@ -1,3 +1,6 @@
+About
+=====
+
 This document describes the configuration parameters for ccnq3.
 
 Conventions
