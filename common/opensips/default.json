@@ -61,6 +61,7 @@
 
   "dlg_match_mode": 1,
   "fix_invalid_dialogs": false,
+  "ignore_static_endpoints": false,
 
   "ok":true
 }
