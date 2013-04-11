@@ -1,6 +1,6 @@
 #!/usr/bin/env coffee
 # This script:
-#   nice sudo -u ccnq3 ./delete-rules.coffee <sip_domain_name> <groupid>
+#   nice sudo -u ccnq3 ./delete-local-rules.coffee <sip_domain_name> <groupid>
 # Get a view at the first rule:
 #   curl 'http://127.0.0.1:5984/provisioning/_all_docs?start_key="rule"&limit=1'
 
