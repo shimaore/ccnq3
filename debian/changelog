@@ -1,3 +1,20 @@
+ccnq3 (0.0.139) unstable; urgency=low
+
+  * opensips: avoid setting a value to null
+  * opensips: added `ignore_static_endpoints` option
+  * Check for disabled endpoint _after_ it is fully resolved.
+  * Move rate_limit code out of authentication and to its proper place.
+  * No Device Left Behind: ignore broken REGISTER
+  * Provide default for `ignore_broken_register`
+  * Corrected logic for handling broken REGISTER.
+  * tools: Add delete-local-rules
+  * tools: corrected usage
+  * local databases do not need history
+  * debian: it seems that (undocumented?) `npm cache clear` is much more efficient.
+  * traces: remove leftover tmp files from mergecap etc.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Fri, 12 Apr 2013 01:46:21 +0200
+
 ccnq3 (0.0.138) unstable; urgency=low
 
   * opensips: catch errors
