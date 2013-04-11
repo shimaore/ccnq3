@@ -17,3 +17,5 @@ require('ccnq3').config (config) ->
     cdr = pico cdr_uri
     cdr.create ->
       push_script cdr_uri, 'cdr'
+      cdr.request.put '_revs_limit',body:"2", (e,r,b) =>
+        if e? then console.dir failure error:e, when:"set revs_limit for #{cdr_uri}"
