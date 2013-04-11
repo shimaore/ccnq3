@@ -48,6 +48,7 @@ case "$1" in
     (cd ${WORKDIR}/src && su -s /bin/sh -c "npm install" $USER) || exit 1
     (cd ${WORKDIR}/src && su -s /bin/sh -c "npm run-script updates" $USER) || exit 1
     (cd ${WORKDIR}/src && su -s /bin/sh -c "npm cache clean" $USER) || exit 1
+    (cd ${WORKDIR}/src && su -s /bin/sh -c "npm cache clear" $USER) || exit 1
 
     rm -f /usr/bin/ccnq3
     # Using a link allows the script to properly find its source.
