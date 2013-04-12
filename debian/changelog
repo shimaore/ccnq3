@@ -1,3 +1,9 @@
+ccnq3 (0.0.140) unstable; urgency=low
+
+  * opensips: corrected macro syntax
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Sat, 13 Apr 2013 00:14:11 +0200
+
 ccnq3 (0.0.139) unstable; urgency=low
 
   * opensips: avoid setting a value to null
