@@ -101,6 +101,7 @@ require('ccnq3').config (config) ->
           expected++
           save_uri_as "#{config.provisioning.local_couchdb_uri}/_design/freeswitch/_show/#{show}/#{host_uri}", file,  ->
             if --expected is 0 then cb?()
+      return
 
     # 1b. Apply configuration changes
     apply_configuration_changes = (cb) ->
@@ -118,6 +119,7 @@ require('ccnq3').config (config) ->
     process_commands = ->
       if p.sip_commands?
         process_changes p.sip_commands
+      return
 
     write_config_files -> apply_configuration_changes -> process_commands()
 
@@ -133,6 +135,7 @@ require('ccnq3').config (config) ->
       hostname: config.host
 
   db.monitor options, handler
+  return
 
 # Start the CDR swiper
 require './cdr-swiper'
