@@ -624,6 +624,12 @@ run = ->
     console.error "Unknown command #{command}"
     return 1
 
-sync_exit = run()
-if sync_exit?
-  process.exit sync_exit
+if require.main is module
+  sync_exit = run()
+  if sync_exit?
+    process.exit sync_exit
+else
+  for command of commands
+    new_command = command.replace /[ ]/g, '_'
+    commands[new_command] = commands[command]
+  module.exports = commands
