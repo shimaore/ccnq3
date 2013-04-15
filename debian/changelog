@@ -1,3 +1,11 @@
+ccnq3 (0.0.141) unstable; urgency=low
+
+  * simplify
+  * wait 30 minutes before expiring mergecap (traces) files
+  * trying to get reliable opensips startup at boot time
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Mon, 15 Apr 2013 10:16:17 +0200
+
 ccnq3 (0.0.140) unstable; urgency=low
 
   * opensips: corrected macro syntax
