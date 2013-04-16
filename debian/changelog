@@ -1,3 +1,11 @@
+ccnq3 (0.0.142) unstable; urgency=low
+
+  * bin: Make ccnq3 useable as a module
+  * fs-agent: cleanup return
+  * host: push the _design document (it only contains filters) to all hosts
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 16 Apr 2013 12:10:20 +0200
+
 ccnq3 (0.0.141) unstable; urgency=low
 
   * simplify
