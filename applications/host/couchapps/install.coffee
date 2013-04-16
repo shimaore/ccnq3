@@ -20,5 +20,6 @@ require('ccnq3').config (config) ->
   if local_provisioning_uri?
     local_provisioning = pico local_provisioning_uri
     local_provisioning.create ->
+      push_script local_provisioning_uri, 'main'
       local_provisioning.request.put '_revs_limit',body:"2", (e,r,b) =>
         if e? then console.dir error:e, when:"set revs_limit for #{local_provisioning_uri}"
