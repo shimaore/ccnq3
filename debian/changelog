@@ -1,3 +1,9 @@
+ccnq3 (0.0.143) unstable; urgency=low
+
+  * tmp purge: trying to track down why this doesn't work on all systems.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Sat, 20 Apr 2013 10:32:59 +0200
+
 ccnq3 (0.0.142) unstable; urgency=low
 
   * bin: Make ccnq3 useable as a module
