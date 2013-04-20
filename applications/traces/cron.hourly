@@ -33,10 +33,11 @@ ccnq3.config (config) ->
       if r = name.match /^\.tmp/
         full = path.join trace_dir, name
         fs.lstat full, (err,stats) ->
-          if err then return
+          if err
+            console.dir error:err, when: "lstat #{full}"
+            return
           if stats.mtime - new Date() < -30*minutes
             fs.unlink full
-
 
     if debug
       ccnq3.log JSON.stringify ind, '  '
