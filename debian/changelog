@@ -1,3 +1,10 @@
+ccnq3 (0.0.144) unstable; urgency=low
+
+  * opensips: domain-based outbound-route selection.
+  * dependencies: with the breakage introduced by request 2.18.0, reverting to safe path for now.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Mon, 22 Apr 2013 18:52:54 +0200
+
 ccnq3 (0.0.143) unstable; urgency=low
 
   * tmp purge: trying to track down why this doesn't work on all systems.
