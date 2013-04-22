@@ -16,7 +16,6 @@
   "dependencies": {
     "ccnq3": ">=0.3.3"
   , "couchapp": "*"
-  , "request": "*"
   , "pico": ">=0.1.13"
   },
   "engines": { "node": ">=0.4.7", "coffee": ">=1.1.1" },

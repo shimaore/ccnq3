@@ -23,7 +23,6 @@
   },
   "dependencies": {
     "ccnq3": ">=0.4.13"
-  , "request": "*"
   , "npm": "*"
   , "pico": ">=0.1.13"
   },
