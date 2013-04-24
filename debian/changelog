@@ -1,3 +1,9 @@
+ccnq3 (0.0.145) unstable; urgency=low
+
+  * debian: restart is required in init
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Wed, 24 Apr 2013 18:25:11 +0200
+
 ccnq3 (0.0.144) unstable; urgency=low
 
   * opensips: domain-based outbound-route selection.
