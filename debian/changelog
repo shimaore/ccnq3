@@ -1,3 +1,9 @@
+ccnq3 (0.0.146) unstable; urgency=low
+
+  * traces: rename temp files so that mergecap doesn't find them.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Thu, 25 Apr 2013 00:23:52 +0200
+
 ccnq3 (0.0.145) unstable; urgency=low
 
   * debian: restart is required in init
