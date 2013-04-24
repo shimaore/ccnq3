@@ -98,7 +98,7 @@ module.exports = (options) ->
 
     # We _have_ to use a file because tshark cannot read from a pipe/fifo/stdin.
     # (And we need tshark for its filtering and field selection features.)
-    fh = "#{options.trace_dir}/.tmp.pcap.#{Math.random()}"
+    fh = "#{options.trace_dir}/.tmp.cap1.#{Math.random()}"
 
     ## Generate a merged capture file
     pcap_command = """

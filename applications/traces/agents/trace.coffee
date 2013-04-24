@@ -57,6 +57,6 @@ module.exports = (config,doc) ->
     tshark_filter: tshark_filter
 
   if doc.reference?
-    options.pcap = options.trace_dir+'/.tmp.'+doc.reference+'.pcap'
+    options.pcap = options.trace_dir+'/.tmp.cap2.'+doc.reference
 
   [ packet_server(options), options.pcap ]
