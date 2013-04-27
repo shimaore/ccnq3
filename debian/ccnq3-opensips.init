@@ -19,7 +19,7 @@ SRCDIR=/opt/$NAME/src
 case "$1" in
   start)
     # Wait for CouchDB + our proxy to be ready
-    sleep 10
+    sleep 30
   ;;
   stop)
   ;;
