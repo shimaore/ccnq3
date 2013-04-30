@@ -1,3 +1,11 @@
+ccnq3 (0.0.147) unstable; urgency=low
+
+  * sbc: remove leaking header
+  * ccnq3-opensips: slightly longer pause at startup
+  * opensips: fixing UPDATE processing
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Wed, 01 May 2013 00:18:39 +0200
+
 ccnq3 (0.0.146) unstable; urgency=low
 
   * traces: rename temp files so that mergecap doesn't find them.
