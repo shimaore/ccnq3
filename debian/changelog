@@ -1,3 +1,9 @@
+ccnq3 (0.0.149) unstable; urgency=low
+
+  * opensips: allow inbound_sbc even if ignore_static_endpoints is set
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Sat, 04 May 2013 09:58:50 +0200
+
 ccnq3 (0.0.148) unstable; urgency=low
 
   * customer-sbc: remove extraneous headers
