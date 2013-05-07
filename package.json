@@ -19,7 +19,7 @@
   , "updates": "./bin/npm-apps.coffee install && ./bin/npm-apps.coffee update && ./bin/npm-apps.coffee run-script couchapps"
   , "bootstrap": "./bin/npm-apps.coffee run-script bootstrap"
   , "compact": "./bin/npm-apps.coffee run-script compact"
-  , "test": "coffeelint -r . ; find . -name '*.json' -exec jsonlint '{}' ';' >/dev/null"
+  , "lint": "coffeelint -r . ; find . -name '*.json' -exec jsonlint '{}' ';' >/dev/null"
   },
   "dependencies": {
     "ccnq3": ">=0.4.13"
