@@ -732,6 +732,14 @@ an OpenSIPS server will accept any domain listed here.
 
 *   `domain`: string; the name of the DNS domain
 
+### domain-based routing
+
+*   `outbound_route`: the default outbound-route to be used if this domain is present in the Request URI.
+
+    This requires the OpenSIPS configuration option `use_domain_outbound_route` to be set to `true`.
+
+    See the description under *Rule (provisioning record)*.
+
 ### ccnq3-dns service
 
   If "applications/dns" is configured on the host, "domain" provisioning records may be used to populate DNS records.
@@ -918,8 +926,6 @@ number (provisioning records)
 
     For a global number this indicates the LCR route that will be selected to route the call out.
 
-    If a number has no `outbound_route`, the `outbound_route` of the endpoint (sending SBC) is used.
-    If the number and the endpoint both have `outbound_route`, the two rule sets are used in order.
     See additional information in *Rule (provisioning record)*.
 
 *   `registrant_password`: password for applications/registrant
@@ -947,8 +953,6 @@ Please note that for a number to use the registrant function, both `registrant_p
 
     For a local number this is used to define the local dialplan, including call restrictions, access to voicemail and services, ...
 
-    If a number has no `outbound_route`, the `outbound_route` of the endpoint is used.
-    If the number and the endpoint both have `outbound_route`, the two rule sets are tried in order.
     See additional information in *Rule (provisioning record)*.
 
 *   `location`:  string; the location identifier for this specific number (used for emergency location services)
@@ -1024,14 +1028,19 @@ Rules are used to route outbound calls in OpenSIPS.
 
 ### Which rule sets are selected ###
 
-When a call has to be routed towards a trunk, one or two rule sets might be applied:
+When a call has to be routed towards a trunk, a maximum of two eligible rule sets are tried in order:
 
-* the rule set indicated by the `outbound_route` of the `number`, if any;
-* the rule set indicated by the `outbound_route` of the `endpoint`, if any.
+* The first rule set is the rule set indicated by the `outbound_route` of the (calling) `number` (From username), if any. This allows for example to route specific calling numbers through a T.38 route rather than a voice-only route.
+* The second rule set is the first matching rule set in the following list:
+  * The rule set indicated by the `outbound_route` of the `domain` (Request URI domain), if any. This only applies if the OpenSIPS configuration flag `use_domain_outbound_route` is `true` [default: `false`].
+  * The rule set indicated by the `outbound_route` of the `endpoint` (source endpoint), if any. This only applies if the OpenSIPS configuration flag `use_endpoint_outbound_route` is `true` [default: `true`].
+  * The rule set indicated by the `default_outbound_route` OpenSIPS configuration parameter, if any. This only applies if the OpenSIPS configuration flag `use_default_outbound_route` is `true` [default: `false`].
 
-If no `outbound_route` is provided, or both rule sets are unable to route the call (no matching prefix, etc.), the call is rejected with `404 User Not Found` (local number) or `502 No Route` (global number).
+The default configuration (calling number and originating endpoint rule sets) allows for rule selection base on provisioning only. Domain-based outbound-route selection is meant to be used on outbound-proxies, not on customer-side proxies (where it could be used to bypass calling restrictions). When domain-based route selection is enabled the calling endpoint can select any domain-based route.
 
-The first matching rule selected (either from the number's `outbound_route` rule-set, or from the endpoint's `outbound_route` rule-set) is used to route the call.
+If no rule set is eligible, or the eligible rule set(s) are unable to route the call (no matching prefix, etc.), the call is rejected with `404 User Not Found` (local number) or `502 No Route` (global number).
+
+The first eligible and matching rule selected is used to route the call.
 
 ### How rules are matched ###
 
