@@ -27,7 +27,7 @@
   , "pico": ">=0.1.13"
   },
   "devDependencies": {
-    "github-flavored-markdown": "*"
+    "marked": "*"
   , "coffeecup": "*"
   , "coffee-script": "*"
   , "ccss": "*"
