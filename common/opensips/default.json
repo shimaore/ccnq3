@@ -66,6 +66,7 @@
   "ignore_static_endpoints": false,
 
   "use_domain_outbound_route": false,
+  "use_default_outbound_route": false,
 
   "ok":true
 }
