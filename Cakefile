@@ -1,6 +1,6 @@
 output_dir = './_site'
 fs = require 'fs'
-markdown = require 'github-flavored-markdown'
+markdown = require 'marked'
 coffeecup = require 'coffeecup'
 css = (o) -> require('ccss').compile o
 coffeescript = require 'coffee-script'
