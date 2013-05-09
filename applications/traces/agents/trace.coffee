@@ -13,6 +13,9 @@ module.exports = (config,doc) ->
 
   console.dir doc: doc
 
+  # Stubbornly refuse to print out all packets.
+  return unless doc.to_user? or doc.from_user? or doc.call_id?
+
   ## Generate a merged capture file
   # ngrep is used to pre-filter packets
   ngrep_filter = []
