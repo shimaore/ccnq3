@@ -1,3 +1,16 @@
+ccnq3 (0.0.150) unstable; urgency=low
+
+  * deps: replaced deprecated package.
+  * opensips: document `use_endpoint_outbound_route`
+  * opensips: add `use_endpoint_outbound_route` (for completeness)
+  * doc: revised the various `outbound_route` options and summarized in one location.
+  * doc: update dep
+  * traces: stubbornly refuse to print out all packets.
+  * Trying to get automated buildpackage in Travis-CI.
+  * Travis: renamed 'test' to 'lint', we're missing global deps.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Thu, 09 May 2013 23:38:00 +0200
+
 ccnq3 (0.0.149) unstable; urgency=low
 
   * opensips: allow inbound_sbc even if ignore_static_endpoints is set
