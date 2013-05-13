@@ -1,9 +1,14 @@
 #!/usr/bin/make -f
 %:
-	dh $@
+	dh $@ --parallel
 
 override_dh_gencontrol:
 	dh_gencontrol -- -Vfreeswitch:Version="1.2.4+git~20130217T182427Z~a4247651ca"
 
 override_dh_installinit:
 	dh_installinit -R
+
+override_dh_auto_build:
+	npm config set dev false
+	npm config set production true
+	npm install
