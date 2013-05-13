@@ -1,3 +1,9 @@
+ccnq3 (0.0.154) unstable; urgency=low
+
+  * debian: having issues detecting existing username
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Mon, 13 May 2013 13:34:26 +0200
+
 ccnq3 (0.0.153) unstable; urgency=low
 
   * debian: revert changes related to including `node_modules`
