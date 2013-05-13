@@ -1,3 +1,10 @@
+ccnq3 (0.0.152) unstable; urgency=low
+
+  * npm: be more precise about the versions we want
+  * debian: include _all_ `node_modules`
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Mon, 13 May 2013 13:10:04 +0200
+
 ccnq3 (0.0.151) unstable; urgency=low
 
   * debian: include `node_modules` in the packages
