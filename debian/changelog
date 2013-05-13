@@ -1,3 +1,9 @@
+ccnq3 (0.0.153) unstable; urgency=low
+
+  * debian: revert changes related to including `node_modules`
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Mon, 13 May 2013 13:14:00 +0200
+
 ccnq3 (0.0.152) unstable; urgency=low
 
   * npm: be more precise about the versions we want
