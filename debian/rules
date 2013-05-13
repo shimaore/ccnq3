@@ -7,8 +7,3 @@ override_dh_gencontrol:
 
 override_dh_installinit:
 	dh_installinit -R
-
-override_dh_auto_build:
-	npm config set dev false
-	npm config set production true
-	find . -name package.json -print0 | xargs -0 sh -c 'cd "$@" && npm install' npm-install

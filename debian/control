@@ -2,7 +2,7 @@ Source: ccnq3
 Maintainer: Stephane Alnet (Packaging) <stephane@shimaore.net>
 
 Package: ccnq3
-Architecture: amd64
+Architecture: all
 Depends:
   findutils, adduser, passwd,
   curl, psmisc,
