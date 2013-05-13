@@ -1,3 +1,10 @@
+ccnq3 (0.0.151) unstable; urgency=low
+
+  * debian: include `node_modules` in the packages
+  * app/host: do not attempt to push `_design/host` twice.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Mon, 13 May 2013 12:59:39 +0200
+
 ccnq3 (0.0.150) unstable; urgency=low
 
   * deps: replaced deprecated package.
