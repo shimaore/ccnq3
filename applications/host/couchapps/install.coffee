@@ -15,6 +15,9 @@ require('ccnq3').config (config) ->
   provisioning_uri = config.provisioning?.couchdb_uri
   if provisioning_uri?
     push_script provisioning_uri, 'main'
+    # We cannot have both couchdb_uri and local_couchdb_uri on the
+    # same host.
+    return
 
   local_provisioning_uri = config.provisioning?.local_couchdb_uri
   if local_provisioning_uri?
