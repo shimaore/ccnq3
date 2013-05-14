@@ -103,7 +103,7 @@ module.exports = (options) ->
     ## Generate a merged capture file
     pcap_command = """
       nice find '#{options.trace_dir}' -maxdepth 1 -type f -size +80c \\
-        -name '#{intf ? ''}*.pcap*' #{options.find_filter ? ''} -print0 |  \\
+        -name '#{intf ? '[a-z]'}*.pcap*' #{options.find_filter ? ''} -print0 |  \\
       nice xargs -0 -r mergecap -w - | \\
       nice ngrep -i -l -q -I - -O '#{fh}' '#{options.ngrep_filter}' >/dev/null
     """
