@@ -1,3 +1,9 @@
+ccnq3 (0.0.156) unstable; urgency=low
+
+  * traces: do not attempt to merge .tmp files.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 14 May 2013 23:22:59 +0200
+
 ccnq3 (0.0.155) unstable; urgency=low
 
   * rabbitmq HTTP API: followAllRedirects, corrected URIs
