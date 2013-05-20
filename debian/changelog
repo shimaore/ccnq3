@@ -1,3 +1,9 @@
+ccnq3 (0.0.158) unstable; urgency=low
+
+  * opensips: Allow to set the FR (failover) timer value
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Mon, 20 May 2013 02:09:10 +0200
+
 ccnq3 (0.0.157) unstable; urgency=low
 
   * cdrs: do not include views not used in core.
