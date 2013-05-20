@@ -40,11 +40,11 @@ modparam("tm", "fr_inv_timer_avp", "$(avp(inv_timer))")
 # 6 seconds is one ring cycle.
 
 if use_shorter_fr_timer
-  modparam("tm", "fr_timer", 2)
+  modparam("tm", "fr_timer", ${short_fr_timer})
 end if use_shorter_fr_timer
 
 if not use_shorter_fr_timer
-  modparam("tm", "fr_timer", 4)
+  modparam("tm", "fr_timer", ${long_fr_timer})
 end if not use_shorter_fr_timer
 
 
