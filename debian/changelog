@@ -1,3 +1,9 @@
+ccnq3 (0.0.159) unstable; urgency=low
+
+  * Removed the "attachements as scripts" feature.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Wed, 22 May 2013 17:55:41 +0200
+
 ccnq3 (0.0.158) unstable; urgency=low
 
   * opensips: Allow to set the FR (failover) timer value
