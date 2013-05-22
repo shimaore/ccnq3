@@ -707,14 +707,6 @@ on the source host, set "opensips_proxy.usrloc_aggregate_uri" to http://host%40s
     * `port`    FreeSwitch ESL `socket` port [default: 7124]
     * `uri`     URI to query
 
-### Attachments ###
-
-Attachments of type "application/javascript" are executed after each change.
-The attachments might use any core Node.js modules.
-
-FIXME test this feature
-
-
 domain (provisioning records)
 -----------------------------
 
