@@ -19,7 +19,7 @@
     <param name="colorize-console" value="true"/>
     <param name="max-sessions" value="2000"/>
     <param name="sessions-per-second" value="200"/>
-    <param name="min-idle-cpu" value="15"/>
+    <param name="min-idle-cpu" value="1"/>
     <param name="loglevel" value="alert"/>
     <param name="crash-protection" value="true"/>
     <!--<param name="max_dtmf_duration" value="192000"/>-->
