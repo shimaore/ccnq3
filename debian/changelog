@@ -1,3 +1,10 @@
+ccnq3 (0.0.160) unstable; urgency=low
+
+  * munin: added dumpcap_reasons_errors
+  * freeswitch: do not start refusing calls at 15% idle
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Fri, 24 May 2013 01:22:18 +0200
+
 ccnq3 (0.0.159) unstable; urgency=low
 
   * Removed the "attachements as scripts" feature.
