@@ -33,11 +33,9 @@ ccnq3 = require 'ccnq3'
 
 #### Applications
 #
-# All servers SHOULD be running the `monitor` and the `host` applications.
-# The `host` applications is especially important because it provides shared
+# All servers SHOULD be running the `host` application as it provides shared
 # provisioning.
 default_apps = [
-  "applications/monitor"
   "applications/host"
 ]
 
