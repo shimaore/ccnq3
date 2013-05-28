@@ -1,3 +1,11 @@
+ccnq3 (0.0.163) unstable; urgency=low
+
+  * bin: removing `monitor` from the list of default applications.
+  * Added `usrloc_memory` configuration option.
+  * Made `max_contacts` into a configurable item.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Wed, 29 May 2013 00:50:54 +0200
+
 ccnq3 (0.0.162) unstable; urgency=low
 
   * freeswitch: do not monitor CPU
