@@ -42,7 +42,7 @@
   "auth_table": "subscriber",
   "usrloc_table": "location",
 
-  "usrloc_memory": false,
+  "usrloc_flags": "f",
 
   "fifo_path": "/tmp/opensips_fifo",
   "mi_port": 30000,
