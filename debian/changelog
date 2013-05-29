@@ -1,3 +1,10 @@
+ccnq3 (0.0.166) unstable; urgency=low
+
+  * opensips: applied `usrloc_flags` changes everywhere
+  * opensips: Enforce min-expires with 423 responses.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Wed, 29 May 2013 12:46:47 +0200
+
 ccnq3 (0.0.165) unstable; urgency=low
 
   * opensips: replaced `usrloc_memory` with `usrloc_flags`.
