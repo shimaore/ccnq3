@@ -74,7 +74,7 @@
   "short_fr_timer": 2,
   "long_fr_timer": 4,
 
-  "max_contacts": 2,
+  "max_contacts": 0,
 
   "ok":true
 }
