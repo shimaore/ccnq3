@@ -165,8 +165,8 @@ require('ccnq3').config (config)->
         loc_db.rev doc._id, (e,r,h) =>
           doc._rev = h.rev if h?.rev?
           loc_db.put doc, (e,r,p) =>
-            if e then return @send ""
-            @send p._id
+            if e then util.error "location: error updating #{doc._id}"
+        @send doc._id
         return
 
       if @body.query_type is 'delete'
@@ -175,8 +175,8 @@ require('ccnq3').config (config)->
           if not h?.rev? then return @send ""
           doc._rev = h.rev
           loc_db.remove doc, (e) =>
-            if e then return @send ""
-            @send ""
+            if e then util.error "location: error removing #{doc._id}"
+        @send ""
         return
 
       util.error "location: not handled: #{util.inspect @req}"
