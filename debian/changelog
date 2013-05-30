@@ -1,3 +1,9 @@
+ccnq3 (0.0.170) unstable; urgency=low
+
+  * opensips: also block REGISTER forwarding in loose-routed path.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Thu, 30 May 2013 10:24:06 +0200
+
 ccnq3 (0.0.169) unstable; urgency=low
 
   * opensips: testing newer `request` version.
