@@ -7,14 +7,14 @@
     "db_http",
     "accounting",
     "toolbox",
-    "forwarder",
     "nat",
     "mediaproxy",
     "register-ignore",
     "invite",
     "invite-router-local",
     "loose-route",
-    "non-loose-route"
+    "non-loose-route",
+    "forwarder"
   ],
 
   "opensips_base_lib": ".",

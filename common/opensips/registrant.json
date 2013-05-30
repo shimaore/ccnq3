@@ -10,8 +10,8 @@
     "accounting",
     "registrant",
     "invite",
-    "forwarder",
-    "loose-route"
+    "loose-route",
+    "forwarder"
   ],
 
   "opensips_base_lib": ".",

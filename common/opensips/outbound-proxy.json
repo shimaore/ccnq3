@@ -8,7 +8,6 @@
     "avpops_db",
     "accounting",
     "toolbox",
-    "forwarder",
     "authenticate",
     "nonat",
     "invite-outbound-proxy",
@@ -16,7 +15,8 @@
     "invite-trunk-drouting",
     "loose-route",
     "non-loose-route",
-    "register-none"
+    "register-none",
+    "forwarder"
   ],
 
   "opensips_base_lib": ".",

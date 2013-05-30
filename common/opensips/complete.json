@@ -9,7 +9,6 @@
     "avpops_db",
     "accounting",
     "toolbox",
-    "forwarder",
     "authenticate",
     "nat",
     "mediaproxy",
@@ -20,7 +19,8 @@
     "non-loose-route",
     "routing-lineside",
     "routing-trunkside-transparent",
-    "register-colocated"
+    "register-colocated",
+    "forwarder"
   ],
 
   "opensips_base_lib": ".",
