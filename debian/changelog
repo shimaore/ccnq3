@@ -1,3 +1,9 @@
+ccnq3 (0.0.169) unstable; urgency=low
+
+  * opensips: testing newer `request` version.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Thu, 30 May 2013 10:10:42 +0200
+
 ccnq3 (0.0.168) unstable; urgency=low
 
   * opensips: do not forward REGISTER messages when unnecessary
