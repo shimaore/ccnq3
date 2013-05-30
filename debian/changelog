@@ -1,3 +1,9 @@
+ccnq3 (0.0.167) unstable; urgency=low
+
+  * opensips: return immediately when updating data
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Thu, 30 May 2013 09:32:51 +0200
+
 ccnq3 (0.0.166) unstable; urgency=low
 
   * opensips: applied `usrloc_flags` changes everywhere
