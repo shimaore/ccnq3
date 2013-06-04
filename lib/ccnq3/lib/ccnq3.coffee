@@ -1,6 +1,8 @@
 util = require 'util'
 pico = require 'pico'
 qs = require 'querystring'
+url = require 'url'
+supercouch = require 'supercouch'
 
 debug = false
 
@@ -196,6 +198,8 @@ ccnq3.db =
 
       db.request.put '_security', json:p
 
+  #### ccnq3.db.add_user(db_uri,name,password,cb)
+  # Create a new user record.
   add_user: (uri,name,password,cb) ->
     db = pico uri
     db.get_user name, (e,r,user_doc) ->
@@ -207,6 +211,8 @@ ccnq3.db =
 
       db.put_user user_doc, cb
 
+  #### ccnq3.db.add_roles(db_uri,name,roles,cb)
+  # Add the specified roles to the existing roles set for the user.
   add_roles: (uri,name,roles,cb) ->
     db = pico uri
     db.get_user name, (e,r,user_doc) ->
@@ -219,3 +225,15 @@ ccnq3.db =
         user_doc.roles.push role unless role in user_doc.roles
 
       db.put_user user_doc, cb
+
+  #### ccnq3.db.couch(uri)
+  # Returns a supercouch instance for the database at the specified URI.
+  couch: (uri) ->
+    uri = url.parse uri
+    base = url.format
+      protocol: uri.protocol
+      auth: uri.auth
+      host: uri.host
+    path = uri.path
+    couch = supercouch base
+    couch.db path
