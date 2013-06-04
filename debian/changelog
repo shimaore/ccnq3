@@ -1,3 +1,10 @@
+ccnq3 (0.0.171) unstable; urgency=low
+
+  * debian: `nice` installation
+  * opensips: only attempt registration lookup if the user is a registered user.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 04 Jun 2013 09:24:29 +0200
+
 ccnq3 (0.0.170) unstable; urgency=low
 
   * opensips: also block REGISTER forwarding in loose-routed path.
