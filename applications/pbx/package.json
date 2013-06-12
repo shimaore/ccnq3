@@ -1,0 +1,17 @@
+{
+  "name": "ccnq3_pbx"
+, "version": "0.0.1"
+, "description": "Mini-PBX application for CCNQ3"
+, "keywords": ["ccnq3"]
+, "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" }
+, "scripts": {
+    "start": "daemon -n ccnq3_pbx -o daemon.debug -r -D \"`pwd`/node\" -- ./pbx.coffee"
+  , "stop":  "daemon -n ccnq3_pbx -o daemon.debug --stop"
+  }
+, "dependencies": {
+  , "ccnq3": ">=0.3.9"
+  , "esl": "~1.0.1"
+  , "supercouch": "*"
+  }
+, "private": true
+}

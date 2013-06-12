@@ -1,5 +1,126 @@
 <configuration name="local_stream.conf" description="stream files from local dir">
-  <directory name="moh/8000" path="$${base_dir}/sounds/music/8000">
+
+  <directory name="ringback/1" path="$${sounds_dir}/ringback/1">
+    <param name="rate" value="8000"/>
+    <param name="shuffle" value="false"/>
+    <param name="channels" value="1"/>
+    <param name="interval" value="20"/>
+    <param name="timer-name" value="soft"/>
+  </directory>
+  <directory name="ringback/2" path="$${sounds_dir}/ringback/2">
+    <param name="rate" value="8000"/>
+    <param name="shuffle" value="false"/>
+    <param name="channels" value="1"/>
+    <param name="interval" value="20"/>
+    <param name="timer-name" value="soft"/>
+  </directory>
+  <directory name="ringback/3" path="$${sounds_dir}/ringback/3">
+    <param name="rate" value="8000"/>
+    <param name="shuffle" value="false"/>
+    <param name="channels" value="1"/>
+    <param name="interval" value="20"/>
+    <param name="timer-name" value="soft"/>
+  </directory>
+  <directory name="ringback/4" path="$${sounds_dir}/ringback/4">
+    <param name="rate" value="8000"/>
+    <param name="shuffle" value="false"/>
+    <param name="channels" value="1"/>
+    <param name="interval" value="20"/>
+    <param name="timer-name" value="soft"/>
+  </directory>
+  <directory name="ringback/5" path="$${sounds_dir}/ringback/5">
+    <param name="rate" value="8000"/>
+    <param name="shuffle" value="false"/>
+    <param name="channels" value="1"/>
+    <param name="interval" value="20"/>
+    <param name="timer-name" value="soft"/>
+  </directory>
+  <directory name="ringback/6" path="$${sounds_dir}/ringback/6">
+    <param name="rate" value="8000"/>
+    <param name="shuffle" value="false"/>
+    <param name="channels" value="1"/>
+    <param name="interval" value="20"/>
+    <param name="timer-name" value="soft"/>
+  </directory>
+  <directory name="ringback/7" path="$${sounds_dir}/ringback/7">
+    <param name="rate" value="8000"/>
+    <param name="shuffle" value="false"/>
+    <param name="channels" value="1"/>
+    <param name="interval" value="20"/>
+    <param name="timer-name" value="soft"/>
+  </directory>
+  <directory name="ringback/8" path="$${sounds_dir}/ringback/8">
+    <param name="rate" value="8000"/>
+    <param name="shuffle" value="false"/>
+    <param name="channels" value="1"/>
+    <param name="interval" value="20"/>
+    <param name="timer-name" value="soft"/>
+  </directory>
+  <directory name="ringback/9" path="$${sounds_dir}/ringback/9">
+    <param name="rate" value="8000"/>
+    <param name="shuffle" value="false"/>
+    <param name="channels" value="1"/>
+    <param name="interval" value="20"/>
+    <param name="timer-name" value="soft"/>
+  </directory>
+
+  <directory name="music/1" path="$${sounds_dir}/music/1">
+    <param name="rate" value="8000"/>
+    <param name="shuffle" value="true"/>
+    <param name="channels" value="1"/>
+    <param name="interval" value="20"/>
+    <param name="timer-name" value="soft"/>
+  </directory>
+  <directory name="music/2" path="$${sounds_dir}/music/2">
+    <param name="rate" value="8000"/>
+    <param name="shuffle" value="true"/>
+    <param name="channels" value="1"/>
+    <param name="interval" value="20"/>
+    <param name="timer-name" value="soft"/>
+  </directory>
+  <directory name="music/3" path="$${sounds_dir}/music/3">
+    <param name="rate" value="8000"/>
+    <param name="shuffle" value="true"/>
+    <param name="channels" value="1"/>
+    <param name="interval" value="20"/>
+    <param name="timer-name" value="soft"/>
+  </directory>
+  <directory name="music/4" path="$${sounds_dir}/music/4">
+    <param name="rate" value="8000"/>
+    <param name="shuffle" value="true"/>
+    <param name="channels" value="1"/>
+    <param name="interval" value="20"/>
+    <param name="timer-name" value="soft"/>
+  </directory>
+  <directory name="music/5" path="$${sounds_dir}/music/5">
+    <param name="rate" value="8000"/>
+    <param name="shuffle" value="true"/>
+    <param name="channels" value="1"/>
+    <param name="interval" value="20"/>
+    <param name="timer-name" value="soft"/>
+  </directory>
+  <directory name="music/6" path="$${sounds_dir}/music/6">
+    <param name="rate" value="8000"/>
+    <param name="shuffle" value="true"/>
+    <param name="channels" value="1"/>
+    <param name="interval" value="20"/>
+    <param name="timer-name" value="soft"/>
+  </directory>
+  <directory name="music/7" path="$${sounds_dir}/music/7">
+    <param name="rate" value="8000"/>
+    <param name="shuffle" value="true"/>
+    <param name="channels" value="1"/>
+    <param name="interval" value="20"/>
+    <param name="timer-name" value="soft"/>
+  </directory>
+  <directory name="music/8" path="$${sounds_dir}/music/8">
+    <param name="rate" value="8000"/>
+    <param name="shuffle" value="true"/>
+    <param name="channels" value="1"/>
+    <param name="interval" value="20"/>
+    <param name="timer-name" value="soft"/>
+  </directory>
+  <directory name="music/9" path="$${sounds_dir}/music/9">
     <param name="rate" value="8000"/>
     <param name="shuffle" value="true"/>
     <param name="channels" value="1"/>
@@ -7,28 +128,4 @@
     <param name="timer-name" value="soft"/>
   </directory>
 
-  <directory name="moh/16000" path="$${base_dir}/sounds/music/16000">
-    <param name="rate" value="16000"/>
-    <param name="shuffle" value="true"/>
-    <param name="channels" value="1"/>
-    <param name="interval" value="20"/>
-    <param name="timer-name" value="soft"/>
-  </directory>
-
-  <directory name="moh/32000" path="$${base_dir}/sounds/music/32000">
-    <param name="rate" value="32000"/>
-    <param name="shuffle" value="true"/>
-    <param name="channels" value="1"/>
-    <param name="interval" value="20"/>
-    <param name="timer-name" value="soft"/>
-  </directory>
-  <!--
-  <directory name="moh/48000" path="$${base_dir}/sounds/music/48000">
-    <param name="rate" value="48000"/>
-    <param name="shuffle" value="true"/>
-    <param name="channels" value="1"/>
-    <param name="interval" value="10"/>
-    <param name="timer-name" value="soft"/>
-  </directory>
-  -->
 </configuration>

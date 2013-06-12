@@ -667,6 +667,12 @@ The service is responsible for managing the user databases (see below the sectio
 
     * `userdb_base_uri`: base URI (with admin access) where to create the users' databases.
 
+### Specific to hosts running the pbx service. ###
+
+    pbx:
+      group_confirm_file: location of the sound file played when confirming the call
+      group_confirm_key:  a single-digit (1-9) string
+
 ### Specific to hosts running the cdrs (CDR aggregation) service. ###
 
 To activate the CDR aggregation service:
@@ -988,10 +994,92 @@ Please note that for a number to use the registrant function, both `registrant_p
     This database is used by the voicemail system to locate the voicemail_settings record and record or playback voicemail
     messages.
 
+    This database is used by the pbx system to locate the pbx_settings record.
+
 *   `voicemail_sender`: string; the email address used to send out voicemail notifications for this number
 
     If not present, the "voicemail.sender" configuration parameter of the host running voicemail is used.
     If neither are present, the recipient's email address is used as as stop-gap.
+
+#### Local-number properties for the PBX application ####
+
+    pbx: {
+      ringback:   false, or integer between 1 and 9
+      music:      false, or integer between 1 and 9
+      voicemail:  sip URI of voicemail for this local number
+      daytime_rules: [
+        {
+          delay:          integer >= 0
+          destination:    string, either a sip URI, "voicemail",
+                          "extension 2x" or some external number
+          confirm:        boolean, if true call must be confirmed
+        },
+        { ... }
+      ],
+      nighttime_rules: [
+        {
+          delay:          integer >= 0
+          destination:    sip URI or "voicemail" or "extension 2x"
+          confirm:        boolean, if true call must be confirmed
+        },
+        { ... }
+      ],
+      short_numbers: {
+        "20": number (uses default number_domain)
+        "21": number
+        "22": number
+        "123": "voicemail"
+        "124": "nighttime_on"
+        "125": "nighttime_off"
+      }
+    }
+
+Notes:
+
+* ringback: false for default ringback, 1-9 for pre-recorded
+* music: false for no music (default), 1-9 for pre-recorded
+* voicemail: sip URI for voicemail (similar to `cfa`, cfb` sip URI)
+
+* delay: delay in seconds before this options is activated.
+* destination: either
+  - sip URI where to send the call (similar to `cfa` etc)
+  - "voicemail" to use the `voicemail` field
+  - "extension foo" to use the "foo" `short_numbers` field
+  - some number to send the call to the specified (external) number
+
+* confirm: if true, the called must press a digit to confirm call is
+    accepted.
+
+* short_numbers:
+    These are used to handle differently the specified numbers;
+    numbers not in this list are sent outbound (as normal).
+    Normally this list should be the same for all extensions in a
+    specific "pbx".
+
+* `daytime_rules` would normally include at least:
+
+      [
+        {
+          delay: 0,
+          destination: "extension" // the actual number
+          confirm: false,
+        },
+        {
+          delay: 45,
+          destination: "voicemail"
+          confirm: false,
+        }
+      ]
+
+* `nighttime_rules` would normally include:
+
+      [
+        {
+          delay: 0,
+          confirm: false,
+          destination: "voicemail"
+        }
+      ]
 
 
 whitelist/blacklist (provisioning records)
@@ -1412,4 +1500,13 @@ Each new voicemail message is stored in an individual voicemail record.
 
     The filename extension depends on the voicemail server's `format` setting. It defaults to `wav`.
 
+PBX settings records
+---------------------
 
+Each local number in the PBX application is mapped to a `user_database` in which is stored the current state of that extension.
+
+*   `_id`: type
+
+*   `type`: `pbx_settings`
+
+*   `night`: boolean; false to use the daytime rule-set; true to use the nighttime rule-set.

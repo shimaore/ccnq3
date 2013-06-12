@@ -1,0 +1,8 @@
+<extension name="cleanup-called-pbx">
+  <condition field="destination_number" expression="^(2.*)$">
+    <action application="set" data="ccnq_to_e164=extension $1"/>
+    <action application="transfer" data="call"/>
+  </condition>
+</extension>
+
+<X-PRE-PROCESS cmd="include" data="france-egress.xml.template"/>
