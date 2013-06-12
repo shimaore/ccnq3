@@ -1,3 +1,13 @@
+ccnq3 (0.0.172) unstable; urgency=low
+
+  * opensips: fix contact on ACK
+  * lib/ccnq3: add supercouch support.
+  * group creation
+  * Initial code for pbx application.
+  * pbx: standardized sound files names
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Wed, 12 Jun 2013 18:28:57 +0200
+
 ccnq3 (0.0.171) unstable; urgency=low
 
   * debian: `nice` installation
