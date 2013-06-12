@@ -9,8 +9,8 @@ Profile: use "send call to socket" in "client-sbc" model with `profile_type` set
     object_param = (o) ->
       ([k,v].join('=') for k,v of o).join(',')
 
-    nighttime_on_message  = '/usr/share/freeswitch/sounds/transfer-est-actif.wav'
-    nighttime_off_message = '/usr/share/freeswitch/sounds/transfer-est-inactif.wav'
+    nighttime_on_message  = '/usr/share/freeswitch/sounds/transfer-activated.wav'
+    nighttime_off_message = '/usr/share/freeswitch/sounds/transfer-deactivated.wav'
 
     ccnq3.config (config)->
 
