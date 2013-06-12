@@ -5,7 +5,7 @@
 , "keywords": ["ccnq3"]
 , "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" }
 , "scripts": {
-    "start": "daemon -n ccnq3_pbx -o daemon.debug -r -D \"`pwd`/node\" -- ./pbx.coffee"
+    "start": "daemon -n ccnq3_pbx -o daemon.debug -r -D \"`pwd`/node\" -- coffee ./pbx.coffee.md"
   , "stop":  "daemon -n ccnq3_pbx -o daemon.debug --stop"
   }
 , "dependencies": {
