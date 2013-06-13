@@ -209,5 +209,11 @@ ddoc.shows.freeswitch_local_modules = p_fun (doc,req) ->
 
     """
 
+  if doc.pbx?
+    send """
+      <load module="mod_local_stream"/>
+
+    """
+
   send "\n</include>"
   return {}
