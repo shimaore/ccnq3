@@ -1,7 +1,7 @@
 @include = ->
 
   pico = require 'pico'
-  uuid = require 'node-uuid'
+  uuid = require 'uuid'
   config = null
   require('ccnq3').config (c) -> config = c
 
