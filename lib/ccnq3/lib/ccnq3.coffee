@@ -237,3 +237,35 @@ ccnq3.db =
     path = uri.path
     couch = supercouch base
     couch.db path
+
+
+dgram = require 'dgram'
+
+ccnq3.opensips =
+
+  # The callback is called with (err,buffer)
+  mi: (host = '127.0.0.1',port,command,cb) ->
+    # Looking at the mi_datagram code source, it looks like the response
+    # must fit in a single datagram.
+    # If this isn't the case then this code needs to be rewritten.
+
+    client = dgram.createSocket 'udp4'
+
+    client.on 'error', cb
+
+    on_timeout = ->
+      client.close()
+      cb 'timeout'
+
+    timeout = null
+
+    client.on 'message', (msg,rinfo) ->
+      clearTimeout timeout
+      client.close()
+      cb null, msg
+
+    message = new Buffer(command)
+    client.send message, 0, message.length, port, host, (e,bytes) ->
+      if e
+        cb e
+      timeout = setTimeout on_timeout, 2000

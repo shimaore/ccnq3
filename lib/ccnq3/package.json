@@ -1,6 +1,6 @@
 {
   "name": "ccnq3",
-  "version": "0.4.14",
+  "version": "0.4.15",
   "description": "CCNQ3 tools",
   "keywords": ["ccnq3"],
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
@@ -17,7 +17,6 @@
     "prepublish": "coffee -c lib/ccnq3.coffee"
   , "postpublish": "rm -f lib/ccnq3.js"
   },
-  "engines": { "node": ">=0.4.7" },
   "private": false,
   "ok": true
 }
