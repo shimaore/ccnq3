@@ -82,19 +82,19 @@ We rewrite them as objects
           else
             s
 
+        outcome = []
         for r in result.Contact
-          m = r.value
-          [uri,params...] = m.split /;/
-          r.uri = clean_value uri
+          [uri,params...] = r.value.split /;/
+
+          o =
+            uri: clean_value uri
           for p in params
             [key,value] = p.split /[=]/
-            r[key] = clean_value value
+            o[key] = clean_value value
 
-and remove the original text response.
+          outcome.push o
 
-          delete r.value
-
-        cb result.Contact
+        cb outcome
 
 Tools
 =====
