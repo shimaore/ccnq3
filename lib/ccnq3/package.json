@@ -1,12 +1,14 @@
 {
   "name": "ccnq3",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "CCNQ3 tools",
   "keywords": ["ccnq3"],
+  "homepage": "https://github.com/shimaore/ccnq3",
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
   "main": "lib/ccnq3.js",
   "files": [
     "lib/ccnq3.js"
+  , "lib/opensips.js"
   ],
   "dependencies": {
     "pico": ">=0.1.10"
