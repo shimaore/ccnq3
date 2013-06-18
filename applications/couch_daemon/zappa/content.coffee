@@ -48,7 +48,7 @@
   fs.readdir './include', (err,names) =>
     return if err
     for name in names
-      if name.match /\.coffee$/
+      if name.match /(\.js|\.coffee|\.coffee\.md)$/
         @include path.join './include', name
 
   return
