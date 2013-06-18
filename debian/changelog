@@ -1,3 +1,10 @@
+ccnq3 (0.0.177) unstable; urgency=low
+
+  * registration status: corrected
+  * registration status: actually rewrite the result as an hash.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 18 Jun 2013 16:03:11 +0200
+
 ccnq3 (0.0.176) unstable; urgency=low
 
   * opensips: updates on amqp client
