@@ -1,6 +1,6 @@
 {
   "name": "ccnq3",
-  "version": "0.4.15",
+  "version": "0.5.1",
   "description": "CCNQ3 tools",
   "keywords": ["ccnq3"],
   "author": { "name": "Stephane Alnet", "email": "stephane@shimaore.net" },
@@ -14,8 +14,9 @@
   , "supercouch": "*"
   },
   "scripts": {
-    "prepublish": "coffee -c lib/ccnq3.coffee"
-  , "postpublish": "rm -f lib/ccnq3.js"
+    "prepublish": "coffee -c lib/ccnq3.coffee lib/opensips.coffee.md"
+  , "postpublish": "rm -f lib/ccnq3.js lib/opensips.js"
+  , "test": "coffee lib/test.coffee.md"
   },
   "private": false,
   "ok": true
