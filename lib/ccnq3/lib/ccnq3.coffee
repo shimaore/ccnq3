@@ -239,6 +239,4 @@ ccnq3.db =
     couch.db path
 
 
-dgram = require 'dgram'
-
 ccnq3.opensips = require './opensips'

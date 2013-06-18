@@ -1,6 +1,8 @@
 OpenSIPS tooling
 ================
 
+    dgram = require 'dgram'
+
     opensips =
 
 The callback is called with (error,buffer).
