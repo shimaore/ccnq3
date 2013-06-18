@@ -1,14 +1,19 @@
 Overview
---------
+========
 
-This is an AMQP agent for OpenSIPS.
+This is a CCNQ3 application
+
+    ccnq3 = require 'ccnq3'
+
+which implements an AMQP agent for OpenSIPS.
+
+    ccnq3.amqp (c) ->
 
 Registration Status
--------------------
+===================
 
 The agent provides registration status for a given user.
 
-    ccnq3.amqp (c) ->
       c.exchange 'registration', {type:'topic',durable:true}, (e) ->
 
 The request comes as an AMQP event.
@@ -29,7 +34,8 @@ The response is sent back over AMQP.
 
               c.publish reply_to, response
 
-### Registration Status Handler ###
+Registration Status Handler
+---------------------------
 
 This part actual sends the command to OpenSIPS and parses the response.
 
@@ -48,56 +54,40 @@ The external commands issued via DATAGRAM interface must follow the following sy
 * `arg_value = not-quoted_string | '"' string '"'`
 * `not-quoted_string = string - {',",\n,\r}`
 
-      command = [
-        ':ul_show_contact:'
-        'location'
+      command = ccnq3.opensips.command 'ul_show_contact',
+        'location',
         request.username
-      ].map( (x) -> x+"\n" ).join ''
 
       ccnq3.opensips.mi null, mi_port, command, (error,response) ->
 
         if error
           return cb {error}
 
-Parse the response (a Buffer instance):
+        result = ccnq3.opensips.parse response
 
-        response = response.toString 'utf-8'
-
-The first line is a status line, while any remaining line should contain data.
-
-        [status,lines] = response.split /\n/
-
-First handle errors. We might for example get '404 AOR not found' or some other message.
-
-        if status isnt '200 OK'
-          cb {error:'status', status}
-          return
-
-If successful we get a line (or lines?) which looks like
+If successful we get one or more Contact entries which look like
 ```
 Contact:: <sip:..@...>;q=;expires=726;flags=..;cflags=..;socket=...;methods=...;user_agent=<...>
 ```
-There's a more generic format for parsing; we don't use it here.
 
-        result = {contacts:[]}
+We rewrite them as objects
 
-        for line in lines
-          m = line.match /^Contact:: (.*)$/
-          [uri,params...] = m[1].split /;/
-          r = {uri}
+        for r in result.Contact
+          m = r.value
+          [uri,params...] = m.split /;/
+          r.uri = uri
           for p in params
             [key,value] = p.split /[=]/
             r[key] = value
-          result.contacts.push r
+
+and remove the original text response.
+
+          delete r.value
 
         cb result
 
 Tools
------
-
-This is a CCNQ3 application.
-
-    ccnq3 = require 'ccnq3'
+=====
 
 We need access to the local configuration,
 

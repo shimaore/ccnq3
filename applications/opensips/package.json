@@ -14,7 +14,7 @@
   , "compact": "cd couchapps && ./compact.coffee"
   },
   "dependencies": {
-    "ccnq3": ">=0.3.3"
+    "ccnq3": ">=0.5"
   , "zappajs": "0.4"
   , "couchapp": "*"
   , "coffee-script": ">=1.1.2"
