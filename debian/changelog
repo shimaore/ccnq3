@@ -1,3 +1,18 @@
+ccnq3 (0.0.174) unstable; urgency=low
+
+  * freeswitch: load module for pbx application
+  * lib: initial attempt at formalizing the UDP MI interface
+  * `node-uuid` and `uuid` are one and the same?
+  * opensips: initial code for AMQP-based registration status retrieval
+  * lib: split opensips code out; add response parser and tests.
+  * opensips: use the new library version
+  * lib: be nice and provide a backlink
+  * lib: corrected dependency
+  * lib: version bump
+  * opensips: clean `<...>`-escaped strings in Contact.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 18 Jun 2013 13:06:30 +0200
+
 ccnq3 (0.0.173) unstable; urgency=low
 
   * pbx: provide defaults for configuration parameters.
