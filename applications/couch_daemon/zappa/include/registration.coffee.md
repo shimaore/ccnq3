@@ -10,23 +10,29 @@
         if not @req.user?
           return @failure error:"Not authorized (probably a bug)"
 
+        username = @params.username
         reply_to = uuid()
 
-        request = {username,reply_to}
+        request = {username}
 
         ccnq3.amqp (c) =>
           if c?
             c.exchange 'registration', {type:'topic',durable:true}, (e) =>
 
-The response is sent back using the specified queue.
+The response is sent back using the specified queue
 
               c.queue reply_to, exclusive:true, (q) ->
-                q.bind 'response'
+
+which is bound to a topic with the same name.
+
+                q.bind e, reply_to
                 q.subscribe (doc) ->
                   c.end()
                   @success doc
 
-              e.publish 'request', request
+The request is sent using topic `request`. The queue on the server is bound to that topic.
+
+              e.publish 'request', request, replyTo:reply_to
           else
             @failure error:"No connection to AMQP server."
         return

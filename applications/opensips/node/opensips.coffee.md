@@ -20,11 +20,11 @@ The request comes as an AMQP event.
 
         c.queue "registration-request-#{config.host}", (q) ->
           q.bind e, 'request'
-          q.subscribe (request) ->
+          q.subscribe (request,headers,info) ->
 
 The request contains the name of the queue to which we should reply.
 
-            {reply_to} = request
+            reply_to = info.replyTo
 
 OpenSIPS is queried for the response.
 
@@ -32,7 +32,7 @@ OpenSIPS is queried for the response.
 
 The response is sent back over AMQP.
 
-              c.publish reply_to, response
+              e.publish reply_to, response
 
 Registration Status Handler
 ---------------------------
@@ -64,6 +64,9 @@ The external commands issued via DATAGRAM interface must follow the following sy
           return cb {error}
 
         result = ccnq3.opensips.parse response
+
+        if result.error?
+          return cb result
 
 If successful we get one or more Contact entries which look like
 ```
