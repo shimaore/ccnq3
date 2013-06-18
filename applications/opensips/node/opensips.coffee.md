@@ -72,19 +72,26 @@ Contact:: <sip:..@...>;q=;expires=726;flags=..;cflags=..;socket=...;methods=...;
 
 We rewrite them as objects
 
+        clean_value = (s) ->
+          return s if typeof s isnt 'string'
+          if s[0] is '<' and s[s.length-1] is '>'
+            s.substr(1,s.length-2)
+          else
+            s
+
         for r in result.Contact
           m = r.value
           [uri,params...] = m.split /;/
-          r.uri = uri
+          r.uri = clean_value uri
           for p in params
             [key,value] = p.split /[=]/
-            r[key] = value
+            r[key] = clean_value value
 
 and remove the original text response.
 
           delete r.value
 
-        cb result
+        cb result.Contact
 
 Tools
 =====
