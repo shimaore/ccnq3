@@ -1,0 +1,5 @@
+#!/bin/bash
+# Kill processes older than 10 minutes and owned by ccnq3
+killall -o 10m -u ccnq3 -q ngrep
+killall -o 10m -u ccnq3 -q tshark
+killall -o 10m -u ccnq3 -q mergecap
