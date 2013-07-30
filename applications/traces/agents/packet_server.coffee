@@ -5,6 +5,8 @@ fs = require 'fs'
 byline = require 'byline'
 events = require 'events'
 
+minutes = 60*1000 # milliseconds
+
 ## Fields returned in the "JSON" response.
 # An additional field "intf" indicates on which interface
 # the packet was captured.
@@ -135,9 +137,15 @@ module.exports = (options) ->
     pcap = exec pcap_command,
       stdio: ['ignore','ignore','ignore']
 
+    pcap_kill = ->
+      pcap.kill()
+
+    pcap_kill_timer = setTimeout pcap_kill, 10*minutes
+
     # Wait for the pcap_command to terminate.
     pcap.on 'exit', (code) ->
       console.dir on:'exit', code:code, pcap_command:pcap_command
+      clearTimeout pcap_kill_timer
       if code isnt 0
         # Remove the temporary (pcap) file
         fs.unlink fh
@@ -148,8 +156,14 @@ module.exports = (options) ->
       tshark = spawn 'nice', tshark_command,
         stdio: ['ignore','pipe','ignore']
 
+      tshark_kill = ->
+        tshark.kill()
+
+      tshark_kill_timer = setTimeout tshark_kill, 10*minutes
+
       tshark.on 'exit', (code) ->
         console.dir on:'exit', code:code, tshark_command:tshark_command
+        clearTimeout tshark_kill_timer
         # Remove the temporary (pcap) file, it's not needed anymore.
         fs.unlink fh
         # The response is complete
