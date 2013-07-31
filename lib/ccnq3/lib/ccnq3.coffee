@@ -30,6 +30,9 @@ amqp = (cb) ->
       ccnq3.amqp.connection = connection
       connection.on 'ready', ->
         cb? connection
+        # There is a bug? in AMQP that makes it call 'ready' repeatedly.
+        # This works around it.
+        cb = null
     else
       cb? null
   return
