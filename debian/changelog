@@ -1,3 +1,11 @@
+ccnq3 (0.0.180) unstable; urgency=low
+
+  * traces: work around AMQP bug
+  * lib: version bump
+  * traces: update dependencies to newer ccnq3-lib
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Wed, 31 Jul 2013 17:09:22 +0200
+
 ccnq3 (0.0.179) unstable; urgency=low
 
   * traces: add timeout on children processes
