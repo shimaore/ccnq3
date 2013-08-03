@@ -625,6 +625,25 @@ commands =
                 console.dir task
     return
 
+  'app': ->
+    ccnq3.config (config) ->
+      console.log config.applications?.join ', '
+
+  'app start': (app) -> do_app app, 'start'
+  'app stop': (app) -> do_app app, 'stop'
+  'app restart': (app) -> do_app app, 'restart'
+  'app compact': (app) -> do_app app, 'run-script compact'
+  'app couchapps': (app) -> do_app app, 'run-script couchapps'
+
+do_app = (app,cmd) ->
+  ccnq3.config (config) ->
+    unless app in config.applications
+      console.error "Unknown application #{app}"
+      return
+    path = require 'path'
+    {exec} = require 'child_process'
+    child_process.exec "cd #{path.join(config.source,app)} && npm #{cmd}"
+
 #### main
 
 run = ->
