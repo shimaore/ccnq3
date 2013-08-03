@@ -14,7 +14,7 @@ module.exports = (config,doc) ->
   console.dir doc: doc
 
   # Stubbornly refuse to print out all packets.
-  return unless doc.to_user? or doc.from_user? or doc.call_id?
+  return unless doc.to_user? or doc.from_user? or doc.call_id? or doc.ip?
 
   ## Generate a merged capture file
   # ngrep is used to pre-filter packets
@@ -50,6 +50,9 @@ module.exports = (config,doc) ->
   tshark_filter.push """
     sip.Call-ID == "#{doc.call_id}"
   """ if doc.call_id?
+  tshark_filter.push """
+    (ip.addr == "#{doc.ip}" || ipv6.addr == "#{doc.ip}")
+  """ if doc.ip?
   tshark_filter = tshark_filter.join ' && '
 
   options =

@@ -36,6 +36,7 @@ Architecture: all
 Depends:
   ccnq3 (= ${binary:Version}),
   couchdb (=1.2.1-1)
+Conflicts:  erlang (>= 1:16)
 Recommends: ccnq3-munin-couchdb
 Description: Installs CouchDB for CCNQ3
   This package will configure CouchDB for a CCNQ3 manager server,
@@ -55,6 +56,7 @@ Architecture: all
 Depends:
   ccnq3 (= ${binary:Version}),
   couchdb (=1.2.1-1)
+Conflicts:  erlang (>= 1:16)
 Conflicts: ccnq3-manager, ccnq3-manager-shared
 Description: Bootstrap the ccnq3 system in non-manager mode.
   This package installs the ccnq3 system in non-manager mode by
