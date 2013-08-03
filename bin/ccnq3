@@ -603,6 +603,28 @@ commands =
 
     return
 
+  'tasks': ->
+    ccnq3.config (config) ->
+      uri = config.admin.couchdb_uri ? 'http://127.0.0.1:5984'
+      couch = pico.request uri
+      couch '_active_tasks', json:true, (e,r,b) ->
+        if e? or not b?
+          console.error "Unable to retrieve active tasks, sorry."
+          return
+        for task in b
+          do (task) ->
+            switch task.type
+              when 'replication'
+                behind = task.source_seq - task.checkpointed_source_seq
+                name = if task.source.match /^http/ then task.target else task.source
+                console.log "Replication for #{name} is #{task.progress}% complete (#{behind} behind)."
+              when 'compaction'
+                behind = task.total_changes - task.changes_done
+                console.log "Compaction for #{task.database} is #{task.progress}% complete (#{behind} left)."
+              else
+                console.dir task
+    return
+
 #### main
 
 run = ->
