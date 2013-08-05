@@ -1,3 +1,11 @@
+ccnq3 (0.0.184) unstable; urgency=low
+
+  * bin: better layout for `app`; fix `app_*`
+  * freeswitch: add `show calls count`, move commands in a separate module, move to new (promise-based) esl
+  * freeswitch: add amqp-listener
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Mon, 05 Aug 2013 22:14:21 +0200
+
 ccnq3 (0.0.183) unstable; urgency=low
 
   * Corrected Conflicts line.
