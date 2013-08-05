@@ -7,49 +7,6 @@ Released under the AGPL3 license
 util = require 'util'
 make_id = (t,n) -> [t,n].join ':'
 
-esl = require 'esl'
-fs_command = (cmd,cb) ->
-  util.log "Executing #{cmd}"
-  client = esl.createClient()
-  client.on 'esl_auth_request', (call) ->
-    call.auth 'CCNQ', (call) ->
-      call.api cmd, (call) ->
-        call.exit (call) ->
-          client.end()
-  if cb?
-    client.on 'close', cb
-  client.connect(8021, '127.0.0.1')
-
-process_changes = (commands) ->
-
-  for profile_name, command of commands when profile_name.match /^(ingress-|egress-)/
-    switch command
-      when 'start'
-        fs_command "sofia profile #{profile_name} start"
-      when 'restart'
-        fs_command "sofia profile #{profile_name} restart reloadxml"
-      when 'stop'
-        fs_command "sofia profile #{profile_name} stop"
-
-  # Following commands are not module-specific.
-  if commands.freeswitch?
-    switch commands.freeswitch
-      when 'reload sofia'
-        fs_command "unload mod_sofia", ->
-          fs_command "load mod_sofia"
-      when 'pause inbound'
-        fs_command "fsctl pause inbound"
-      when 'pause outbound'
-        fs_command "fsctl pause outbound"
-      when 'resume inbound'
-        fs_command "fsctl resume inbound"
-      when 'resume outbound'
-        fs_command "fsctl resume outbound"
-      when 'restart elegant'
-        fs_command "fsctl restart elegant"
-      when 'restart asap'
-        fs_command "fsctl restart asap"
-
 request = require 'request'
 fs = require 'fs'
 save_uri_as = (uri,file,cb)->
@@ -118,7 +75,7 @@ require('ccnq3').config (config) ->
     # 2. Process any command
     process_commands = ->
       if p.sip_commands?
-        process_changes p.sip_commands
+        (require './process-changes') p.sip_commands
       return
 
     write_config_files -> apply_configuration_changes -> process_commands()
