@@ -1,3 +1,10 @@
+ccnq3 (0.0.182) unstable; urgency=low
+
+  * bin: `tasks` report
+  * bin: add `app` management options
+
+ -- stephane <stephane@voyageur.shimaore.net>  Mon, 05 Aug 2013 14:48:35 +0200
+
 ccnq3 (0.0.181) unstable; urgency=low
 
   * traces: Added "ip" parameter. (#54)
