@@ -99,3 +99,6 @@ require './cdr-swiper'
 
 # Start the CDR cleaner
 require './cdr-cleaner'
+
+# Start the AMQP commands listener
+require './amqp-listener'
