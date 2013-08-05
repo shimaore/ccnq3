@@ -1,3 +1,9 @@
+ccnq3 (0.0.185) unstable; urgency=low
+
+  * freeswitch/commands: try with double `bind` (might not work) couch_daemon: add `commands` interface.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Mon, 05 Aug 2013 22:45:23 +0200
+
 ccnq3 (0.0.184) unstable; urgency=low
 
   * bin: better layout for `app`; fix `app_*`
