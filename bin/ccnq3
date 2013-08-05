@@ -627,7 +627,7 @@ commands =
 
   'app': ->
     ccnq3.config (config) ->
-      console.log config.applications?.join ', '
+      console.log config.applications?.join '\n'
 
   'app start': (app) -> do_app app, 'start'
   'app stop': (app) -> do_app app, 'stop'
@@ -642,7 +642,7 @@ do_app = (app,cmd) ->
       return
     path = require 'path'
     {exec} = require 'child_process'
-    child_process.exec "cd #{path.join(config.source,app)} && npm #{cmd}"
+    exec "cd #{path.join(config.source,app)} && npm #{cmd}"
 
 #### main
 
