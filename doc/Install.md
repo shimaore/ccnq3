@@ -220,6 +220,8 @@ Additionally I recommend modifying the rsyslog configuration to either a central
     $ModLoad imuxsock # provides support for local system logging
     $ModLoad imklog   # provides kernel logging support (previously done by rklogd)
     $ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
+    $SystemLogRateLimitInterval 0
+    $SystemLogRateLimitBurst 0
     $FileOwner root
     $FileGroup adm
     $FileCreateMode 0640
