@@ -1,3 +1,10 @@
+ccnq3 (0.0.186) unstable; urgency=low
+
+  * doc: rsyslog without rate-limiting, please
+  * FS/cdr swiper: work around EMFILE issue by serializing readdir swiper
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 13 Aug 2013 12:00:46 +0200
+
 ccnq3 (0.0.185) unstable; urgency=low
 
   * freeswitch/commands: try with double `bind` (might not work) couch_daemon: add `commands` interface.
