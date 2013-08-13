@@ -18,35 +18,37 @@ pico = require 'pico'
 require('ccnq3').config (config) ->
 
   # When a new file is detected,
-  handle_file = (filename) ->
+  handle_file = (filename,cb) ->
     # We first confirm that it is a JSON CDR file
     if filename.match cdr_pattern
       # Then attempt to read it into memory
       fs.readFile filename, 'utf8', (err,data) ->
         if err
           console.log "readFile #{filename}: #{err}"
-          return
+          cb? false; return
         # If successful, we attempt to parse the JSON content
         try
           content = JSON.parse data
         catch e
           console.log "Not JSON in #{filename}"
-          return
+          cb? false; return
         # And attempt post that JSON content
         db.request.post json:content, (e,r,b) ->
           # This might fail because of network issues,
           if e
             console.log "Post #{filename}: #{e}"
-            return
+            cb? false; return
           # Or because of database issues.
           if not b.ok
             console.log "Post #{filename}: #{require('util').inspect b}"
-            return
+            cb? false; return
           # If successful, we finally attempt to remove the CDR file.
           fs.unlink filename, (err) ->
             if err
               console.log "unlink #{filename}: #{err}"
-              return
+              cb? false; return
+            cb? true
+            return
 
   # We attemtpt to push the CDRs to config.cdr_uri, the same location
   # FreeSwitch's mod_json_cdr is configured to use.
@@ -61,9 +63,13 @@ require('ccnq3').config (config) ->
   read_all = ->
     fs.readdir dirname, (err,filenames) ->
       if filenames? and filenames.length
-        for filename in filenames
-          console.log "readdir: Found #{filename}"
-          handle_file path.join dirname, filename
+        read_one = ->
+          if filenames.length > 0
+            filename = filenames.shift()
+            console.log "readdir: Found #{filename}"
+            handle_file path.join(dirname, filename), read_one
+          return
+        do read_one
 
   # We attempt to upload the files which are present at startup,
   # then re-read at regular intervals.
