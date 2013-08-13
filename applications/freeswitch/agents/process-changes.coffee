@@ -50,3 +50,4 @@ process_changes = (commands,cb) ->
         fs_command "show calls count", cb
 
 module.exports = process_changes
+module.exports.fs_command = fs_command

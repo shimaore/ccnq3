@@ -6,6 +6,7 @@ Released under the AGPL3 license
 
 util = require 'util'
 make_id = (t,n) -> [t,n].join ':'
+{fs_command} = require './process-changes'
 
 request = require 'request'
 fs = require 'fs'
