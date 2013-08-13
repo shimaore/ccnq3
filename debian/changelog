@@ -1,3 +1,9 @@
+ccnq3 (0.0.187) unstable; urgency=low
+
+  * freeswitch: re-export fs_command
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 13 Aug 2013 14:32:50 +0200
+
 ccnq3 (0.0.186) unstable; urgency=low
 
   * doc: rsyslog without rate-limiting, please
