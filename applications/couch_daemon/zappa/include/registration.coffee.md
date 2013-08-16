@@ -27,7 +27,7 @@
 
 The response is sent back using the specified queue
 
-              c.queue reply_to, exclusive:true, (q) =>
+              c.queue reply_to, exclusive:true, durable:no, autoDelete:true, (q) =>
 
 which is bound to a topic with the same name.
 
