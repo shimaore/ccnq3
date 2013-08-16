@@ -1,3 +1,10 @@
+ccnq3 (0.0.189) unstable; urgency=low
+
+  * registration: still getting stuck queues
+  * traces: add pcap_tail
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Fri, 16 Aug 2013 22:36:31 +0200
+
 ccnq3 (0.0.188) unstable; urgency=low
 
   * freeswitch: respond 503 to OPTIONS when busy
