@@ -106,7 +106,7 @@ module.exports = (options) ->
     pcap_command = """
       nice find '#{options.trace_dir}' -maxdepth 1 -type f -size +80c \\
         -name '#{intf ? '[a-z]'}*.pcap*' #{options.find_filter ? ''} -print0 |  \\
-      nice xargs -0 -r mergecap -w - | \\
+      nice xargs -0 -r mergecap -F libpcap -w - | ./pcap_tail | \\
       nice ngrep -i -l -q -I - -O '#{fh}' '#{options.ngrep_filter}' >/dev/null
     """
 

@@ -16,6 +16,7 @@
   , "pico": ">=0.1.0"
   , "byline": ">=2.0.3"
   , "stream-buffers": "*"
+  , "pcap-parser": "*"
   },
   "engines": { "node": ">=0.6.6", "coffee": ">=1.1.2" },
 
