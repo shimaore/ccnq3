@@ -1,3 +1,10 @@
+ccnq3 (0.0.188) unstable; urgency=low
+
+  * freeswitch: respond 503 to OPTIONS when busy
+  * couch_daemon: add timeout for registration requests
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Thu, 15 Aug 2013 18:19:04 +0200
+
 ccnq3 (0.0.187) unstable; urgency=low
 
   * freeswitch: re-export fs_command
