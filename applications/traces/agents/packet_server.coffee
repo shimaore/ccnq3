@@ -148,7 +148,9 @@ module.exports = (options) ->
       clearTimeout pcap_kill_timer
       if code isnt 0
         # Remove the temporary (pcap) file
-        fs.unlink fh
+        fs.unlink fh, (err) ->
+          if err
+            console.dir error:err, when: "unlink #{fh}"
         # The response is complete
         self.close()
         return
@@ -165,7 +167,9 @@ module.exports = (options) ->
         console.dir on:'exit', code:code, tshark_command:tshark_command
         clearTimeout tshark_kill_timer
         # Remove the temporary (pcap) file, it's not needed anymore.
-        fs.unlink fh
+        fs.unlink fh, (err) ->
+          if err
+            console.dir error:err, when: "unlink #{fh}"
         # The response is complete
         self.close()
 
