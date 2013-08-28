@@ -1,14 +1,11 @@
 ccnq3 (0.0.190) unstable; urgency=low
 
-  [ Stéphane Alnet ]
   * traces: actually shouldn't tail at that point
   * traces: properly log `unlink`
   * traces: made pcap_tail into a module
   * trace: initial attempts at full Node.js packet merging/selection.
 
-  [ Stephane Alnet (Packaging) ]
-
- -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Wed, 28 Aug 2013 12:00:51 +0200
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Wed, 28 Aug 2013 12:05:24 +0200
 
 ccnq3 (0.0.189) unstable; urgency=low
 
