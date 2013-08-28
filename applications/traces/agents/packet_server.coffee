@@ -2,6 +2,8 @@
 #
 {exec,spawn} = require('child_process')
 fs = require 'fs'
+path = require 'path'
+zlib = require 'zlib'
 byline = require 'byline'
 events = require 'events'
 
@@ -57,7 +59,7 @@ tshark_line_parser = (t) ->
 # Options are:
 #   interface
 #   trace_dir
-#   find_filter
+#   find_since
 #   ngrep_filter
 #   tshark_filter
 #   pcap          if provided, a PCAP filename
@@ -103,12 +105,54 @@ module.exports = (options) ->
     fh = "#{options.trace_dir}/.tmp.cap1.#{Math.random()}"
 
     ## Generate a merged capture file
-    pcap_command = """
-      nice find '#{options.trace_dir}' -maxdepth 1 -type f -size +80c \\
-        -name '#{intf ? '[a-z]'}*.pcap*' #{options.find_filter ? ''} -print0 |  \\
-      nice xargs -0 -r mergecap -F libpcap -w - | \\
-      nice ngrep -i -l -q -I - -O '#{fh}' '#{options.ngrep_filter}' >/dev/null
-    """
+
+    # This function tests whether a file is an acceptable input PCAP file.
+    is_acceptable = (name,stats) ->
+      return no unless name.match /^[a-z].+\.pcap/
+      if intf?
+        return no unless name[0...intf.length] is intf
+      return no unless stats.isFile() and stats.size > 80
+      file_time = stats.mtime.getTime()
+      if options.find_since?
+        return no unless options.find_since < file_time
+      yes
+
+    fs.readdir options.trace_dir, (err,files) ->
+      if err
+        console.error 'readdir(#{options.trace_dir}): #{err}'
+        return
+
+      next = (acc,last) ->
+        if names.length is 0
+          last acc
+
+        name = files.shift()
+
+        full_name = path.join options.trace_dir, name
+        fs.stat full_name, (err,stats) ->
+          if err
+            console.error 'stat(#{full_name}): #{err}'
+          else
+            if is_acceptable name, stats
+              acc.push name:full_name, time:stats.mtime.getTime()
+          next acc, last
+
+      next [], (proper_files) ->
+        proper_files.sort (a,b) -> a.time - b.time
+
+        # `proper_files` now contains a sorted list of *pcap* files.
+        # We build a stash using the last 500 packets matching `ngrep_filter`.
+        next = (stash,last) ->
+          if proper_files.length is 0
+            last stash
+          file = proper_files.shift()
+          input = fs.createReadStream(file)
+          input = input.pipe zlib.createGunzip() if file.match /gz$/
+          pcap_tail.tail input, options.ngrep_filter, options.ngrep_limit ? 500, stash, (stash) ->
+            next stash, last
+
+        next [], (stash) ->
+          pcap_tail.write fs.createWriteStream(fh), stash, run_tshark
 
     ## Select the proper packets
     if options.pcap?
@@ -133,28 +177,9 @@ module.exports = (options) ->
         console.log "Linestream error"
         seld.end()
 
-    # Fork the find/mergecap/ngrep pipe.
-    pcap = exec pcap_command,
-      stdio: ['ignore','ignore','ignore']
-
-    pcap_kill = ->
-      pcap.kill()
-
-    pcap_kill_timer = setTimeout pcap_kill, 10*minutes
-
     # Wait for the pcap_command to terminate.
-    pcap.on 'exit', (code) ->
-      console.dir on:'exit', code:code, pcap_command:pcap_command
-      clearTimeout pcap_kill_timer
-      if code isnt 0
-        # Remove the temporary (pcap) file
-        fs.unlink fh, (err) ->
-          if err
-            console.dir error:err, when: "unlink #{fh}"
-        # The response is complete
-        self.close()
-        return
 
+    run_tshark = ->
       tshark = spawn 'nice', tshark_command,
         stdio: ['ignore','pipe','ignore']
 

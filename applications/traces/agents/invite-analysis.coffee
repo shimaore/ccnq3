@@ -6,14 +6,16 @@ packet_server = require './packet_server'
 
 default_workdir = '/opt/ccnq3/traces'
 
+minutes = 60*1000
+
 ##
 # find_time: selection criteria for pcap files
-analyze = (interfaces,find_time,ngrep_filter)->
+analyze = (interfaces,find_since,ngrep_filter)->
 
   self = packet_server
     interfaces: config.traces.interfaces
     trace_dir: config.traces?.workdir ? default_workdir
-    find_filter: "-newermt '#{find_time}'"
+    find_since: find_since
     ngrep_filter: ngrep_filter
     # tshark_filter is left empty
 
@@ -37,15 +39,14 @@ aggregate = (self,ago,cb) ->
 # Look for final replies to INVITE messages.
 ngrep_filter = '^SIP/2.0 [2-6].*CSeq: [0-9]+ INVITE'
 
-minutes = 60*1000
-
 ## Do the INVITE response-code analysis for applications/monitor.
 # cb = (error,data) -> ...
 @invite_analysis = (since,cb) ->
+  find_since = new Date().getTime() - since*minutes
   require('ccnq3').config (config) ->
     interfaces = config.traces?.interfaces
     if interfaces?.length > 0
-      server = @analyze "#{since+1} minutes ago", ngrep_filter
+      server = @analyze find_since, ngrep_filter
       @aggregate server, since*minutes, cb
     else
       cb null, null
