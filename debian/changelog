@@ -1,3 +1,9 @@
+ccnq3 (0.0.192) unstable; urgency=low
+
+  * debian: trying to enforce erlang version dependency
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Wed, 28 Aug 2013 23:18:36 +0200
+
 ccnq3 (0.0.191) unstable; urgency=low
 
   * debian: add `erlang` as a dependency to force resolution of R15B installation.
