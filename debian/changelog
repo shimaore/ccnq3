@@ -1,3 +1,9 @@
+ccnq3 (0.0.193) unstable; urgency=low
+
+  * debian: revert
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Wed, 28 Aug 2013 23:30:34 +0200
+
 ccnq3 (0.0.192) unstable; urgency=low
 
   * debian: trying to enforce erlang version dependency
