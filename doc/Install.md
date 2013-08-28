@@ -11,6 +11,10 @@ Base system
 
 Your base system _must_ be a current Debian/testing system.
 
+August 2013: however Debian/testing currently contains Erlang R16B which is incompatible with released versions of CouchDB and RabbitMQ. You should also list Debian/testing in your `/etc/apt/sources.list` file and make sure that Erlang R15B (versions starting with `1:15` in Debian parlance) is used. The following command might help:
+
+    sudo aptitude install erlang=1:15.b.1-dfsg-4
+
 Hostnames and DNS
 -----------------
 
