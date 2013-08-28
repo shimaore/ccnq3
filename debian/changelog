@@ -1,3 +1,9 @@
+ccnq3 (0.0.195) unstable; urgency=low
+
+  * debian: and again
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Thu, 29 Aug 2013 00:23:00 +0200
+
 ccnq3 (0.0.194) unstable; urgency=low
 
   * debian: document erlang dependency issue
