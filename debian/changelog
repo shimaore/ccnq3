@@ -1,3 +1,9 @@
+ccnq3 (0.0.191) unstable; urgency=low
+
+  * debian: add `erlang` as a dependency to force resolution of R15B installation.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Wed, 28 Aug 2013 23:07:46 +0200
+
 ccnq3 (0.0.190) unstable; urgency=low
 
   * traces: actually shouldn't tail at that point
