@@ -80,8 +80,7 @@ Package: ccnq3-traces
 Architecture: all
 Depends:
   ccnq3 (= ${binary:Version}),
-  tshark (>=1.2), ngrep (>=1.45),
-  findutils,
+  tshark (>=1.2),
   procps, gzip
 Recommends: ccnq3-munin-traces
 Description: Installs the SIP traces in /opt/ccnq3/traces

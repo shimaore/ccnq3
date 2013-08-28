@@ -37,7 +37,9 @@ ccnq3.config (config) ->
             console.dir error:err, when: "lstat #{full}"
             return
           if stats.mtime - new Date() < -30*minutes
-            fs.unlink full
+            fs.unlink full, (err) ->
+              if err
+                console.dir error: err, when: "unlink #{full}"
 
     if debug
       ccnq3.log JSON.stringify ind, '  '
@@ -53,7 +55,10 @@ ccnq3.config (config) ->
         if debug
           ccnq3.log "unlink #{full}"
         else
-          fs.unlink full
+          fs.unlink full, (err) ->
+            if err
+              console.dir error: err, when: "unlink #{full}"
+
       files.pop() # remove current file
       for a in files
         do (a) ->
