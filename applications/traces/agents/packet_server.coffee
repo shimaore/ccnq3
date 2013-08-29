@@ -6,6 +6,7 @@ path = require 'path'
 zlib = require 'zlib'
 byline = require 'byline'
 events = require 'events'
+pcap_tail = require './pcap_tail'
 
 minutes = 60*1000 # milliseconds
 
@@ -125,6 +126,7 @@ module.exports = (options) ->
       next = (acc,last) ->
         if files.length is 0
           last acc
+          return
 
         name = files.shift()
 
@@ -142,16 +144,17 @@ module.exports = (options) ->
 
         # `proper_files` now contains a sorted list of *pcap* files.
         # We build a stash using the last 500 packets matching `ngrep_filter`.
-        next = (stash,last) ->
+        next_file = (stash,last) ->
           if proper_files.length is 0
             last stash
+            return
           file = proper_files.shift()
-          input = fs.createReadStream(file)
+          input = fs.createReadStream(file.name)
           input = input.pipe zlib.createGunzip() if file.match /gz$/
           pcap_tail.tail input, options.ngrep_filter, options.ngrep_limit ? 500, stash, (stash) ->
-            next stash, last
+            next_file stash, last
 
-        next [], (stash) ->
+        next_file [], (stash) ->
           pcap_tail.write fs.createWriteStream(fh), stash, run_tshark
 
     ## Select the proper packets

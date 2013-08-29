@@ -32,10 +32,10 @@ module.exports =
     b.writeUInt32LE 0xa1b2c3d4, 0
     b.writeUInt16LE 2, 4
     b.writeUInt16LE 4, 6
-    b.writeUInt32LE stash.globalHeader.gmtOffset, 8
-    b.writeUInt32LE stash.globalHeader.timestampAccuracy, 12
-    b.writeUInt32LE stash.globalHeader.snapshotLength, 16
-    b.writeUInt32LE stash.globalHeader.linkLayerType, 20
+    b.writeUInt32LE stash.globalHeader?.gmtOffset ? 0, 8
+    b.writeUInt32LE stash.globalHeader?.timestampAccuracy ? 0, 12
+    b.writeUInt32LE stash.globalHeader?.snapshotLength ? 65535, 16
+    b.writeUInt32LE stash.globalHeader?.linkLayerType ? 1, 20
     output_stream.write b
 
     while stash.length > 0
