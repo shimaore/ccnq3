@@ -123,7 +123,7 @@ module.exports = (options) ->
         return
 
       next = (acc,last) ->
-        if names.length is 0
+        if files.length is 0
           last acc
 
         name = files.shift()
