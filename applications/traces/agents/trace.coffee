@@ -41,19 +41,15 @@ module.exports = (config,doc) ->
     tshark_filter.push """
       frame.time >= "#{today}" && frame.time < "#{tomorrow}"
     """
-  tshark_filter.push """
-    (sip.r-uri.user contains "#{doc.to_user}" || sip.to.user contains "#{doc.to_user}")
-  """ if doc.to_user?
-  tshark_filter.push """
-    sip.from.user contains "#{doc.from_user}"
-  """ if doc.from_user?
-  tshark_filter.push """
-    sip.Call-ID == "#{doc.call_id}"
-  """ if doc.call_id?
+
   tshark_filter.push """
     (ip.addr == "#{doc.ip}" || ipv6.addr == "#{doc.ip}")
   """ if doc.ip?
-  tshark_filter = tshark_filter.join ' && '
+
+  if tshark_filter.length > 0
+    tshark_filter = tshark_filter.join ' && '
+  else
+    tshark_filter = 'ip'
 
   options =
     interface: doc.interface
