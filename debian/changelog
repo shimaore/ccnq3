@@ -1,3 +1,10 @@
+ccnq3 (0.0.198) unstable; urgency=low
+
+  * traces: corrections for proper packet writing
+  * traces: tshark doesn't know what to do with IP fragments
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Fri, 30 Aug 2013 17:00:29 +0200
+
 ccnq3 (0.0.197) unstable; urgency=low
 
   * traces: bugfixes
