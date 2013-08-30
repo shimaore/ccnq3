@@ -47,6 +47,7 @@ for f in trace_field_names
 
 tshark_line_parser = (t) ->
   return if not t?
+  t = t.toString 'utf8' # ascii?
   t.trimRight()
   values = t.split /\t/
   result = {}
@@ -150,7 +151,7 @@ module.exports = (options) ->
             return
           file = proper_files.shift()
           input = fs.createReadStream(file.name)
-          input = input.pipe zlib.createGunzip() if file.match /gz$/
+          input = input.pipe zlib.createGunzip() if file.name.match /gz$/
           pcap_tail.tail input, options.ngrep_filter, options.ngrep_limit ? 500, stash, (stash) ->
             next_file stash, last
 

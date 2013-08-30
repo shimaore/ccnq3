@@ -27,6 +27,7 @@ require('ccnq3').config (config) ->
         '-p', '-q', '-i', intf
         '-b', "filesize:#{config.traces.filesize ? default_filesize}"
         '-b', "files:#{config.traces.ringsize ? default_ringsize}"
+        '-P'
         '-w', "#{config.traces.workdir ? default_workdir}/#{intf}.pcap"
         '-f', config.traces.filter ? default_filter
       ], stdio:'ignore'
