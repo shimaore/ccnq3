@@ -35,9 +35,7 @@ Package: ccnq3-couchdb
 Architecture: all
 Depends:
   ccnq3 (= ${binary:Version}),
-  couchdb (=1.2.1-1),
-  erlang-base-hipe (=1:15.b.1-dfsg-4)
-Conflicts:  erlang (>= 1:16)
+  couchdb (>= 1.4.0)
 Recommends: ccnq3-munin-couchdb
 Description: Installs CouchDB for CCNQ3
   This package will configure CouchDB for a CCNQ3 manager server,
@@ -56,10 +54,8 @@ Package: ccnq3-client
 Architecture: all
 Depends:
   ccnq3 (= ${binary:Version}),
-  couchdb (=1.2.1-1),
-  erlang-base-hipe (=1:15.b.1-dfsg-4)
-Conflicts: ccnq3-manager, ccnq3-manager-shared,
-  erlang (>= 1:16)
+  couchdb (>= 1.4.0)
+Conflicts: ccnq3-manager, ccnq3-manager-shared
 Description: Bootstrap the ccnq3 system in non-manager mode.
   This package installs the ccnq3 system in non-manager mode by
   overwriting the local system's CouchDB configugration.
