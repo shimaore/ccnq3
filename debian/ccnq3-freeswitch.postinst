@@ -36,7 +36,8 @@ case "$1" in
 
     mkdir -p $VOICEMAIL
     chown -R freeswitch.$GROUP $VOICEMAIL
-    chmod g+w $VOICEMAIL # allow access to voicemail directory
+    chmod g+w $VOICEMAIL # allow access to voicemail directory for ccnq3 user
+    chmod u+s $VOICEMAIL # allow access to message fifo for freeswitch user
 
     mkdir -p $CDR
     chown -R freeswitch.$GROUP $CDR
