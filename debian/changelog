@@ -1,3 +1,10 @@
+ccnq3 (0.0.202) unstable; urgency=low
+
+  * install doc: updated to reflect current news
+  * voicemail: still trying to get permissions fixed!
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Wed, 11 Sep 2013 18:16:51 +0200
+
 ccnq3 (0.0.201) unstable; urgency=low
 
   * voicemail/debian: fix permissions on messages directory
