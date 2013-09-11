@@ -3,7 +3,7 @@ ccnq3 (0.0.200) unstable; urgency=low
   * opensips: do not create loops on NOTIFY
   * debian: libjson 0.11 causes opensips to crash
 
- -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 10 Sep 2013 11:06:04 +0200
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Wed, 11 Sep 2013 10:21:02 +0200
 
 ccnq3 (0.0.199) unstable; urgency=low
 
