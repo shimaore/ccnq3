@@ -69,7 +69,7 @@ record_to_url = (call,fifo_path,upload_url,next) ->
 
   if message_record_streaming
     preprocess = (cb) ->
-      child_process.exec "rm -f '#{fifo_path}'; /usr/bin/mkfifo -m 0660 '#{fifo_path}'", stdio:['ignore','ignore','pipe'], (error) ->
+      child_process.exec "rm -f '#{fifo_path}'; /usr/bin/mkfifo -m 0666 '#{fifo_path}'", stdio:['ignore','ignore','pipe'], (error) ->
         if error?
           util.log util.inspect error
           cleanup -> cb? error
