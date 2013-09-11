@@ -1,3 +1,13 @@
+ccnq3 (0.0.201) unstable; urgency=low
+
+  * voicemail/debian: fix permissions on messages directory
+  * doc: install libjson0
+  * voicemail: revert, other way to address
+
+  [ Stephane Alnet (Packaging) ]
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Wed, 11 Sep 2013 10:32:37 +0200
+
 ccnq3 (0.0.200) unstable; urgency=low
 
   * opensips: do not create loops on NOTIFY
