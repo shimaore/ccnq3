@@ -4,6 +4,7 @@
 NAME=ccnq3
 USER=ccnq3
 GROUP=daemon
+FSGROUP=freeswitch
 WORKDIR=/opt/${NAME}
 ETCDIR=/etc/ccnq3
 
@@ -22,6 +23,9 @@ case "$1" in
     if [ "`getent group $GROUP | cut -d : -f 4`" != "$USER" ]; then
       adduser "$USER" $GROUP
     fi
+    if [ "`getent group $FSGROUP | cut -d : -f 4`" != "$USER" ]; then
+      adduser "$USER" $FSGROUP
+    fi
 
     # Startup parameters
     DEFAULTS=/etc/default/freeswitch
@@ -34,9 +38,12 @@ case "$1" in
     chown -R freeswitch.$GROUP $CONF
     chmod g+w $CONF # allow access to configuration directory
 
+    # Apparently FreeSwitch is now running as freeswitch.freeswitch
     mkdir -p $VOICEMAIL
-    chown -R freeswitch.$GROUP $VOICEMAIL
+    chown -R freeswitch.$FSGROUP $VOICEMAIL
+    chgrp $FSGROUP $VOICEMAIL
     chmod g+w $VOICEMAIL # allow access to voicemail directory for ccnq3 user
+    chmod g+s $VOICEMAIL
 
     mkdir -p $CDR
     chown -R freeswitch.$GROUP $CDR
