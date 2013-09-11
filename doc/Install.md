@@ -11,11 +11,7 @@ Base system
 
 Your base system _must_ be a current Debian/testing system.
 
-Note: libjson0 breaks OpenSIPS 1.8.2. As a workaround:
-
-    curl -O ftp://ftp.debian.org/debian/pool/main/j/json-c/libjson0_0.10-1.2_amd64.deb
-    dpkg -i libjson0_0.10-1.2_amd64.deb
-    aptitude install libjson0=
+Note: libjson0 breaks OpenSIPS 1.8.2. As a workaround we include libjson0 version 0.10-1.2.
 
 Hostnames and DNS
 -----------------
@@ -109,6 +105,10 @@ Securing services on the manager host
 
 You should use HTTPS and AMQPS services instead of the default, HTTP and AMQP services.
 
+### Traffic Encryption for CouchDB
+
+Note: CouchDB 1.4.0 does not properly support SSL. For now please front-end CouchDB with `stunnel4` instead of using the following procedure.
+
 To enable HTTPS on CouchDB, add the following to `/etc/couchdb/local.ini` and make sure the SSL certificate and private key are available as `/etc/couchdb/cert.pem` and `/etc/couchdb/key.pem`, respectively:
 
     [daemons]
@@ -124,6 +124,8 @@ Then restart CouchDB (as root):
 
 This will enable HTTPS access on port 6984. (HTTP access is still available on port 5984 but we recommend you do not use it.)
 Make sure to update the URIs in the `provisioning` `host` records to point to the HTTPS URI (`https://....:6984/provisiong` instead of `http://...:5984/provisioning`, etc.).
+
+### Traffic Encryption for RabbitMQ
 
 To enable AMQPS and HTTPS on RabbitMQ, add the following to `/etc/rabbitmq/rabbitmq.config` and make sure the SSL certificate, private key, and CA certificate are available as `/etc/rabbitmq/cert.pem`, `/etc/rabbitmq/key.pem`, and `/etc/rabbitmq/cacert.pem`, respectively:
 
