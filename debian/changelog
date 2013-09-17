@@ -1,3 +1,9 @@
+ccnq3 (0.0.203) unstable; urgency=low
+
+  * debian: do not return error if no stray processes were found.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 17 Sep 2013 11:55:36 +0200
+
 ccnq3 (0.0.202) unstable; urgency=low
 
   * install doc: updated to reflect current news
