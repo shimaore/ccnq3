@@ -536,11 +536,11 @@ commands =
             password: prov_doc.password
             tags: ""
           # followAllRedirects: RabbitMQ replies 301 on success. Stupid RabbitMQ.
-          amqp_mgmt.put "users/#{escape host_user}", json:amqp_user_info, followAllRedirects:true, (e,r) ->
+          amqp_mgmt.put "users/#{escape host_user}", json:amqp_user_info, (e,r) ->
             if e?
               console.error "Could not create AMQP user: #{inspect e}"
               process.exit 1
-            unless 200 <= r.statusCode < 300
+            unless 200 <= r.statusCode < 300 or r.statusCode is 301
               console.error "Could not create AMQP user: #{r.statusCode}"
               process.exit 1
             # FIXME get the vhost from the amqp URI.
@@ -549,8 +549,11 @@ commands =
               configure: ".*"
               write: ".*"
               read: ".*"
-            amqp_mgmt.put "permissions/#{escape user_vhost}/#{escape host_user}", json:amqp_permissions, followAllRedirects:true, (e,r) ->
-              unless 200 <= r.statusCode < 300
+            amqp_mgmt.put "permissions/#{escape user_vhost}/#{escape host_user}", json:amqp_permissions, (e,r) ->
+              if e?
+                console.error "Could not create AMQP user: #{inspect e}"
+                process.exit 1
+              unless 200 <= r.statusCode < 300 or r.statusCode is 301
                 console.error "Could not create AMQP user: #{inspect e}"
                 process.exit 1
     return
