@@ -2,7 +2,7 @@ ccnq3 (0.0.203) unstable; urgency=low
 
   * debian: do not return error if no stray processes were found.
 
- -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 17 Sep 2013 11:55:36 +0200
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Thu, 19 Sep 2013 17:29:53 +0200
 
 ccnq3 (0.0.202) unstable; urgency=low
 
@@ -16,8 +16,6 @@ ccnq3 (0.0.201) unstable; urgency=low
   * voicemail/debian: fix permissions on messages directory
   * doc: install libjson0
   * voicemail: revert, other way to address
-
-  [ Stephane Alnet (Packaging) ]
 
  -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Wed, 11 Sep 2013 10:32:37 +0200
 
