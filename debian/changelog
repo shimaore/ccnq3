@@ -1,3 +1,9 @@
+ccnq3 (0.0.204) unstable; urgency=low
+
+  * bin: following the redirect might not work, even though the operation completed successfully.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Thu, 19 Sep 2013 17:32:20 +0200
+
 ccnq3 (0.0.203) unstable; urgency=low
 
   * debian: do not return error if no stray processes were found.
