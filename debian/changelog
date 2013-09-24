@@ -1,3 +1,10 @@
+ccnq3 (0.0.205) unstable; urgency=low
+
+  * opensips: added options_200 to provide default (fake) reply to OPTIONS requests.
+  * debian: replace dependency for Node.js
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 24 Sep 2013 13:55:51 +0200
+
 ccnq3 (0.0.204) unstable; urgency=low
 
   * bin: following the redirect might not work, even though the operation completed successfully.
