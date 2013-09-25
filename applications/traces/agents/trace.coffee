@@ -19,9 +19,9 @@ module.exports = (config,doc) ->
   ## Generate a merged capture file
   # ngrep is used to pre-filter packets
   ngrep_filter = []
-  ngrep_filter.push '(To|t)'+     ':[^\r\n]*' + doc.to_user   if doc.to_user?
-  ngrep_filter.push '(From|f)'+   ':[^\r\n]*' + doc.from_user if doc.from_user?
-  ngrep_filter.push '(Call-ID|i)'+':[^\r\n]*' + doc.call_id   if doc.call_id?
+  ngrep_filter.push '([Tt][Oo]|t)'+     ':[^\r\n]*' + doc.to_user   if doc.to_user?
+  ngrep_filter.push '([Ff][Rr][Oo][Mm]|f)'+   ':[^\r\n]*' + doc.from_user if doc.from_user?
+  ngrep_filter.push '([Cc][Aa][Ll][Ll]-[Ii][Dd]|i)'+':[^\r\n]*' + doc.call_id   if doc.call_id?
   ngrep_filter = ngrep_filter.join '|'
 
   ## Select the proper packets
