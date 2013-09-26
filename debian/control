@@ -149,8 +149,11 @@ Description: Meta-package for a ccnq3 system running only OpenSIPS
 Package: ccnq3-opensips
 Architecture: all
 Depends: ccnq3 (= ${binary:Version}),
-  opensips (=1.8.2-2), opensips-dbhttp-module, opensips-json-module, opensips-b2bua-module,
-  opensips-rabbitmq-module, opensips-http-modules, opensips-redis-module,
+  opensips (= ${opensips:Version}),
+  opensips-dbhttp-module (= ${opensips:Version}),
+  opensips-json-module (= ${opensips:Version}),
+  opensips-b2bua-module (= ${opensips:Version}),
+  opensips-redis-module (= ${opensips:Version}),
   netcat,
   mediaproxy-dispatcher (>= 2.5.2-20120112),
   libjson0 (=0.10-1.2)

@@ -3,7 +3,9 @@
 	dh $@ --parallel
 
 override_dh_gencontrol:
-	dh_gencontrol -- -Vfreeswitch:Version="1.2.4+git~20130217T182427Z~a4247651ca"
+	dh_gencontrol -- \
+		-Vfreeswitch:Version="1.2.4+git~20130217T182427Z~a4247651ca" \
+		-Vopensips:Version="1.10.0-1"
 
 override_dh_installinit:
 	dh_installinit -R
