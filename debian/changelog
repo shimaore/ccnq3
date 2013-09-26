@@ -1,3 +1,12 @@
+ccnq3 (0.0.207) unstable; urgency=low
+
+  * Added default value for `options_200`.
+  * Added `require_same_auth` endpoint options.
+  * Doc: added required indication for registration endpoint fields.
+  * Initial set of tests.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Thu, 26 Sep 2013 16:51:57 +0200
+
 ccnq3 (0.0.206) unstable; urgency=low
 
   * trace: account for weird-cased headers.
