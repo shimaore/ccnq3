@@ -1,3 +1,9 @@
+ccnq3 (0.0.210) unstable; urgency=low
+
+  * Remove unnecessary modules.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Thu, 26 Sep 2013 17:15:59 +0200
+
 ccnq3 (0.0.209) unstable; urgency=low
 
   * Added default value for `options_200`.
