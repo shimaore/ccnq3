@@ -1,3 +1,10 @@
+ccnq3 (0.0.211) unstable; urgency=low
+
+  * Update changelog for 0.0.207 release
+  * debian: bump up opensips dependency
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Thu, 26 Sep 2013 18:16:05 +0200
+
 ccnq3 (0.0.210) unstable; urgency=low
 
   * Remove unnecessary modules.
