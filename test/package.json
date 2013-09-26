@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "mktemp": "~0.3"
+  }
+}
