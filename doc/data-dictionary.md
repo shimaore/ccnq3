@@ -806,11 +806,11 @@ endpoint (provisioning records)
 
 ### Registration endpoint fields ###
 
-*   `password`: string; password used for authentication, or null if authentication not used
+*   `password`: string; password used for authentication, or null if authentication not used [required for registration endpoints]
 
-*   `ha1`: authentication string; hex_md5([username,challenge,password].join(":"))
+*   `ha1`: authentication string; `hex_md5([username,challenge,password].join(":"))` [required for registration endpoints]
 
-*   `ha1b`: authentication string; hex_md5([username+'@'+challenge,challenge,password].join(":"))
+*   `ha1b`: authentication string; `hex_md5([username+'@'+challenge,challenge,password].join(":"))` [required for registration endpoints]
 
 If the "challenge" configuration parameter is empty (the default), the domain name of the To: header (for REGISTER) or From: header (for other messages) is used as the challenge. In other words: normally the challenge should be the same as the domain name used for the endpoint.
 
