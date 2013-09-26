@@ -802,6 +802,8 @@ endpoint (provisioning records)
 
     If a registration endpoint, password, ha1, and ha1b are required.
 
+*   `require_same_auth` boolean; if true, this endpoint must validate both IP-based and username+password authentications for egress calls. The present record is used for username authentication (endpoint is user@domain), but an additional `user_ip` field must match. [default: false]
+
 ### Registration endpoint fields ###
 
 *   `password`: string; password used for authentication, or null if authentication not used
