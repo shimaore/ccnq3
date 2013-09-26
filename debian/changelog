@@ -1,3 +1,15 @@
+ccnq3 (0.0.209) unstable; urgency=low
+
+  * Added default value for `options_200`.
+  * Added `require_same_auth` endpoint options.
+  * Doc: added required indication for registration endpoint fields.
+  * Initial set of tests.
+  * opensips: use upstream's version of my auth code.
+  * debian: common opensips version; opensips: bump to 1.10 dependency.
+  * debian: corrected gencontrol usage
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Thu, 26 Sep 2013 17:06:44 +0200
+
 ccnq3 (0.0.206) unstable; urgency=low
 
   * trace: account for weird-cased headers.
