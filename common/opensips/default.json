@@ -71,6 +71,8 @@
   "use_endpoint_outbound_route": true,
   "use_default_outbound_route": false,
 
+  "options_200": false,
+
   "short_fr_timer": 2,
   "long_fr_timer": 4,
 
