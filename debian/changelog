@@ -1,3 +1,9 @@
+ccnq3 (0.0.216) unstable; urgency=low
+
+  * opensips: update `location` table version for opensips 1.10
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Mon, 30 Sep 2013 23:07:05 +0200
+
 ccnq3 (0.0.215) unstable; urgency=low
 
   * debian: update to new (working?) opensips dep
