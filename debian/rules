@@ -4,8 +4,8 @@
 
 override_dh_gencontrol:
 	dh_gencontrol -- \
-		-Vfreeswitch:Version="1.2.4+git~20130217T182427Z~a4247651ca" \
-		-Vopensips:Version="1.10.0-2"
+		-Vfreeswitch:Version="1.3.4-20130930T160940Z-git8efc1d0~shimaore-master" \
+		-Vopensips:Version="1.10.0-3"
 
 override_dh_installinit:
 	dh_installinit -R
