@@ -32,6 +32,7 @@ case "$1" in
     DB=/dev/shm/freeswitch
     sed -i -e '/^DAEMON_OPTS=/ d' $DEFAULTS
     echo "DAEMON_OPTS=\"-nc -nonat -nonatmap -conf $CONF -log $LOG -db $DB\"" >> $DEFAULTS
+    echo "CONFDIR=\"$CONF\"" >> $DEFAULTS
 
     # Default configuration
     mkdir -p $CONF
