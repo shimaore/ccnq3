@@ -1,8 +1,8 @@
-ccnq3 (0.0.214) unstable; urgency=low
+ccnq3 (0.0.215) unstable; urgency=low
 
   * debian: update to new (working?) opensips dep
 
- -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Mon, 30 Sep 2013 22:12:39 +0200
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Mon, 30 Sep 2013 22:20:01 +0200
 
 ccnq3 (0.0.213) unstable; urgency=low
 
