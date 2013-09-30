@@ -2,8 +2,6 @@ ccnq3 (0.0.212) unstable; urgency=low
 
   * debian: in recent FreeSwitch packages, the init.d script checks for configuration.
 
- -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Mon, 30 Sep 2013 19:10:58 +0200
-
 ccnq3 (0.0.211) unstable; urgency=low
 
   * Update changelog for 0.0.207 release
