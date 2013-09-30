@@ -246,7 +246,7 @@ require('ccnq3').config (config)->
 
         # Versions for OpenSIPS 1.8.1
         versions =
-          location: 1007
+          location: 1009
           subscriber: 7
           dr_gateways: 5
           dr_rules: 3
