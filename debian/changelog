@@ -1,3 +1,9 @@
+ccnq3 (0.0.217) unstable; urgency=low
+
+  * Revert 125968890307392f25f0b603aacc29c0958f198e and rewrite it so that things still work for non-register scenarios (e.g. using `register-ignore`).
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 01 Oct 2013 18:58:02 +0200
+
 ccnq3 (0.0.216) unstable; urgency=low
 
   * opensips: update `location` table version for opensips 1.10
