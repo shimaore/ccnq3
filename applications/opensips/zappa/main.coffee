@@ -34,7 +34,7 @@ require('ccnq3').config (config)->
         q:'double'
         cseq:'int'
         flags:'int'
-        cflags:'int'
+        cflags:'string'
         user_agent:'string'
         received:'string'
         path:'string'
