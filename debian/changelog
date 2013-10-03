@@ -1,3 +1,10 @@
+ccnq3 (0.0.218) unstable; urgency=low
+
+  * Removed comment that caused trouble.
+  * opensips: the new `attr` column was documented in the module but not in the database schema page.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Thu, 03 Oct 2013 12:41:49 +0200
+
 ccnq3 (0.0.217) unstable; urgency=low
 
   * Revert 125968890307392f25f0b603aacc29c0958f198e and rewrite it so that things still work for non-register scenarios (e.g. using `register-ignore`).
