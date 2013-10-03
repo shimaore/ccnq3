@@ -17,6 +17,7 @@
         socket: 'string'
         methods: 'int'
         sip_instance: 'string'
+        attr: 'string'
       version:
         table_name: 'string'
         table_version: 'int'
