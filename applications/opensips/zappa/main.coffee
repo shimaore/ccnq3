@@ -41,6 +41,7 @@ require('ccnq3').config (config)->
         socket:'string'
         methods:'int'
         last_modified:'date'
+        sip_instance:'string'
         attr:'string'
 
     unquote_value = (t,x) ->
