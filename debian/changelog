@@ -1,3 +1,9 @@
+ccnq3 (0.0.219) unstable; urgency=low
+
+  * opensips: also add `sip_instance`
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Thu, 03 Oct 2013 22:30:51 +0200
+
 ccnq3 (0.0.218) unstable; urgency=low
 
   * Removed comment that caused trouble.
