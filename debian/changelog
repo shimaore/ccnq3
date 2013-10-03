@@ -1,3 +1,9 @@
+ccnq3 (0.0.221) unstable; urgency=low
+
+  * opensips: cflags changed to `string`
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Fri, 04 Oct 2013 00:23:45 +0200
+
 ccnq3 (0.0.220) unstable; urgency=low
 
   * opensips: finally found missing column type
