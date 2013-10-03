@@ -12,7 +12,7 @@
         cseq: 'int'
         last_modified: 'date'
         flags: 'int'
-        cflags: 'int'
+        cflags: 'string'
         user_agent: 'string'
         socket: 'string'
         methods: 'int'
