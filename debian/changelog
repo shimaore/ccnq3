@@ -1,3 +1,9 @@
+ccnq3 (0.0.222) unstable; urgency=low
+
+  * munin: SIP statistics on all interfaces
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Mon, 07 Oct 2013 12:22:23 +0200
+
 ccnq3 (0.0.221) unstable; urgency=low
 
   * opensips: cflags changed to `string`
