@@ -56,7 +56,7 @@ EOT
   exit
 fi
 
-( find $TRACE_DIR -type f -name 'eth0*' -newermt '5 minutes ago' -print0 | \
+( find $TRACE_DIR -type f -name 'eth*' -newermt '5 minutes ago' -print0 | \
   xargs -0 -I 'FILE' -r -P 4 -n 1 \
     ngrep -I FILE -n -l -q -t -W single -P '|' '^SIP/2.0 [4-6].*CSeq: [0-9]+ INVITE' ) \
 | perl -e '
