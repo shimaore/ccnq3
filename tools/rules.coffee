@@ -125,8 +125,10 @@ ccnq3.config (config) ->
 
   run = ->
     columns = []
+    process.stdin.resume()
     process.stdin.setEncoding 'utf8'
     input = byline process.stdin
+    input.setEncoding 'utf8'
     n = 0
     input.on 'data', (line) ->
       [prefix,gwlist,attrs] = line.split /;/
