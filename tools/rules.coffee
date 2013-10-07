@@ -125,6 +125,7 @@ ccnq3.config (config) ->
 
   run = ->
     columns = []
+    process.stdin.setEncoding 'utf8'
     input = byline process.stdin
     n = 0
     input.on 'data', (line) ->
