@@ -1,0 +1,1484 @@
+<!DOCTYPE html><html><head><title>specs</title><style>pre {
+  border: 1px solid #ccc;
+  background-color: #f8f8f8;
+}
+code {
+  background-color: #f8f8f8;
+  font-size: 13px;
+  line-height: 19px;
+  padding: 2px 2px;
+}
+</style></head><body><div id="container"><ul>
+<li><a href="#about">About</a></li>
+<li><a href="#conventions">Conventions</a><ul>
+<li><a href="#databaseuri">Database URI</a><ul>
+<li><a href="#onthemanagerserver">On the manager server</a></li>
+<li><a href="#onnonmanagerservers">On non-manager servers</a></li>
+</ul>
+</li>
+<li><a href="#authentication">Authentication</a><ul>
+<li><a href="#onthemanagerserver">On the manager server</a></li>
+<li><a href="#onnonmanagerservers">On non-manager servers</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#applications">Applications</a></li>
+<li><a href="#provisioningdatabase">provisioning database</a><ul>
+<li><a href="#hostprovisioningrecords">host -provisioning records-</a><ul>
+<li><a href="#commonsectionhostprovisioningrecord">Common section -host provisioning record-</a></li>
+<li><a href="#othergenericsections">Other generic sections</a></li>
+<li><a href="#whenrunningapplicationsmonitor">When running <code>applications/monitor</code></a></li>
+<li><a href="#specifictohostsrunningfreeswitch">Specific to hosts running FreeSwitch</a></li>
+<li><a href="#specifictohostsrunningopensips">Specific to hosts running OpenSIPS.</a></li>
+<li><a href="#specifictohostsrunningsiptraces">Specific to hosts running SIP traces.</a></li>
+<li><a href="#specifictohostsrunningasregistrants">Specific to hosts running as registrants.</a></li>
+<li><a href="#specifictohostsrunningasemergencyservers">Specific to hosts running as emergency servers.</a></li>
+<li><a href="#specifictohostsrunningvoicemail">Specific to hosts running voicemail</a><ul>
+<li><a href="#voicemailnotifications">Voicemail notifications</a></li>
+</ul>
+</li>
+<li><a href="#specifictohostsrunningthevoicemailstore">Specific to hosts running the voicemail-store</a></li>
+<li><a href="#specifictohostsrunningthepbxservice">Specific to hosts running the pbx service.</a></li>
+<li><a href="#specifictohostsrunningthecdrscdraggregationservice">Specific to hosts running the cdrs -CDR aggregation- service.</a></li>
+<li><a href="#specifictohostsrunningthelocationslocationaggregationservice">Specific to hosts running the locations -Location aggregation- service.</a></li>
+<li><a href="#specifictohostsrunningthecnamclient">Specific to hosts running the CNAM-client</a></li>
+</ul>
+</li>
+<li><a href="#domainprovisioningrecords">domain -provisioning records-</a><ul>
+<li><a href="#domainbasedrouting">domain-based routing</a></li>
+<li><a href="#ccnq3dnsservice">ccnq3-dns service</a></li>
+</ul>
+</li>
+<li><a href="#accountforwarderprovisioningrecords">account_forwarder -provisioning records-</a></li>
+<li><a href="#endpointprovisioningrecords">endpoint -provisioning records-</a><ul>
+<li><a href="#registrationendpointfields">Registration endpoint fields</a></li>
+<li><a href="#staticendpointfields">Static endpoint fields</a></li>
+<li><a href="#inboundcallroutingdstendpoint">Inbound call routing -dst_endpoint-</a></li>
+<li><a href="#outboundcallroutingsrcendpoint">Outbound call routing -src_endpoint-</a></li>
+</ul>
+</li>
+<li><a href="#numberprovisioningrecords">number -provisioning records-</a><ul>
+<li><a href="#globalnumberproperties">Global-number properties</a></li>
+<li><a href="#localnumberproperties">Local-number properties</a><ul>
+<li><a href="#localnumberpropertiesforthepbxapplication">Local-number properties for the PBX application</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#whitelistblacklistprovisioningrecords">whitelist/blacklist -provisioning records-</a></li>
+<li><a href="#ruleprovisioningrecords">rule -provisioning records-</a><ul>
+<li><a href="#whichrulesetsareselected">Which rule sets are selected</a></li>
+<li><a href="#howrulesarematched">How rules are matched</a></li>
+<li><a href="#howroutingisdone">How routing is done</a></li>
+<li><a href="#ruleidentifiers">Rule identifiers</a></li>
+<li><a href="#ruleselection">Rule selection</a></li>
+<li><a href="#ruleoutput">Rule output</a></li>
+</ul>
+</li>
+<li><a href="#carrierprovisioningrecords">carrier -provisioning records-</a></li>
+<li><a href="#gatewayprovisioningrecords">gateway -provisioning records-</a></li>
+<li><a href="#locationprovisioningrecords">location -provisioning records-</a></li>
+<li><a href="#emergencyprovisioningrecords">emergency -provisioning records-</a></li>
+</ul>
+</li>
+<li><a href="#usersdatabase">_users database</a><ul>
+<li><a href="#hostrecords">host records</a></li>
+<li><a href="#voicemailrecords">voicemail records</a></li>
+<li><a href="#otherrecords">Other records</a></li>
+</ul>
+</li>
+<li><a href="#endpointlocationdatabase">endpoint-location database</a><ul>
+<li><a href="#endpointlocationrecords">endpoint-location records</a></li>
+</ul>
+</li>
+<li><a href="#userdatabase">user database</a><ul>
+<li><a href="#voicemailsettingsrecord">voicemail_settings record</a></li>
+<li><a href="#voicemailrecords">voicemail records</a></li>
+<li><a href="#pbxsettingsrecords">PBX settings records</a></li>
+</ul>
+</li>
+</ul>
+<p><a name="about"></a></p>
+<h1>About</h1>
+<p>This document describes the configuration parameters for ccnq3.</p>
+<p><a name="conventions"></a></p>
+<h1>Conventions</h1>
+<p><a name="databaseuri"/></a></p>
+<h2>Database URI</h2>
+<p>In this document the term <em>URI of database</em> signifies a URI of some CouchDB database, and is always a string.</p>
+<p>These URIs might contain authentication usernames and passwords.</p>
+<p><a name="onthemanagerserver"/></a></p>
+<h3>On the manager server</h3>
+<p>The manager server uses direclty the central CouchDB database.</p>
+<p><a name="onnonmanagerservers"/></a></p>
+<h3>On non-manager servers</h3>
+<p>Other servers use a local-only CouchDB instance (replicated from the central CouchDB database) for any read-access to the provisioning database, and other local CouchDB instances to store some local values (CDRs, location information for a registration server).</p>
+<p>These non-manager servers might also write data back to the central CouchDB database either using replication (for example to aggregate the CDRs in the <code>cdrs</code> database, or the location information in the <code>locations</code> database), or directly, for logging purposes (the <code>logging</code> and <code>monitor</code> databases for example).</p>
+<p><a name="authentication"/></a></p>
+<h2>Authentication</h2>
+<p>In CouchDB, authentication is customarily provided by the <code>_users</code> database for most users; and by the configuration system (section <code>admins</code>) for administrative users.</p>
+<p><a name="onthemanagerserver"/></a></p>
+<h3>On the manager server</h3>
+<p>On the manager server, most access will be done using an <code>admin</code> account, since the manager will need to update database views, create new databases, etc.</p>
+<p>The <code>provisiong.host_couchdb_uri</code> parameter is required to use a <code>host@</code>+hostname username.</p>
+<p><a name="onnonmanagerservers"/></a></p>
+<h3>On non-manager servers</h3>
+<p>Non-manager host use a local-only, non-authenticated CouchDB instance for all real-time accesses. No username is required to access the databases on that local CouchDB server. No administrative account is created either (the database is said to be in &quot;Admin Party Mode&quot;).</p>
+<p>For example, <code>provisioning.local_couchdb_uri</code> is simply <code>http://127.0.0.1:5984/provisioning</code>, <code>cdr_uri</code> is <code>http://127.0.0.1:5984/cdr</code>.</p>
+<p>On the other hand, when accessing the central CouchDB database (normally located on the manager server, or on some other central server), non-manager hosts should <em>never</em> use an <code>admin</code> account. Instead, the following types of accounts are recommended.</p>
+<ul>
+<li><p>For each <code>host</code>, a user named <code>host@</code>+hostname with its roles set (at least) to <code>[&quot;host&quot;]</code>.</p>
+<p>This user will be created automatically when using the <code>ccnq3 add_host</code> command.</p>
+<p>This should be used for any URI where the host needs access to the central CouchDB database (e.g. for replication of the provisioning database, or to upload CDRs, locations, logging data, etc.).</p>
+<p>Use this username in fields such as <code>provisioning.host_couchdb_uri</code>, <code>opensips_proxy.usrloc_aggregate_uri</code>, <code>cdr_aggregate_uri</code>, <code>logging.host_couchdb_uri</code>, <code>monitor.host_couchdb_uri</code>.</p>
+</li>
+<li><p>For each &#39;voicemail&#39; server, a user named <code>voicemail@</code>+hostname with the roles set (at least) to <code>[&quot;update:user_db:&quot;,&quot;access:_users:&quot;]</code>. (Notice the extra colon <code>:</code> at the end of each value.)</p>
+<p>This should be used for any URI related to <code>applications/voicemail</code>, to allow the voicemail server to manipulate the databases where messages are stored (hence <code>update:user_db</code>) and query for databases linked to a specific user (hence <code>access:_users:</code>).</p>
+<p>Use this username in fields such as <code>voicemail.userdb_base_uri</code>.</p>
+</li>
+</ul>
+<p><a name="applications"></a></p>
+<h1>Applications</h1>
+<p>Applications are modules inside the CCNQ3 system which may be added or removed on a server after installation of the Debian packages.  Each application may come with database updates, new local processes, and sometimes offer remotely-accessible services.</p>
+<p>In a typical CCNQ3 system, you would have two types of servers, <em>manager</em> servers and <em>call-processing</em> (non-manager) servers.</p>
+<p>A manager server would typically have the <code>ccnq3-manager</code> package installed, which will select a default set of applications suitable for a manager.</p>
+<p>A call-processing server would typically have the <code>ccnq3-client</code> package installed, which will select a default set of application suitable for a non-manager.</p>
+<p>Finally, at least two servers (for redundancy purposes) must have the <code>ccnq3-dns</code> package installed, and run the following application:</p>
+<pre><code>applications/dns</code></pre>
+<p>Moreover all servers, regardless of intended purpose, must run the following application:</p>
+<pre><code>applications/host</code></pre>
+<p>Some of these applications are automatically installed. For example, a <code>manager</code> host (using the <code>ccnq3-manager</code> Debian package) will have most services enabled except the aggregation services. Removing automatically-installed applications in this case will lead to loss of functionality or breakage.</p>
+<p>After adding or removing one or more applications on a given host, you must run</p>
+<pre><code>/etc/init.d/ccnq3 update</code></pre>
+<p>on that host to ensure that the proper dependencies are updated.</p>
+<p>Operational Note: This last operation will in most cases lead to loss of calls on call-processing servers and should only be applied during off-hours maintenance.</p>
+<p><a name="provisioningdatabase"></a></p>
+<h1>provisioning database</h1>
+<p>The provisioning database contains the master copy of all provisioning information for an entire system.</p>
+<p>It contains different types of records, which can be identified by their &quot;type&quot; field.
+The type is also the first part of the records&#39; identifier, to avoid identifier collisions.</p>
+<p><a name="hostprovisioningrecords"/></a></p>
+<h2>host (provisioning records)</h2>
+<p>The local configuration file for a host, normally found in <code>/etc/ccnq3/host.json</code>, is a copy of the <code>host</code> record for that specific server as found in the master CouchDB provisioning database.</p>
+<p>(In the code, this is referred to as the <code>config</code> object. This is the object managed by the <code>ccnq3.config</code> class.)</p>
+<p>There must be exactly one <code>host</code> record for each server in the system.
+Servers are identified by their (arbitrary) Fully Qualified Domain Name (FQDN).</p>
+<p>Some changes in <code>host</code> records might require you to:</p>
+<ul>
+<li><p>either restart the ccnq3 processes to apply the changes:</p>
+<pre><code>/etc/init.d/ccnq3 push
+/etc/init.d/ccnq3 restart</code></pre>
+<p>(This should be sufficient in most cases.)</p>
+</li>
+<li><p>if you added a new application:</p>
+<pre><code>/etc/init.d/ccnq3 update</code></pre>
+</li>
+</ul>
+<p>However this does not apply to commands (such as the ones in <code>sip_commands</code>), which are executed immediately.</p>
+<p>Operational note:
+In a lot of cases, restarting, reinstalling, or submitting commands will cause calls to disconnect. These operations are best used during dedicated maintenance windows and should be avoided during production use.</p>
+<p>Currently the main freeswitch, opensips, and medaproxy processes are not started by ccnq3.
+These processes might be controlled using their respective /etc/init.d/ scripts.</p>
+<p>Developper note:
+As suggested above, the <code>host</code> record for a particuler server is referred to as the <code>config</code> record for that server inside most applications.</p>
+<p><a name="commonsectionhostprovisioningrecord"/></a></p>
+<h3>Common section (host provisioning record)</h3>
+<p>All the fields in this section are pre-populated by the installation scripts.
+There is no reason to change them after the initial installation of a server.
+Only the <code>applications</code> array will need to be expanded.</p>
+<p>Installation caveat: <code>provisioning.host_couchdb_uri</code> might need to be fixed if the system cannot guess
+your installation.</p>
+<ul>
+<li><p><code>_id</code>: type+&quot;:&quot;+host</p>
+</li>
+<li><p><code>account</code>: &quot;&quot;    (the empty string)</p>
+</li>
+<li><p><code>updated_at</code>: integer, update timestamp in ms [required]</p>
+<p><code>new Date().getTime()</code>  for example</p>
+</li>
+<li><p><code>type</code>: &quot;host&quot;</p>
+</li>
+<li><p><code>host</code>: string; hostname, preferably FQDN</p>
+<p>This value must match what the <code>hostname</code> command returns.</p>
+</li>
+<li><p><code>interfaces</code>: {} of {}, fields:</p>
+<ul>
+<li><code>ipv4</code>: IP (if interface supports v4)</li>
+<li><code>ipv6</code>: IP (if interface supports v6)</li>
+</ul>
+<p>The keys of the records in the <code>interfaces</code> hash must be unique, so they cannot just be the interface&#39;s name, since an interface may have multiple v4 or v6 IP addresses.</p>
+<p>The key <code>primary</code> has a special meaning (see next item).</p>
+</li>
+<li><p><code>interfaces.primary.ipv4</code>,
+<code>interfaces.primary.ipv6</code></p>
+<p>If present, these are selected as the addresses for the host itself.
+Otherwise a random non-private IPv4 address is selected, and a random IPv6 address is selected, from the ones present in the &quot;interfaces&quot; records.</p>
+</li>
+<li><p><code>amqp</code></p>
+<p>AMQP URI with access for the local host, complete with <code>ccnq3</code> vhost. (Similar authentication as <code>provisioning.host_couchdb_uri</code>.)</p>
+<p>(Under development) AMQP is used to forward logging data, send command to servers (replaces the obsolete <code>sip_commands</code>) and retrieve data (registrant).</p>
+</li>
+</ul>
+<p>Changing any of the following settings would require to restart the matching services, since configuration is read (in most cases) once at startup.</p>
+<ul>
+<li><p><code>admin</code>:   (only present for bootstrap-system hosts normally; there&#39;s no reason to modify these)</p>
+<ul>
+<li><code>couchdb_uri</code>: server admin URI [required for a Manager host]</li>
+<li><code>amqp</code>: amqp admin URI (with <code>/ccnq3</code> path to access the <code>ccnq3</code> vhost)</li>
+<li><code>amqp_mgmt</code>: http(s) admin URI for API access (with <code>/api</code> path included)</li>
+<li><code>system</code>: true   (indicates this host is the one that should do system updates)</li>
+</ul>
+</li>
+<li><p><code>users</code>:</p>
+<ul>
+<li><code>couchdb_uri</code>: <code>_users</code> database admin URI</li>
+</ul>
+<p>Normally only present on the manager server and a voicemail-store server.</p>
+</li>
+<li><p><code>applications</code>: [] of strings, list of applications that need to be installed</p>
+<p>These are simply relative paths to the matching &quot;package&quot; for that application.
+To apply changes to the list of applications, you must <code>aptitude reinstall ccnq3</code> on the host.</p>
+<p>Example:</p>
+<pre><code>[ &quot;applications/host&quot;, &quot;applications/traces&quot;, &quot;applications/freeswitch&quot; ]</code></pre>
+</li>
+<li><p><code>provisioning</code>:</p>
+<ul>
+<li><p><code>couchdb_uri</code>: URI of the provisioning database (with database admin authentication) [used by couchapps apps to insert new applications]</p>
+<p>Normally only present on a manager host (and only used by installation scripts)</p>
+</li>
+<li><p><code>host_couchdb_uri</code>: URI of the provisioning database (read-only), allows access to the main provisioning database from any host. [required for a non-Manager host]</p>
+<p>This URI is used as the source for replication of the provisioning database onto a non-manager host
+Replication will work better if this URI points directly to CouchDB (rather than a reverse proxy, for example).</p>
+<p>This URI is also used by ccnq3_config to locate the host&#39;s configuration; if it is not present only the local (file-based) configuration will be used.</p>
+</li>
+<li><p><code>local_couchdb_uri</code>: URI of a local replica of the provisioning database [used by local applications such as opensips]</p>
+<p>Generally <code>http://127.0.0.1:5984/provisioning</code> [no authentication to keep things faster]</p>
+<p>Realtime (call-handling) applications should only rely on this database as their primary source.</p>
+<p>Must have db admin access to the database (so that applications can push their design documents).</p>
+</li>
+<li><p><code>filter</code>: Filter that controls which data gets replicated into <code>local_couchdb_uri</code> [default: <code>host/replication</code>]</p>
+<p>If <code>local_couchdb_uri</code> is not defined, no replication happens. However sometimes you do not need to replicate the entire provisioning database since it can grow very large. <code>filter</code> allows you to control which documents are replicated.</p>
+<p>The following filters are available:</p>
+<ul>
+<li><code>host/replication</code> (the default) will replicate all provisioning documents;</li>
+<li><code>host/local_rules</code> will replicate all provisioning documents except for rules, in which case it will only replicate <code>rule</code> documents which match the local <code>sip_domain_name</code>;</li>
+<li><code>host/skip_rules</code> will replicate all provisioning documents except for rules.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><a name="othergenericsections"/></a></p>
+<h3>Other generic sections</h3>
+<ul>
+<li><p><code>install</code>: (normally not defined)</p>
+<p>This feature is used to force re-installation of the corresponding databases (for example to change the URI)</p>
+<ul>
+<li><code>provisioning</code>:<ul>
+<li><code>couchdb_uri</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><code>replicate_interval</code>: integer; milliseconds [default: 5 minutes]</p>
+<p>  Sometimes CouchDB replicate processes might die.
+  An automated process will restart them at <code>replicate_interval</code> milliseconds.</p>
+</li>
+<li><p><code>logging</code>:</p>
+<p>This feature allows centralized logging from CCNQ3 hosts.
+All logging is pushed into a single central CouchDB database; no local logging database is created.</p>
+<ul>
+<li><p><code>couchdb_uri</code>: string, only on the manager server; the database (with admin access) where data should be stored.</p>
+</li>
+<li><p><code>host_couchdb_uri</code>: string, required; the database (with host access) where data should be stored</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><a name="whenrunningapplicationsmonitor"/></a></p>
+<h3>When running <code>applications/monitor</code></h3>
+<ul>
+<li><p><code>monitor</code>:</p>
+<p>This feature is used on hosts running the <code>applications/monitor</code> service.
+All monitoring data is parsed and pushed into a CouchDB database at set intervals as a JSON record.
+For analysis, reporting, and graphing, use CouchDB and other tools.</p>
+<ul>
+<li><p><code>couchdb_uri</code>: string, only on the manager server; the database (with admin access) where data should be stored.</p>
+</li>
+<li><p><code>host_couchdb_uri</code>: string, required; the database (with host access) where data should be stored</p>
+</li>
+<li><p><code>interval</code>: integer; the interval in milliseconds between two runs of the data collection [default: 5 minutes]</p>
+</li>
+<li><p><code>plugins</code>: array of strings; the list of monitor plugins that need to be activated [default: all of them]</p>
+<p>The following plugins are available:</p>
+<ul>
+<li><code>os</code>: Node.js <code>os</code> module data, plus <code>/proc/version</code></li>
+<li><code>process</code>: Node.js <code>process</code> module data (information about the monitor application itself)</li>
+<li><code>processes</code>: <code>/proc/[pid]/(comm|cmdline|oom_score|stat|statm)</code> (currently does not support thread-level data)</li>
+<li><code>interrupts</code>: <code>/proc/interrupts</code> data</li>
+<li><code>diskstats</code>: <code>/proc/diskstats</code> data</li>
+<li><code>meminfo</code>: <code>/proc/meminfo</code> data</li>
+<li><code>netdev</code>: <code>/proc/net/dev</code> data</li>
+<li><code>stat</code>: <code>/proc/stat</code> data</li>
+<li><code>vmstat</code>: <code>/proc/vmstat</code> data</li>
+</ul>
+</li>
+<li><p><code>couchdb_uri</code>: string; administrative access to the database where data is stored (this is only used to create the database and should only be present on the host running that database).</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><a name="specifictohostsrunningfreeswitch"/></a></p>
+<h3>Specific to hosts running FreeSwitch</h3>
+<p>To add a FreeSwitch host:</p>
+<ol>
+<li><p>Configure the fields in this section</p>
+<p>(You&#39;ll need to configure at least <code>sip_domain_name</code>.)</p>
+<p>(You&#39;ll need to configure one <code>sip_profiles[]</code> in order to be able to place calls.)</p>
+</li>
+<li><p>Add <code>applications/freeswitch</code> to the applications field [and restart ccnq3]</p>
+</li>
+</ol>
+<p>Configuration options:</p>
+<ul>
+<li><p><code>sip_domain_name</code>:  string (required); FQDN accepted by the server</p>
+<p>This should be the &quot;cluster name&quot; for servers running similar configurations. This is used by <code>applications/dns</code> to create SRV records for these services. This is also used by <code>applications/opensips</code> to create gateway entries for the <code>egress_gwid</code> in those domains/clusters.
+Finally, this is the domain name accepted by OpenSIPS servers in that cluster.</p>
+</li>
+<li><p><code>rtp_ip</code>: local IP to bind to for RTP [default: &quot;auto&quot;]</p>
+</li>
+<li><p><code>cdr_uri</code>: URI where the local CDRs should be written to [default: none, no CDRs are generated]; recommended value: &quot;<a href="http://127.0.0.1:5984/cdr">http://127.0.0.1:5984/cdr</a>&quot;</p>
+</li>
+<li><code>log_b_leg</code>: boolean; whether a CDR should be generated for the b-leg of a call [default: false, log only the a-leg]</li>
+<li><p><code>cdr_aggregate_uri</code>: URI where the local CDRs should be replicated to [no default]
+  Note: must contain authentication (for the local host).</p>
+</li>
+<li><p><code>sip_profiles</code>: {} of profiles descriptions:</p>
+<ul>
+<li><p><code>sip_profiles[profile_name]</code>:</p>
+<ul>
+<li>Sofia data</li>
+<li><code>template</code>: sofia template name (e.g. &quot;sbc-media&quot;, &quot;sbc-nomedia&quot;)</li>
+<li>For the &quot;sbc*&quot; types, we need:</li>
+<li><code>ingress_sip_ip</code>: which IP (v4,v6) to bind for ingress processing</li>
+<li><code>ingress_sip_port</code>: which port to bind for ingress processing [in the range 5060 to 5299]</li>
+<li><code>ingress_acl</code>: [] of CIDR records &quot;ip/masklen&quot; source IPs allowed for ingress processing</li>
+<li><code>egress_sip_ip</code>: which IP (v4,v6) to bind for egress processing [default: ingress_sip_ip]</li>
+<li><code>egress_sip_port</code>: which port to bind for egress processing [default: 10000+ingress_sip_port; in the range 15060 to 15299]</li>
+<li><code>egress_acl</code>: [] of CIDR records &quot;ip/masklen&quot; source IPs allowed for the egress processing</li>
+<li><code>egress_gwid</code>: optional; a (unique) alphanumerical gateway id or name to be used in routing rules.</li>
+</ul>
+<p>Note: port numbers must be in the range 5060 to 5299 or 15060 to 15299 to be compatible with the &quot;traces&quot; application.</p>
+<p>Note: look in <code>doc/port-numbers.md</code> for port numbers conventions.</p>
+<p>Note: <code>egress_gwid</code> must be unique amongst all gateway IDs, including the ones in &quot;gateway&quot;-type records.</p>
+<ul>
+<li>Dialplan data</li>
+<li><code>handler</code>: dialplan template name (e.g. &quot;client-sbc&quot;, &quot;voicemail&quot;)</li>
+<li><p><code>egress_target</code>: domain where to send egress calls</p>
+</li>
+<li><p>For handler=&quot;client-sbc&quot;</p>
+</li>
+<li><code>type</code>: dialplan profile type (e.g. &quot;usa&quot;, &quot;france&quot;)</li>
+<li><code>send_call_to</code>: where to send the calls (&quot;socket&quot;, &quot;bridge&quot;) [default: &quot;socket&quot;]</li>
+<li><code>ingress_target</code>: domain where to send ingress calls [default: the <code>sip_domain_name</code> of the host]</li>
+<li><p><code>number_domain</code>: for inbound calls, how to locate the local numbers in the proxy [default: &quot;local&quot;]</p>
+</li>
+<li><p>For handler on one of the carrier-sbc&#39;s</p>
+</li>
+<li><p><code>enum_root</code>: Carrier ENUM root for inbound routing</p>
+</li>
+<li><p>For handler=&quot;voicemail&quot;</p>
+</li>
+<li><code>default_language</code>: string; default voicemail language [default: this host&#39;s voicemail.default_language, see below]</li>
+</ul>
+<p>Changes (except for <code>*_sip_ip</code> and <code>*_sip_port</code>) are automatically applied.</p>
+</li>
+</ul>
+</li>
+<li><p><code>sip_commands</code>: {} of profiles commands:</p>
+<ul>
+<li><p><code>sip_commands[sofia_profile]</code>: string
+  One of:</p>
+<pre><code>&quot;start&quot;       sofia profile &lt;profile_name&gt; start
+&quot;restart&quot;     sofia profile &lt;profile_name&gt; restart reloadxml  [required to change IP or port]
+&quot;stop&quot;        sofia profile &lt;profile_name&gt; killgw</code></pre>
+</li>
+<li><p><code>sip_commands.freeswitch</code>: string
+  One of:</p>
+<pre><code>&quot;reload sofia&quot;    unload mod_sofia, load mod_sofia            [required to add a new profile]
+&quot;pause inbound&quot;   fsctl pause inbound
+&quot;pause outbound&quot;  fsctl pause outbound
+&quot;resume inbound&quot;  fsctl resume inbound
+&quot;resume outbound&quot; fsctl resume outbound</code></pre>
+</li>
+</ul>
+<p>All these commands will cause calls to drop if any is present on that profile.</p>
+<p>The &quot;sofia_profile&quot; key is either &quot;egress-#{profile_name}&quot; or &quot;ingress-#{profile_name}&quot; so that each direction
+can be restarted independently.</p>
+<p>Add a command then remove it from the hash to prevent accidental misfiring of commands.</p>
+<p>A special &quot;sofia_profile&quot; key &quot;opensips&quot; is used to send events to a running OpenSIPS process (rather than a
+FreeSwitch sofia profile). See below for more information.</p>
+<p>A special &quot;sofia_profile&quot; key &quot;registrant&quot; is used to send events to a running registrant process (rather than a
+FreeSwitch sofia profile). See below for more information.</p>
+</li>
+<li><p><code>sip_variables</code>: {} of global (FreeSwitch) variables; defaults to {}</p>
+<p>The idea is that these can be used on a per-host basis by additional dialplans, profiles, etc.</p>
+<p>These should also show up in CDRs. FIXME confirm this is the case</p>
+</li>
+<li><p><code>cdr_cleanup_interval</code>: interval (in milliseconds) at which to run the cdr cleaner process (which removes CDRs that have been aggregated to the central <code>cdrs</code> database from the local database) [default: 17 minutes]</p>
+</li>
+<li><code>cdr_cleanup_size</code>: number of records to process at each run [default: 10000]</li>
+</ul>
+<p><a name="specifictohostsrunningopensips"/></a></p>
+<h3>Specific to hosts running OpenSIPS.</h3>
+<p>To add an OpenSIPS host:</p>
+<ol>
+<li>Configure the fields in this section</li>
+<li>Add &quot;applications/opensips&quot; to the applications field [and restart ccnq3]</li>
+<li>Run common/mediaproxy/install.sh to install mediaproxy FIXME still requires some work</li>
+</ol>
+<p>Configuration options:</p>
+<ul>
+<li><p><code>opensips_proxy</code>:</p>
+<ul>
+<li><p><code>port</code>:34340   integer, required, do not change [default]</p>
+</li>
+<li><p><code>hostname</code>:&quot;127.0.0.1&quot;   string, required, do not change [default]</p>
+</li>
+<li><p><code>usrloc_uri</code>: URI of the location database (used to save registration data)</p>
+<p>This should be &quot;<a href="http://127.0.0.1:5984/location">http://127.0.0.1:5984/location</a>&quot; [default]</p>
+</li>
+<li><p><code>usrloc_aggregate_uri</code>: URI where the location database should be replicated to [no default]</p>
+<p>Must contain authentication (for the local host).</p>
+</li>
+</ul>
+</li>
+<li><p><code>opensips</code>:</p>
+<ul>
+<li><p><code>model</code>: <code>&quot;complete&quot;</code>, or any other model defined in common/opensips [required]</p>
+<p>Currently supported: <code>complete</code>, <code>outbound-proxy</code>, <code>emergency</code>, <code>registrant</code>.</p>
+</li>
+<li><p><code>number_domain</code>: string; the default <code>number_domain</code> used on this server if none is provided [default: &quot;local&quot;]</p>
+<p>This value is used if:</p>
+<ul>
+<li>for outbound calls, the <code>endpoint</code> record contains no <code>number_domain</code>;</li>
+<li>for inbound calls, the <code>client-sbc</code> <code>sip_profiles</code> record contains no <code>number_domain</code>.</li>
+</ul>
+</li>
+<li><p><code>listen</code>: [] of strings &quot;host:port&quot; to which OpenSIPS will bind()  [default is the empty array, in which case OpenSIPS binds to all interfaces on port 5060]</p>
+<p>  For example, if you wish for OpenSIPS to only listen on local interfaces for test purposes, you might set <code>listen</code> to:</p>
+<pre><code>  [
+    &quot;127.0.0.1:5060&quot;,
+    &quot;[::1]:5060&quot;
+  ]</code></pre>
+</li>
+<li><p><code>local_ipv4</code>: for models using it (<code>&quot;conference&quot;</code>), IP where to send all INVITE messages</p>
+</li>
+<li><p><code>local_ipv6</code>: reserved</p>
+</li>
+<li><p><code>voicemail_notifier</code>: incoming SUBSCRIBE messages are sent to this host:port or name</p>
+<p>  Typically should point to the egress-* voicemail profile&#39;s NAPTR record.</p>
+<p>  If this parameter is not defined, forwarding of message waiting indication (MWI) via SUBSCRIBE and NOTIFY messages will not work.</p>
+</li>
+<li><p><code>lineside_extra_info</code>: OpenSIPS string containing variables to include in a <code>X-CCNQ3-Extra</code> header.</p>
+<p>  The output is recorded in CDRs in the <code>variables.ccnq_extra</code> field.</p>
+<p>  In the <code>complete</code> model it defaults to &quot;$pr $si $sp -&gt; $Ri $Rp $json(src_endpoint/endpoint) $au $ad $ar $ci $ru $fu $tu $ua&quot;.
+  Other models do not use the <code>X-CCNQ3-Extra</code> header.</p>
+</li>
+<li><p><code>rate_limit_invite</code>: integer; maximum number of new INVITE messages that might be received from any given IP address over a period of 10s. [default: 1000 for outbound-proxy; 50 for client-side proxy.]</p>
+<p> New dialogs may start to be rejected between 5 and 15 cps with the default value of 50.</p>
+</li>
+</ul>
+<p>There are plenty other OpenSIPS configuration parameters; all of them can be modified via the database.
+The list of parameters can be found in the source code, in the JSON configuration files under <code>common/opensips/</code>.
+However in normal operation there is no reason to modify parameters except for those listed above.</p>
+</li>
+<li><p><code>sip_commands.opensips</code>: string</p>
+<p>  One of:</p>
+<pre><code>&quot;reload routes&quot;         [apply &quot;rule&quot; or &quot;gateway&quot; record changes]</code></pre>
+</li>
+</ul>
+<p><a name="specifictohostsrunningsiptraces"/></a></p>
+<h3>Specific to hosts running SIP traces.</h3>
+<p>To start traces:</p>
+<ol>
+<li>install the ccnq3-traces package</li>
+<li>configure the fields in this section</li>
+<li>add &quot;applications/traces&quot; to the applications field</li>
+<li>make sure users who need to run traces have the &quot;access:traces:&quot; role.</li>
+</ol>
+<p>Installation note: this is not enabled by default even after you install the ccnq3-traces package.
+You must specify which interfaces will be used for traces by using the <code>traces.interfaces</code> array.</p>
+<p>Configuration:</p>
+<ul>
+<li><p><code>traces</code>:</p>
+<ul>
+<li><code>interfaces</code>: [] of interfaces names</li>
+<li><code>upload_uri</code>: for <code>respond_via</code> == <code>couch</code>, the URI for the database that will receive the trace documents. (We recommend you use the <code>logging</code> database for this purpose.)</li>
+</ul>
+<p>There&#39;s no reason to modify the following parameters.</p>
+<ul>
+<li><code>filesize</code>: integer, maximum size of the sniffer traces (in ko) [default: 10000]</li>
+<li><code>ringsize</code>: integer, maximum number of sniffer trace files [default: 50]</li>
+<li><code>workdir</code>: string, directory used to store the traces [default: &quot;/opt/ccnq3/traces&quot;]</li>
+<li><code>filter</code>: string, pcap filter for traces [default: ports used by ccnq3 applications]</li>
+</ul>
+</li>
+</ul>
+<p>To obtain data from the trace files, use the AMQP bus with exchange <code>traces</code> and topic <code>request</code>. (Or use the Extended API operations that acts as a proxy for it.) The body of the request must be a JSON object with the following properties:</p>
+<pre><code>* `to_user`     string; To username (destination number)
+* `from_user`   string; From username (calling number)
+* `call_id`     string; Call-ID
+* `days_ago`    integer; only lookup for this number of days ago (0 = today)
+
+* `reference`   string: the desired response reference.
+* `upload_uri`  URI: when using `respond_via` `couch`, the database URI to use instead of the configured value.</code></pre>
+<p>The JSON ouput will contain an array of hash record named <code>packets</code>; the records might contain the following fields:</p>
+<p>  <code>frame.time</code>
+  <code>ip.version</code>
+  <code>ip.dsfield.dscp</code>
+  <code>ip.src</code>
+  <code>ip.dst</code>
+  <code>ip.proto</code>
+  <code>udp.srcport</code>
+  <code>udp.dstport</code>
+  <code>sip.Call-ID</code>
+  <code>sip.Request-Line</code>
+  <code>sip.Method</code>
+  <code>sip.r-uri.user</code>
+  <code>sip.r-uri.host</code>
+  <code>sip.r-uri.port</code>
+  <code>sip.Status-Line</code>
+  <code>sip.Status-Code</code>
+  <code>sip.to.user</code>
+  <code>sip.from.user</code>
+  <code>sip.From</code>
+  <code>sip.To</code>
+  <code>sip.contact.addr</code>
+  <code>sip.User-Agent</code></p>
+<p>The response are stored in the CouchDB specified by <code>upload_uri</code>. The record will contain:</p>
+<pre><code>* `_id`: type + `:` + reference + `:` + host
+* `type`: &quot;trace&quot;
+* `host`: the host on which the query was ran
+* `packets`: the array of packets (JSON output specified above) [if format is `json`]
+* and all other fields in the AMQP request.</code></pre>
+<p>The PCAP output is attached to the CouchDB document as a file named <code>packets.pcap</code>.</p>
+<p>Application note: this type of request is highly CPU intensive for the target hosts. It is only meant as a troubleshooting tool for administrators, not as a generically available service. Use the cdr database to obtain per-call information as a generic service.</p>
+<p>Caveat: Since the trace files on the various hosts are rotated to not exceed a given disk space, it is possible that a trace might not be found even though a call was placed.</p>
+<p><a name="specifictohostsrunningasregistrants"/></a></p>
+<h3>Specific to hosts running as registrants.</h3>
+<p>Related: applications/registrant</p>
+<ul>
+<li><p><code>registrant</code>:</p>
+<ul>
+<li><p><code>local_ipv4</code>: string, IP where to send incoming calls (generally the local server)</p>
+</li>
+<li><p><code>local_port</code>: integer, port where to send incoming calls (generally, the port of the local <code>sip_profile</code> that accepts those calls)</p>
+</li>
+<li><p><code>proxy_port</code>: integer, the port for this SIP service [default: 5070]</p>
+</li>
+<li><p><code>source_ip</code>: string, IP to send outbound calls from (generally the public IP of the local server)</p>
+</li>
+</ul>
+</li>
+<li><p><code>sip_commands.registrant</code>: string</p>
+<p>One of:</p>
+<pre><code>&quot;restart&quot;         Restart the registrant server.
+&quot;start&quot;           Start the registrant server.
+&quot;stop&quot;            Stop the registrant server.</code></pre>
+<p>Registrant entries (generated by using the <code>registrant_password</code> field in global numbers records) are
+pushed into the registrant&#39;s process configuration as they appear; however they are not applied until
+a <code>restart</code> command is issued.</p>
+</li>
+</ul>
+<p><a name="specifictohostsrunningasemergencyservers"/></a></p>
+<h3>Specific to hosts running as emergency servers.</h3>
+<p>Related: applications/emergency</p>
+<ul>
+<li><p><code>emergency</code>: {}</p>
+<p>The configuration hash may be empty, but needs to be present for the service to start.</p>
+<ul>
+<li><code>proxy_port</code>: integer, the port for this SIP service [default: 5072]</li>
+</ul>
+</li>
+<li><p><code>sip_commands.emergency</code>: string</p>
+<p>One of:</p>
+<pre><code>&quot;start&quot;           Start the emergency server.
+&quot;stop&quot;            Stop the emergency server.</code></pre>
+</li>
+</ul>
+<p><a name="specifictohostsrunningvoicemail"/></a></p>
+<h3>Specific to hosts running voicemail</h3>
+<p>Voicemail is stored inside a user&#39;s own CouchDB database.
+This section specifies the parameters for applications/voicemail.</p>
+<ul>
+<li><p><code>voicemail</code>:</p>
+<ul>
+<li><p><code>userdb_base_uri</code>: string, required; the URI prefix (including authentication for the &quot;voicemail manager&quot;) to a user&#39;s database.</p>
+<p>  The value of the <code>user_database</code> field in a local number provisioning record is appended to this prefix.</p>
+</li>
+<li><p><code>port</code>: integer, optional; the (local) port for the voicemail ESL server [default: 7123]</p>
+</li>
+<li><p><code>min_duration</code>: integer, optional; the minimal duration for a voicemail fragment [default: 5]</p>
+</li>
+<li><p><code>max_duration</code>: integer, optional; the maximal duration for a voicemail fragment [default: 300]</p>
+</li>
+<li><p><code>min_pin_length</code>: integer, optional; the minimum length for the PIN (password) [default: 6]</p>
+</li>
+<li><p><code>default_language</code>: language used if none is specified in the sip_profile [default: &#39;en&#39;]</p>
+</li>
+<li><p><code>timezone</code>: timezone used if none is specified in the user&#39;s <code>voicemail_settings</code> [default: UTC]</p>
+</li>
+<li><p><code>number_domain</code>: string; the default <code>number_domain</code> used to identify local numbers if none is available in the call [default: &quot;local&quot;]</p>
+<p>Normally the <code>number_domain</code> is passed along with an incoming call to the voicemail server. If for some reason it is not available, this value is used instead.</p>
+</li>
+<li><p><code>record_streaming</code>: boolean;
+  if true stream recording of messages (only available with non-encapsulated formats such as &quot;PCMU&quot;)
+  if false messages are first recorded on the local server then uploaded to the message store
+  [default: false]</p>
+</li>
+<li><p><code>playback_streaming</code>: boolean; if true stream playback of messages [default: true]</p>
+</li>
+<li><p><code>message_format</code>: string; voicemail message format [default: &quot;wav&quot;]</p>
+<p>See <a href="http://wiki.freeswitch.org/wiki/Mod_native_file">http://wiki.freeswitch.org/wiki/Mod_native_file</a> for an explanation; meaningul values would be &quot;PCMU&quot; or &quot;PCMA&quot; in most cases, if the default is not suitable.</p>
+</li>
+<li><p><code>max_parts</code>: integer; the maximum number of segments/parts that might be recorded in a voicemail message [default: 1]</p>
+</li>
+<li><p><code>sender</code>: string; the email address used to send email notifications from, if none is specified for a number.</p>
+</li>
+<li><p><code>file_base</code>: string; a prefix used to locate the format files used by the email notifier.</p>
+<p>  On Unix this string must be terminated by a slash.</p>
+</li>
+<li><p><code>callback</code>:  Configuration to allow users to call the number that left a voicemail message</p>
+<p>When sending to a proxy, make sure the voicemail server has a matching endpoint record with its &quot;sbc&quot; field set to type 10 so that it is authorized to pass charging information along.</p>
+<ul>
+<li><p><code>profile</code>   &quot;ingress-#{profile_name}&quot; or &quot;egress-#{profile_name}&quot;, an existing <code>sip_profile</code> to use to dial out.</p>
+</li>
+<li><p><code>domain</code>    the domain name where the call should be sent to.</p>
+</li>
+</ul>
+</li>
+<li><p><code>notifier_port</code>: which local port to bind to for SIP MWI notifications [default: 7124]</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><a name="voicemailnotifications"/></a></p>
+<h4>Voicemail notifications</h4>
+<p>The notifier will first build filenames by concatenating <code>voicemail_notification</code>, <code>voicemail_notification_with_attachment</code>, or <code>voicemail_notification_do_not_record</code>, then the user&#39;s language, then the component of the email message (subject, text body, or HTML body).
+For example, for a notification without attachment nor <code>do_not_record</code> flag, using language &#39;en&#39;, the following filenames will be used:
+    voicemail_notification.en.subject, voicemail_notification.en.body, voicemail_notification.en.html</p>
+<p>The notifier will then try to locate those filenames.
+If the local host&#39;s configuration contains attachments with those filenames, these attachments will be used as templates.
+If not found as attachment, but present on the filesystem at the path specified by <code>file_base</code>, the content of those files will be used as templates.
+Otherwise default templates (in English) will be used.</p>
+<p>The templates are <a href="http://mustache.github.com/mustache.5.html">Mustache</a> templates.
+The parameters for the template will consist of the content of the voicemail message record. (See the &quot;voicemail records&quot; section below.)</p>
+<p>Especially the following parameters are available:</p>
+<pre><code>caller_id
+timestamp</code></pre>
+<p>The default templates are:</p>
+<ul>
+<li><p><code>voicemail_notification.en.subject</code>, <code>voicemail_notification_with_attachment.en.subject</code>:</p>
+<pre><code>New message from {{caller_id}}</code></pre>
+</li>
+<li><p><code>voicemail_notification.en.body</code>, <code>voicemail_notification_with_attachment.en.body</code>:</p>
+<pre><code>You have a new message from {{caller_id}}</code></pre>
+</li>
+<li><p><code>voicemail_notification.en.html</code>, <code>voicemail_notification_with_attachment.en.html</code>:</p>
+<pre><code>&lt;p&gt;You have a new message from {{caller_id}}</code></pre>
+</li>
+</ul>
+<p><a name="specifictohostsrunningthevoicemailstore"/></a></p>
+<h3>Specific to hosts running the voicemail-store</h3>
+<p>The <code>voicemail-store</code> service must be ran on a manager host.</p>
+<p>The service is responsible for managing the user databases (see below the section about <em>user database</em>) that store individual voicemail messages and need to be created correctly for that purpose.</p>
+<ul>
+<li><p><code>voicemail</code></p>
+<ul>
+<li><code>userdb_base_uri</code>: base URI (with admin access) where to create the users&#39; databases.</li>
+</ul>
+</li>
+</ul>
+<p><a name="specifictohostsrunningthepbxservice"/></a></p>
+<h3>Specific to hosts running the pbx service.</h3>
+<pre><code>pbx:
+  group_confirm_file: location of the sound file played when confirming the call
+  group_confirm_key:  a single-digit (1-9) string</code></pre>
+<p><a name="specifictohostsrunningthecdrscdraggregationservice"/></a></p>
+<h3>Specific to hosts running the cdrs (CDR aggregation) service.</h3>
+<p>To activate the CDR aggregation service:
+1. Set the &quot;aggregate.cdrs_uri&quot; URI in the target host; make sure the CouchDB system has enough storage.
+2. Add &quot;applications/cdrs&quot; to the list of applications on the target host. Restart the ccnq3 service to activate.
+3. On each source host (hosts which are running FreeSwitch and generating global CDRs; normally your inbound-carrier and outbound-carrier SBCs), set the &quot;cdr_aggregate_uri&quot; to the target&#39;s host URI, with the local (source) host authentication.</p>
+<p>For example
+on the target host, set &quot;aggregate.cdrs_uri&quot; to <a href="http://admin:password@target.example.net/cdrs">http://admin:password@target.example.net/cdrs</a>
+on the source host, set &quot;cdr_aggregate_uri&quot; to <a href="http://host%40source.example.net@target.example.net/cdrs">http://host%40source.example.net@target.example.net/cdrs</a>
+(both URIs point to the same database, but the authentication is different).</p>
+<ul>
+<li><p><code>aggregate</code></p>
+<ul>
+<li><p><code>cdrs_uri</code>: string;  URI for the database where the CDRs should be aggregated [no default]</p>
+<p>  The URI must contain authentication (it is used e.g. to create the database)</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><a name="specifictohostsrunningthelocationslocationaggregationservice"/></a></p>
+<h3>Specific to hosts running the locations (Location aggregation) service.</h3>
+<p>To activate the locations aggregation service:
+1. Set the &quot;aggregate.locations_uri&quot; URI in the target host.
+2. Add &quot;applications/locations&quot; to the list of applications on the target host. Restart the ccnq3 service to activate.
+3. On each source host (hosts which are running OpenSIPS with registration), set the &quot;opensips_proxy.usrloc_aggregate_uri&quot; to the target&#39;s host URI, with the local (source) host authentication.</p>
+<p>For example
+on the target host, set &quot;aggregate.locations_uri&quot; to <a href="http://admin:password@target.example.net/locations">http://admin:password@target.example.net/locations</a>
+on the source host, set &quot;opensips_proxy.usrloc_aggregate_uri&quot; to <a href="http://host%40source.example.net@target.example.net/locations">http://host%40source.example.net@target.example.net/locations</a>
+(both URIs point to the same database, but the authentication is different).</p>
+<ul>
+<li><p><code>aggregate</code></p>
+<ul>
+<li><code>locations_uri</code></li>
+</ul>
+</li>
+</ul>
+<p><a name="specifictohostsrunningthecnamclient"/></a></p>
+<h3>Specific to hosts running the CNAM-client</h3>
+<ul>
+<li><code>cnam_client</code>:<ul>
+<li><code>port</code>    FreeSwitch ESL <code>socket</code> port [default: 7124]</li>
+<li><code>uri</code>     URI to query</li>
+</ul>
+</li>
+</ul>
+<p><a name="domainprovisioningrecords"/></a></p>
+<h2>domain (provisioning records)</h2>
+<p>These records are normally used to populate the DNS server (&quot;applications/dns&quot;).</p>
+<p>Alternatively, if &quot;support_alternate_domains&quot; is enabled in the OpenSIPS configuration,
+an OpenSIPS server will accept any domain listed here.
+(By default only sip_domain_name is accepted.)</p>
+<ul>
+<li><p><code>_id</code>: type+&quot;:&quot;+domain</p>
+</li>
+<li><p><code>account</code>: &quot;&quot;    (the empty string)</p>
+</li>
+<li><p><code>type</code>:&quot;domain&quot;</p>
+</li>
+<li><p><code>domain</code>: string; the name of the DNS domain</p>
+</li>
+</ul>
+<p><a name="domainbasedrouting"/></a></p>
+<h3>domain-based routing</h3>
+<ul>
+<li><p><code>outbound_route</code>: the default outbound-route to be used if this domain is present in the Request URI.</p>
+<p>This requires the OpenSIPS configuration option <code>use_domain_outbound_route</code> to be set to <code>true</code>.</p>
+<p>See the description under <em>Rule (provisioning record)</em>.</p>
+</li>
+</ul>
+<p><a name="ccnq3dnsservice"/></a></p>
+<h3>ccnq3-dns service</h3>
+<p>  If &quot;applications/dns&quot; is configured on the host, &quot;domain&quot; provisioning records may be used to populate DNS records.
+  In this case the &quot;account&quot; field is optional (which can only be done on the main provisioning database).
+  The following fields are available:</p>
+<ul>
+<li><p><code>ENUM</code>: boolean; true if the domain is to be used to provide &quot;number&quot;-type records as a Carrier ENUM service</p>
+</li>
+<li><p><code>ttl</code>: integer, time-to-live for the records</p>
+<p>  Application note: For an ENUM domain, the ttl will influence how the database changes are propagated. It is better to keep it low in that case.</p>
+</li>
+<li><p><code>admin</code>: optional string, the contact value of the domain&#39;s SOA [default: &quot;hostmaster.&quot;+domain]</p>
+</li>
+<li><p><code>records</code>: [] of {}; the fields of the records are as follows:</p>
+<ul>
+<li><p><code>prefix</code>: a prefix to the domain (local name) [optional]</p>
+</li>
+<li><p><code>ttl</code>: integer, individual record&#39;s ttl [overrides domain&#39;s default]</p>
+</li>
+<li><p><code>class</code>: &quot;A&quot;, &quot;NS&quot;, etc. [default: &quot;A&quot;] (only &quot;IN&quot; classes are supported)</p>
+</li>
+<li><p><code>value</code>: either a string (if only one value is provided, for example for A, CNAME, NS, etc.), or an array of response values.</p>
+<p>An array value is used for example for SRV records or NAPTR records.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>Example:</p>
+<pre><code>records: [
+  {class:&#39;NS&#39;, value:&#39;ns1.example.net.&#39;}
+  {class:&#39;NS&#39;, value:&#39;ns2.example.net.&#39;}
+  {prefix:&#39;s1&#39;,value:&#39;192.168.1.10&#39;}
+  {prefix:&#39;_sip._udp&#39;,class:&#39;SRV&#39;,value:[20,7,5060,&quot;sip1.example.net.&quot;]}
+  {class:&quot;NAPTR&quot;,value:[20,10,&#39;u&#39;,&#39;E2U+sip&#39;,&quot;!^.*$!sip:foo@example.net!&quot;, &quot;&quot;]
+
+]</code></pre>
+<p>By design &quot;applications/dns&quot; runs on port 53053. To allow remote hosts to access the application on port 53, install the ccnq3-dns package.</p>
+<p><a name="accountforwarderprovisioningrecords"/></a></p>
+<h2>account_forwarder (provisioning records)</h2>
+<p>For non-trusted host that are allowed to submit P-Charge-Info, list of accounts they may submit.</p>
+<ul>
+<li><code>_id</code>: type+&quot;:&quot;+account+&#39;@&#39;+endpoint</li>
+<li><code>account</code>: account</li>
+<li><code>type</code>:&quot;account_forwarder&quot;</li>
+<li><code>endpoint</code>: endpoint</li>
+</ul>
+<p><a name="endpointprovisioningrecords"/></a></p>
+<h2>endpoint (provisioning records)</h2>
+<ul>
+<li><p><code>_id</code>: type+&quot;:&quot;+endpoint</p>
+</li>
+<li><p><code>account</code>: string</p>
+</li>
+<li><p><code>type</code>:&quot;endpoint&quot;</p>
+</li>
+<li><p><code>endpoint</code>: string, required; either a static IP, or a user@domain registration username</p>
+<p>If a static IP, it must be identical to the user_ip field.</p>
+<p>If a registration endpoint, password, ha1, and ha1b are required.</p>
+</li>
+<li><p><code>require_same_auth</code> boolean; if true, this endpoint must validate both IP-based and username+password authentications for egress calls. The present record is used for username authentication (endpoint is user@domain), but an additional <code>user_ip</code> field must match. [default: false]</p>
+</li>
+</ul>
+<p><a name="registrationendpointfields"/></a></p>
+<h3>Registration endpoint fields</h3>
+<ul>
+<li><p><code>password</code>: string; password used for authentication, or null if authentication not used [required for registration endpoints]</p>
+</li>
+<li><p><code>ha1</code>: authentication string; <code>hex_md5([username,challenge,password].join(&quot;:&quot;))</code> [required for registration endpoints]</p>
+</li>
+<li><p><code>ha1b</code>: authentication string; <code>hex_md5([username+&#39;@&#39;+challenge,challenge,password].join(&quot;:&quot;))</code> [required for registration endpoints]</p>
+</li>
+</ul>
+<p>If the &quot;challenge&quot; configuration parameter is empty (the default), the domain name of the To: header (for REGISTER) or From: header (for other messages) is used as the challenge. In other words: normally the challenge should be the same as the domain name used for the endpoint.</p>
+<ul>
+<li><code>bypass_from_auth</code>:  boolean
+Applies to authorized calls coming from this endpoint.
+If false (the default), the From username must equal the Authentication ID, otherwise the call is rejected.
+If true, the From username is not checked. In this case you probably want to enable <code>check_from</code> (below) to ensure that the From username is valid.</li>
+</ul>
+<p><a name="staticendpointfields"/></a></p>
+<h3>Static endpoint fields</h3>
+<ul>
+<li><p><code>user_ip</code>         string  Static endpoint&#39;s IP address [required for static endpoints]</p>
+<p>Must be identical to the endpoint field if used.</p>
+</li>
+<li><p><code>user_port</code>       integer Static endpoint&#39;s port number [optional]</p>
+</li>
+<li><p><code>disabled</code>        boolean If true, this IP is prevented from talking to the switch.
+(Used to build a black-list of IP addresses.)</p>
+</li>
+</ul>
+<p><a name="inboundcallroutingdstendpoint"/></a></p>
+<h3>Inbound call routing (dst_endpoint)</h3>
+<ul>
+<li><p><code>dst_disabled</code>    boolean If true, calls towards this endpoint are blocked</p>
+</li>
+<li><p><code>strip_digit</code>     boolean If true, remove the first digit of the destination username</p>
+</li>
+<li><p><code>user_force_mp</code>   boolean If true, attempt to force media_proxy insertion</p>
+</li>
+<li><p><code>user_srv</code>        string  Final user&#39;s domain (compatible with user_via)</p>
+<p>Design note: a valid design to allow for easy migration of customers IP addresses
+is to have:</p>
+<ul>
+<li>one endpoint with an identifier (not an IP address nor a <code>username@domain</code>)
+which is used to route inbound calls; that endpoint uses the <code>user_srv</code> field
+to terminate the calls on the proper customer system;</li>
+<li>one or more endpoints (using IP addresses as identifiers) to allow these
+IP addresses to route outbound calls.</li>
+</ul>
+<p>With this design a customer can migrate IP addresses temporarily or permanently by:</p>
+<ul>
+<li>adding or removing the IP addresses (used for outbound calls)</li>
+<li>updating the <code>user_srv</code> field of the endpoint used for inbound calls.</li>
+</ul>
+</li>
+<li><p><code>user_via</code>        string  If present, calls are routed via this SBC</p>
+<p>Usage note: This requires a type of SBC which has not yet been ported to ccnq3.</p>
+</li>
+</ul>
+<p><a name="outboundcallroutingsrcendpoint"/></a></p>
+<h3>Outbound call routing (src_endpoint)</h3>
+<ul>
+<li><p><code>number_domain</code>: string; the local number&#39;s <code>number_domain</code> [default: the proxy&#39;s <code>number_domain</code>]</p>
+<p>Used to locate a local number&#39;s record.</p>
+</li>
+<li><p><code>dialog_timer</code>: integer; maximum call (dialog) duration (in seconds)</p>
+</li>
+<li><p><code>outbound_route</code>: integer</p>
+<p>See the description under <em>Rule (provisioning record)</em>.</p>
+</li>
+<li><p><code>check_from</code>      boolean
+If true, the call can only be placed if the endpoint for the From username is the same as this endpoint.</p>
+</li>
+<li><p><code>sbc</code>             integer This endpoint is an outbound SBC that sends calls to us towards a carrier.</p>
+<p>Our own outbound SBCs</p>
+<ul>
+<li>1: SBC provides originator endpoint information as Sock-Info or source RURI param</li>
+<li>2: SBC provides account info in P-Charge-Info (no checks) (for example, a client-sbc)</li>
+</ul>
+<p>Customer outbound SBCs</p>
+<ul>
+<li>10: SBC provides account info in P-Charge-Info, account is checked against account_forwarder</li>
+</ul>
+</li>
+<li><p><code>inbound_sbc</code>     integer This endpoint is an inbound SBC that sends calls to us from a carrier.</p>
+<p>Our own inbound SBCs</p>
+<ul>
+<li>1: upstream SBC [inbound]</li>
+</ul>
+</li>
+<li><p><code>location</code>        string  An identifier for a location record</p>
+<p>Might be overriden by the calling number&#39;s location.</p>
+</li>
+<li><p><code>src_disabled</code>    boolean All outbound calls are disabled.</p>
+</li>
+<li><p><code>user_force_mp</code>   boolean If true, attempt to force media_proxy insertion</p>
+</li>
+<li><p><code>emergency_domain</code>: string</p>
+<p>This domain is used when an outbound-proxy sends a query to an emergency server.
+The emergency server will use this domain in its 302 Redirect response to the outbound-proxy.
+(Configure this field in the endpoints that are defined for the outbound proxies.)</p>
+</li>
+</ul>
+<p><a name="numberprovisioningrecords"/></a></p>
+<h2>number (provisioning records)</h2>
+<ul>
+<li><p><code>_id</code>: type+&quot;:&quot;+number</p>
+</li>
+<li><p><code>account</code>: string [required]</p>
+</li>
+<li><p><code>type</code>:&quot;number&quot;</p>
+</li>
+<li><p><code>number</code>: string</p>
+<p>  For global numbers (between a carrier-sbc and a client-sbc), formatted as &quot;E.164-without-plus&quot;.</p>
+<p>  For client-side local-numbers, a locally-formatted number @ the client-sbc&#39;s <code>number_domain</code>.</p>
+</li>
+</ul>
+<p><a name="globalnumberproperties"/></a></p>
+<h3>Global-number properties</h3>
+<ul>
+<li><p><code>inbound_uri</code>: string (URI)  a URI used by an outbound-proxy to bypass LCR and route a number directly, or an inbound Carrier SBC to route the number.</p>
+<p>These are used to build Carrier ENUM records.</p>
+</li>
+<li><p><code>outbound_route</code>: integer; allows to select a specific <code>rule</code> based on the rule&#39;s <code>groupid</code>.</p>
+<p>For a global number this indicates the LCR route that will be selected to route the call out.</p>
+<p>See additional information in <em>Rule (provisioning record)</em>.</p>
+</li>
+<li><p><code>registrant_password</code>: password for applications/registrant</p>
+<p>You must issue a <code>restart</code> registrant command for the changes to be applied.</p>
+</li>
+<li><p><code>registrant_remote_ipv4</code>: remote server for applications/registrant</p>
+</li>
+<li><p><code>registrant_host</code>: host(s) where this registration should be effective</p>
+<p>This parameter can actually be either a string (single host) or an array of strings (multiple hosts).</p>
+</li>
+<li><p><code>registrant_expiry</code>: integer, expiry parameter, in seconds [default: 3600, one hour]</p>
+</li>
+<li><p><code>registrant_realm</code>: string; the <code>realm</code> used to authenticate outbound calls through the registrant server.</p>
+</li>
+</ul>
+<p>Please note that for a number to use the registrant function, both <code>registrant_password</code> and <code>registrant_host</code> must be specified.</p>
+<p><a name="localnumberproperties"/></a></p>
+<h3>Local-number properties</h3>
+<ul>
+<li><p><code>endpoint</code> [required]</p>
+</li>
+<li><p><code>outbound_route</code>: integer; allows to select a specific <code>rule</code> based on the rule&#39;s <code>groupid</code>.</p>
+<p>For a local number this is used to define the local dialplan, including call restrictions, access to voicemail and services, ...</p>
+<p>See additional information in <em>Rule (provisioning record)</em>.</p>
+</li>
+<li><p><code>location</code>:  string; the location identifier for this specific number (used for emergency location services)</p>
+<p>If present, overrides the endpoint&#39;s location.</p>
+</li>
+<li><p><code>cfa</code>:  string, URI; if present, all calls are forwarded to this URI</p>
+</li>
+<li><p><code>cfb</code>:  string, URI; if present, busy calls are forwarded to this URI</p>
+</li>
+<li><p><code>cfda</code>: string, URI; if present, unanswered calls are forwarded to this URI</p>
+</li>
+<li><p><code>cfnr</code>: string, URI; if present, non-registered endpoints are forwarded to this URI</p>
+</li>
+<li><p><code>dialog_timer</code>: integer; maximum call duration</p>
+</li>
+<li><p><code>inv_timer</code>: integer; maximum ringback duration</p>
+</li>
+<li><p><code>privacy</code>: boolean</p>
+<p>If true, a Privacy: id (mask calling number) header is added to outbound calls</p>
+</li>
+<li><p><code>asserted_number</code>: string</p>
+<p>If present, a P-Asserted-Identity (Caller-ID) header is added to outbound calls</p>
+</li>
+<li><p><code>reject_anonymous</code>: boolean</p>
+<p>If true, reject anonymous inbound calls</p>
+</li>
+<li><p><code>use_blacklist</code>: boolean</p>
+<p>If true, reject inbound calls from the blacklist</p>
+</li>
+<li><p><code>use_whitelist</code>: boolean</p>
+<p>If true, accept inbound calls from the whitelist</p>
+</li>
+<li><p><code>user_database</code>:  string; the name of the user&#39;s own CouchDB instance (for the user who &quot;owns&quot; this number)</p>
+<p>This database is used by the voicemail system to locate the voicemail_settings record and record or playback voicemail
+messages.</p>
+<p>This database is used by the pbx system to locate the pbx_settings record.</p>
+</li>
+<li><p><code>voicemail_sender</code>: string; the email address used to send out voicemail notifications for this number</p>
+<p>If not present, the &quot;voicemail.sender&quot; configuration parameter of the host running voicemail is used.
+If neither are present, the recipient&#39;s email address is used as as stop-gap.</p>
+</li>
+</ul>
+<p><a name="localnumberpropertiesforthepbxapplication"/></a></p>
+<h4>Local-number properties for the PBX application</h4>
+<pre><code>pbx: {
+  ringback:   false, or integer between 1 and 9
+  music:      false, or integer between 1 and 9
+  voicemail:  sip URI of voicemail for this local number
+  daytime_rules: [
+    {
+      delay:          integer &gt;= 0
+      destination:    string, either a sip URI, &quot;voicemail&quot;,
+                      &quot;extension 2x&quot; or some external number
+      confirm:        boolean, if true call must be confirmed
+    },
+    { ... }
+  ],
+  nighttime_rules: [
+    {
+      delay:          integer &gt;= 0
+      destination:    sip URI or &quot;voicemail&quot; or &quot;extension 2x&quot;
+      confirm:        boolean, if true call must be confirmed
+    },
+    { ... }
+  ],
+  short_numbers: {
+    &quot;20&quot;: number (uses default number_domain)
+    &quot;21&quot;: number
+    &quot;22&quot;: number
+    &quot;123&quot;: &quot;voicemail&quot;
+    &quot;124&quot;: &quot;nighttime_on&quot;
+    &quot;125&quot;: &quot;nighttime_off&quot;
+  }
+}</code></pre>
+<p>Notes:</p>
+<ul>
+<li>ringback: false for default ringback, 1-9 for pre-recorded</li>
+<li>music: false for no music (default), 1-9 for pre-recorded</li>
+<li><p>voicemail: sip URI for voicemail (similar to <code>cfa</code>, cfb` sip URI)</p>
+</li>
+<li><p>delay: delay in seconds before this options is activated.</p>
+</li>
+<li><p>destination: either</p>
+<ul>
+<li>sip URI where to send the call (similar to <code>cfa</code> etc)</li>
+<li>&quot;voicemail&quot; to use the <code>voicemail</code> field</li>
+<li>&quot;extension foo&quot; to use the &quot;foo&quot; <code>short_numbers</code> field</li>
+<li>some number to send the call to the specified (external) number</li>
+</ul>
+</li>
+<li><p>confirm: if true, the called must press a digit to confirm call is
+  accepted.</p>
+</li>
+<li><p>short_numbers:
+  These are used to handle differently the specified numbers;
+  numbers not in this list are sent outbound (as normal).
+  Normally this list should be the same for all extensions in a
+  specific &quot;pbx&quot;.</p>
+</li>
+<li><p><code>daytime_rules</code> would normally include at least:</p>
+<pre><code>[
+  {
+    delay: 0,
+    destination: &quot;extension&quot; // the actual number
+    confirm: false,
+  },
+  {
+    delay: 45,
+    destination: &quot;voicemail&quot;
+    confirm: false,
+  }
+]</code></pre>
+</li>
+<li><p><code>nighttime_rules</code> would normally include:</p>
+<pre><code>[
+  {
+    delay: 0,
+    confirm: false,
+    destination: &quot;voicemail&quot;
+  }
+]</code></pre>
+</li>
+</ul>
+<p><a name="whitelistblacklistprovisioningrecords"/></a></p>
+<h2>whitelist/blacklist (provisioning records)</h2>
+<p>A local number may reject or accept calls from specific numbers.</p>
+<ul>
+<li><p><code>_id</code>: type+&#39;:&#39;+number+&#39;@&#39;+calling_number</p>
+</li>
+<li><p><code>type</code>: &#39;list&#39;</p>
+</li>
+<li><p><code>number</code>: string; a local number &#39;@&#39; number_domain</p>
+</li>
+<li><p><code>calling_number</code>: string; a locally-formatted calling number</p>
+</li>
+<li><p><code>blacklist</code>: boolean</p>
+</li>
+<li><p><code>whitelist</code>: boolean</p>
+</li>
+</ul>
+<p>Either (or both) of <code>blacklist</code> and/or <code>whitelist</code> must be true for the matching action to be taken.</p>
+<p><a name="ruleprovisioningrecords"/></a></p>
+<h2>rule (provisioning records)</h2>
+<p>Rules are used to route outbound calls in OpenSIPS.</p>
+<p><a name="whichrulesetsareselected"/></a></p>
+<h3>Which rule sets are selected</h3>
+<p>When a call has to be routed towards a trunk, a maximum of two eligible rule sets are tried in order:</p>
+<ul>
+<li>The first rule set is the rule set indicated by the <code>outbound_route</code> of the (calling) <code>number</code> (From username), if any. This allows for example to route specific calling numbers through a T.38 route rather than a voice-only route.</li>
+<li>The second rule set is the first matching rule set in the following list:<ul>
+<li>The rule set indicated by the <code>outbound_route</code> of the <code>domain</code> (Request URI domain), if any. This only applies if the OpenSIPS configuration flag <code>use_domain_outbound_route</code> is <code>true</code> [default: <code>false</code>].</li>
+<li>The rule set indicated by the <code>outbound_route</code> of the <code>endpoint</code> (source endpoint), if any. This only applies if the OpenSIPS configuration flag <code>use_endpoint_outbound_route</code> is <code>true</code> [default: <code>true</code>].</li>
+<li>The rule set indicated by the <code>default_outbound_route</code> OpenSIPS configuration parameter, if any. This only applies if the OpenSIPS configuration flag <code>use_default_outbound_route</code> is <code>true</code> [default: <code>false</code>].</li>
+</ul>
+</li>
+</ul>
+<p>The default configuration (calling number and originating endpoint rule sets) allows for rule selection base on provisioning only. Domain-based outbound-route selection is meant to be used on outbound-proxies, not on customer-side proxies (where it could be used to bypass calling restrictions). When domain-based route selection is enabled the calling endpoint can select any domain-based route.</p>
+<p>If no rule set is eligible, or the eligible rule set(s) are unable to route the call (no matching prefix, etc.), the call is rejected with <code>404 User Not Found</code> (local number) or <code>502 No Route</code> (global number).</p>
+<p>The first eligible and matching rule selected is used to route the call.</p>
+<p><a name="howrulesarematched"/></a></p>
+<h3>How rules are matched</h3>
+<p>Out of all the rules in a rule set, at most one will eventually be selected.</p>
+<p>The selection criterias are described under <em>Rule selection</em> below.</p>
+<p><a name="howroutingisdone"/></a></p>
+<h3>How routing is done</h3>
+<p>Once a rule is selected, the call is forwarded to the destination gateway(s) or carrier(s) for that rule.</p>
+<p>Carrier&#39;s names are pre-pended with a hash <code>#</code> sign, while gateway names are inserted as-is, separated by comma <code>,</code>. (But remember that carrier and gateway names must be alphanumeric.)</p>
+<p>Although <code>rule</code>s and <code>gateway</code>s are defined on a per-<code>sip_domain_name</code> basis, carriers defined on a per-<code>host</code> basis.
+This allows you do have domain-generic routes and gateways, but each host can route to a preferred set of gateways (e.g. closest-gateway first) if desired. In that last case, make sure you assign higher weights to the preferred gateways for each <code>carrier</code>.</p>
+<p>The <code>attrs</code> field of the selected rule is made available in the CDRs.
+This feature can be used for example to store rating information so that they do not need to be looked up again (using longest-prefix match) at rating time.</p>
+<p>Operational note:
+Changes to rules, gateways, and carriers are not applied automatically. Use `sip_commands.opensips = &quot;reload routes&quot;`` to apply the changes.</p>
+<p><a name="ruleidentifiers"/></a></p>
+<h3>Rule identifiers</h3>
+<ul>
+<li><p><code>_id</code>: type+&quot;:&quot;+rule</p>
+</li>
+<li><p><code>account</code>: &quot;&quot;    (the empty string)</p>
+</li>
+<li><p><code>type</code>: &quot;rule&quot;</p>
+</li>
+<li><p><code>rule</code>:</p>
+<p>Either, if no <code>timerec</code> field is present:</p>
+<pre><code>sip_domain_name+&quot;:&quot;+groupid+&quot;:&quot;+prefix</code></pre>
+<p>or, if a <code>timerec</code> field is present:</p>
+<pre><code>sip_domain_name+&quot;:&quot;+groupid+&quot;:&quot;+prefix+&quot;:&quot;+timerec+&quot;:&quot;+priority</code></pre>
+</li>
+<li><p><code>sip_domain_name</code>: the <code>sip_domain_name</code> of the hosts on which OpenSIPS is running and using this rule/<code>outbound_route</code></p>
+</li>
+</ul>
+<p><a name="ruleselection"/></a></p>
+<h3>Rule selection</h3>
+<p>The following four fields are used to select a rule.
+The set of applicable rules is narrowed down as each field is applied in order.</p>
+<ul>
+<li><p><code>groupid</code>: integer; this is the <code>outbound_route</code> of the number or endpoint. All rules with the same <code>groupid</code> constitute a rule set.</p>
+<p>Although it seems OpenSIPS might support having one or more groupid for a given rule we currently do not support this option.</p>
+</li>
+<li><p><code>prefix</code>: string; the routing (destination number) prefix (might be &quot;&quot;), longest-prefix match</p>
+</li>
+<li><p><code>timerec</code>: string; a time specification [optional; defaults to &quot;&quot;]</p>
+</li>
+<li><p><code>priority</code>: integer; ruleset ordering criteria (within the groupid and prefix, for matching <code>timerec</code>s, the rule with the highest priority is chosen) [optional; defaults to 1]</p>
+</li>
+</ul>
+<p>At the end of the selection process, at most one rule is selected from the rule set.</p>
+<p>For the complete specification, see section <em>Routing Rule Processing</em> in <a href="http://www.opensips.org/html/docs/modules/1.8.x/drouting.html">http://www.opensips.org/html/docs/modules/1.8.x/drouting.html</a></p>
+<p><a name="ruleoutput"/></a></p>
+<h3>Rule output</h3>
+<p>The following fields are the output of the selection process, and are used to route the call, once a rule has been selected.</p>
+<p>The gateway list indicates which gateways (either <code>gateway</code> records or <code>egress_gwid</code> sip_profiles) are used to route the call.</p>
+<ul>
+<li><p><code>gwlist</code>: string; a comma-separated list of gateways or carriers.</p>
+<p>Carrier IDs must be prefixed with a <code>#</code>. Weight are assigned by following the <code>gwid</code> or <code>carrierid</code> with <code>=</code> and a numerical weight.</p>
+<p>Examples:</p>
+<pre><code>&quot;gw1,gw2,#car1&quot;
+
+&quot;gw1=25,gw2=25,#car1=50&quot;</code></pre>
+<p>The gateways and/or carriers specified in the rule are tried in the order given.</p>
+</li>
+<li><p><code>attrs</code>: string [default: the empty string]
+This output field is present in the call&#39;s CDR as <code>variables.ccnq_attrs</code> on outbound calls.</p>
+</li>
+</ul>
+<p><a name="carrierprovisioningrecords"/></a></p>
+<h2>carrier (provisioning records)</h2>
+<p>Carriers are used by the Least Cost Rules as targets for call routing.</p>
+<p>Operational note:
+Changes to rules, gateways, and carriers are not applied automatically. Use sip_commands.opensips = &quot;reload routes&quot; to apply the changes.</p>
+<ul>
+<li><p><code>_id</code>: type+&quot;:&quot;+carrier</p>
+</li>
+<li><p><code>account</code>: &quot;&quot;    (the empty string)</p>
+</li>
+<li><p><code>type</code>: &quot;carrier&quot;</p>
+</li>
+<li><p><code>carrier</code>: host+&quot;:&quot;+carrierid</p>
+</li>
+<li><p><code>host</code>: string; the <code>host</code> on which OpenSIPS is running and using this carrier.</p>
+</li>
+<li><p><code>carrierid</code>: alphanumerical; a unique identifier for the carrier inside this <code>sip_domain_name</code>; used in the <code>gwlist</code> field of a <code>rule</code> record (prefixed with <code>#</code>).</p>
+</li>
+<li><p><code>gwlist</code>: the comma-separated list of <code>gwid</code> for the target gateways.</p>
+<p>To assign weights to the gateways append <code>=</code> and a numerical weight after each <code>gwid</code>.</p>
+<p>Examples:</p>
+<pre><code>`gw1,gw2,gw3`
+
+`gw1=25,gw2=25,gw3=50`</code></pre>
+</li>
+</ul>
+<p>The following fields are optional.</p>
+<ul>
+<li><p><code>flags</code>: integer [default: 0]</p>
+<p>The following flags are supported; you normally do not need to modify the default.</p>
+<p>1 - if set, use weights for sorting; if not set [default], uses <code>gwlist</code> order
+2 - if set, after sorting, use only the first gateway; if not set [default], after sorting, try all gateways
+4 - if set, disable this carrier; if not set [default], enable this carrier</p>
+<p>(Add the numerical values of the flags if multiple are set.)</p>
+</li>
+<li><p><code>attrs</code>:  string</p>
+</li>
+</ul>
+<p><a name="gatewayprovisioningrecords"/></a></p>
+<h2>gateway (provisioning records)</h2>
+<p>Gateways are used by the Least Cost Rules as targets for call routing.</p>
+<p>You do not need to create gateway records for sip_profiles which have an <code>egress_gwid</code> field, these are created automatically using the host&#39;s <code>sip_domain_name</code> and the <code>egress_gwid</code>. (They will not show up in the database but will be accessible to all the OpenSIPS hosts within that <code>sip_domain_name</code>.)
+This feature means that you normally should not have to manually create <code>gateway</code>-type records for Least Cost Routing, since all the interesting records should be created automatically.</p>
+<p>However you will have to create gateway records for calls to servers in a different <code>sip_domain_name</code> such as voicemail servers or emergency servers.</p>
+<p>Operational note:
+Changes to rules, gateways, and carriers are not applied automatically. Use sip_commands.opensips = &quot;reload routes&quot; to apply the changes.</p>
+<ul>
+<li><p><code>_id</code>: type+&quot;:&quot;+gateway</p>
+</li>
+<li><p><code>account</code>: &quot;&quot;    (the empty string)</p>
+</li>
+<li><p><code>type</code>: &quot;gateway&quot;</p>
+</li>
+<li><p><code>gateway</code>: sip_domain_name+&quot;:&quot;+gwid</p>
+</li>
+<li><p><code>sip_domain_name</code>: the sip_domain_name of the hosts on which OpenSIPS is running and using this gateway.</p>
+</li>
+<li><p><code>gwid</code>: alphanumerical; a unique identifier for the gateway inside this sip_domain_name; used in the <code>gwlist</code> field of a <code>rule</code> record or in the <code>gwlist</code> field of a <code>carrier</code> record.</p>
+<p><em>Alphanumerical</em> means the <code>gwid</code> (or <code>egress_gwid</code> for that matter) must only contain the following ASCII characters: <code>a</code> through <code>z</code>, <code>A</code> through <code>Z</code>, <code>0</code> through <code>9</code>, and the underscore <code>_</code>. Any other character in a gateway id will cause OpenSIPS to crash.</p>
+</li>
+<li><p><code>address</code>: the address of the gateway (IP, IP:port, etc.)</p>
+</li>
+</ul>
+<p>The following fields are optional.</p>
+<ul>
+<li><p><code>probe_mode</code>: 0</p>
+<p>The following modes are available:
+  0: no probing
+  1: probing only when disabled (however our scripts do not use dr_disable())
+  2: probing at all times</p>
+</li>
+<li><p><code>strip</code>: 0</p>
+</li>
+<li><p><code>pri_prefix</code>:  string</p>
+</li>
+<li><p><code>attrs</code>: string; currently has a special meaning, do not use.</p>
+</li>
+</ul>
+<p><a name="locationprovisioningrecords"/></a></p>
+<h2>location (provisioning records)</h2>
+<ul>
+<li><p><code>_id</code>: type+&quot;:&quot;+location</p>
+</li>
+<li><p><code>account</code>: string</p>
+</li>
+<li><p><code>type</code>: &quot;location&quot;</p>
+</li>
+<li><p><code>location</code>:  string; a unique identifier for this location</p>
+</li>
+<li><p><code>routing_data</code>:  string; specific to the emergency routing system used</p>
+<p>In France this would be the INSEE code of the commune.</p>
+</li>
+</ul>
+<p><a name="emergencyprovisioningrecords"/></a></p>
+<h2>emergency (provisioning records)</h2>
+<p>This is currently used to implement a French emergency call router.</p>
+<p>These records are used by the <code>applications/emergency</code> application.</p>
+<ul>
+<li><p><code>_id</code>: type + &quot;:&quot; + number + &quot;#&quot; + routing_data</p>
+</li>
+<li><p><code>type</code>: &quot;emergency&quot;</p>
+</li>
+<li><p><code>number</code>: string</p>
+<p>  In France this could for example be a local number &quot;112&quot;, or (more probably) a global number &quot;330112&quot;.</p>
+<p>  Implementation note:
+  The prefix &quot;330&quot; is used in our French dialplan to allow OpenSIPS to route emergency calls using its standard Least Cost Routing module,
+  which does not allow anything but digits as the routing element.</p>
+</li>
+<li><p><code>routing_data</code>: string, matching the routing_data field of the location record.</p>
+<p>  In France this would be the INSEE code of the commune.</p>
+</li>
+<li><p><code>destination</code>: string; a target phone number expressed in the emergency_domain of the server that sent the request.</p>
+<p>  The Contact URI returned by the emergency sever in its 302 message will consist of <code>destination</code>@<code>emergency_domain</code>.</p>
+<p>  The <code>emergency_domain</code> used is the one found in the <code>endpoint</code> record for the host that sent the INVITE message to
+  the emergency server.</p>
+</li>
+</ul>
+<p><a name="usersdatabase"></a></p>
+<h1>_users database</h1>
+<p>The <code>_users</code> database is CouchDB&#39;s standard authentication and authorization database.</p>
+<p>Authentication is provided by setting the <code>password</code> field in a user record.</p>
+<p>Authorization is provided by setting the <code>roles</code> field in a user record.</p>
+<p><a name="hostrecords"/></a></p>
+<h2>host records</h2>
+<p>These records are used to allow hosts (servers) within the system access to some functionality:</p>
+<ul>
+<li>replicate the provisioning database from the master to their local copies;</li>
+<li>replicate their local CDRs onto a master CDR database;</li>
+<li>replicate their local database of user locations onto a master <code>locations</code> database.</li>
+</ul>
+<p>The records follow the format outlined in the previous section.
+They are documented here separately for convenience.</p>
+<p>Servers should have the <code>host</code> role assigned.</p>
+<ul>
+<li><code>_id</code>: &quot;org.couchd.user:&quot;+name</li>
+<li><code>type</code>: &quot;user&quot;</li>
+<li><code>name</code>: &quot;host@&quot; + hostname</li>
+<li><code>password</code></li>
+<li><code>roles</code>: [&quot;host&quot;]</li>
+</ul>
+<p><a name="voicemailrecords"/></a></p>
+<h2>voicemail records</h2>
+<p>These records are used to allow voicemail servers access to:</p>
+<ul>
+<li>read and update voicemail settings and voicemail messages in a <em>user database</em>;</li>
+<li>read the <code>_users</code> database to list <code>user_database</code> fields.</li>
+</ul>
+<p>Their <code>_users</code> profile is as follows:</p>
+<ul>
+<li><code>_id</code>: &quot;org.couchd.user:&quot;+name</li>
+<li><code>type</code>: &quot;user&quot;</li>
+<li><code>name</code>: &quot;voicemail@&quot; + hostname</li>
+<li><code>password</code></li>
+<li><code>roles</code>: [&quot;update:user_db:&quot;,&quot;access:_users:&quot;]</li>
+</ul>
+<p><a name="otherrecords"/></a></p>
+<h2>Other records</h2>
+<p>Regular <code>_user</code> record may also contain:</p>
+<ul>
+<li><code>user_database</code>: the name of a <em>user database</em> this user has access to. (These are maintained by the <code>voicemail-store</code> application.)</li>
+</ul>
+<p><a name="endpointlocationdatabase"></a></p>
+<h1>endpoint-location database</h1>
+<p>The record in this database are read-only.
+(In other words you should not attempt to modify them.)
+They are updated by OpenSIPS.</p>
+<p>There should be one location database local to each OpenSIPS server that provides registration services.</p>
+<p>Additionally the locations records might be aggregated in a central <code>locations</code> database, see the documentation for <code>locations_aggregate_uri</code>.</p>
+<p><a name="endpointlocationrecords"/></a></p>
+<h2>endpoint-location records</h2>
+<p>Identifier</p>
+<ul>
+<li><code>id</code>: username+&quot;@&quot;+domain (registration username)</li>
+<li><code>username</code>: string; username part of the registration username@domain</li>
+<li><code>domain</code>: string; domain part of the registration username@domain</li>
+</ul>
+<p>Information received from the client</p>
+<ul>
+<li><code>callid</code>: string</li>
+<li><code>contact</code>: string</li>
+<li><code>cseq</code>: integer</li>
+<li><code>q</code>: integer (-1 if none is provided by the endpoint)</li>
+<li><code>user_agent</code>: string</li>
+</ul>
+<p>Information stored by the server to manage the registration</p>
+<ul>
+<li><code>last_modified</code>: string (datetime, UTC)</li>
+<li><code>expires</code>: string (datetime, UTC)</li>
+<li><code>received</code>: string (IP:port from which the registration packet originated)</li>
+<li><code>socket</code>: string (IP:port on which we received the registration packet)</li>
+<li><code>methods</code>: integer</li>
+<li><code>path</code>: string</li>
+<li><code>cflags</code>: integer</li>
+<li><code>flags</code>: 0</li>
+</ul>
+<p><a name="userdatabase"></a></p>
+<h1>user database</h1>
+<p>Each user is assigned a private <em>user database</em>.</p>
+<blockquote>
+<p>Usage note: <em>user databases</em> are named using the convention &quot;u&quot;+UUID.
+If your application creates user databases make sure to follow that convention as well.</p>
+<p>Additionally, note that a single user database may be shared by multiple users.</p>
+</blockquote>
+<p>An application may create the database itself (server-side) using the standard CouchDB API, if it has database-level administrative access.
+However databases created that way are world-readable; it is your responsability to ensure that the database will get proper security tokens.</p>
+<p><a name="voicemailsettingsrecord"/></a></p>
+<h2>voicemail_settings record</h2>
+<p>A user&#39;s voicemail settings are stored in this record.</p>
+<ul>
+<li><p><code>_id</code>: &#39;voicemail_settings&#39;</p>
+</li>
+<li><p><code>pin</code>: string of digits; the user&#39;s voicemail PIN [optional]</p>
+<p>If no &quot;pin&quot; is specified then no authentication is required to access the voicemail box.</p>
+</li>
+<li><p><code>language</code>: language string for this user&#39;s voicemail</p>
+</li>
+<li><p><code>timezone</code>: timezone string for this user&#39;s voicemail</p>
+</li>
+<li><p><code>email_notifications</code>: hash; the key is the target email address; the values should be a hash containing:</p>
+<ul>
+<li><code>attach_message</code>: boolean; if true the voice message is sent along with the notification</li>
+</ul>
+</li>
+<li><p><code>do_not_record</code>: boolean; if true, no voice messages are recorded, only the prompts are played</p>
+</li>
+<li><p><code>send_then_delete</code>: boolean; if true, the message is removed after an email is sent, as long as the email contains the message as attachments (<code>attach_message</code> is true) or no message was recorded (<code>do_not_record</code> is true).</p>
+<p>If neither <code>attach_message</code> or <code>send_then_delete</code> is true, this option is ignored.</p>
+</li>
+<li><p><code>_attachments</code>:</p>
+<ul>
+<li><code>prompt.wav</code>  voicemail prompt</li>
+<li><code>name.wav</code>    name prompt</li>
+</ul>
+</li>
+</ul>
+<p><a name="voicemailrecords"/></a></p>
+<h2>voicemail records</h2>
+<p>Each new voicemail message is stored in an individual voicemail record.</p>
+<ul>
+<li><p><code>_id</code>: type + timestamp + caller_id</p>
+</li>
+<li><p><code>type</code>: &#39;voicemail&#39;</p>
+</li>
+<li><p><code>timestamp</code>: string; JSON timestamp e.g. &quot;2012-02-13T14:05:21.247Z&quot;</p>
+</li>
+<li><p><code>caller_id</code>: string; caller_id</p>
+</li>
+<li><p><code>box</code>: string; &#39;new&#39; or &#39;archive&#39;</p>
+</li>
+<li><p><code>_attachments</code>:</p>
+<p>The fragments of the message, in the order they were recorded.</p>
+<ul>
+<li><code>part1.wav</code></li>
+<li><code>part2.wav</code></li>
+<li>etc.</li>
+</ul>
+<p>The message may contain no fragments if none was recorded or it was too short.</p>
+<p>By default (<code>max_parts</code> == 1) only one fragment is recorded, so only <code>part1.wav</code> might be present.</p>
+<p>The filename extension depends on the voicemail server&#39;s <code>format</code> setting. It defaults to <code>wav</code>.</p>
+</li>
+</ul>
+<p><a name="pbxsettingsrecords"/></a></p>
+<h2>PBX settings records</h2>
+<p>Each local number in the PBX application is mapped to a <code>user_database</code> in which is stored the current state of that extension.</p>
+<ul>
+<li><p><code>_id</code>: type</p>
+</li>
+<li><p><code>type</code>: <code>pbx_settings</code></p>
+</li>
+<li><p><code>night</code>: boolean; false to use the daytime rule-set; true to use the nighttime rule-set.</p>
+</li>
+</ul>
+</div></body></html>

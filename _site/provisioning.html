@@ -1,0 +1,371 @@
+<!DOCTYPE html><html><head><title>provisioning</title><style>pre {
+  border: 1px solid #ccc;
+  background-color: #f8f8f8;
+}
+code {
+  background-color: #f8f8f8;
+  font-size: 13px;
+  line-height: 19px;
+  padding: 2px 2px;
+}
+</style></head><body><div id="container"><ul>
+<li><a href="#about">About</a><ul>
+<li><a href="#examplelayout">Example layout</a></li>
+</ul>
+</li>
+<li><a href="#conventionsinthisdocument">Conventions in this document</a><ul>
+<li><a href="#runningasuserccnq3">Running as user <code>ccnq3</code></a></li>
+<li><a href="#accessingthecouchdbinterfacefuton">Accessing the CouchDB interface <code>Futon</code></a></li>
+</ul>
+</li>
+<li><a href="#prerequisites">Prerequisites</a><ul>
+<li><a href="#createamanaginguser">Create a managing user</a></li>
+</ul>
+</li>
+<li><a href="#dns">DNS</a><ul>
+<li><a href="#standarddnslayout">Standard DNS layout</a></li>
+<li><a href="#hostsrunningtheccnq3dnsservice">Hosts running the <code>ccnq3_dns</code> service</a></li>
+<li><a href="#domainstobecreated">Domains to be created</a></li>
+</ul>
+</li>
+<li><a href="#addanewvoicehost">Add a new &quot;voice&quot; host</a></li>
+<li><a href="#addaregisteringendpointrecordtotestthenewsetup">Add a registering endpoint record to test the new setup</a></li>
+<li><a href="#finishingconfiguringthehosts">Finishing configuring the hosts</a></li>
+<li><a href="#enduserdata">End-user data</a><ul>
+<li><a href="#endpoint">Endpoint</a></li>
+<li><a href="#number">Number</a></li>
+<li><a href="#location">Location</a></li>
+</ul>
+</li>
+<li><a href="#furtherreading">Further Reading</a></li>
+</ul>
+<p><a name="about"></a></p>
+<h1>About</h1>
+<p>This document is a quick guide meant to show you how to bootstrap your system. It runs you through the tools available to manually edit records.</p>
+<p>It is however your responsability to write a proper provisioning front-end for your administrative users and your customers. CCNQ3 only provides the API.</p>
+<p><a name="examplelayout"/></a></p>
+<h2>Example layout</h2>
+<p>In this document we will assume that your main domain for installation is <code>phone.example.net</code>. IP Addresses are assigned from a block in RFC5737 as follows:</p>
+<pre><code>vm1.phone.example.net  198.51.100.51
+vm2.phone.example.net  198.51.100.52
+vm3.phone.example.net  198.51.100.53</code></pre>
+<p>We will use two SIP domains, <code>a.phone.example.net</code> for client-side, and <code>trunk.phone.example.net</code> for the carrier-side.</p>
+<p>Host <code>vm1</code> will be the manager host; host <code>vm2</code> will be a client-side server, and host <code>vm3</code> will be a carrier-side server.</p>
+<p>Note: In a realistic deployment at least the two voice servers would be duplicated to provide redundancy.</p>
+<p><a name="conventionsinthisdocument"></a></p>
+<h1>Conventions in this document</h1>
+<p><a name="runningasuserccnq3"/></a></p>
+<h2>Running as user <code>ccnq3</code></h2>
+<p>The <code>ccnq3</code> commands must be issued as user <code>ccnq3</code>. You can either do:</p>
+<pre><code>sudo -u ccnq3   &lt;command&gt;</code></pre>
+<p>or run a shell as the <code>ccnq3</code> user and type the commands in that shell:</p>
+<pre><code>su -s /bin/bash ccnq3</code></pre>
+<p><a name="accessingthecouchdbinterfacefuton"/></a></p>
+<h2>Accessing the CouchDB interface <code>Futon</code></h2>
+<p>CouchDB provides a web interface. The <code>Futon</code> database manager is available as <code>/_utils/</code> on the server that runs your master CouchDB service.</p>
+<p>For example:</p>
+<pre><code>http://vm1.example.net:5984/_utils/</code></pre>
+<p>If you installed SSL for CouchDB, use instead:</p>
+<pre><code>https://vm1.example.net:6984/_utils/</code></pre>
+<p><a name="prerequisites"></a></p>
+<h1>Prerequisites</h1>
+<p>The following steps must be performed after the steps in <a href="install">the installation document</a>, which explains how to install the packages and bootstrap the servers.</p>
+<p><a name="createamanaginguser"/></a></p>
+<h2>Create a managing user</h2>
+<p>We recommend you use your email address as identifier for the CouchDB database.</p>
+<p>Run the following commands as user <code>ccnq3</code>, replacing <code>bob@example.net</code> and <code>my_password</code> with your email address and the password you would like to use to access CouchDB, respectively:</p>
+<pre><code>ccnq3 &#39;add user&#39; bob@example.net my_password
+ccnq3 &#39;admin&#39; bob@example.net</code></pre>
+<p><a name="dns"></a></p>
+<h1>DNS</h1>
+<p>The following step is to enable the <code>ccnq3_dns</code> service, which will provide dedicated
+DNS responses based on your provisioning data.</p>
+<p><a name="standarddnslayout"/></a></p>
+<h2>Standard DNS layout</h2>
+<p>We recommend that most hosts use a locally-installed DNS cache resolver (such as the plain bind9
+package). Their /etc/resolv.conf file should therefor contain:</p>
+<pre><code>nameserver 127.0.0.1</code></pre>
+<p>These hosts will require no further changes related to DNS.</p>
+<p><a name="hostsrunningtheccnq3dnsservice"/></a></p>
+<h2>Hosts running the <code>ccnq3_dns</code> service</h2>
+<p>The environment contains a dynamic, database-driven, DNS service which must be enabled on at least one host. These DNS-serving hosts must be configured with the <code>applications/dns</code> application. Additionally, the <code>ccnq3-dns</code> package must installed on these DNS-serving hosts.</p>
+<p>See the <a href="installation">installation documentation</a> for more details on how to configure these servers.</p>
+<p><a name="domainstobecreated"/></a></p>
+<h2>Domains to be created</h2>
+<p>Most DNS entries are dynamically created based on the configuration stored in the CouchDB database.</p>
+<p>However you must manually create two records in the provisioning database:</p>
+<ul>
+<li>one record for the main domain <code>phone.example.net</code></li>
+<li>one record for the subdomain <code>enum.phone.example.net</code></li>
+</ul>
+<p>Using <code>Futon</code>, insert two records layed out as follows into the <code>provisioning</code> database. To do so, open <code>Futon</code>, open the <code>provisioning</code> database, then click <code>New document</code>. In the new document, switch to the <code>Source</code> tab, double-click the content and paste the record content. Once done, click <code>Save document</code>.</p>
+<p>Record #1:</p>
+<pre><code>{
+  &quot;_id&quot;:&quot;domain:phone.example.net&quot;,
+  &quot;type&quot;:&quot;domain&quot;
+  &quot;domain&quot;:&quot;phone.example.net&quot;,
+  &quot;records&quot;:[
+    {&quot;class&quot;:&quot;NS&quot;,&quot;value&quot;:&quot;vm1.phone.example.net&quot;}
+  ]
+}</code></pre>
+<p>Record #2:</p>
+<pre><code>{
+  &quot;_id&quot;:&quot;domain:enum.phone.example.net&quot;,
+  &quot;type&quot;:&quot;domain&quot;,
+  &quot;domain&quot;:&quot;enum.phone.example.net&quot;,
+  &quot;ttl&quot;:60,
+  &quot;ENUM&quot;:true,
+  &quot;records&quot;:[
+    {&quot;class&quot;:&quot;NS&quot;,&quot;value&quot;:&quot;vm1.phone.example.net&quot;}
+  ]
+}</code></pre>
+<p>Notes:</p>
+<ul>
+<li>Any DNS-serving host, with <code>applications/dns</code> listed as an application, should be listed as <code>NS</code>. In a realistic deployment you MUST have more than one such host.</li>
+</ul>
+<p><a name="addanewvoicehost"></a></p>
+<h1>Add a new &quot;voice&quot; host</h1>
+<ul>
+<li><p>On the manager server, run the following command as user <code>ccnq3</code> to add an entry for host <code>vm2.phone.example.net</code>:</p>
+<pre><code>ccnq3 add_host vm2.phone.example.net</code></pre>
+<p>(You may run the script multiple times.)</p>
+<p>The script will print out the <code>Host CouchDB URI</code>. Copy that value.</p>
+</li>
+<li><p>On the host, install the <code>ccnq3-client</code> package. During the installation process you will be asked to provide the URL you copied in the previous step.</p>
+</li>
+<li><p>After the packages are installed, on the new host, as the <code>ccnq3</code> user do:</p>
+<pre><code>cat /etc/ccnq3/host.json</code></pre>
+<p>Copy the output of the command (a JSON record starting with <code>{</code> and ending with <code>}</code>).</p>
+</li>
+<li><p>Using <code>Futon</code>, open the <code>provisioning</code> database. In the <code>Jump to:</code> field, type <code>host:</code> followed by the hostname, and Enter to open that record.
+In the record, switch to the <code>Source</code> tab, double-click the JSON source content, and paste the JSON record you copied in the previous step.
+Click <code>Save Document</code>.</p>
+</li>
+<li><p>Still in the host document, switch to the <code>Fields</code> tab, click <code>Add Field</code>, enter <code>sip_domain_name</code> for the field and <code>a.phone.example.net</code> for the value.</p>
+</li>
+<li><p>Still in the <code>Field</code> tab, the <code>applications</code> array should be extended to contain at least (in the following order):</p>
+<pre><code>[
+  &quot;applications/host&quot;,
+  &quot;applications/freeswitch&quot;,
+  &quot;applications/opensips&quot;,
+  &quot;applications/traces&quot;
+]</code></pre>
+</li>
+<li><p><code>Add Field</code> named <code>opensips</code> with its value set to:</p>
+<pre><code>{
+  &quot;model&quot;: &quot;complete&quot;
+}</code></pre>
+</li>
+<li><p><code>Add Field</code> named <code>traces</code> with its value set to:</p>
+<pre><code>{
+  &quot;interfaces&quot;: [ &quot;eth0&quot; ]
+}</code></pre>
+<p>(assuming the main interface is called <code>eth0</code>).</p>
+</li>
+<li><p>Click on <code>Save Document</code>.</p>
+</li>
+<li><p>On the host, run as <code>root</code>:</p>
+<pre><code>sudo aptitude install ccnq3-voice
+sudo aptitude reinstall ccnq3
+# Normally at this point, freeswitch and opensips are still not running.
+sudo /etc/init.d/opensips start
+sudo /etc/init.d/freeswitch start
+# If running MediaProxy:
+sudo /etc/init.d/mediaproxy-dispatcher restart
+sudo /etc/init.d/mediaproxy-relay restart</code></pre>
+</li>
+</ul>
+<p><a name="addaregisteringendpointrecordtotestthenewsetup"></a></p>
+<h1>Add a registering endpoint record to test the new setup</h1>
+<ul>
+<li><p>Using <code>Futon</code>, open the database <code>provisioning</code>, click <code>New Document</code>, switch to the <code>Source</code> tab and enter:</p>
+<pre><code>{
+  &quot;_id&quot;: &quot;endpoint:0976543210@a.phone.example.net&quot;,
+  &quot;type&quot;: &quot;endpoint&quot;,
+  &quot;endpoint&quot;: &quot;0976543210@a.phone.example.net&quot;,
+  &quot;password&quot;: &quot;72hbh8fjwjhb&quot;,
+  &quot;ha1&quot;: &quot;ae4fe3b1f2ca4b7a33a2f77fc5b15d11&quot;,
+  &quot;ha1b&quot;: &quot;eabda99f11ae85b840597275b1cc962d&quot;,
+  &quot;account&quot;: &quot;test&quot;
+}</code></pre>
+</li>
+<li><p>Test registration.</p>
+</li>
+</ul>
+<p><a name="finishingconfiguringthehosts"></a></p>
+<h1>Finishing configuring the hosts</h1>
+<p><em>FIXME</em> These might be outdated. Refer to <a href="specs">the specifications</a> for current data.</p>
+<ul>
+<li><p>Here are example records for the &quot;client-sbc&quot; host and the &quot;carrier-side sbc&quot; host.</p>
+<p>This host is a &quot;client sbc&quot; in cluster &quot;a.phone.example.net&quot;.
+<code>ingress_acl</code> should contain the IP addresses of the carrier-side SBCs.</p>
+<pre><code>{
+  &quot;_id&quot;:&quot;host:vm2.phone.example.net&quot;,
+  &quot;type&quot;:&quot;host&quot;,
+  &quot;host&quot;:&quot;vm2.phone.example.net&quot;,
+  &quot;provisioning&quot;: ....,
+  &quot;password&quot;:&quot;XXXX&quot;,
+  &quot;interfaces&quot;: ....,
+  &quot;account&quot;:&quot;&quot;,
+  &quot;mailer&quot;:{},
+  &quot;applications&quot;:[&quot;applications/host&quot;,&quot;applications/freeswitch&quot;,&quot;applications/opensips&quot;,&quot;applications/traces&quot;],
+  &quot;traces&quot;:{&quot;interfaces&quot;:[&quot;eth0&quot;,&quot;eth1&quot;]},
+
+  &quot;sip_domain_name&quot;:&quot;a.phone.example.net&quot;,
+  &quot;opensips&quot;:{&quot;model&quot;:&quot;complete&quot;},
+  &quot;sip_profiles&quot;:{
+    &quot;test&quot;:{
+      &quot;template&quot;:&quot;sbc-nomedia&quot;,
+      &quot;ingress_sip_ip&quot;:&quot;198.51.100.52&quot;,
+      &quot;ingress_sip_port&quot;:5200,
+      &quot;ingress_acl&quot;:[&quot;198.51.100.53/32&quot;],
+      &quot;egress_acl&quot;:[198.51.100.52/32&quot;],
+      &quot;handler&quot;:&quot;client-sbc&quot;,
+      &quot;type&quot;:&quot;france&quot;,
+      &quot;send_call_to&quot;:&quot;bridge&quot;,
+      &quot;ingress_target&quot;:&quot;a.phone.example.net&quot;,
+      &quot;egress_target&quot;:&quot;trunk.phone.example.net&quot;,
+      &quot;egress_gwid&quot;:1
+    }
+  }
+
+}</code></pre>
+<p>This host is a &quot;carrier-side sbc&quot; in cluster &quot;trunk.phone.example.net&quot;.</p>
+<pre><code>{
+  &quot;_id&quot;:&quot;host:vm3.phone.example.net&quot;,
+  &quot;type&quot;:&quot;host&quot;,
+  &quot;host&quot;:&quot;vm3.phone.example.net&quot;,
+  &quot;provisioning&quot;: ...,
+  &quot;password&quot;:&quot;XXXX&quot;,
+  &quot;interfaces&quot;: ...,
+  &quot;account&quot;:&quot;&quot;,
+  &quot;mailer&quot;:{},
+  &quot;applications&quot;:[&quot;applications/host&quot;,&quot;applications/dns&quot;,&quot;applications/freeswitch&quot;,&quot;applications/opensips&quot;,&quot;applications/traces&quot;],
+
+  &quot;sip_domain_name&quot;:&quot;trunk.phone.example.net&quot;,
+  &quot;opensips&quot;:{&quot;model&quot;:&quot;outbound-proxy&quot;},
+  &quot;sip_profiles&quot;:{
+    &quot;sotel&quot;:{
+      &quot;template&quot;:&quot;sbc-nomedia&quot;,
+      &quot;ingress_sip_ip&quot;:&quot;198.51.100.53&quot;,
+      &quot;ingress_sip_port&quot;:5200,
+      &quot;ingress_acl&quot;:[&quot;4.53.160.135/32&quot;,&quot;4.53.160.136/32&quot;],
+      &quot;egress_acl&quot;:[&quot;198.51.100.52/32&quot;],
+      &quot;handler&quot;:&quot;sotel&quot;,
+      &quot;send_call_to&quot;:&quot;bridge&quot;,
+      &quot;egress_target&quot;:&quot;termination2.sotelips.net&quot;,
+      &quot;enum_root&quot;:&quot;enum.phone.example.net&quot;,
+      &quot;egress_gwid&quot;:100
+    }
+  }
+
+}</code></pre>
+</li>
+</ul>
+<ul>
+<li><p>To apply the changes: run the <code>reload sofia</code> FreeSwitch command.</p>
+</li>
+<li><p>You&#39;ll also need an endpoint to identify the client-sbc with the
+carrier-side proxy.</p>
+<pre><code>{
+  &quot;_id&quot;:&quot;endpoint:198.51.100.52&quot;,
+  &quot;type&quot;:&quot;endpoint&quot;,
+  &quot;endpoint&quot;:&quot;198.51.100.52&quot;,
+  &quot;sbc&quot;:2,
+  &quot;outbound_route&quot;:1
+}</code></pre>
+</li>
+</ul>
+<ul>
+<li><p>Configure OpenSIPS routing:</p>
+<p>The groupid should match the <code>outbound_route</code> for the endpoints.
+The ruleid is a random/incremental field used to manage the records.</p>
+<ul>
+<li><p>Add rule records</p>
+<p>Routes from the client-side OpenSIPS to the client-side FreeSwitch.
+Mostly used to allow/deny destinations.</p>
+<p>   {</p>
+<pre><code>&quot;_id&quot;:&quot;rule:vm2.phone.example.net:1:&quot;,
+&quot;type&quot;:&quot;rule&quot;,
+&quot;rule&quot;:&quot;vm2.phone.example.net:1:&quot;,
+&quot;host&quot;:&quot;vm2.phone.example.net&quot;,
+
+&quot;groupid&quot;:1,
+&quot;prefix&quot;:&quot;&quot;,
+&quot;timerec&quot;:&quot;&quot;,
+&quot;priority&quot;:1,
+&quot;gwlist&quot;:&quot;1&quot;,
+&quot;routeid&quot;:0,
+&quot;attrs&quot;:&quot;&quot;</code></pre>
+<p>  }</p>
+<p>Routes from the carrier-side OpenSIPS to the carrier-side FreeSwitch.
+Used for LCR routing.</p>
+<p>  {</p>
+<pre><code>&quot;_id&quot;:&quot;rule:vm3.phone.example.net:1:&quot;,
+&quot;type&quot;:&quot;rule&quot;,
+&quot;rule&quot;:&quot;vm3.phone.example.net:1:&quot;,
+&quot;host&quot;:&quot;vm3.phone.example.net&quot;,
+
+&quot;groupid&quot;:1,
+&quot;prefix&quot;:&quot;&quot;,
+&quot;timerec&quot;:&quot;&quot;,
+&quot;priority&quot;:1,
+&quot;gwlist&quot;:&quot;100&quot;,
+&quot;routeid&quot;:0,
+&quot;attrs&quot;:&quot;&quot;</code></pre>
+<p>  }</p>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>Send <code>reload routes</code> command (in the portal)</li>
+</ul>
+<p><a name="enduserdata"></a></p>
+<h1>End-user data</h1>
+<p>Here are some provisioning records as examples.</p>
+<p><a name="endpoint"/></a></p>
+<h2>Endpoint</h2>
+<p>See above for a complete example.</p>
+<p><a name="number"/></a></p>
+<h2>Number</h2>
+<p>There are two types of &quot;number&quot; records. Both types must be provisioned for
+a number to be fully provisioned.</p>
+<p>Unqualified (global) number records are used by the carrier-side SBCs to know which cluster will handle an incoming number.
+These &quot;number&quot; records populate Carrier ENUM for inbound routing and CDR generation.
+The number is expressed in E.164 format without a &quot;+&quot; sign.</p>
+<pre><code>{
+  &quot;_id&quot;:&quot;number:33976543210&quot;,
+  &quot;number&quot;:&quot;33976543210&quot;,
+  &quot;type&quot;:&quot;number&quot;,
+
+  &quot;account&quot;:&quot;stephane&quot;,
+  &quot;inbound_uri&quot;:&quot;sip:33976543210@ingress-test.a.phone.example.net&quot;
+}</code></pre>
+<p>Qualified (local) number records are used by a client-side SBC to know which endpoint will handle an incoming number.
+They may also contain additional information such as the location of that specific number (for the purpose of emergency call routing).
+Since the default value for OpenSIPS&#39; <code>number_domain</code> is <code>local</code>, the name after the @ sign will generally be <code>local</code>.</p>
+<pre><code>{
+  &quot;_id&quot;:&quot;number:0976543210@local&quot;,
+  &quot;type&quot;:&quot;number&quot;,
+  &quot;number&quot;:&quot;0976543210@local&quot;,
+
+  &quot;endpoint&quot;:&quot;0976543210@a.phone.example.net&quot;,
+  &quot;location&quot;:&quot;maison&quot;
+}</code></pre>
+<p><a name="location"/></a></p>
+<h2>Location</h2>
+<p>Used for emergency call routing.</p>
+<pre><code>{
+    &quot;_id&quot;:&quot;location:maison&quot;,
+    &quot;type&quot;:&quot;location&quot;,
+    &quot;location&quot;:&quot;maison&quot;,
+
+    &quot;account&quot;:&quot;&quot;,
+    &quot;routing_data&quot;:&quot;29789&quot;
+}</code></pre>
+<p><a name="furtherreading"></a></p>
+<h1>Further Reading</h1>
+<p>This document is meant to help you bootstrap your provisioning.</p>
+<p>The complete provisioning documentation is available in <a href="specs">the specifications</a>.</p>
+</div></body></html>

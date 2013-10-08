@@ -1,0 +1,31 @@
+<!DOCTYPE html><html><head><title>upgrade</title><style>pre {
+  border: 1px solid #ccc;
+  background-color: #f8f8f8;
+}
+code {
+  background-color: #f8f8f8;
+  font-size: 13px;
+  line-height: 19px;
+  padding: 2px 2px;
+}
+</style></head><body><div id="container"><ul>
+<li><a href="#upgrade">Upgrade</a></li>
+</ul>
+<p><a name="upgrade"></a></p>
+<h1>Upgrade</h1>
+<p>In most cases, upgrades to the <code>ccnq3</code> packages and their dependencies <em>will</em> cause service disruption. In-progress calls will most likely be disconnected.</p>
+<p>Always proceed with upgrades during off-peak periods, and only upgrade one server in a <code>sip_domain_name</code> (for example) at a time.</p>
+<p>If FreeSwitch is to be upgraded, you should <code>pause</code> it beforehand:</p>
+<pre><code>fs_cli -p CCNQ -x &#39;fsctl pause&#39;</code></pre>
+<p>You should then wait until there are no active calls left; you can monitor this with the command:</p>
+<pre><code>fs_cli -p CCNQ -x &#39;show calls&#39;</code></pre>
+<p>To upgrade run the usual Debian commands:</p>
+<pre><code>aptitude update
+aptitude dist-upgrade</code></pre>
+<p>If asked to replace or overwrite a configuration file in one of the <code>ccnq3</code>, <code>opensips</code>, or <code>freeswitch</code> packages, please do so. The <code>ccnq3</code> installers expect the files to be overwritten and will correct them as needed.</p>
+<p>In most cases we recommend you also restart OpenSIPS and FreeSwitch even if they are not being upgraded, since upgrades to the <code>ccnq3</code> packages might contains configuration changes that require a restart. Before restarting FreeSwitch you can <code>pause</code> it if you need to first let calls die out on that instance (see above).</p>
+<p>To restart OpenSIPS:</p>
+<pre><code>/etc/init.d/opensips restart</code></pre>
+<p>To restart FreeSwitch:</p>
+<pre><code>/etc/init.d/freeswitch restart</code></pre>
+</div></body></html>

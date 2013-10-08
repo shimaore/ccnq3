@@ -1,0 +1,269 @@
+<!DOCTYPE html><html><head><title>install</title><style>pre {
+  border: 1px solid #ccc;
+  background-color: #f8f8f8;
+}
+code {
+  background-color: #f8f8f8;
+  font-size: 13px;
+  line-height: 19px;
+  padding: 2px 2px;
+}
+</style></head><body><div id="container"><ul>
+<li><a href="#conventions">Conventions</a></li>
+<li><a href="#requirements">Requirements</a><ul>
+<li><a href="#basesystem">Base system</a></li>
+<li><a href="#hostnamesanddns">Hostnames and DNS</a></li>
+<li><a href="#requiredservices">Required Services</a></li>
+</ul>
+</li>
+<li><a href="#ipv6">IPv6</a></li>
+<li><a href="#addrepository">Add Repository</a></li>
+<li><a href="#addkey">Add Key</a></li>
+<li><a href="#updatesysteminstallpackages">Update System, Install Packages</a></li>
+<li><a href="#startinstallation">Start Installation</a><ul>
+<li><a href="#managerhost">&quot;manager&quot; host</a></li>
+<li><a href="#securingservicesonthemanagerhost">Securing services on the manager host</a><ul>
+<li><a href="#trafficencryptionforcouchdb">Traffic Encryption for CouchDB</a></li>
+<li><a href="#trafficencryptionforrabbitmq">Traffic Encryption for RabbitMQ</a></li>
+</ul>
+</li>
+<li><a href="#clientnonmanagerhosts">Client -non-manager- hosts</a></li>
+<li><a href="#clienthostswithvoiceservices">Client hosts with voice services</a></li>
+<li><a href="#installationofccnq3dnsserver">Installation of CCNQ3 DNS server</a></li>
+<li><a href="#nextsteps">Next steps</a></li>
+</ul>
+</li>
+<li><a href="#automatedscriptedinstallation">Automated -scripted- installation</a></li>
+<li><a href="#tuneup">Tune-Up</a></li>
+<li><a href="#alternativeways">Alternative ways</a><ul>
+<li><a href="#addrepository">Add repository</a></li>
+<li><a href="#addkey">Add key</a></li>
+</ul>
+</li>
+</ul>
+<p><a name="conventions"></a></p>
+<h1>Conventions</h1>
+<p>Most commands on this page must be ran as root. The only exception would be the <code>gpg</code> commands; in that case make sure you run <code>apt-key</code> as root.</p>
+<p><a name="requirements"></a></p>
+<h1>Requirements</h1>
+<p><a name="basesystem"/></a></p>
+<h2>Base system</h2>
+<p>Your base system <em>must</em> be a current Debian/testing system.</p>
+<p><a name="hostnamesanddns"/></a></p>
+<h2>Hostnames and DNS</h2>
+<p>Hostnames for the different servers MUST be:</p>
+<ol>
+<li>FQDN (e.g. &quot;server.example.com&quot;, not &quot;server&quot;)</li>
+<li>Valid DNS names (that resolve using A and/or AAAA queries)</li>
+</ol>
+<p>These are both required to ensure clients can properly access the server.</p>
+<p>Note: compare the output of</p>
+<pre><code>cat /etc/hostname
+hostname
+hostname --fqdn</code></pre>
+<p>to make sure they all report the name you expect.</p>
+<p>Note: ccnq3 contains a DNS server package that will automatically provide proper records for all servers configured in the system, so this requirement can be met relatively easily.  See below for more information on <code>ccnq3_dns</code>.</p>
+<p><a name="requiredservices"/></a></p>
+<h2>Required Services</h2>
+<p>You MUST have a reliable clock on the system. This is necessary to do proper billing and greatly facilitates troubleshooting. Therefor:</p>
+<pre><code>aptitude install ntp ntpdate</code></pre>
+<p><a name="ipv6"></a></p>
+<h1>IPv6</h1>
+<p>The Node.js packages downloaded during installation are downloaded from hosts that do not support IPv6 (for example github.com, or the npm registry).</p>
+<p>Therefor installation and upgrades <em>must</em> currently be done with some kind of connectivity to the global IPv4 network.</p>
+<p><a name="addrepository"></a></p>
+<h1>Add Repository</h1>
+<p>Add</p>
+<pre><code>deb http://debian.sotelips.net/shimaore shimaore main</code></pre>
+<p>to your existing /etc/apt/sources.list using the following commands:</p>
+<pre><code>aptitude install -y python-software-properties
+REPOSITORY=debian.sotelips.net
+apt-add-repository &quot;deb http://${REPOSITORY}/shimaore shimaore main&quot;</code></pre>
+<p><a name="addkey"></a></p>
+<h1>Add Key</h1>
+<p>Add the GPG key for stephane@shimaore.net, which is used to sign the &quot;shimaore&quot; distribution:</p>
+<pre><code>MAINTAINER=&#39;Stephane Alnet (Packaging) &lt;stephane@shimaore.net&gt;&#39;
+# You might need to run the following command twice the first time.
+gpg --recv-keys &quot;F24B9200&quot;
+gpg --armor --export &quot;=${MAINTAINER}&quot; | apt-key add -</code></pre>
+<p><a name="updatesysteminstallpackages"></a></p>
+<h1>Update System, Install Packages</h1>
+<p>Update and upgrade your system:</p>
+<pre><code>aptitude update
+aptitude -y dist-upgrade</code></pre>
+<p><a name="startinstallation"></a></p>
+<h1>Start Installation</h1>
+<p>Finally start the installation of CCNQ3 itself.</p>
+<p><a name="managerhost"/></a></p>
+<h2>&quot;manager&quot; host</h2>
+<p>The first host you will install is your &quot;manager&quot; host.</p>
+<pre><code>aptitude -y install ccnq3-manager</code></pre>
+<p>Make sure to locate and save the <code>CCNQ3 Master interface</code> URL printed at the end of the installation process.</p>
+<p>However, this package will overwrite any local CouchDB configuration.  If you have an existing CouchDB/BigCouch installation you&#39;d like to re-use (located on the same host or on a different system), use</p>
+<pre><code>aptitude -y install ccnq3-manager-shared</code></pre>
+<p>instead. You will need to provide administrative access to that existing database via a URL such as <code>http://admin:password@host:5984</code>.</p>
+<p>Normally you should not run voice services on the manager, however if you intend to do so you will need to install the <code>ccnq3-voice</code> package as well.</p>
+<p><a name="securingservicesonthemanagerhost"/></a></p>
+<h2>Securing services on the manager host</h2>
+<p>You should use HTTPS and AMQPS services instead of the default, HTTP and AMQP services.</p>
+<p><a name="trafficencryptionforcouchdb"/></a></p>
+<h3>Traffic Encryption for CouchDB</h3>
+<p>Note: CouchDB 1.4.0 does not properly support SSL. For now please front-end CouchDB with <code>stunnel4</code> instead of using the following procedure.</p>
+<p>To enable HTTPS on CouchDB, add the following to <code>/etc/couchdb/local.ini</code> and make sure the SSL certificate and private key are available as <code>/etc/couchdb/cert.pem</code> and <code>/etc/couchdb/key.pem</code>, respectively:</p>
+<pre><code>[daemons]
+httpsd = {couch_httpd, start_link, [https]}
+
+[ssl]
+cert_file = /etc/couchdb/cert.pem
+key_file = /etc/couchdb/key.pem</code></pre>
+<p>Then restart CouchDB (as root):</p>
+<pre><code>/etc/init.d/couchdb restart</code></pre>
+<p>This will enable HTTPS access on port 6984. (HTTP access is still available on port 5984 but we recommend you do not use it.)
+Make sure to update the URIs in the <code>provisioning</code> <code>host</code> records to point to the HTTPS URI (<code>https://....:6984/provisiong</code> instead of <code>http://...:5984/provisioning</code>, etc.).</p>
+<p><a name="trafficencryptionforrabbitmq"/></a></p>
+<h3>Traffic Encryption for RabbitMQ</h3>
+<p>To enable AMQPS and HTTPS on RabbitMQ, add the following to <code>/etc/rabbitmq/rabbitmq.config</code> and make sure the SSL certificate, private key, and CA certificate are available as <code>/etc/rabbitmq/cert.pem</code>, <code>/etc/rabbitmq/key.pem</code>, and <code>/etc/rabbitmq/cacert.pem</code>, respectively:</p>
+<pre><code>[
+  {rabbit, [
+    {ssl_listeners, [5671]},
+    {ssl_options, [{certfile,&quot;/etc/rabbitmq/cert.pem&quot;},
+                   {keyfile, &quot;/etc/rabbitmq/key.pem&quot;}]}
+  ]},
+  {rabbitmq_management, [
+    {listener, [
+      {port, 55672},
+      {ssl, true},
+      {ssl_opts, [
+        {cacertfile, &quot;/etc/rabbitmq/cacert.pem&quot;},
+        {certfile,   &quot;/etc/rabbitmq/cert.pem&quot;},
+        {keyfile,    &quot;/etc/rabbitmq/key.pem&quot;}
+      ]}
+    ]}
+  ]}
+].</code></pre>
+<p>This will enable AMQPS access on port 5671, and replace the management HTTP on port 55672 with HTTPS access on the same port. (AMQP access is still available on port 5672 but we recommend you do not use it.)
+Make sure to update the URIs in the <code>provisioning</code> <code>host</code> records to point to the AMQPS URI (<code>amqps://....:5671/ccnq3</code> instead of <code>amqp://..../ccnq3</code>) and HTTPS URI (<code>https://....:55672/</code> instead of <code>http://....:55672/</code>).</p>
+<p><a name="clientnonmanagerhosts"/></a></p>
+<h2>Client (non-manager) hosts</h2>
+<p>On a non-manager host you will use:</p>
+<pre><code>aptitude install ccnq3-client</code></pre>
+<p>You will need to provide it the URI assigned by the provisioning system.  (See the [provisioning] documentation for how to obtain that URI.)</p>
+<p>Installing the <code>ccnq3-client</code> package will overwrite any local CouchDB configuration. This package cannot be co-located with non-ccnq3 applications that might use CouchDB.</p>
+<p><a name="clienthostswithvoiceservices"/></a></p>
+<h2>Client hosts with voice services</h2>
+<p>After you complete the steps above for a client host, install:</p>
+<pre><code>aptitude install ccnq3-voice</code></pre>
+<p>This will install OpenSIPS, FreeSwitch, and their dependencies.</p>
+<p>Alternatively, if you&#39;d rather install OpenSIPS and FreeSwitch on different hosts, do:</p>
+<pre><code>aptitude install ccnq3-voice-freeswitch</code></pre>
+<p>or</p>
+<pre><code>aptitude install ccnq3-voice-opensips</code></pre>
+<p>If you need mediaproxy on a host running OpenSIPS, you <em>must</em> manually run</p>
+<pre><code>cd &quot;`ccnq3 get_config_source`/common/mediaproxy&quot;
+./install.sh</code></pre>
+<p>because of some important caveats regarding IPv6.</p>
+<p><a name="installationofccnq3dnsserver"/></a></p>
+<h2>Installation of CCNQ3 DNS server</h2>
+<p>The CCNQ3 DNS server is a master-only DNS server that must be installed to provide inbound routing for numbers. We recommend you install that service on at least two physically independent servers for redundancy purposes.</p>
+<p>The CCNQ3 DNS server uses UDP port 53 and will conflict with any other application, such as another DNS server, which would use that port. Therefor make sure there are no other DNS resolver or proxy on the host where you install the CCNQ3 DNS server.</p>
+<p>Moreover you should not have the local host rely on the service provided by the CCNQ3 DNS server for its name resolution, since the service will not forward requests or provide recursive resolution.</p>
+<p>Therefor the host(s) that run the CCNQ3 DNS service <em>must</em> use non-local nameservers; make sure to configure those in <code>/etc/resolv.conf</code>.</p>
+<p>Additionally install the <code>ccnq3-dns</code> package on any host running the CCNQ3 DNS server:</p>
+<pre><code>aptitude install ccnq3-dns</code></pre>
+<p>This package will forward UDP port 53 to UDP port 53053 on the local host.</p>
+<p><a name="nextsteps"/></a></p>
+<h2>Next steps</h2>
+<p>The base system is installation is now complete.</p>
+<p>For more information and follow-up steps refer to the [provisioning] documentation.</p>
+<p>The following sections provide additional information but are not required.</p>
+<p><a name="automatedscriptedinstallation"></a></p>
+<h1>Automated (scripted) installation</h1>
+<p>You may provide the URI for <code>ccnq3-client</code> in <code>/etc/ccnq3/uri</code> before installing the package.</p>
+<p>You may provide the URI for <code>ccnq3-manager-shared</code> in <code>/etc/ccnq3/admin_uri</code> before installing the package.</p>
+<p><a name="tuneup"></a></p>
+<h1>Tune-Up</h1>
+<p>Additionally I recommend modifying the rsyslog configuration to either a centralized syslog server, or a smaller local configuration such as:</p>
+<pre><code>tee /etc/rsyslog.conf &gt;/dev/null &lt;&lt;&#39;EOT&#39;
+$ModLoad imuxsock # provides support for local system logging
+$ModLoad imklog   # provides kernel logging support (previously done by rklogd)
+$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
+$SystemLogRateLimitInterval 0
+$SystemLogRateLimitBurst 0
+$FileOwner root
+$FileGroup adm
+$FileCreateMode 0640
+$DirCreateMode 0755
+auth,authpriv.*             /var/log/auth.log
+*.info;auth,authpriv.none  -/var/log/syslog
+# Uncomment the following line to gather debug messages
+# *.debug                  -/var/log/debug
+EOT
+
+/etc/init.d/rsyslog restart</code></pre>
+<p><a name="alternativeways"></a></p>
+<h1>Alternative ways</h1>
+<p><a name="addrepository"/></a></p>
+<h2>Add repository</h2>
+<p>You may manually add the <code>shimaore</code> repository as follows:</p>
+<pre><code>REPOSITORY=${REPOSITORY:-debian.sotelips.net}
+tee -a /etc/apt/sources.list &gt; /dev/null &lt;&lt;EOT
+deb http://${REPOSITORY}/shimaore shimaore main
+EOT</code></pre>
+<p><a name="addkey"/></a></p>
+<h2>Add key</h2>
+<p>You may manually install the proper GPG key as follows:</p>
+<pre><code>apt-key add - &lt;&lt;&#39;GPG&#39;
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: GnuPG v1.4.11 (GNU/Linux)
+
+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
+3FuSepTWd4opF5wgYQ3ZtPM=
+=+BNA
+-----END PGP PUBLIC KEY BLOCK-----
+GPG</code></pre>
+</div></body></html>
