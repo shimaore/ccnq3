@@ -3,7 +3,7 @@
 
   <X-PRE-PROCESS cmd="set" data="domain=test.shimaore.net"/>
   <X-PRE-PROCESS cmd="set" data="local_ip=$${local_ip_v4}"/>
-  <X-PRE-PROCESS cmd="set" data="sounds_dir=/opt/freeswitch/sounds"/>
+  <X-PRE-PROCESS cmd="set" data="sounds_dir=/usr/share/freeswitch/sounds"/>
 
   <section name="configuration" description="Various Configuration">
     <configuration name="switch.conf" description="Core Configuration">
@@ -93,8 +93,9 @@
 
     <context name="private">
       <extension name="test">
-        <condition field="destination_number" expression="^1">
+        <condition field="destination_number" expression="^(fr|en)$">
           <action application="answer"/>
+          <action application="set" data="language=$1"/>
           <action application="socket" data="127.0.0.1:7000 async full"/>
         </condition>
       </extension>
