@@ -57,6 +57,21 @@
 
   </macro>
 
+  <macro name="spell">
+    <input pattern="^(.)$" break_on_match="true">
+      <match>
+        <action function="phrase" phrase="say-single" data="$1"/>
+      </match>
+    </input>
+
+    <input pattern="^(.)(.+)$" break_on_match="true">
+      <match>
+        <action function="phrase" phrase="say-single" data="$1"/>
+        <action function="phrase" phrase="spell" data="$2"/>
+      </match>
+    </input>
+  </macro>
+
   <macro name="say-iterated">
 
     <!-- iterated -->

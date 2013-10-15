@@ -99,6 +99,16 @@
           <action application="socket" data="127.0.0.1:7000 async full"/>
         </condition>
       </extension>
+      <extension name="test-more">
+        <condition field="destination_number" expression="^([01]\d+)$">
+          <action application="answer"/>
+          <action application="sleep" data="2000"/>
+          <action application="set" data="language=fr"/>
+          <action application="phrase" data="spell,$1_test-foobar"/>
+          <action application="set" data="language=en"/>
+          <action application="phrase" data="spell,$1_test-foobar"/>
+        </condition>
+      </extension>
       <extension name="Echo">
         <condition field="destination_number" expression="^9$">
           <action application="answer"/>
