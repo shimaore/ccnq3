@@ -1,3 +1,9 @@
+ccnq3 (0.0.226) unstable; urgency=low
+
+  * bumped mediaproxy dep again
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Fri, 08 Nov 2013 11:21:01 +0100
+
 ccnq3 (0.0.225) unstable; urgency=low
 
   * bump dependency
