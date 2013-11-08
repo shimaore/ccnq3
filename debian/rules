@@ -6,7 +6,7 @@ override_dh_gencontrol:
 	dh_gencontrol -- \
 		-Vfreeswitch:Version="1.3.4-20130930T160940Z-git8efc1d0~shimaore-master" \
 		-Vopensips:Version="1.10.0-3" \
-		-Vmediaproxy:Version="2.5.2-3"
+		-Vmediaproxy:Version="2.5.2-4"
 
 override_dh_installinit:
 	dh_installinit -R
