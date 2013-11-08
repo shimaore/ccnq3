@@ -1,3 +1,20 @@
+ccnq3 (0.0.224) unstable; urgency=low
+
+  * routes: try encoding
+  * routes: encoding again
+  * install doc: now that we use opensips 1.10 we no longer have the issue.
+  * freeswitch: Initial code for english voicemail
+  * couch_daemon/registration: don't crash on failure
+  * traces/pcap_tail: prevent "multiple listeners" errors
+  * Initial Freeswitch "en-us" test code.
+  * English numbers test corrections
+  * updated for recent en-us-callie sound package layout (different rates are built on the target)
+  * freeswitch/lang: added `spell` phrase
+  * New `announce` SBC target (egress-only at this time).
+  * Update mediaproxy dependency
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Fri, 08 Nov 2013 08:12:09 +0100
+
 ccnq3 (0.0.223) unstable; urgency=low
 
   * munin: Added number of registered opensips endpoints.
