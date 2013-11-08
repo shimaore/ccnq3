@@ -1,3 +1,9 @@
+ccnq3 (0.0.225) unstable; urgency=low
+
+  * bump dependency
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Fri, 08 Nov 2013 11:08:18 +0100
+
 ccnq3 (0.0.224) unstable; urgency=low
 
   * routes: try encoding
