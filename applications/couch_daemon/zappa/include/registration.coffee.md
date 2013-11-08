@@ -19,7 +19,7 @@
 
         ccnq3.amqp (c) =>
           if c?
-            on_timeout = ->
+            on_timeout = =>
               c.end()
               @failure error:'timeout'
             timer = setTimeout on_timeout, 15*seconds

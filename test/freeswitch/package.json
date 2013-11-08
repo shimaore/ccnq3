@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "q": "latest"
+  , "esl": "1.0"
+  }
+}

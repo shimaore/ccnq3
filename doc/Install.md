@@ -11,8 +11,6 @@ Base system
 
 Your base system _must_ be a current Debian/testing system.
 
-Note: libjson0 breaks OpenSIPS 1.8.2. As a workaround we include libjson0 version 0.10-1.2.
-
 Hostnames and DNS
 -----------------
 
