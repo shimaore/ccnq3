@@ -93,28 +93,55 @@
   <macro name="say-currency">
 
     <!-- currency -->
+
+    <!-- whole numbers -->
+    <input pattern="^([01])$" break_on_match="true">
+      <match>
+        <action function="phrase" phrase="say-number" data="$1"/>
+        <action function="play-file" data="currency/dollar.wav"/>
+      </match>
+    </input>
+
     <input pattern="^([0-9]+)$" break_on_match="true">
       <match>
         <action function="phrase" phrase="say-number" data="$1"/>
-        <action function="play-file" data="currency/euro.wav"/>
+        <action function="play-file" data="currency/dollars.wav"/>
       </match>
     </input>
 
-    <input pattern="^([0-9]+)\.0([0-9])$" break_on_match="true">
+    <!-- only decimals -->
+    <input pattern="^0?\.00$" break_on_match="true">
       <match>
-        <action function="phrase" phrase="say-number" data="$1"/>
-        <action function="play-file" data="currency/euro.wav"/>
-        <action function="phrase" phrase="say-number" data="$2"/>
+        <!-- say nothing -->
+      </match>
+    </input>
+
+    <input pattern="^0?\.01$" break_on_match="true">
+      <match>
+        <action function="phrase" phrase="say-number" data="1"/>
         <action function="play-file" data="currency/cent.wav"/>
       </match>
     </input>
 
-    <input pattern="^([0-9]+)\.([1-9][0-9])$" break_on_match="true">
+    <input pattern="^0?\.0([0-9])$" break_on_match="true">
       <match>
         <action function="phrase" phrase="say-number" data="$1"/>
-        <action function="play-file" data="currency/euro.wav"/>
-        <action function="phrase" phrase="say-number" data="$2"/>
-        <action function="play-file" data="currency/cent.wav"/>
+        <action function="play-file" data="currency/cents.wav"/>
+      </match>
+    </input>
+
+    <input pattern="^0?\.([0-9][0-9])$" break_on_match="true">
+      <match>
+        <action function="phrase" phrase="say-currency" data="$1"/>
+        <action function="play-file" data="currency/cents.wav"/>
+      </match>
+    </input>
+
+    <!-- whole and decimals -->
+    <input pattern="^([0-9]+)(\.[0-9][0-9])$" break_on_match="true">
+      <match>
+        <action function="phrase" phrase="say-currency" data="$1"/>
+        <action function="phrase" phrase="say-currency" data="0$2"/>
       </match>
     </input>
 
@@ -256,64 +283,16 @@
 
     <!-- two digits and less -->
 
-    <input pattern="^1n$" break_on_match="true">
-      <match>
-        <action function="play-file" data="digits/h-1n.wav"/> <!-- FIXME Needs unième -->
-      </match>
-    </input>
-
-    <input pattern="^1f$" break_on_match="true">
-      <match>
-        <action function="play-file" data="digits/h-1f.wav"/> <!-- première -->
-      </match>
-    </input>
-
-    <input pattern="^([1-9]0|1[0-9]|[1-9])f?n?$" break_on_match="true">
+    <input pattern="^([1-9]0|1[0-9]|[1-9])$" break_on_match="true">
       <match>
         <action function="play-file" data="digits/h-$1.wav"/>
       </match>
     </input>
 
-    <input pattern="^([23456])1f?n?$" break_on_match="true">
-      <match>
-        <action function="phrase" phrase="say-number" data="$1_0"/>
-        <action function="play-file" data="digits/h-1n.wav"/> <!-- "et unième" -->
-      </match>
-    </input>
-
-    <input pattern="^([234568])([2-9])" break_on_match="true">
+    <input pattern="^([2-9])([1-9])" break_on_match="true">
       <match>
         <action function="phrase" phrase="say-number" data="$1_0"/>
         <action function="play-file" data="digits/h-$2.wav"/>
-      </match>
-    </input>
-
-    <input pattern="^71" break_on_match="true">
-      <match>
-        <action function="play-file" data="digits/60.wav"/>
-        <action function="play-file" data="currency/and.wav"/>
-        <action function="play-file" data="digits/h-11.wav"/>
-      </match>
-    </input>
-
-    <input pattern="^7([02-9])" break_on_match="true">
-      <match>
-        <action function="play-file" data="digits/60.wav"/>
-        <action function="play-file" data="digits/h-1$1.wav"/>
-      </match>
-    </input>
-
-    <input pattern="^81" break_on_match="true">
-      <match>
-        <action function="play-file" data="digits/80.wav"/>
-        <action function="play-file" data="digits/h-1n.wav"/>
-      </match>
-    </input>
-
-    <input pattern="^9([1-9])" break_on_match="true">
-      <match>
-        <action function="play-file" data="digits/80.wav"/>
-        <action function="play-file" data="digits/h-1$1.wav"/>
       </match>
     </input>
 
@@ -372,8 +351,6 @@
     </input>
 
     <!-- fractions -->
-    <!-- note: in french you would say "21 secondes virgule 1" so we do not
-         deal with feminine here -->
     <!-- pronounce initial zeros -->
     <input pattern="^([0-9]*)\.([0]+)([1-9][0-9]*)$" break_on_match="true">
       <match>
@@ -387,7 +364,7 @@
     </input>
 
     <!-- ignore leading zeros -->
-    <input pattern="^0f?$" break_on_match="true">
+    <input pattern="^0$" break_on_match="true">
       <match>
         <action function="play-file" data="digits/0.wav"/>
       </match>
@@ -400,7 +377,7 @@
 
     <!-- 9 digits or less -->
 
-    <input pattern="^([1-9]|[1-9][0-9]|[1-9][0-9][0-9])000000f?$" break_on_match="true">
+    <input pattern="^([1-9]|[1-9][0-9]|[1-9][0-9][0-9])000000$" break_on_match="true">
       <match>
         <action function="phrase" phrase="say-number" data="$1 million"/>
       </match>
@@ -414,25 +391,25 @@
 
     <!-- six digits or less -->
 
-    <input pattern="^1000f?$" break_on_match="true">
+    <input pattern="^1000$" break_on_match="true">
       <match>
         <action function="phrase" phrase="say-number" data="thousand"/>
       </match>
     </input>
 
-    <input pattern="^([2-9]|[1-9][0-9]|[1-9][0-9][0-9])000f?$" break_on_match="true">
+    <input pattern="^([2-9]|[1-9][0-9]|[1-9][0-9][0-9])000$" break_on_match="true">
       <match>
         <action function="phrase" phrase="say-number" data="$1 thousand"/>
       </match>
     </input>
 
-    <input pattern="^1([0-9]{3}f?)$" break_on_match="true">
+    <input pattern="^1([0-9]{3})$" break_on_match="true">
       <match>
         <action function="phrase" phrase="say-number" data="thousand $1"/>
       </match>
     </input>
 
-    <input pattern="^([2-9]|[1-9][0-9]|[1-9][0-9][0-9])([0-9]{3}f?)$" break_on_match="true">
+    <input pattern="^([2-9]|[1-9][0-9]|[1-9][0-9][0-9])([0-9]{3})$" break_on_match="true">
       <match>
         <action function="phrase" phrase="say-number" data="$1 thousand $2"/>
       </match>
@@ -440,25 +417,13 @@
 
     <!-- three digits or less -->
 
-    <input pattern="^100f?$" break_on_match="true">
-      <match>
-        <action function="phrase" phrase="say-number" data="hundred"/>
-      </match>
-    </input>
-
-    <input pattern="^([2-9])00f?$" break_on_match="true">
+    <input pattern="^([1-9])00$" break_on_match="true">
       <match>
         <action function="phrase" phrase="say-number" data="$1 hundred"/>
       </match>
     </input>
 
-    <input pattern="^1([0-9][0-9]f?)$" break_on_match="true">
-      <match>
-        <action function="phrase" phrase="say-number" data="hundred $1$2"/>
-      </match>
-    </input>
-
-    <input pattern="^([2-9])([0-9][0-9]f?)$" break_on_match="true">
+    <input pattern="^([1-9])([0-9][0-9]f?)$" break_on_match="true">
       <match>
         <action function="phrase" phrase="say-number" data="$1 hundred $2"/>
       </match>
@@ -466,65 +431,16 @@
 
     <!-- two digits or less -->
 
-    <input pattern="^1f$" break_on_match="true">
-      <match>
-        <action function="play-file" data="digits/1f.wav"/>
-      </match>
-    </input>
-
-    <input pattern="^([1-9]0|1[0-9]|[1-9])f?$" break_on_match="true">
+    <input pattern="^([1-9]0|1[0-9]|[1-9])$" break_on_match="true">
       <match>
         <action function="play-file" data="digits/$1.wav"/>
       </match>
     </input>
 
-    <input pattern="^([234568])([2-9])" break_on_match="true">
+    <input pattern="^([2-9])([1-9])" break_on_match="true">
       <match>
         <action function="phrase" phrase="say-number" data="$1_0"/>
         <action function="play-file" data="digits/$2.wav"/>
-      </match>
-    </input>
-
-    <input pattern="^([234568])1f" break_on_match="true">
-      <match>
-        <action function="phrase" phrase="say-number" data="$1_0"/>
-        <action function="play-file" data="currency/and.wav"/>
-        <action function="play-file" data="digits/1f.wav"/>
-      </match>
-    </input>
-
-    <!-- we recorded these specially. YMMV -->
-    <input pattern="^(11|21|71|91)" break_on_match="true">
-      <match>
-        <action function="play-file" data="digits/$1.wav"/>
-      </match>
-    </input>
-
-    <input pattern="^([23456])1" break_on_match="true">
-      <match>
-        <action function="phrase" phrase="say-number" data="$1_0"/>
-        <action function="play-file" data="generic/234.wav"/>
-      </match>
-    </input>
-
-    <input pattern="^8(1.*)$" break_on_match="true">
-      <match>
-        <action function="play-file" data="digits/80.wav"/>
-        <action function="phrase" phrase="say-number" data="$1"/>
-      </match>
-    </input>
-
-    <input pattern="^7([02-9])" break_on_match="true">
-      <match>
-        <action function="phrase" phrase="say-number" data="60"/>
-        <action function="phrase" phrase="say-number" data="1$1"/>
-      </match>
-    </input>
-
-    <input pattern="^9([0-9])" break_on_match="true">
-      <match>
-        <action function="phrase" phrase="say-number" data="80"/>
-        <action function="phrase" phrase="say-number" data="1$1"/>
       </match>
     </input>
 
@@ -594,7 +510,7 @@
       </match>
     </input>
 
-    <input pattern="^(.*)( *€| +currency)$" break_on_match="true">
+    <input pattern="^(.*)( *\$| +currency)$" break_on_match="true">
       <match>
         <action function="phrase" phrase="say-currency" data="$1"/>
       </match>
@@ -608,12 +524,6 @@
     </input>
 
     <!-- default -->
-    <input pattern="^(.*) masculine?$" break_on_match="true">
-      <match>
-        <action function="phrase" phrase="say" data="$1"/>
-      </match>
-    </input>
-
     <input pattern="^(.)$" break_on_match="true">
       <match>
         <action function="phrase" phrase="say-single" data="$1"/>

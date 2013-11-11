@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<include>
+
+  <!-- This is a generic template for an E.164-compliant carrier. -->
+
+  <!-- Additionally this is a model template to create your own. -->
+
+  <!-- egress towards carrier -->
+  <context name="egress-$${profile_name}">
+
+    <extension name="unloop">
+      <condition field="${unroll_loops}" expression="^true$"/>
+      <condition field="${sip_looped_call}" expression="^true$">
+        <action application="deflect" data="${destination_number}"/>
+      </condition>
+    </extension>
+
+    <extension name="set-defaults" continue="true">
+      <condition field="caller_id_number" expression="">
+        <action application="set" data="ccnq_direction=egress"/>
+        <action application="set" data="ccnq_profile=$${profile_name}"/>
+        <action application="set" data="ccnq_extra=${sip_h_X-CCNQ3-Extra}" />
+        <action application="set" data="ccnq_attrs=${sip_h_X-CCNQ3-Attrs}" />
+        <action application="set" data="ccnq_account=${url_decode(${regex(${sip_h_p-charge-info}|sip:([^@]+)@|%1)})}" inline="true" />
+        <action application="set" data="ccnq_from_e164=${caller_id_number}" inline="true" />
+        <action application="set" data="ccnq_to_e164=${destination_number}" inline="true" />
+
+        <action application="set" data="sip_cid_type=pid"/>
+
+        <action application="set" data="progress_timeout=12"/>
+        <action application="set" data="call_timeout=300"/>
+        <action application="export" data="sip_wait_for_aleg_ack=true"/>
+        <action application="export" data="t38_passthru=true"/>
+      </condition>
+    </extension>
+
+    <extension name="cleanup-caller-id" continue="true">
+      <condition field="${ccnq_from_e164}" expression="^(\d+)$">
+        <action application="set" data="sip_contact_user=$1"/>
+        <action application="set" data="effective_caller_id_number=$1"/>
+      </condition>
+    </extension>
+
+    <extension name="egress-e164">
+      <condition field="${ccnq_account}" expression="^.+$" />
+      <condition field="${ccnq_to_e164}" expression="^(\d+)$">
+        <action application="answer"/>
+        <action application="sleep" data="2000"/>
+        <action application="set" data="language=fr"/>
+        <action application="phrase" data="spell,$1"/>
+        <action application="set" data="language=en"/>
+        <action application="phrase" data="spell,$1"/>
+        <action application="set" data="language=fr"/>
+        <action application="phrase" data="spell,$1_$${profile_name}"/>
+        <action application="set" data="language=en"/>
+        <action application="phrase" data="spell,$1_$${profile_name}"/>
+        <action application="hangup"/>
+      </condition>
+    </extension>
+
+  </context>
+
+</include>

@@ -40,7 +40,7 @@ module.exports =
       if output_stream.write packet.data
           do cb
       else
-        output_stream.on 'drain', cb
+        output_stream.once 'drain', cb
       return
 
     # Global Header

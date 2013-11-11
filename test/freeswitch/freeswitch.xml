@@ -1,0 +1,129 @@
+<?xml version="1.0"?>
+<document type="freeswitch/xml">
+
+  <X-PRE-PROCESS cmd="set" data="domain=test.shimaore.net"/>
+  <X-PRE-PROCESS cmd="set" data="local_ip=$${local_ip_v4}"/>
+  <X-PRE-PROCESS cmd="set" data="sounds_dir=/usr/share/freeswitch/sounds"/>
+
+  <section name="configuration" description="Various Configuration">
+    <configuration name="switch.conf" description="Core Configuration">
+      <settings>
+        <param name="colorize-console" value="true"/>
+        <param name="core-db-name" value="/dev/shm/freeswitch/core.db" />
+        <param name="rtp-start-port" value="49152"/>
+        <param name="rtp-end-port" value="65535"/>
+      </settings>
+    </configuration>
+    <configuration name="modules.conf" description="Modules">
+      <modules>
+        <load module="mod_event_socket"/>
+        <load module="mod_hash"/>
+        <load module="mod_commands"/>
+        <load module="mod_dptools"/>
+        <load module="mod_loopback"/>
+        <load module="mod_console"/>
+        <load module="mod_logfile"/>
+
+        <load module="mod_sndfile"/>
+
+        <load module="mod_dialplan_xml"/>
+        <load module="mod_sofia"/>
+      </modules>
+    </configuration>
+    <configuration name="event_socket.conf" description="Socket Client">
+      <settings>
+        <param name="nat-map" value="false"/>
+        <param name="listen-ip" value="127.0.0.1"/>
+        <param name="listen-port" value="8021"/>
+        <param name="password" value="ClueCon"/>
+      </settings>
+    </configuration>
+    <configuration name="console.conf" description="Console Logger">
+      <mappings>
+        <map name="all" value="console,debug,info,notice,warning,err,crit,alert"/>
+      </mappings>
+      <settings>
+        <param name="colorize" value="true"/>
+        <param name="loglevel" value="debug"/>
+      </settings>
+    </configuration>
+    <configuration name="logfile.conf" description="File Logging">
+      <settings>
+        <param name="rotate-on-hup" value="true"/>
+      </settings>
+      <profiles>
+        <profile name="default">
+          <settings>
+             <!--<param name="logfile" value="/var/log/freeswitch.log"/>-->
+             <param name="rollover" value="10485760"/>
+             <param name="maximum-rotate" value="32"/>
+             <param name="uuid" value="true" />
+          </settings>
+          <mappings>
+           <map name="all" value="debug,info,notice,warning,err,crit,alert"/>
+          </mappings>
+        </profile>
+      </profiles>
+    </configuration>
+
+    <configuration name="acl.conf" description="Network Lists">
+      <network-lists>
+        <list name="any" default="allow">
+          <node type="allow" cidr="127.0.0.1/8"/>
+        </list>
+      </network-lists>
+    </configuration>
+
+    <configuration name="sofia.conf" description="sofia Endpoint">
+      <global_settings>
+        <param name="log-level" value="9"/> <!-- anything below 9 makes FreeSwitch segfault??! -->
+        <!-- <param name="auto-restart" value="false"/> -->
+        <param name="debug-presence" value="0"/>
+        <!-- <param name="capture-server" value="udp:homer.domain.com:5060"/> -->
+      </global_settings>
+      <profiles>
+
+            <X-PRE-PROCESS cmd="include" data="profile-test-5060.xml"/>
+
+      </profiles>
+    </configuration>
+  </section>
+
+  <section name="dialplan" description="Regex/XML Dialplan">
+
+    <context name="private">
+      <extension name="test">
+        <condition field="destination_number" expression="^(fr|en)$">
+          <action application="answer"/>
+          <action application="set" data="language=$1"/>
+          <action application="socket" data="127.0.0.1:7000 async full"/>
+        </condition>
+      </extension>
+      <extension name="test-more">
+        <condition field="destination_number" expression="^([01]\d+)$">
+          <action application="answer"/>
+          <action application="sleep" data="2000"/>
+          <action application="set" data="language=fr"/>
+          <action application="phrase" data="spell,$1_test-foobar"/>
+          <action application="set" data="language=en"/>
+          <action application="phrase" data="spell,$1_test-foobar"/>
+        </condition>
+      </extension>
+      <extension name="Echo">
+        <condition field="destination_number" expression="^9$">
+          <action application="answer"/>
+          <action application="echo" data=""/>
+        </condition>
+      </extension>
+    </context>
+  </section>
+
+  <section name="phrases" description="Speech Phrase Management">
+    <macros>
+      <X-PRE-PROCESS cmd="include" data="../../common/freeswitch/lang/en/*.xml"/>
+      <X-PRE-PROCESS cmd="include" data="../../common/freeswitch/lang/fr/*.xml"/>
+    </macros>
+  </section>
+
+
+</document>

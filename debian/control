@@ -7,7 +7,7 @@ Depends:
   findutils, adduser, passwd,
   curl, psmisc,
   daemon, bash, openssl,
-  nodejs-shimaore, build-essential, python
+  nodejs-legacy (=${nodejs:Version}), nodejs-dev (=${nodejs:Version}), npm, gyp, build-essential
 Recommends: monit, munin-node, ntp, ntpdate
 Description: ccnq3 -- a SIP SoftSwitch for ISPs
   This package install the base ccnq3 code in /opt/ccnq3/src
@@ -155,7 +155,7 @@ Depends: ccnq3 (= ${binary:Version}),
   opensips-b2bua-module (= ${opensips:Version}),
   opensips-redis-module (= ${opensips:Version}),
   netcat,
-  mediaproxy-dispatcher (>= 2.5.2-20120112),
+  mediaproxy-dispatcher (= ${mediaproxy:Version}),
   libjson0 (=0.10-1.2)
 Recommends: ccnq3-munin-opensips
 Description: OpenSIPS dependencies for CCNQ3
@@ -186,7 +186,7 @@ Description: FreeSwitch dependencies for CCNQ3
 Package: ccnq3-mediaproxy-relay
 Architecture: all
 Depends: ccnq3 (= ${binary:Version}),
-  mediaproxy-relay (>= 2.5.2-20120112), conntrack
+  mediaproxy-relay (= ${mediaproxy:Version}), conntrack
 Description: mediaproxy-relay dependencies for CCNQ3
   Note that this depends on a mediaproxy version that can only handle local
   mediaproxy-dispatcher.
