@@ -7,7 +7,7 @@ Depends:
   findutils, adduser, passwd,
   curl, psmisc,
   daemon, bash, openssl,
-  nodejs-shimaore, build-essential, python
+  nodejs-legacy (=${nodejs:Version}), nodejs-dev (=${nodejs:Version}), npm, gyp, build-essential
 Recommends: monit, munin-node, ntp, ntpdate
 Description: ccnq3 -- a SIP SoftSwitch for ISPs
   This package install the base ccnq3 code in /opt/ccnq3/src
