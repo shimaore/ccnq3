@@ -5,7 +5,7 @@ Requirements:
   aptitude install opensips opensips-dbhttp-module opensips-json-module opensips-b2bua-module
 
     fs = require 'fs'
-    assert = require 'assert'
+    should = require 'should'
 
     exec = (command,args,next) ->
       run = (require 'child_process').spawn command, args
@@ -16,50 +16,62 @@ Requirements:
         throw e
       run.on 'exit', (code,signal) ->
         next?()
-        unless code is 0
-          throw new Error "Died with code = #{code}, signal = #{signal}"
+        (code).should.equal 0, "#{command} #{args.join ' '} -> died with code = #{code}, signal = #{signal}"
 
     compiler = require '../common/opensips/compiler'
 
     check_config_opensips = (cfg_path,next) ->
+      console.log "Checking configuration file #{cfg_path}"
       exec '/usr/sbin/opensips', ['-C', '-D', '-E', '-f', cfg_path], next
 
     run_opensips = (cfg_path,next) ->
+      console.log "Running OpenSIPS with #{cfg_path}"
       exec '/usr/sbin/opensips', ['-D', '-E', '-f', cfg_path], next
 
-    mktemp = (cb) ->
-      (require 'mktemp').createFile 'opensips-XXXXXX.cfg', (err,cfg_path) ->
+    mktemp = (name,cb) ->
+      (require 'mktemp').createFile "opensips-#{name}-XXXXXX.cfg", (err,cfg_path) ->
         if err
           throw err
         try
           cb? cfg_path, ->
-            fs.unlink cfg_path
+            # fs.unlink cfg_path
 
 Here's the first test: test `complete` model with default options.
 
-    mktemp (cfg_path,next) ->
-      base = (require 'path').join process.cwd(), '../common/opensips'
+    check_provided_config = (name) ->
+      port = 15500
+      mktemp name, (cfg_path,next) ->
+        base = (require 'path').join process.cwd(), '../common/opensips'
 
-      options =
-        opensips_base_lib: base
-        runtime_opensips_cfg: cfg_path
-        sip_domain_name: 'test'
-        listen: ['127.0.0.1']
-        port: 15060
+        options =
+          opensips_base_lib: base
+          runtime_opensips_cfg: cfg_path
+          sip_domain_name: 'test'
+          listen: ['127.0.0.1']
+          port: port++
 
-      for k,v of require '../common/opensips/complete.json'
-        options[k] ?= v
-      for k,v of require '../common/opensips/default.json'
-        options[k] ?= v
+        for k,v of require "../common/opensips/#{name}.json"
+          options[k] ?= v
+        for k,v of require '../common/opensips/default.json'
+          options[k] ?= v
 
-      compiler options
+        # local-vars
+        options.local_ipv4 = '127.0.0.1'
 
-      check_config_opensips cfg_path, next
+        compiler options
 
+        unless fs.existsSync cfg_path
+          throw "Compiler did not create #{cfg_path}"
 
-Here the second test: make sure the json module works.
+        check_config_opensips cfg_path, next
 
-    mktemp (cfg_path,next) ->
+    for name in 'complete conference emergency outbound-proxy registrant'.split ' '
+      do (name) ->
+        check_provided_config name
+
+Here's the second test: make sure the json module works.
+
+    mktemp 'json-module', (cfg_path,next) ->
       fs.writeFile cfg_path, '''
         mpath = "/usr/lib/opensips/modules/"
         loadmodule "json.so"
