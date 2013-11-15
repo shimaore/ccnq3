@@ -1,29 +1,8 @@
 #!/usr/bin/env coffee
-# clean.js -- merge OpenSIPS configuration fragments
-# Copyright (C) 2009,2011  Stephane Alnet
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Affero General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Affero General Public License for more details.
-#
-# You should have received a copy of the GNU Affero General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# compiler.coffee -- merge OpenSIPS configuration fragments
 
 fs = require 'fs'
 path = require 'path'
-
-### clean_cfg
-
-  Rename route statements and prune unavailable ones.
-  Process macros.
-
-###
 
 macros_cfg = (t,params) ->
 
@@ -84,45 +63,6 @@ macros_cfg = (t,params) ->
 
   return t
 
-clean_cfg = (t,params) ->
-
-  t = macros_cfg t, params
-
-  available = {}
-  t.replace /// \b route \[ ( [^\]]+ ) \] ///g, (str,$1) ->
-    available[$1] = 0
-
-  t = t.replace /// \b route \( ( [^\)]+ ) \) ///g, (str,$1) ->
-    if available[$1]?
-      available[$1]++
-      return str
-    else
-      console.log "Removing unknown route(#{$1})"
-      return ''
-
-  unused = (k for k,v of available when v is 0)
-  if unused? and unused.length
-      throw "Unused routes (replace with macros): " + unused.sort().join(', ')
-
-  used = (k for k,v of available when v > 0)
-
-  route_count = 0
-  route = {}
-  route[_] = ++route_count for _ in used.sort()
-
-  console.log "Found #{route_count} routes"
-
-  t = t.replace /\broute\(([^\)]+)\)\s*([;\#\)])/g, (str,$1,$2) -> "route(#{route[$1]}) #{$2}"
-  t = t.replace /\broute\[([^\]]+)\]\s*([\{\#])/g, (str,$1,$2)  -> "route[#{route[$1]}] #{$2}"
-
-  t += "\n"
-
-  keys = (k for k of route)
-  t += "# route(#{route[_]}) => route(#{_})\n" for _ in keys.sort()
-
-  return t
-
-
 ### compile_cfg
 
     Build OpenSIPS configuration from fragments.
@@ -150,7 +90,7 @@ compile_cfg = (base_dir,params) ->
         fragment += fs.readFileSync file
         fragment += "\n## ---  End #{file}  --- ##\n\n"
         result += fragment
-  return clean_cfg result, params
+  return macros_cfg result, params
 
 ###
 
