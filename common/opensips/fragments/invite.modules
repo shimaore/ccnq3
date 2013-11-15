@@ -3,8 +3,8 @@
 if not skip_uac_auth
   loadmodule "uac_auth.so"
   modparam("uac_auth","auth_realm_avp",    "$(avp(uac_realm))")
-  modparam("uac_auth","auth_username_avp", "$(avp(uac_user))")
-  modparam("uac_auth","auth_password_avp", "$(avp(uac_pass))")
+  modparam("uac_auth","auth_username_avp", "$(avp(uac_username))")
+  modparam("uac_auth","auth_password_avp", "$(avp(uac_password))")
 
   loadmodule "uac.so"
   modparam("uac","rr_store_param",    "${UAC_VSF}")
