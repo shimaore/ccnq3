@@ -68,3 +68,7 @@ if rate_limit
     modparam("ratelimit", "db_prefix", "ratelimit_")
   end if rate_limit_cache
 end if rate_limit
+
+# -- avpops --
+# Note: see also avpops_db.modules for additional configuration.
+loadmodule "avpops.so"
