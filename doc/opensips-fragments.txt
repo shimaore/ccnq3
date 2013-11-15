@@ -1,0 +1,174 @@
+Name: accounting
+Description: starts accounting methods (OBSOLETE)
+Routes: 0
+
+Name: authenticate-disabled
+Group: authenticate
+Description: replacement module for `authenticate` when no authorization/authentication is desired.
+Routes: 3
+  route[authenticate]
+  route[authenticate_check]
+  route[authenticate_register]
+
+Name: authenticate
+Group: authenticate
+Description: authenticate INVITE or REGISTER; populates `src_endpoint` based on IP or username
+Routes: 3
+  route[authenticate]
+  route[authenticate_check]
+  route[authenticate_register]
+
+Name: forwarder
+Description: Default message forwarder (for anything except ACK, PRACK, CANCEL and UPDATE); adds var-based headers and forward messages using t_relay()
+Note: in most cases (except from failure_route), a call to route(initial_forwarder) should be preceded by a call to route(update_media_proxy).
+Routes: 3
+  route[initial_forwarder]
+  route[forwarder]
+  route[forwarder-progress]
+
+Name: generic.cfg
+Required
+Description: main route statement
+Routes: 0
+
+Name: invite-emergency
+Group: invite_handlers
+Description: INVITE handler for an emergency call router
+Routes: 1
+  route[invite_handler]
+
+Name: invite-outbound-proxy
+Group: invite_handlers
+Description: INVITE handler for an outbound-proxy
+Routes: 2
+  route[invite_handler]
+  route[lookup_src]
+
+Name: invite-registrar
+Group: invite_handlers
+Description: INVITE handler for a standalone registrar (UNTESTED)
+Routes: 1
+  route[invite_handler]
+
+Name: invite-router-local
+Group: invite_handlers
+Description: INVITE handler for a router that forwards to a static server.
+Routes: 1
+  route[invite_handler]
+
+Name: invite-router
+Group: invite_handlers
+Description: INVITE handler for a generic router
+Routes: 2
+  route[invite_handler]
+  route[lookup_src]
+
+Name: invite-trunk-side
+Routes: 3
+  route[invite_trunk_drouting]
+  route[trunk_attributes]
+  branch_route[1]
+
+Name: invite
+Description: modules and configuration shared by all forwarding INVITE modules
+Routes: 2
+  onreply_route[1]
+  failure_route[1]
+
+Name: loose-route-disabled
+Group: loose-route
+Description: no handling of loose-routed messages
+Routes: 0
+
+Name: loose-route
+Group: loose-route
+Description: handler for loose-routed messages
+Routes: 1
+  onreply_route[2]
+
+Name: mediaproxy
+Group: mediaproxy
+Description: handler for MediaProxy (SDP with NAT)
+Note: This is independent from having mp=yes added to Record-Route
+Routes: 5
+  route[start-media-proxy]
+  route[stop-media-proxy]
+  route[media-proxy-method-handler]
+  route[media-proxy-reply-handler]
+  route[update-media-proxy]
+
+Name: nat
+Group: nat
+Description: handler for messages originating or terminating behind NAT
+Routes: 3
+  route[nlr_nat]
+  route[initial_nat]
+  route[lr_nat]
+
+Name: non-loose-route
+Group: non-loose-route
+Description: handler for out-of-dialog (non loose-routed) messages
+Routes: 0
+
+Name: nonat
+Group: nat
+Description: no NAT handling
+Routes: 3
+  route[nlr_nat]
+  route[initial_nat]
+  route[lr_nat]
+
+Name: register-colocted
+Group: register-handler
+Description: REGISTER handler for a colocated registrar
+Routes: 1
+  route[register_handler]
+
+Name: register-ignore
+Group: register-handler
+Description: do not handle REGISTER messages, but pretend we still did.
+Routes: 1
+  route[register_handler]
+
+Name: register-none
+Group: register-handler
+Description: REGISTER are not handled at all
+Routes: 1
+  route[register_handler]
+
+Name: register-registrar
+Group: register-handler
+Description: REGISTER handler for a standalone registrar (UNFINISHED)
+Routes: 1
+  route[register_handler]
+
+Name: register-router
+Group: register-handler
+Description: REGISTER handler for a router
+Routes: 1
+  route[register_handler]
+
+Name: registrant
+Group: non-loose-route
+Description: handler for out-of-dialog (non loose-routed) messages for the registrant application.
+Routes: 0
+
+Name: routing-lineside
+Description: INVITE handler for line-side (customer) termination
+Routes: 4
+  route[try_line_side]
+  route[line_side_invite]
+  route[registered_static_line_side]
+  route[static_line_side]
+
+Name: routing-trunkside-transparent
+Group: try_trunk_side
+Description: routing toward trunkside for transparent router
+Routes: 1
+  route[try_trunk_side]
+
+Name: toolbox
+Required
+Description: misc routines
+Routes: 0
+

@@ -4,5 +4,5 @@ for f in fragments/*.cfg; do
   echo -n 'Routes: '; grep 'route\[' $f | wc -l;
   grep 'route\[' $f | sed -e 's/^/  /' | sed -e 's/\].*$/]/'
   echo
-done > doc.txt
+done > ../../doc/opensips-fragments.txt
 # Inside a group, only one module may be selected.
