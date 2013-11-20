@@ -2,31 +2,12 @@ Check whether generic opensips configurations will compile OK.
 
 Requirements:
 
-  aptitude install opensips opensips-dbhttp-module opensips-json-module opensips-b2bua-module
+```
+aptitude install opensips opensips-dbhttp-module opensips-json-module opensips-b2bua-module
+```
 
     fs = require 'fs'
-    should = require 'should'
-
-    exec = (command,args,next) ->
-      run = (require 'child_process').spawn command, args
-      run.stdout.pipe process.stdout
-      run.stderr.pipe process.stderr
-      run.on 'error', (e) ->
-        next?()
-        throw e
-      run.on 'exit', (code,signal) ->
-        next?()
-        (code).should.equal 0, "#{command} #{args.join ' '} -> died with code = #{code}, signal = #{signal}"
-
-    compiler = require '../common/opensips/compiler'
-
-    check_config_opensips = (cfg_path,next) ->
-      console.log "Checking configuration file #{cfg_path}"
-      exec '/usr/sbin/opensips', ['-C', '-D', '-E', '-f', cfg_path], next
-
-    run_opensips = (cfg_path,next) ->
-      console.log "Running OpenSIPS with #{cfg_path}"
-      exec '/usr/sbin/opensips', ['-D', '-E', '-f', cfg_path], next
+    test = require './test_opensips'
 
     mktemp = (name,cb) ->
       (require 'mktemp').createFile "opensips-#{name}-XXXXXX.cfg", (err,cfg_path) ->
@@ -37,6 +18,8 @@ Requirements:
             # fs.unlink cfg_path
 
 Here's the first test: test `complete` model with default options.
+
+    compiler = require '../common/opensips/compiler'
 
     check_provided_config = (name) ->
       port = 15500
@@ -63,7 +46,7 @@ Here's the first test: test `complete` model with default options.
         unless fs.existsSync cfg_path
           throw "Compiler did not create #{cfg_path}"
 
-        check_config_opensips cfg_path, next
+        test.check_config cfg_path, next
 
     for name in 'complete conference emergency outbound-proxy registrant'.split ' '
       do (name) ->
@@ -110,4 +93,4 @@ Then check for values in object.
           exit;
         }
       ''', ->
-        run_opensips cfg_path, next
+        test.run cfg_path, next
