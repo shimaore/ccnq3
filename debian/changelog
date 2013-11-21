@@ -27,7 +27,7 @@ ccnq3 (0.0.229) unstable; urgency=low
   * registrant out of pkg_mem
   * Updated dependencies.
 
- -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Thu, 21 Nov 2013 15:50:54 +0100
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Thu, 21 Nov 2013 16:13:47 +0100
 
 ccnq3 (0.0.228) unstable; urgency=low
 
