@@ -1,3 +1,12 @@
+ccnq3 (0.0.228) unstable; urgency=low
+
+  [ Stephane Alnet ]
+  * Replaced noejs-shimaore with nodejs..~shimaore
+
+  [ Stephane Alnet (Packaging) ]
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Thu, 21 Nov 2013 15:49:50 +0100
+
 ccnq3 (0.0.227) unstable; urgency=low
 
   * trying to replace nodejs-shimaore with nodejs..~shimaore
