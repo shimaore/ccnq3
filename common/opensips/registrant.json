@@ -4,6 +4,7 @@
   "recipe":[
     "generic",
     "toolbox",
+    "authenticate-disabled",
     "avpops_db",
     "db_http",
     "nonat",
