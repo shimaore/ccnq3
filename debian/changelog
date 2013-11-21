@@ -1,9 +1,37 @@
+ccnq3 (0.0.229) unstable; urgency=low
+
+  * CFNR test should only be applied for Registration cases.
+  * opensips: make-docs; also cleanedup xlog's
+  * opensips: prep for new compiler: mediaproxy as conditional
+  * opensips: initial-forwarder -> initial_forwarder
+  * opensips: invite-handler -> invite_handler
+  * opensips: invite-trunk-drouting -> invite_trunk_drouting
+  * opensips: try-* -> try_*
+  * opensips: *-nat -> *_nat
+  * opensips: register_record_route moved out
+  * opensips: migrate register* to new compiler
+  * opensips: couple internal route names rewrites
+  * opensips: force user to specify either `authenticate` or `authenticate-disabled`.
+  * opensips: new compiler no longer trims calls to missing `route` statements.
+  * opensips: new fragments cross-reference document.
+  * opensips: compiler should handle two-level `if` macros
+  * opensips: more route names cleanup
+  * opensips: avpops module is required in generic (and others)
+  * opensips: use standardized names for uac_auth's username, etc. AVPs.
+  * opensips: registrant: make sure we properly use the new auth code in b2b apps.
+  * opensips: the new tests help figure out plenty of compile-time issues, hooray!
+  * opensips: optional Makefile to cleanup the test directory
+  * license
+  * updated opensips test framework
+  * test/freeswitch cleanup
+  * registrant out of pkg_mem
+  * Updated dependencies.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Thu, 21 Nov 2013 15:50:54 +0100
+
 ccnq3 (0.0.228) unstable; urgency=low
 
-  [ Stephane Alnet ]
-  * Replaced noejs-shimaore with nodejs..~shimaore
-
-  [ Stephane Alnet (Packaging) ]
+  * Replaced nodejs-shimaore with nodejs..~shimaore
 
  -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Thu, 21 Nov 2013 15:49:50 +0100
 
