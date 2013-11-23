@@ -184,6 +184,15 @@ If you need mediaproxy on a host running OpenSIPS, you _must_ manually run
 
 because of some important caveats regarding IPv6.
 
+Setup of traces
+---------------
+
+If you intend to use the `ccnq3-traces` package (and the `applications/traces` application), make sure the permissions are set properly on `/usr/bin/dumpcap` by running
+
+    dpkg-reconfigure wireshark-common
+
+and selectiong "Yes" when asked "Should non-superusers be able to capture packets?"
+
 Installation of CCNQ3 DNS server
 --------------------------------
 
