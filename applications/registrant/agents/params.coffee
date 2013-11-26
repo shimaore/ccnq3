@@ -11,7 +11,7 @@ module.exports = (p,config) ->
       params[k] = data[k] for own k of data
 
   params.opensips_base_lib = base_path
-  params.notify_via_rabbitmq ?= "#{config.amqp}/logging" if config.amqp?
+  params.notify_via_rabbitmq ?= "#{config.amqp}/logging".replace(/^amqp/,'rabbitmq') if config.amqp?
 
   params[k] = p.registrant[k] for own k of p.registrant
 
