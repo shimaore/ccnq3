@@ -66,6 +66,7 @@
   "ignore_broken_register": false,
   "register_check_ip": true,
   "notify_on_check_ip": false,
+  "notify_via_rabbitmq": null,
 
   "ignore_static_endpoints": false,
 

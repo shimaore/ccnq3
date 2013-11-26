@@ -46,3 +46,6 @@ user_agent_header="User-Agent: ccnq3 ${model} proxy"
 if sip_domain_name
 alias="${sip_domain_name}"
 end if sip_domain_name
+
+event_pkg_threshold = 90
+event_shm_threshold = 90
