@@ -405,7 +405,7 @@ Configuration options:
 
     * `model`: `"complete"`, or any other model defined in common/opensips [required]
 
-      Currently supported: `complete`, `outbound-proxy`, `emergency`, `registrant`.
+      Currently supported: `complete`, `outbound-proxy`.
 
     * `number_domain`: string; the default `number_domain` used on this server if none is provided [default: "local"]
 
