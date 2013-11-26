@@ -12,7 +12,8 @@
     "authenticate",
     "invite-emergency",
     "non-loose-route",
-    "loose-route-disabled"
+    "loose-route-disabled",
+    "register-none"
   ],
 
   "opensips_base_lib": ".",
