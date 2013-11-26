@@ -1,3 +1,11 @@
+ccnq3 (0.0.236) unstable; urgency=low
+
+  * opensips: simplify macro preprocessor
+  * opensips: emergency profile never forwards INVITE messages.
+  * opensips: only subscribe pike event if it might be emitted.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 26 Nov 2013 18:11:03 +0100
+
 ccnq3 (0.0.235) unstable; urgency=low
 
   * opensips: corrected rabbitmq destinations
