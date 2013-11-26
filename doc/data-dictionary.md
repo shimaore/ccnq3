@@ -819,6 +819,9 @@ If the "challenge" configuration parameter is empty (the default), the domain na
     If false (the default), the From username must equal the Authentication ID, otherwise the call is rejected.
     If true, the From username is not checked. In this case you probably want to enable `check_from` (below) to ensure that the From username is valid.
 
+*   `check_ip`: boolean
+    If true, after authentication the `user_ip` field is compared with the REGISTER message's source IP address; the message is rejected if the values don't match; additionally, if `notify_on_check_ip` is set in the configuration, an event is raised.
+
 ### Static endpoint fields ###
 
 *   `user_ip`         string  Static endpoint's IP address [required for static endpoints]
