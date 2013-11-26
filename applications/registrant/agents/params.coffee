@@ -1,5 +1,5 @@
 fs = require 'fs'
-module.exports = (p) ->
+module.exports = (p,config) ->
   base_path = "./opensips"
   model = 'registrant'
 

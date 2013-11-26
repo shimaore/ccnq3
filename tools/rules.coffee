@@ -4,7 +4,7 @@
 # for the given parameters:
 #     ./rules.coffee <sip_domain_name> <groupid>
 # The input lines must contain semicolon-separated
-#     prefix;gwlist;attrs
+#     prefix;gwlist;cdr
 
 byline = require 'byline'
 pico = require 'pico'
@@ -131,8 +131,9 @@ ccnq3.config (config) ->
     input.setEncoding 'utf8'
     n = 0
     input.on 'data', (line) ->
-      [prefix,gwlist,attrs] = line.split /;/
+      [prefix,gwlist,cdr] = line.split /;/
       n++
+      attrs = {cdr}
       input.pause()
       emit_rule {prefix,gwlist,attrs}, ->
         input.resume()
