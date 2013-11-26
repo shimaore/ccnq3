@@ -1,3 +1,11 @@
+ccnq3 (0.0.235) unstable; urgency=low
+
+  * opensips: corrected rabbitmq destinations
+  * opensips: only call forwarder routines if it is present.
+  * opensips: only raise-able events might be registered.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 26 Nov 2013 17:49:20 +0100
+
 ccnq3 (0.0.234) unstable; urgency=low
 
   * update deps for opensips
