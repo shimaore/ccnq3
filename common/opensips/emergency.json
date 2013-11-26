@@ -10,7 +10,6 @@
     "nonat",
     "accounting",
     "authenticate",
-    "invite",
     "invite-emergency",
     "non-loose-route",
     "loose-route-disabled"

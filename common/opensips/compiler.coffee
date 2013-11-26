@@ -18,10 +18,12 @@ macros_cfg = (t,params) ->
     return ''
 
   # Macros may contain params, so substitute them first.
-  t = t.replace /// \$ \{ (\w+) \} ///g, (str,$1) -> macros[$1] ? str
+  macro_params = ->
+    t = t.replace /// \$ \{ (\w+) \} ///g, (str,$1) -> macros[$1] ? str
 
+  do macro_params
   # One more time (macros within macros)
-  t = t.replace /// \$ \{ (\w+) \} ///g, (str,$1) -> macros[$1] ? str
+  do macro_params
 
   # Evaluate parameters after macro substitution
   t = t.replace /// \b define \s+ (\w+) \b ///g, (str,$1) ->
