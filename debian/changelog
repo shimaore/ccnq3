@@ -1,3 +1,15 @@
+ccnq3 (0.0.231) unstable; urgency=low
+
+  * Initial fixes for opensips 1.11
+  * opensips: proper doc for register-registrar
+  * opensips: initial code for `register_check_ip`
+  * opensips: document Parameters in fragments.
+  * opensips: normalize script events names.
+  * doc/opensips: do not document (private) templates `emergency` and `registrant`.
+  * opensips: `notify_via_rabbitmq`
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 26 Nov 2013 12:53:06 +0100
+
 ccnq3 (0.0.230) unstable; urgency=low
 
   * Added notes on setting up `dumpcap` for traces.
