@@ -1,3 +1,9 @@
+ccnq3 (0.0.233) unstable; urgency=low
+
+  * registrant: default config to params for api.coffee
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 26 Nov 2013 16:22:14 +0100
+
 ccnq3 (0.0.232) unstable; urgency=low
 
   * opensips: make routes `attrs` into JSON.
