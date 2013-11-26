@@ -63,6 +63,7 @@ require('ccnq3').config (config) ->
 
     params.opensips_base_lib = base_path
     params.sip_domain_name = config.sip_domain_name
+    params.notify_via_rabbitmq ?= "#{config.amqp}/logging" if config.amqp?
 
     require("#{base_path}/compiler.coffee") params
 

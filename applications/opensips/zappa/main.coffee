@@ -250,7 +250,7 @@ require('ccnq3').config (config)->
         versions =
           location: 1009
           subscriber: 7
-          dr_gateways: 5
+          dr_gateways: 6
           dr_rules: 3
           registrant: 1
 

@@ -1,6 +1,12 @@
 Name: accounting
 Description: starts accounting methods (OBSOLETE)
 Routes: 0
+Parameters: 5
+  flag_accounting_flatstore_calls
+  flag_accounting_flatstore_missed
+  flag_accounting_radius_calls
+  flag_accounting_radius_missed
+  flag_accounting_syslog
 
 Name: authenticate-disabled
 Group: authenticate
@@ -9,6 +15,7 @@ Routes: 3
   route[authenticate]
   route[authenticate_check]
   route[authenticate_register]
+Parameters: 0
 
 Name: authenticate
 Group: authenticate
@@ -17,6 +24,13 @@ Routes: 3
   route[authenticate]
   route[authenticate_check]
   route[authenticate_register]
+Parameters: 6
+  auth_table
+  cache_timeout
+  challenge
+  sbc_csr_outbound
+  sbc_own_originator
+  sbc_own_outbound
 
 Name: forwarder
 Description: Default message forwarder (for anything except ACK, PRACK, CANCEL and UPDATE); adds var-based headers and forward messages using t_relay()
@@ -24,18 +38,28 @@ Note: in most cases (except from failure_route), a call to route(initial_forward
 Routes: 3
   route[initial_forwarder]
   route[forwarder]
-  route[forwarder-progress]
+  route[forwarder_progress]
+Parameters: 0
 
 Name: generic.cfg
 Required
 Description: main route statement
 Routes: 0
+Parameters: 7
+  cache_timeout
+  initialize
+  loose_route_handler
+  non_local_uri_handler
+  non_loose_route_handler
+  notify_via_rabbitmq
+  sip_domain_name
 
 Name: invite-emergency
 Group: invite_handlers
 Description: INVITE handler for an emergency call router
 Routes: 1
   route[invite_handler]
+Parameters: 0
 
 Name: invite-outbound-proxy
 Group: invite_handlers
@@ -43,18 +67,29 @@ Description: INVITE handler for an outbound-proxy
 Routes: 2
   route[invite_handler]
   route[lookup_src]
+Parameters: 6
+  cache_timeout
+  flag_dest_domain_set
+  flag_request_mp_caller
+  flag_trunk_routing
+  sbc_csr_outbound
+  sbc_own_outbound
 
 Name: invite-registrar
 Group: invite_handlers
 Description: INVITE handler for a standalone registrar (UNTESTED)
 Routes: 1
   route[invite_handler]
+Parameters: 1
+  usrloc_table
 
 Name: invite-router-local
 Group: invite_handlers
 Description: INVITE handler for a router that forwards to a static server.
 Routes: 1
   route[invite_handler]
+Parameters: 1
+  local_port
 
 Name: invite-router
 Group: invite_handlers
@@ -62,40 +97,70 @@ Description: INVITE handler for a generic router
 Routes: 2
   route[invite_handler]
   route[lookup_src]
+Parameters: 7
+  cache_timeout
+  flag_dest_domain_set
+  flag_request_mp_caller
+  lineside_extra_info
+  rate_limit_latency
+  sbc_own_outbound
+  sbc_own_upstream
 
 Name: invite-trunk-side
 Routes: 3
   route[invite_trunk_drouting]
   route[trunk_attributes]
   branch_route[1]
+Parameters: 5
+  cache_timeout
+  default_outbound_route
+  flag_request_mp_callee
+  flag_trunk_routing
+  internal_ip
 
 Name: invite
 Description: modules and configuration shared by all forwarding INVITE modules
 Routes: 2
   onreply_route[1]
   failure_route[1]
+Parameters: 5
+  bflag_auth_attempted
+  bflag_in_progress
+  flag_has_forwarding
+  flag_trunk_routing
+  onreply_nat
 
 Name: loose-route-disabled
 Group: loose-route
 Description: no handling of loose-routed messages
 Routes: 0
+Parameters: 0
 
 Name: loose-route
 Group: loose-route
 Description: handler for loose-routed messages
 Routes: 1
   onreply_route[2]
+Parameters: 1
+  onreply_nat
 
 Name: mediaproxy
 Group: mediaproxy
 Description: handler for MediaProxy (SDP with NAT)
 Note: This is independent from having mp=yes added to Record-Route
 Routes: 5
-  route[start-media-proxy]
-  route[stop-media-proxy]
-  route[media-proxy-method-handler]
-  route[media-proxy-reply-handler]
-  route[update-media-proxy]
+  route[start_media_proxy]
+  route[stop_media_proxy]
+  route[media_proxy_method_handler]
+  route[media_proxy_reply_handler]
+  route[update_media_proxy]
+Parameters: 6
+  bflag_request_mp_callee
+  dflag_mediaproxy
+  dflag_mediaproxy_engaged
+  flag_request_mp_callee
+  flag_request_mp_caller
+  mp_always
 
 Name: nat
 Group: nat
@@ -104,11 +169,23 @@ Routes: 3
   route[nlr_nat]
   route[initial_nat]
   route[lr_nat]
+Parameters: 6
+  ack_nat
+  bflag_request_mp_callee
+  flag_request_mp_caller
+  flag_tcp_persistent
+  lr_detect_nat
+  nat_keepalive
 
 Name: non-loose-route
 Group: non-loose-route
 Description: handler for out-of-dialog (non loose-routed) messages
 Routes: 0
+Parameters: 4
+  rate_limit_latency
+  start_accounting
+  usrloc_table
+  voicemail_notifier
 
 Name: nonat
 Group: nat
@@ -117,41 +194,59 @@ Routes: 3
   route[nlr_nat]
   route[initial_nat]
   route[lr_nat]
+Parameters: 0
 
 Name: register-colocted
 Group: register-handler
 Description: REGISTER handler for a colocated registrar
 Routes: 1
   route[register_handler]
+Parameters: 5
+  cache_timeout
+  min_expires
+  register_nat
+  usrloc_flags
+  usrloc_table
 
 Name: register-ignore
 Group: register-handler
 Description: do not handle REGISTER messages, but pretend we still did.
 Routes: 1
   route[register_handler]
+Parameters: 0
 
 Name: register-none
 Group: register-handler
 Description: REGISTER are not handled at all
 Routes: 1
   route[register_handler]
+Parameters: 0
 
 Name: register-registrar
 Group: register-handler
-Description: REGISTER handler for a standalone registrar (UNFINISHED)
+Description: REGISTER handler for a standalone registrar (REGISTER messages are forwarded by a register-router).
 Routes: 1
   route[register_handler]
+Parameters: 3
+  flag_register_authenticated
+  flag_sock
+  usrloc_flags
 
 Name: register-router
 Group: register-handler
-Description: REGISTER handler for a router
+Description: REGISTER handler for a router (forwards REGISTER messages to a register-registrar).
 Routes: 1
   route[register_handler]
+Parameters: 1
+  register_nat
 
 Name: registrant
 Group: non-loose-route
 Description: handler for out-of-dialog (non loose-routed) messages for the registrant application.
 Routes: 0
+Parameters: 2
+  local_port
+  source_ip
 
 Name: routing-lineside
 Description: INVITE handler for line-side (customer) termination
@@ -160,15 +255,27 @@ Routes: 4
   route[line_side_invite]
   route[registered_static_line_side]
   route[static_line_side]
+Parameters: 8
+  cache_timeout
+  external_ip
+  flag_dest_domain_set
+  flag_has_forwarding
+  flag_request_mp_callee
+  lookup
+  media_proxy_in_ruri
+  rate_limit_latency
 
 Name: routing-trunkside-transparent
 Group: try_trunk_side
 Description: routing toward trunkside for transparent router
 Routes: 1
   route[try_trunk_side]
+Parameters: 0
 
 Name: toolbox
 Required
 Description: misc routines
 Routes: 0
+Parameters: 1
+  max_hops
 
