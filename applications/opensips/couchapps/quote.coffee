@@ -30,6 +30,8 @@
         pri_prefix: 'string'
         attrs: 'string'
         probe_mode: 'int'
+        socket: 'string'
+        state: 'int'
       dr_rules:
         ruleid: 'int'
         # keys
