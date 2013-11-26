@@ -1144,7 +1144,7 @@ Carrier's names are pre-pended with a hash `#` sign, while gateway names are ins
 Although `rule`s and `gateway`s are defined on a per-`sip_domain_name` basis, carriers defined on a per-`host` basis.
 This allows you do have domain-generic routes and gateways, but each host can route to a preferred set of gateways (e.g. closest-gateway first) if desired. In that last case, make sure you assign higher weights to the preferred gateways for each `carrier`.
 
-The `attrs` field of the selected rule is made available in the CDRs.
+The `attrs.cdr` field of the selected rule is made available in the CDRs.
 This feature can be used for example to store rating information so that they do not need to be looked up again (using longest-prefix match) at rating time.
 
 Operational note:
@@ -1207,8 +1207,10 @@ The gateway list indicates which gateways (either `gateway` records or `egress_g
 
     The gateways and/or carriers specified in the rule are tried in the order given.
 
-*   `attrs`: string [default: the empty string]
-    This output field is present in the call's CDR as `variables.ccnq_attrs` on outbound calls.
+*   `attrs`: an object containing:
+
+    * `cdr`: string [default: the empty string]
+        This output field is present in the call's CDR as `variables.ccnq_attrs` on outbound calls.
 
 carrier (provisioning records)
 ------------------------------
