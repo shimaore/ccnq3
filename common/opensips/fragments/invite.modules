@@ -19,6 +19,7 @@ if accounting is flatstore
 end if accounting is flatstore
 
 loadmodule "dialog.so"
+define has_dialog_module
 modparam("dialog", "enable_stats", 1) # default 1
 
 # Dialog matching
