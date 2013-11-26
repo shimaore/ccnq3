@@ -1,3 +1,11 @@
+ccnq3 (0.0.239) unstable; urgency=low
+
+  * opensips: dr_gateways' state must be provided.
+  * opensips: set db_http timeout at 60s since dr_rules might take a long time to download.
+  * tools: validate at least the prefix.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 26 Nov 2013 20:41:58 +0100
+
 ccnq3 (0.0.238) unstable; urgency=low
 
   * opensips: emergency profile: provide for register handling
