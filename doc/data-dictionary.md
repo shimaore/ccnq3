@@ -444,7 +444,7 @@ Configuration options:
        New dialogs may start to be rejected between 5 and 15 cps with the default value of 50.
 
     There are plenty other OpenSIPS configuration parameters; all of them can be modified via the database.
-    The list of parameters can be found in the source code, in the JSON configuration files under `common/opensips/`.
+    The list of parameters can be found in the source code, in the JSON configuration files under `common/opensips/`, and in the file `doc/opensips-fragments.txt`.
     However in normal operation there is no reason to modify parameters except for those listed above.
 
 *   `sip_commands.opensips`: string
