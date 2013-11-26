@@ -1,3 +1,9 @@
+ccnq3 (0.0.234) unstable; urgency=low
+
+  * update deps for opensips
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 26 Nov 2013 17:17:42 +0100
+
 ccnq3 (0.0.233) unstable; urgency=low
 
   * registrant: default config to params for api.coffee
