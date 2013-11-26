@@ -132,6 +132,7 @@ ccnq3.config (config) ->
     n = 0
     input.on 'data', (line) ->
       [prefix,gwlist,cdr] = line.split /;/
+      throw "Invalid prefix #{prefix}" unless prefix.match /^\d*$/
       n++
       attrs = {cdr}
       input.pause()
