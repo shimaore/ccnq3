@@ -60,7 +60,7 @@ Here's the second test: make sure the json module works.
         loadmodule "json.so"
         listen=127.0.0.1
         port=15061
-        debug=5
+        debug=0
         startup_route {
 
 First test whether we can at least assign the empty object.
@@ -83,9 +83,9 @@ Then check for values in object.
           $avp(foo) := null;
 
           if($json(foo/bar) == 4) {
-            log("\nOK\n");
+            log(0,"\nOK\n");
           } else {
-            log("\nFailed\n");
+            log(0,"\nFailed\n");
           }
 
         }
