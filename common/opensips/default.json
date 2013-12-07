@@ -84,5 +84,7 @@
 
   "max_contacts": 0,
 
+  "sip_warning": 1,
+
   "ok":true
 }
