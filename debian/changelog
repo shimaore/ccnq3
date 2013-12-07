@@ -1,3 +1,14 @@
+ccnq3 (0.0.240) unstable; urgency=low
+
+  * opensips: cleanup headers
+  * opensips: Corrected syntax for dlg_flags.
+  * opensips: can't mix strings and numbers, and no way to convert numbers to string.
+  * test: opensips set debug level and match log level.
+  * downgrade freeswitch
+  * Added SIP warning.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Sat, 07 Dec 2013 01:16:43 +0100
+
 ccnq3 (0.0.239) unstable; urgency=low
 
   * opensips: dr_gateways' state must be provided.
