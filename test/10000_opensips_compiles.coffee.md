@@ -60,7 +60,7 @@ Here's the second test: make sure the json module works.
         loadmodule "json.so"
         listen=127.0.0.1
         port=15061
-        debug=5
+        debug=0
         startup_route {
 
 First test whether we can at least assign the empty object.
@@ -83,10 +83,47 @@ Then check for values in object.
           $avp(foo) := null;
 
           if($json(foo/bar) == 4) {
-            log("\nOK\n");
+            log(0,"\nOK\n");
           } else {
-            log("\nFailed\n");
+            log(0,"\nFailed\n");
           }
+
+        }
+        route {
+          exit;
+        }
+      ''', ->
+        test.run cfg_path, next
+
+Here's the third test: make sure numerical port number works.
+
+    mktemp 'port-as-integer', (cfg_path,next) ->
+      fs.writeFile cfg_path, '''
+        listen=127.0.0.1
+        port=15062
+        debug=0
+        startup_route {
+
+          $var(port) = 1234;
+          $ru = "sip:foo@127.0.0.1";
+          $rp = $var(port);
+
+          if($ru == "sip:foo@127.0.0.1:1234") {
+            log(0,"\nOK\n");
+          } else {
+            log(0,"\nFailed\n");
+          }
+
+          $var(port) = "1234";
+          $ru = "sip:foo@127.0.0.1";
+          $rp = $var(port);
+
+          if($ru == "sip:foo@127.0.0.1:1234") {
+            log(0,"\nOK\n");
+          } else {
+            log(0,"\nFailed\n");
+          }
+
 
         }
         route {
