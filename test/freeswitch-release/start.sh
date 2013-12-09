@@ -21,7 +21,7 @@ sipp -bg \
   -i 127.0.0.1 -mi 127.0.0.1 \
   -bind_local -default_behaviors none -nd -fd 1 \
   -sf uac-with-reinvite.xml -p 15060 \
-  -s 163578273827 127.0.0.1:5060
+  -s 163578273827 -set from_user 12021237654 127.0.0.1:5060
 
 # UAS
 sipp -bg \
