@@ -1,3 +1,17 @@
+ccnq3 (0.0.241) unstable; urgency=low
+
+  * debian: bump freeswitch version to installable one
+  * test: freeswitch-release (initial)
+  * test: initial attempt with sipp
+  * test: no stats, no media
+  * test: valid test-with-reinvite
+  * test: more logs!
+  * freeswitch: multiunset before re-INVITEs come in
+  * test: updated test suite that shows the difference
+  * freeswitch dep: latest update
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Mon, 09 Dec 2013 20:58:47 +0100
+
 ccnq3 (0.0.240) unstable; urgency=low
 
   * opensips: cleanup headers
