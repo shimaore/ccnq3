@@ -61,20 +61,19 @@
         <!-- <param name="capture-server" value="udp:homer.domain.com:5060"/> -->
       </global_settings>
       <profiles>
-
-            <X-PRE-PROCESS cmd="include" data="profile-test-5060.xml"/>
-            <X-PRE-PROCESS cmd="include" data="profile-test-5062.xml"/>
-
+        <X-PRE-PROCESS cmd="set" data="port=5060"/>
+        <X-PRE-PROCESS cmd="include" data="profile-test.xml"/>
+        <X-PRE-PROCESS cmd="set" data="port=5062"/>
+        <X-PRE-PROCESS cmd="include" data="profile-test.xml"/>
       </profiles>
     </configuration>
   </section>
 
   <section name="dialplan" description="Regex/XML Dialplan">
-
     <context name="private">
       <extension name="test">
-        <condition field="destination_number" expression="^(17002021234)$">
-          <action application="bridge" data="sofia/profile/$1" />
+        <condition field="destination_number" expression="^(\d+)$">
+          <action application="bridge" data="sofia/test-5062/$1@127.0.0.1:15062" />
         </condition>
       </extension>
     </context>

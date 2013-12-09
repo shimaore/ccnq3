@@ -1,19 +1,12 @@
-<profile name="test-5062">
+<profile name="test-$${port}">
   <settings>
-    <param name="user-agent-string" value="CCNQ3 test-5062"/>
+    <param name="user-agent-string" value="CCNQ3 test-$${port}"/>
     <param name="username" value="ccnq3"/>
     <param name="debug" value="7"/>
     <param name="sip-trace" value="true"/>
 
-    <param name="sip-port" value="5062"/>
+    <param name="sip-port" value="$${port}"/>
     <param name="bind-params" value="transport=udp,tcp"/>
-    <param name="tls-sip-port" value="5063"/>
-    <!-- See https://wiki.freeswitch.org/wiki/Sofia.conf.xml#TLS -->
-    <param name="tls" value="false"/>
-    <param name="tls-only" value="false"/>
-    <param name="tls-bind-params" value="transport=tls"/>
-    <param name="tls-cert-dir" value="/path/to/ssl"/>
-    <param name="tls-version" value="sslv3,tlsv1"/>
 
     <param name="sip-ip" value="$${local_ip}"/>
     <param name="ext-sip-ip" value="$${local_ip}"/>
