@@ -16,12 +16,14 @@
     </configuration>
     <configuration name="modules.conf" description="Modules">
       <modules>
+        <load module="mod_console"/>
+        <load module="mod_logfile"/>
+
         <load module="mod_event_socket"/>
         <load module="mod_hash"/>
         <load module="mod_commands"/>
         <load module="mod_dptools"/>
         <load module="mod_loopback"/>
-        <load module="mod_console"/>
 
         <load module="mod_dialplan_xml"/>
         <load module="mod_sofia"/>
@@ -43,6 +45,24 @@
         <param name="colorize" value="true"/>
         <param name="loglevel" value="debug"/>
       </settings>
+    </configuration>
+    <configuration name="logfile.conf" description="File Logging">
+      <settings>
+        <param name="rotate-on-hup" value="true"/>
+      </settings>
+      <profiles>
+        <profile name="default">
+          <settings>
+            <!-- <param name="logfile" value="./freeswitch.log"/> -->
+            <!-- <param name="rollover" value="10485760"/> -->
+            <!-- <param name="maximum-rotate" value="32"/> -->
+            <param name="uuid" value="true" />
+          </settings>
+          <mappings>
+            <map name="all" value="debug,info,notice,warning,err,crit,alert"/>
+          </mappings>
+        </profile>
+      </profiles>
     </configuration>
 
     <configuration name="acl.conf" description="Network Lists">
@@ -73,6 +93,7 @@
     <context name="private">
       <extension name="test">
         <condition field="destination_number" expression="^(\d+)$">
+          <action application="info" />
           <action application="bridge" data="sofia/test-5062/$1@127.0.0.1:15062" />
         </condition>
       </extension>
