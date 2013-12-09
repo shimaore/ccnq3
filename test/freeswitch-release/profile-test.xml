@@ -4,6 +4,7 @@
     <param name="username" value="ccnq3"/>
     <param name="debug" value="7"/>
     <param name="sip-trace" value="true"/>
+    <param name="sip-capture" value="true"/>
 
     <param name="sip-port" value="$${port}"/>
     <param name="bind-params" value="transport=udp,tcp"/>

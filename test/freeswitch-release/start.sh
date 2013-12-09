@@ -34,7 +34,8 @@ sipp -bg \
   -sf uas-with-reinvite.xml -p 15062 \
   127.0.0.1:5060
 
-freeswitch -c -nonat -nonatmap -nort \
+rm -f var/freeswitch.log
+freeswitch -nc -nonat -nonatmap -nort \
     -mod /usr/lib/freeswitch/mod \
     -base "$DIR" -conf "$DIR" -log "$DIR/var" -run "$DIR/var" -db "$DIR/var" -scripts "$DIR" -temp "$DIR/var"
 

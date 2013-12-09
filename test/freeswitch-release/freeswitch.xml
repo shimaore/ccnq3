@@ -94,6 +94,8 @@
       <extension name="test">
         <condition field="destination_number" expression="^(\d+)$">
           <action application="info" />
+          <!-- <action application="export" data="execute_on_sip_reinvite_1=unset sip_h_X-CCNQ3-Test" /> -->
+          <action application="export" data="execute_on_answer_1=multiunset sip_h_X-CCNQ3-Test sip_h_X-CCNQ3-Extra sip_h_X-CCNQ3-Location sip_h_X-CCNQ3-MediaProxy sip_h_X-CCNQ3-Attrs sip_h_X-CCNQ3-Number-Domain" />
           <action application="bridge" data="sofia/test-5062/$1@127.0.0.1:15062" />
         </condition>
       </extension>
