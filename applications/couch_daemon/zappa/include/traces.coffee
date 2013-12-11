@@ -15,7 +15,7 @@
 
     ccnq3.amqp (connection) =>
       if connection?
-        connection.exchange 'traces', {type:'topic',durable:true}, (exchange) =>
+        connection.exchange 'traces', {type:'topic',durable:true,autoDelete:false}, (exchange) =>
           exchange.publish 'request', request
           connection.end()
           @success request

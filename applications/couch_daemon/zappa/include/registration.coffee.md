@@ -23,7 +23,7 @@
               c.end()
               @failure error:'timeout'
             timer = setTimeout on_timeout, 15*seconds
-            c.exchange 'registration', {type:'topic',durable:true}, (e) =>
+            c.exchange 'registration', {type:'topic',durable:true,autoDelete:false}, (e) =>
 
 The response is sent back using the specified queue
 

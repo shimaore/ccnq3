@@ -14,7 +14,7 @@ Registration Status
 
 The agent provides registration status for a given user.
 
-      c.exchange 'registration', {type:'topic',durable:true}, (e) ->
+      c.exchange 'registration', {type:'topic',durable:true,autoDelete:false}, (e) ->
 
 The request comes as an AMQP event.
 
