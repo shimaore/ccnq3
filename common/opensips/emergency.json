@@ -8,7 +8,6 @@
     "domain_db",
     "db_http",
     "nonat",
-    "accounting",
     "authenticate",
     "invite-emergency",
     "non-loose-route",
@@ -27,7 +26,6 @@
   "internal_ip": "",
   "external_ip": "",
 
-  "accounting": "none",
   "authentication": "database",
   "skip_uac_auth": 1,
   "mp_allowed": 1,

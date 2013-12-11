@@ -8,7 +8,6 @@
     "avpops_db",
     "db_http",
     "nonat",
-    "accounting",
     "registrant",
     "invite",
     "loose-route",
@@ -33,7 +32,6 @@
 
   "local_port": 5064,
 
-  "accounting": "",
   "authentication": "",
   "skip_uac_auth": 1,
   "mp_allowed": 1,
