@@ -1,3 +1,13 @@
+ccnq3 (0.0.242) unstable; urgency=medium
+
+  * opensips: starting to get rid of `macros`
+  * opensips: initial code for notify_on_registrant_failure
+  * opensips: removed macro processing
+  * opensips: do not generate empty statements.
+  * amqp: work around default change in amqp module
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Wed, 11 Dec 2013 22:14:36 +0100
+
 ccnq3 (0.0.241) unstable; urgency=low
 
   * debian: bump freeswitch version to installable one
