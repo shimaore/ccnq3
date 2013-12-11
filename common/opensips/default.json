@@ -14,11 +14,6 @@
   "bflag_in_progress":               18,
 
   "comment flag": "Transaction flags",
-  "flag_accounting_syslog":           1,
-  "flag_accounting_flatstore_calls":  2,
-  "flag_accounting_flatstore_missed": 3,
-  "flag_accounting_radius_calls":     4,
-  "flag_accounting_radius_missed":    5,
   "flag_request_mp_callee":           6,
   "flag_request_mp_caller":           7,
   "flag_failed_transaction":         12,

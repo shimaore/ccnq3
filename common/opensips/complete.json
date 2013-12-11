@@ -7,7 +7,6 @@
     "domain_db",
     "usrloc_db",
     "avpops_db",
-    "accounting",
     "toolbox",
     "authenticate",
     "nat",
@@ -34,7 +33,6 @@
   "internal_ip": "",
   "external_ip": "",
 
-  "accounting": "none",
   "authentication": "database",
   "skip_uac_auth": 1,
   "mp_allowed": 1,

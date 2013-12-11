@@ -11,12 +11,6 @@ if not skip_uac_auth
 end if not skip_uac_auth
 
 loadmodule "uac_redirect.so"
-if accounting is radius
-  modparam("uac_redirect","acc_function","acc_rad_request")
-end if accounting is radius
-if accounting is flatstore
-  modparam("uac_redirect","acc_function","acc_db_request")
-end if accounting is flatstore
 
 loadmodule "dialog.so"
 define has_dialog_module
