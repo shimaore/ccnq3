@@ -2,7 +2,7 @@ ccnq3 = require 'ccnq3'
 process_changes = require './process-changes'
 ccnq3.config (config) ->
   ccnq3.amqp (c) ->
-    c.exchange 'commands', {type:'topic',durable:true}, (e) ->
+    c.exchange 'commands', {type:'topic',durable:true,autoDelete:false}, (e) ->
       c.queue "commands-#{config.host}", (q) ->
 
         # Handle requests specific to this host.
