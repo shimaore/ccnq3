@@ -6,25 +6,6 @@ path = require 'path'
 
 macros_cfg = (t,params) ->
 
-  macros = {}
-
-  # Macro pre-processing
-  t = t.replace ///
-    \b macro \s+ (\w+) \b
-    ([\s\S]*?)
-    \b end \s+ macro \s+ \1 \b
-    ///g, (str,$1,$2) ->
-    macros[$1] = $2
-    return ''
-
-  # Macros may contain params, so substitute them first.
-  macro_params = ->
-    t = t.replace /// \$ \{ (\w+) \} ///g, (str,$1) -> macros[$1] ? str
-
-  do macro_params
-  # One more time (macros within macros)
-  do macro_params
-
   # Evaluate parameters after macro substitution
   t = t.replace /// \b define \s+ (\w+) \b ///g, (str,$1) ->
     params[$1] = 1
