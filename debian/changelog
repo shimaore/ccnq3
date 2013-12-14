@@ -1,3 +1,9 @@
+ccnq3 (0.0.244) unstable; urgency=medium
+
+  * match current nodejs version
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Sat, 14 Dec 2013 23:26:29 +0100
+
 ccnq3 (0.0.243) unstable; urgency=medium
 
   * opensips: removed `accounting` module
