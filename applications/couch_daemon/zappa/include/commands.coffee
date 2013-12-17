@@ -13,7 +13,7 @@
 
     ccnq3.amqp (connection) =>
       if connection?
-        connection.exchange 'commands', {type:'topic',durable:true}, (exchange) =>
+        connection.exchange 'commands', {type:'topic',durable:true,autoDelete:false}, (exchange) =>
           # Be ready to receive the response(s) -- but only pick the first one.
           connection.queue "couch_daemon-#{config.host}-#{request.reference}", (queue) ->
             queue.bind exchange, "response-#{request.reference}"

@@ -20,7 +20,7 @@ ccnq3.config (config) ->
     params = require('./params') p
 
     # Build the configuration file.
-    require("#{base_path}/compiler.coffee") params
+    require("#{base_path}/compiler.coffee") params, config
 
     # Process any MI commands
     if p.sip_commands?.registrant?

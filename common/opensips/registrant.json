@@ -4,10 +4,10 @@
   "recipe":[
     "generic",
     "toolbox",
+    "authenticate-disabled",
     "avpops_db",
     "db_http",
     "nonat",
-    "accounting",
     "registrant",
     "invite",
     "loose-route",
@@ -32,7 +32,6 @@
 
   "local_port": 5064,
 
-  "accounting": "",
   "authentication": "",
   "skip_uac_auth": 1,
   "mp_allowed": 1,
@@ -54,6 +53,8 @@
   "skip_domain_check": 1,
 
   "children": 20,
+
+  "notify_on_registrant_failure": true,
 
   "ok":true
 }

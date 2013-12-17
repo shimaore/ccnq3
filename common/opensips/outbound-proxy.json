@@ -6,7 +6,6 @@
     "db_http",
     "domain_db",
     "avpops_db",
-    "accounting",
     "toolbox",
     "authenticate",
     "nonat",
@@ -33,7 +32,6 @@
   "internal_ip": "",
   "external_ip": "",
 
-  "accounting": "none",
   "authentication": "database",
   "skip_uac_auth": 1,
   "mp_allowed": 1,

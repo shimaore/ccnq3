@@ -8,12 +8,11 @@
     "domain_db",
     "db_http",
     "nonat",
-    "accounting",
     "authenticate",
-    "invite",
     "invite-emergency",
     "non-loose-route",
-    "loose-route-disabled"
+    "loose-route-disabled",
+    "register-none"
   ],
 
   "opensips_base_lib": ".",
@@ -27,7 +26,6 @@
   "internal_ip": "",
   "external_ip": "",
 
-  "accounting": "none",
   "authentication": "database",
   "skip_uac_auth": 1,
   "mp_allowed": 1,

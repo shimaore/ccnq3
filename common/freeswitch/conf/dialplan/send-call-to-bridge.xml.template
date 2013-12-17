@@ -4,6 +4,7 @@
   <context name="egress-$${profile_name}-send-call">
     <extension name="send-call">
       <condition field="destination_number" expression="^(.*)$">
+        <action application="export" data="execute_on_answer_1=multiunset sip_h_X-CCNQ3-Extra sip_h_X-CCNQ3-Location sip_h_X-CCNQ3-MediaProxy sip_h_X-CCNQ3-Attrs sip_h_X-CCNQ3-Number-Domain" />
         <action application="bridge" data="sofia/ingress-$${profile_name}/$1@$${egress_target}"/>
       </condition>
     </extension>

@@ -14,11 +14,6 @@
   "bflag_in_progress":               18,
 
   "comment flag": "Transaction flags",
-  "flag_accounting_syslog":           1,
-  "flag_accounting_flatstore_calls":  2,
-  "flag_accounting_flatstore_missed": 3,
-  "flag_accounting_radius_calls":     4,
-  "flag_accounting_radius_missed":    5,
   "flag_request_mp_callee":           6,
   "flag_request_mp_caller":           7,
   "flag_failed_transaction":         12,
@@ -28,6 +23,9 @@
   "flag_tcp_persistent":             21,
   "flag_trunk_routing":              22,
   "flag_has_forwarding":             23,
+
+  "comment dflag": "Dialog flags",
+  "dflag_cleanup_headers":            1,
 
   "sbc_own_originator":               1,
   "sbc_own_outbound":                 2,
@@ -64,6 +62,9 @@
   "dlg_match_mode": 1,
   "fix_invalid_dialogs": false,
   "ignore_broken_register": false,
+  "register_check_ip": true,
+  "notify_on_check_ip": false,
+  "notify_via_rabbitmq": null,
 
   "ignore_static_endpoints": false,
 
@@ -77,6 +78,8 @@
   "long_fr_timer": 4,
 
   "max_contacts": 0,
+
+  "sip_warning": 1,
 
   "ok":true
 }

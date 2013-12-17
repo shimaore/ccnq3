@@ -30,6 +30,8 @@
         pri_prefix: 'string'
         attrs: 'string'
         probe_mode: 'int'
+        socket: 'string'
+        state: 'int'
       dr_rules:
         ruleid: 'int'
         # keys
@@ -143,17 +145,22 @@
         hash.routeid ?= ""
         hash.timerec ?= ""
         hash.priority ?= 1
-        hash.attrs ?= ""
+        hash.attrs ?= '{}'
+        hash.attrs = JSON.stringify(hash.attrs) unless typeof hash.attrs is 'string'
       if n is 'dr_carriers'
         hash.id ?= 1
         hash.flags ?= 0
-        hash.attrs ?= ""
+        hash.attrs ?= '{}'
+        hash.attrs = JSON.stringify(hash.attrs) unless typeof hash.attrs is 'string'
       if n is 'dr_gateways'
         hash.id ?= 1
         hash.gwtype ?= 0
         hash.type = hash.gwtype
         hash.probe_mode ?= 0
         hash.strip ?= 0
+        hash.attrs ?= '{}'
+        hash.attrs = JSON.stringify(hash.attrs) unless typeof hash.attrs is 'string'
+        hash.state ?= 0
       if n is 'dr_groups'
         hash.groupid = hash.outbound_route # alternatively set the "drg_grpid_col" parameter to "outbound_route"
       return line( quoted_value(types[col], hash[col]) for col in c )

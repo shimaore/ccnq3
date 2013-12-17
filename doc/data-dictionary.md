@@ -405,7 +405,7 @@ Configuration options:
 
     * `model`: `"complete"`, or any other model defined in common/opensips [required]
 
-      Currently supported: `complete`, `outbound-proxy`, `emergency`, `registrant`.
+      Currently supported: `complete`, `outbound-proxy`.
 
     * `number_domain`: string; the default `number_domain` used on this server if none is provided [default: "local"]
 
@@ -443,8 +443,10 @@ Configuration options:
 
        New dialogs may start to be rejected between 5 and 15 cps with the default value of 50.
 
+    * `notify_via_rabbitmq`: URI of the exchange where events should be sent. [Default: the `logging` on the global `amqp` server.]
+
     There are plenty other OpenSIPS configuration parameters; all of them can be modified via the database.
-    The list of parameters can be found in the source code, in the JSON configuration files under `common/opensips/`.
+    The list of parameters can be found in the source code, in the JSON configuration files under `common/opensips/`, and in the file `doc/opensips-fragments.txt`.
     However in normal operation there is no reason to modify parameters except for those listed above.
 
 *   `sip_commands.opensips`: string
@@ -819,6 +821,9 @@ If the "challenge" configuration parameter is empty (the default), the domain na
     If false (the default), the From username must equal the Authentication ID, otherwise the call is rejected.
     If true, the From username is not checked. In this case you probably want to enable `check_from` (below) to ensure that the From username is valid.
 
+*   `check_ip`: boolean
+    If true, after authentication the `user_ip` field is compared with the REGISTER message's source IP address; the message is rejected if the values don't match; additionally, if `notify_on_check_ip` is set in the configuration, an event is raised.
+
 ### Static endpoint fields ###
 
 *   `user_ip`         string  Static endpoint's IP address [required for static endpoints]
@@ -1139,7 +1144,7 @@ Carrier's names are pre-pended with a hash `#` sign, while gateway names are ins
 Although `rule`s and `gateway`s are defined on a per-`sip_domain_name` basis, carriers defined on a per-`host` basis.
 This allows you do have domain-generic routes and gateways, but each host can route to a preferred set of gateways (e.g. closest-gateway first) if desired. In that last case, make sure you assign higher weights to the preferred gateways for each `carrier`.
 
-The `attrs` field of the selected rule is made available in the CDRs.
+The `attrs.cdr` field of the selected rule is made available in the CDRs.
 This feature can be used for example to store rating information so that they do not need to be looked up again (using longest-prefix match) at rating time.
 
 Operational note:
@@ -1202,8 +1207,10 @@ The gateway list indicates which gateways (either `gateway` records or `egress_g
 
     The gateways and/or carriers specified in the rule are tried in the order given.
 
-*   `attrs`: string [default: the empty string]
-    This output field is present in the call's CDR as `variables.ccnq_attrs` on outbound calls.
+*   `attrs`: an object containing:
+
+    * `cdr`: string [default: the empty string]
+        This output field is present in the call's CDR as `variables.ccnq_attrs` on outbound calls.
 
 carrier (provisioning records)
 ------------------------------

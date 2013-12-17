@@ -5,8 +5,8 @@
     "generic",
     "domain_db",
     "db_http",
-    "accounting",
     "toolbox",
+    "authenticate-disabled",
     "nat",
     "mediaproxy",
     "register-ignore",
@@ -36,7 +36,6 @@
 
   "local_port": 5064,
 
-  "accounting": "",
   "authentication": "",
   "skip_uac_auth": 1,
   "mp_allowed": 1,

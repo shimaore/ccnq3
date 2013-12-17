@@ -3,22 +3,17 @@
 if not skip_uac_auth
   loadmodule "uac_auth.so"
   modparam("uac_auth","auth_realm_avp",    "$(avp(uac_realm))")
-  modparam("uac_auth","auth_username_avp", "$(avp(uac_user))")
-  modparam("uac_auth","auth_password_avp", "$(avp(uac_pass))")
+  modparam("uac_auth","auth_username_avp", "$(avp(uac_username))")
+  modparam("uac_auth","auth_password_avp", "$(avp(uac_password))")
 
   loadmodule "uac.so"
   modparam("uac","rr_store_param",    "${UAC_VSF}")
 end if not skip_uac_auth
 
 loadmodule "uac_redirect.so"
-if accounting is radius
-  modparam("uac_redirect","acc_function","acc_rad_request")
-end if accounting is radius
-if accounting is flatstore
-  modparam("uac_redirect","acc_function","acc_db_request")
-end if accounting is flatstore
 
 loadmodule "dialog.so"
+define has_dialog_module
 modparam("dialog", "enable_stats", 1) # default 1
 
 # Dialog matching

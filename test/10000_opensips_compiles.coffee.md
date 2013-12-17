@@ -2,70 +2,65 @@ Check whether generic opensips configurations will compile OK.
 
 Requirements:
 
-  aptitude install opensips opensips-dbhttp-module opensips-json-module opensips-b2bua-module
+```
+aptitude install opensips opensips-dbhttp-module opensips-json-module opensips-b2bua-module
+```
 
     fs = require 'fs'
-    assert = require 'assert'
+    test = require './test_opensips'
 
-    exec = (command,args,next) ->
-      run = (require 'child_process').spawn command, args
-      run.stdout.pipe process.stdout
-      run.stderr.pipe process.stderr
-      run.on 'error', (e) ->
-        next?()
-        throw e
-      run.on 'exit', (code,signal) ->
-        next?()
-        unless code is 0
-          throw new Error "Died with code = #{code}, signal = #{signal}"
-
-    compiler = require '../common/opensips/compiler'
-
-    check_config_opensips = (cfg_path,next) ->
-      exec '/usr/sbin/opensips', ['-C', '-D', '-E', '-f', cfg_path], next
-
-    run_opensips = (cfg_path,next) ->
-      exec '/usr/sbin/opensips', ['-D', '-E', '-f', cfg_path], next
-
-    mktemp = (cb) ->
-      (require 'mktemp').createFile 'opensips-XXXXXX.cfg', (err,cfg_path) ->
+    mktemp = (name,cb) ->
+      (require 'mktemp').createFile "opensips-#{name}-XXXXXX.cfg", (err,cfg_path) ->
         if err
           throw err
         try
           cb? cfg_path, ->
-            fs.unlink cfg_path
+            # fs.unlink cfg_path
 
 Here's the first test: test `complete` model with default options.
 
-    mktemp (cfg_path,next) ->
-      base = (require 'path').join process.cwd(), '../common/opensips'
+    compiler = require '../common/opensips/compiler'
 
-      options =
-        opensips_base_lib: base
-        runtime_opensips_cfg: cfg_path
-        sip_domain_name: 'test'
-        listen: ['127.0.0.1']
-        port: 15060
+    check_provided_config = (name) ->
+      port = 15500
+      mktemp name, (cfg_path,next) ->
+        base = (require 'path').join process.cwd(), '../common/opensips'
 
-      for k,v of require '../common/opensips/complete.json'
-        options[k] ?= v
-      for k,v of require '../common/opensips/default.json'
-        options[k] ?= v
+        options =
+          opensips_base_lib: base
+          runtime_opensips_cfg: cfg_path
+          sip_domain_name: 'test'
+          listen: ['127.0.0.1']
+          port: port++
 
-      compiler options
+        for k,v of require "../common/opensips/#{name}.json"
+          options[k] ?= v
+        for k,v of require '../common/opensips/default.json'
+          options[k] ?= v
 
-      check_config_opensips cfg_path, next
+        # local-vars
+        options.local_ipv4 = '127.0.0.1'
 
+        compiler options
 
-Here the second test: make sure the json module works.
+        unless fs.existsSync cfg_path
+          throw "Compiler did not create #{cfg_path}"
 
-    mktemp (cfg_path,next) ->
+        test.check_config cfg_path, next
+
+    for name in 'complete conference emergency outbound-proxy registrant'.split ' '
+      do (name) ->
+        check_provided_config name
+
+Here's the second test: make sure the json module works.
+
+    mktemp 'json-module', (cfg_path,next) ->
       fs.writeFile cfg_path, '''
         mpath = "/usr/lib/opensips/modules/"
         loadmodule "json.so"
         listen=127.0.0.1
         port=15061
-        debug=5
+        debug=0
         startup_route {
 
 First test whether we can at least assign the empty object.
@@ -88,9 +83,9 @@ Then check for values in object.
           $avp(foo) := null;
 
           if($json(foo/bar) == 4) {
-            log("\nOK\n");
+            log(0,"\nOK\n");
           } else {
-            log("\nFailed\n");
+            log(0,"\nFailed\n");
           }
 
         }
@@ -98,4 +93,41 @@ Then check for values in object.
           exit;
         }
       ''', ->
-        run_opensips cfg_path, next
+        test.run cfg_path, next
+
+Here's the third test: make sure numerical port number works.
+
+    mktemp 'port-as-integer', (cfg_path,next) ->
+      fs.writeFile cfg_path, '''
+        listen=127.0.0.1
+        port=15062
+        debug=0
+        startup_route {
+
+          $var(port) = 1234;
+          $ru = "sip:foo@127.0.0.1";
+          $rp = $var(port);
+
+          if($ru == "sip:foo@127.0.0.1:1234") {
+            log(0,"\nOK\n");
+          } else {
+            log(0,"\nFailed\n");
+          }
+
+          $var(port) = "1234";
+          $ru = "sip:foo@127.0.0.1";
+          $rp = $var(port);
+
+          if($ru == "sip:foo@127.0.0.1:1234") {
+            log(0,"\nOK\n");
+          } else {
+            log(0,"\nFailed\n");
+          }
+
+
+        }
+        route {
+          exit;
+        }
+      ''', ->
+        test.run cfg_path, next

@@ -16,7 +16,9 @@ process_command = (port,command,cfg) ->
   start_service = ->
     if service?
       ccnq3.log "WARNING in start_service: service already running?"
-    service = spawn '/usr/sbin/opensips', [ '-f', cfg ]
+    shared_megs = 1024
+    pkg_megs = 512
+    service = spawn '/usr/sbin/opensips', [ '-m', shared_megs, '-M', pkg_megs, '-f', cfg ]
 
   switch command
     when 'stop'
