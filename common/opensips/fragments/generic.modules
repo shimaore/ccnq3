@@ -76,3 +76,5 @@ loadmodule "avpops.so"
 if notify_via_rabbitmq
   loadmodule "event_rabbitmq.so"
 end if notify_via_rabbitmq
+
+loadmodule "statistics.so"
