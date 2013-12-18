@@ -73,8 +73,8 @@ end if rate_limit
 # Note: see also avpops_db.modules for additional configuration.
 loadmodule "avpops.so"
 
-if notify_via_rabbitmq
+if notify
   loadmodule "event_rabbitmq.so"
-end if notify_via_rabbitmq
+end if notify
 
 loadmodule "statistics.so"

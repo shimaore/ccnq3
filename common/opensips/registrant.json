@@ -54,7 +54,5 @@
 
   "children": 20,
 
-  "notify_on_registrant_failure": true,
-
   "ok":true
 }
