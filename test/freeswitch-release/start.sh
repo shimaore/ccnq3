@@ -39,4 +39,6 @@ freeswitch -nc -nonat -nonatmap -nort \
     -mod /usr/lib/freeswitch/mod \
     -base "$DIR" -conf "$DIR" -log "$DIR/var" -run "$DIR/var" -db "$DIR/var" -scripts "$DIR" -temp "$DIR/var"
 
+echo "Running for one minute..."
 sleep 60; killall freeswitch
+echo "Please validate re-INVITE behavior (should not contain any X-CCNQ3 headers)."
