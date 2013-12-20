@@ -1,3 +1,14 @@
+ccnq3 (0.0.246) unstable; urgency=medium
+
+  * opensips: Add statistics module (for upcoming user stats).
+  * test: documented freeswitch-release
+  * opensips: unified E_SCRIPT event into a single event (this might still get reverted later, but simplifies for now).
+  * voicemail: only answer the call inside the service.
+  * voicemail: make_cleanup must handle errors, but callback is optional.
+  * voicemail: catch errors to prevent throw()
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Fri, 20 Dec 2013 12:37:20 +0100
+
 ccnq3 (0.0.245) unstable; urgency=medium
 
   * Remove X-CCNQ3-Number-Domain when sending to upstream.
