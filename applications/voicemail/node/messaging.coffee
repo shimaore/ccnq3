@@ -80,7 +80,8 @@ record_to_url = (call,fifo_path,upload_url,next) ->
           return
 
         # Start the proxy on the fifo
-        register_fifo fs.createReadStream(fifo_path).pipe request.put upload_url
+        register_fifo fs.createReadStream(fifo_path).pipe request.put upload_url, (e,r,b) ->
+          next e, call
         cb? null
       call.register_callback 'RECORD_STOP', ->
         next null, call
