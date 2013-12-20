@@ -5,7 +5,6 @@
     <extension name="voicemail-inbox">
       <condition field="destination_number" expression="^inbox$" />
       <condition field="caller_id_number" expression="^(.+)$" >
-        <action application="answer"/>
         <action application="set" data="vm_user=$1"/>
         <action application="set" data="vm_mode=inbox" />
         <action application="set" data="number_domain=${sip_h_X-CCNQ3-Number-Domain}" />
@@ -17,7 +16,6 @@
     <extension name="voicemail-main">
       <condition field="destination_number" expression="^main$" />
       <condition field="caller_id_number" expression="^(.+)$" >
-        <action application="answer"/>
         <action application="set" data="vm_user=$1"/>
         <action application="set" data="vm_mode=main" />
         <action application="set" data="number_domain=${sip_h_X-CCNQ3-Number-Domain}" />
@@ -28,7 +26,6 @@
 
     <extension name="voicemail-record">
       <condition field="destination_number" expression="^(.+)$" >
-        <action application="answer"/>
         <action application="set" data="vm_user=$1" />
         <action application="set" data="vm_mode=record" />
         <action application="set" data="number_domain=${sip_h_X-CCNQ3-Number-Domain}" />
@@ -43,7 +40,6 @@
 
     <extension name="voicemail-direct">
       <condition field="caller_id_number" expression="^(.+)$" >
-        <action application="answer"/>
         <action application="set" data="vm_user=$1"/>
         <action application="set" data="vm_mode=inbox" />
         <action application="set" data="number_domain=${sip_h_X-CCNQ3-Number-Domain}" />
