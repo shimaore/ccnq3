@@ -34,10 +34,14 @@ make_cleanup = (fifo_path) ->
   return (cb) ->
     fs.stat fifo_path, (err,stats) ->
       if err?
-        cb err
+        cb? err
       else
         # Remove the FIFO/file
-        fs.unlink fifo_path, cb
+        fs.unlink fifo_path, (err) ->
+          if err?
+            cb? err
+          else
+            cb?()
 
 goodbye = (call) ->
   call.command 'phrase', 'voicemail_goodbye', hangup
