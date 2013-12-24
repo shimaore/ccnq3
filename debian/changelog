@@ -1,3 +1,10 @@
+ccnq3 (0.0.247) unstable; urgency=medium
+
+  * opensips: corrected host_info retrieval
+  * opensips: state is also in dr_carriers.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 24 Dec 2013 11:52:43 +0100
+
 ccnq3 (0.0.246) unstable; urgency=medium
 
   * opensips: Add statistics module (for upcoming user stats).
