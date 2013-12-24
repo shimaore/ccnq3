@@ -49,6 +49,7 @@
         gwlist: 'string'
         flags: 'int'
         attrs: 'string'
+        state: 'int'
       dr_groups:
         username:'string'
         domain:'string'
@@ -152,6 +153,7 @@
         hash.flags ?= 0
         hash.attrs ?= '{}'
         hash.attrs = JSON.stringify(hash.attrs) unless typeof hash.attrs is 'string'
+        hash.state ?= 0
       if n is 'dr_gateways'
         hash.id ?= 1
         hash.gwtype ?= 0
