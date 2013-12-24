@@ -7,7 +7,7 @@ ccnq3 (0.0.246) unstable; urgency=medium
   * voicemail: make_cleanup must handle errors, but callback is optional.
   * voicemail: catch errors to prevent throw()
 
- -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Fri, 20 Dec 2013 12:37:20 +0100
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 24 Dec 2013 11:35:23 +0100
 
 ccnq3 (0.0.245) unstable; urgency=medium
 
