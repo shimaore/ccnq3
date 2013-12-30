@@ -1,3 +1,9 @@
+ccnq3 (0.0.250) unstable; urgency=medium
+
+  * debian/opensips: use bogdan's fix so that the `production` branch stays close to `master` for opensips.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Mon, 30 Dec 2013 21:56:01 +0100
+
 ccnq3 (0.0.249) unstable; urgency=medium
 
   * Added test for drouting crash-at-startup.
