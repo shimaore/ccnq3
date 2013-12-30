@@ -1,3 +1,12 @@
+ccnq3 (0.0.249) unstable; urgency=medium
+
+  * Added test for drouting crash-at-startup.
+  * Use newer opensips version.
+  * Added test/auth-test/
+  * Test for opensips with RabbitMQ virtual host.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Mon, 30 Dec 2013 20:27:11 +0100
+
 ccnq3 (0.0.248) unstable; urgency=medium
 
   * opensips: corrected host_info behavior
