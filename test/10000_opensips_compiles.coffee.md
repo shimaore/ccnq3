@@ -132,6 +132,38 @@ Here's the third test: make sure numerical port number works.
       ''', ->
         test.run cfg_path, next
 
+
+    mktemp 'rabbitmq', (cfg_path,next) ->
+      fs.writeFile cfg_path, '''
+        mpath="/usr/lib/opensips/modules"
+        listen=127.0.0.1
+        port=15063
+        debug=5
+        loadmodule "event_rabbitmq.so"
+        startup_route {
+          # subscribe_event("E_SCRIPT_REPORT","rabbitmq:guest:guest@127.0.0.1/ccnq3/test");
+          subscribe_event("E_SCRIPT_REPORT","rabbitmq:guest:guest@127.0.0.1/test");
+          $avp(event-names) := null;
+          $avp(event-values) := null;
+          $avp(event-names) = "event";
+          $avp(event-values) = "startup";
+          raise_event("E_SCRIPT_REPORT",$avp(event-names),$avp(event-values));
+        }
+        route {
+          exit;
+        }
+        timer_route[tester,10] {
+          $avp(event-names) := null;
+          $avp(event-values) := null;
+          $avp(event-names) = "event";
+          $avp(event-values) = "timer";
+          $avp(event-names) = "foo";
+          $avp(event-values) = "bar";
+          raise_event("E_SCRIPT_REPORT",$avp(event-names),$avp(event-values));
+        }
+      ''', ->
+        test.run cfg_path, next
+
     mktemp 'crash-drouting-1.11.0', (cfg_path,next) ->
       fs.writeFileSync cfg_path, '''
         mpath="/usr/lib/opensips/modules"
