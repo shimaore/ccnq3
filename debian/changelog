@@ -1,3 +1,9 @@
+ccnq3 (0.0.251) unstable; urgency=medium
+
+  * opensips: disable drouting persistent state
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 31 Dec 2013 01:09:05 +0100
+
 ccnq3 (0.0.250) unstable; urgency=medium
 
   * debian/opensips: use bogdan's fix so that the `production` branch stays close to `master` for opensips.
