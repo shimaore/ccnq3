@@ -18,5 +18,6 @@ modparam("drouting", "rule_prefix_avp",    '$avp(dr_rule_prefix)')
 modparam("drouting", "ruri_avp", '$avp(dr_ruri)')
 modparam("drouting", "force_dns", 0)  # Allows for SRV, etc.
 modparam("drouting", "use_domain", 1) # default
+modparam("drouting", "persistent_state", 0)
 
 # TODO: consider the probing_* parameters
