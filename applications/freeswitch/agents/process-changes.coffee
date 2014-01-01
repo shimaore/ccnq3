@@ -1,7 +1,7 @@
 FS = require 'esl'
 
 fs_command = (cmd,cb) ->
-  FS.client password:'CCNQ', (call) ->
+  client = FS.client password:'CCNQ', (call) ->
     response = null
     outcome = call.sequence [
       -> @api cmd
@@ -14,7 +14,9 @@ fs_command = (cmd,cb) ->
       cb? null, response
     outcome.fail (reason) ->
       cb? reason
-  .connect 8021, '127.0.0.1'
+  client.on 'error', (err) ->
+    console.dir {where:"FreeSwitch command",cmd,err}
+  client.connect 8021, '127.0.0.1'
 
 process_changes = (commands,cb) ->
 
