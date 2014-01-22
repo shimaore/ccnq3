@@ -1,3 +1,10 @@
+ccnq3 (0.0.252) unstable; urgency=medium
+
+  * freeswitch: avoid throwing error on socket error (e.g. can't connect to FreeSwitch)
+  * voicemail: call.command needs args
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Wed, 22 Jan 2014 22:42:59 +0100
+
 ccnq3 (0.0.251) unstable; urgency=medium
 
   * opensips: disable drouting persistent state
