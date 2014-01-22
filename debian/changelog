@@ -1,3 +1,9 @@
+ccnq3 (0.0.253) unstable; urgency=medium
+
+  * voicemail: workaround bug in esl module
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Wed, 22 Jan 2014 23:13:44 +0100
+
 ccnq3 (0.0.252) unstable; urgency=medium
 
   * freeswitch: avoid throwing error on socket error (e.g. can't connect to FreeSwitch)
