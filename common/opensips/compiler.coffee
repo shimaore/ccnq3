@@ -27,7 +27,7 @@ macros_cfg = (t,params) ->
       \b end \s+ if \s+ \1 \s+ is \s+ not \s+ \2 \b
       ///g, (str,$1,$2,$3) -> if params[$1] isnt $2 then $3 else ''
     t = t.replace ///
-      \b if \s+ (\w+)\ s+ is \s+ (\w+) \b
+      \b if \s+ (\w+) \s+ is \s+ (\w+) \b
       ([\s\S]*?)
       \b end \s+ if \s+ \1 \s+ is \s+ \2 \b
       ///g, (str,$1,$2,$3) -> if params[$1] is $2 then $3 else ''
@@ -49,6 +49,18 @@ macros_cfg = (t,params) ->
       return str
 
   return t
+
+do test = ->
+  verify = (t,m,p) ->
+    (require 'assert').strictEqual t, macros_cfg m, p
+  verify 'var is 3', 'var is ${var}', var:3
+  verify 'var is this', 'var is ${var}', var:'this'
+  verify ' yes ', 'if it yes end if it', it:1
+  verify ' yes ', 'if not it yes end if not it', it:0
+  verify '', 'if it is 0 yes end if it is 0', it:1
+  verify ' yes ', 'if it is bob yes end if it is bob', it:'bob'
+  # verify ' yes ', 'if it is 0 yes end if it is 0', it:0 # fails: strings vs number
+  verify ' yes ', 'if it is not bob yes end if it is not bob', it:'bar'
 
 ### compile_cfg
 
