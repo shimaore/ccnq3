@@ -1,3 +1,9 @@
+ccnq3 (0.0.255) unstable; urgency=medium
+
+  * opensips: shorten logname
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Thu, 06 Feb 2014 11:06:58 +0100
+
 ccnq3 (0.0.254) unstable; urgency=medium
 
   * registrant: removed obsolete couchdb code for static configuration of registrant entries
