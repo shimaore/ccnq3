@@ -1,3 +1,10 @@
+ccnq3 (0.0.254) unstable; urgency=medium
+
+  * registrant: removed obsolete couchdb code for static configuration of registrant entries
+  * opensips: corrected bug in config compiler
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Thu, 06 Feb 2014 10:59:39 +0100
+
 ccnq3 (0.0.253) unstable; urgency=medium
 
   * voicemail: workaround bug in esl module
