@@ -23,9 +23,9 @@ end if listen
 # Debug level (syslog)
 debug=${debug}
 # Fork is yes for normal use
-fork=yes
+fork=${fork}
 # Do not log to STDERR
-log_stderror=no
+log_stderror=${log_stderror}
 
 # Children=4 or higher (in production)
 children=${children}

@@ -5,6 +5,8 @@
   "uac_vsf": "vsf",
   "max_hops": "10",
   "children": 30,
+  "fork": "yes",
+  "log_stderror": "no",
 
   "comment bflag": "Branch flags",
   "bflag_request_mp_callee":          6,
