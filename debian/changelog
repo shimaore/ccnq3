@@ -2,7 +2,7 @@ ccnq3 (0.0.257) unstable; urgency=medium
 
   * mediaproxy/dispatcher.ini moved to the ccnq3-opensips-* packages
 
- -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Mon, 17 Feb 2014 14:37:08 +0100
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Mon, 17 Feb 2014 14:38:40 +0100
 
 ccnq3 (0.0.256) unstable; urgency=medium
 
