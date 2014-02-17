@@ -1,2 +1,0 @@
-Modify the agent so that it starts / stops opensips.
-Modify the installer so that the default opensips (using /etc/opensips) is disabled.

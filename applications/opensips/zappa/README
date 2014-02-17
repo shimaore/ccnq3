@@ -1,6 +1,0 @@
-This application's purpose is to provide a fast http-db server for OpenSIPS
-so that data can be served directly from CouchDB without the need for MySQL
-or PostgreSQL insertions.
-
-It essentially consists of a Zappa application which uses a replica of the provisioning
-database in order to provide http-db content to OpenSIPS.

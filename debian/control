@@ -100,11 +100,11 @@ Description: Allows the ccnq3_dns service to be available on port 53
 Package: ccnq3-voice
 Architecture: all
 Depends: ccnq3-traces (= ${binary:Version}),
-  ccnq3-opensips (= ${binary:Version}),
+  ccnq3-opensips,
   ccnq3-freeswitch (= ${binary:Version}),
   ccnq3-mediaproxy-relay (= ${binary:Version}),
   ccnq3-munin-traces (= ${binary:Version}),
-  ccnq3-munin-opensips (= ${binary:Version}),
+  ccnq3-munin-opensips,
   ccnq3-munin-freeswitch (= ${binary:Version})
 Conflicts: ccnq3-voice-freeswitch, ccnq3-voice-opensips
 Description: Meta-package for a ccnq3 system running voice traffic
@@ -133,10 +133,10 @@ Description: Meta-package for a ccnq3 system running only FreeSwitch
 Package: ccnq3-voice-opensips
 Architecture: all
 Depends: ccnq3-traces (= ${binary:Version}),
-  ccnq3-opensips (= ${binary:Version}),
+  ccnq3-opensips,
   ccnq3-mediaproxy-relay (= ${binary:Version}),
   ccnq3-munin-traces (= ${binary:Version}),
-  ccnq3-munin-opensips (= ${binary:Version})
+  ccnq3-munin-opensips
 Conflicts: ccnq3-voice, ccnq3-voice-freeswitch
 Description: Meta-package for a ccnq3 system running only OpenSIPS
   Install this meta-package on any host that will be running OpenSIPS
@@ -145,20 +145,6 @@ Description: Meta-package for a ccnq3 system running only OpenSIPS
   You should install one of ccnq3-voice (both OpenSIPS and FreeSwitch),
   ccnq3-voice-freeswitch (only FreeSwitch), or ccnq3-voice-opensips
   (only OpenSIPS).
-
-Package: ccnq3-opensips
-Architecture: all
-Depends: ccnq3 (= ${binary:Version}),
-  opensips (= ${opensips:Version}),
-  opensips-dbhttp-module (= ${opensips:Version}),
-  opensips-json-module (= ${opensips:Version}),
-  opensips-b2bua-module (= ${opensips:Version}),
-  opensips-redis-module (= ${opensips:Version}),
-  netcat,
-  mediaproxy-dispatcher (= ${mediaproxy:Version}),
-  libjson0 (=0.10-1.2)
-Recommends: ccnq3-munin-opensips
-Description: OpenSIPS dependencies for CCNQ3
 
 Package: ccnq3-freeswitch
 Architecture: all
@@ -197,13 +183,6 @@ Depends: munin-node, ccnq3-traces (= ${binary:Version}),
   bash, perl, findutils, ngrep, libdatetime-perl
 Description: munin modules for ccnq3-traces
   Provides dumpcap_reasons and dumpcap_reasons_abs munin plugins.
-
-Package: ccnq3-munin-opensips
-Architecture: all
-Depends: munin-node, ccnq3-opensips (= ${binary:Version}),
-  bash
-Description: munin modules for ccnq3-opensips
-  Provides the opensips_dialogs munin plugin.
 
 Package: ccnq3-munin-freeswitch
 Architecture: all
