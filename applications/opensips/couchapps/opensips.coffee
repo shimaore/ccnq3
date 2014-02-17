@@ -1,8 +1,3 @@
-###
-(c) 2010 Stephane Alnet
-Released under the Affero GPL3 license or above
-###
-
 p_fun = (f) -> '('+f+')'
 
 ddoc =
@@ -118,8 +113,10 @@ ddoc.views.registrant_by_host =
         hosts = [hosts]
 
       for host in hosts
-        value.binding_URI = "sip:00#{doc.number}@#{host}:5070"
-        emit [host,1], value
+        [hostname,port] = host.split /:/
+        port ?= 5070
+        value.binding_URI = "sip:00#{doc.number}@#{hostname}:#{port}"
+        emit [hostname,1], value
 
     if doc.type? and doc.type is 'host' and doc.applications.indexOf('applications/registrant') >= 0
       # Make sure these records show up at the top

@@ -3,22 +3,23 @@ ccnq3 = require 'ccnq3'
 opensips_command = require './opensips-command'
 params = require './params'
 
-service = null
-kill_service = ->
-  service.kill 'SIGKILL'
-  service = null
+service = {}
 
 process_command = (port,command,cfg) ->
+  kill_service = ->
+    service[port].kill 'SIGKILL'
+    service[port] = null
+
   stop_service = ->
     opensips_command port, ":kill:\n"
-    if service?
+    if service[port]?
       setTimeout kill_service, 4000
   start_service = ->
-    if service?
+    if service[port]?
       ccnq3.log "WARNING in start_service: service already running?"
     shared_megs = 1024
     pkg_megs = 512
-    service = spawn '/usr/sbin/opensips', [ '-m', shared_megs, '-M', pkg_megs, '-f', cfg ]
+    service[port] = spawn '/usr/sbin/opensips', [ '-m', shared_megs, '-M', pkg_megs, '-f', cfg ]
 
   switch command
     when 'stop'
@@ -29,33 +30,39 @@ process_command = (port,command,cfg) ->
       do stop_service
       setTimeout start_service, 5000
 
-@api =
-  start:
-    description: 'Start the registrant OpenSIPS process'
-    category: 'registrant'
-    do: (cb) ->
-      ccnq3.config (p) ->
-        if not p.registrant? then return
-        p = params p
-        process_command p.mi_port, 'start', p.runtime_opensips_cfg
-        cb?()
+module.exports = (command,cb) ->
+  unless command.command?
+    cb error:"`command` is a required parameter", arguments: command
 
-  restart:
-    description: 'Restart the registrant OpenSIPS process'
-    category: 'registrant'
-    do: (cb) ->
-      ccnq3.config (p) ->
-        if not p.registrant? then return
-        p = params p
-        process_command p.mi_port, 'restart', p.runtime_opensips_cfg
-        cb?()
+  ccnq3.config (config) ->
+    if command.port?
+      switch command.command
+        when 'restart registrant'
+          c = 'restart'
+        when 'start registrant'
+          c = 'start'
+        when 'stop registrant'
+          c = 'stop'
+        else
+          cb error:"Invalid command", received:command
 
-  stop:
-    description: 'Stop the registrant OpenSIPS process'
-    category: 'registrant'
-    do: (cb) ->
-      ccnq3.config (p) ->
-        if not p.registrant? then return
-        p = params p
-        process_command p.mi_port, 'stop', p.runtime_opensips_cfg
-        cb?()
+      p = params {proxy_port:command.port}, config
+      process_command command.port+30000, c, p.runtime_opensips_cfg
+      cb?()
+
+    else
+      switch command.command
+        when 'restart all registrant'
+          c = 'restart'
+        when 'start all registrant'
+          c = 'start'
+        when 'stop all registrant'
+          c = 'stop'
+        else
+          cb error:"Invalid command", received:command
+
+      for r in config.registrants
+        p = params r, config
+        process_command command.port+30000, c, p.runtime_opensips_cfg
+
+      cb?()

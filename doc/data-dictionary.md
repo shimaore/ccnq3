@@ -365,9 +365,6 @@ Configuration options:
     A special "sofia_profile" key "opensips" is used to send events to a running OpenSIPS process (rather than a
     FreeSwitch sofia profile). See below for more information.
 
-    A special "sofia_profile" key "registrant" is used to send events to a running registrant process (rather than a
-    FreeSwitch sofia profile). See below for more information.
-
 *   `sip_variables`: {} of global (FreeSwitch) variables; defaults to {}
 
     The idea is that these can be used on a per-host basis by additional dialplans, profiles, etc.
@@ -533,7 +530,7 @@ Caveat: Since the trace files on the various hosts are rotated to not exceed a g
 
 Related: applications/registrant
 
-*   `registrant`:
+*   `registrants`: An array of object containing the following items:
 
     * `local_ipv4`: string, IP where to send incoming calls (generally the local server)
 
@@ -939,7 +936,7 @@ number (provisioning records)
 
 *   `registrant_remote_ipv4`: remote server for applications/registrant
 
-*   `registrant_host`: host(s) where this registration should be effective
+*   `registrant_host`: host(s) where this registration should be effective; if the port is different from the default [5070] port, use the `hostname:port` format.
 
     This parameter can actually be either a string (single host) or an array of strings (multiple hosts).
 

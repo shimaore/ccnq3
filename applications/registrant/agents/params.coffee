@@ -13,6 +13,9 @@ module.exports = (p,config) ->
   params.opensips_base_lib = base_path
   params.notify_via_rabbitmq ?= "#{config.amqp}/logging".replace(/^amqp/,'rabbitmq') if config.amqp?
 
-  params[k] = p.registrant[k] for own k of p.registrant
+  params[k] = p[k] for own k of p
+
+  params.mi_port = params.proxy_port + 30000 # i.e. 35070 etc.
+  params.runtime_opensips_cfg = "#{params.runtime_opensips_cfg}.#{params.proxy_port}"
 
   return params

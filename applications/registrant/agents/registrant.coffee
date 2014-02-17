@@ -2,32 +2,23 @@
 
 pico = require 'pico'
 ccnq3 = require 'ccnq3'
-{api} = require './api'
-
+params = require './params'
 
 # Agent main process
 ccnq3.config (config) ->
 
   provisioning = pico config.provisioning.local_couchdb_uri
 
-  handler = (p) ->
+  handler = (config) ->
 
-    if not p.registrant? then return
+    if not config.registrants? then return
 
-    base_path = "./opensips"
-    model = 'registrant'
+    for r in config.registrants
+      do (r) ->
+        p = params r, config
 
-    params = require('./params') p
-
-    # Build the configuration file.
-    require("#{base_path}/compiler.coffee") params, config
-
-    # Process any MI commands
-    if p.sip_commands?.registrant?
-      r = api[p.sip_commands.registrant]
-      if r?
-        ccnq3.log r.description
-        r.do()
+        # Build the configuration file.
+        require("#{base_path}/compiler.coffee") params, config
 
   # At startup, use the current document.
   handler config
@@ -40,3 +31,5 @@ ccnq3.config (config) ->
       hostname: config.host
 
   provisioning.monitor options, handler
+
+require './amqp-listener'
