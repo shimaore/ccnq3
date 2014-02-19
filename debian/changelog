@@ -1,3 +1,9 @@
+ccnq3 (0.0.258) unstable; urgency=medium
+
+  * debian: Update dependencies for ccqn3-opensips*
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Wed, 19 Feb 2014 14:34:19 +0100
+
 ccnq3 (0.0.257) unstable; urgency=medium
 
   * mediaproxy/dispatcher.ini moved to the ccnq3-opensips-* packages
