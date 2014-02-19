@@ -100,7 +100,7 @@ Description: Allows the ccnq3_dns service to be available on port 53
 Package: ccnq3-voice
 Architecture: all
 Depends: ccnq3-traces (= ${binary:Version}),
-  ccnq3-opensips,
+  ccnq3-opensips-ga | ccnq3-opensips-latest,
   ccnq3-freeswitch (= ${binary:Version}),
   ccnq3-mediaproxy-relay (= ${binary:Version}),
   ccnq3-munin-traces (= ${binary:Version}),
@@ -133,7 +133,7 @@ Description: Meta-package for a ccnq3 system running only FreeSwitch
 Package: ccnq3-voice-opensips
 Architecture: all
 Depends: ccnq3-traces (= ${binary:Version}),
-  ccnq3-opensips,
+  ccnq3-opensips-ga | ccnq3-opensips-latest,
   ccnq3-mediaproxy-relay (= ${binary:Version}),
   ccnq3-munin-traces (= ${binary:Version}),
   ccnq3-munin-opensips
