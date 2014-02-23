@@ -1,7 +1,7 @@
 # (c) 2012 Stephane Alnet
 #
 fs = require 'fs'
-{isIPv4,isIPv{isIPv4,isIPv6}6} = require 'net'
+{isIPv4,isIPv6} = require 'net'
 packet_server = require './packet_server'
 wireshark_date = require './wireshark_date'
 
