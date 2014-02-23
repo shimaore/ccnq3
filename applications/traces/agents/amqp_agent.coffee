@@ -6,7 +6,7 @@ trace_couch = require './trace_couch'
 config = null
 ccnq3.config (c) -> config = c
 
-while true
+do ->
   ccnq3.amqp (c) ->
     c.exchange 'traces', {type:'topic',durable:true,autoDelete:false}, (e) ->
       c.queue "trace-requests-#{config.host}", (q) ->

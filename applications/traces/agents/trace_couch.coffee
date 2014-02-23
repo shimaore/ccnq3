@@ -37,4 +37,5 @@ module.exports = (config,doc) ->
           headers:
             'Content-Type': 'application/vnd.tcpdump.pcap'
         fs.createReadStream(pcap).pipe dest.request.put uri, (e,r,b) ->
-          fs.unlink pcap
+          fs.unlink pcap, (err) ->
+            console.dir error:err, when: "unlink #{pcap}"

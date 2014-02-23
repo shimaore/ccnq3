@@ -1,6 +1,7 @@
 # (c) 2012 Stephane Alnet
 #
 fs = require 'fs'
+{isIPv4,isIPv{isIPv4,isIPv6}6} = require 'net'
 packet_server = require './packet_server'
 wireshark_date = require './wireshark_date'
 
@@ -42,9 +43,15 @@ module.exports = (config,doc) ->
       frame.time >= "#{today}" && frame.time < "#{tomorrow}"
     """
 
-  tshark_filter.push """
-    (ip.addr == "#{doc.ip}" || ipv6.addr == "#{doc.ip}")
-  """ if doc.ip?
+  if doc.ip?
+    if isIPv4 doc.ip
+      tshark_filter.push """
+        (ip.addr == #{doc.ip})
+      """
+    else if isIPv6 doc.ip
+      tshark_filter.push """
+        (ipv6.addr == #{doc.ip})
+      """
 
   if tshark_filter.length > 0
     tshark_filter = tshark_filter.join ' && '
