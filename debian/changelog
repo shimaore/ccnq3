@@ -1,3 +1,12 @@
+ccnq3 (0.0.259) unstable; urgency=medium
+
+  * traces: revert
+  * cnam: confirmed ESL package dependency
+  * traces: update to support new `tshark` version (1.10.5 at least)
+  * traces: show progress and status
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Sun, 23 Feb 2014 20:27:03 +0100
+
 ccnq3 (0.0.258) unstable; urgency=medium
 
   * debian: Update dependencies for ccqn3-opensips*
