@@ -156,6 +156,7 @@ module.exports = (options) ->
             next_file stash, last
 
         next_file [], (stash) ->
+          console.log "Going to write #{stash.length} packets to #{fh}."
           pcap_tail.write fs.createWriteStream(fh), stash, run_tshark
 
     ## Select the proper packets
@@ -184,6 +185,7 @@ module.exports = (options) ->
     # Wait for the pcap_command to terminate.
 
     run_tshark = ->
+      console.log "Staring #{tshark_command}."
       tshark = spawn 'nice', tshark_command,
         stdio: ['ignore','pipe','ignore']
 
