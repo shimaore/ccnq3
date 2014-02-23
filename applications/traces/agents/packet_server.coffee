@@ -161,11 +161,11 @@ module.exports = (options) ->
     ## Select the proper packets
     if options.pcap?
       tshark_command = [
-        'tshark', '-r', fh, '-R', options.tshark_filter, '-nltad', '-T', 'fields', tshark_fields..., '-P', '-w', options.pcap
+        'tshark', '-r', fh, '-Y', options.tshark_filter, '-nltad', '-T', 'fields', tshark_fields..., '-P', '-w', options.pcap
       ]
     else
       tshark_command = [
-        'tshark', '-r', fh, '-R', options.tshark_filter, '-nltad', '-T', 'fields', tshark_fields...
+        'tshark', '-r', fh, '-Y', options.tshark_filter, '-nltad', '-T', 'fields', tshark_fields...
       ]
 
     # stream is tshark.stdout
