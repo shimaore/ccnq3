@@ -4,7 +4,7 @@
 
 override_dh_gencontrol:
 	dh_gencontrol -- \
-		-Vfreeswitch:Version="1.2.15~shimaore-3" \
+		-Vfreeswitch:Version="1.2.22~shimaore-1" \
 		-Vmediaproxy:Version="2.5.2-5~shimaore" \
 		-Vnodejs:Version="0.10.23~shimaore1-1"
 
