@@ -1,3 +1,10 @@
+ccnq3 (0.0.262) unstable; urgency=medium
+
+  * Updated doc: only one registrant_host allowed.
+  * Only one registrant_host allowed per source number; registrant_host should contain (local side) port number to simulate multiple local registrant instances.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Wed, 30 Apr 2014 16:07:00 +0200
+
 ccnq3 (0.0.261) unstable; urgency=medium
 
   * bump freeswitch dependency
