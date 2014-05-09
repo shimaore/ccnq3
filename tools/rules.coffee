@@ -55,7 +55,7 @@ class Bulk
         console.log "Submitted block #{block} (queue depth: #{@queue.length})."
         the_cb = @finally
         delete @finally
-        do the_cb
+        the_cb?()
         return
       @stream = new stream()
       @stream.pipe post
