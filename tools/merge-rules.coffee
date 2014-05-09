@@ -15,11 +15,15 @@ db
   rules = {}
   rules[doc.prefix] = doc for doc in res.rows
 
+  extra = {}
+  extra[doc.prefix] = true for doc in res.rows
+
   process.stdin.setEncoding 'utf8'
   lines = byline process.stdin
   lines.setEncoding 'utf8'
 
   n = 0
+  new_prefixes = 0
 
   lines.on 'data', (line) ->
     n++
@@ -31,7 +35,9 @@ db
       doc.gwlist = gwlist
       doc.attrs ?= {}
       doc.attrs.cdr = cdr
+      delete extra[doc.prefix]
     else
+      new_prefixes++
       doc =
         _id: "rule:#{domain}:#{rule}:#{prefix}"
         attrs: {cdr}
@@ -57,6 +63,9 @@ db
         .then ->
           batch end
       else
-        console.log 'Done'
+        console.log "Done, with #{new_prefixes} new prefixes added."
+        for p of extra
+          console.log "Extra prefix in database: #{p}"
+
 
     batch 0
