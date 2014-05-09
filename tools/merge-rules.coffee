@@ -7,6 +7,7 @@ db = new PouchDB config.provisioning.couchdb_uri
 
 domain = process.argv[2]
 rule = parseInt process.argv[3]
+console.log "Loading data for rule:#{domain}:#{rule}:*"
 
 db
 .allDocs startkey:"rule:#{domain}:#{rule}:", endkey:"rule:#{domain}:#{rule};", include_docs: true
@@ -14,12 +15,16 @@ db
   rules = {}
   rules[doc.prefix] = doc for doc in res.rows
 
+  process.stdin.setEncoding 'utf8'
   lines = byline process.stdin
+  lines.setEncoding 'utf8'
 
   n = 0
 
   lines.on 'data', (line) ->
-    [prefix,gwlist,cdr] = line.toString().split /;/
+    n++
+    [prefix,gwlist,cdr] = line.split /;/
+    throw "Invalid prefix #{prefix}" unless prefix.match /^\d+$/
 
     if rules[prefix]?
       doc = rules[prefix]
