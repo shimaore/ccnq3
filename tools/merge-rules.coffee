@@ -16,6 +16,8 @@ db
 
   lines = byline process.stdin
 
+  n = 0
+
   lines.on 'data', (line) ->
     [prefix,gwlist,cdr] = line.toString().split /;/
 
@@ -37,7 +39,10 @@ db
       rules[prefix] = doc
 
   lines.on 'end', (line) ->
+    docs = []
+    docs.push doc for key,doc of rules
+    console.log "Saving changes from #{n} lines with #{docs.length} updates."
     db
-    .bulkDocs rules
+    .bulkDocs docs
     .then ->
       console.log 'Done'
