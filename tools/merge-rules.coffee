@@ -47,7 +47,16 @@ db
     docs = []
     docs.push doc for key,doc of rules
     console.log "Saving changes from #{n} lines with #{docs.length} updates."
-    db
-    .bulkDocs docs
-    .then ->
-      console.log 'Done'
+    # Batch it in 10k sets
+    batch_len = 10000
+    batch = (start) ->
+      if start < docs.length
+        end = start+batch_len
+        db
+        .bulkDocs docs[start...end]
+        .then ->
+          batch end
+      else
+        console.log 'Done'
+
+    batch 0
