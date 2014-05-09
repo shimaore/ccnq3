@@ -17,7 +17,7 @@ db
   lines = byline process.stdin
 
   lines.on 'data', (line) ->
-    [prefix,gwlist,cdr] = line.split /;/
+    [prefix,gwlist,cdr] = line.toString().split /;/
 
     if rules[prefix]?
       doc = rules[prefix]
