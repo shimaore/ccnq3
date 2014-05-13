@@ -936,7 +936,9 @@ number (provisioning records)
 
 *   `registrant_remote_ipv4`: remote server for applications/registrant
 
-*   `registrant_host`: host where this registration should be effective, in the `ip-address:port` format.
+*   `registrant_host`: host where this registration should be effective, in the `hostname:port` format. (port is optional and defaults to 5070)
+
+*   `registrant_socket`: socket used to bind the registration, in the `ip-address:port` format. (port is mandatory and should be the same as the one specified in `registrant_host`)
 
 *   `registrant_expiry`: integer, expiry parameter, in seconds [default: 3600, one hour]
 
