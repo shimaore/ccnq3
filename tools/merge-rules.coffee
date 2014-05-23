@@ -28,7 +28,7 @@ db
   lines.on 'data', (line) ->
     n++
     [prefix,gwlist,cdr] = line.split /;/
-    throw "Invalid prefix #{prefix}" unless prefix.match /^\d+$/
+    throw "Invalid prefix #{prefix}" unless prefix.match /^\d*$/
 
     if rules[prefix]?
       doc = rules[prefix]
