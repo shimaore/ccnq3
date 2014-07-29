@@ -21,6 +21,7 @@
   <condition field="destination_number" expression="^call"/>
   <condition field="${privacy_hide_number}" expression="true">
     <action application="privacy" data="full"/>
+    <action application="set" data="sip_h_X-CCNQ3-Caller=${effective_caller_id_number}"/>
     <action application="set" data="effective_caller_id_name=_undef_"/>
     <action application="set" data="effective_caller_id_number=anonymous"/>
     <action application="set" data="origination_privacy=screen+hide_name+hide_number"/>
