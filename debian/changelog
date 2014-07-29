@@ -1,3 +1,17 @@
+ccnq3 (0.0.263) unstable; urgency=medium
+
+  * trying to fix additions
+  * tool: needed Buffer -> String conversion
+  * tools: Oops, need Array, not Object
+  * tools: validate
+  * tools: batch updates
+  * tools: reports more stats
+  * Updated for ccnq3-opensips-ga updates.
+  * tools: A default prefix is a valid prefix.
+  * Save original caller-id
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Tue, 29 Jul 2014 20:28:30 +0200
+
 ccnq3 (0.0.262) unstable; urgency=medium
 
   * Updated doc: only one registrant_host allowed.
