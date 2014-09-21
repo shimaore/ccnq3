@@ -8,7 +8,7 @@
     "file": "/etc/ccnq3/host.json"
   }
 , "dependencies": {
-    "ccnq3": ">=0.5.4"
+    "ccnq3": ">=0.6.0"
   , "pico": ">=0.1.3"
   , "zappajs": ">=0.4.20"
   , "uuid": "~1.4.1"
