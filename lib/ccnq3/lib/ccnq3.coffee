@@ -70,6 +70,55 @@ log = (msg) ->
 
 ccnq3.log = log
 
+# Commands
+#   This provides an RPC bus over AMQP.
+#   Commands might be sent to all connected hosts (no `host` field in the request)
+#   or to a specific host (a `host` field is provided in the request).
+
+command_exchange = (cb) ->
+  amqp (c) ->
+    c.exchange 'commands', type:'topic',durable:true,autoDelete:false, (e) ->
+      cb c,e
+  null
+
+ccnq3.command =
+
+  handler: (name,cb) ->
+    # Connect and build the exchange.
+    get (config) -> command_exchange (c,e) ->
+
+      c.queue "#{name}-#{config.host}", (q) ->
+
+        # Handle requests specific to this host.
+        q.bind e, "request-#{config.host}"
+        # Handle requests addressed to all hosts.
+        q.bind e, "request"
+
+        q.subscribe (request) ->
+          cb request, (response) ->
+            e.publish "response-#{request.reference}", response
+
+  send: (request,cb) ->
+    request.reference ?= 'x'+Math.random()
+
+    # Connect and build the exchange.
+    get (config) -> command_exchange (c,e) ->
+
+      # Be ready to receive the response(s) -- but only pick the first one.
+      c.queue "#{name}-#{config.host}-#{request.reference}", (q) ->
+
+        q.bind e, "response-#{request.reference}"
+        q.subscribe (response) ->
+          c.end()
+          cb response
+
+      # Send the request to one host specifically.
+      if request.host?
+        e.publish "request-#{request.host}", request
+      # Send the request to all hosts.
+      else
+        e.publish "request", request
+
 #### CCNQ3 Tools
 #
 

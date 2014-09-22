@@ -9,23 +9,23 @@
       return @failure error:"Not authorized (probably a bug)"
 
     request = @body
-    request.reference ?= 'x'+Math.random()
 
-    ccnq3.amqp (connection) =>
-      if connection?
-        connection.exchange 'commands', {type:'topic',durable:true,autoDelete:false}, (exchange) =>
-          # Be ready to receive the response(s) -- but only pick the first one.
-          connection.queue "couch_daemon-#{config.host}-#{request.reference}", (queue) ->
-            queue.bind exchange, "response-#{request.reference}"
-            queue.subscribe (response) ->
-              connection.end()
-              @success response
-          # Send the request to one host specifically.
-          if request.host?
-            exchange.publish "request-#{request.host}", request
-          # Send the request to all hosts.
-          else
-            exchange.publish "request", request
-      else
-        @failure error:"No connection to AMQP server."
+    try
+      ccnq3.command.send 'couch_daemon', request, (r) =>
+        @success r
+    catch e
+      @failure error:e
+    return
+
+  @on 'command', ->
+
+    if not @req.user?
+      return @emit error:"Not authorized (probably a bug)"
+
+    request = @data
+    try
+      ccnq3.command.send 'couch_daemon', request, (r) =>
+        @emit response:r, request:request
+    catch e
+      @emit error:e, request:request
     return
