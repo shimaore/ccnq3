@@ -29,6 +29,7 @@
         <action application="unset" data="sip_h_X-CCNQ3-Attrs"/>
         <action application="unset" data="sip_h_X-CCNQ3-Location"/>
         <action application="unset" data="sip_h_X-CCNQ3-Routing"/>
+        <action application="unset" data="sip_h_X-CCNQ3-Endpoint"/>
         <action application="unset" data="sip_h_X-CCNQ3-MediaProxy"/>
         <action application="unset" data="sip_h_X-CCNQ3-Number-Domain"/>
         <action application="unset" data="sip_h_X-CCNQ3-Registrant-Password"/>
