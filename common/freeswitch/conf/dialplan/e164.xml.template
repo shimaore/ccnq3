@@ -35,7 +35,6 @@
         <action application="unset" data="sip_h_X-CCNQ3-Registrant-Password"/>
         <action application="unset" data="sip_h_X-CCNQ3-Registrant-Realm"/>
         <action application="unset" data="sip_h_X-CCNQ3-Registrant-Target"/>
-        <action application="unset" data="sip_h_X-CCNQ3-Number-Domain"/>
         <action application="unset" data="sip_h_p-charge-info"/>
 
         <action application="set" data="sip_cid_type=pid"/>
