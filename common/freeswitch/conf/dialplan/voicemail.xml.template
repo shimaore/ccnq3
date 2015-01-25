@@ -5,7 +5,6 @@
     <extension name="voicemail-inbox">
       <condition field="destination_number" expression="^inbox$" />
       <condition field="caller_id_number" expression="^(.+)$" >
-        <action application="answer"/>
         <action application="set" data="vm_user=$1"/>
         <action application="set" data="vm_mode=inbox" />
         <action application="set" data="number_domain=${sip_h_X-CCNQ3-Number-Domain}" />
@@ -17,8 +16,17 @@
     <extension name="voicemail-main">
       <condition field="destination_number" expression="^main$" />
       <condition field="caller_id_number" expression="^(.+)$" >
-        <action application="answer"/>
         <action application="set" data="vm_user=$1"/>
+        <action application="set" data="vm_mode=main" />
+        <action application="set" data="number_domain=${sip_h_X-CCNQ3-Number-Domain}" />
+        <action application="set" data="playback_terminator=#"/>
+        <action application="socket" data="127.0.0.1:$${voicemail_port} async full"/>
+      </condition>
+    </extension>
+
+    <extension name="voicemail-external">
+      <condition field="destination_number" expression="^external$" >
+        <action application="play_and_get_digits" data="7 16 1 15000 # phrase:'voicemail_enter_id:#' silence_stream://250 vm_user \d+" />
         <action application="set" data="vm_mode=main" />
         <action application="set" data="number_domain=${sip_h_X-CCNQ3-Number-Domain}" />
         <action application="set" data="playback_terminator=#"/>
@@ -28,7 +36,6 @@
 
     <extension name="voicemail-record">
       <condition field="destination_number" expression="^(.+)$" >
-        <action application="answer"/>
         <action application="set" data="vm_user=$1" />
         <action application="set" data="vm_mode=record" />
         <action application="set" data="number_domain=${sip_h_X-CCNQ3-Number-Domain}" />
@@ -43,7 +50,6 @@
 
     <extension name="voicemail-direct">
       <condition field="caller_id_number" expression="^(.+)$" >
-        <action application="answer"/>
         <action application="set" data="vm_user=$1"/>
         <action application="set" data="vm_mode=inbox" />
         <action application="set" data="number_domain=${sip_h_X-CCNQ3-Number-Domain}" />

@@ -25,18 +25,18 @@
         <action application="set" data="ccnq_from_e164=${caller_id_number}" inline="true" />
         <action application="set" data="ccnq_to_e164=${destination_number}" inline="true" />
 
-        <action application="unset" data="sip_h_X-CCNQ3-Extra"/>
         <action application="unset" data="sip_h_X-CCNQ3-Attrs"/>
+        <action application="unset" data="sip_h_X-CCNQ3-Endpoint"/>
+        <action application="unset" data="sip_h_X-CCNQ3-Extra"/>
         <action application="unset" data="sip_h_X-CCNQ3-Location"/>
-        <action application="unset" data="sip_h_X-CCNQ3-Routing"/>
         <action application="unset" data="sip_h_X-CCNQ3-MediaProxy"/>
         <action application="unset" data="sip_h_X-CCNQ3-Number-Domain"/>
         <action application="unset" data="sip_h_X-CCNQ3-Registrant-Password"/>
         <action application="unset" data="sip_h_X-CCNQ3-Registrant-Realm"/>
         <action application="unset" data="sip_h_X-CCNQ3-Registrant-Target"/>
-        <action application="unset" data="sip_h_X-CCNQ3-Number-Domain"/>
-        <action application="unset" data="sip_h_p-charge-info"/>
+        <action application="unset" data="sip_h_X-CCNQ3-Routing"/>
 
+        <action application="unset" data="sip_h_p-charge-info"/>
         <action application="set" data="sip_cid_type=pid"/>
 
         <action application="set" data="progress_timeout=12"/>

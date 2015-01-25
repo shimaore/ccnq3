@@ -1,2 +1,6 @@
 [dumpcap_reasons*]
 user ccnq3
+[dumpcap_reasons_abs]
+user ccnq3
+env.warning 40
+env.critical 50

@@ -165,7 +165,7 @@ Client hosts with voice services
 
 After you complete the steps above for a client host, install:
 
-    aptitude install ccnq3-voice
+    aptitude install ccnq3-voice ccnq3-opensips-ga
 
 This will install OpenSIPS, FreeSwitch, and their dependencies.
 
@@ -175,7 +175,7 @@ Alternatively, if you'd rather install OpenSIPS and FreeSwitch on different host
 
 or
 
-    aptitude install ccnq3-voice-opensips
+    aptitude install ccnq3-voice-opensips ccnq3-opensips-ga
 
 If you need mediaproxy on a host running OpenSIPS, you _must_ manually run
 

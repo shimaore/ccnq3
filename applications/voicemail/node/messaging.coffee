@@ -34,10 +34,14 @@ make_cleanup = (fifo_path) ->
   return (cb) ->
     fs.stat fifo_path, (err,stats) ->
       if err?
-        cb err
+        cb? err
       else
         # Remove the FIFO/file
-        fs.unlink fifo_path, cb
+        fs.unlink fifo_path, (err) ->
+          if err?
+            cb? err
+          else
+            cb?()
 
 goodbye = (call) ->
   call.command 'phrase', 'voicemail_goodbye', hangup
@@ -76,7 +80,8 @@ record_to_url = (call,fifo_path,upload_url,next) ->
           return
 
         # Start the proxy on the fifo
-        register_fifo fs.createReadStream(fifo_path).pipe request.put upload_url
+        register_fifo fs.createReadStream(fifo_path).pipe request.put upload_url, (e,r,b) ->
+          next e, call
         cb? null
       call.register_callback 'RECORD_STOP', ->
         next null, call
