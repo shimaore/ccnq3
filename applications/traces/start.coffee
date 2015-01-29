@@ -30,5 +30,6 @@ require('ccnq3').config (config) ->
         '-P'
         '-w', "#{config.traces.workdir ? default_workdir}/#{intf}.pcap"
         '-f', config.traces.filter ? default_filter
+        '-s', 65535
       ], stdio:'ignore'
       return

@@ -57,6 +57,8 @@ graph_category voice
 dumpcap_reason_abs_total.label Total
 dumpcap_reason_abs_total.graph no
 dumpcap_reason_abs_total.type ABSOLUTE
+dumpcap_reason_abs_total.warning $warning
+dumpcap_reason_abs_total.critical $critical
 EOT
   for CODE in ${!colors[@]}; do
     cat <<EOT ;
