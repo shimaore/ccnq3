@@ -1,3 +1,18 @@
+ccnq3 (0.0.265) unstable; urgency=medium
+
+  * lib is now a separate repo.
+  * Prevent X-CCNQ3-Endpoint from leaking to clients or carriers.
+  * Removed dup entry
+  * Sorted the entries in alphabetical order to avoid dups in the future :)
+  * Added external handling for voicemail.
+  * Add warning and critical triggers for `dumpcap_reason_abs`.
+  * Normalized `ccnq3` module dependency.
+  * Document the fact that registrant commands are replaced by the `royal-thing` project.
+  * Allow full (plussed) E.164 numbers in default template.
+  * Merging different snapshot length (in pcap_tail) results in botchered output. Enforce snapshot length.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Thu, 29 Jan 2015 15:44:38 +0100
+
 ccnq3 (0.0.264) unstable; urgency=medium
 
   * lib: added `command` class.
