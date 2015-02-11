@@ -1483,7 +1483,7 @@ Each new voicemail message is stored in an individual voicemail record.
 
 *   `caller_id`: string; caller_id
 
-*   `box`: string; 'new' or 'archive'
+*   `box`: string; 'new' or 'saved'
 
 *   `_attachments`:
 
