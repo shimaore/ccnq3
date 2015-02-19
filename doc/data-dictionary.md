@@ -1330,8 +1330,12 @@ These records are used by the `applications/emergency` application.
 
 * `destination`: string; a target phone number expressed in the emergency_domain of the server that sent the request.
 
-    The Contact URI returned by the emergency sever in its 302 message will consist of `destination`@`emergency_domain`.
+    In CCNQ4 (`tough-rate` routing engine):
+    This field can also be an array-of-strings identifying multiple phone numbers to try in sequence.
+    The numbers are first translated, then routed using regular rulesets.
 
+    In CCNQ3 (opensips-based emergency router):
+    The Contact URI returned by the emergency sever in its 302 message will consist of `destination`@`emergency_domain`.
     The `emergency_domain` used is the one found in the `endpoint` record for the host that sent the INVITE message to
     the emergency server.
 
