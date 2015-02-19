@@ -47,7 +47,7 @@
     </extension>
 
     <extension name="cleanup-caller-id" continue="true">
-      <condition field="${ccnq_from_e164}" expression="^(\d+)$">
+      <condition field="${ccnq_from_e164}" expression="^\+?(\d+)$">
         <action application="set" data="sip_contact_user=+$1"/>
         <action application="set" data="effective_caller_id_number=+$1"/>
       </condition>
@@ -68,7 +68,7 @@
 
     <extension name="egress-e164">
       <condition field="${ccnq_account}" expression="^.+$" />
-      <condition field="${ccnq_to_e164}" expression="^(\d+)$">
+      <condition field="${ccnq_to_e164}" expression="^\+?(\d+)$">
         <action application="transfer" data="+$1 XML egress-$${profile_name}-send-call"/>
       </condition>
     </extension>
