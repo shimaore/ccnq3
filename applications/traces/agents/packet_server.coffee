@@ -36,7 +36,7 @@ trace_field_names = [
   "sip.from.user"
   "sip.From"
   "sip.To"
-  "sip.contact.addr"
+  "sip.contact.uri"
   "sip.User-Agent"
 ]
 
@@ -150,6 +150,7 @@ module.exports = (options) ->
             last stash
             return
           file = proper_files.shift()
+          # FIXME we shouldn't just crash if createReadStream, zlib, or pcap-parser fail.
           input = fs.createReadStream(file.name)
           input = input.pipe zlib.createGunzip() if file.name.match /gz$/
           pcap_tail.tail input, options.ngrep_filter, options.ngrep_limit ? 500, stash, (stash) ->
