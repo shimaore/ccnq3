@@ -1,3 +1,11 @@
+ccnq3 (0.0.267) unstable; urgency=medium
+
+  * There's no reference to 'archive' in the voicemail code, assuming the doc wasn't updated.
+  * Emergency routing: Amended documentation to report on differences between CCNQ3 and CCNQ4.
+  * `sip.contact.addr` got deprecated as a tshark `field`.
+
+ -- Stephane Alnet (Packaging) <stephane@shimaore.net>  Wed, 25 Feb 2015 12:09:52 +0100
+
 ccnq3 (0.0.266) unstable; urgency=medium
 
   * Add `no_messages` view.
