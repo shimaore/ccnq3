@@ -78,14 +78,14 @@
         <action application="set" data="sip_h_X-CCNQ3-Number-Domain=$${number_domain}" />
 
         <!-- These should not be forwarded towards customers -->
-        <action application="unset" data="sip_h_X-CCNQ3-Extra"/>
         <action application="unset" data="sip_h_X-CCNQ3-Attrs"/>
-        <action application="unset" data="sip_h_X-CCNQ3-Location"/>
-        <action application="unset" data="sip_h_X-CCNQ3-Routing"/>
         <action application="unset" data="sip_h_X-CCNQ3-Endpoint"/>
+        <action application="unset" data="sip_h_X-CCNQ3-Extra"/>
+        <action application="unset" data="sip_h_X-CCNQ3-Location"/>
         <action application="unset" data="sip_h_X-CCNQ3-Registrant-Password"/>
         <action application="unset" data="sip_h_X-CCNQ3-Registrant-Realm"/>
         <action application="unset" data="sip_h_X-CCNQ3-Registrant-Target"/>
+        <action application="unset" data="sip_h_X-CCNQ3-Routing"/>
 
         <action application="transfer" data="$1 XML ingress-$${profile_name}-send-call"/>
       </condition>
