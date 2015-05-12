@@ -61,35 +61,39 @@ require('ccnq3').config (config)->
 
   server.on 'CONNECT', (call) ->
 
-    # The XML dialplan provides us with the username
-    # and already answer()ed the call.
-    user  = call.body.variable_vm_user
-    number_domain = call.body.variable_number_domain
-    mode  = call.body.variable_vm_mode
+    try
+      # The XML dialplan provides us with the username
+      # and already answer()ed the call.
+      user  = call.body.variable_vm_user
+      number_domain = call.body.variable_number_domain
+      mode  = call.body.variable_vm_mode
 
-    switch mode
-      when 'record'
-        util.log "Record for #{user}@#{number_domain}"
-        call.linger ->
-          call.register_callback 'esl_linger', ->
-            # Keep the call opened for a little while.
-            seconds = 1000
-            setTimeout (-> call.exit()), 20*seconds
+      switch mode
+        when 'record'
+          util.log "Record for #{user}@#{number_domain}"
+          call.linger ->
+            call.register_callback 'esl_linger', ->
+              # Keep the call opened for a little while.
+              seconds = 1000
+              setTimeout (-> call.exit()), 20*seconds
+            call.command 'answer', 'undefined', (call) ->
+              messaging.record config, call, user
+
+        when 'inbox'
+          util.log "Inbox for #{user}@#{number_domain}"
           call.command 'answer', 'undefined', (call) ->
-            messaging.record config, call, user
+            messaging.inbox config, call, user
 
-      when 'inbox'
-        util.log "Inbox for #{user}@#{number_domain}"
-        call.command 'answer', 'undefined', (call) ->
-          messaging.inbox config, call, user
+        when 'main'
+          util.log "Main for #{user}@#{number_domain}"
+          call.command 'answer', 'undefined', (call) ->
+            messaging.main config, call, user
 
-      when 'main'
-        util.log "Main for #{user}@#{number_domain}"
-        call.command 'answer', 'undefined', (call) ->
-          messaging.main config, call, user
+        else
+          # FIXME say something
+          call.command 'hangup'
 
-      else
-        # FIXME say something
-        call.command 'hangup'
+    catch error
+      console.log "Error: #{error}"
 
   server.listen config.voicemail?.port ? 7123  # FIXME default_voicemail_port
