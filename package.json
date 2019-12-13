@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "ccnq3": "^0.6.0"
-  , "npm": "1.2.20"
+  , "npm": "6.13.4"
   , "pico": ">=0.1.13"
   },
   "devDependencies": {
